@@ -9,7 +9,8 @@
         (function() {
             var pathname = window.location.pathname;
             var search = window.location.search || '';
-            window.location.replace('mohitjain49.github.io' + pathname + search);
+            var hash = window.location.hash || '';
+            window.location.replace('/' + pathname + search + hash);
         })();
     </script>
 </head>
