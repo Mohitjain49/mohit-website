@@ -9,10 +9,7 @@
         (function() {
             var pathname = window.location.pathname;
             var search = window.location.search || '';
-            var hash = window.location.hash || '';
-
-            // Redirect to the root index.html, preserving the original path as part of the query
-            window.location.replace('mohitjain49.github.io' + pathname + search + hash);
+            window.location.replace('mohitjain49.github.io' + pathname + search);
         })();
     </script>
 </head>
