@@ -1,0 +1,108 @@
+.navBar-dropdown {
+    position: fixed;
+    height: 250px;
+    width: 300px;
+    z-index: 4;
+    overflow: hidden;
+    border-bottom: 1px solid var(--nav-bar-border);
+}
+
+.color-nav-dropdown {
+    left: 0;
+    top: 50px;
+    border-right: 1px solid var(--nav-bar-border);
+}
+.route-nav-dropdown {
+    right: 0;
+    top: 50px;
+    border-left: 1px solid var(--nav-bar-border);
+    background: var(--webpage-background);
+    height: 200px;
+}
+
+.globe-menu {
+    position: relative;
+    z-index: 4;
+    overflow: hidden;
+    height: fit-content;
+    width: 300px;
+}
+
+.navBar-dropdown-opt-container {
+    cursor: pointer;
+    height: 50px;
+    width: 100%;
+}
+.navBar-dropdown-opt {
+    width: calc(100% - 18px);
+    height: calc(100% - 18px);
+    border: var(--thin-empty-border);
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+    transition: var(--default-transition);
+}
+.navBar-dropdown-opt:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+/**
+ * These are classes containing different colors for each option.
+ */
+
+.default-color-opt {
+    color: var(--website-text);
+}
+.default-color-opt:hover {
+    border-color: var(--website-text);
+}
+
+.orangeGold-color-opt {
+    color: rgb(126, 90, 0);
+}
+.orangeGold-color-opt:hover {
+    border-color: rgb(126, 90, 0);
+}
+
+.blueSilver-color-opt {
+    color: #d9d8d8;
+}
+.blueSilver-color-opt:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #d9d8d8;
+}
+
+.forest-color-opt {
+    color: rgb(228, 81, 81);
+}
+.forest-color-opt:hover {
+    border-color: rgb(228, 81, 81);
+}
+
+.light-color-opt {
+    color: rgb(50, 50, 50);
+}
+.light-color-opt:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+    border-color: rgb(50, 50, 50);
+}
+
+.dark-color-opt {
+    color: rgb(243, 243, 243);
+}
+.dark-color-opt:hover {
+    border-color: rgb(243, 243, 243);
+}
+
+.navBarDDTransition-enter-active, .navBarDDTransition-leave-active {
+    transition: top 0.5s, opacity 0.5s;
+}
+.navBarDDTransition-enter-from, .navBarDDTransition-leave-to {
+    opacity: 0;
+    top: -200px;
+}
+.navBarDDTransition-enter-to, .navBarDDTransition-leave-from {
+    opacity: 1;
+    top: 50px;
+}

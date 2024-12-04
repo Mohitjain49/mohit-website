@@ -1,0 +1,156 @@
+.web-navBar {
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    top: 0;
+    left: 0;
+    background: var(--nav-bar-background);
+    border-bottom: 1px solid var(--nav-bar-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 5;
+}
+
+.web-navBar-links-section {
+    width: 500px;
+    justify-content: space-evenly;
+    height: 100%;
+}
+.web-navBar-links-side {
+    display: flex;
+    width: 140px;
+    height: 100%;
+}
+
+.web-navBar-opt {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--website-text);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 2px;
+    padding: 5px;
+    border-radius: 5px;
+    border-bottom: var(--empty-border);
+    transition: var(--default-transition);
+    font-family: monospace;
+}
+.web-navBar-opt:hover {
+    border-color: var(--website-text);
+    background-color: var(--translucent-background);
+}
+
+.web-navBar-side {
+    height: 100%;
+    padding: 0px;
+    border: none;
+    margin-top: 0px;
+    border-radius: 0px;
+}
+.web-navBar-color-section {
+    width: 100px;
+}
+.web-navBar-routeIcon-container {
+    width: 50px;
+}
+
+.exp-navBar-opt:hover {
+    color: #0872BA;
+    border-color: #0872BA;
+}
+.skills-navBar-opt:hover {
+    color: #41B883;
+    border-color: #41B883;
+}
+
+@media (max-width: 340px) {
+    .web-navBar {
+        position: absolute;
+    }
+}
+
+/**
+ * This section contains styles for the Vue.js Bar.
+ */
+.vue-bar {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to right, #35495E 0%, #41B883 25%, #41B883 75%, #35495E 100%);
+}
+.wiv-bar {
+    background: linear-gradient(to right, #48A548 0%, #0872BA 50%, #48A548 100%);
+}
+
+.vue-bar-center {
+    cursor: pointer;
+    height: 100%;
+    min-height: 50px;
+    width: fit-content;
+    max-width: 350px;
+    padding: 0px 10px;
+    background-color: #35495e33;
+    transition: var(--default-transition);
+    text-decoration: none;
+    color: white;
+}
+.vue-bar-center:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.wiv-bar-center {
+    background-color: rgba(178, 252, 167, 0.45);
+}
+.wiv-bar-center:hover {
+    background-color: #80cf76;
+}
+
+.vue-bar-explanation {
+    text-align: center;
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
+    margin-right: 10px;
+}
+.vue-bar-mainText {
+    color: whitesmoke;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 25px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+@media (max-width: 400px) {
+    .vue-bar-explanation {
+        font-size: 18px;
+    }
+}
+
+/**
+ * These are classes that work on top of the Nav Bar classes for the Globe Bar.
+ */
+
+.globe-bar {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    border-bottom: none;
+    border-top: 1px solid var(--website-text);
+    justify-content: center;
+    z-index: 10;
+}
+
+.globe-bar-opt-text {
+    display: block;
+    margin-left: 7px;
+}
+
+@media (max-width: 575px) {
+    .globe-bar-opt-text {
+        display: none;
+    }
+    .globe-bar-opt {
+        padding: 7px calc(10% - 3px);
+        font-size: 25px;
+    }
+}

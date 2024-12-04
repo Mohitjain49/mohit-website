@@ -1,0 +1,128 @@
+.skill-sidebar-container {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.skill-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 50px;
+    z-index: 1000;
+    justify-content: space-between;
+    overflow: visible;
+}
+
+.aws-sidebar {
+    background-color: #402C6D;
+}
+
+.main-ivue-sidebar {
+    background-color: rgb(207, 207, 207);
+}
+.media-ivue-sidebar {
+    background-color: #b99955;
+}
+.wiv-ivue-sidebar {
+    background-color: #80cf76;
+}
+
+.cesium-module-sidebar {
+    background-color: #5b9738;
+}
+.mavlink-module-sidebar {
+    background-color: #ff8000;
+}
+
+.vue-frontend-sidebar {
+    background-color: #246d4c;
+}
+.angular-frontend-sidebar {
+    background-color: #933BFF;
+}
+
+.skill-sidebar-opt {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    width: 100%;
+    height: 45px;
+    padding: 0px;
+    transition: var(--default-transition), padding 0.2s;
+}
+.skill-sidebar-opt:hover {
+    padding-left: 5px;
+}
+
+.skill-sidebar-opt-icon {
+    font-size: 25px;
+    width: 25px;
+    color: white;
+    user-select: none;
+}
+.skill-sidebar-opt-icon-v2 {
+    user-select: none;
+}
+
+.skill-sidebar-wivIcon-visible {
+    background-color: rgba(255, 255, 255, 0.75);
+    padding: 2px;
+    border-radius: 10px;
+    user-select: none;
+    width: 25px;
+}
+
+.aws-sidebar-opt:hover {
+    background-color: #815adb;
+}
+.main-ivue-sidebar-opt:hover {
+    background-color: rgb(167, 167, 167);
+}
+.media-ivue-sidebar-opt:hover {
+    background-color: #947b45;
+}
+.wiv-ivue-sidebar-opt:hover {
+    background-color: #6fb466;
+}
+.cesium-module-sidebar-opt:hover {
+    background-color: #508830;
+}
+.mavlink-module-sidebar-opt:hover {
+    background-color: #c04d01;
+}
+.vue-frontend-sidebar-opt:hover {
+    background-color: #153d2b;
+}
+.angular-frontend-sidebar-opt:hover {
+    background-color: #a45ff9;
+}
+
+@media (max-width: 600px) {
+    .skill-sidebar-container {
+        width: fit-content;
+        height: 100%;
+        flex-direction: row;
+    }
+    .skill-sidebar {
+        position: absolute;
+        width: 100%;
+        height: 45px;
+    }
+    
+    .skill-sidebar-opt {
+        height: 100%;
+        width: 45px;
+    }
+    .top-sidebar-menu-icon {
+        display: none;
+    }
+
+    .skill-sidebar-opt:hover {
+        padding-left: 0px;
+        padding-top: 5px;
+    }
+}
