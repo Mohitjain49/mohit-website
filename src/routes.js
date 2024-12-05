@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import PersonalMain from "./pages/PersonalMain.vue";
 import MyGlobe from "./pages/MyGlobe.vue";
@@ -67,7 +67,7 @@ const personalRoutes = [
 ];
 
 const personalRouter = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes: personalRoutes
 });
 
