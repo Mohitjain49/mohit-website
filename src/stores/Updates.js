@@ -89,5 +89,26 @@ export const Updates = [
                 example: { type: "none" }
             }
         ]
+    },
+    {
+        version: "1.2.1",
+        versionPath: "1-2-1",
+        releaseDate: "December 4th, 2024",
+        mainDescription: "The creator of Vue.js, <span><a href=\"https://evanyou.me/\" style=\"text-decoration: underline;\">Evan You</a></span>, " +
+            "is also the creator of Vite as well. Therefore, Vue.js uses Vite to handle app configuration, simplifying web development and deployment. " +
+            "I properly configured my website so it takes full advantage of Vite.",
+
+        topics: [
+            {
+                name: "Improved Website Configuration",
+                elementId: "Website_Configuration",
+                description: "Before this update, my website used to use to use \"Web Hash History\", which made the website itself handle routing between the website's many paths. " +
+                    "This could be seen with the \"/#/\" before any path on the website, as opposed to a simple \"/\" which often isn't even visible. " +
+                    "Using the guide down below, I managed to configure routing to be handled my Github Pages itself so that this wouldn't be a problem." +
+                    "<br><br>Link To Guide: <span><a href=\"https://vite.dev/guide/static-deploy.html\" style=\"text-decoration: underline;\">Deploying a Static Site | Vite</a></span>" +
+                    "<br>Link To Vite's Website: <span><a href=\"https://vite.dev/\" style=\"text-decoration: underline;\">Vite | Next Generation Frontend Tooling</a></span>",
+                example: { type: "none" }
+            }
+        ]
     }
 ]

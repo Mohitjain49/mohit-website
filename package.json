@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "open": "vite --open"
+    "open": "vite --open",
+    "open:preview": "vite preview --open",
+    "open:build": "vite build & vite preview --open"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
