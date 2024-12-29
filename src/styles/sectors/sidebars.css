@@ -44,6 +44,9 @@
 .angular-frontend-sidebar {
     background-color: #933BFF;
 }
+.react-frontend-sidebar {
+    background-color: #087EA4;
+}
 
 .skill-sidebar-opt {
     color: white;
@@ -99,6 +102,9 @@
 }
 .angular-frontend-sidebar-opt:hover {
     background-color: #a45ff9;
+}
+.react-frontend-sidebar-opt:hover {
+    background-color: #06698a;
 }
 
 @media (max-width: 600px) {

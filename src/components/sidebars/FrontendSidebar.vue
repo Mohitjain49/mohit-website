@@ -15,6 +15,16 @@
 
             <img :src="angular_icon" class="skill-sidebar-wivIcon-visible" draggable="false" />
         </div>
+        <div class="skill-sidebar-opt center-flex-display"
+            :class="(classPrefix + 'frontend-sidebar-opt')"
+            @click="navigateFrontendPages('reactnative')"
+            title="React Native">
+
+            <img :src="react_icon" draggable="false"
+                class="skill-sidebar-wivIcon-visible"
+                style="background-color: black;"
+            />
+        </div>
     </div>
     <div class="skill-sidebar-container">
         <RouterLink to="/skills" class="skill-sidebar-opt center-flex-display"
@@ -39,6 +49,7 @@ import return_icon from "@/google-icons/Return_White_Icon.svg";
 
 import vue_icon from "@/assets/Vuejs_Icon.png";
 import angular_icon from "@/assets/Angular_Icon.webp";
+import react_icon from "@/assets/React_icon.png";
 
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
@@ -53,6 +64,8 @@ onMounted(() => {
         classPrefix.value = "vue-";
     } else if(subRoute === "angular") {
         classPrefix.value = "angular-";
+    } else if(subRoute === "react" || subRoute === "reactnative") {
+        classPrefix.value = "react-";
     }
 });
 

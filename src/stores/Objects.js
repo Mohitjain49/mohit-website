@@ -7,6 +7,7 @@ import cesium_icon from "../assets/Cesium_Globe_Icon.png";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
+import react_icon from "../assets/React_icon.png";
 
 import aws_icon from "../assets/modules/AWS_Icon.png";
 import amplify_icon from "../assets/modules/AWS_Amplify_Icon.svg";
@@ -519,6 +520,49 @@ export const ANGULAR_INFO_SECTOR = {
             fileLink: PIZZA_WEBSITE_LINK,
             links: [
                 { text: "Go To Website", path: PIZZA_WEBSITE_LINK, nativeRoute: false }
+            ]
+        }
+    ]
+}
+
+export const REACT_NATIVE_INFO_SECTOR = {
+    title: "React Native",
+    image: react_icon,
+    style: {
+        background: "rgb(25, 25, 25)",
+        color: "#087EA4",
+        minHeight: "100vh"
+    },
+
+    buttons: [
+        { title: "Go To React Native's Website", link: "https://reactnative.dev/" }
+    ],
+    descriptions: [
+        "React Native is an JavaScript framework capable of developing apps for any mainstream platform. " +
+            "As its namesake would suggest, this framework contains many aspects seen in React, including the familiar markup syntax JSX. " +
+            "Together, developers could use this framework to create all their projects without the need to use different frameworks if the operating system is different. " +
+            "While this strategy doesn't work well for web development, it benefits shine with mobile app development instead.",
+        "React Native is the only mobile app framework that primarily uses JavaScript/TypeScript. " +
+            "There are plenty of web frameworks like Vue.js, Angular, React (Not Native), and plenty more that exceeds at web development already. " +
+            "There are also plenty of desktop app frameworks and wrappers like <span><a href=\"https://electronjs.org\" style=\"text-decoration: underline;\">Electron</a></span> " +
+            "that make web development and desktop app development practically identical to each other. " +
+            "On the flipside, however, React Native is the only framework for Android and iOS apps that can use widespread npm modules. " +
+            "Its mainstream alternatives either use a different programming language which doesn't have access to npm modules, " +
+            "support only one of the major two mobile operating systems, or both. " +
+            "It should go without saying that this gives React Native a huge competitive edge and a less steep learning curve than other frameworks.",
+        "I've used the framework primarily to help Sublo develop a mobile subleasing app. " +
+            "The app seeks to make subleasing more efficient, as platforms like facebook marketplace can sometimes be rather inefficient for finding homes or tenants. " +
+            "While I have left Sublo for more pursuits at iVue and My University, I am certain I'll be using React Native for other projects in the future."
+    ],
+
+    addBottomSpace: false,
+    pictures: [
+        {
+            header: "Sublo",
+            file: sublo_white_background_icon,
+            fileLink: "#",
+            links: [
+                { text: "See my experience with Sublo", path: "/experience/sublo", nativeRoute: true }
             ]
         }
     ]
