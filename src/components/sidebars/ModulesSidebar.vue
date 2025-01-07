@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="skill-sidebar-container">
-        <a href="https://www.worldsivue.com/" target="_blank"
+        <a :href="WORLDS_IVUE_LINK" target="_blank"
             class="skill-sidebar-opt center-flex-display"
             :class="(classPrefix + 'module-sidebar-opt')"
             title="Worlds iVue">
@@ -48,6 +48,7 @@ import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 import cesium_icon from "@/assets/Cesium_Globe_Icon.png";
 import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
 
+import { WORLDS_IVUE_LINK } from "@/stores/Objects.js";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 

@@ -17,7 +17,7 @@
         -->
     </div>
     <div class="skill-sidebar-container">
-        <a href="https://www.worldsivue.com/" target="_blank" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="Worlds iVue">
+        <a :href="WORLDS_IVUE_LINK" target="_blank" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="Worlds iVue">
             <img :src="wiv_icon" class="skill-sidebar-opt-icon-v2" width="30" draggable="false" />
         </a>
         <RouterLink to="/skills" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="Back To Skills Page">
@@ -42,6 +42,7 @@ import cognito_icon from "@/assets/modules/AWS_Cognito_Icon.svg";
 // WILL BE REINSTATED IN A LATER DATE.
 // import dynamo_db_icon from "@/assets/modules/AWS_Dynamo_DB_Icon.svg";
 
+import { WORLDS_IVUE_LINK } from "@/stores/Objects.js";
 import { useRouter } from "vue-router";
 const router = useRouter();
 

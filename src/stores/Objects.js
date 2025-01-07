@@ -27,6 +27,13 @@ import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
+export const MAIN_IVUE_WEBSITE_LINK = "https://www.dronesivue.com";
+export const IVUE_MEDIA_WEBSITE_LINK = "https://media.dronesivue.com";
+export const IVUE_ROBOTCIS_WEBSITE_LINK = "https://robotics.dronesivue.com";
+export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
+
+export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
+export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 
 export const MAIN_SKILLS_SECTOR = {
     title: "Professional Skills",
@@ -38,9 +45,9 @@ export const MAIN_SKILLS_SECTOR = {
         {
             subtitle: "Frontend Development",
             points: [
-                { title: "Vue.js", icon: vue_icon, color: "#41B883", link: "https://vuejs.org/", faIcon: false },
+                { title: "Vue.js", icon: vue_icon, color: "#41B883", link: VUEJS_WEBSITE_LINK, faIcon: false },
                 { title: "React", icon: "fa-brands fa-react", color: "#087EA4", link: "https://react.dev/", faIcon: true },
-                { title: "React Native", icon: "fa-brands fa-react", color: "#087EA4", link: "https://reactnative.dev/", faIcon: true },
+                { title: "React Native", icon: "fa-brands fa-react", color: "#087EA4", link: REACT_NATIVE_WEBSITE_LINK, faIcon: true },
                 { title: "JavaScript", icon: "fa-brands fa-js", color: "#F7DF1E", link: "https://www.javascript.com/", faIcon: true },
                 { title: "HTML", icon: "fa-brands fa-html5", color: "#E34E26", link: "", faIcon: true },
                 { title: "CSS", icon: "fa-brands fa-css3-alt", color: "#264DE4", link: "", faIcon: true }
@@ -75,8 +82,8 @@ export const MAIN_CONTACTS_SECTOR = {
         {
             subtitle: "Experience",
             points: [
-                { title: "iVue", icon: rc_icon, color: "rgb(171, 15, 20)", link: "https://ivueworld.com/", faIcon: false },
-                { title: "Worlds iVue", icon: wiv_icon, color: "#0872BA", link: "https://www.worldsivue.com/", faIcon: false },
+                { title: "iVue", icon: rc_icon, color: "rgb(171, 15, 20)", link: MAIN_IVUE_WEBSITE_LINK, faIcon: false },
+                { title: "Worlds iVue", icon: wiv_icon, color: "#0872BA", link: WORLDS_IVUE_LINK, faIcon: false },
                 { title: "Sublo", icon: sublo_icon, color: "#36A1D9", link: "", faIcon: false }
             ]
         },
@@ -139,12 +146,12 @@ export const PAGE_SECTORS = [
                 title: "My WIV Experience"
             },
             {
-                route: "https://ivueworld.com/",
+                route: MAIN_IVUE_WEBSITE_LINK,
                 nativeRoute: false,
                 title: "Go To ivueworld.com"
             },
             {
-                route: "https://www.worldsivue.com/",
+                route: WORLDS_IVUE_LINK,
                 nativeRoute: false,
                 title: "Go To Worlds iVue"
             },
@@ -442,7 +449,7 @@ export const VUE_INFO_SECTOR = {
     },
 
     buttons: [
-        { title: "Go To Vue.js Website", link: "https://vuejs.org/" }
+        { title: "Go To Vue.js Website", link: VUEJS_WEBSITE_LINK }
     ],
     descriptions: [
         "Vue.js is a versatile web development framework that enhances traditional HTML, CSS, and JavaScript, offering a familiar yet more intuitive learning curve for developers. " +
@@ -466,19 +473,19 @@ export const VUE_INFO_SECTOR = {
         {
             header: "Worlds iVue",
             file: wiv_app,
-            fileLink: "https://www.worldsivue.com/",
+            fileLink: WORLDS_IVUE_LINK,
             links: [
                 { text: "See My Contributions", path: "/experience/ivue/worldsivue", nativeRoute: true },
-                { text: "Open App", path: "https://www.worldsivue.com/", nativeRoute: false }
+                { text: "Open App", path: WORLDS_IVUE_LINK, nativeRoute: false }
             ]
         },
         {
             header: "iVue Websites",
             file: ivue_website,
-            fileLink: "https://ivueworld.com/",
+            fileLink: MAIN_IVUE_WEBSITE_LINK,
             links: [
                 { text: "See My Contributions", path: "/experience/ivue", nativeRoute: true },
-                { text: "Go To Website", path: "https://ivueworld.com/", nativeRoute: false }
+                { text: "Go To Website", path: MAIN_IVUE_WEBSITE_LINK, nativeRoute: false }
             ]
         }
     ]
@@ -535,7 +542,7 @@ export const REACT_NATIVE_INFO_SECTOR = {
     },
 
     buttons: [
-        { title: "Go To React Native's Website", link: "https://reactnative.dev/" }
+        { title: "Go To React Native's Website", link: REACT_NATIVE_WEBSITE_LINK }
     ],
     descriptions: [
         "React Native is an JavaScript framework capable of developing apps for any mainstream platform. " +
@@ -579,7 +586,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Go To iVue's Main Website", link: "https://ivueworld.com/" }
+            { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
             "I am the lead software developer at iVue, a company specializing in drone hardware, photography and videography services, and 3D globe software. " +
@@ -598,19 +605,19 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: ivue_website,
-                fileLink: "https://ivueworld.com/",
+                fileLink: MAIN_IVUE_WEBSITE_LINK,
                 links: []
             },
             {
                 header: "",
                 file: ivue_media_website,
-                fileLink: "https://ivuemedia.com/",
+                fileLink: IVUE_MEDIA_WEBSITE_LINK,
                 links: []
             },
             {
                 header: "",
                 file: wiv_banner,
-                fileLink: "https://www.worldsivue.com/",
+                fileLink: WORLDS_IVUE_LINK,
                 links: []
             }
         ]
@@ -625,7 +632,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Go To iVue's Main Website", link: "https://ivueworld.com/" }
+            { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
             "As the lead software developer of iVue, I not only play a major role in developing Worlds iVue, " +
@@ -650,7 +657,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: ivue_website,
-                fileLink: "https://ivueworld.com/",
+                fileLink: MAIN_IVUE_WEBSITE_LINK,
                 links: []
             }
         ]
@@ -665,7 +672,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Go To iVue Media's Website", link: "https://ivuemedia.com/" }
+            { title: "Go To iVue Media's Website", link: IVUE_MEDIA_WEBSITE_LINK }
         ],
         descriptions: [
             "iVue Media is an iVue subsidiary that manages its photography and videography services. " +
@@ -688,7 +695,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: ivue_media_website,
-                fileLink: "https://ivuemedia.com/",
+                fileLink: IVUE_MEDIA_WEBSITE_LINK,
                 links: []
             }
         ]
@@ -703,7 +710,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Open Worlds iVue", link: "https://www.worldsivue.com/" }
+            { title: "Open Worlds iVue", link: WORLDS_IVUE_LINK }
         ],
         descriptions: [
             "Worlds iVue is a proprietary web application that was released by iVue in May 2024. " +
@@ -726,13 +733,13 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: wiv_banner,
-                fileLink: "https://www.worldsivue.com/",
+                fileLink: WORLDS_IVUE_LINK,
                 links: []
             },
             {
                 header: "",
                 file: wiv_app,
-                fileLink: "https://www.worldsivue.com/",
+                fileLink: WORLDS_IVUE_LINK,
                 links: []
             },
             {
