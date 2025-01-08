@@ -22,8 +22,9 @@
                 <Transition name="navPictureTransition" mode="out-in">
                     <img :src="sectorObj.pictures[pictureShown].image"
                         :width="sectorObj.pictures[pictureShown].width"
-                        :style="{ 'background-color': (sectorObj.pictures[pictureShown].width === '51%') ? 'none' : 'white' }"
+                        :style="getPictureBackground(sectorObj.pictures[pictureShown].width)"
                         :key="pictureShown"
+                        class="nav-card-picture"
                     />
                 </Transition>
             </div>
@@ -74,7 +75,7 @@ onUnmounted(() => { removePictureInterval(); })
 /**
  * This function occurs whenever visitors hovers over the nav card.
  */
-const onNavCardHover = () => {
+function onNavCardHover() {
     webData.colorHandler.onNavCardHover(
         props.sectorObj.id,
         props.sectorObj.titleId,
@@ -85,7 +86,7 @@ const onNavCardHover = () => {
 /**
  * This function runs whenever visitors' mouse leave the nav card.
  */
-const onNavCardLeave = () => {
+function onNavCardLeave() {
     webData.colorHandler.onNavCardLeave(
         props.sectorObj.id,
         props.sectorObj.titleId
@@ -95,7 +96,7 @@ const onNavCardLeave = () => {
 /**
  * This is the function that runs within the interval.
  */
-const pictureIntervalFunc = () => {
+function pictureIntervalFunc() {
     document.getElementsByClassName(props.sectorObj.pictureBarClass).item(pictureShown.value).style.backgroundColor = "rgba(0, 0, 0, 0)";
     pictureShown.value = ((pictureShown.value + 1) % props.sectorObj.pictures.length);
     document.getElementsByClassName(props.sectorObj.pictureBarClass).item(pictureShown.value).style.backgroundColor = props.sectorObj.color;
@@ -104,7 +105,7 @@ const pictureIntervalFunc = () => {
 /**
  * This sets the picture interval to toggle between the pictures.
  */
-const setPictureInterval = () => {
+function setPictureInterval() {
     if(pictureInterval != null) { return; }
     pictureInterval = setInterval(() => { pictureIntervalFunc(); }, 5000);
 }
@@ -112,9 +113,24 @@ const setPictureInterval = () => {
 /**
  * This removes the picture interval from being used.
  */
-const removePictureInterval = () => {
+function removePictureInterval() {
     if(pictureInterval == null) { return; }
     clearInterval(pictureInterval);
     pictureInterval = null;
+}
+
+/**
+ * This function returns the background of a picture.
+ * @param {String} picWidth The width of the picture.
+ */
+function getPictureBackground(picWidth = "50%") {
+    const obj = { backgroundColor: "none" }
+    if(picWidth === "51%" || picWidth === "41%" || picWidth === "76%") {
+        obj.backgroundColor = "white";
+    } else if(picWidth === "49%" || picWidth === "39%") {
+        obj.backgroundColor = "black";
+    }
+
+    return obj;
 }
 </script>

@@ -19,6 +19,7 @@ import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
 import wiv_app from "../assets/ivue/Worlds_iVue_Main_App.png";
 import ivue_website from "../assets/ivue/iVue_Main_Website_Home.png";
 import ivue_media_website from "../assets/ivue/iVue_Media_Website_Home.png";
+import ivue_robotics_website from "../assets/ivue/iVue_Robotics_Website_Home.png";
 import globe_page from "../assets/Personal_Globe_Page.png";
 import pizza_page from "../assets/Pizza_Project_Page.png";
 
@@ -283,15 +284,14 @@ export const NAV_CARDS = [
         },
     
         color: "#5C9E57",
-        desc: "Learn about some of the unique modules I use to develop Worlds iVue and Sublo.",
+        desc: "Learn about some of the unique modules I use to develop Worlds iVue.",
     
         pointsTitle: "Modules Include:",
         bulletPoints: [ "Cesium", "Mavlink Protocol" ],
 
         pictureBarClass: "backend-nav-picture-bar",
         pictures: [
-            { image: wiv_app, width: "90%" },
-            { image: sublo_white_background_icon, width: "50%" },
+            { image: wiv_banner, width: "76%" },
             { image: mavlink_banner, width: "80%" },
             { image: cesium_picture, width: "80%" }
         ]
@@ -316,7 +316,7 @@ export const NAV_CARDS = [
             "that serves as a drone control operator and will serve as a media sharing app in the future.",
         
         pointsTitle: "Frameworks/Modules Used:",
-        bulletPoints: [ "Vue.js", "Cesium", "Amazon Web Services" ],
+        bulletPoints: [ "Vue.js", "Cesium", "MAVLink", "Amazon Web Services" ],
 
         pictureBarClass: "wiv-nav-picture-bar",
         pictures: [
@@ -349,7 +349,8 @@ export const NAV_CARDS = [
         pictureBarClass: "ivue-web-nav-picture-bar",
         pictures: [
             { image: ivue_website, width: "90%" },
-            { image: ivue_media_website, width: "90%" }
+            { image: ivue_media_website, width: "90%" },
+            { image: ivue_robotics_website, width: "90%" }
         ]
     },
     {
@@ -402,9 +403,9 @@ export const NAV_CARDS = [
 
         pictureBarClass: "aws-nav-picture-bar",
         pictures: [
-            { image: aws_icon, width: "51%" },
-            { image: amplify_icon, width: "50%" },
-            { image: cognito_icon, width: "50%" },
+            { image: aws_icon, width: "40%" },
+            { image: amplify_icon, width: "40%" },
+            { image: cognito_icon, width: "40%" },
             // DYNAMODB WILL BE INCLUDED ON A LATER DATE.
             // { image: dynamo_db_icon, width: "50%" },
         ]
@@ -436,7 +437,36 @@ export const NAV_CARDS = [
             { image: angular_icon, width: "51%" },
             { image: pizza_page, width: "90%" }
         ]
-    }
+    },
+    {
+        id: "frontend-nav-card",
+        titleId: "frontend-nav-card-title",
+        route: "/skills/frontend/vuejs",
+    
+        title: {
+            text: "Frontend",
+            icon: "fa-brands fa-js",
+            faIcon: true,
+            extraClass: "",
+            colorType: "color",
+            color: "#FFF03C",
+            size: "42px"
+        },
+    
+        color: "#F7DF1E",
+        desc: "Read about my experience on how I used numerous Frontend JavaScript Frameworks, " +
+            "especially Vue.js, to create professional websites and applications.",
+
+        pointsTitle: "Related Projects:",
+        bulletPoints: [ "Worlds iVue", "iVue's Company Websites", "Pizza Project", "Sublo", "My Website" ],
+
+        pictureBarClass: "vue-nav-picture-bar",
+        pictures: [
+            { image: vue_icon, width: "40%" },
+            { image: react_icon, width: "39%" },
+            { image: angular_icon, width: "41%" }
+        ]
+    },
 ]
 
 export const VUE_INFO_SECTOR = {

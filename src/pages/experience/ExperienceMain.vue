@@ -6,7 +6,7 @@
             <div class="main-nav-page">
                 <NavPageCard :sectorObj="NAV_CARDS[3]" />
                 <NavPageCard :sectorObj="NAV_CARDS[4]" />
-                <NavPageCard :sectorObj="NAV_CARDS[5]" />
+                <NavPageCard :sectorObj="NAV_CARDS[5]" id="third-nav-card" />
             </div>
             <div class="main-sector-bottom-linkBtn-container center-flex-display" style="padding-bottom: 30px;">
                 <RouterLink to="/" class="main-sector-bottom-linkBtn center-flex-display">Back to Home</RouterLink>

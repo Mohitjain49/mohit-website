@@ -3,11 +3,10 @@
     <div class="personal-web-body personal-web-body-main" @click="() => {webData.setNavBarDropdown(-1)}">
         <div class="main-nav-page-container">
             <div class="nav-page-title center-flex-display gradient-text">My Skills</div>
-            <div class="main-nav-page twoColumn-nav-page">
-                <NavPageCard :sectorObj="NAV_CARDS[0]" />
-                <NavPageCard :sectorObj="NAV_CARDS[7]" />
+            <div class="main-nav-page">
+                <NavPageCard :sectorObj="NAV_CARDS[8]" />
                 <NavPageCard :sectorObj="NAV_CARDS[2]" />
-                <NavPageCard :sectorObj="NAV_CARDS[6]" />
+                <NavPageCard :sectorObj="NAV_CARDS[6]" id="third-nav-card" />
             </div>
             <div class="main-sector-bottom-linkBtn-container center-flex-display" style="padding-bottom: 30px;">
                 <RouterLink to="/" class="main-sector-bottom-linkBtn center-flex-display">Back to Home</RouterLink>

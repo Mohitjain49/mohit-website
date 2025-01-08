@@ -10,13 +10,6 @@
         </div>
         <div class="skill-sidebar-opt center-flex-display"
             :class="(classPrefix + 'frontend-sidebar-opt')"
-            @click="navigateFrontendPages('angular')"
-            title="Angular">
-
-            <img :src="angular_icon" class="skill-sidebar-wivIcon-visible" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'frontend-sidebar-opt')"
             @click="navigateFrontendPages('reactnative')"
             title="React Native">
 
@@ -24,6 +17,13 @@
                 class="skill-sidebar-wivIcon-visible"
                 style="background-color: black;"
             />
+        </div>
+        <div class="skill-sidebar-opt center-flex-display"
+            :class="(classPrefix + 'frontend-sidebar-opt')"
+            @click="navigateFrontendPages('angular')"
+            title="Angular">
+
+            <img :src="angular_icon" class="skill-sidebar-wivIcon-visible" draggable="false" />
         </div>
     </div>
     <div class="skill-sidebar-container">
