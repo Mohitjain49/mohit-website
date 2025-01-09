@@ -1,1 +1,2 @@
-*.js linguist-detectable=false
+*.vue linguist-language=Vue
+*.js linguist-language=Vue
