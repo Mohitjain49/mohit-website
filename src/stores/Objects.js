@@ -976,3 +976,30 @@ export const AWS_INFO_SECTORS = [
     }
     */
 ]
+
+export const SUBLO_INFO_SECTOR = {
+    title: "Sublo",
+    image: sublo_icon,
+    style: {
+        background: "#031427",
+        color: "#d1efff",
+        minHeight: "calc(100vh - 75px)"
+    },
+
+    buttons: [
+        { title: "Sublo's LinkedIn", link: "https://www.linkedin.com/company/sublollc" },
+    ],
+    descriptions: [
+        "Amplify is Amazon's frontend module that seamlessly connects AWS's core services to web and mobile applications. " +
+            "By managing website hosting and deployment, Amplify makes it easy for frontend developers " +
+            "to collaborate with AWS professionals and backend developers for key features for large-scale apps. " +
+            "Since I originated as a frontend developer, Amplify was my first real dive into AWS. " +
+            "With a library of UI components and scalability at its core, Amplify showcases the AWS ecosystem in a way that's both powerful and approachable.",
+        "Currently, I used Amplify primarily to integrate authentication services powered by Amazon Cognito into <u>Worlds iVue</u> and <u>Sublo</u>. " +
+            "In the future, both apps will also leverage Amplify to run AWS Lambda functions, connecting to databases that store user and geospatial data. " +
+            "Furthermore, iVue's company websites will also integrate AWS services such as Amazon Simple Email Service (SES) with Amplify as well."
+    ],
+
+    addBottomSpace: true,
+    pictures: []
+}
