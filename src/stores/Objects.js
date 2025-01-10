@@ -9,10 +9,13 @@ import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_icon.png";
 
-import aws_icon from "../assets/modules/AWS_Icon.png";
-import amplify_icon from "../assets/modules/AWS_Amplify_Icon.svg";
-import cognito_icon from "../assets/modules/AWS_Cognito_Icon.svg";
-import dynamo_db_icon from "../assets/modules/AWS_Dynamo_DB_Icon.svg";
+import aws_icon from "../assets/aws/AWS_Icon.png";
+import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
+import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
+import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
+import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
+import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
+// import dynamo_db_icon from "../assets/aws/AWS_Dynamo_DB_Icon.svg";
 
 import wiv_banner from "../assets/ivue/Worlds_iVue_Banner.png";
 import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
@@ -863,6 +866,34 @@ export const MAVLINK_INFO_SECTOR = {
     ]
 }
 
+export const SUBLO_INFO_SECTOR = {
+    title: "Sublo",
+    image: sublo_icon,
+    style: {
+        background: "#031427",
+        color: "#d1efff",
+        minHeight: "calc(100vh - 75px)"
+    },
+
+    buttons: [
+        { title: "Sublo's LinkedIn", link: "https://www.linkedin.com/company/sublollc" },
+    ],
+    descriptions: [
+        "Sublo is a work-in-progress mobile subleasing app that will allow students to sublease to others safely and quickly. " +
+            "Today, college students typically use platforms like Facebook Marketplace. " +
+            "While these platforms are good, they lack many important filters for specific traits that college students are looking for, " +
+            "from specifying the number of bedrooms and bathrooms to whether pets are allowed or not. " +
+            "Sublo intends to fix this, focusing on creating proper filters to make searching for subleases efficient.",
+        "During my time at Sublo, I learned a lot about <span><a href=\"https://reactnative.dev\" style=\"text-decoration: underline;\">React Native</a></span>. " +
+            "Being one of the only mobile development frameworks that supports JavaScript packages and a platform that works for both Android and iOS, " +
+            "I have truly learned a lot with mobile app development. Though I have parted ways with Sublo due to College starting back up, " +
+            "I'm sure I'll be at the front of making mobile apps for iVue and maybe other organizations I'll join in the future."
+    ],
+
+    addBottomSpace: true,
+    pictures: []
+}
+
 export const AWS_INFO_SECTORS = [
     {
         title: "Amazon Web Services",
@@ -945,6 +976,85 @@ export const AWS_INFO_SECTORS = [
         addBottomSpace: true,
         pictures: []
     },
+    {
+        title: "Amazon S3",
+        image: s3_icon,
+        style: {
+            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+
+        buttons: [
+            { title: "Amazon S3's Website", link: "https://aws.amazon.com/s3/" }
+        ],
+        descriptions: [
+            "Amazon Simple Storage Service (S3) is an easy way to store data. " +
+                "This can be used for pretty much any use case, but I've been mainly using it for websites. " +
+                "A single bucket can store all sorts of files and assets for a website. On top of that, they have a \"Static Website Hosting\" mode, " +
+                "automatically creating a link to view the stored website. Furthermore, it's straightforward to make special rules for a website, " +
+                "not just for accessing it, but also for having said bucket redirect to other websites and domains.",
+            "I don't use S3 for any personal projects, but i configured iVue's buckets so that they are used to host the company's websites and " +
+                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "In the future, I'm sure that iVue will use S3 for more complex purposes."
+        ],
+
+        addBottomSpace: true,
+        pictures: []
+    },
+    {
+        title: "Amazon CloudFront",
+        image: cloudfront_icon,
+        style: {
+            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+
+        buttons: [
+            { title: "Amazon CloudFront's Website", link: "https://aws.amazon.com/cloudfront/" }
+        ],
+        descriptions: [
+            "Amazon CloudFront is an effective and secure delivery tool for content like websites, videos, mobile apps, etc. " +
+                "For websites in particular, This primarily serves as a middleman between Amazon S3 and a domain's name servers (DNS). " +
+                "A Cloudfront Distribution takes an S3 bucket, configures domains that will use it, and then creates a secure link for its content. " +
+                "like an S3 bucket and many other Amazon services, any distribution is customizable. For instance, " +
+                "many behaviors can be set for different errors, such as adding a custom 404 error page, amongst many other actions. ",
+            "I configured this service so iVue can deliver its company websites and " +
+                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "iVue might use this for more complex purposes in the future like delivering potential mobile apps."
+        ],
+
+        addBottomSpace: true,
+        pictures: []
+    },
+    {
+        title: "Amazon Route 53",
+        image: route53_icon,
+        style: {
+            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+
+        buttons: [
+            { title: "Amazon Route 53's Website", link: "https://aws.amazon.com/route53/" }
+        ],
+        descriptions: [
+            "Amazon Route 53 is Amazon's primary routing service. " +
+                "Like any other domain registrar, it can hold domains on an account." +
+                "However, A hosted zone can be created for any domain, regardless of who the registrar is, as it provides its own nameserver addresses. " +
+                "This allows domain managers to configure DNS records freely, whether it be for linked emails, websites, or other purposes." +
+                "For instance, a CNAME record can be set up for a subdomain like " +
+                "<span><a href=\"https://www.ivueworld.com/\" style=\"text-decoration: underline;\">www.ivueworld.com</a></span> to host a cloudfront distribution.",
+            "I configured this service so iVue can deliver its company websites and " +
+                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "iVue will probably use this to host more websites in the future and to register more domains taht it might need."
+        ],
+
+        addBottomSpace: true,
+        pictures: []
+    }
     /*
     {
         title: "Amazon DynamoDB",
@@ -976,30 +1086,3 @@ export const AWS_INFO_SECTORS = [
     }
     */
 ]
-
-export const SUBLO_INFO_SECTOR = {
-    title: "Sublo",
-    image: sublo_icon,
-    style: {
-        background: "#031427",
-        color: "#d1efff",
-        minHeight: "calc(100vh - 75px)"
-    },
-
-    buttons: [
-        { title: "Sublo's LinkedIn", link: "https://www.linkedin.com/company/sublollc" },
-    ],
-    descriptions: [
-        "Amplify is Amazon's frontend module that seamlessly connects AWS's core services to web and mobile applications. " +
-            "By managing website hosting and deployment, Amplify makes it easy for frontend developers " +
-            "to collaborate with AWS professionals and backend developers for key features for large-scale apps. " +
-            "Since I originated as a frontend developer, Amplify was my first real dive into AWS. " +
-            "With a library of UI components and scalability at its core, Amplify showcases the AWS ecosystem in a way that's both powerful and approachable.",
-        "Currently, I used Amplify primarily to integrate authentication services powered by Amazon Cognito into <u>Worlds iVue</u> and <u>Sublo</u>. " +
-            "In the future, both apps will also leverage Amplify to run AWS Lambda functions, connecting to databases that store user and geospatial data. " +
-            "Furthermore, iVue's company websites will also integrate AWS services such as Amazon Simple Email Service (SES) with Amplify as well."
-    ],
-
-    addBottomSpace: true,
-    pictures: []
-}
