@@ -49,7 +49,7 @@ import return_icon from "@/assets/google-icons/Return_White_Icon.svg";
 
 import vue_icon from "@/assets/Vuejs_Icon.png";
 import angular_icon from "@/assets/Angular_Icon.webp";
-import react_icon from "@/assets/React_icon.png";
+import react_icon from "@/assets/React_Icon.png";
 
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
