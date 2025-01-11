@@ -7,7 +7,7 @@ import cesium_icon from "../assets/Cesium_Globe_Icon.png";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
-import react_icon from "../assets/React_icon.png";
+import react_icon from "../assets/React_Icon.png";
 
 import aws_icon from "../assets/aws/AWS_Icon.png";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
