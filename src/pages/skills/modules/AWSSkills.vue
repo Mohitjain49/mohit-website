@@ -36,6 +36,17 @@ onMounted(() => {
     } else if(subRoute === "cognito") {
         sectorOpen.value = 2;
         document.title = (documentTitle + " | Amazon Cognito");
+    } else if(subRoute === "s3" || subRoute === "simple-storage-service") {
+        sectorOpen.value = 3;
+        document.title = (documentTitle + " | Amazon S3");
+    } else if(subRoute === "cloudfront") {
+        sectorOpen.value = 4;
+        document.title = (documentTitle + " | Amazon CloudFront");
+    } else if(subRoute === "route53" || subRoute === "route-53") {
+        sectorOpen.value = 5;
+        document.title = (documentTitle + " | Amazon Route 53");
+    } else if(subRoute === "CloudFront" || subRoute === "Cloudfront") {
+        router.push("/skills/aws/cloudfront");
     }
     /*
     else if(subRoute === "dynamodb") {

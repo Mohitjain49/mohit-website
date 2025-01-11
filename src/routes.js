@@ -13,7 +13,7 @@ import AWSSkills from "./pages/skills/modules/AWSSkills.vue";
 
 import ExperienceMain from "./pages/experience/ExperienceMain.vue";
 import IvueWeb from "./pages/experience/IvueWeb.vue";
-import SubloMain from "./pages/experience/sublo/SubloMain.vue";
+import SubloMain from "./pages/experience/SubloMain.vue";
 
 import Updates from "./pages/updates/Updates.vue";
 import UpdateLog from "./pages/updates/UpdateLog.vue";

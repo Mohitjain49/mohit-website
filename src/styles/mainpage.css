@@ -49,7 +49,11 @@
         height: auto;
         min-height: auto;
     }
-    .web-main-basic-text, .web-main-headshot {
+    .web-main-basic-text {
+        top: 0%;
+        padding-top: 20px;
+    }
+    .web-main-headshot {
         top: 0%;
     }
     .web-main-half {

@@ -22,7 +22,7 @@ export const Updates = [
                     "<br><br>Link To Example: <span><a href=\"#/experience/ivue\" style=\"text-decoration: underline;\">Mohit Jain | iVue</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/#/experience/ivue/',
+                    src: '/experience/ivue/',
                 }
             },
             {
@@ -109,6 +109,52 @@ export const Updates = [
                     "<br>Link To Vite's Website: <span><a href=\"https://vite.dev/\" style=\"text-decoration: underline;\">Vite | Next Generation Frontend Tooling</a></span>",
                 example: { type: "none" }
             }
+        ]
+    },
+    {
+        version: "1.3.0",
+        versionPath: "1-3-0",
+        releaseDate: "January 11th, 2025",
+        mainDescription: "Over these last few months, I have gained a lot more experience with Amazon Web Services (AWS), " +
+            "the JavaScript Framework React Native, and coding in general. Now that my internship at Sublo has ended " +
+            "and new updates were released for Worlds iVue and iVue's company websites, I thought it only fitting to update my website as well.",
+
+        topics: [
+            {
+                name: "My Additional AWS Experience",
+                elementId: "AWS_Experience",
+                description: "Through my role as iVue's lead software developer, I have learned quite a bit on hosting websites through AWS. " +
+                    "This includes learning how to use Amazon S3, Amazon CloudFront, and Amazon Route 53 to configure AWS to host iVue's websites. " +
+                    "I've even constructed a CI/CD pipeline between the repositories of each website's code and their respective S3 buckets and CloudFront Distributions. " +
+                    "The AWS page is updated now to reflect my growing experience." +
+                    "<br><br>Link To Example: <span><a href=\"/skills/aws\" style=\"text-decoration: underline;\">Mohit Jain | AWS</a></span>",
+                example: {
+                    type: "iframe",
+                    src: '/skills/aws/s3',
+                }
+            },
+            {
+                name: "My React Native Experience",
+                elementId: "React_Native_Experience",
+                description: "Through my internship at Sublo, I got hands-on experience with react native. The website has been updated appropriately to accomodate this. " +
+                    "I am certain that I'll be using this framework in the future for projects at iVue and other possible companies.<br><br>Link To Example: " +
+                    "<span><a href=\"/skills/frontend/reactnative\" style=\"text-decoration: underline;\">Mohit Jain | Frontend Development | React Native</a></span>",
+                example: {
+                    type: "iframe",
+                    src: '/skills/frontend/reactnative',
+                }
+            },
+            {
+                name: "My Sublo Experience",
+                elementId: "Sublo_Experience",
+                description: "During my brief internship at Sublo, I learned a lot about mobile app development with React Native. " +
+                    "Though the company is still in its infancy, I wanted to include it as it is a core piece of my UI/UX development skills." +
+                    "<br><br>Link To Example: <span><a href=\"/experience/sublo\" style=\"text-decoration: underline;\">Mohit Jain | Sublo</a></span>",
+                example: {
+                    type: "iframe",
+                    src: '/experience/sublo',
+                }
+            },
         ]
     }
 ]

@@ -7,17 +7,22 @@ import cesium_icon from "../assets/Cesium_Globe_Icon.png";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
+import react_icon from "../assets/React_icon.png";
 
-import aws_icon from "../assets/modules/AWS_Icon.png";
-import amplify_icon from "../assets/modules/AWS_Amplify_Icon.svg";
-import cognito_icon from "../assets/modules/AWS_Cognito_Icon.svg";
-import dynamo_db_icon from "../assets/modules/AWS_Dynamo_DB_Icon.svg";
+import aws_icon from "../assets/aws/AWS_Icon.png";
+import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
+import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
+import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
+import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
+import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
+// import dynamo_db_icon from "../assets/aws/AWS_Dynamo_DB_Icon.svg";
 
 import wiv_banner from "../assets/ivue/Worlds_iVue_Banner.png";
 import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
 import wiv_app from "../assets/ivue/Worlds_iVue_Main_App.png";
 import ivue_website from "../assets/ivue/iVue_Main_Website_Home.png";
 import ivue_media_website from "../assets/ivue/iVue_Media_Website_Home.png";
+import ivue_robotics_website from "../assets/ivue/iVue_Robotics_Website_Home.png";
 import globe_page from "../assets/Personal_Globe_Page.png";
 import pizza_page from "../assets/Pizza_Project_Page.png";
 
@@ -26,6 +31,13 @@ import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
+export const MAIN_IVUE_WEBSITE_LINK = "https://www.dronesivue.com";
+export const IVUE_MEDIA_WEBSITE_LINK = "https://media.dronesivue.com";
+export const IVUE_ROBOTCIS_WEBSITE_LINK = "https://robotics.dronesivue.com";
+export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
+
+export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
+export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 
 export const MAIN_SKILLS_SECTOR = {
     title: "Professional Skills",
@@ -37,9 +49,9 @@ export const MAIN_SKILLS_SECTOR = {
         {
             subtitle: "Frontend Development",
             points: [
-                { title: "Vue.js", icon: vue_icon, color: "#41B883", link: "https://vuejs.org/", faIcon: false },
+                { title: "Vue.js", icon: vue_icon, color: "#41B883", link: VUEJS_WEBSITE_LINK, faIcon: false },
                 { title: "React", icon: "fa-brands fa-react", color: "#087EA4", link: "https://react.dev/", faIcon: true },
-                { title: "React Native", icon: "fa-brands fa-react", color: "#087EA4", link: "https://reactnative.dev/", faIcon: true },
+                { title: "React Native", icon: "fa-brands fa-react", color: "#087EA4", link: REACT_NATIVE_WEBSITE_LINK, faIcon: true },
                 { title: "JavaScript", icon: "fa-brands fa-js", color: "#F7DF1E", link: "https://www.javascript.com/", faIcon: true },
                 { title: "HTML", icon: "fa-brands fa-html5", color: "#E34E26", link: "", faIcon: true },
                 { title: "CSS", icon: "fa-brands fa-css3-alt", color: "#264DE4", link: "", faIcon: true }
@@ -74,8 +86,8 @@ export const MAIN_CONTACTS_SECTOR = {
         {
             subtitle: "Experience",
             points: [
-                { title: "iVue", icon: rc_icon, color: "rgb(171, 15, 20)", link: "https://ivueworld.com/", faIcon: false },
-                { title: "Worlds iVue", icon: wiv_icon, color: "#0872BA", link: "https://www.worldsivue.com/", faIcon: false },
+                { title: "iVue", icon: rc_icon, color: "rgb(171, 15, 20)", link: MAIN_IVUE_WEBSITE_LINK, faIcon: false },
+                { title: "Worlds iVue", icon: wiv_icon, color: "#0872BA", link: WORLDS_IVUE_LINK, faIcon: false },
                 { title: "Sublo", icon: sublo_icon, color: "#36A1D9", link: "", faIcon: false }
             ]
         },
@@ -138,12 +150,12 @@ export const PAGE_SECTORS = [
                 title: "My WIV Experience"
             },
             {
-                route: "https://ivueworld.com/",
+                route: MAIN_IVUE_WEBSITE_LINK,
                 nativeRoute: false,
                 title: "Go To ivueworld.com"
             },
             {
-                route: "https://www.worldsivue.com/",
+                route: WORLDS_IVUE_LINK,
                 nativeRoute: false,
                 title: "Go To Worlds iVue"
             },
@@ -186,7 +198,7 @@ export const PAGE_SECTORS = [
         text: {
             leftSide: false,
             title: "Sublo",
-            desc: "Scroll through how I am making an app to make finding or listing subleases easy for college students."
+            desc: "Read on how I am helped make an app to make finding or listing subleases easy for college students."
         },
         images: [
             {
@@ -275,15 +287,14 @@ export const NAV_CARDS = [
         },
     
         color: "#5C9E57",
-        desc: "Learn about some of the unique modules I use to develop Worlds iVue and Sublo.",
+        desc: "Learn about some of the unique modules I use to develop Worlds iVue.",
     
         pointsTitle: "Modules Include:",
         bulletPoints: [ "Cesium", "Mavlink Protocol" ],
 
         pictureBarClass: "backend-nav-picture-bar",
         pictures: [
-            { image: wiv_app, width: "90%" },
-            { image: sublo_white_background_icon, width: "50%" },
+            { image: wiv_banner, width: "76%" },
             { image: mavlink_banner, width: "80%" },
             { image: cesium_picture, width: "80%" }
         ]
@@ -308,7 +319,7 @@ export const NAV_CARDS = [
             "that serves as a drone control operator and will serve as a media sharing app in the future.",
         
         pointsTitle: "Frameworks/Modules Used:",
-        bulletPoints: [ "Vue.js", "Cesium", "Amazon Web Services" ],
+        bulletPoints: [ "Vue.js", "Cesium", "MAVLink", "Amazon Web Services" ],
 
         pictureBarClass: "wiv-nav-picture-bar",
         pictures: [
@@ -341,7 +352,8 @@ export const NAV_CARDS = [
         pictureBarClass: "ivue-web-nav-picture-bar",
         pictures: [
             { image: ivue_website, width: "90%" },
-            { image: ivue_media_website, width: "90%" }
+            { image: ivue_media_website, width: "90%" },
+            { image: ivue_robotics_website, width: "90%" }
         ]
     },
     {
@@ -390,13 +402,19 @@ export const NAV_CARDS = [
         desc: "Check out some of the Amazon Web Sevrives that I configure to amplify Worlds iVue and Sublo.",
 
         pointsTitle: "Services Include:",
-        bulletPoints: [ "AWS Amplify", "Amazon Cognito", /* "Amazon DynamoDB " */ ],
+        bulletPoints: [ "AWS Amplify",
+            "Amazon Cognito",
+            "Amazon S3",
+            "Amazon CloudFront",
+            "Amazon Route 53"
+            /* "Amazon DynamoDB " */
+        ],
 
         pictureBarClass: "aws-nav-picture-bar",
         pictures: [
-            { image: aws_icon, width: "51%" },
-            { image: amplify_icon, width: "50%" },
-            { image: cognito_icon, width: "50%" },
+            { image: aws_icon, width: "40%" },
+            { image: amplify_icon, width: "40%" },
+            { image: cognito_icon, width: "40%" },
             // DYNAMODB WILL BE INCLUDED ON A LATER DATE.
             // { image: dynamo_db_icon, width: "50%" },
         ]
@@ -428,7 +446,36 @@ export const NAV_CARDS = [
             { image: angular_icon, width: "51%" },
             { image: pizza_page, width: "90%" }
         ]
-    }
+    },
+    {
+        id: "frontend-nav-card",
+        titleId: "frontend-nav-card-title",
+        route: "/skills/frontend/vuejs",
+    
+        title: {
+            text: "Frontend",
+            icon: "fa-brands fa-js",
+            faIcon: true,
+            extraClass: "",
+            colorType: "color",
+            color: "#FFF03C",
+            size: "42px"
+        },
+    
+        color: "#F7DF1E",
+        desc: "Read about my experience on how I used numerous Frontend JavaScript Frameworks, " +
+            "especially Vue.js, to create professional websites and applications.",
+
+        pointsTitle: "Related Projects:",
+        bulletPoints: [ "Worlds iVue", "iVue's Company Websites", "Pizza Project", "Sublo", "My Website" ],
+
+        pictureBarClass: "vue-nav-picture-bar",
+        pictures: [
+            { image: vue_icon, width: "40%" },
+            { image: react_icon, width: "39%" },
+            { image: angular_icon, width: "41%" }
+        ]
+    },
 ]
 
 export const VUE_INFO_SECTOR = {
@@ -441,7 +488,7 @@ export const VUE_INFO_SECTOR = {
     },
 
     buttons: [
-        { title: "Go To Vue.js Website", link: "https://vuejs.org/" }
+        { title: "Go To Vue.js Website", link: VUEJS_WEBSITE_LINK }
     ],
     descriptions: [
         "Vue.js is a versatile web development framework that enhances traditional HTML, CSS, and JavaScript, offering a familiar yet more intuitive learning curve for developers. " +
@@ -465,19 +512,19 @@ export const VUE_INFO_SECTOR = {
         {
             header: "Worlds iVue",
             file: wiv_app,
-            fileLink: "https://www.worldsivue.com/",
+            fileLink: WORLDS_IVUE_LINK,
             links: [
                 { text: "See My Contributions", path: "/experience/ivue/worldsivue", nativeRoute: true },
-                { text: "Open App", path: "https://www.worldsivue.com/", nativeRoute: false }
+                { text: "Open App", path: WORLDS_IVUE_LINK, nativeRoute: false }
             ]
         },
         {
             header: "iVue Websites",
             file: ivue_website,
-            fileLink: "https://ivueworld.com/",
+            fileLink: MAIN_IVUE_WEBSITE_LINK,
             links: [
                 { text: "See My Contributions", path: "/experience/ivue", nativeRoute: true },
-                { text: "Go To Website", path: "https://ivueworld.com/", nativeRoute: false }
+                { text: "Go To Website", path: MAIN_IVUE_WEBSITE_LINK, nativeRoute: false }
             ]
         }
     ]
@@ -524,6 +571,49 @@ export const ANGULAR_INFO_SECTOR = {
     ]
 }
 
+export const REACT_NATIVE_INFO_SECTOR = {
+    title: "React Native",
+    image: react_icon,
+    style: {
+        background: "rgb(25, 25, 25)",
+        color: "#087EA4",
+        minHeight: "100vh"
+    },
+
+    buttons: [
+        { title: "Go To React Native's Website", link: REACT_NATIVE_WEBSITE_LINK }
+    ],
+    descriptions: [
+        "React Native is an JavaScript framework capable of developing apps for any mainstream platform. " +
+            "As its namesake would suggest, this framework contains many aspects seen in React, including the familiar markup syntax JSX. " +
+            "Together, developers could use this framework to create all their projects without the need to use different frameworks if the operating system is different. " +
+            "While this strategy doesn't work well for web development, it benefits shine with mobile app development instead.",
+        "React Native is the only mobile app framework that primarily uses JavaScript/TypeScript. " +
+            "There are plenty of web frameworks like Vue.js, Angular, React (Not Native), and plenty more that exceeds at web development already. " +
+            "There are also plenty of desktop app frameworks and wrappers like <span><a href=\"https://electronjs.org\" style=\"text-decoration: underline;\">Electron</a></span> " +
+            "that make web development and desktop app development practically identical to each other. " +
+            "On the flipside, however, React Native is the only framework for Android and iOS apps that can use widespread npm modules. " +
+            "Its mainstream alternatives either use a different programming language which doesn't have access to npm modules, " +
+            "support only one of the major two mobile operating systems, or both. " +
+            "It should go without saying that this gives React Native a huge competitive edge and a less steep learning curve than other frameworks.",
+        "I've used the framework primarily to help Sublo develop a mobile subleasing app. " +
+            "The app seeks to make subleasing more efficient, as platforms like facebook marketplace can sometimes be rather inefficient for finding homes or tenants. " +
+            "While I have left Sublo for more pursuits at iVue and My University, I am certain I'll be using React Native for other projects in the future."
+    ],
+
+    addBottomSpace: false,
+    pictures: [
+        {
+            header: "Sublo",
+            file: sublo_white_background_icon,
+            fileLink: "#",
+            links: [
+                { text: "See my experience with Sublo", path: "/experience/sublo", nativeRoute: true }
+            ]
+        }
+    ]
+}
+
 export const IVUE_WEBSITE_INFO_SECTORS = [
     {
         title: "My Role",
@@ -535,7 +625,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Go To iVue's Main Website", link: "https://ivueworld.com/" }
+            { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
             "I am the lead software developer at iVue, a company specializing in drone hardware, photography and videography services, and 3D globe software. " +
@@ -554,19 +644,19 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: ivue_website,
-                fileLink: "https://ivueworld.com/",
+                fileLink: MAIN_IVUE_WEBSITE_LINK,
                 links: []
             },
             {
                 header: "",
                 file: ivue_media_website,
-                fileLink: "https://ivuemedia.com/",
+                fileLink: IVUE_MEDIA_WEBSITE_LINK,
                 links: []
             },
             {
                 header: "",
                 file: wiv_banner,
-                fileLink: "https://www.worldsivue.com/",
+                fileLink: WORLDS_IVUE_LINK,
                 links: []
             }
         ]
@@ -581,7 +671,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Go To iVue's Main Website", link: "https://ivueworld.com/" }
+            { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
             "As the lead software developer of iVue, I not only play a major role in developing Worlds iVue, " +
@@ -606,7 +696,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: ivue_website,
-                fileLink: "https://ivueworld.com/",
+                fileLink: MAIN_IVUE_WEBSITE_LINK,
                 links: []
             }
         ]
@@ -621,7 +711,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Go To iVue Media's Website", link: "https://ivuemedia.com/" }
+            { title: "Go To iVue Media's Website", link: IVUE_MEDIA_WEBSITE_LINK }
         ],
         descriptions: [
             "iVue Media is an iVue subsidiary that manages its photography and videography services. " +
@@ -644,7 +734,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: ivue_media_website,
-                fileLink: "https://ivuemedia.com/",
+                fileLink: IVUE_MEDIA_WEBSITE_LINK,
                 links: []
             }
         ]
@@ -659,7 +749,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         },
     
         buttons: [
-            { title: "Open Worlds iVue", link: "https://www.worldsivue.com/" }
+            { title: "Open Worlds iVue", link: WORLDS_IVUE_LINK }
         ],
         descriptions: [
             "Worlds iVue is a proprietary web application that was released by iVue in May 2024. " +
@@ -682,13 +772,13 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             {
                 header: "",
                 file: wiv_banner,
-                fileLink: "https://www.worldsivue.com/",
+                fileLink: WORLDS_IVUE_LINK,
                 links: []
             },
             {
                 header: "",
                 file: wiv_app,
-                fileLink: "https://www.worldsivue.com/",
+                fileLink: WORLDS_IVUE_LINK,
                 links: []
             },
             {
@@ -782,6 +872,34 @@ export const MAVLINK_INFO_SECTOR = {
     ]
 }
 
+export const SUBLO_INFO_SECTOR = {
+    title: "Sublo",
+    image: sublo_icon,
+    style: {
+        background: "#031427",
+        color: "#d1efff",
+        minHeight: "calc(100vh - 75px)"
+    },
+
+    buttons: [
+        { title: "Sublo's LinkedIn", link: "https://www.linkedin.com/company/sublollc" },
+    ],
+    descriptions: [
+        "Sublo is a work-in-progress mobile subleasing app that will allow students to sublease to others safely and quickly. " +
+            "Today, college students typically use platforms like Facebook Marketplace. " +
+            "While these platforms are good, they lack many important filters for specific traits that college students are looking for, " +
+            "from specifying the number of bedrooms and bathrooms to whether pets are allowed or not. " +
+            "Sublo intends to fix this, focusing on creating proper filters to make searching for subleases efficient.",
+        "During my time at Sublo, I learned a lot about <span><a href=\"https://reactnative.dev\" style=\"text-decoration: underline;\">React Native</a></span>. " +
+            "Being one of the only mobile development frameworks that supports JavaScript packages and a platform that works for both Android and iOS, " +
+            "I have truly learned a lot with mobile app development. Though I have parted ways with Sublo due to College starting back up, " +
+            "I'm sure I'll be at the front of making mobile apps for iVue and maybe other organizations I'll join in the future."
+    ],
+
+    addBottomSpace: true,
+    pictures: []
+}
+
 export const AWS_INFO_SECTORS = [
     {
         title: "Amazon Web Services",
@@ -864,6 +982,90 @@ export const AWS_INFO_SECTORS = [
         addBottomSpace: true,
         pictures: []
     },
+    {
+        title: "Amazon S3",
+        image: s3_icon,
+        style: {
+            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+
+        buttons: [
+            { title: "Amazon S3's Website", link: "https://aws.amazon.com/s3/" }
+        ],
+        descriptions: [
+            "Amazon Simple Storage Service (S3) is an easy way to store data. " +
+                "This can be used for pretty much any use case, but I've been mainly using it for websites. " +
+                "A single bucket can store all sorts of files and assets for a website. On top of that, they have a \"Static Website Hosting\" mode, " +
+                "automatically creating a link to view the stored website. Furthermore, it's straightforward to make special rules for a website, " +
+                "not just for accessing it, but also for having said bucket redirect to other websites and domains.",
+            "One cool thing that's possible with AWS in general is to setup a CI/CD pipeline, or continuous integration and continuous deployment. " +
+                "GitHub Actions makes updating the actual website as simple as pushing a commit onto the production branch. " +
+                "This helps junior developers on my team efficiently push updates to the website without involving me as much, " +
+                "a feat not available on other hosting platforms.",
+            "I don't use S3 for any personal projects, but i configured iVue's buckets so that they are used to host the company's websites and " +
+                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "Each of these projects also have their own CI/CD pipeline connecting them to their respective Amazon S3 bucket. " +
+                "In the future, I'm sure that iVue will use S3 for more complex purposes."
+        ],
+
+        addBottomSpace: true,
+        pictures: []
+    },
+    {
+        title: "Amazon CloudFront",
+        image: cloudfront_icon,
+        style: {
+            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+
+        buttons: [
+            { title: "Amazon CloudFront's Website", link: "https://aws.amazon.com/cloudfront/" }
+        ],
+        descriptions: [
+            "Amazon CloudFront is an effective and secure delivery tool for content like websites, videos, mobile apps, etc. " +
+                "For websites in particular, This primarily serves as a middleman between Amazon S3 and a domain's name servers (DNS). " +
+                "A Cloudfront Distribution takes an S3 bucket, configures domains that will use it, and then creates a secure link for its content. " +
+                "like an S3 bucket and many other Amazon services, any distribution is customizable. For instance, " +
+                "many behaviors can be set for different errors, such as adding a custom 404 error page, amongst many other actions. ",
+            "I configured this service so iVue can deliver its company websites and " +
+                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "iVue might use this for more complex purposes in the future like delivering potential mobile apps."
+        ],
+
+        addBottomSpace: true,
+        pictures: []
+    },
+    {
+        title: "Amazon Route 53",
+        image: route53_icon,
+        style: {
+            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+
+        buttons: [
+            { title: "Amazon Route 53's Website", link: "https://aws.amazon.com/route53/" }
+        ],
+        descriptions: [
+            "Amazon Route 53 is Amazon's primary routing service. " +
+                "Like any other domain registrar, it can hold domains on an account." +
+                "However, A hosted zone can be created for any domain, regardless of who the registrar is, as it provides its own nameserver addresses. " +
+                "This allows domain managers to configure DNS records freely, whether it be for linked emails, websites, or other purposes." +
+                "For instance, a CNAME record can be set up for a subdomain like " +
+                "<span><a href=\"https://www.ivueworld.com/\" style=\"text-decoration: underline;\">www.ivueworld.com</a></span> to host a cloudfront distribution.",
+            "I configured this service so iVue can deliver its company websites and " +
+                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "iVue will probably use this to host more websites in the future and to register more domains taht it might need."
+        ],
+
+        addBottomSpace: true,
+        pictures: []
+    }
     /*
     {
         title: "Amazon DynamoDB",

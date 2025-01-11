@@ -1,6 +1,6 @@
 <template>
 <div class="page-sector center-flex-display" :style="{ 'background': sectorObj.style.background }">
-    <div v-if="!sectorObj.text.leftSide && webData.resizeHandler.sectorTextWidth.width === '50%'"
+    <div v-if="!sectorObj.text.leftSide && webData.sectorTextWidth.width === '50%'"
         class="page-sector-half center-flex-display">
 
         <img v-for="image in sectorObj.images"
@@ -10,7 +10,7 @@
         />
     </div>
 
-    <div class="page-sector-half center-flex-display" :style="webData.resizeHandler.sectorTextWidth">
+    <div class="page-sector-half center-flex-display" :style="webData.sectorTextWidth">
         <div class="page-sector-title" :style="{ 'color': sectorColor }" v-html="sectorObj.text.title"></div>
         <div class="page-sector-desc" :style="{ 'color': sectorColor }" v-html="sectorObj.text.desc"></div>
 
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div v-if="sectorObj.text.leftSide && webData.resizeHandler.sectorTextWidth.width === '50%'"
+    <div v-if="sectorObj.text.leftSide && webData.sectorTextWidth.width === '50%'"
         class="page-sector-half center-flex-display">
         
         <img v-for="image in sectorObj.images"

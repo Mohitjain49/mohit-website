@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="skill-sidebar-container">
-        <a href="https://vuejs.org/" target="_blank"
+        <a :href="VUEJS_WEBSITE_LINK" target="_blank"
             class="skill-sidebar-opt center-flex-display"
             :class="(classPrefix + 'ivue-sidebar-opt')"
             title="Vue.js">
@@ -56,13 +56,14 @@
 
 <script setup>
 import "@/styles/sectors/sidebars.css";
-import return_icon from "@/google-icons/Return_Black_Icon.svg";
+import return_icon from "@/assets/google-icons/Return_Black_Icon.svg";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 
 import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 import ivue_text from "@/assets/ivue/iVue_Black_Text.png";
 import media_icon from "@/assets/ivue/iVue_Media_Icon.png";
 
+import { VUEJS_WEBSITE_LINK } from "@/stores/Objects.js";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 
