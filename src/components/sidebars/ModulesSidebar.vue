@@ -42,7 +42,7 @@
 
 <script setup>
 import "@/styles/sectors/sidebars.css";
-import return_icon from "@/google-icons/Return_White_Icon.svg";
+import return_icon from "@/assets/google-icons/Return_White_Icon.svg";
 import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 
 import cesium_icon from "@/assets/Cesium_Globe_Icon.png";

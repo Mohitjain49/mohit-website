@@ -402,7 +402,13 @@ export const NAV_CARDS = [
         desc: "Check out some of the Amazon Web Sevrives that I configure to amplify Worlds iVue and Sublo.",
 
         pointsTitle: "Services Include:",
-        bulletPoints: [ "AWS Amplify", "Amazon Cognito", /* "Amazon DynamoDB " */ ],
+        bulletPoints: [ "AWS Amplify",
+            "Amazon Cognito",
+            "Amazon S3",
+            "Amazon CloudFront",
+            "Amazon Route 53"
+            /* "Amazon DynamoDB " */
+        ],
 
         pictureBarClass: "aws-nav-picture-bar",
         pictures: [
@@ -994,8 +1000,13 @@ export const AWS_INFO_SECTORS = [
                 "A single bucket can store all sorts of files and assets for a website. On top of that, they have a \"Static Website Hosting\" mode, " +
                 "automatically creating a link to view the stored website. Furthermore, it's straightforward to make special rules for a website, " +
                 "not just for accessing it, but also for having said bucket redirect to other websites and domains.",
+            "One cool thing that's possible with AWS in general is to setup a CI/CD pipeline, or continuous integration and continuous deployment. " +
+                "GitHub Actions makes updating the actual website as simple as pushing a commit onto the production branch. " +
+                "This helps junior developers on my team efficiently push updates to the website without involving me as much, " +
+                "a feat not available on other hosting platforms.",
             "I don't use S3 for any personal projects, but i configured iVue's buckets so that they are used to host the company's websites and " +
                 "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "Each of these projects also have their own CI/CD pipeline connecting them to their respective Amazon S3 bucket. " +
                 "In the future, I'm sure that iVue will use S3 for more complex purposes."
         ],
 

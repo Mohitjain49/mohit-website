@@ -56,7 +56,7 @@
 
 <script setup>
 import "@/styles/sectors/sidebars.css";
-import return_icon from "@/google-icons/Return_Black_Icon.svg";
+import return_icon from "@/assets/google-icons/Return_Black_Icon.svg";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 
 import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";

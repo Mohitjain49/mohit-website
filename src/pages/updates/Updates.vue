@@ -8,7 +8,7 @@
             {{('Choose an Update!')}}
         </div>
         <div class="main-sector-bottom-linkBtn-container center-flex-display">
-            <RouterLink to="/updates/1-1-0" class="main-sector-bottom-linkBtn center-flex-display">See Update 1.1.0</RouterLink>
+            <RouterLink to="/updates/1-3-0" class="main-sector-bottom-linkBtn center-flex-display">See Update 1.3.0</RouterLink>
         </div>
     </div>
 </div>
