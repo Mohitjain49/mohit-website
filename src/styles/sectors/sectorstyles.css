@@ -8,9 +8,8 @@
     position: relative;
     height: 100px;
     font-size: 40px;
-    width: 350px;
-    padding: 5px;
-    left: calc((100% - 350px) / 2);
+    width: 340px;
+    left: calc((100% - 340px) / 2);
 }
 
 .main-sector-body {
@@ -96,6 +95,10 @@
     }
     .main-sector-body-grid {
         margin-bottom: 20px;
+        left: calc((100% - 285px) / 2);
+    }
+    .main-sector-title {
+        font-size: 35px;
     }
 }
 

@@ -5,17 +5,29 @@ import { useRouter, useRoute } from "vue-router";
 import MJ_Resume from "../assets/documents/Mohit_Jain_Resume.pdf";
 
 export const useWebsiteDataStore = defineStore("WebsiteData", () => {
+    const route = useRoute();
+
     const colorHandler = ref(new ColorHandler());
     const routeHandler = ref(new RouteHandler());
-    const resizeHandler = ref(new ResizeHandler());
+
+    /**
+     * An reference integer that determines the Mode of the Nav Bar.
+     * If it equals 0, it is on laptop mode, or the screen width is above 800px.
+     * If it equals 1, it is on tablet mode, or the screen width is above 600px.
+     * If it equals 2, it is on phone mode, or the screen width is at most 600px.
+     */
+    const pageView = ref(0);
+    const sectorTextWidth = ref({ width: "50%" });
 
     const navBarDropdown = ref(-1);
+    const mobileSidebarOpen = ref(false);
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
     function setEventListeners() {
-        resizeHandler.value.setWebResizeEL();
+        resizePageComponents();
+        window.addEventListener("resize", () => { resizePageComponents(); });
         setColorKeybind();
     }
 
@@ -23,7 +35,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      * This function removes event listeners to the website as soon as its loaded.
      */
     function removeEventListeners() {
-        resizeHandler.value.removeWebResizeEL();
+        window.removeEventListener("resize", () => { resizePageComponents(); });
         removeColorKeybind();
     }
 
@@ -43,6 +55,22 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     function setNavBarDropdown(newIndex = -1) {
         navBarDropdown.value = ((newIndex == navBarDropdown.value) ? -1 : newIndex);
+    }
+
+    /**
+     * This toggles the status of the mobile sidebar for a skills or experience page.
+     */
+    function toggleMobileSidebar() {
+        mobileSidebarOpen.value = ((pageView.value != 2) ? false : !mobileSidebarOpen.value);
+        document.body.style.overflowY = (mobileSidebarOpen.value ? 'hidden' : '');
+    }
+
+    /**
+     * This closes the mobile sidebar for a skills or experience page.
+     */
+    function closeMobileSidebar() {
+        mobileSidebarOpen.value = false;
+        document.body.style.overflowY = '';
     }
 
     /**
@@ -69,6 +97,26 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
+     * This sets the size of crucial components within the website.
+     */
+    function resizePageComponents() {
+        const largeScreen = ((route.path != "/") ? 1300 : 800);
+        const windowWidth = window.innerWidth;
+        sectorTextWidth.value.width = ((windowWidth < largeScreen) ? '100%' : '50%');
+        
+        if(windowWidth <= 600) {
+            pageView.value = 2;
+        } else if(windowWidth <= 800) {
+            pageView.value = 1;
+            closeMobileSidebar();
+        } else {
+            pageView.value = 0;
+            closeMobileSidebar();
+            if(navBarDropdown.value == 1) { setNavBarDropdown(-1); }
+        }
+    }
+
+    /**
      * This function downloads my resume for the visitor to see.
      */
     function downloadResume() {
@@ -78,8 +126,9 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
         link.click();
     }
 
-    return { colorHandler, routeHandler, resizeHandler, navBarDropdown,
-        setEventListeners, removeEventListeners, mountWebData, setNavBarDropdown, downloadResume
+    return { colorHandler, routeHandler, sectorTextWidth, navBarDropdown, pageView, mobileSidebarOpen,
+        setEventListeners, removeEventListeners, mountWebData,
+        setNavBarDropdown, toggleMobileSidebar, closeMobileSidebar, downloadResume
     }
 });
 
@@ -311,38 +360,4 @@ export class RouteHandler {
         { path: "/experience", title: "Experience", classes: "web-navBar-opt" },
         { path: "/globe", title: "My Globe", classes: "web-navBar-opt" }
     ]
-}
-
-export class ResizeHandler {
-    /**
-     * This class manages the website's window "resize" even listener.
-     * It is specifically made so that certain variables can be set to alter its functionality between pages.
-     */
-    constructor() {
-        this.sectorTextWidth = { width: '50%' }
-        this.route = useRoute()
-    }
-    
-    /**
-     * This sets the sector resize event listener.
-     */
-    setWebResizeEL() {
-        this.resizePageComponents();
-        window.addEventListener("resize", () => {this.resizePageComponents()});
-    }
-
-    /**
-     * This removes the sector resize event listener.
-     */
-    removeWebResizeEL() {
-        window.removeEventListener("resize", () => {this.resizePageComponents()});
-    }
-
-    /**
-     * This sets the size of crucial components within the website.
-     */
-    resizePageComponents() {
-        const largeScreen = ((this.route.path != "/") ? 1300 : 800)
-        this.sectorTextWidth.width = ((window.innerWidth < largeScreen) ? '100%' : '50%');
-    }
 }

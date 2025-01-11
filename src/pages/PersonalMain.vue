@@ -2,10 +2,10 @@
     <NavigationMain />
     <div class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
         <div class="web-main-mediaSection">
-            <div class="web-main-half" :style="{ 'align-items': mobileView ? 'center' : 'flex-start'}">
+            <div class="web-main-half" :style="getAlignment()">
                 <div class="web-main-basic-text center-flex-display" v-html="MAIN_DESC"></div>
             </div>
-            <div class="web-main-half" :style="{ 'align-items': mobileView ? 'center' : 'flex-start'}">
+            <div class="web-main-half" :style="getAlignment()">
                 <img :src="headshot" class="web-main-headshot" />
             </div>
         </div>
@@ -26,7 +26,7 @@ import MainSector from '../components/body-components/MainSector.vue';
 import PageSector from '../components/body-components/PageSector.vue';
 
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { onMounted } from 'vue';
 
 import { MAIN_SKILLS_SECTOR, PAGE_SECTORS } from '../stores/Objects.js';
 import headshot from "../assets/Mohit_Headshot.jpeg";
@@ -36,21 +36,13 @@ const webData = useWebsiteDataStore();
 onMounted(() => {
     document.title = "Mohit Jain";
     webData.mountWebData();
-
-    setMainPage();
-    window.addEventListener("resize", setMainPage);
 })
-onUnmounted(() => {
-    window.removeEventListener("resize", setMainPage);
-})
-
-const mobileView = ref(false);
 
 /**
- * This sets some styles of the main page.
+ * This returns the slingment for the media section half.
  */
-const setMainPage = () => {
-    mobileView.value = (window.innerWidth < 601);
+function getAlignment() {
+    return { 'align-items': ((webData.pageView == 2) ? 'center' : 'flex-start') }
 }
 
 /**

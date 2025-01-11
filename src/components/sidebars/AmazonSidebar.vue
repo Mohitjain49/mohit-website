@@ -1,30 +1,19 @@
 <template>
 <div class="skill-sidebar-container skill-sidebar aws-sidebar">
-    <div class="skill-sidebar-container">
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="navigateAmazonPages('main')" title="Amazon Web Services">
-            <img :src="aws_icon" class="skill-sidebar-opt-icon" draggable="false" />
+    <div class="skill-sidebar-container" v-if="webData.pageView != 2">
+        <div v-for="path in AWS_PATHS" :title="path.title"
+            class="skill-sidebar-opt aws-sidebar-opt center-flex-display"
+            @click="navigateAmazonPages(path.route)">
+
+            <img :src="path.icon" class="skill-sidebar-opt-icon" draggable="false" />
         </div>
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="navigateAmazonPages('amplify')" title="AWS Amplify">
-            <img :src="amplify_icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="navigateAmazonPages('cognito')" title="Amazon Cognito">
-            <img :src="cognito_icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="navigateAmazonPages('s3')" title="Amazon S3">
-            <img :src="s3_icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="navigateAmazonPages('cloudfront')" title="Amazon CloudFront">
-            <img :src="cloudfront_icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="navigateAmazonPages('route53')" title="Amazon Route 53">
-            <img :src="route53_icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </div>
-        <!--
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="navigateAmazonPages('dynamodb')" title="Amazon DynamoDB">
-            <img :src="dynamo_db_icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </div>
-        -->
     </div>
+    <div class="skill-sidebar-container" v-if="webData.pageView == 2">
+        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="webData.toggleMobileSidebar()" title="Open Sidebar">
+            <font-awesome-icon icon="fa-bars" class="skill-sidebar-opt-icon" />
+        </div>
+    </div>
+
     <div class="skill-sidebar-container">
         <a :href="AWS_ICONS_LINK" target="_blank" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="AWS Icons">
             <img :src="icons_logo" class="skill-sidebar-opt-icon-v2" width="35" draggable="false" />
@@ -40,6 +29,26 @@
         </RouterLink>
     </div>
 </div>
+
+<div v-if="webData.mobileSidebarOpen" class="webpage-cover"
+    @click="webData.closeMobileSidebar()"
+    style="z-index: 1499;">
+</div>
+<Transition name="mobile-skill-sidebar-transition">
+    <div v-if="webData.mobileSidebarOpen" class="mobile-skill-sidebar aws-sidebar" draggable="false">
+        <div class="mobile-skill-sidebar-opt aws-sidebar-opt" @click="webData.toggleMobileSidebar()">
+            <font-awesome-icon icon="fa-bars" class="mobile-skill-sidebar-opt-icon" />
+            <span> Close Sidebar </span>
+        </div>
+        <div v-for="path in AWS_PATHS"
+            class="mobile-skill-sidebar-opt aws-sidebar-opt"
+            @click="navigateAmazonPages(path.route)">
+
+            <img :src="path.icon" class="mobile-skill-sidebar-opt-icon" draggable="false" />
+            <span> {{ path.title }} </span>
+        </div>
+    </div>
+</Transition>
 </template>
 
 <script setup>
@@ -59,10 +68,18 @@ import route53_icon from "@/assets/aws/AWS_Route_53_Icon.svg";
 // import dynamo_db_icon from "@/assets/aws/AWS_Dynamo_DB_Icon.svg";
 
 import { WORLDS_IVUE_LINK } from "@/stores/Objects.js";
-import { useRouter } from "vue-router";
+import { useWebsiteDataStore } from "@/stores/WebsiteData.js";
 
+import { useRouter } from "vue-router";
+import { onBeforeUnmount } from "vue";
+
+const webData = useWebsiteDataStore();
 const router = useRouter();
 const AWS_ICONS_LINK = "https://aws-icons.com/";
+
+onBeforeUnmount(() => {
+    if(webData.mobileSidebarOpen) { webData.closeMobileSidebar(); }
+})
 
 /**
  * This function navigates to specific aws pages for the user.
@@ -71,4 +88,17 @@ const AWS_ICONS_LINK = "https://aws-icons.com/";
 function navigateAmazonPages(subRoute = "") {
     router.push("/skills/aws/" + subRoute);
 }
+
+/**
+ * This is the list of available paths in the AWS skills page.
+ */
+const AWS_PATHS = [
+    { title: "Amazon Web Services", icon: aws_icon, route: "main" },
+    { title: "AWS Amplify", icon: amplify_icon, route: "amplify" },
+    { title: "Amazon Cognito", icon: cognito_icon, route: "cognito" },
+    { title: "Amazon S3", icon: s3_icon, route: "s3" },
+    { title: "Amazon CloudFront", icon: cloudfront_icon, route: "cloudfront" },
+    { title: "Amazon Route 53", icon: route53_icon, route: "route53" },
+    // { title: "Amazon DynamoDB", icon: dynamo_db_icon, route: "dynamodb" }
+];
 </script>

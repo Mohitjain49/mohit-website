@@ -198,7 +198,7 @@ export const PAGE_SECTORS = [
         text: {
             leftSide: false,
             title: "Sublo",
-            desc: "Scroll through how I am making an app to make finding or listing subleases easy for college students."
+            desc: "Read on how I am helped make an app to make finding or listing subleases easy for college students."
         },
         images: [
             {

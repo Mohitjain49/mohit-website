@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div v-if="wideNavBar" class="web-navBar-links-section center-flex-display">
+    <div v-if="webData.pageView == 0" class="web-navBar-links-section center-flex-display">
         <RouterLink v-for="route in webData.routeHandler.ROUTE_COLLECTION"
             :class="route.classes"
             :to="route.path"
@@ -18,7 +18,7 @@
         />
     </div>
 
-    <div v-if="wideNavBar" class="web-navBar-links-side" style="justify-content: right;">
+    <div v-if="webData.pageView == 0" class="web-navBar-links-side" style="justify-content: right;">
         <!--
         <RouterLink class="web-navBar-opt web-navBar-side web-navBar-routeIcon-container center-flex-display"
             to="/contact-me"
@@ -45,7 +45,7 @@
         </RouterLink>
     </div>
 
-    <div v-if="!wideNavBar" style="display: flex; height: 100%;">
+    <div v-if="webData.pageView != 0" style="display: flex; height: 100%;">
         <!--
         <RouterLink class="web-navBar-opt web-navBar-side web-navBar-routeIcon-container center-flex-display"
             to="/contact-me"
@@ -91,9 +91,7 @@
 import "../styles/sectors/barstyles.css";
 import ColorMenu from "./menus/ColorMenu.vue";
 import RouteMenu from "./menus/RouteMenu.vue";
-
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
-import { ref, onMounted, onUnmounted } from "vue";
 
 const webData = useWebsiteDataStore();
 const COLOR_MENU_TITLE = "Color Menu (Alt + C)";
@@ -101,27 +99,6 @@ const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
 const UPDATES_TITLE = "Update Logs for My Website."
 const CONTACT_TITLE = "Contact Me!";
-
-onMounted(() => {
-    setNavBarSize();
-    window.addEventListener("resize", setNavBarSize);
-})
-onUnmounted(() => {
-    window.removeEventListener("resize", setNavBarSize);
-})
-
-const wideNavBar = ref(true);
-
-/**
- * This sets the "wideNavBar" reference boolean.
- * This is run by an even listener too.
- */
-const setNavBarSize = () => {
-    wideNavBar.value = (window.innerWidth > 800);
-    if(wideNavBar.value && webData.navBarDropdown == 1) {
-        webData.setNavBarDropdown(-1);
-    }
-}
 
 /**
  * This sets which dropdown is open.

@@ -47,10 +47,6 @@ h1, h2, h3, p {
     color: var(--website-text);
 }
 
-#universal-element {
-    height: auto;
-    width: auto;
-}
 .personal-web-body {
     position: absolute;
     top: 50px;
@@ -60,7 +56,6 @@ h1, h2, h3, p {
     min-width: 340px;
     background: var(--webpage-background);
 }
-
 .center-flex-display {
     display: flex;
     justify-content: center;
