@@ -31,9 +31,9 @@ import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
-export const MAIN_IVUE_WEBSITE_LINK = "https://www.dronesivue.com";
-export const IVUE_MEDIA_WEBSITE_LINK = "https://media.dronesivue.com";
-export const IVUE_ROBOTCIS_WEBSITE_LINK = "https://robotics.dronesivue.com";
+export const MAIN_IVUE_WEBSITE_LINK = "https://ivueworld.com/";
+export const IVUE_MEDIA_WEBSITE_LINK = "https://ivuemedia.com/";
+export const IVUE_ROBOTICS_WEBSITE_LINK = "https://ivuerobotics.com/";
 export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
@@ -735,6 +735,37 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
                 header: "",
                 file: ivue_media_website,
                 fileLink: IVUE_MEDIA_WEBSITE_LINK,
+                links: []
+            }
+        ]
+    },
+    {
+        title: "iVue Robotics",
+        image: rc_icon,
+        style: {
+            background: "red",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+    
+        buttons: [
+            { title: "Go To iVue Robotics Website", link: IVUE_ROBOTICS_WEBSITE_LINK },
+            { title: "Order A Drone!", link: (IVUE_ROBOTICS_WEBSITE_LINK + "order") }
+        ],
+        descriptions: [
+            "iVue Robotics focuses on creating drone hardware for its consumers. " +
+                "Currently, drones are seen only as \"flying cameras\" that should be used for photography and videography or " +
+                "as military devices meant for reconnaissance or bombing attacks. " +
+                "Our mission is to create \"Flying Computer\" drones that go beyond today's capabilities. " +
+                ""
+        ],
+    
+        addBottomSpace: true,
+        pictures: [
+            {
+                header: "",
+                file: ivue_robotics_website,
+                fileLink: IVUE_ROBOTICS_WEBSITE_LINK,
                 links: []
             }
         ]
