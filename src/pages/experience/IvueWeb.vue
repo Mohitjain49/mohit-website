@@ -25,21 +25,50 @@ const sectorOpen = ref(0);
 onMounted(() => {
     webData.mountWebData();
     const subRoute = route.params.id;
+    var pathInvalid = true;
 
-    if(subRoute == undefined || subRoute === "main" || subRoute === "me") {
-        sectorOpen.value = 0;
-        document.title = "Mohit Jain | iVue";
-    } else if(subRoute === "website" || subRoute === "web") {
-        sectorOpen.value = 1;
-        document.title = "Mohit Jain | iVue Websites";
-    } else if(subRoute === "media") {
-        sectorOpen.value = 2;
-        document.title = "Mohit Jain | iVue Media";
-    } else if(subRoute === "worldsivue" || subRoute === "wiv" || subRoute === "worlds-ivue") {
-        sectorOpen.value = 3;
-        document.title = "Mohit Jain | Worlds iVue";
-    } else {
-        router.replace("/experience/invalid");
+    for(let i = 0; i < IVUE_EXPERIENCE_PATHS.length; i++) {
+        if(!pathInvalid) { break; }
+        const pathObj = IVUE_EXPERIENCE_PATHS[i];
+
+        if(pathObj.path === subRoute) {
+            pathInvalid = false;
+            sectorOpen.value = i;
+            document.title = pathObj.docTitle;
+        } else if(pathObj.aliases.findIndex(mainRoute => mainRoute === subRoute) != -1) {
+            pathInvalid = false;
+            router.push("/experience/ivue/" + pathObj.path);
+        }
     }
-})
+
+    if(pathInvalid) { router.replace("/experience/invalid"); }
+});
+
+const IVUE_EXPERIENCE_PATHS = [
+    {
+        path: undefined,
+        aliases: ["main", "me", ""],
+        docTitle: "Mohit Jain | iVue"
+    },
+    {
+        path: "web",
+        aliases: ["website", "ivue-website", "main-website"],
+        docTitle: "Mohit Jain | iVue's Main Website"
+    },
+    {
+        path: "ivuemedia",
+        aliases: ["media", "ivue-media"],
+        docTitle: "Mohit Jain | iVue Media"
+    },
+    {
+        path: "ivuerobotics",
+        aliases: ["robotics", "ivue-robotics"],
+        docTitle: "Mohit Jain | iVue Robotics"
+    },
+    {
+        path: "worldsivue",
+        aliases: ["wiv", "worlds-ivue"],
+        docTitle: "Mohit Jain | Worlds iVue"
+    }
+]
 </script>

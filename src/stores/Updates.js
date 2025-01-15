@@ -1,5 +1,5 @@
 import resume from "../assets/documents/Mohit_Jain_Resume.pdf";
-import { PIZZA_WEBSITE_LINK, PAGE_SECTORS } from "./Objects.js";
+import { PIZZA_WEBSITE_LINK, PAGE_SECTORS, IVUE_ROBOTICS_WEBSITE_LINK } from "./Objects.js";
 
 import PageSector from "@/components/body-components/PageSector.vue";
 
@@ -114,7 +114,7 @@ export const Updates = [
     {
         version: "1.3.0",
         versionPath: "1-3-0",
-        releaseDate: "January 11th, 2025",
+        releaseDate: "January 14th, 2025",
         mainDescription: "Over these last few months, I have gained a lot more experience with Amazon Web Services (AWS), " +
             "the JavaScript Framework React Native, and coding in general. Now that my internship at Sublo has ended " +
             "and new updates were released for Worlds iVue and iVue's company websites, I thought it only fitting to update my website as well.",
@@ -148,13 +148,25 @@ export const Updates = [
                 name: "My Sublo Experience",
                 elementId: "Sublo_Experience",
                 description: "During my brief internship at Sublo, I learned a lot about mobile app development with React Native. " +
-                    "Though the company is still in its infancy, I wanted to include it as it is a core piece of my UI/UX development skills." +
+                    "Though the company is still in its infancy, I wanted to include it as it is a core piece of my software development skills." +
                     "<br><br>Link To Example: <span><a href=\"/experience/sublo\" style=\"text-decoration: underline;\">Mohit Jain | Sublo</a></span>",
                 example: {
                     type: "iframe",
                     src: '/experience/sublo',
                 }
             },
+            {
+                name: "iVue Robotics Website",
+                elementId: "iVue_Robotics_Website",
+                description: "iVue's Website Development Team, including me and a few trusted colleagues, just released a new version of the iVue Robotics Website a few days ago. " +
+                    "I made a brief section for this under my experience with iVue like the other two websites." +
+                    "<br><br>Link To Example: <span><a href=\"/experience/ivue/ivuerobotics\" style=\"text-decoration: underline;\">Mohit Jain | iVue Robotics</a></span>" +
+                    "<br>Link To Website: <span><a href=\"" + IVUE_ROBOTICS_WEBSITE_LINK + "\" style=\"text-decoration: underline;\">iVue Robotics</a></span>",
+                example: {
+                    type: "iframe",
+                    src: '/experience/ivue/ivuerobotics',
+                }
+            }
         ]
     }
 ]

@@ -27,6 +27,9 @@
 .media-ivue-sidebar {
     background-color: #b99955;
 }
+.robotics-ivue-sidebar {
+    background-color: #AB0F14;
+}
 .wiv-ivue-sidebar {
     background-color: #80cf76;
 }
@@ -82,21 +85,27 @@
 .aws-sidebar-opt:hover {
     background-color: #815adb;
 }
+
 .main-ivue-sidebar-opt:hover {
     background-color: rgb(167, 167, 167);
 }
 .media-ivue-sidebar-opt:hover {
     background-color: #947b45;
 }
+.robotics-ivue-sidebar-opt:hover {
+    background-color: #7d0f13;
+}
 .wiv-ivue-sidebar-opt:hover {
     background-color: #6fb466;
 }
+
 .cesium-module-sidebar-opt:hover {
     background-color: #508830;
 }
 .mavlink-module-sidebar-opt:hover {
     background-color: #c04d01;
 }
+
 .vue-frontend-sidebar-opt:hover {
     background-color: #153d2b;
 }

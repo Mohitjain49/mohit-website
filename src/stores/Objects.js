@@ -31,9 +31,9 @@ import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
-export const MAIN_IVUE_WEBSITE_LINK = "https://www.dronesivue.com";
-export const IVUE_MEDIA_WEBSITE_LINK = "https://media.dronesivue.com";
-export const IVUE_ROBOTCIS_WEBSITE_LINK = "https://robotics.dronesivue.com";
+export const MAIN_IVUE_WEBSITE_LINK = "https://ivueworld.com/";
+export const IVUE_MEDIA_WEBSITE_LINK = "https://ivuemedia.com/";
+export const IVUE_ROBOTICS_WEBSITE_LINK = "https://ivuerobotics.com/";
 export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
@@ -740,6 +740,40 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         ]
     },
     {
+        title: "iVue Robotics",
+        image: rc_icon,
+        style: {
+            background: "red",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+    
+        buttons: [
+            { title: "Go To iVue Robotics Website", link: IVUE_ROBOTICS_WEBSITE_LINK },
+            { title: "Order A Drone!", link: (IVUE_ROBOTICS_WEBSITE_LINK + "order") }
+        ],
+        descriptions: [
+            "iVue Robotics focuses on creating drone hardware for its consumers. " +
+                "While drones are often perceived as either military tools or \"flying cameras\" for photography and videography, " +
+                "our mission is to break these boundaries by creating \"Flying Computers\", or drones that surpass their current capabilities. " +
+                "Our product line includes \"Develop Air\" drone models and a variety of ModKits designed to enhance and customize drone functionality. " +
+                "For more details, explore our website linked below.",
+            "The iVue Robotics Website enables visitors to design their perfect drone. " +
+                "Customers can customize orders by selecting ModKits, extra parts, and warranty plans tailored to their needs. " +
+                "While this website has just been released, visitors will be able to set up accounts with iVue to enhance their experience with drones."
+        ],
+    
+        addBottomSpace: true,
+        pictures: [
+            {
+                header: "",
+                file: ivue_robotics_website,
+                fileLink: IVUE_ROBOTICS_WEBSITE_LINK,
+                links: []
+            }
+        ]
+    },
+    {
         title: "Worlds iVue",
         image: wiv_icon,
         style: {
@@ -762,7 +796,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
                 "which allows it to function as a desktop app as well.",
             "As the lead software developer at iVue, Worlds iVue is both my first and most important project. " +
                 "I've gained much of my software development expertise, including working with numerous code libraries, through developing this app. " +
-                "It has also been key to developing my leadership skills, as I’ve mentored numerous intern developers in Vue.js and JavaScript, " +
+                "It has also been key to developing my leadership skills, as I've mentored numerous intern developers in Vue.js and JavaScript, " +
                 "guiding them as they contribute to the app's development. " +
                 "I will continue developing Worlds iVue to integrate user pools, enhance its user-friendliness, and introduce new features unique to geospatial applications."
         ],
