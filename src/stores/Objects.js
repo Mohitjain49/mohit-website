@@ -754,10 +754,13 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
         ],
         descriptions: [
             "iVue Robotics focuses on creating drone hardware for its consumers. " +
-                "Currently, drones are seen only as \"flying cameras\" that should be used for photography and videography or " +
-                "as military devices meant for reconnaissance or bombing attacks. " +
-                "Our mission is to create \"Flying Computer\" drones that go beyond today's capabilities. " +
-                ""
+                "While drones are often perceived as either military tools or \"flying cameras\" for photography and videography, " +
+                "our mission is to break these boundaries by creating \"Flying Computers\", or drones that surpass their current capabilities. " +
+                "Our product line includes \"Develop Air\" drone models and a variety of ModKits designed to enhance and customize drone functionality. " +
+                "For more details, explore our website linked below.",
+            "The iVue Robotics Website enables visitors to design their perfect drone. " +
+                "Customers can customize orders by selecting ModKits, extra parts, and warranty plans tailored to their needs. " +
+                "While this website has just been released, visitors will be able to set up accounts with iVue to enhance their experience with drones."
         ],
     
         addBottomSpace: true,
@@ -793,7 +796,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
                 "which allows it to function as a desktop app as well.",
             "As the lead software developer at iVue, Worlds iVue is both my first and most important project. " +
                 "I've gained much of my software development expertise, including working with numerous code libraries, through developing this app. " +
-                "It has also been key to developing my leadership skills, as I’ve mentored numerous intern developers in Vue.js and JavaScript, " +
+                "It has also been key to developing my leadership skills, as I've mentored numerous intern developers in Vue.js and JavaScript, " +
                 "guiding them as they contribute to the app's development. " +
                 "I will continue developing Worlds iVue to integrate user pools, enhance its user-friendliness, and introduce new features unique to geospatial applications."
         ],
