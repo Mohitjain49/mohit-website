@@ -1,6 +1,8 @@
 <template>
     <NavigationMain />
-    <div class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
+    <div class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}"
+        style="background: var(--webpage-static-background)">
+
         <div class="web-main-mediaSection">
             <div class="web-main-half" :style="getAlignment()">
                 <div class="web-main-basic-text center-flex-display" v-html="MAIN_DESC"></div>
@@ -10,9 +12,7 @@
             </div>
         </div>
 
-        <MainSector :sectorObj="MAIN_SKILLS_SECTOR" />
-        <div class="web-main-pageBreak"></div>
-        <div class="web-main-pageBreak"></div>
+        <SkillsSection />
 
         <PageSector :sectorObj="PAGE_SECTORS[1]" />
         <PageSector :sectorObj="PAGE_SECTORS[2]" />
@@ -22,7 +22,9 @@
 
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
-import MainSector from '../components/body-components/MainSector.vue';
+import SkillsSection from '../components/home/SkillsSection.vue';
+
+// import MainSector from '../components/body-components/MainSector.vue';
 import PageSector from '../components/body-components/PageSector.vue';
 
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
@@ -52,3 +54,7 @@ const MAIN_DESC = "Hi! I'm Mohit Jain, a software developer that seeks to inspir
     "designing, developing, and organizing intuitive and colorful User Interfaces for apps and websites alike." +
     "<br><br>Change the color of my website at the top left of the window!";
 </script>
+
+<style>
+
+</style>

@@ -1,4 +1,6 @@
 :root {
+    --body-height: calc(100vh - 50px);
+
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
     --website-gradient-text: linear-gradient(to left, rgb(126, 90, 0) 0%, rgb(198, 147, 19) 50%, rgb(126, 90, 0) 100%);
@@ -90,27 +92,4 @@ h1, h2, h3, p {
     left: 0;
     z-index: 5000;
     background-color: rgba(0, 0, 0, 0.75);
-}
-
-#scroll-down-cover {
-    cursor: pointer;
-}
-.scroll-down-elements {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.scroll-down-cover-text {
-    color: white;
-    font-size: 75px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin-bottom: 20px;
-    text-align: center;
-}
-.scroll-down-arrow-icon {
-    color: white;
-    font-size: 50px;
 }
