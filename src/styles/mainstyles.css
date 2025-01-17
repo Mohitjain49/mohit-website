@@ -1,6 +1,12 @@
 :root {
     --body-height: calc(100vh - 50px);
 
+    --blue-one: rgb(159, 191, 255);
+    --blue-two: rgb(117, 163, 255);
+    --blue-three: rgb(67, 130, 255);
+    --blue-four: rgb(82, 139, 252);
+    --blue-five: rgb(82, 3, 239);
+
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
     --website-gradient-text: linear-gradient(to left, rgb(126, 90, 0) 0%, rgb(198, 147, 19) 50%, rgb(126, 90, 0) 100%);

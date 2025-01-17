@@ -61,14 +61,7 @@ const SOFTWARE_SKILLS = [
 ]
 </script>
 
-<style>
-:root {
-    --blue-one: rgb(159, 191, 255);
-    --blue-two: rgb(117, 163, 255);
-    --blue-three: rgb(67, 130, 255);
-    --blue-four: rgb(82, 139, 252);
-    --blue-five: rgb(82, 3, 239);
-}
+<style scoped>
 .sector-transition {
     height: 50px;
     width: 100%;

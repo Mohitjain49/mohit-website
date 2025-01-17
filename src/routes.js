@@ -23,7 +23,7 @@ const personalRoutes = [
     { path: "/globe", name: "My Globe", component: MyGlobe },
     { path: "/resume", name: "My Resume", component: Resume },
 
-    // { path: "/contact", name: "Contact Mohit", component: ContactPage, alias: ['/contact-me'] },
+    { path: "/contact", name: "Contact Mohit", component: ContactPage, alias: ['/contact-me'] },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
     {
