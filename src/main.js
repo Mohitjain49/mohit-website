@@ -15,7 +15,7 @@ library.add(
     FaIcons.faList,
     FaIcons.faDatabase,
     FaIcons.faPalette,
-    FaIcons.faEnvelope,
+    FaIcons.faPaperPlane,
     FaIcons.faBuilding,
     FaIcons.faMapPin,
     FaIcons.faGear,
@@ -30,6 +30,9 @@ library.add(
     FaIcons.faFileCode,
     FaIcons.faFileArrowDown,
     FaIcons.faFileArrowUp,
+    FaIcons.faCopy,
+    FaIcons.faShare,
+    FaIcons.faPhone,
 
     FaBrands.faReact,
     FaBrands.faJs,
@@ -41,7 +44,8 @@ library.add(
     FaBrands.faGoogle,
     FaBrands.faGithub,
     FaBrands.faLinkedin,
-    FaBrands.faAws
+    FaBrands.faAws,
+    FaBrands.faDiscord
 );
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).

@@ -39,69 +39,6 @@ export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 
-export const MAIN_SKILLS_SECTOR = {
-    title: "Professional Skills",
-    routePath: "/resume",
-    routeBtn: "See My Resume",
-    gridClasses: "main-sector-body",
-
-    content: [
-        {
-            subtitle: "Frontend Development",
-            points: [
-                { title: "Vue.js", icon: vue_icon, color: "#41B883", link: VUEJS_WEBSITE_LINK, faIcon: false },
-                { title: "React", icon: "fa-brands fa-react", color: "#087EA4", link: "https://react.dev/", faIcon: true },
-                { title: "React Native", icon: "fa-brands fa-react", color: "#087EA4", link: REACT_NATIVE_WEBSITE_LINK, faIcon: true },
-                { title: "JavaScript", icon: "fa-brands fa-js", color: "#F7DF1E", link: "https://www.javascript.com/", faIcon: true },
-                { title: "HTML", icon: "fa-brands fa-html5", color: "#E34E26", link: "", faIcon: true },
-                { title: "CSS", icon: "fa-brands fa-css3-alt", color: "#264DE4", link: "", faIcon: true }
-            ]
-        },
-        {
-            subtitle: "Backend Development",
-            points: [
-                { title: "Amazon Web Services", icon: "fa-brands fa-aws", color: "rgb(84, 104, 255)", link: "https://aws.amazon.com/", faIcon: true },
-                { title: "Node.js", icon: "fa-brands fa-node", color: "#70A561", link: "https://nodejs.org/en", faIcon: true },
-                { title: "PostgreSQL", icon: "fa-database", color: "#0072C6", link: "https://www.postgresql.org/", faIcon: true },
-            ]
-        },
-        {
-            subtitle: "Other Skills",
-            points: [
-                { title: "Github", icon: "fa-brands fa-github", color: "#842791", link: "https://github.com/", faIcon: true },
-                { title: "Microsoft 365", icon: "fa-brands fa-windows", color: "#35B5FF", link: "https://www.office.com/", faIcon: true },
-                { title: "Google", icon: "fa-brands fa-google", color: "#4285F4", link: "https://workspace.google.com/", faIcon: true },
-            ]
-        }
-    ]
-}
-
-export const MAIN_CONTACTS_SECTOR = {
-    title: "",
-    routePath: "/experience",
-    routeBtn: "See More of My Experience",
-    gridClasses: "main-sector-body main-contacts-sector",
-
-    content: [
-        {
-            subtitle: "Experience",
-            points: [
-                { title: "iVue", icon: rc_icon, color: "rgb(171, 15, 20)", link: MAIN_IVUE_WEBSITE_LINK, faIcon: false },
-                { title: "Worlds iVue", icon: wiv_icon, color: "#0872BA", link: WORLDS_IVUE_LINK, faIcon: false },
-                { title: "Sublo", icon: sublo_icon, color: "#36A1D9", link: "", faIcon: false }
-            ]
-        },
-        {
-            subtitle: "Contact Me",
-            points: [
-                { title: "mohitkjain49@gmail.com", icon: "fa-envelope", color: "grey", link: "mailto:mohitkjain49@gmail.com", faIcon: true },
-                { title: "LinkedIn", icon: "fa-brands fa-linkedin", color: "#0A66C2", link: "https://www.linkedin.com/in/mohitjain49/", faIcon: true },
-                { title: "Github", icon: "fa-brands fa-github", color: "#842791", link: "https://github.com/Mohitjain49", faIcon: true }
-            ]
-        }
-    ]
-}
-
 export const PAGE_SECTORS = [
     {
         buttons: [

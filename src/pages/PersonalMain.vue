@@ -23,16 +23,13 @@
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
 import SkillsSection from '../components/home/SkillsSection.vue';
-
-// import MainSector from '../components/body-components/MainSector.vue';
 import PageSector from '../components/body-components/PageSector.vue';
 
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
 import { onMounted } from 'vue';
 
-import { MAIN_SKILLS_SECTOR, PAGE_SECTORS } from '../stores/Objects.js';
+import { PAGE_SECTORS } from '../stores/Objects.js';
 import headshot from "../assets/Mohit_Headshot.jpeg";
-import "../styles/mainpage.css";
 
 const webData = useWebsiteDataStore();
 onMounted(() => {
@@ -55,6 +52,67 @@ const MAIN_DESC = "Hi! I'm Mohit Jain, a software developer that seeks to inspir
     "<br><br>Change the color of my website at the top left of the window!";
 </script>
 
-<style>
+<style scoped>
+.web-main-mediaSection {
+    height: 40vw;
+    min-height: 600px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.web-main-half {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.web-main-basic-text {
+    position: relative;
+    height: auto;
+    top: 10%;
+    width: 90%;
+    font-size: 25px;
+    font-family: monospace;
+    color: var(--website-text);
+}
+.web-main-headshot {
+    position: relative;
+    width: 50%;
+    top: 10%;
+}
+
+.web-main-pageBreak {
+    height: 25px;
+    width: 100%;
+    background: var(--sector-background);
+}
+
+.incomplete-background {
+    background: var(--webpage-background);
+    flex-direction: column;
+}
+.incomplete-title {
+    font-size: 50px;
+    margin-bottom: 25px;
+}
+
+@media (max-width: 600px) {
+    .web-main-mediaSection {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: auto;
+    }
+    .web-main-basic-text {
+        top: 0%;
+        padding-top: 20px;
+    }
+    .web-main-headshot {
+        top: 0%;
+    }
+    .web-main-half {
+        margin-bottom: 50px;
+    }
+}
 </style>
