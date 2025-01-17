@@ -1,17 +1,64 @@
 <template>
 <div id="skills" class="sector-transition"></div>
 <div class="skills-section">
-    <div class="skills-section-title"> My Skills </div>
-    <div class="skills-section-mainText">
+    <div class="skills-section-title center-flex-display"> My Skills </div>
+    <div class="skills-section-mainText center-flex-display">
         Since 2021, I have successfully designed and developed numerous websites, web applications, and projects 
         by utilizing multiple programming languages, frontend frameworks, and web services.
+    </div>
+
+    <div class="center-flex-display" style="height: 67%; width: 100%;">
+        <div class="skills-section-icons">
+            <div v-for="skill in SOFTWARE_SKILLS" class="skills-section-tab">
+                <img v-if="!skill.faIcon" :src="skill.asset"
+                    @click="openWebsite(skill.link)"
+                    :title="skill.name"
+                    class="skills-section-tab-asset"
+                    draggable="false"
+                />
+                <font-awesome-icon v-else :icon="skill.asset"
+                    :title="skill.name"
+                    :style="{ 'color': skill.color }"
+                    class="skills-section-tab-asset skills-section-tab-faIcon"
+                />
+            </div>
+        </div>
     </div>
 </div>
 <div class="sector-transition"></div>
 </template>
 
 <script setup>
+import { VUEJS_WEBSITE_LINK, REACT_NATIVE_WEBSITE_LINK } from "@/stores/Objects.js";
+import vuejs_icon from "@/assets/Vuejs_Icon.png";
+import aws_icon from "@/assets/aws/AWS_Icon.png";
+import cesium_icon from "@/assets/Cesium_Globe_Icon.png";
+import react_icon from "@/assets/React_Icon.png";
+import angular_icon from "@/assets/Angular_Icon.webp";
+import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
 
+/**
+ * This function is simple. it opens a website for the visitor.
+ * @param {String} website The website domain name.
+ */
+function openWebsite(website) {
+    window.open(website, "_blank")
+}
+
+/**
+ * These are the multiple software skills I have experience with.
+ */
+const SOFTWARE_SKILLS = [
+    { name: "Vue.js", link: VUEJS_WEBSITE_LINK, asset: vuejs_icon, faIcon: false },
+    { name: "Amazon Web Services", link: "https://aws.amazon.com", asset: aws_icon, faIcon: false },
+    { name: "JavaScript", link: "https://aws.amazon.com", asset: "fa-brands fa-js", faIcon: true, color: "#F7DF1E" },
+    { name: "React Native", link: REACT_NATIVE_WEBSITE_LINK, asset: react_icon, faIcon: false },
+    { name: "Cesium", link: "https://cesium.com", asset: cesium_icon, faIcon: false },
+    { name: "HTML", link: "https://aws.amazon.com", asset: "fa-brands fa-html5", faIcon: true, color: "#E34E26" },
+    { name: "Angular", link: "https://angular.dev", asset: angular_icon, faIcon: false },
+    { name: "MAVLink", link: "https://mavlink.io/en", asset: mavlink_icon, faIcon: false },
+    { name: "CSS", link: "https://aws.amazon.com", asset: "fa-brands fa-css3-alt", faIcon: true, color: "#264DE4" },
+]
 </script>
 
 <style>
@@ -32,7 +79,9 @@
 }
 
 .skills-section {
-    height: var(--body-height);
+    height: fit-content;
+    min-height: calc(var(--body-height) - 40px);
+    padding: 20px 0px;
     width: 100%;
     background: linear-gradient(to bottom, var(--blue-one) 0%, var(--blue-two) 100%);
     color: var(--blue-five);
@@ -41,6 +90,7 @@
     align-items: center;
     flex-direction: column;
 }
+
 .skills-section-title {
     position: relative;
     font-size: 90px;
@@ -48,19 +98,86 @@
     font-weight: bold;
     color: var(--blue-five);
     width: fit-content;
-    margin: 25px 0px;
+    height: 18%;
 }
-
 .skills-section-mainText {
-    font-size: 20px;
+    font-size: 22px;
     font-family: 'Lexend', 'sans-serif';
-    width: fit-content;
+    width: calc(100% - 20px);
+    height: fit-content;
     max-width: 700px;
-    padding: 0px 10px;
+    padding: 20px 10px;
     text-align: center;
 }
-.skills-section-descNew {
-    font-size: 30px;
-    font-family: 'Lexend', 'sans-serif';
+
+.skills-section-icons {
+    height: fit-content;
+    width: fit-content;
+    padding: 20px;
+    max-width: 850px;
+    border: 2px solid var(--blue-five);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.skills-section-tab {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.skills-section-tab-faIcon {
+    font-size: 70px;
+    cursor: default !important;
+}
+
+.skills-section-tab-asset {
+    cursor: pointer;
+    user-select: none;
+    width: 70px;
+    padding: 12px;
+    margin: 10px;
+    border: 2px solid var(--blue-four);
+    border-radius: 10px;
+    transition: var(--default-transition), padding 0.2s;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.skills-section-tab-asset:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+    /*padding: 16px;*/
+}
+
+@media (max-width: 600px) {
+    .skills-section {
+        min-height: 0px;
+    }
+    .skills-section-title {
+        font-size: 75px;
+        height: 110px;
+    }
+    .skills-section-mainText {
+        font-size: 17px;
+        padding: 20px 0px;
+    }
+
+    .skills-section-icons {
+        transform: none;
+        margin: 20px 0px;
+    }
+    .skills-section-tab-asset {
+        width: 40px;
+    }
+    .skills-section-tab-faIcon {
+        font-size: 40px;
+    }
+}
+@media (min-height: 800px) {
+    .skills-section-icons {
+        position: relative;
+        top: 50px;
+        margin-top: 20px;
+        transform: scale(1.2, 1.2);
+    }
 }
 </style>
