@@ -139,7 +139,7 @@ const ROUTE_COLLECTION = [
 .web-navBar-list {
     width: 50px;
 }
-.web-navBar-list span {
+.web-navBar-list svg {
     margin-top: 0px;
 }
 

@@ -322,6 +322,7 @@ const SOCIALS = [
 
 .social-tab-link {
     margin-left: 5px;
+    font-size: 16px;
     font-family: 'Roboto', sans-serif;
     color: var(--blue-five);
     border-bottom: var(--thin-empty-border);
@@ -382,11 +383,23 @@ const SOCIALS = [
         grid-template-columns: 1fr;
     }
     .contact-me-box {
+        height: 100%;
         width: 100%;
         left: 0 !important;
         padding: 20px 0px;
-        height: fit-content;
         border: none;
+        border-radius: 0px;
+    }
+    .contact-me-box.web-service {
+        margin-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .social-tab-link {
+        font-size: 14px;
+    }
+    .social-tab-btn {
+        font-size: 14px;
     }
 }
 </style>

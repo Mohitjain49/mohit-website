@@ -13,12 +13,14 @@
                 <img v-if="!skill.faIcon" :src="skill.asset"
                     @click="openWebsite(skill.link)"
                     :title="skill.name"
+                    :style="getIconStyle(skill.link, undefined)"
                     class="skills-section-tab-asset"
                     draggable="false"
                 />
                 <font-awesome-icon v-else :icon="skill.asset"
+                    @click="openWebsite(skill.link)"
                     :title="skill.name"
-                    :style="{ 'color': skill.color }"
+                    :style="getIconStyle(skill.link, skill.color)"
                     class="skills-section-tab-asset skills-section-tab-faIcon"
                 />
             </div>
@@ -41,8 +43,20 @@ import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
  * This function is simple. it opens a website for the visitor.
  * @param {String} website The website domain name.
  */
-function openWebsite(website) {
+function openWebsite(website = "#") {
+    if(website === "#") { return; }
     window.open(website, "_blank")
+}
+
+/**
+ * This function returns the style for an icon.
+ * @param {String} website The website domain name.
+ * @param {String} color The color of the icon. Can be undefined.
+ */
+function getIconStyle(website = "#", color = undefined) {
+    return { color: ((color == undefined) ? "" : color),
+        cursor: ((website === "#") ? "default" : "pointer")
+    }
 }
 
 /**
@@ -51,13 +65,13 @@ function openWebsite(website) {
 const SOFTWARE_SKILLS = [
     { name: "Vue.js", link: VUEJS_WEBSITE_LINK, asset: vuejs_icon, faIcon: false },
     { name: "Amazon Web Services", link: "https://aws.amazon.com", asset: aws_icon, faIcon: false },
-    { name: "JavaScript", link: "https://aws.amazon.com", asset: "fa-brands fa-js", faIcon: true, color: "#F7DF1E" },
+    { name: "JavaScript", link: "#", asset: "fa-brands fa-js", faIcon: true, color: "#F7DF1E" },
     { name: "React Native", link: REACT_NATIVE_WEBSITE_LINK, asset: react_icon, faIcon: false },
     { name: "Cesium", link: "https://cesium.com", asset: cesium_icon, faIcon: false },
-    { name: "HTML", link: "https://aws.amazon.com", asset: "fa-brands fa-html5", faIcon: true, color: "#E34E26" },
+    { name: "HTML", link: "#", asset: "fa-brands fa-html5", faIcon: true, color: "#E34E26" },
     { name: "Angular", link: "https://angular.dev", asset: angular_icon, faIcon: false },
     { name: "MAVLink", link: "https://mavlink.io/en", asset: mavlink_icon, faIcon: false },
-    { name: "CSS", link: "https://aws.amazon.com", asset: "fa-brands fa-css3-alt", faIcon: true, color: "#264DE4" },
+    { name: "CSS", link: "#", asset: "fa-brands fa-css3-alt", faIcon: true, color: "#264DE4" },
 ]
 </script>
 
@@ -122,7 +136,6 @@ const SOFTWARE_SKILLS = [
 }
 .skills-section-tab-faIcon {
     font-size: 70px;
-    cursor: default !important;
 }
 
 .skills-section-tab-asset {
@@ -155,7 +168,6 @@ const SOFTWARE_SKILLS = [
     }
 
     .skills-section-icons {
-        transform: none;
         margin: 20px 0px;
     }
     .skills-section-tab-asset {
@@ -165,7 +177,7 @@ const SOFTWARE_SKILLS = [
         font-size: 40px;
     }
 }
-@media (min-height: 800px) {
+@media (min-height: 800px) and (min-width: 601px) {
     .skills-section-icons {
         position: relative;
         top: 50px;
