@@ -30,11 +30,5 @@ const webData = useWebsiteDataStore();
 onMounted(() => {
     document.title = "Mohit Jain | Experience";
     webData.mountWebData();
-
-    webData.colorHandler.setCurrentNavCards([
-        { id: NAV_CARDS[3].id, titleId: NAV_CARDS[3].titleId },
-        { id: NAV_CARDS[4].id, titleId: NAV_CARDS[4].titleId },
-        { id: NAV_CARDS[5].id, titleId: NAV_CARDS[5].titleId }
-    ]);
 })
 </script>

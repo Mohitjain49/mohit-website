@@ -2,13 +2,6 @@
 <div class="web-navBar globe-bar" @click="globeStore.closeRCM" @contextmenu="globeStore.closeRCM">
     <div class="web-navBar-links-section center-flex-display" style="width: 600px;">
         <div class="center-flex-display web-navBar-opt globe-bar-opt"
-            @click="globeStore.setFeatureIndex(0)"
-            :title="((globeStore.featureIndex == 0) ? 'Hide Available Colors' : 'Show Available Colors')">
-
-            <font-awesome-icon icon="fa-palette" />
-            <div class="globe-bar-opt-text">Color</div>
-        </div>
-        <div class="center-flex-display web-navBar-opt globe-bar-opt"
             @click="globeStore.setFeatureIndex(1)"
             :title="((globeStore.featureIndex == 1) ? 'Hide Website Routes' : 'Show Website Routes')">
 

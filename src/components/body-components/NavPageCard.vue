@@ -57,12 +57,9 @@
 
 <script setup>
 import "../../styles/nav/navcards.css";
-import { useWebsiteDataStore } from "../../stores/WebsiteData.js";
 import { ref, onMounted, onUnmounted } from "vue";
 
-const webData = useWebsiteDataStore();
 const props = defineProps({ sectorObj: Object });
-
 const pictureShown = ref(0);
 var pictureInterval = null;
 
@@ -76,21 +73,18 @@ onUnmounted(() => { removePictureInterval(); })
  * This function occurs whenever visitors hovers over the nav card.
  */
 function onNavCardHover() {
-    webData.colorHandler.onNavCardHover(
-        props.sectorObj.id,
-        props.sectorObj.titleId,
-        props.sectorObj.color
-    );
+    const color = props.sectorObj.color;
+    document.getElementById(props.sectorObj.id).style.borderColor = color;
+    document.getElementById(props.sectorObj.titleId).style.borderColor = color;
 }
 
 /**
  * This function runs whenever visitors' mouse leave the nav card.
  */
 function onNavCardLeave() {
-    webData.colorHandler.onNavCardLeave(
-        props.sectorObj.id,
-        props.sectorObj.titleId
-    );
+    const navBarBorder = "rgb(255, 115, 0)";
+    document.getElementById(props.sectorObj.id).style.borderColor = navBarBorder;
+    document.getElementById(props.sectorObj.titleId).style.borderColor = navBarBorder;
 }
 
 /**

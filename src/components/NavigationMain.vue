@@ -38,16 +38,12 @@
 </div>
 
 <Transition name="navBarDDTransition">
-    <ColorMenu v-if="webData.navBarDropdown == 0" :globePage="false" />
-</Transition>
-<Transition name="navBarDDTransition">
     <RouteMenu v-if="webData.navBarDropdown == 1" :globePage="false" />
 </Transition>
 </template>
 
 <script setup>
 import "../styles/sectors/barstyles.css";
-import ColorMenu from "./menus/ColorMenu.vue";
 import RouteMenu from "./menus/RouteMenu.vue";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
 

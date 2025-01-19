@@ -33,13 +33,11 @@
 import "../../styles/update.css";
 import { Updates } from '../../stores/Updates.js';
 
+import { useRouter } from "vue-router";
 import { ref } from "vue";
-import { useWebsiteDataStore } from "@/stores/WebsiteData";
 
-const webData = useWebsiteDataStore();
-const tabsExpanded = ref(
-    new Array(Updates.length).fill(true, 0, Updates.length)
-);
+const router = useRouter();
+const tabsExpanded = ref(new Array(Updates.length).fill(true, 0, Updates.length));
 
 /**
  * This sets whether a specific tab is expanded or not given an index.
@@ -54,15 +52,19 @@ function setTabExpanded(index = 0) {
  * @param {String} versionPath The version path to navigate to.
  */
 function navigateToUpdate(versionPath = "home") {
-    webData.routeHandler.navigateToUpdate(versionPath);
+    router.push('/updates/' + versionPath);
 }
 
 /**
- * This navigates to the specific topi the user wants more info on.
+ * This navigates to the specific topic the user wants more info on.
  * @param {String} updatePath The update that contains the topic.
  * @param {String} id The id of the main element for this. 
  */
 function navigateToUpdateTopic(updatePath = "1-1-0", id = "") {
-    webData.routeHandler.navigateToUpdateTopic(updatePath, id);
+    router.push({ path: ("/updates/" + updatePath), hash: ("#" + id) }).then(() => {
+        const logPage = document.getElementById(updatePath);
+        const top = (document.getElementById(id).getBoundingClientRect().y + logPage.scrollTop - 55);
+        logPage.scrollTo({ top: top, left: 0, behavior: "smooth" });
+    });
 }
 </script>

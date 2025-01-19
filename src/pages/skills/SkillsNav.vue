@@ -30,12 +30,5 @@ const webData = useWebsiteDataStore();
 onMounted(() => {
     document.title = "Mohit Jain | Skills";
     webData.mountWebData();
-
-    webData.colorHandler.setCurrentNavCards([
-        { id: NAV_CARDS[0].id, titleId: NAV_CARDS[0].titleId },
-        { id: NAV_CARDS[7].id, titleId: NAV_CARDS[7].titleId },
-        { id: NAV_CARDS[2].id, titleId: NAV_CARDS[2].titleId },
-        { id: NAV_CARDS[6].id, titleId: NAV_CARDS[6].titleId },
-    ]);
 })
 </script>

@@ -6,9 +6,6 @@
     </div>
     <div class="right-click-line"></div>
 
-    <div class="right-click-opt" @click="activateOpt(1)">
-        {{ ((globeStore.featureIndex == 0) ? 'Hide Available Colors' : 'Show Available Colors') }}
-    </div>
     <div class="right-click-opt" @click="activateOpt(2)">
         {{ ((globeStore.featureIndex == 1) ? 'Hide Website Routes' : 'Show Website Routes') }}
     </div>
