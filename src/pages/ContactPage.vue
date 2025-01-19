@@ -74,6 +74,7 @@
 
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
+import { SOCIALS } from '../stores/Objects.js';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
 import { onMounted } from 'vue';
 
@@ -94,53 +95,7 @@ function copyLink(link = "") {
 const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, please do so below. It uses " +
     "<span><a href=\"https://aws.amazon.com/ses/\" style=\"text-decoration: underline;\" target=\"_blank\">Amazon Simple Email Service (SES)</a></span>" +
     " to send an automatic email to me."
-const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, phone, LinkedIn, Discord, and Github.";
-
-/**
- * These socials are ways that people will be able to contact me.
- */
-const SOCIALS = [
-    {
-        name: "Email",
-        displayLink: "mohitkjain49@gmail.com",
-        link: "mailto:mohitkjain49@gmail.com",
-        copyBtn: "Copy Email",
-        linkBtn: "Send Email",
-        linkIcon: "fa-share"
-    },
-    {
-        name: "Phone Number",
-        displayLink: "(770) 687-5981",
-        link: "tel:7706875981",
-        copyBtn: "Copy Number",
-        linkBtn: "Call Number",
-        linkIcon: "fa-phone"
-    },
-    {
-        name: "LinkedIn",
-        displayLink: "https://www.linkedin.com/in/mohitjain49",
-        link: "https://www.linkedin.com/in/mohitjain49",
-        copyBtn: "Copy LinkedIn Link",
-        linkBtn: "Go To LinkedIn",
-        linkIcon: "fa-brands fa-linkedin"
-    },
-    {
-        name: "Discord",
-        displayLink: "https://discord.com/users/mohitjainn",
-        link: "https://discord.com/users/mohitjainn",
-        copyBtn: "Copy Discord Link",
-        linkBtn: "Go To Discord",
-        linkIcon: "fa-brands fa-discord"
-    },
-    {
-        name: "GitHub",
-        displayLink: "https://github.com/Mohitjain49",
-        link: "https://github.com/Mohitjain49",
-        copyBtn: "Copy GitHub Link",
-        linkBtn: "Go To Github",
-        linkIcon: "fa-brands fa-github"
-    },
-]
+const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, LinkedIn, Discord, and Github.";
 </script>
 
 <style scoped>
@@ -156,6 +111,7 @@ const SOCIALS = [
     padding: 25px 10px;
     margin: 25px 0px;
     height: fit-content;
+    min-height: 750px;
     border: 2px solid var(--website-text);
     border-radius: 20px;
     overflow: hidden;
@@ -308,7 +264,7 @@ const SOCIALS = [
     left: calc(10% - 10px);
     border: 2px solid var(--website-text);
     border-radius: 7px;
-    margin-bottom: 12px;
+    margin-bottom: 30px;
 }
 .social-tab-header {
     margin-left: 5px;

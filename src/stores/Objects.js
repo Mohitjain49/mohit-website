@@ -39,6 +39,45 @@ export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 
+export const SOCIALS = [
+    {
+        name: "Work Email",
+        displayLink: "mohitkjainwork@gmail.com",
+        link: "mailto:mohitkjainwork@gmail.com",
+        copyBtn: "Copy Email",
+        linkBtn: "Send Email",
+        linkIcon: "fa-envelope",
+        color: "var(--website-text)"
+    },
+    {
+        name: "LinkedIn",
+        displayLink: "https://www.linkedin.com/in/mohitjain49",
+        link: "https://www.linkedin.com/in/mohitjain49",
+        copyBtn: "Copy LinkedIn Link",
+        linkBtn: "Go To LinkedIn",
+        linkIcon: "fa-brands fa-linkedin",
+        color: "#0072B1"
+    },
+    {
+        name: "Discord",
+        displayLink: "https://discord.com/users/mohitjainn",
+        link: "https://discord.com/users/mohitjainn",
+        copyBtn: "Copy Discord Link",
+        linkBtn: "Go To Discord",
+        linkIcon: "fa-brands fa-discord",
+        color: "#5865F2"
+    },
+    {
+        name: "GitHub",
+        displayLink: "https://github.com/Mohitjain49",
+        link: "https://github.com/Mohitjain49",
+        copyBtn: "Copy GitHub Link",
+        linkBtn: "Go To Github",
+        linkIcon: "fa-brands fa-github",
+        color: "white"
+    },
+]
+
 export const PAGE_SECTORS = [
     {
         buttons: [

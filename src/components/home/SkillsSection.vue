@@ -3,7 +3,7 @@
 <div class="skills-section">
     <div class="skills-section-title center-flex-display"> My Skills </div>
     <div class="skills-section-mainText center-flex-display">
-        Since 2021, I have successfully designed and developed numerous websites, web applications, and projects 
+        Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
         by utilizing multiple programming languages, frontend frameworks, and web services.
     </div>
 

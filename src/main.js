@@ -31,7 +31,7 @@ library.add(
     FaIcons.faFileArrowDown,
     FaIcons.faFileArrowUp,
     FaIcons.faCopy,
-    FaIcons.faShare,
+    FaIcons.faEnvelope,
     FaIcons.faPhone,
 
     FaBrands.faReact,
