@@ -1,5 +1,7 @@
 <template>
     <NavigationMain />
+    <NavigationHome />
+
     <div id="homepage" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
         <StartSection />
         <SkillsSection />
@@ -12,6 +14,7 @@
 
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
+import NavigationHome from '../components/home/NavigationHome.vue';
 import PageSector from '../components/body-components/PageSector.vue';
 
 import StartSection from '../components/home/StartSection.vue';
