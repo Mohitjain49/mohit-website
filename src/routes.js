@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import PersonalMain from "./pages/PersonalMain.vue";
-import MyGlobe from "./pages/MyGlobe.vue";
+// import MyGlobe from "./pages/MyGlobe.vue";
 import ContactPage from "./pages/ContactPage.vue";
-import InvalidRoute from "./pages/InvalidRoute.vue";
 import Resume from "./pages/Resume.vue";
+import InvalidRoute from "./pages/InvalidRoute.vue";
+import GlobeNotAvailable from "./pages/GlobeNotAvailable.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import FrontendSkills from "./pages/skills/FrontendSkills.vue";
@@ -20,7 +21,8 @@ import UpdateLog from "./pages/updates/UpdateLog.vue";
 
 const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
-    { path: "/globe", name: "My Globe", component: MyGlobe },
+    // { path: "/globe", name: "My Globe", component: MyGlobe },
+    { path: "/globe", name: "My Globe", component: GlobeNotAvailable },
     { path: "/resume", name: "My Resume", component: Resume },
 
     { path: "/contact", name: "Contact Mohit", component: ContactPage, alias: ['/contact-me'] },
