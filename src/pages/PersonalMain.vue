@@ -5,6 +5,7 @@
     <div id="homepage" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
         <StartSection />
         <SkillsSection />
+        <ExperienceSection />
 
         <PageSector :sectorObj="PAGE_SECTORS[1]" />
         <PageSector :sectorObj="PAGE_SECTORS[2]" />
@@ -19,6 +20,7 @@ import PageSector from '../components/body-components/PageSector.vue';
 
 import StartSection from '../components/home/StartSection.vue';
 import SkillsSection from '../components/home/SkillsSection.vue';
+import ExperienceSection from '../components/home/ExperienceSection.vue';
 
 import { PAGE_SECTORS } from '../stores/Objects.js';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';

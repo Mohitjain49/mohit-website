@@ -27,7 +27,6 @@ function toggleMenuExpanded() {
  * @param {String} id The element ID of the section.
  */
 function goToHomeSection(id = "start") {
-    if(id === "experience") { return; } // THIS WILL BE REMOVED SOON.
     const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
     window.scrollTo({ top: top, left: 0, behavior: "smooth" });
 }

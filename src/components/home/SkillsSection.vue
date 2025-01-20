@@ -1,5 +1,5 @@
 <template>
-<div id="skills" class="sector-transition"></div>
+<div id="skills"></div>
 <div class="skills-section">
     <div class="skills-section-title center-flex-display"> My Skills </div>
     <div class="skills-section-mainText center-flex-display">
@@ -7,7 +7,10 @@
         by utilizing multiple programming languages, frontend frameworks, and web services.
     </div>
 
-    <div class="center-flex-display" style="height: 67%; width: 100%;">
+    <div class="skills-section-routeBtn-container">
+        <RouterLink to="/skills" class="skills-section-routeBtn"> Want To Know More? </RouterLink>
+    </div>
+    <div class="skills-section-icons-container">
         <div class="skills-section-icons">
             <div v-for="skill in SOFTWARE_SKILLS" class="skills-section-tab">
                 <img v-if="!skill.faIcon" :src="skill.asset"
@@ -27,7 +30,6 @@
         </div>
     </div>
 </div>
-<div class="sector-transition"></div>
 </template>
 
 <script setup>
@@ -76,18 +78,14 @@ const SOFTWARE_SKILLS = [
 </script>
 
 <style scoped>
-.sector-transition {
+#skills {
     height: 50px;
     width: 100%;
-    background: linear-gradient(to top, rgb(248, 206, 171) 0%, var(--blue-two) 100%);
-}
-.sector-transition#skills {
     background: linear-gradient(to bottom, rgb(248, 206, 171) 0%, var(--blue-one) 100%);
 }
-
 .skills-section {
     height: fit-content;
-    min-height: calc(var(--body-height) - 40px);
+    min-height: calc(var(--body-height));
     padding: 20px 0px;
     width: 100%;
     background: linear-gradient(to bottom, var(--blue-one) 0%, var(--blue-two) 100%);
@@ -113,10 +111,40 @@ const SOFTWARE_SKILLS = [
     width: calc(100% - 20px);
     height: fit-content;
     max-width: 700px;
-    padding: 20px 10px;
+    padding: 15px 10px;
     text-align: center;
 }
 
+.skills-section-routeBtn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75px;
+    width: 100%;
+    padding-bottom: 25px;
+}
+.skills-section-routeBtn {
+    width: fit-content;
+    padding: 10px;
+    font-size: 26px;
+    font-family: 'Lexend', 'sans-serif';
+    font-weight: bold;
+    color: var(--blue-five);
+    border: 2px solid var(--blue-four);
+    border-radius: 15px;
+    transition: var(--default-transition);
+}
+.skills-section-routeBtn:hover {
+    background-color: var(--blue-three);
+}
+
+.skills-section-icons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    width: 100%;
+}
 .skills-section-icons {
     height: fit-content;
     width: fit-content;
@@ -127,6 +155,7 @@ const SOFTWARE_SKILLS = [
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
+
 .skills-section-tab {
     height: 100%;
     width: 100%;
@@ -177,12 +206,15 @@ const SOFTWARE_SKILLS = [
         font-size: 40px;
     }
 }
-@media (min-height: 800px) and (min-width: 601px) {
+@media (min-height: 900px) and (min-width: 601px) {
     .skills-section-icons {
         position: relative;
-        top: 50px;
+        top: 23px;
         margin-top: 20px;
         transform: scale(1.2, 1.2);
+    }
+    .skills-section-routeBtn-container {
+        padding-bottom: 25px;
     }
 }
 </style>
