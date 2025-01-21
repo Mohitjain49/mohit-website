@@ -19,7 +19,7 @@
 import NavigationMain from '../../components/NavigationMain.vue';
 import NavPageCard from '../../components/body-components/NavPageCard.vue';
 
-import "../../styles/nav/navpage.css";
+import "../../styles/navpage.css";
 import "../../styles/sectors/sectorstyles.css";
 
 import { useWebsiteDataStore } from '../../stores/WebsiteData.js';

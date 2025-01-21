@@ -49,3 +49,9 @@
         max-width: 1800px;
     }
 }
+
+@media (max-width: 950px) and (min-width: 651px) {
+    #third-nav-card {
+        left: 52.5%;
+    }
+}

@@ -4,7 +4,7 @@
     <div class="gradient-text incomplete-title"> {{ message }} </div>
     <div class="incomplete-subtitle"> {{ subtitle }} </div>
     <div class="main-sector-bottom-linkBtn-container center-flex-display" style="padding-bottom: 30px;">
-        <RouterLink to="/" class="main-sector-bottom-linkBtn center-flex-display">Back to Home</RouterLink>
+        <RouterLink to="/" class="main-sector-bottom-linkBtn center-flex-display">Go to Home</RouterLink>
     </div>
 </div>
 </template>
