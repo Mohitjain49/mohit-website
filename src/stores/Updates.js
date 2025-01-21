@@ -3,6 +3,8 @@ import { PIZZA_WEBSITE_LINK, PAGE_SECTORS, IVUE_ROBOTICS_WEBSITE_LINK } from "./
 
 import PageSector from "@/components/body-components/PageSector.vue";
 
+const OLD_WEBSITE_LINK = "https://mohitjain49.github.io/";
+
 export const Updates = [
     {
         version: "1.1.0",
@@ -19,17 +21,17 @@ export const Updates = [
                 description: "Over my three years of coding, I have learned many skills, most notably frontend development through my role at iVue. " +
                     "I organized these skills into different paths, showcasing how my experience and skills are linked together. " +
                     "An example with my experience with iVue is down below, where I show how I contribute to the company and develop its software." +
-                    "<br><br>Link To Example: <span><a href=\"#/experience/ivue\" style=\"text-decoration: underline;\">Mohit Jain | iVue</a></span>",
+                    "<br><br>Link To Example: <span><a href=\"/experience/ivue\" style=\"text-decoration: underline;\">Mohit Jain | iVue</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/experience/ivue/',
+                    src: (OLD_WEBSITE_LINK + 'experience/ivue/'),
                 }
             },
             {
                 name: "New Company Page Sectors",
                 elementId: "Page_Sectors",
                 description: "As a compliment to the new Experience Pages, These page sectors serve as brief displays of my experience at different companies. " +
-                    "You can observe them at the bottom of the <span><a href=\"#/\" style=\"text-decoration: underline;\">Home Page</a></span>. " +
+                    "You can observe them at the bottom of the <span><a href=\"/\" style=\"text-decoration: underline;\">Home Page</a></span>. " +
                     "One example is with iVue down below, containing links to my experience, the company's main website, and Worlds iVue, " +
                     "the company's world map software.",
                 example: {
@@ -54,7 +56,7 @@ export const Updates = [
                 description: "There used to be a button at the top-left of the site that let visitors download my resume. " +
                     "Considering that many visitors are on my site would like to see my resume without having to download a document, " +
                     "I made a new path that just contains my resume. Use the link down below to see a clearer version." +
-                    "<br><br>Link To Resume: <span><a href=\"#/resume\" style=\"text-decoration: underline;\">Mohit Jain | Resume</a></span>",
+                    "<br><br>Link To Resume: <span><a href=\"/resume\" style=\"text-decoration: underline;\">Mohit Jain | Resume</a></span>",
                 example: {
                     type: "iframe",
                     src: resume,
@@ -84,8 +86,8 @@ export const Updates = [
                     "Each update will show new projects I work on and new skills I learn. " +
                     "Though I did make this website with scalability in mind, updates could also show new UI developments to the website. " +
                     "Use some of the links below to navigate to different update pages:" +
-                    "<br><br>Main Updates Page: <span><a href=\"#/updates/main\" style=\"text-decoration: underline;\">Mohit Jain | Updates</a></span>" +
-                    "<br>Update 1.1.0: <span><a href=\"#/updates/1-1-0\" style=\"text-decoration: underline;\">Mohit Jain | Update 1.1.0</a></span>",
+                    "<br><br>Main Updates Page: <span><a href=\"/updates/main\" style=\"text-decoration: underline;\">Mohit Jain | Updates</a></span>" +
+                    "<br>Update 1.1.0: <span><a href=\"/updates/1-1-0\" style=\"text-decoration: underline;\">Mohit Jain | Update 1.1.0</a></span>",
                 example: { type: "none" }
             }
         ]
@@ -130,7 +132,7 @@ export const Updates = [
                     "<br><br>Link To Example: <span><a href=\"/skills/aws\" style=\"text-decoration: underline;\">Mohit Jain | AWS</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/skills/aws/s3',
+                    src: (OLD_WEBSITE_LINK + 'skills/aws/s3'),
                 }
             },
             {
@@ -141,7 +143,7 @@ export const Updates = [
                     "<span><a href=\"/skills/frontend/reactnative\" style=\"text-decoration: underline;\">Mohit Jain | Frontend Development | React Native</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/skills/frontend/reactnative',
+                    src: (OLD_WEBSITE_LINK + 'skills/frontend/reactnative'),
                 }
             },
             {
@@ -152,7 +154,7 @@ export const Updates = [
                     "<br><br>Link To Example: <span><a href=\"/experience/sublo\" style=\"text-decoration: underline;\">Mohit Jain | Sublo</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/experience/sublo',
+                    src: (OLD_WEBSITE_LINK + 'experience/sublo'),
                 }
             },
             {
@@ -164,7 +166,7 @@ export const Updates = [
                     "<br>Link To Website: <span><a href=\"" + IVUE_ROBOTICS_WEBSITE_LINK + "\" style=\"text-decoration: underline;\">iVue Robotics</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/experience/ivue/ivuerobotics',
+                    src: (OLD_WEBSITE_LINK + 'experience/ivue/ivuerobotics'),
                 }
             }
         ]
