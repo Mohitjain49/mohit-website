@@ -90,7 +90,7 @@ h1, h2, h3, p {
     margin: 0;
     padding: 0;
     position: absolute;
-    height:auto;
+    height: auto;
     min-height: 100%;
     width: 100%;
     min-width: 350px;
@@ -98,4 +98,26 @@ h1, h2, h3, p {
     left: 0;
     z-index: 5000;
     background-color: rgba(0, 0, 0, 0.75);
+}
+
+.main-sector-bottom-linkBtn-container {
+    height: 75px;
+    width: 100%;
+}
+.main-sector-bottom-linkBtn {
+    cursor: pointer;
+    height: 45px;
+    width: 250px;
+    color: var(--website-text);
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    border-radius: 10px;
+    text-decoration: none;
+    border: var(--empty-border);
+    background-color: var(--website-light-text);
+    transition: var(--default-transition);
+}
+.main-sector-bottom-linkBtn:hover {
+    border-color: var(--website-text);
 }

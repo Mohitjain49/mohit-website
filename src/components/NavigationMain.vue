@@ -29,7 +29,7 @@
         </RouterLink>
         <div class="web-navBar-opt web-navBar-side web-navBar-list"
             v-if="webData.pageView != 0"
-            @click="setDropdown(1)"
+            @click="setDropdown(0)"
             :title="ROUTE_MENU_TITLE">
 
             <font-awesome-icon icon="fa-list" />
@@ -38,16 +38,18 @@
 </div>
 
 <Transition name="navBarDDTransition">
-    <RouteMenu v-if="webData.navBarDropdown == 1" :globePage="false" />
+    <div class="navBar-dropdown" v-if="webData.navBarDropdown == 0">
+        <RouterLink class="navBar-dropdown-opt" v-for="route in ROUTE_COLLECTION" :to="route.path">
+            <span> {{ route.title }} </span>
+        </RouterLink>
+    </div>
 </Transition>
 </template>
 
 <script setup>
-import "../styles/sectors/barstyles.css";
-import RouteMenu from "./menus/RouteMenu.vue";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
-
 const webData = useWebsiteDataStore();
+
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
@@ -157,5 +159,57 @@ const ROUTE_COLLECTION = [
     .web-navBar {
         position: absolute;
     }
+}
+
+/**
+ * These styles are for the route menu.
+ */
+
+.navBar-dropdown {
+    position: fixed;
+    right: 0;
+    top: 50px;
+    height: 200px;
+    width: 300px;
+    z-index: 6;
+    overflow: hidden;
+    border-bottom: 1px solid var(--nav-bar-border);
+    border-left: 1px solid var(--nav-bar-border);
+    background: var(--webpage-background);
+}
+
+.navBar-dropdown-opt {
+    cursor: pointer;
+    height: 48px;
+    width: calc(100% - 2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: var(--thin-empty-border);
+    transition: var(--default-transition);
+}
+.navBar-dropdown-opt:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: var(--website-text);
+}
+.navBar-dropdown-opt span {
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: 'Lexend', sans-serif;
+    transition: var(--default-transition);
+    color: var(--website-text);
+}
+
+.navBarDDTransition-enter-active, .navBarDDTransition-leave-active {
+    transition: height 0.5s, opacity 0.5s;
+}
+.navBarDDTransition-enter-from, .navBarDDTransition-leave-to {
+    opacity: 0;
+    height: 0;
+}
+.navBarDDTransition-enter-to, .navBarDDTransition-leave-from {
+    opacity: 1;
+    height: 200px;
 }
 </style>

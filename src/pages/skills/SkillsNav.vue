@@ -18,9 +18,7 @@
 <script setup>
 import NavigationMain from '../../components/NavigationMain.vue';
 import NavPageCard from '../../components/body-components/NavPageCard.vue';
-
 import "../../styles/navpage.css";
-import "../../styles/sectors/sectorstyles.css";
 
 import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
 import { NAV_CARDS } from '../../stores/Objects.js';

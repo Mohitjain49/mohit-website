@@ -107,7 +107,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
         } else {
             pageView.value = 0;
             closeMobileSidebar();
-            if(navBarDropdown.value == 1) { setNavBarDropdown(-1); }
+            if(navBarDropdown.value == 0) { setNavBarDropdown(-1); }
         }
     }
 

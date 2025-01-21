@@ -149,7 +149,6 @@ const SOFTWARE_SKILLS = [
     height: fit-content;
     width: fit-content;
     padding: 20px;
-    max-width: 850px;
     border: 2px solid var(--blue-five);
     border-radius: 10px;
     display: grid;
@@ -207,11 +206,16 @@ const SOFTWARE_SKILLS = [
     }
 }
 @media (min-height: 900px) and (min-width: 601px) {
-    .skills-section-icons {
-        position: relative;
-        top: 23px;
-        margin-top: 20px;
-        transform: scale(1.2, 1.2);
+    .skills-section {
+        justify-content: center;
+    }
+    .skills-section-tab-asset {
+        width: 84px;
+        padding: 15px;
+        margin: 12px;
+    }
+    .skills-section-tab-faIcon {
+        font-size: 84px;
     }
     .skills-section-routeBtn-container {
         padding-bottom: 25px;

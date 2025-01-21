@@ -10,9 +10,7 @@
 </template>
 
 <script setup>
-import "../../styles/sectors/sectorstyles.css";
 import NavigationMain from '../NavigationMain.vue';
-
 import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
 import { onMounted } from 'vue';
 
