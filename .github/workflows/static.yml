@@ -36,9 +36,6 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-
-      - name: Inject Environment Variables
-        run: echo "VITE_CESIUM_TOKEN=${{ secrets.CESIUM_MAP_KEY }}" > .env.production
       
       - name: Install dependencies
         run: npm ci
