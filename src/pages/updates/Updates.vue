@@ -16,7 +16,7 @@
 
 <script setup>
 import "../../styles/update.css";
-import "../../styles/nav/navpage.css";
+import "../../styles/navpage.css";
 import "../../styles/sectors/sectorstyles.css";
 
 import UpdateMenu from "../../components/menus/UpdateMenu.vue";
