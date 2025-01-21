@@ -10,7 +10,9 @@
 </template>
 
 <script setup>
+import "../../styles/navpage.css";
 import NavigationMain from '../NavigationMain.vue';
+
 import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
 import { onMounted } from 'vue';
 
@@ -26,36 +28,3 @@ onMounted(() => {
     webData.mountWebData();
 })
 </script>
-
-<style scoped>
-.personal-web-body#invalid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: calc(100% - 40px);
-    padding: 0px 20px;
-}
-.incomplete-title {
-    font-size: 60px;
-    width: fit-content;
-    height: fit-content;
-    margin-bottom: 5px;
-    text-align: center;
-}
-.incomplete-subtitle {
-    font-size: 20px;
-    font-family: "Roboto", "Lexend", sans-serif;
-    color: var(--website-text);
-    margin-bottom: 10px;
-    height: fit-content;
-    width: fit-content;
-    text-align: center;
-}
-
-@media (max-width: 600px) {
-    .incomplete-title {
-        font-size: 42px;
-    }
-}
-</style>

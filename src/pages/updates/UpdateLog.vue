@@ -29,7 +29,7 @@
 
 <script setup>
 import "../../styles/update.css";
-import UpdateMenu from "../../components/menus/UpdateMenu.vue";
+import UpdateMenu from "../../components/sidebars/UpdateMenu.vue";
 import NavigationMain from '../../components/NavigationMain.vue';
 
 import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
