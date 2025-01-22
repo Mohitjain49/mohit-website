@@ -31,6 +31,8 @@ import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
+export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
+
 export const MAIN_IVUE_WEBSITE_LINK = "https://ivueworld.com/";
 export const IVUE_MEDIA_WEBSITE_LINK = "https://ivuemedia.com/";
 export const IVUE_ROBOTICS_WEBSITE_LINK = "https://ivuerobotics.com/";
@@ -76,119 +78,7 @@ export const SOCIALS = [
         linkIcon: "fa-brands fa-github",
         color: "white"
     },
-]
-
-export const PAGE_SECTORS = [
-    {
-        buttons: [
-            {
-                route: "/globe",
-                nativeRoute: true,
-                title: "Go To My Globe"
-            },
-            {
-                route: "https://cesium.com/",
-                nativeRoute: false,
-                title: "Go To cesium.com"
-            }
-        ],
-    
-        text: {
-            leftSide: true,
-            title: "My Globe",
-            desc: "Experience 3D globe apps I have developed with the Cesium Geospatial Platform."
-        },
-        images: [
-            {
-                asset: globe_page,
-                style: { maxWidth: "calc(1918px / 3)", marginBottom: "30px" }
-            },
-            {
-                asset: cesium_picture,
-                style: { maxWidth: "calc(1200px / 2)" }
-            }
-        ],
-        style: {
-            background: "rgba(135, 206, 235, 0.95)",
-            fontColor: "#709B49"
-        }
-    },
-    {
-        buttons: [
-            {
-                route: "/experience/ivue",
-                nativeRoute: true,
-                title: "My Experience"
-            },
-            {
-                route: "/experience/ivue/worldsivue",
-                nativeRoute: true,
-                title: "My WIV Experience"
-            },
-            {
-                route: MAIN_IVUE_WEBSITE_LINK,
-                nativeRoute: false,
-                title: "Go To ivueworld.com"
-            },
-            {
-                route: WORLDS_IVUE_LINK,
-                nativeRoute: false,
-                title: "Go To Worlds iVue"
-            },
-        ],
-    
-        text: {
-            leftSide: true,
-            title: "iVue",
-            desc: "Observe how iVue produces media content, drone hardware, and 3D world map software " +
-                "to make drones a part of everyone's daily life."
-        },
-        images: [
-            {
-                asset: wiv_app,
-                style: { maxWidth: 'calc(1918px / 4)', marginBottom: "30px" }
-            },
-            {
-                asset: ivue_website,
-                style: { maxWidth: 'calc(1980px / 4)', marginBottom: "30px" }
-            },
-            {
-                asset: ivue_media_website,
-                style: { maxWidth: 'calc(1918px / 4)' }
-            }
-        ],
-        style: {
-            background: "white",
-            fontColor: "black"
-        }
-    },
-    {
-        buttons: [
-            {
-                route: "/experience/sublo",
-                nativeRoute: true,
-                title: "My Experience"
-            },
-        ],
-    
-        text: {
-            leftSide: false,
-            title: "Sublo",
-            desc: "Read on how I am helped make an app to make finding or listing subleases easy for college students."
-        },
-        images: [
-            {
-                asset: sublo_icon,
-                style: { maxWidth: "calc(1488px / 2.5)" }
-            }
-        ],
-
-        style: {
-            background: "#031427",
-            fontColor: "#d1efff"
-        }
-    }
-]
+];
 
 export const NAV_CARDS = [
     {
@@ -582,7 +472,7 @@ export const REACT_NATIVE_INFO_SECTOR = {
         {
             header: "Sublo",
             file: sublo_white_background_icon,
-            fileLink: "#",
+            fileLink: SUBLO_WEBSITE_LINK,
             links: [
                 { text: "See my experience with Sublo", path: "/experience/sublo", nativeRoute: true }
             ]
@@ -892,7 +782,7 @@ export const SUBLO_INFO_SECTOR = {
     },
 
     buttons: [
-        { title: "Sublo's LinkedIn", link: "https://www.linkedin.com/company/sublollc" },
+        { title: "Sublo's Website", link: SUBLO_WEBSITE_LINK },
     ],
     descriptions: [
         "Sublo is a work-in-progress mobile subleasing app that will allow students to sublease to others safely and quickly. " +

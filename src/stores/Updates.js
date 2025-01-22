@@ -1,7 +1,5 @@
 import resume from "../assets/documents/Mohit_Jain_Resume.pdf";
-import { PIZZA_WEBSITE_LINK, PAGE_SECTORS, IVUE_ROBOTICS_WEBSITE_LINK } from "./Objects.js";
-
-import PageSector from "@/components/body-components/PageSector.vue";
+import { PIZZA_WEBSITE_LINK, IVUE_ROBOTICS_WEBSITE_LINK } from "./Objects.js";
 
 const OLD_WEBSITE_LINK = "https://mohitjain49.github.io/";
 
@@ -33,11 +31,9 @@ export const Updates = [
                 description: "As a compliment to the new Experience Pages, These page sectors serve as brief displays of my experience at different companies. " +
                     "You can observe them at the bottom of the <span><a href=\"/\" style=\"text-decoration: underline;\">Home Page</a></span>. " +
                     "One example is with iVue down below, containing links to my experience, the company's main website, and Worlds iVue, " +
-                    "the company's world map software.",
+                    "the company's 3D Globe App. <br><br>Note: As of Version 1.4.0, This component has been removed." ,
                 example: {
-                    type: "component",
-                    src: PageSector,
-                    sectorObj: PAGE_SECTORS[1]
+                    type: "none"
                 }
             }
         ]

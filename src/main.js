@@ -33,6 +33,7 @@ library.add(
     FaIcons.faCopy,
     FaIcons.faEnvelope,
     FaIcons.faPhone,
+    FaIcons.faCircleDot,
 
     FaBrands.faReact,
     FaBrands.faJs,

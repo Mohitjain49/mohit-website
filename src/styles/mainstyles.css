@@ -7,6 +7,9 @@
     --blue-four: rgb(82, 139, 252);
     --blue-five: rgb(82, 3, 239);
 
+    --silver-color: #adadad;
+    --silver-light: #e4e2e2;
+
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
     --website-gradient-text: linear-gradient(to left, rgb(126, 90, 0) 0%, rgb(198, 147, 19) 50%, rgb(126, 90, 0) 100%);
