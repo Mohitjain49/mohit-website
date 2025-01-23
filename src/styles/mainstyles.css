@@ -124,3 +124,36 @@ h1, h2, h3, p {
 .main-sector-bottom-linkBtn:hover {
     border-color: var(--website-text);
 }
+
+/**
+ * These are styles meant specifically for a more dynamic info sector page.
+ */
+
+ .info-sector-v2, .info-sector-v3 {
+    position: relative;
+    width: calc(100% - 40px) !important;
+    left: 40px;
+}
+.personal-web-body-v2, .personal-web-body-v3 {
+    top: 0px;
+    height: 100%;
+}
+
+@media (min-width: 2000px) {
+    .info-sector-v2 {
+        transform: scale(1.5, 1.5);
+    }
+    .personal-web-body-v2 {
+        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+}
+
+@media (max-width: 600px) {
+    .info-sector-v2, .info-sector-v3 {
+        width: 100% !important;
+        left: 0;
+        top: 45px;
+    }
+}

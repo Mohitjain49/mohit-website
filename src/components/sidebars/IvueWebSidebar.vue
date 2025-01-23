@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import "@/styles/sectors/sidebars.css";
+import "@/styles/sidebars.css";
 import return_black_icon from "@/assets/google-icons/Return_Black_Icon.svg";
 import return_white_icon from "@/assets/google-icons/Return_White_Icon.svg";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";

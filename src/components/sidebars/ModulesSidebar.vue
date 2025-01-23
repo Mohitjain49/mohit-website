@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import "@/styles/sectors/sidebars.css";
+import "@/styles/sidebars.css";
 import return_icon from "@/assets/google-icons/Return_White_Icon.svg";
 import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 

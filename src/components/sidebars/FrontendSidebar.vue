@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import "@/styles/sectors/sidebars.css";
+import "@/styles/sidebars.css";
 import return_icon from "@/assets/google-icons/Return_White_Icon.svg";
 
 import vue_icon from "@/assets/Vuejs_Icon.png";

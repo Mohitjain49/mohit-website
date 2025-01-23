@@ -1,12 +1,11 @@
 <template>
-    <IvueWebSidebar />
-    <div class="personal-web-body personal-web-body-v3" @click="() => {webData.setNavBarDropdown(-1)}">
-        <InfoSector :sectorObj="IVUE_WEBSITE_INFO_SECTORS[sectorOpen]" class="info-sector-v3" />
-    </div>
+<IvueWebSidebar />
+<div class="personal-web-body personal-web-body-v3" @click="() => {webData.setNavBarDropdown(-1)}">
+    <InfoSector :sectorObj="IVUE_WEBSITE_INFO_SECTORS[sectorOpen]" class="info-sector-v3" />
+</div>
 </template>
 
 <script setup>
-import "../../styles/sectors/infosectorstyles.css";
 import IvueWebSidebar from "../../components/sidebars/IvueWebSidebar.vue";
 import InfoSector from '../../components/body-components/InfoSector.vue';
 

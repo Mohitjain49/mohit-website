@@ -1,6 +1,6 @@
 <template>
     <NavigationMain />
-    <div class="personal-web-body personal-web-body-main" @click="() => {webData.setNavBarDropdown(-1)}">
+    <div class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
         <div class="main-nav-page-container">
             <div class="nav-page-title center-flex-display gradient-text">My Skills</div>
             <div class="main-nav-page">
