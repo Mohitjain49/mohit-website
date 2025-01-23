@@ -1,12 +1,12 @@
 <template>
-    <NavigationMain />
-    <NavigationHome />
+<NavigationMain />
+<NavigationHome />
 
-    <div id="homepage" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
-        <StartSection />
-        <SkillsSection />
-        <ExperienceSection />
-    </div>
+<div id="homepage" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
+    <StartSection />
+    <SkillsSection />
+    <ExperienceSection />
+</div>
 </template>
 
 <script setup>

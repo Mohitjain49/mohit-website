@@ -1,6 +1,6 @@
 <template>
-<div :class="getCircleClasses()" @click="toggleMenuExpanded()">
-    <font-awesome-icon v-if="!menuExpanded" icon="fa-bars" class="home-nav-barsIcon" />
+<div :class="getCircleClasses()" @click="toggleMenuExpanded()" title="Navigate This Page">
+    <font-awesome-icon v-if="!menuExpanded" icon="fa-bars" class="home-nav-barsIcon" :beat="iconBeating" />
 
     <template v-if="menuExpanded">
         <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses()"> Start </RouterLink>
@@ -12,14 +12,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 const menuExpanded = ref(false);
+const iconBeating = ref(true);
+
+/**
+ * This lets the icon "beat" for 5 seconds before stopping it.
+ */
+onMounted(() => {
+    setTimeout(() => { iconBeating.value = false; }, 5000);
+})
 
 /**
  * This function toggles the status of this menu.
  */
 function toggleMenuExpanded() {
     menuExpanded.value = !menuExpanded.value;
+    iconBeating.value = false;
 }
 
 /**
@@ -51,8 +60,8 @@ function getCircleOptClasses() {
     position: fixed;
     cursor: pointer;
     overflow: hidden;
-    bottom: 20px;
-    left: 20px;
+    top: 60px;
+    left: 10px;
     background-color: var(--website-text);
     height: 50px;
     width: 50px;

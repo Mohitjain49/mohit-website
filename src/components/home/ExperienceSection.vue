@@ -133,7 +133,7 @@ const SCREENS = [
 }
 .experience-section {
     height: var(--body-height);
-    min-height: 700px;
+    min-height: 800px;
     display: grid;
     grid-template-columns: 60% 40% ;
 }

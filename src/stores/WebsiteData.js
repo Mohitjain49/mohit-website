@@ -1,12 +1,9 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { useRoute } from "vue-router";
-
 import MJ_Resume from "../assets/documents/Mohit_Jain_Resume.pdf";
 
 export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     const dateStore = useDateStore();
-    const route = useRoute();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -15,8 +12,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      * If it equals 2, it is on phone mode, or the screen width is at most 600px.
      */
     const pageView = ref(0);
-    const sectorTextWidth = ref({ width: "50%" });
-
     const navBarDropdown = ref(-1);
     const mobileSidebarOpen = ref(false);
 
@@ -26,7 +21,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     function setEventListeners() {
         resizePageComponents();
         window.addEventListener("resize", () => { resizePageComponents(); });
-        setColorKeybind();
         dateStore.startDateInterval();
     }
 
@@ -35,7 +29,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     function removeEventListeners() {
         window.removeEventListener("resize", () => { resizePageComponents(); });
-        removeColorKeybind();
         dateStore.stopDateInterval();
     }
 
@@ -72,35 +65,10 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
-     * This sets the color keybind.
-     */
-    function setColorKeybind() {
-        document.addEventListener("keydown", (event) => {onColorKeybind(event)});
-    }
-
-    /**
-     * This removes the color keybind.
-     */
-    function removeColorKeybind() {
-        document.removeEventListener("keydown", (event) => {onColorKeybind(event)});
-    }
-
-    /**
-     * This function runs everytime "Alt + C" is pressed when the Keybind is active.
-     */
-    function onColorKeybind(event) {
-        if(event.altKey && (event.key === "c" || event.key === "C")) {
-            setNavBarDropdown(0);
-        }
-    }
-
-    /**
      * This sets the size of crucial components within the website.
      */
     function resizePageComponents() {
-        const largeScreen = ((route.path != "/") ? 1300 : 800);
         const windowWidth = window.innerWidth;
-        sectorTextWidth.value.width = ((windowWidth < largeScreen) ? '100%' : '50%');
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -114,19 +82,9 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
         }
     }
 
-    /**
-     * This function downloads my resume for the visitor to see.
-     */
-    function downloadResume() {
-        const link = document.createElement('a');
-        link.href = MJ_Resume;
-        link.download = 'Mohit_Jain_Resume.pdf';
-        link.click();
-    }
-
-    return { sectorTextWidth, navBarDropdown, pageView, mobileSidebarOpen,
+    return { navBarDropdown, pageView, mobileSidebarOpen,
         setEventListeners, removeEventListeners, mountWebData,
-        setNavBarDropdown, toggleMobileSidebar, closeMobileSidebar, downloadResume
+        setNavBarDropdown, toggleMobileSidebar, closeMobileSidebar
     }
 });
 
@@ -194,4 +152,14 @@ export const useDateStore = defineStore("DateStore", () => {
     return { dateObj, dateStrings, setDateObj,
         startDateInterval, stopDateInterval
     }
-})
+});
+
+/**
+ * This function downloads my resume for the visitor to see.
+ */
+export function downloadResume() {
+   const link = document.createElement('a');
+   link.href = MJ_Resume;
+   link.download = 'Mohit_Jain_Resume.pdf';
+   link.click();
+}

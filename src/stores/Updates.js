@@ -166,5 +166,46 @@ export const Updates = [
                 }
             }
         ]
+    },
+    {
+        version: "1.4.0",
+        versionPath: "1-4-0",
+        releaseDate: "January 25th, 2025",
+        mainDescription: "Since releasing this website back in September last year, I have dramatically improved my UI/UX design skills " +
+            "by developing iVue's company websites and releasing a new update to Worlds iVue. So, I completely redesigned my personal home page. " +
+            "I have also added a new contact page and moved the website to a proper domain.",
+
+        topics: [
+            {
+                name: "New Domain",
+                elementId: "Domain",
+                description: "This was the update that first introduced my new domain \"mohit-jain.com\". " +
+                    "This allows me to host many more of my projects like my globe and the pizza angular website I created Fall 2024.",
+                example: {
+                    type: "none"
+                }
+            },
+            {
+                name: "New Home Page",
+                elementId: "Home_Page",
+                description: "The new homepage's design was reworked completely to ensure that each of my skills and experiences " +
+                    "took up more than one line of text. It also introduces a blend of orange and blue to my website." +
+                    "<br><br>Link To Example: <span><a href=\"/\" style=\"text-decoration: underline;\">Mohit Jain</a></span>",
+                example: {
+                    type: "iframe",
+                    src: (OLD_WEBSITE_LINK),
+                }
+            },
+            {
+                name: "New Contact Page",
+                elementId: "Contact_Page",
+                description: "The Contact Page, similar to other contact pages, contains a list of platforms for visitors to contact me and " +
+                    "a section to type in a message for me. It uses Amazon Simple Email Service to facilitate this." +
+                    "<br><br>Link To Webpage: <span><a href=\"/contact\" style=\"text-decoration: underline;\">Mohit Jain | Contact Me</a></span>",
+                example: {
+                    type: "none"
+                }
+            }
+        ]
     }
 ]
