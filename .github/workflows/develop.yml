@@ -45,6 +45,10 @@ jobs:
 
       - name: Add 404 fallback
         run: cp ./dist/index.html ./dist/404.html
+
+        # Move the build output into the `mohit-website` subdirectory
+      - name: Move build output to repo-name directory
+        run: mkdir -p ./dist/mohit-website && mv ./dist/* ./dist/mohit-website
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
