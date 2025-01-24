@@ -15,7 +15,6 @@ import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
 import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
 import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
 import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
-// import dynamo_db_icon from "../assets/aws/AWS_Dynamo_DB_Icon.svg";
 
 import wiv_banner from "../assets/ivue/Worlds_iVue_Banner.png";
 import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
@@ -280,9 +279,7 @@ export const NAV_CARDS = [
         pictures: [
             { image: aws_icon, width: "40%" },
             { image: amplify_icon, width: "40%" },
-            { image: cognito_icon, width: "40%" },
-            // DYNAMODB WILL BE INCLUDED ON A LATER DATE.
-            // { image: dynamo_db_icon, width: "50%" },
+            { image: cognito_icon, width: "40%" }
         ]
     },
     {
@@ -966,34 +963,4 @@ export const AWS_INFO_SECTORS = [
         addBottomSpace: true,
         pictures: []
     }
-    /*
-    {
-        title: "Amazon DynamoDB",
-        image: dynamo_db_icon,
-        style: {
-            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
-            color: "white",
-            minHeight: "calc(100vh - 25px)"
-        },
-
-        buttons: [
-            { title: "Go To Amazon DynamoDB", link: "https://aws.amazon.com/dynamodb/" }
-        ],
-        descriptions: [
-            "Amazon Web Services (AWS) is a cloud provider for millions of websites and web apps across the world. " +
-                "Many companies, including iVue, use their network to lower costs and increase agility and innvoation. " +
-                "They have many products, ranging from Simple Storage Service (S3) that lets customers store data for their apps to " +
-                "Amazon Cognito that provides user management services for applications. " +
-                "iVue uses AWS to host Worlds iVue online, manage users, and store large amounts of geospatial data.",
-            "That being said, \"Amplify\" is a frontend module that connects an application's frontend to the AWS Services powering its backend. " +
-                "With some help, I have integrated Amplify into Worlds iVue to connect it to an Amazon Cognito User Pool to enable users to log onto " +
-                "Worlds iVue with an account. This enables my team to develop far more features for the app, " +
-                "including registering drones and modkits with user accounts. " +
-                "Amplify will also connect Worlds iVue with many more AWS Services, further enhancing the boundaries of the 3D app."
-        ],
-
-        addBottomSpace: true,
-        pictures: []
-    }
-    */
 ]
