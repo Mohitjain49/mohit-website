@@ -4,5 +4,6 @@ This repository hosts my personal website that I use to show my portfolio of ski
 
 ## Links
   
-Main Website - https://mohitjain49.github.io/  
-Pizza Project - https://mohitjain49.github.io/pizza/#/
+Main Website - https://mohit-jain.com/  
+Pizza Project - https://mohitjain49.github.io/pizza/#/  
+Globe Website = https://globe.mohit-jain.com/ (Coming Soon)
