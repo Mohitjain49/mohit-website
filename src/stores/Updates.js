@@ -1,7 +1,7 @@
 import resume from "../assets/documents/Mohit_Jain_Resume.pdf";
 import { PIZZA_WEBSITE_LINK, IVUE_ROBOTICS_WEBSITE_LINK } from "./Objects.js";
 
-const OLD_WEBSITE_LINK = "https://mohitjain49.github.io/mohit-website/";
+const OLD_WEBSITE_LINK = "https://mohitjain49.github.io/";
 
 export const Updates = [
     {
