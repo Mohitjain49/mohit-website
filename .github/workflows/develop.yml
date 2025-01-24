@@ -48,7 +48,10 @@ jobs:
 
         # Move the build output into the `mohit-website` subdirectory
       - name: Move build output to repo-name directory
-        run: mkdir -p ./dist/mohit-website && mv ./dist/* ./dist/mohit-website
+        run: |
+          mkdir -p ./dist/mohit-website
+          shopt -s extglob
+          mv ./dist/!(mohit-website) ./dist/mohit-website
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
