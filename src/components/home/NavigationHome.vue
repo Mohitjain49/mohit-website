@@ -6,6 +6,7 @@
         <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses()"> Start </RouterLink>
         <RouterLink to="/#skills" @click="goToHomeSection('skills')" :class="getCircleOptClasses()"> Skills </RouterLink>
         <RouterLink to="/#experience" @click="goToHomeSection('experience')" :class="getCircleOptClasses()"> Experience </RouterLink>
+        <RouterLink to="/#credits" @click="goToHomeSection('credits')" :class="getCircleOptClasses()"> Credits </RouterLink>
         <div class="close" :class="getCircleOptClasses()"> Close </div>
     </template>
 </div>
@@ -78,7 +79,7 @@ function getCircleOptClasses() {
 }
 
 .home-nav.home-nav-expanded {
-    height: 183px;
+    height: 229px;
     width: 200px;
     border-radius: 15px;
     background-color: var(--website-text);

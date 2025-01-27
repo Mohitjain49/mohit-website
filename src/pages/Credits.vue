@@ -1,11 +1,26 @@
 <template>
 <NavigationMain />
 <div id="credits" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
-    <div id="top"></div>
+    <div v-for="entity in CREDIT_ENTITIES" class="credits-entity-container">
+        <a :href="entity.link" target="_blank" class="credits-entity">
+            <div class="credits-entity-image">
+                <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity.icon)" />
+                <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
+            </div>
+            <div class="credits-entity-body" :style="{ color: entity.color }">
+                <div class="credits-entity-header"> {{ entity.name }} </div>
+                <div class="credits-entity-desc"> {{ entity.desc }} </div>
+            </div>
+        </a>
+    </div>
 </div>
 </template>
 
 <script setup>
+import { VUEJS_WEBSITE_LINK } from "../stores/Objects.js";
+import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
+import vuejs_icon from "../assets/Vuejs_Icon.png";
+
 import NavigationMain from '../components/NavigationMain.vue';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
 import { onMounted } from 'vue';
@@ -16,7 +31,59 @@ onMounted(() => {
     webData.mountWebData();
 });
 
-const CREDIT_ENTITIES = [];
+/**
+ * This function returns a style object for an Font Awesome icon on here.
+ * @param iconObj The object for the icon.
+ */
+function getFAIconStyle(iconObj) {
+    return { color: iconObj.color, fontSize: iconObj.size }
+}
+
+const CREDIT_ENTITIES = [
+    {
+        name: "Font Awesome",
+        link: "https://fontawesome.com/",
+        color: "rgb(83, 141, 215)",
+        desc: "I have used free font awesome icons across this website. " +
+            "There's a paper plane next to \"Contact Me\", file icons for my resume and the website's updates, " +
+            "brand icons on the contact page, and many more icons across the website.",
+
+        icon: {
+            id: "fa-brands fa-font-awesome",
+            faIcon: true,
+            size: "110px",
+            color: "rgb(83, 141, 215)"
+        }
+    },
+    {
+        name: "AWS Icons",
+        link: "https://aws-icons.com/",
+        color: "#F59D0A",
+        desc: "Amazon Web Services (AWS) has an entire website dedicated to their icons. " +
+            "Nearly every AWS service and more has a specialized icon, " +
+            "and I use these icons on the aws page and other places on my website.",
+
+        icon: {
+            id: aws_icons_logo,
+            faIcon: false,
+            width: "125"
+        }
+    },
+    {
+        name: "Vue.js",
+        link: VUEJS_WEBSITE_LINK,
+        color: "#41B883",
+        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
+            "It's extremely lightweight compared to angular and react and simple for beginners. " +
+            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+
+        icon: {
+            id: vuejs_icon,
+            faIcon: false,
+            width: "105"
+        }
+    }
+];
 </script>
 
 <style scoped>
@@ -24,12 +91,94 @@ const CREDIT_ENTITIES = [];
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     background: var(--webpage-static-background);
-    top: 0px;
-    min-height: 100%;
+    width: 1200px;
+    padding: 0px calc(50% - 600px);
 }
-#top {
-    height: 50px;
+.credits-entity-container {
+    height: 475px;
     width: 100%;
-    background: var(--webpage-static-background);
+    min-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.credits-entity {
+    height: 400px;
+    width: 360px;
+    border: 3px solid var(--website-light-text);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: var(--default-transition);
+    background-color: white;
+}
+.credits-entity:hover {
+    border-color: var(--website-text);
+}
+
+.credits-entity-image {
+    height: 147px;
+    width: 100%;
+    border-bottom: 3px solid var(--website-light-text);
+    background-color: var(--silver-light);
+    transition: var(--default-transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.credits-entity:hover .credits-entity-image {
+    border-color: var(--website-text);
+}
+.credits-entity-image svg, .credits-entity-image img {
+    user-select: none;
+}
+
+.credits-entity-body {
+    height: calc(100% - 160px);
+    width: calc(100% - 20px);
+    padding: 10px 10px 0px;
+    text-align: left;
+    font-family: 'Lexend', sans-serif;
+}
+.credits-entity-header {
+    font-size: 35px;
+    color: inherit;
+    margin-bottom: 12px;
+}
+.credits-entity-desc {
+    font-size: 16px;
+    color: inherit;
+}
+
+@media (max-width: 1200px) {
+    .personal-web-body#credits {
+        grid-template-columns: repeat(2, 1fr);
+        width: 800px;
+        padding: 0px calc(50% - 400px);
+    }
+}
+@media (max-width: 830px) {
+    .personal-web-body#credits {
+        grid-template-columns: repeat(1, 1fr);
+        width: 400px;
+        padding: 0px calc(50% - 200px);
+    }
+}
+
+@media (max-width: 430px) {
+    .personal-web-body#credits {
+        grid-template-columns: repeat(1, 1fr);
+        width: 100%;
+        padding: 0px;
+    }
+
+    .credits-entity-container {
+        min-width: 0px;
+        height: 500px;
+    }
+    .credits-entity {
+        height: 425px;
+        width: 320px;
+    }
 }
 </style>

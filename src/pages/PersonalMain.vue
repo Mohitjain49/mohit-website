@@ -6,6 +6,9 @@
     <StartSection />
     <SkillsSection />
     <ExperienceSection />
+    <div id="credits" class="main-sector-bottom-linkBtn-container center-flex-display">
+        <RouterLink to="/credits" class="main-sector-bottom-linkBtn center-flex-display">Go To Credits</RouterLink>
+    </div>
 </div>
 </template>
 
@@ -31,5 +34,8 @@ onMounted(() => {
 #homepage {
     background: var(--webpage-static-background);
     top: 0px;
+}
+#credits {
+    padding: 30px 0px;
 }
 </style>
