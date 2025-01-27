@@ -3,7 +3,7 @@ import wiv_icon from "../assets/ivue/Worlds_iVue_Icon.png";
 import rc_icon from "../assets/ivue/iVue_Robotics_Cog_Icon.png";
 import ivue_media_icon from "../assets/ivue/iVue_Media_Icon.png";
 import sublo_icon from "../assets/sublo/Sublo_Blue_Transparent.png";
-import cesium_icon from "../assets/Cesium_Globe_Icon.png";
+import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
@@ -901,7 +901,7 @@ export const AWS_INFO_SECTORS = [
                 "GitHub Actions makes updating the actual website as simple as pushing a commit onto the production branch. " +
                 "This helps junior developers on my team efficiently push updates to the website without involving me as much, " +
                 "a feat not available on other hosting platforms.",
-            "I don't use S3 for any personal projects, but i configured iVue's buckets so that they are used to host the company's websites and " +
+            "I use Amazon S3 to host my website. On top of that, I configured iVue's buckets so that they are used to host the company's websites and " +
                 "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
                 "Each of these projects also have their own CI/CD pipeline connecting them to their respective Amazon S3 bucket. " +
                 "In the future, I'm sure that iVue will use S3 for more complex purposes."
@@ -930,7 +930,8 @@ export const AWS_INFO_SECTORS = [
                 "many behaviors can be set for different errors, such as adding a custom 404 error page, amongst many other actions. ",
             "I configured this service so iVue can deliver its company websites and " +
                 "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
-                "iVue might use this for more complex purposes in the future like delivering potential mobile apps."
+                "iVue might use this for more complex purposes in the future like delivering potential mobile apps. " +
+                "I've also configured this service to deliver this website as well."
         ],
 
         addBottomSpace: true,
@@ -955,9 +956,10 @@ export const AWS_INFO_SECTORS = [
                 "This allows domain managers to configure DNS records freely, whether it be for linked emails, websites, or other purposes." +
                 "For instance, a CNAME record can be set up for a subdomain like " +
                 "<span><a href=\"https://www.ivueworld.com/\" style=\"text-decoration: underline;\">www.ivueworld.com</a></span> to host a cloudfront distribution.",
-            "I configured this service so iVue can deliver its company websites and " +
+            "I configured this service so iVue can host its company websites and " +
                 "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
-                "iVue will probably use this to host more websites in the future and to register more domains taht it might need."
+                "iVue will probably use this to host more websites in the future and to register more domains that it might need. " +
+                "I've also configured this service to host this website as well."
         ],
 
         addBottomSpace: true,

@@ -36,7 +36,7 @@
 import { VUEJS_WEBSITE_LINK, REACT_NATIVE_WEBSITE_LINK } from "@/stores/Objects.js";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
-import cesium_icon from "@/assets/Cesium_Globe_Icon.png";
+import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
 import react_icon from "@/assets/React_Icon.png";
 import angular_icon from "@/assets/Angular_Icon.webp";
 import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";

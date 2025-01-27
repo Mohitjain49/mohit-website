@@ -4,7 +4,7 @@
     <div v-for="entity in CREDIT_ENTITIES" class="credits-entity-container">
         <a :href="entity.link" target="_blank" class="credits-entity">
             <div class="credits-entity-image">
-                <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity.icon)" />
+                <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
                 <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
             </div>
             <div class="credits-entity-body" :style="{ color: entity.color }">
@@ -20,6 +20,7 @@
 import { VUEJS_WEBSITE_LINK } from "../stores/Objects.js";
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
 import vuejs_icon from "../assets/Vuejs_Icon.png";
+import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 
 import NavigationMain from '../components/NavigationMain.vue';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
@@ -33,10 +34,10 @@ onMounted(() => {
 
 /**
  * This function returns a style object for an Font Awesome icon on here.
- * @param iconObj The object for the icon.
+ * @param entity The object for the credits entity.
  */
-function getFAIconStyle(iconObj) {
-    return { color: iconObj.color, fontSize: iconObj.size }
+function getFAIconStyle(entity) {
+    return { color: entity.color, fontSize: entity.icon.size }
 }
 
 const CREDIT_ENTITIES = [
@@ -51,8 +52,7 @@ const CREDIT_ENTITIES = [
         icon: {
             id: "fa-brands fa-font-awesome",
             faIcon: true,
-            size: "110px",
-            color: "rgb(83, 141, 215)"
+            size: "110px"
         }
     },
     {
@@ -82,7 +82,48 @@ const CREDIT_ENTITIES = [
             faIcon: false,
             width: "105"
         }
-    }
+    },
+    {
+        name: "AWS",
+        link: "https://aws.amazon.com/",
+        color: "#5468ff",
+        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
+            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
+            "and Amazon Route 53 to put this website under a custom domain.",
+
+        icon: {
+            id: "fa-brands fa-aws",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "Cesium",
+        link: "https://cesium.com/",
+        color: "#6DABE4",
+        desc: "I used Cesium as the main geospatial service for my personal globe. " +
+            "It's also used with Worlds iVue. Due to its extensive documentation on all its features, " +
+            "Cesium isn't that complicated to learn and can perform a variety of tasks related to geospatial platforms.",
+
+        icon: {
+            id: cesium_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "GitHub",
+        link: "https://github.com/",
+        color: "black",
+        desc: "I use GitHub as this website's version control. It's very reliable due to " +
+            "its intuitive user interfaces on its website and desktop app and helpful CI/CD pipelines with GitHub Actions.",
+
+        icon: {
+            id: "fa-brands fa-github",
+            faIcon: true,
+            size: "110px"
+        }
+    },
 ];
 </script>
 
