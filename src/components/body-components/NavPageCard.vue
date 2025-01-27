@@ -170,7 +170,7 @@ function getPictureBackground(picWidth = "50%") {
     font-size: 45px;
     margin-left: 10px;
     font-weight: bold;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Lexend', 'Roboto', sans-serif;
     text-align: center;
 }
 
@@ -200,7 +200,7 @@ function getPictureBackground(picWidth = "50%") {
 }
 .nav-card-picture-bar {
     width: 90%;
-    max-width: 50px;
+    max-width: 25px;
     height: 7px;
     border: 2px solid var(--nav-bar-border);
     border-radius: 7px;
@@ -217,15 +217,14 @@ function getPictureBackground(picWidth = "50%") {
     width: 95%;
     height: auto;
     text-align: center;
-    font-weight: bold;
-    font-family: 'Calibri', 'Trebuchet MS', sans-serif;
-    font-size: 18px;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    font-size: 16px;
 }
 
 .nav-card-bullet-points {
     margin: 20px;
-    font-family: 'Calibri', 'Trebuchet MS', sans-serif;
-    font-size: 18px;
+    font-family: 'Roboto', 'Calibri', sans-serif;
+    font-size: 16px;
 }
 .nav-card-bullet-points-title {
     position: relative;

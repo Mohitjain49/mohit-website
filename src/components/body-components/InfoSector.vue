@@ -97,7 +97,7 @@ const openPictureLink = (link = "#") => {
 }
 
 .info-sector-text {
-    font-family: monospace;
+    font-family: 'Lexend', 'Roboto', monospace;
     height: auto;
     width: calc(100% - 30px);
     padding: 5px 15px;
@@ -117,7 +117,7 @@ const openPictureLink = (link = "#") => {
     border-radius: 10px;
     font-size: 18px;
     font-weight: bold;
-    font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+    font-family: 'Lexend', 'Roboto', sans-serif;
     letter-spacing: 1px;
     text-decoration: none;
     margin: 0px 10px;

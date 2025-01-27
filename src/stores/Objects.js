@@ -15,6 +15,7 @@ import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
 import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
 import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
 import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
+import workmail_icon from "../assets/aws/AWS_WorkMail_Icon.svg";
 
 import wiv_banner from "../assets/ivue/Worlds_iVue_Banner.png";
 import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
@@ -152,7 +153,7 @@ export const NAV_CARDS = [
         },
     
         color: "#5C9E57",
-        desc: "Learn about some of the unique modules I use to develop Worlds iVue.",
+        desc: "Learn about some of the unique modules I use to develop Worlds iVue and other websites.",
     
         pointsTitle: "Modules Include:",
         bulletPoints: [ "Cesium", "Mavlink Protocol" ],
@@ -269,17 +270,19 @@ export const NAV_CARDS = [
         pointsTitle: "Services Include:",
         bulletPoints: [ "AWS Amplify",
             "Amazon Cognito",
-            "Amazon S3",
-            "Amazon CloudFront",
-            "Amazon Route 53"
-            /* "Amazon DynamoDB " */
+            "Data Storage",
+            "Web Hosting",
+            "Business Email Services"
         ],
 
         pictureBarClass: "aws-nav-picture-bar",
         pictures: [
             { image: aws_icon, width: "40%" },
             { image: amplify_icon, width: "40%" },
-            { image: cognito_icon, width: "40%" }
+            { image: cognito_icon, width: "40%" },
+            { image: s3_icon, width: "40%" },
+            { image: route53_icon, width: "40%" },
+            { image: workmail_icon, width: "40%" },
         ]
     },
     {
@@ -491,15 +494,16 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
-            "I am the lead software developer at iVue, a company specializing in drone hardware, photography and videography services, and 3D globe software. " +
-                "Primarily a frontend developer, I lead the development of Worlds iVue, " +
-                "oversee a team building iVue's new websites, and also contribute to backend development " +
-                "Working at iVue has been central to honing my software skills that I have listed on my website, including web development with " +
-                "<span><a href=\"https://vuejs.org\" style=\"text-decoration: underline;\">Vue.js</a></span>, " +
-                "<span><a href=\"https://mavlink.io/en/\" style=\"text-decoration: underline;\">The MAVLink Protocol</a></span>, " +
-                "<span><a href=\"https://cesium.com/\" style=\"text-decoration: underline;\">Cesium</a></span>, and " +
-                "<span><a href=\"https://aws.amazon.com/\" style=\"text-decoration: underline;\">AWS</a></span>, among others. " +
-                "I plan to continue developing software for iVue to make it a successful industry leader for drones and media content."
+            "Serving as the lead software developer and shareholder at iVue, a company that specializes in drone hardware, photography and videography services, " +
+                "and 3D globe software, has been the root of my software development journey. By personally developing most of its code, " +
+                "I co-created " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ", iVue's 3D globe application. " +
+                "Furthermore, I lead iVue's Website Development Team, ensuring that iVue's websites promote our leading products and services. " +
+                "These projects have provided me the opportunity to master " + getLinkElement("Vue.js", VUEJS_WEBSITE_LINK) + ", " +
+                getLinkElement("Cesium", "https://cesium.com/") + ", " + getLinkElement("MAVLink", "https://mavlink.io/en/") + ", " +
+                getLinkElement("AWS", "https://aws.amazon.com/") + ", and a wide variety of other software skills.",
+            "I began my journey at iVue in January 2023 as a high school intern and have grown with the company ever since. " +
+                "Over the years, iVue has expanded its team with skilled software developers and introduced a diverse range of new products and services. " + 
+                "My goal is to help establish iVue as a household name, recognized for all its exceptional offerings."
         ],
     
         addBottomSpace: true,
@@ -514,6 +518,12 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
                 header: "",
                 file: ivue_media_website,
                 fileLink: IVUE_MEDIA_WEBSITE_LINK,
+                links: []
+            },
+            {
+                header: "",
+                file: ivue_robotics_website,
+                fileLink: IVUE_ROBOTICS_WEBSITE_LINK,
                 links: []
             },
             {
@@ -537,13 +547,11 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
-            "As the lead software developer of iVue, I not only play a major role in developing Worlds iVue, " +
-                "but also take a significant role in leading the iVue Website Development Team. " +
-                "Before this team was established, iVue's former websites weren't the best, to say the least. " +
+            "Before the iVue Website Development Team was established, iVue's former websites weren't the best, to say the least. " +
                 "These old websites were developed with WordPress, which not only increases latency, " +
-                "but also doesn't accurately reflect iVue's Software Development skills. " +
+                "but also doesn't accurately reflect iVue's affinity for software. " +
                 "So, I made a team that would develop the new iVue Websites, including the Main iVue Website and the iVue Media Website, " +
-                "with Vue.js, which not just serves as a good intro for new web developers, " +
+                "with " + getLinkElement("Vue.js", VUEJS_WEBSITE_LINK) + ", which not just serves as a good intro for new web developers, " +
                 "but also solved the websites' latency issues as Vue.js is far more lightweight than a WordPress Website.",
             "The purpose of the Main iVue Website is to display iVue's major departments. " +
                 "iVue offers quite a few services, as it provides location based photography and videography services through iVue Media, " +
@@ -902,9 +910,8 @@ export const AWS_INFO_SECTORS = [
                 "This helps junior developers on my team efficiently push updates to the website without involving me as much, " +
                 "a feat not available on other hosting platforms.",
             "I use Amazon S3 to host my website. On top of that, I configured iVue's buckets so that they are used to host the company's websites and " +
-                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
-                "Each of these projects also have their own CI/CD pipeline connecting them to their respective Amazon S3 bucket. " +
-                "In the future, I'm sure that iVue will use S3 for more complex purposes."
+                getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ". " + "Each of these projects also have their own CI/CD pipeline " +
+                "connecting them to their respective Amazon S3 bucket. In the future, I'm sure that iVue will use S3 for more complex purposes."
         ],
 
         addBottomSpace: true,
@@ -928,8 +935,7 @@ export const AWS_INFO_SECTORS = [
                 "A Cloudfront Distribution takes an S3 bucket, configures domains that will use it, and then creates a secure link for its content. " +
                 "like an S3 bucket and many other Amazon services, any distribution is customizable. For instance, " +
                 "many behaviors can be set for different errors, such as adding a custom 404 error page, amongst many other actions. ",
-            "I configured this service so iVue can deliver its company websites and " +
-                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+            "I configured this service so iVue can deliver its company websites and " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ". " +
                 "iVue might use this for more complex purposes in the future like delivering potential mobile apps. " +
                 "I've also configured this service to deliver this website as well."
         ],
@@ -954,15 +960,49 @@ export const AWS_INFO_SECTORS = [
                 "Like any other domain registrar, it can hold domains on an account." +
                 "However, A hosted zone can be created for any domain, regardless of who the registrar is, as it provides its own nameserver addresses. " +
                 "This allows domain managers to configure DNS records freely, whether it be for linked emails, websites, or other purposes." +
-                "For instance, a CNAME record can be set up for a subdomain like " +
-                "<span><a href=\"https://www.ivueworld.com/\" style=\"text-decoration: underline;\">www.ivueworld.com</a></span> to host a cloudfront distribution.",
-            "I configured this service so iVue can host its company websites and " +
-                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
+                "For instance, a CNAME record can be set up for a subdomain like " + getLinkElement("www.ivueworld.com", "www.ivueworld.com") +
+                " to host a cloudfront distribution.",
+            "I configured this service so iVue can host its company websites and " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ". " +
                 "iVue will probably use this to host more websites in the future and to register more domains that it might need. " +
                 "I've also configured this service to host this website as well."
         ],
 
         addBottomSpace: true,
         pictures: []
+    },
+    {
+        title: "Amazon WorkMail",
+        image: workmail_icon,
+        style: {
+            background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
+            color: "white",
+            minHeight: "calc(100vh - 25px)"
+        },
+
+        buttons: [
+            { title: "Amazon WorkMail's Website", link: "https://aws.amazon.com/workmail/" }
+        ],
+        descriptions: [
+            "Amazon WorkMail is Amazon's Business Email and Calendar Service. " +
+                "It allows customers to make emails with registered domains (e.g. example@example.com) and works well with " +
+                "other AWS services like Amazon Simple Email Service (SES) and has its own Software Development Kit. " +
+                "All these features are paired with a monthly cost of $4.00 for 50GB of storage per user, " +
+                "which, compared to other providers, is suprisingly low.",
+            "I configured Amazon WorkMail for iVue's business needs. This includes emails for websites like \"info@ivueworld.com\" to " +
+                "emails for iVue's leadership like \"mohit.jain@worldsivue.com\". In the future, I'll probably be configuring user accounts for " +
+                "iVue's other employees and programmatically work with other AWS services."
+        ],
+
+        addBottomSpace: true,
+        pictures: []
     }
 ]
+
+/**
+ * This returns an "a" element that has text link to a string.
+ * @param {String} text The text that represents the link.
+ * @param {String} link The link to the website.
+ */
+function getLinkElement(text, link) {
+    return ("<span><a href=\"" + link + "\"" + "style=\"text-decoration: underline;\">" + text + "</a></span>");
+}

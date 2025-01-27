@@ -44,8 +44,13 @@ onMounted(() => {
     } else if(subRoute === "route53" || subRoute === "route-53") {
         sectorOpen.value = 5;
         document.title = (documentTitle + " | Amazon Route 53");
+    } else if(subRoute === "workmail") {
+        sectorOpen.value = 6;
+        document.title = (documentTitle + " | Amazon WorkMail");
     } else if(subRoute === "CloudFront" || subRoute === "Cloudfront") {
         router.push("/skills/aws/cloudfront");
+    } else if(subRoute === "WorkMail" || subRoute === "Workmail") {
+        router.push("/skills/aws/workmail");
     }
     /*
     else if(subRoute === "dynamodb") {
