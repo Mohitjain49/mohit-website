@@ -46,7 +46,8 @@ library.add(
     FaBrands.faGithub,
     FaBrands.faLinkedin,
     FaBrands.faAws,
-    FaBrands.faDiscord
+    FaBrands.faDiscord,
+    FaBrands.faFontAwesome
 );
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).

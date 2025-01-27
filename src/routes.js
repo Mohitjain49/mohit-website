@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import PersonalMain from "./pages/PersonalMain.vue";
 import ContactPage from "./pages/ContactPage.vue";
 import Resume from "./pages/Resume.vue";
+import Credits from "./pages/Credits.vue";
+
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeNotAvailable from "./pages/GlobeNotAvailable.vue";
 
@@ -20,10 +22,11 @@ import UpdateLog from "./pages/updates/UpdateLog.vue";
 
 const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
-    { path: "/globe", name: "My Globe", component: GlobeNotAvailable },
     { path: "/resume", name: "My Resume", component: Resume },
-
     { path: "/contact", name: "Contact Mohit", component: ContactPage, alias: ['/contact-me'] },
+    { path: "/credits", name: "Credits Page", component: Credits },
+
+    { path: "/globe", name: "My Globe", component: GlobeNotAvailable },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
     {
