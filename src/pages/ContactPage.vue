@@ -417,7 +417,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
 }
 .contact-alert-box-text {
     height: fit-content;
-    width: calc(100% -20px);
+    width: calc(100% - 20px);
     padding: 5px 10px;
     color: var(--blue-three);
     text-align: center;
