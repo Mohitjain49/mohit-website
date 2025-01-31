@@ -14,13 +14,13 @@
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Title</div>
                 </div>
-                <input class="contact-input-tab-textbox">
+                <input class="contact-input-tab-textbox" v-model="msgTitle">
             </div>
             <div class="contact-input-tab" style="height: calc(100% - 70px);">
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Message</div>
                 </div>
-                <textarea class="contact-input-tab-textbox contact-input-tab-textarea"></textarea>
+                <textarea class="contact-input-tab-textbox contact-input-tab-textarea" v-model="msgMain"></textarea>
             </div>
             <div class="contact-box-line"></div>
 
@@ -28,17 +28,17 @@
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Name</div>
                 </div>
-                <input class="contact-input-tab-textbox">
+                <input class="contact-input-tab-textbox" v-model="senderName">
             </div>
             <div class="contact-input-tab">
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Email</div>
                 </div>
-                <input class="contact-input-tab-textbox">
+                <input class="contact-input-tab-textbox" v-model="senderEmail">
             </div>
             <div class="contact-box-buttons-container center-flex-display">
                 <div class="contact-input-tab-btn-container center-flex-display">
-                    <div class="contact-input-tab-btn center-flex-display">Send Message</div>
+                    <div class="contact-input-tab-btn center-flex-display" @click="sendEmail()">Send Message</div>
                 </div>
             </div>
         </div>
@@ -70,19 +70,80 @@
         </div>
     </div>
 </div>
+
+<Transition name="alertBoxTransition">
+    <div class="contact-alert-box" v-if="(alertBoxText !== '')">
+        <div class="contact-alert-box-text" v-html="alertBoxText"></div>
+    </div>
+</Transition>
 </template>
 
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
 import { SOCIALS } from '../stores/Objects.js';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const webData = useWebsiteDataStore();
+const AWS_API_AVAILABLE = false;
+
+const alertBoxText = ref("");
+var alertBoxTimeout = null;
+
+const msgTitle = ref("");
+const msgMain = ref("");
+const senderName = ref("");
+const senderEmail = ref("");
+
 onMounted(() => {
     document.title = "Mohit Jain | Contact Me";
     webData.mountWebData();
-})
+});
+
+/**
+ * This function calls a AWS Lambda Function via Amazon API Gateway to send an email to me.
+ */
+function sendEmail() {
+    // Stores the necessary parameters for the message.
+    const message = {
+        title: msgTitle.value,
+        body: msgMain.value,
+        name: senderName.value,
+        email: senderEmail.value
+    }
+
+    // Clears all the input boxes.
+    msgTitle.value = "";
+    msgMain.value = "";
+    senderName.value = "";
+    senderEmail.value = "";
+
+    if(!AWS_API_AVAILABLE) {
+        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience. " +
+            "You can email me directly with my work email: " +
+            getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink)
+        );
+    } else {
+        console.log(message);
+    }
+}
+
+/**
+ * This sets the status of the alert box.
+ * @param {String} text The text for the alert box.
+ */
+function setAlertBox(text = "") {
+    alertBoxText.value = text;
+    if(alertBoxTimeout != null) {
+        clearTimeout(alertBoxTimeout);
+        alertBoxTimeout = null;
+    }
+
+    alertBoxTimeout = setTimeout(() => {
+        alertBoxText.value = "";
+        alertBoxTimeout = null;
+    }, 5000);
+}
 
 /**
  * This function copies a social link for the visitor.
@@ -90,10 +151,22 @@ onMounted(() => {
  */
 function copyLink(link = "") {
     navigator.clipboard.writeText(link);
+    const navLink = ((link === SOCIALS[0].displayLink) ? SOCIALS[0].link : link);
+    setAlertBox("Copied Link: " + getLinkString(navLink, link));
+}
+
+/**
+ * This function returns a HTML element in string form for JS functions here.
+ * @param {String} link The link to use here.
+ * @param {string} text The text that's displayed on the screen. If it's an empty string, it uses the link itself.
+ */
+function getLinkString(link = "/", text = "") {
+    text = ((text === "") ? link : text);
+    return ("<span><a href=\"" + link + "\" style=\"text-decoration: underline;\" target=\"_blank\">" + text + "</a></span>");
 }
 
 const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, please do so below. It uses " +
-    "<span><a href=\"https://aws.amazon.com/ses/\" style=\"text-decoration: underline;\" target=\"_blank\">Amazon Simple Email Service (SES)</a></span>" +
+    getLinkString("https://aws.amazon.com/ses/", "Amazon Simple Email Service (SES)") +
     " to send an automatic email to me."
 const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, LinkedIn, Discord, and Github.";
 </script>
@@ -123,7 +196,6 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
 .contact-me-box.socials {
     left: 50px;
 }
-
 
 .contact-box-line {
     position: relative;
@@ -325,6 +397,52 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     margin-right: 5px;
 }
 
+.contact-alert-box {
+    position: fixed;
+    left: 10%;
+    bottom: 30px;
+    height: 100px;
+    width: 80%;
+    max-width: 600px;
+    border: 2px solid var(--website-text);
+    border-radius: 20px;
+    background-color: var(--webpage-static-background);
+    z-index: 5;
+    box-shadow: 0px 0px 10px 0px black;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.contact-alert-box-text {
+    height: fit-content;
+    width: calc(100% -20px);
+    padding: 5px 10px;
+    color: var(--blue-three);
+    text-align: center;
+    font-family: 'Lexend', sans-serif;
+    font-size: 16px;
+}
+
+.alertBoxTransition-enter-active, .alertBoxTransition-leave-active {
+    transition: bottom 0.5s, opacity 0.5s;
+}
+.alertBoxTransition-enter-from, .alertBoxTransition-leave-to {
+    opacity: 0;
+    bottom: -90px;
+}
+.alertBoxTransition-enter-to, .alertBoxTransition-leave-from {
+    opacity: 1;
+    bottom: 30px;
+}
+
+@media (min-width: 750px) {
+    .contact-alert-box {
+        left: calc(50% - 300px);
+    }
+}
+
 @media (max-width: 1050px) and (min-width: 526px) {
     #contact-page {
         grid-template-columns: 1fr;
@@ -339,8 +457,8 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
         grid-template-columns: 1fr;
     }
     .contact-me-box {
-        height: 100%;
         width: 100%;
+        min-height: 100%;
         left: 0 !important;
         padding: 20px 0px;
         border: none;
@@ -355,6 +473,9 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
         font-size: 14px;
     }
     .social-tab-btn {
+        font-size: 14px;
+    }
+    .contact-alert-box-text {
         font-size: 14px;
     }
 }

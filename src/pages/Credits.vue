@@ -156,6 +156,7 @@ const CREDIT_ENTITIES = [
 
 <style scoped>
 .personal-web-body#credits {
+    background: linear-gradient(to bottom, var(--blue-one) 0%, var(--blue-three) 100%) !important;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     background: var(--webpage-static-background);
