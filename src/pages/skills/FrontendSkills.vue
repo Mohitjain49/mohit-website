@@ -1,14 +1,13 @@
 <template>
-    <FrontendSidebar />
-    <div class="personal-web-body personal-web-body-v3" @click="() => {webData.setNavBarDropdown(-1)}">
-        <InfoSector v-if="sectorOpen == 0" :sectorObj="VUE_INFO_SECTOR" class="info-sector-v3" />
-        <InfoSector v-else-if="sectorOpen == 1" :sectorObj="ANGULAR_INFO_SECTOR" class="info-sector-v3" />
-        <InfoSector v-else-if="sectorOpen == 2" :sectorObj="REACT_NATIVE_INFO_SECTOR" class="info-sector-v3" />
-    </div>
+<FrontendSidebar />
+<div class="personal-web-body personal-web-body-v3" @click="() => {webData.setNavBarDropdown(-1)}">
+    <InfoSector v-if="sectorOpen == 0" :sectorObj="VUE_INFO_SECTOR" class="info-sector-v3" />
+    <InfoSector v-else-if="sectorOpen == 1" :sectorObj="ANGULAR_INFO_SECTOR" class="info-sector-v3" />
+    <InfoSector v-else-if="sectorOpen == 2" :sectorObj="REACT_NATIVE_INFO_SECTOR" class="info-sector-v3" />
+</div>
 </template>
 
 <script setup>
-import "../../styles/sectors/infosectorstyles.css";
 import InfoSector from '../../components/body-components/InfoSector.vue';
 import FrontendSidebar from "../../components/sidebars/FrontendSidebar.vue";
 

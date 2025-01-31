@@ -56,11 +56,7 @@
 </template>
 
 <script setup>
-import "../../styles/nav/navcards.css";
-import { useWebsiteDataStore } from "../../stores/WebsiteData.js";
 import { ref, onMounted, onUnmounted } from "vue";
-
-const webData = useWebsiteDataStore();
 const props = defineProps({ sectorObj: Object });
 
 const pictureShown = ref(0);
@@ -76,21 +72,18 @@ onUnmounted(() => { removePictureInterval(); })
  * This function occurs whenever visitors hovers over the nav card.
  */
 function onNavCardHover() {
-    webData.colorHandler.onNavCardHover(
-        props.sectorObj.id,
-        props.sectorObj.titleId,
-        props.sectorObj.color
-    );
+    const color = props.sectorObj.color;
+    document.getElementById(props.sectorObj.id).style.borderColor = color;
+    document.getElementById(props.sectorObj.titleId).style.borderColor = color;
 }
 
 /**
  * This function runs whenever visitors' mouse leave the nav card.
  */
 function onNavCardLeave() {
-    webData.colorHandler.onNavCardLeave(
-        props.sectorObj.id,
-        props.sectorObj.titleId
-    );
+    const navBarBorder = "rgb(255, 115, 0)";
+    document.getElementById(props.sectorObj.id).style.borderColor = navBarBorder;
+    document.getElementById(props.sectorObj.titleId).style.borderColor = navBarBorder;
 }
 
 /**
@@ -134,3 +127,125 @@ function getPictureBackground(picWidth = "50%") {
     return obj;
 }
 </script>
+
+<style scoped>
+.card-container {
+    position: relative;
+    width: 95%;
+    height: 800px;
+    left: 2.5%;
+}
+
+.nav-card {
+    cursor: pointer;
+    text-decoration: none;
+    width: 90%;
+    min-width: 290px;
+    max-width: 400px;
+    height: 92.5%;
+    border: 3px solid var(--nav-bar-border);
+    border-radius: 20px;
+    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0, 0.5);
+    transition: var(--default-transition);
+    overflow: hidden;
+    background: var(--sector-background);
+}
+.nav-card-header {
+    width: 100%;
+    height: 123px;
+    border-bottom: 2px solid var(--nav-bar-border);
+    transition: var(--default-transition);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-card-header-image {
+    position: relative;
+    width: 45px;
+    margin-top: 1px;
+}
+.nav-card-header-faIcon {
+    font-size: 45px;
+}
+.nav-card-header-text {
+    font-size: 45px;
+    margin-left: 10px;
+    font-weight: bold;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    text-align: center;
+}
+
+.nav-card-picture-carousel {
+    width: 100%;
+    height: 240px;
+}
+.nav-card-picture-container {
+    width: 100%;
+    height: 225px;
+}
+.nav-card-picture {
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.nav-card-picture-bars-container {
+    width: 100%;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nav-card-picture-bar-wrapper {
+    height: 100%;
+    max-width: 100px;
+}
+.nav-card-picture-bar {
+    width: 90%;
+    max-width: 25px;
+    height: 7px;
+    border: 2px solid var(--nav-bar-border);
+    border-radius: 7px;
+    transition: background-color 0.5s;
+}
+
+.nav-card-desc-container {
+    margin-top: 15px;
+    height: 140px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+}
+.nav-card-desc {
+    width: 95%;
+    height: auto;
+    text-align: center;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
+.nav-card-bullet-points {
+    margin: 20px;
+    font-family: 'Roboto', 'Calibri', sans-serif;
+    font-size: 16px;
+}
+.nav-card-bullet-points-title {
+    position: relative;
+    font-size: 22px;
+    font-weight: bold;
+    border-bottom: 2px dashed;
+    width: fit-content;
+    margin-bottom: 7px;
+    right: 15px;
+}
+.experience-bullet-point {
+    height: 25px;
+}
+
+.navPictureTransition-enter-active, .navPictureTransition-leave-active {
+    transition: opacity 0.5s ease;
+}
+.navPictureTransition-enter-from, .navPictureTransition-leave-to {
+    opacity: 0;
+}
+.navPictureTransition-enter-to, .navPictureTransition-leave-from {
+    opacity: 1;
+}
+</style>

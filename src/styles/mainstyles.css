@@ -1,4 +1,15 @@
 :root {
+    --body-height: calc(100vh - 50px);
+
+    --blue-one: rgb(159, 191, 255);
+    --blue-two: rgb(117, 163, 255);
+    --blue-three: rgb(67, 130, 255);
+    --blue-four: rgb(82, 139, 252);
+    --blue-five: rgb(82, 3, 239);
+
+    --silver-color: #adadad;
+    --silver-light: #e4e2e2;
+
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
     --website-gradient-text: linear-gradient(to left, rgb(126, 90, 0) 0%, rgb(198, 147, 19) 50%, rgb(126, 90, 0) 100%);
@@ -10,7 +21,7 @@
 
     --translucent-background: rgba(255, 255, 255, 0.25);
     --sector-background: rgba(0, 0, 0, 0);
-    --footer-text-shadow: rgba(0, 0, 0, 0.25);
+    --dark-translucent-background: rgba(0, 0, 0, 0.15);
 
     --empty-border: 2px solid rgba(0, 0, 0, 0);
     --thin-empty-border: 1px solid rgba(0, 0, 0, 0);
@@ -82,7 +93,7 @@ h1, h2, h3, p {
     margin: 0;
     padding: 0;
     position: absolute;
-    height:auto;
+    height: auto;
     min-height: 100%;
     width: 100%;
     min-width: 350px;
@@ -92,25 +103,57 @@ h1, h2, h3, p {
     background-color: rgba(0, 0, 0, 0.75);
 }
 
-#scroll-down-cover {
-    cursor: pointer;
+.main-sector-bottom-linkBtn-container {
+    height: 75px;
+    width: 100%;
 }
-.scroll-down-elements {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.main-sector-bottom-linkBtn {
+    cursor: pointer;
+    height: 45px;
+    width: 250px;
+    color: var(--website-text);
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    border-radius: 10px;
+    text-decoration: none;
+    border: var(--empty-border);
+    background-color: var(--website-light-text);
+    transition: var(--default-transition);
+}
+.main-sector-bottom-linkBtn:hover {
+    border-color: var(--website-text);
 }
 
-.scroll-down-cover-text {
-    color: white;
-    font-size: 75px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin-bottom: 20px;
-    text-align: center;
+/**
+ * These are styles meant specifically for a more dynamic info sector page.
+ */
+
+ .info-sector-v2, .info-sector-v3 {
+    position: relative;
+    width: calc(100% - 40px) !important;
+    left: 40px;
 }
-.scroll-down-arrow-icon {
-    color: white;
-    font-size: 50px;
+.personal-web-body-v2, .personal-web-body-v3 {
+    top: 0px;
+    height: 100%;
+}
+
+@media (min-width: 2000px) {
+    .info-sector-v2 {
+        transform: scale(1.5, 1.5);
+    }
+    .personal-web-body-v2 {
+        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+}
+
+@media (max-width: 600px) {
+    .info-sector-v2, .info-sector-v3 {
+        width: 100% !important;
+        left: 0;
+        top: 45px;
+    }
 }

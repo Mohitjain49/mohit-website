@@ -41,11 +41,11 @@
 </template>
 
 <script setup>
-import "@/styles/sectors/sidebars.css";
+import "@/styles/sidebars.css";
 import return_icon from "@/assets/google-icons/Return_White_Icon.svg";
 import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 
-import cesium_icon from "@/assets/Cesium_Globe_Icon.png";
+import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
 
 import { WORLDS_IVUE_LINK } from "@/stores/Objects.js";

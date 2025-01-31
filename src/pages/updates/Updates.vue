@@ -3,12 +3,13 @@
 <div id="update-body" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
     <UpdateMenu />
 
-    <div v-if="laptopScreen" class="update-content center-flex-display" style="flex-direction: column;">
-        <div class="gradient-text incomplete-title">
-            {{('Choose an Update!')}}
-        </div>
+    <div v-if="webData.pageView == 0" class="update-content center-flex-display" style="flex-direction: column;">
+        <div class="gradient-text incomplete-title"> Choose An Update </div>
         <div class="main-sector-bottom-linkBtn-container center-flex-display">
-            <RouterLink to="/updates/1-3-0" class="main-sector-bottom-linkBtn center-flex-display">See Update 1.3.0</RouterLink>
+            <RouterLink :to="('/updates/' + LAST_UPDATE.versionPath)"
+                class="main-sector-bottom-linkBtn center-flex-display"
+                v-html="('See Update ' + LAST_UPDATE.version)">
+            </RouterLink>
         </div>
     </div>
 </div>
@@ -16,33 +17,20 @@
 
 <script setup>
 import "../../styles/update.css";
-import "../../styles/nav/navpage.css";
-import "../../styles/sectors/sectorstyles.css";
+import "../../styles/navpage.css";
 
-import UpdateMenu from "../../components/menus/UpdateMenu.vue";
+import UpdateMenu from "../../components/sidebars/UpdateMenu.vue";
 import NavigationMain from '../../components/NavigationMain.vue';
 
+import { Updates } from "@/stores/Updates.js";
 import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { onMounted } from 'vue';
 
 const webData = useWebsiteDataStore();
-const laptopScreen = ref(false);
+const LAST_UPDATE = Updates[Updates.length - 1];
 
 onMounted(() => {
     document.title = "Mohit Jain | Updates";
     webData.mountWebData();
-
-    setUpdatesPage();
-    window.addEventListener("resize", setUpdatesPage);
 });
-onUnmounted(() => {
-    window.removeEventListener("resize", setUpdatesPage);
-})
-
-/**
- * This sets whether the updates page is in its mobile or desktop form.
- */
-function setUpdatesPage() {
-    laptopScreen.value = (window.innerWidth > 840);
-}
 </script>

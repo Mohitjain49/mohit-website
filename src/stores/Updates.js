@@ -1,7 +1,7 @@
 import resume from "../assets/documents/Mohit_Jain_Resume.pdf";
-import { PIZZA_WEBSITE_LINK, PAGE_SECTORS, IVUE_ROBOTICS_WEBSITE_LINK } from "./Objects.js";
+import { PIZZA_WEBSITE_LINK, IVUE_ROBOTICS_WEBSITE_LINK } from "./Objects.js";
 
-import PageSector from "@/components/body-components/PageSector.vue";
+const OLD_WEBSITE_LINK = "/";
 
 export const Updates = [
     {
@@ -19,23 +19,21 @@ export const Updates = [
                 description: "Over my three years of coding, I have learned many skills, most notably frontend development through my role at iVue. " +
                     "I organized these skills into different paths, showcasing how my experience and skills are linked together. " +
                     "An example with my experience with iVue is down below, where I show how I contribute to the company and develop its software." +
-                    "<br><br>Link To Example: <span><a href=\"#/experience/ivue\" style=\"text-decoration: underline;\">Mohit Jain | iVue</a></span>",
+                    "<br><br>Link To Example: <span><a href=\"/experience/ivue\" style=\"text-decoration: underline;\">Mohit Jain | iVue</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/experience/ivue/',
+                    src: (OLD_WEBSITE_LINK + 'experience/ivue/'),
                 }
             },
             {
                 name: "New Company Page Sectors",
                 elementId: "Page_Sectors",
                 description: "As a compliment to the new Experience Pages, These page sectors serve as brief displays of my experience at different companies. " +
-                    "You can observe them at the bottom of the <span><a href=\"#/\" style=\"text-decoration: underline;\">Home Page</a></span>. " +
+                    "You can observe them at the bottom of the <span><a href=\"/\" style=\"text-decoration: underline;\">Home Page</a></span>. " +
                     "One example is with iVue down below, containing links to my experience, the company's main website, and Worlds iVue, " +
-                    "the company's world map software.",
+                    "the company's 3D Globe App. <br><br>Note: As of Version 2.0.0, This component has been removed." ,
                 example: {
-                    type: "component",
-                    src: PageSector,
-                    sectorObj: PAGE_SECTORS[1]
+                    type: "none"
                 }
             }
         ]
@@ -54,7 +52,7 @@ export const Updates = [
                 description: "There used to be a button at the top-left of the site that let visitors download my resume. " +
                     "Considering that many visitors are on my site would like to see my resume without having to download a document, " +
                     "I made a new path that just contains my resume. Use the link down below to see a clearer version." +
-                    "<br><br>Link To Resume: <span><a href=\"#/resume\" style=\"text-decoration: underline;\">Mohit Jain | Resume</a></span>",
+                    "<br><br>Link To Resume: <span><a href=\"/resume\" style=\"text-decoration: underline;\">Mohit Jain | Resume</a></span>",
                 example: {
                     type: "iframe",
                     src: resume,
@@ -84,8 +82,8 @@ export const Updates = [
                     "Each update will show new projects I work on and new skills I learn. " +
                     "Though I did make this website with scalability in mind, updates could also show new UI developments to the website. " +
                     "Use some of the links below to navigate to different update pages:" +
-                    "<br><br>Main Updates Page: <span><a href=\"#/updates/main\" style=\"text-decoration: underline;\">Mohit Jain | Updates</a></span>" +
-                    "<br>Update 1.1.0: <span><a href=\"#/updates/1-1-0\" style=\"text-decoration: underline;\">Mohit Jain | Update 1.1.0</a></span>",
+                    "<br><br>Main Updates Page: <span><a href=\"/updates/main\" style=\"text-decoration: underline;\">Mohit Jain | Updates</a></span>" +
+                    "<br>Update 1.1.0: <span><a href=\"/updates/1-1-0\" style=\"text-decoration: underline;\">Mohit Jain | Update 1.1.0</a></span>",
                 example: { type: "none" }
             }
         ]
@@ -130,7 +128,7 @@ export const Updates = [
                     "<br><br>Link To Example: <span><a href=\"/skills/aws\" style=\"text-decoration: underline;\">Mohit Jain | AWS</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/skills/aws/s3',
+                    src: (OLD_WEBSITE_LINK + 'skills/aws/s3'),
                 }
             },
             {
@@ -141,7 +139,7 @@ export const Updates = [
                     "<span><a href=\"/skills/frontend/reactnative\" style=\"text-decoration: underline;\">Mohit Jain | Frontend Development | React Native</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/skills/frontend/reactnative',
+                    src: (OLD_WEBSITE_LINK + 'skills/frontend/reactnative'),
                 }
             },
             {
@@ -152,7 +150,7 @@ export const Updates = [
                     "<br><br>Link To Example: <span><a href=\"/experience/sublo\" style=\"text-decoration: underline;\">Mohit Jain | Sublo</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/experience/sublo',
+                    src: (OLD_WEBSITE_LINK + 'experience/sublo'),
                 }
             },
             {
@@ -164,7 +162,59 @@ export const Updates = [
                     "<br>Link To Website: <span><a href=\"" + IVUE_ROBOTICS_WEBSITE_LINK + "\" style=\"text-decoration: underline;\">iVue Robotics</a></span>",
                 example: {
                     type: "iframe",
-                    src: '/experience/ivue/ivuerobotics',
+                    src: (OLD_WEBSITE_LINK + 'experience/ivue/ivuerobotics'),
+                }
+            }
+        ]
+    },
+    {
+        version: "2.0.0",
+        versionPath: "2-0-0",
+        releaseDate: "January 31st, 2025",
+        mainDescription: "Since releasing this website back in September last year, I have dramatically improved my UI/UX design skills " +
+            "by developing iVue's company websites and releasing a new update to Worlds iVue. So, I redesigned most of my website. " +
+            "This includes a redesigned home page, a new domain, multiple new pages, and more.",
+
+        topics: [
+            {
+                name: "New Domain",
+                elementId: "Domain",
+                description: "This was the update that first introduced my new domain \"mohit-jain.com\". " +
+                    "This allows me to host many more of my projects like my globe and the pizza angular website I created Fall 2024.",
+                example: {
+                    type: "none"
+                }
+            },
+            {
+                name: "New Home Page",
+                elementId: "Home_Page",
+                description: "The new homepage's design was reworked completely to ensure that each of my skills and experiences " +
+                    "took up more than one line of text. It also introduces a blend of orange and blue to my website." +
+                    "<br><br>Link To Example: <span><a href=\"/\" style=\"text-decoration: underline;\">Mohit Jain</a></span>",
+                example: {
+                    type: "iframe",
+                    src: (OLD_WEBSITE_LINK),
+                }
+            },
+            {
+                name: "New Credits Page",
+                elementId: "Credits_Page",
+                description: "The Credits Page is simple: It shows what code libraries, framework, assets, and web services I used for this website. " +
+                    "Though It's not required, I'm truly grateful that I can use all these (mostly) free services." +
+                    "<br><br>Link To Webpage: <span><a href=\"/credits\" style=\"text-decoration: underline;\">Mohit Jain | Credits</a></span>",
+                example: {
+                    type: "iframe",
+                    src: (OLD_WEBSITE_LINK + "credits"),
+                }
+            },
+            {
+                name: "New Contact Page",
+                elementId: "Contact_Page",
+                description: "The Contact Page, similar to other contact pages, contains a list of platforms for visitors to contact me and " +
+                    "a section to type in a message for me. It uses Amazon Simple Email Service to facilitate this." +
+                    "<br><br>Link To Webpage: <span><a href=\"/contact\" style=\"text-decoration: underline;\">Mohit Jain | Contact Me</a></span>",
+                example: {
+                    type: "none"
                 }
             }
         ]

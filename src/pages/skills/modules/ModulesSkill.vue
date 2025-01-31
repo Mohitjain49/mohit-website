@@ -1,9 +1,9 @@
 <template>
-    <ModulesSidebar />
-    <div class="personal-web-body personal-web-body-v3" @click="() => {webData.setNavBarDropdown(-1)}">
-        <InfoSector v-if="sectorOpen == 0" :sectorObj="CESIUM_INFO_SECTOR" class="info-sector-v3" />
-        <InfoSector v-if="sectorOpen == 1" :sectorObj="MAVLINK_INFO_SECTOR" class="info-sector-v3" />
-    </div>
+<ModulesSidebar />
+<div class="personal-web-body personal-web-body-v3" @click="() => {webData.setNavBarDropdown(-1)}">
+    <InfoSector v-if="sectorOpen == 0" :sectorObj="CESIUM_INFO_SECTOR" class="info-sector-v3" />
+    <InfoSector v-if="sectorOpen == 1" :sectorObj="MAVLINK_INFO_SECTOR" class="info-sector-v3" />
+</div>
 </template>
 
 <script setup>

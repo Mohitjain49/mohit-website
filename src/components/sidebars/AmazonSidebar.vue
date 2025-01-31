@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import "@/styles/sectors/sidebars.css";
+import "@/styles/sidebars.css";
 import return_icon from "@/assets/google-icons/Return_White_Icon.svg";
 import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 import icons_logo from "@/assets/aws/AWS_Icons_Logo.svg";
@@ -63,9 +63,7 @@ import cognito_icon from "@/assets/aws/AWS_Cognito_Icon.svg";
 import s3_icon from "@/assets/aws/AWS_S3_Icon.svg";
 import cloudfront_icon from "@/assets/aws/AWS_CloudFront_Icon.svg";
 import route53_icon from "@/assets/aws/AWS_Route_53_Icon.svg";
-
-// WILL BE REINSTATED IN A LATER DATE.
-// import dynamo_db_icon from "@/assets/aws/AWS_Dynamo_DB_Icon.svg";
+import workmail_icon from "@/assets/aws/AWS_WorkMail_Icon.svg";
 
 import { WORLDS_IVUE_LINK } from "@/stores/Objects.js";
 import { useWebsiteDataStore } from "@/stores/WebsiteData.js";
@@ -99,6 +97,6 @@ const AWS_PATHS = [
     { title: "Amazon S3", icon: s3_icon, route: "s3" },
     { title: "Amazon CloudFront", icon: cloudfront_icon, route: "cloudfront" },
     { title: "Amazon Route 53", icon: route53_icon, route: "route53" },
-    // { title: "Amazon DynamoDB", icon: dynamo_db_icon, route: "dynamodb" }
+    { title: "Amazon WorkMail", icon: workmail_icon, route: "workmail" }
 ];
 </script>

@@ -1,6 +1,6 @@
 <template>
     <NavigationMain />
-    <div class="personal-web-body personal-web-body-main" @click="() => {webData.setNavBarDropdown(-1)}">
+    <div class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
         <div class="main-nav-page-container">
             <div class="nav-page-title center-flex-display gradient-text">My Experience</div>
             <div class="main-nav-page">
@@ -18,9 +18,7 @@
 <script setup>
 import NavigationMain from '../../components/NavigationMain.vue';
 import NavPageCard from '../../components/body-components/NavPageCard.vue';
-
-import "../../styles/nav/navpage.css";
-import "../../styles/sectors/sectorstyles.css";
+import "../../styles/navpage.css";
 
 import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
 import { NAV_CARDS } from '../../stores/Objects.js';
@@ -30,11 +28,5 @@ const webData = useWebsiteDataStore();
 onMounted(() => {
     document.title = "Mohit Jain | Experience";
     webData.mountWebData();
-
-    webData.colorHandler.setCurrentNavCards([
-        { id: NAV_CARDS[3].id, titleId: NAV_CARDS[3].titleId },
-        { id: NAV_CARDS[4].id, titleId: NAV_CARDS[4].titleId },
-        { id: NAV_CARDS[5].id, titleId: NAV_CARDS[5].titleId }
-    ]);
 })
 </script>

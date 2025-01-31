@@ -3,7 +3,7 @@ import wiv_icon from "../assets/ivue/Worlds_iVue_Icon.png";
 import rc_icon from "../assets/ivue/iVue_Robotics_Cog_Icon.png";
 import ivue_media_icon from "../assets/ivue/iVue_Media_Icon.png";
 import sublo_icon from "../assets/sublo/Sublo_Blue_Transparent.png";
-import cesium_icon from "../assets/Cesium_Globe_Icon.png";
+import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
@@ -15,7 +15,7 @@ import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
 import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
 import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
 import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
-// import dynamo_db_icon from "../assets/aws/AWS_Dynamo_DB_Icon.svg";
+import workmail_icon from "../assets/aws/AWS_WorkMail_Icon.svg";
 
 import wiv_banner from "../assets/ivue/Worlds_iVue_Banner.png";
 import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
@@ -31,6 +31,8 @@ import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
+export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
+
 export const MAIN_IVUE_WEBSITE_LINK = "https://ivueworld.com/";
 export const IVUE_MEDIA_WEBSITE_LINK = "https://ivuemedia.com/";
 export const IVUE_ROBOTICS_WEBSITE_LINK = "https://ivuerobotics.com/";
@@ -39,180 +41,44 @@ export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 
-export const MAIN_SKILLS_SECTOR = {
-    title: "Professional Skills",
-    routePath: "/resume",
-    routeBtn: "See My Resume",
-    gridClasses: "main-sector-body",
-
-    content: [
-        {
-            subtitle: "Frontend Development",
-            points: [
-                { title: "Vue.js", icon: vue_icon, color: "#41B883", link: VUEJS_WEBSITE_LINK, faIcon: false },
-                { title: "React", icon: "fa-brands fa-react", color: "#087EA4", link: "https://react.dev/", faIcon: true },
-                { title: "React Native", icon: "fa-brands fa-react", color: "#087EA4", link: REACT_NATIVE_WEBSITE_LINK, faIcon: true },
-                { title: "JavaScript", icon: "fa-brands fa-js", color: "#F7DF1E", link: "https://www.javascript.com/", faIcon: true },
-                { title: "HTML", icon: "fa-brands fa-html5", color: "#E34E26", link: "", faIcon: true },
-                { title: "CSS", icon: "fa-brands fa-css3-alt", color: "#264DE4", link: "", faIcon: true }
-            ]
-        },
-        {
-            subtitle: "Backend Development",
-            points: [
-                { title: "Amazon Web Services", icon: "fa-brands fa-aws", color: "rgb(84, 104, 255)", link: "https://aws.amazon.com/", faIcon: true },
-                { title: "Node.js", icon: "fa-brands fa-node", color: "#70A561", link: "https://nodejs.org/en", faIcon: true },
-                { title: "PostgreSQL", icon: "fa-database", color: "#0072C6", link: "https://www.postgresql.org/", faIcon: true },
-            ]
-        },
-        {
-            subtitle: "Other Skills",
-            points: [
-                { title: "Github", icon: "fa-brands fa-github", color: "#842791", link: "https://github.com/", faIcon: true },
-                { title: "Microsoft 365", icon: "fa-brands fa-windows", color: "#35B5FF", link: "https://www.office.com/", faIcon: true },
-                { title: "Google", icon: "fa-brands fa-google", color: "#4285F4", link: "https://workspace.google.com/", faIcon: true },
-            ]
-        }
-    ]
-}
-
-export const MAIN_CONTACTS_SECTOR = {
-    title: "",
-    routePath: "/experience",
-    routeBtn: "See More of My Experience",
-    gridClasses: "main-sector-body main-contacts-sector",
-
-    content: [
-        {
-            subtitle: "Experience",
-            points: [
-                { title: "iVue", icon: rc_icon, color: "rgb(171, 15, 20)", link: MAIN_IVUE_WEBSITE_LINK, faIcon: false },
-                { title: "Worlds iVue", icon: wiv_icon, color: "#0872BA", link: WORLDS_IVUE_LINK, faIcon: false },
-                { title: "Sublo", icon: sublo_icon, color: "#36A1D9", link: "", faIcon: false }
-            ]
-        },
-        {
-            subtitle: "Contact Me",
-            points: [
-                { title: "mohitkjain49@gmail.com", icon: "fa-envelope", color: "grey", link: "mailto:mohitkjain49@gmail.com", faIcon: true },
-                { title: "LinkedIn", icon: "fa-brands fa-linkedin", color: "#0A66C2", link: "https://www.linkedin.com/in/mohitjain49/", faIcon: true },
-                { title: "Github", icon: "fa-brands fa-github", color: "#842791", link: "https://github.com/Mohitjain49", faIcon: true }
-            ]
-        }
-    ]
-}
-
-export const PAGE_SECTORS = [
+export const SOCIALS = [
     {
-        buttons: [
-            {
-                route: "/globe",
-                nativeRoute: true,
-                title: "Go To My Globe"
-            },
-            {
-                route: "https://cesium.com/",
-                nativeRoute: false,
-                title: "Go To cesium.com"
-            }
-        ],
-    
-        text: {
-            leftSide: true,
-            title: "My Globe",
-            desc: "Experience 3D globe apps I have developed with the Cesium Geospatial Platform."
-        },
-        images: [
-            {
-                asset: globe_page,
-                style: { maxWidth: "calc(1918px / 3)", marginBottom: "30px" }
-            },
-            {
-                asset: cesium_picture,
-                style: { maxWidth: "calc(1200px / 2)" }
-            }
-        ],
-        style: {
-            background: "rgba(135, 206, 235, 0.95)",
-            fontColor: "#709B49"
-        }
+        name: "Work Email",
+        displayLink: "mohitkjainwork@gmail.com",
+        link: "mailto:mohitkjainwork@gmail.com",
+        copyBtn: "Copy Email",
+        linkBtn: "Send Email",
+        linkIcon: "fa-envelope",
+        color: "var(--website-text)"
     },
     {
-        buttons: [
-            {
-                route: "/experience/ivue",
-                nativeRoute: true,
-                title: "My Experience"
-            },
-            {
-                route: "/experience/ivue/worldsivue",
-                nativeRoute: true,
-                title: "My WIV Experience"
-            },
-            {
-                route: MAIN_IVUE_WEBSITE_LINK,
-                nativeRoute: false,
-                title: "Go To ivueworld.com"
-            },
-            {
-                route: WORLDS_IVUE_LINK,
-                nativeRoute: false,
-                title: "Go To Worlds iVue"
-            },
-        ],
-    
-        text: {
-            leftSide: true,
-            title: "iVue",
-            desc: "Observe how iVue produces media content, drone hardware, and 3D world map software " +
-                "to make drones a part of everyone's daily life."
-        },
-        images: [
-            {
-                asset: wiv_app,
-                style: { maxWidth: 'calc(1918px / 4)', marginBottom: "30px" }
-            },
-            {
-                asset: ivue_website,
-                style: { maxWidth: 'calc(1980px / 4)', marginBottom: "30px" }
-            },
-            {
-                asset: ivue_media_website,
-                style: { maxWidth: 'calc(1918px / 4)' }
-            }
-        ],
-        style: {
-            background: "white",
-            fontColor: "black"
-        }
+        name: "LinkedIn",
+        displayLink: "https://www.linkedin.com/in/mohitjain49",
+        link: "https://www.linkedin.com/in/mohitjain49",
+        copyBtn: "Copy LinkedIn Link",
+        linkBtn: "Go To LinkedIn",
+        linkIcon: "fa-brands fa-linkedin",
+        color: "#0072B1"
     },
     {
-        buttons: [
-            {
-                route: "/experience/sublo",
-                nativeRoute: true,
-                title: "My Experience"
-            },
-        ],
-    
-        text: {
-            leftSide: false,
-            title: "Sublo",
-            desc: "Read on how I am helped make an app to make finding or listing subleases easy for college students."
-        },
-        images: [
-            {
-                asset: sublo_icon,
-                style: { maxWidth: "calc(1488px / 2.5)" }
-            }
-        ],
-
-        style: {
-            background: "#031427",
-            fontColor: "#d1efff"
-        }
-    }
-]
+        name: "Discord",
+        displayLink: "https://discord.com/users/mohitjainn",
+        link: "https://discord.com/users/mohitjainn",
+        copyBtn: "Copy Discord Link",
+        linkBtn: "Go To Discord",
+        linkIcon: "fa-brands fa-discord",
+        color: "#5865F2"
+    },
+    {
+        name: "GitHub",
+        displayLink: "https://github.com/Mohitjain49",
+        link: "https://github.com/Mohitjain49",
+        copyBtn: "Copy GitHub Link",
+        linkBtn: "Go To Github",
+        linkIcon: "fa-brands fa-github",
+        color: "white"
+    },
+];
 
 export const NAV_CARDS = [
     {
@@ -287,7 +153,7 @@ export const NAV_CARDS = [
         },
     
         color: "#5C9E57",
-        desc: "Learn about some of the unique modules I use to develop Worlds iVue.",
+        desc: "Learn about some of the unique modules I use to develop Worlds iVue and other websites.",
     
         pointsTitle: "Modules Include:",
         bulletPoints: [ "Cesium", "Mavlink Protocol" ],
@@ -404,10 +270,9 @@ export const NAV_CARDS = [
         pointsTitle: "Services Include:",
         bulletPoints: [ "AWS Amplify",
             "Amazon Cognito",
-            "Amazon S3",
-            "Amazon CloudFront",
-            "Amazon Route 53"
-            /* "Amazon DynamoDB " */
+            "Data Storage",
+            "Web Hosting",
+            "Business Email Services"
         ],
 
         pictureBarClass: "aws-nav-picture-bar",
@@ -415,8 +280,9 @@ export const NAV_CARDS = [
             { image: aws_icon, width: "40%" },
             { image: amplify_icon, width: "40%" },
             { image: cognito_icon, width: "40%" },
-            // DYNAMODB WILL BE INCLUDED ON A LATER DATE.
-            // { image: dynamo_db_icon, width: "50%" },
+            { image: s3_icon, width: "40%" },
+            { image: route53_icon, width: "40%" },
+            { image: workmail_icon, width: "40%" },
         ]
     },
     {
@@ -606,7 +472,7 @@ export const REACT_NATIVE_INFO_SECTOR = {
         {
             header: "Sublo",
             file: sublo_white_background_icon,
-            fileLink: "#",
+            fileLink: SUBLO_WEBSITE_LINK,
             links: [
                 { text: "See my experience with Sublo", path: "/experience/sublo", nativeRoute: true }
             ]
@@ -628,15 +494,16 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
-            "I am the lead software developer at iVue, a company specializing in drone hardware, photography and videography services, and 3D globe software. " +
-                "Primarily a frontend developer, I lead the development of Worlds iVue, " +
-                "oversee a team building iVue's new websites, and also contribute to backend development " +
-                "Working at iVue has been central to honing my software skills that I have listed on my website, including web development with " +
-                "<span><a href=\"https://vuejs.org\" style=\"text-decoration: underline;\">Vue.js</a></span>, " +
-                "<span><a href=\"https://mavlink.io/en/\" style=\"text-decoration: underline;\">The MAVLink Protocol</a></span>, " +
-                "<span><a href=\"https://cesium.com/\" style=\"text-decoration: underline;\">Cesium</a></span>, and " +
-                "<span><a href=\"https://aws.amazon.com/\" style=\"text-decoration: underline;\">AWS</a></span>, among others. " +
-                "I plan to continue developing software for iVue to make it a successful industry leader for drones and media content."
+            "Serving as the lead software developer and shareholder at iVue, a company that specializes in drone hardware, photography and videography services, " +
+                "and 3D globe software, has been the root of my software development journey. By personally developing most of its code, " +
+                "I co-created " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ", iVue's 3D globe application. " +
+                "Furthermore, I lead iVue's Website Development Team, ensuring that iVue's websites promote our leading products and services. " +
+                "These projects have provided me the opportunity to master " + getLinkElement("Vue.js", VUEJS_WEBSITE_LINK) + ", " +
+                getLinkElement("Cesium", "https://cesium.com/") + ", " + getLinkElement("MAVLink", "https://mavlink.io/en/") + ", " +
+                getLinkElement("AWS", "https://aws.amazon.com/") + ", and a wide variety of other software skills.",
+            "I began my journey at iVue in January 2023 as a high school intern and have grown with the company ever since. " +
+                "Over the years, iVue has expanded its team with skilled software developers and introduced a diverse range of new products and services. " + 
+                "My goal is to help establish iVue as a household name, recognized for all its exceptional offerings."
         ],
     
         addBottomSpace: true,
@@ -651,6 +518,12 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
                 header: "",
                 file: ivue_media_website,
                 fileLink: IVUE_MEDIA_WEBSITE_LINK,
+                links: []
+            },
+            {
+                header: "",
+                file: ivue_robotics_website,
+                fileLink: IVUE_ROBOTICS_WEBSITE_LINK,
                 links: []
             },
             {
@@ -674,13 +547,11 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
             { title: "Go To iVue's Main Website", link: MAIN_IVUE_WEBSITE_LINK }
         ],
         descriptions: [
-            "As the lead software developer of iVue, I not only play a major role in developing Worlds iVue, " +
-                "but also take a significant role in leading the iVue Website Development Team. " +
-                "Before this team was established, iVue's former websites weren't the best, to say the least. " +
+            "Before the iVue Website Development Team was established, iVue's former websites weren't the best, to say the least. " +
                 "These old websites were developed with WordPress, which not only increases latency, " +
-                "but also doesn't accurately reflect iVue's Software Development skills. " +
+                "but also doesn't accurately reflect iVue's affinity for software. " +
                 "So, I made a team that would develop the new iVue Websites, including the Main iVue Website and the iVue Media Website, " +
-                "with Vue.js, which not just serves as a good intro for new web developers, " +
+                "with " + getLinkElement("Vue.js", VUEJS_WEBSITE_LINK) + ", which not just serves as a good intro for new web developers, " +
                 "but also solved the websites' latency issues as Vue.js is far more lightweight than a WordPress Website.",
             "The purpose of the Main iVue Website is to display iVue's major departments. " +
                 "iVue offers quite a few services, as it provides location based photography and videography services through iVue Media, " +
@@ -916,7 +787,7 @@ export const SUBLO_INFO_SECTOR = {
     },
 
     buttons: [
-        { title: "Sublo's LinkedIn", link: "https://www.linkedin.com/company/sublollc" },
+        { title: "Sublo's Website", link: SUBLO_WEBSITE_LINK },
     ],
     descriptions: [
         "Sublo is a work-in-progress mobile subleasing app that will allow students to sublease to others safely and quickly. " +
@@ -1038,10 +909,9 @@ export const AWS_INFO_SECTORS = [
                 "GitHub Actions makes updating the actual website as simple as pushing a commit onto the production branch. " +
                 "This helps junior developers on my team efficiently push updates to the website without involving me as much, " +
                 "a feat not available on other hosting platforms.",
-            "I don't use S3 for any personal projects, but i configured iVue's buckets so that they are used to host the company's websites and " +
-                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
-                "Each of these projects also have their own CI/CD pipeline connecting them to their respective Amazon S3 bucket. " +
-                "In the future, I'm sure that iVue will use S3 for more complex purposes."
+            "I use Amazon S3 to host my website. On top of that, I configured iVue's buckets so that they are used to host the company's websites and " +
+                getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ". " + "Each of these projects also have their own CI/CD pipeline " +
+                "connecting them to their respective Amazon S3 bucket. In the future, I'm sure that iVue will use S3 for more complex purposes."
         ],
 
         addBottomSpace: true,
@@ -1065,9 +935,9 @@ export const AWS_INFO_SECTORS = [
                 "A Cloudfront Distribution takes an S3 bucket, configures domains that will use it, and then creates a secure link for its content. " +
                 "like an S3 bucket and many other Amazon services, any distribution is customizable. For instance, " +
                 "many behaviors can be set for different errors, such as adding a custom 404 error page, amongst many other actions. ",
-            "I configured this service so iVue can deliver its company websites and " +
-                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
-                "iVue might use this for more complex purposes in the future like delivering potential mobile apps."
+            "I configured this service so iVue can deliver its company websites and " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ". " +
+                "iVue might use this for more complex purposes in the future like delivering potential mobile apps. " +
+                "I've also configured this service to deliver this website as well."
         ],
 
         addBottomSpace: true,
@@ -1090,20 +960,19 @@ export const AWS_INFO_SECTORS = [
                 "Like any other domain registrar, it can hold domains on an account." +
                 "However, A hosted zone can be created for any domain, regardless of who the registrar is, as it provides its own nameserver addresses. " +
                 "This allows domain managers to configure DNS records freely, whether it be for linked emails, websites, or other purposes." +
-                "For instance, a CNAME record can be set up for a subdomain like " +
-                "<span><a href=\"https://www.ivueworld.com/\" style=\"text-decoration: underline;\">www.ivueworld.com</a></span> to host a cloudfront distribution.",
-            "I configured this service so iVue can deliver its company websites and " +
-                "<span><a href=\"https://www.worldsivue.com/\" style=\"text-decoration: underline;\">Worlds iVue</a></span>. " +
-                "iVue will probably use this to host more websites in the future and to register more domains taht it might need."
+                "For instance, a CNAME record can be set up for a subdomain like " + getLinkElement("www.ivueworld.com", "www.ivueworld.com") +
+                " to host a cloudfront distribution.",
+            "I configured this service so iVue can host its company websites and " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ". " +
+                "iVue will probably use this to host more websites in the future and to register more domains that it might need. " +
+                "I've also configured this service to host this website as well."
         ],
 
         addBottomSpace: true,
         pictures: []
-    }
-    /*
+    },
     {
-        title: "Amazon DynamoDB",
-        image: dynamo_db_icon,
+        title: "Amazon WorkMail",
+        image: workmail_icon,
         style: {
             background: "linear-gradient(to bottom, #5468ff 0%, black 100%)",
             color: "white",
@@ -1111,23 +980,29 @@ export const AWS_INFO_SECTORS = [
         },
 
         buttons: [
-            { title: "Go To Amazon DynamoDB", link: "https://aws.amazon.com/dynamodb/" }
+            { title: "Amazon WorkMail's Website", link: "https://aws.amazon.com/workmail/" }
         ],
         descriptions: [
-            "Amazon Web Services (AWS) is a cloud provider for millions of websites and web apps across the world. " +
-                "Many companies, including iVue, use their network to lower costs and increase agility and innvoation. " +
-                "They have many products, ranging from Simple Storage Service (S3) that lets customers store data for their apps to " +
-                "Amazon Cognito that provides user management services for applications. " +
-                "iVue uses AWS to host Worlds iVue online, manage users, and store large amounts of geospatial data.",
-            "That being said, \"Amplify\" is a frontend module that connects an application's frontend to the AWS Services powering its backend. " +
-                "With some help, I have integrated Amplify into Worlds iVue to connect it to an Amazon Cognito User Pool to enable users to log onto " +
-                "Worlds iVue with an account. This enables my team to develop far more features for the app, " +
-                "including registering drones and modkits with user accounts. " +
-                "Amplify will also connect Worlds iVue with many more AWS Services, further enhancing the boundaries of the 3D app."
+            "Amazon WorkMail is Amazon's Business Email and Calendar Service. " +
+                "It allows customers to make emails with registered domains (e.g. example@example.com) and works well with " +
+                "other AWS services like Amazon Simple Email Service (SES) and has its own Software Development Kit. " +
+                "All these features are paired with a monthly cost of $4.00 for 50GB of storage per user, " +
+                "which, compared to other providers, is suprisingly low.",
+            "I configured Amazon WorkMail for iVue's business needs. This includes emails for websites like \"info@ivueworld.com\" to " +
+                "emails for iVue's leadership like \"mohit.jain@worldsivue.com\". In the future, I'll probably be configuring user accounts for " +
+                "iVue's other employees and programmatically work with other AWS services."
         ],
 
         addBottomSpace: true,
         pictures: []
     }
-    */
 ]
+
+/**
+ * This returns an "a" element that has text link to a string.
+ * @param {String} text The text that represents the link.
+ * @param {String} link The link to the website.
+ */
+function getLinkElement(text, link) {
+    return ("<span><a href=\"" + link + "\"" + "style=\"text-decoration: underline;\">" + text + "</a></span>");
+}

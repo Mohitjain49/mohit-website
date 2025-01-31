@@ -1,12 +1,11 @@
 <template>
-    <AmazonSidebar />
-    <div class="personal-web-body personal-web-body-v2" @click="() => {webData.setNavBarDropdown(-1)}">
-        <InfoSector :sectorObj="AWS_INFO_SECTORS[sectorOpen]" class="info-sector-v2" />
-    </div>
+<AmazonSidebar />
+<div class="personal-web-body personal-web-body-v2" @click="() => {webData.setNavBarDropdown(-1)}">
+    <InfoSector :sectorObj="AWS_INFO_SECTORS[sectorOpen]" class="info-sector-v2" />
+</div>
 </template>
 
 <script setup>
-import "../../../styles/sectors/infosectorstyles.css";
 import InfoSector from '../../../components/body-components/InfoSector.vue';
 import AmazonSidebar from '../../../components/sidebars/AmazonSidebar.vue';
 
@@ -45,8 +44,13 @@ onMounted(() => {
     } else if(subRoute === "route53" || subRoute === "route-53") {
         sectorOpen.value = 5;
         document.title = (documentTitle + " | Amazon Route 53");
+    } else if(subRoute === "workmail") {
+        sectorOpen.value = 6;
+        document.title = (documentTitle + " | Amazon WorkMail");
     } else if(subRoute === "CloudFront" || subRoute === "Cloudfront") {
         router.push("/skills/aws/cloudfront");
+    } else if(subRoute === "WorkMail" || subRoute === "Workmail") {
+        router.push("/skills/aws/workmail");
     }
     /*
     else if(subRoute === "dynamodb") {

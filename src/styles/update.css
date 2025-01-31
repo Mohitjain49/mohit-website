@@ -82,12 +82,12 @@
     text-decoration: underline;
 }
 
-@media (max-width: 1200px) and (min-width: 841px) {
+@media (max-width: 1200px) and (min-width: 801px) {
     #update-body {
         grid-template-columns: 340px calc(100% - 340px);
     }
 }
-@media (max-width: 840px) {
+@media (max-width: 800px) {
     #update-body {
         grid-template-columns: 1fr;
     }
@@ -107,7 +107,8 @@
  */
 
 .update-content {
-    width: 100%;
+    padding: 0px 10px;
+    width: calc(100% - 20px);
     height: 100%;
     border: none;
     overflow-x: hidden;
