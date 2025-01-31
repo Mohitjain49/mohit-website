@@ -26,6 +26,7 @@ const personalRoutes = [
     { path: "/contact", name: "Contact Mohit", component: ContactPage, alias: ['/contact-me'] },
     { path: "/credits", name: "Credits Page", component: Credits },
 
+    { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
     { path: "/globe", name: "My Globe", component: GlobeNotAvailable },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 

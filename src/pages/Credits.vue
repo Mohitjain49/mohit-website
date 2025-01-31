@@ -17,10 +17,11 @@
 </template>
 
 <script setup>
-import { VUEJS_WEBSITE_LINK } from "../stores/Objects.js";
+import { VUEJS_WEBSITE_LINK, MAIN_IVUE_WEBSITE_LINK } from "../stores/Objects.js";
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
 import vuejs_icon from "../assets/Vuejs_Icon.png";
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
+import ivue_text from "../assets/ivue/iVue_Black_Text.png";
 
 import NavigationMain from '../components/NavigationMain.vue';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
@@ -124,6 +125,32 @@ const CREDIT_ENTITIES = [
             size: "110px"
         }
     },
+    {
+        name: "iVue",
+        link: MAIN_IVUE_WEBSITE_LINK,
+        color: "black",
+        desc: "Throughout my website, I use many of iVue's logos, icons, and screenshots of the company's websites " +
+            "to outline my contributions to iVue and my experience with the company as a software developer.",
+
+        icon: {
+            id: ivue_text,
+            faIcon: false,
+            width: "155"
+        }
+    },
+    {
+        name: "Cloudflare",
+        link: "https://www.cloudflare.com/",
+        color: "#F58A27",
+        desc: "Cloudflare has a free platform called Cloudflare Pages that simplifies deploying full-stack applications to the web. " +
+            "It has a free version that I use to ensure that my web development projects run smoothly online.",
+
+        icon: {
+            id: "fa-brands fa-cloudflare",
+            faIcon: true,
+            size: "110px"
+        }
+    },
 ];
 </script>
 
@@ -191,6 +218,13 @@ const CREDIT_ENTITIES = [
     color: inherit;
 }
 
+@media (min-width: 1625px) {
+    .personal-web-body#credits {
+        grid-template-columns: repeat(4, 1fr);
+        width: 1600px;
+        padding: 0px calc(50% - 800px);
+    }
+}
 @media (max-width: 1200px) {
     .personal-web-body#credits {
         grid-template-columns: repeat(2, 1fr);
@@ -198,7 +232,7 @@ const CREDIT_ENTITIES = [
         padding: 0px calc(50% - 400px);
     }
 }
-@media (max-width: 830px) {
+@media (max-width: 825px) {
     .personal-web-body#credits {
         grid-template-columns: repeat(1, 1fr);
         width: 400px;

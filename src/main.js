@@ -34,6 +34,8 @@ library.add(
     FaIcons.faEnvelope,
     FaIcons.faPhone,
     FaIcons.faCircleDot,
+    FaIcons.faStar,
+    FaIcons.faCopyright,
 
     FaBrands.faReact,
     FaBrands.faJs,
@@ -44,7 +46,8 @@ library.add(
     FaBrands.faLinkedin,
     FaBrands.faAws,
     FaBrands.faDiscord,
-    FaBrands.faFontAwesome
+    FaBrands.faFontAwesome,
+    FaBrands.faCloudflare
 );
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).

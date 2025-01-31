@@ -23,6 +23,10 @@
             <font-awesome-icon icon="fa-file-lines" />
             <span>Resume</span>
         </RouterLink>
+        <RouterLink to="/credits" class="web-navBar-opt web-navBar-side" :title="CREDITS_TITLE">
+            <font-awesome-icon icon="fa-star" />
+            <span>Credits</span>
+        </RouterLink>
         <RouterLink to="/updates" class="web-navBar-opt web-navBar-side" :title="UPDATES_TITLE">
             <font-awesome-icon icon="fa-file-code" />
             <span>Updates</span>
@@ -53,6 +57,7 @@ const webData = useWebsiteDataStore();
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
+const CREDITS_TITLE = "Credits Page";
 const UPDATES_TITLE = "Update Logs for My Website."
 
 /**
@@ -93,7 +98,7 @@ const ROUTE_COLLECTION = [
 }
 .web-navBar-links-side {
     display: flex;
-    width: 160px;
+    width: 210px;
     height: 100%;
 }
 
@@ -142,12 +147,12 @@ const ROUTE_COLLECTION = [
 }
 
 .web-navBar-contact {
-    width: fit-content;
+    width: 120px !important;
     flex-direction: row;
     padding: 0px 7px;
 }
 .web-navBar-contact span {
-    font-size: 16px;
+    font-size: 16px !important;
     margin-left: 5px;
 }
 .web-navBar-contact svg {
@@ -155,6 +160,17 @@ const ROUTE_COLLECTION = [
     font-size: 17px;
 }
 
+@media (max-width: 800px) {
+    .web-navBar-links-side {
+        width: fit-content;
+    }
+    .web-navBar-side {
+        width: 50px;
+    }
+    .web-navBar-side span {
+        font-size: 10px;
+    }
+}
 @media (max-width: 340px) {
     .web-navBar {
         position: absolute;
