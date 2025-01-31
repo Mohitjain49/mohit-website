@@ -31,7 +31,7 @@ export const Updates = [
                 description: "As a compliment to the new Experience Pages, These page sectors serve as brief displays of my experience at different companies. " +
                     "You can observe them at the bottom of the <span><a href=\"/\" style=\"text-decoration: underline;\">Home Page</a></span>. " +
                     "One example is with iVue down below, containing links to my experience, the company's main website, and Worlds iVue, " +
-                    "the company's 3D Globe App. <br><br>Note: As of Version 1.4.0, This component has been removed." ,
+                    "the company's 3D Globe App. <br><br>Note: As of Version 2.0.0, This component has been removed." ,
                 example: {
                     type: "none"
                 }
@@ -168,12 +168,12 @@ export const Updates = [
         ]
     },
     {
-        version: "1.4.0",
-        versionPath: "1-4-0",
-        releaseDate: "January 25th, 2025",
+        version: "2.0.0",
+        versionPath: "2-0-0",
+        releaseDate: "January 31st, 2025",
         mainDescription: "Since releasing this website back in September last year, I have dramatically improved my UI/UX design skills " +
-            "by developing iVue's company websites and releasing a new update to Worlds iVue. So, I completely redesigned my personal home page. " +
-            "I have also added a new contact page and moved the website to a proper domain.",
+            "by developing iVue's company websites and releasing a new update to Worlds iVue. So, I redesigned most of my website. " +
+            "This includes a redesigned home page, a new domain, multiple new pages, and more.",
 
         topics: [
             {
@@ -194,6 +194,17 @@ export const Updates = [
                 example: {
                     type: "iframe",
                     src: (OLD_WEBSITE_LINK),
+                }
+            },
+            {
+                name: "New Credits Page",
+                elementId: "Credits_Page",
+                description: "The Credits Page is simple: It shows what code libraries, framework, assets, and web services I used for this website. " +
+                    "Though It's not required, I'm truly grateful that I can use all these (mostly) free services." +
+                    "<br><br>Link To Webpage: <span><a href=\"/credits\" style=\"text-decoration: underline;\">Mohit Jain | Credits</a></span>",
+                example: {
+                    type: "iframe",
+                    src: (OLD_WEBSITE_LINK + "credits"),
                 }
             },
             {
