@@ -6,7 +6,7 @@ import Resume from "./pages/Resume.vue";
 import Credits from "./pages/Credits.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
-import GlobeRedirect from "./pages/GlobeRedirect.vue";
+import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import FrontendSkills from "./pages/skills/FrontendSkills.vue";

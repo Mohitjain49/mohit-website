@@ -1,5 +1,5 @@
 import resume from "../assets/documents/Mohit_Jain_Resume.pdf";
-import { PIZZA_WEBSITE_LINK, IVUE_ROBOTICS_WEBSITE_LINK } from "./Objects.js";
+import { PIZZA_WEBSITE_LINK, IVUE_ROBOTICS_WEBSITE_LINK, PERSONAL_GLOBE_LINK } from "./Objects.js";
 
 const OLD_WEBSITE_LINK = "/";
 
@@ -213,6 +213,28 @@ export const Updates = [
                 description: "The Contact Page, similar to other contact pages, contains a list of platforms for visitors to contact me and " +
                     "a section to type in a message for me. It uses Amazon Simple Email Service to facilitate this." +
                     "<br><br>Link To Webpage: <span><a href=\"/contact\" style=\"text-decoration: underline;\">Mohit Jain | Contact Me</a></span>",
+                example: {
+                    type: "none"
+                }
+            }
+        ]
+    },
+    {
+        version: "2.0.1",
+        versionPath: "2-0-1",
+        releaseDate: "February 3rd, 2025",
+        mainDescription: "While working my 2.0.0 update, I was also working on a new Globe Page. " +
+            "This was primarily to reduce the size of my main website. Cesium is more than any npm module; its assets must be stored in a separate assets folder.",
+
+        topics: [
+            {
+                name: "New Globe Website",
+                elementId: "Globe",
+                description: "This new page is currently not fully complete, but it introduces a new design that the old globe page on my .github.io subdomain. " +
+                    "There's a link to that page and a link on how I configure cesium down below for anyone that'll need help." +
+                    "<br><br>Link To Webpage: <span><a href=\"" + PERSONAL_GLOBE_LINK + "\" style=\"text-decoration: underline;\">Mohit Jain | Globe</a></span>" +
+                    "<br><span><a href=\"https://cesium.com/blog/2024/02/13/configuring-vite-or-webpack-for-cesiumjs/\" " +
+                    "style=\"text-decoration: underline;\">How To Configure Cesium For A Project</a></span>",
                 example: {
                     type: "none"
                 }
