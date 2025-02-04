@@ -6,7 +6,7 @@ import Resume from "./pages/Resume.vue";
 import Credits from "./pages/Credits.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
-import GlobeNotAvailable from "./pages/GlobeNotAvailable.vue";
+import GlobeRedirect from "./pages/GlobeRedirect.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import FrontendSkills from "./pages/skills/FrontendSkills.vue";
@@ -27,7 +27,12 @@ const personalRoutes = [
     { path: "/credits", name: "Credits Page", component: Credits },
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
-    { path: "/globe", name: "My Globe", component: GlobeNotAvailable },
+    { path: "/ivue", redirect: "/experience/ivue" },
+    { path: "/sublo", redirect: "/experience/sublo" },
+    { path: "/frontend", redirect: "/skills/frontend" },
+    { path: "/aws", redirect: "/skills/aws" },
+
+    { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
     {

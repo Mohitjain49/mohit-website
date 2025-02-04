@@ -11,11 +11,8 @@
     </div>
 
     <div v-if="webData.pageView == 0" class="web-navBar-links-section center-flex-display">
-        <RouterLink v-for="route in ROUTE_COLLECTION"
-            class="web-navBar-opt"
-            :to="route.path"
-            v-html="route.title"
-        />
+        <RouterLink v-for="route in ROUTE_COLLECTION" class="web-navBar-opt" :to="route.path" v-html="route.title" />
+        <a class="web-navBar-opt" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
     </div>
 
     <div class="web-navBar-links-side" style="justify-content: right;">
@@ -33,7 +30,7 @@
         </RouterLink>
         <div class="web-navBar-opt web-navBar-side web-navBar-list"
             v-if="webData.pageView != 0"
-            @click="setDropdown(0)"
+            @click="webData.setNavBarDropdown(0)"
             :title="ROUTE_MENU_TITLE">
 
             <font-awesome-icon icon="fa-list" />
@@ -46,11 +43,15 @@
         <RouterLink class="navBar-dropdown-opt" v-for="route in ROUTE_COLLECTION" :to="route.path">
             <span> {{ route.title }} </span>
         </RouterLink>
+        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt">
+            <span> My Globe </span>
+        </a>
     </div>
 </Transition>
 </template>
 
 <script setup>
+import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
 const webData = useWebsiteDataStore();
 
@@ -58,22 +59,13 @@ const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
 const CREDITS_TITLE = "Credits Page";
-const UPDATES_TITLE = "Update Logs for My Website."
-
-/**
- * This sets which dropdown is open.
- * @param {Number} newIndex The index of the dropdown to set.
- */
-const setDropdown = (newIndex = -1) => {
-    webData.setNavBarDropdown(newIndex);
-}
+const UPDATES_TITLE = "Update Logs for My Website.";
 
 const ROUTE_COLLECTION = [
     { path: "/", title: "Home" },
     { path: "/skills", title: "Skills" },
-    { path: "/experience", title: "Experience" },
-    { path: "/globe", title: "My Globe" }
-]
+    { path: "/experience", title: "Experience" }
+];
 </script>
 
 <style scoped>
