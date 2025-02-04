@@ -81,11 +81,13 @@
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
 import { SOCIALS } from '../stores/Objects.js';
+
+import axios from 'axios';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
 import { ref, onMounted } from 'vue';
 
 const webData = useWebsiteDataStore();
-const AWS_API_AVAILABLE = false;
+const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 
 const alertBoxText = ref("");
 var alertBoxTimeout = null;
@@ -107,9 +109,9 @@ function sendEmail() {
     // Stores the necessary parameters for the message.
     const message = {
         title: msgTitle.value,
-        body: msgMain.value,
+        msgBody: msgMain.value,
         name: senderName.value,
-        email: senderEmail.value
+        emailAddress: senderEmail.value
     }
 
     // Clears all the input boxes.
@@ -117,14 +119,20 @@ function sendEmail() {
     msgMain.value = "";
     senderName.value = "";
     senderEmail.value = "";
+    const errorRedirect = " You can email me directly with my work email: " +
+        getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink)
 
-    if(!AWS_API_AVAILABLE) {
-        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience. " +
-            "You can email me directly with my work email: " +
-            getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink)
-        );
+    if(AWS_API_LINK === "") {
+        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + errorRedirect);
     } else {
-        console.log(message);
+        axios.post(AWS_API_LINK, message).then((response) => {
+            if(response.status === 200) {
+                setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
+            }
+        }).catch((e) => {
+            console.error(e);
+            setAlertBox("This feature is not working at the moment." + errorRedirect);
+        })
     }
 }
 

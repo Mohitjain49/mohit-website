@@ -30,6 +30,7 @@ import sublo_white_background_icon from "../assets/sublo/Sublo_Blue_Background.p
 import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
+export const PERSONAL_GLOBE_LINK = "https://globe.mohit-jain.com/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
 export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
 

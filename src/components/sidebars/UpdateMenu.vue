@@ -37,7 +37,7 @@ import { useRouter } from "vue-router";
 import { ref } from "vue";
 
 const router = useRouter();
-const tabsExpanded = ref(new Array(Updates.length).fill(true, 0, Updates.length));
+const tabsExpanded = ref(new Array(Updates.length).fill(false, 0, Updates.length));
 
 /**
  * This sets whether a specific tab is expanded or not given an index.
