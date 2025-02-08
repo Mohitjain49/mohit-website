@@ -6,4 +6,4 @@ This repository hosts my personal website that I use to show my portfolio of ski
   
 Main Website - https://mohit-jain.com/  
 Pizza Project - https://mohitjain49.github.io/pizza/#/  
-Globe Website = https://globe.mohit-jain.com/ (Coming Soon)
+Globe Website = https://globe.mohit-jain.com/ (Not Completed - Preview Available)
