@@ -4,6 +4,7 @@ import PersonalMain from "./pages/PersonalMain.vue";
 import ContactPage from "./pages/ContactPage.vue";
 import Resume from "./pages/Resume.vue";
 import Credits from "./pages/Credits.vue";
+import MyIcon from "./pages/MyIcon.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
@@ -25,6 +26,7 @@ const personalRoutes = [
     { path: "/resume", name: "My Resume", component: Resume },
     { path: "/contact", name: "Contact Mohit", component: ContactPage, alias: ['/contact-me'] },
     { path: "/credits", name: "Credits Page", component: Credits },
+    { path: "/icon", alias: ["/icons"], name: "Icon Page", component: MyIcon },
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
     { path: "/ivue", redirect: "/experience/ivue" },
