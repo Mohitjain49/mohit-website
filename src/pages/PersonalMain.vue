@@ -59,6 +59,7 @@ function scrollToTop() {
     color: var(--blue-cobalt);
     font-size: 25px;
     border: none;
+    text-align: center;
 }
 #copyright span {
     font-size: 28px;
@@ -81,5 +82,11 @@ function scrollToTop() {
 }
 .scroll-topBtn:hover {
     background-color: var(--blue-three);
+}
+
+@media (max-width: 600px) {
+    #copyright {
+        justify-content: flex-start;
+    }
 }
 </style>
