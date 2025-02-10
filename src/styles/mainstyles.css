@@ -1,6 +1,9 @@
 :root {
     --body-height: calc(100vh - 50px);
 
+    --blue-cobalt: #0047ab;
+    --blue-zero: rgb(187, 210, 255);
+
     --blue-one: rgb(159, 191, 255);
     --blue-two: rgb(117, 163, 255);
     --blue-three: rgb(67, 130, 255);

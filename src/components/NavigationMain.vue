@@ -20,10 +20,6 @@
             <font-awesome-icon icon="fa-file-lines" />
             <span>Resume</span>
         </RouterLink>
-        <RouterLink to="/credits" class="web-navBar-opt web-navBar-side" :title="CREDITS_TITLE">
-            <font-awesome-icon icon="fa-star" />
-            <span>Credits</span>
-        </RouterLink>
         <RouterLink to="/updates" class="web-navBar-opt web-navBar-side" :title="UPDATES_TITLE">
             <font-awesome-icon icon="fa-file-code" />
             <span>Updates</span>
@@ -58,7 +54,6 @@ const webData = useWebsiteDataStore();
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
-const CREDITS_TITLE = "Credits Page";
 const UPDATES_TITLE = "Update Logs for My Website.";
 
 const ROUTE_COLLECTION = [

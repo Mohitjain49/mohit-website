@@ -203,8 +203,7 @@ export const Updates = [
                     "Though It's not required, I'm truly grateful that I can use all these (mostly) free services." +
                     "<br><br>Link To Webpage: <span><a href=\"/credits\" style=\"text-decoration: underline;\">Mohit Jain | Credits</a></span>",
                 example: {
-                    type: "iframe",
-                    src: (OLD_WEBSITE_LINK + "credits"),
+                    type: "none",
                 }
             },
             {

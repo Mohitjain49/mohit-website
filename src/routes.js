@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import PersonalMain from "./pages/PersonalMain.vue";
 import ContactPage from "./pages/ContactPage.vue";
 import Resume from "./pages/Resume.vue";
-import Credits from "./pages/Credits.vue";
 import MyIcon from "./pages/MyIcon.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
@@ -25,10 +24,10 @@ const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
     { path: "/resume", name: "My Resume", component: Resume },
     { path: "/contact", name: "Contact Mohit", component: ContactPage, alias: ['/contact-me'] },
-    { path: "/credits", name: "Credits Page", component: Credits },
     { path: "/icon", alias: ["/icons"], name: "Icon Page", component: MyIcon },
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
+    { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#credits" } },
     { path: "/ivue", redirect: "/experience/ivue" },
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
@@ -65,6 +64,7 @@ const personalRoutes = [
                 { path: "", name: "iVue Main Page", component: IvueWeb },
                 { path: ":id", name: "iVue Dynamic Page", component: IvueWeb }
             ]},
+            { path: "worldsivue", redirect: "/experience/ivue/worldsivue" },
         ]
     },
     {

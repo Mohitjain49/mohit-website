@@ -8,7 +8,7 @@
     </div>
 
     <div class="skills-section-routeBtn-container">
-        <RouterLink to="/skills" class="skills-section-routeBtn"> Want To Know More? </RouterLink>
+        <RouterLink to="/skills/" class="skills-section-routeBtn"> Want To Know More? </RouterLink>
     </div>
     <div class="skills-section-icons-container">
         <div class="skills-section-icons">
@@ -37,7 +37,6 @@ import { VUEJS_WEBSITE_LINK, REACT_NATIVE_WEBSITE_LINK } from "@/stores/Objects.
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
-import react_icon from "@/assets/React_Icon.png";
 import angular_icon from "@/assets/Angular_Icon.webp";
 import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
 
@@ -68,7 +67,7 @@ const SOFTWARE_SKILLS = [
     { name: "Vue.js", link: VUEJS_WEBSITE_LINK, asset: vuejs_icon, faIcon: false },
     { name: "Amazon Web Services", link: "https://aws.amazon.com", asset: aws_icon, faIcon: false },
     { name: "JavaScript", link: "#", asset: "fa-brands fa-js", faIcon: true, color: "#F7DF1E" },
-    { name: "React Native", link: REACT_NATIVE_WEBSITE_LINK, asset: react_icon, faIcon: false },
+    { name: "React Native", link: REACT_NATIVE_WEBSITE_LINK, asset: "fa-brands fa-react", faIcon: true, color: "#61DBFB" },
     { name: "Cesium", link: "https://cesium.com", asset: cesium_icon, faIcon: false },
     { name: "HTML", link: "#", asset: "fa-brands fa-html5", faIcon: true, color: "#E34E26" },
     { name: "Angular", link: "https://angular.dev", asset: angular_icon, faIcon: false },
@@ -81,15 +80,15 @@ const SOFTWARE_SKILLS = [
 #skills {
     height: 50px;
     width: 100%;
-    background: linear-gradient(to bottom, rgb(248, 206, 171) 0%, var(--blue-one) 100%);
+    background: linear-gradient(to bottom, rgb(248, 206, 171) 0%, var(--blue-zero) 100%);
 }
 .skills-section {
     height: fit-content;
     min-height: calc(var(--body-height));
     padding: 20px 0px;
     width: 100%;
-    background: linear-gradient(to bottom, var(--blue-one) 0%, var(--blue-two) 100%);
-    color: var(--blue-five);
+    background: var(--blue-zero);
+    color: var(--blue-cobalt);
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -101,7 +100,7 @@ const SOFTWARE_SKILLS = [
     font-size: 90px;
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
-    color: var(--blue-five);
+    color: var(--blue-cobalt);
     width: fit-content;
     height: 18%;
 }
@@ -129,13 +128,13 @@ const SOFTWARE_SKILLS = [
     font-size: 26px;
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
-    color: var(--blue-five);
-    border: 2px solid var(--blue-four);
+    color: var(--blue-cobalt);
+    border: 2px solid var(--blue-cobalt);
     border-radius: 15px;
     transition: var(--default-transition);
 }
 .skills-section-routeBtn:hover {
-    background-color: var(--blue-three);
+    background-color: var(--blue-two);
 }
 
 .skills-section-icons-container {
@@ -149,7 +148,7 @@ const SOFTWARE_SKILLS = [
     height: fit-content;
     width: fit-content;
     padding: 20px;
-    border: 2px solid var(--blue-five);
+    border: 2px solid var(--blue-cobalt);
     border-radius: 10px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -172,14 +171,13 @@ const SOFTWARE_SKILLS = [
     width: 70px;
     padding: 12px;
     margin: 10px;
-    border: 2px solid var(--blue-four);
+    border: 2px solid var(--blue-cobalt);
     border-radius: 10px;
     transition: var(--default-transition), padding 0.2s;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.15);
 }
 .skills-section-tab-asset:hover {
-    background-color: rgba(0, 0, 0, 0.15);
-    /*padding: 16px;*/
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
 @media (max-width: 600px) {

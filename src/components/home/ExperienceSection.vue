@@ -3,13 +3,18 @@
 <div class="experience-section">
     <div class="experience-section-column">
         <div class="experience-section-title">My Experience</div>
-        <div class="experience-section-desc">
-            Since starting at iVue in 2023, I took resposibility for creating Worlds iVue, 
-            building new versions of iVue's company websites, and more recently managing
-            our use of AWS Services.
-        </div>
-        <div class="experience-section-routeBtn-container">
-            <RouterLink to="/experience" class="experience-section-routeBtn"> Read More </RouterLink>
+
+        <div class="experience-info">
+            <div class="experience-section-routeBtn-container">
+                <RouterLink to="/experience/" class="experience-section-routeBtn"> Read On It </RouterLink>
+                <RouterLink to="/resume" class="experience-section-routeBtn ivue"> My Resume </RouterLink>
+            </div>
+
+            <div class="experience-section-desc desc-info">
+                Since starting at iVue in 2023, I took resposibility for creating Worlds iVue, 
+                building new versions of iVue's company websites, and more recently managing
+                our use of AWS Services.
+            </div>
         </div>
     </div>
 
@@ -129,13 +134,13 @@ const SCREENS = [
 #experience {
     height: 50px;
     width: 100%;
-    background: linear-gradient(to top, rgb(248, 206, 171) 0%, var(--blue-two) 100%);
+    background: linear-gradient(to top, rgb(248, 206, 171) 0%, var(--blue-zero) 100%);
 }
 .experience-section {
     height: var(--body-height);
     min-height: 800px;
     display: grid;
-    grid-template-columns: 60% 40% ;
+    grid-template-columns: 60% 40%;
 }
 
 .experience-section-column {
@@ -151,31 +156,52 @@ const SCREENS = [
     color: var(--website-text);
     font-family: 'Lexend', sans-serif;
     font-weight: bold;
-    font-size: 75px;
+    font-size: 90px;
     width: fit-content;
     text-align: center;
+}
+
+.experience-info {
+    margin-top: 30px;
+    width: 700px;
+    height: 200px;
+    border: 2px solid var(--website-text);
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 1);
 }
 .experience-section-desc {
     color: var(--website-text);
     font-family: 'Lexend', sans-serif;
-    font-size: 22px;
-    width: fit-content;
-    max-width: 680px;
+    font-size: 18px;
+    width: calc(100% - 20px);
     text-align: center;
-    padding: 5px 0px 10px 0px;
+    padding: 20px 10px;
+    font-weight: bold;
+}
+.experience-section-desc.desc-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110px;
+    padding: 0px 10px;
 }
 
 .experience-section-routeBtn-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
-    height: 75px;
+    height: 70px;
+    padding-top: 20px;
     width: 100%;
 }
 .experience-section-routeBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: fit-content;
     padding: 10px;
     font-size: 26px;
+    width: 200px;
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
     color: var(--website-text);
@@ -184,7 +210,20 @@ const SCREENS = [
     transition: var(--default-transition);
 }
 .experience-section-routeBtn:hover {
-    background-color: var(--dark-translucent-background);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.experience-section-routeBtn.ivue {
+    border-color: white;
+    color: white;
+}
+.experience-section-routeBtn.worldsivue {
+    border-color: #48A548;
+    color: #48A548;
+}
+.experience-section-routeBtn.sublo {
+    border-color: #36A1D9;
+    color: #36A1D9;
 }
 
 .experience-phone {
@@ -293,11 +332,14 @@ const SCREENS = [
     display: flex;
     justify-content: center;
     align-items: center;
+    text-shadow: none;
+    font-weight: normal;
 }
 .experience-phone-expBtn {
     color: inherit;
     border-color: inherit;
     font-size: 18px;
+    width: 160px;
 }
 
 @media (max-width: 1175px) {
@@ -314,6 +356,19 @@ const SCREENS = [
     }
 }
 
+@media (max-width: 775px) {
+    .experience-info {
+        height: 350px;
+        width: 375px;
+    }
+    .experience-section-routeBtn-container {
+        flex-direction: column;
+        height: 180px;
+        padding-top: 0px;
+        padding-bottom: 20px;
+    }
+}
+
 @media (max-width: 600px) {
     .experience-section {
         min-height: 0px;
@@ -324,8 +379,13 @@ const SCREENS = [
     .experience-section-desc {
         font-size: 17px;
     }
+
+    .experience-info {
+        height: 380px;
+        width: 315px;
+    }
     .experience-phone {
-        width: 325px;
+        width: 315px;
         height: 600px;
     }
 }

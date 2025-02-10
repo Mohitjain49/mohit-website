@@ -36,6 +36,7 @@ library.add(
     FaIcons.faCircleDot,
     FaIcons.faStar,
     FaIcons.faCopyright,
+    FaIcons.faArrowUp,
 
     FaBrands.faReact,
     FaBrands.faJs,

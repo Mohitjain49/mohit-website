@@ -16,6 +16,7 @@ import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
 import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
 import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
 import workmail_icon from "../assets/aws/AWS_WorkMail_Icon.svg";
+import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
 
 import wiv_banner from "../assets/ivue/Worlds_iVue_Banner.png";
 import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
@@ -78,6 +79,118 @@ export const SOCIALS = [
         linkBtn: "Go To Github",
         linkIcon: "fa-brands fa-github",
         color: "white"
+    },
+];
+
+export const CREDIT_ENTITIES = [
+    {
+        name: "Font Awesome",
+        link: "https://fontawesome.com/",
+        color: "rgb(83, 141, 215)",
+        desc: "I have used free font awesome icons across this website. " +
+            "There's a paper plane next to \"Contact Me\", file icons for my resume and the website's updates, " +
+            "brand icons on the contact page, and many more icons across the website.",
+
+        icon: {
+            id: "fa-brands fa-font-awesome",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "AWS Icons",
+        link: "https://aws-icons.com/",
+        color: "#F59D0A",
+        desc: "Amazon Web Services (AWS) has an entire website dedicated to their icons. " +
+            "Nearly every AWS service and more has a specialized icon, " +
+            "and I use these icons on the aws page and other places on my website.",
+
+        icon: {
+            id: aws_icons_logo,
+            faIcon: false,
+            width: "125"
+        }
+    },
+    {
+        name: "Vue.js",
+        link: VUEJS_WEBSITE_LINK,
+        color: "#41B883",
+        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
+            "It's extremely lightweight compared to angular and react and simple for beginners. " +
+            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "AWS",
+        link: "https://aws.amazon.com/",
+        color: "#5468ff",
+        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
+            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
+            "and Amazon Route 53 to put this website under a custom domain.",
+
+        icon: {
+            id: "fa-brands fa-aws",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "Cesium",
+        link: "https://cesium.com/",
+        color: "#6DABE4",
+        desc: "I used Cesium as the main geospatial service for my personal globe. " +
+            "It's also used with Worlds iVue. Due to its extensive documentation on all its features, " +
+            "Cesium isn't that complicated to learn and can perform a variety of tasks related to geospatial platforms.",
+
+        icon: {
+            id: cesium_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "GitHub",
+        link: "https://github.com/",
+        color: "black",
+        desc: "I use GitHub as this website's version control. It's very reliable due to " +
+            "its intuitive user interfaces on its website and desktop app and helpful CI/CD pipelines with GitHub Actions.",
+
+        icon: {
+            id: "fa-brands fa-github",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "iVue",
+        link: MAIN_IVUE_WEBSITE_LINK,
+        color: "black",
+        desc: "Throughout my website, I use many of iVue's logos, icons, and screenshots of the company's websites " +
+            "to outline my contributions to iVue and my experience with the company as a software developer.",
+
+        icon: {
+            id: ivue_black_text,
+            faIcon: false,
+            width: "155"
+        }
+    },
+    {
+        name: "Cloudflare",
+        link: "https://www.cloudflare.com/",
+        color: "#F58A27",
+        desc: "Cloudflare has a free platform called Cloudflare Pages that simplifies deploying full-stack applications to the web. " +
+            "It has a free version that I use to ensure that my web development projects run smoothly online.",
+
+        icon: {
+            id: "fa-brands fa-cloudflare",
+            faIcon: true,
+            size: "110px"
+        }
     },
 ];
 
