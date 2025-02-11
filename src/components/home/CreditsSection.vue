@@ -45,6 +45,7 @@ function getFAIconStyle(entity) {
     grid-template-columns: repeat(3, 1fr);
     width: 1200px;
     padding: 0px calc(50% - 600px);
+    padding-bottom: 20px !important;
 }
 
 .credits-main-header {
@@ -164,6 +165,12 @@ function getFAIconStyle(entity) {
         grid-template-columns: repeat(1, 1fr);
         width: 100%;
         padding: 0px;
+    }
+    .credits-main-header {
+        font-size: 75px;
+    }
+    .credits-main-desc {
+        font-size: 20px;
     }
 
     .credits-entity-container {

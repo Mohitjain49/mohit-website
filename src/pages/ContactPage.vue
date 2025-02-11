@@ -14,13 +14,19 @@
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Title</div>
                 </div>
-                <input class="contact-input-tab-textbox" v-model="msgTitle">
+                <input class="contact-input-tab-textbox"
+                    v-model="msgTitle"
+                    @click="setAlertBox('')"
+                >
             </div>
             <div class="contact-input-tab" style="height: calc(100% - 70px);">
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Message</div>
                 </div>
-                <textarea class="contact-input-tab-textbox contact-input-tab-textarea" v-model="msgMain"></textarea>
+                <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
+                    v-model="msgMain"
+                    @click="setAlertBox('')"
+                ></textarea>
             </div>
             <div class="contact-box-line"></div>
 
@@ -28,13 +34,20 @@
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Name</div>
                 </div>
-                <input class="contact-input-tab-textbox" v-model="senderName">
+                <input class="contact-input-tab-textbox"
+                    v-model="senderName"
+                    @click="setAlertBox('')"
+                >
             </div>
             <div class="contact-input-tab">
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Email</div>
                 </div>
-                <input class="contact-input-tab-textbox" v-model="senderEmail">
+                <input class="contact-input-tab-textbox"
+                    type="email"
+                    v-model="senderEmail"
+                    @click="setAlertBox('')"
+                >
             </div>
             <div class="contact-box-buttons-container center-flex-display">
                 <div class="contact-input-tab-btn-container center-flex-display">
@@ -114,26 +127,56 @@ function sendEmail() {
         emailAddress: senderEmail.value
     }
 
-    // Clears all the input boxes.
-    msgTitle.value = "";
-    msgMain.value = "";
-    senderName.value = "";
-    senderEmail.value = "";
-    const errorRedirect = " You can email me directly with my work email: " +
-        getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink)
-
     if(AWS_API_LINK === "") {
-        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + errorRedirect);
-    } else {
-        axios.post(AWS_API_LINK, message).then((response) => {
-            if(response.status === 200) {
-                setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
-            }
-        }).catch((e) => {
-            console.error(e);
-            setAlertBox("This feature is not working at the moment." + errorRedirect);
-        })
+        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + getAPIErrorRedirect());
+        return;
+    } else if(!checkAPIParameters(message)) {
+        return;
     }
+
+    axios.post(AWS_API_LINK, message).then((response) => {
+        if(response.status !== 200) { return; }
+        setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
+    }).catch((e) => {
+        console.error(e);
+        setAlertBox("This feature is not working at the moment." + getAPIErrorRedirect());
+    })
+
+}
+
+/**
+ * This function checks the parameters for my API function.
+ * @param {Object} message The parameters for the API.
+ * @param {String} message.title The title of the message.
+ * @param {String} message.msgBody The body of the message.
+ * @param {String} message.name The name of the sender.
+ * @param {String} message.emailAddress The title of the email.
+ */
+function checkAPIParameters(message) {
+    if(message.title === "") {
+        setAlertBox("Please enter an appropriate title for your message.");
+    } else if(message.msgBody.length < 50) {
+        setAlertBox("Please ensure that your message is at least 50 characters long.");
+    } else if(message.name === "") {
+        setAlertBox("Please enter your name that I can refer to you as.");
+    } else if(message.emailAddress === "") {
+        setAlertBox("Please enter your email address so I can stay in touch with you.");
+    } else {
+        setAlertBox("Send Message. Please Wait...");
+        msgTitle.value = "";
+        msgMain.value = "";
+        senderName.value = "";
+        senderEmail.value = "";
+        return true;
+    }
+    return false;
+}
+
+/**
+ * This returns a string redirecting visitors to email my work email.
+ */
+function getAPIErrorRedirect() {
+    return (" You can email me directly with my work email: " + getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink));
 }
 
 /**
@@ -147,6 +190,7 @@ function setAlertBox(text = "") {
         alertBoxTimeout = null;
     }
 
+    if(text === "") { return; }
     alertBoxTimeout = setTimeout(() => {
         alertBoxText.value = "";
         alertBoxTimeout = null;
@@ -173,9 +217,8 @@ function getLinkString(link = "/", text = "") {
     return ("<span><a href=\"" + link + "\" style=\"text-decoration: underline;\" target=\"_blank\">" + text + "</a></span>");
 }
 
-const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, please do so below. It uses " +
-    getLinkString("https://aws.amazon.com/ses/", "Amazon Simple Email Service (SES)") +
-    " to send an automatic email to me."
+const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, you can do so below. It uses " +
+    getLinkString("https://aws.amazon.com/ses/", "Amazon Simple Email Service (SES)") + " to send an automatic email to me.";
 const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, LinkedIn, Discord, and Github.";
 </script>
 

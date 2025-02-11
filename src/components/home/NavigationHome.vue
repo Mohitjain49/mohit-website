@@ -112,4 +112,10 @@ function getCircleOptClasses() {
 .home-nav-opt.close {
     border-bottom: none;
 }
+
+@media (max-width: 340px) {
+    .home-nav {
+        display: none;
+    }
+}
 </style>

@@ -298,7 +298,7 @@ export const NAV_CARDS = [
         desc: "Explore my ongoing development with Worlds iVue, a geospatial app " +
             "that serves as a drone control operator and will serve as a media sharing app in the future.",
         
-        pointsTitle: "Frameworks/Modules Used:",
+        pointsTitle: "Dev Stack:",
         bulletPoints: [ "Vue.js", "Cesium", "MAVLink", "Amazon Web Services" ],
 
         pictureBarClass: "wiv-nav-picture-bar",
@@ -326,7 +326,7 @@ export const NAV_CARDS = [
         desc: "Navigate through my work with developing the latest versions of the iVue Websites, " +
             "serving as a way for potential customers to see our mission of making drones an everyday product.",
     
-        pointsTitle: "Frameworks I Used:",
+        pointsTitle: "Dev Stack:",
         bulletPoints: [ "Vue.js" ],
 
         pictureBarClass: "ivue-web-nav-picture-bar",
@@ -355,8 +355,8 @@ export const NAV_CARDS = [
         desc: "See my work with developing Sublo, a subleasing mobile app that will make subleasing easier " +
             "for college students to find and list subleases for their dormitories or apartments.",
     
-        pointsTitle: "Frameworks I Used:",
-        bulletPoints: [ "React Native" ],
+        pointsTitle: "Dev Stack:",
+        bulletPoints: [ "React Native", "Expo" ],
 
         pictureBarClass: "sublo-nav-picture-bar",
         pictures: [
@@ -379,7 +379,7 @@ export const NAV_CARDS = [
         },
 
         color: "#5468ff",
-        desc: "Check out some of the Amazon Web Sevrives that I configure to amplify Worlds iVue and Sublo.",
+        desc: "Check out some of the Amazon Web Services that I configure to amplify Worlds iVue and Sublo.",
 
         pointsTitle: "Services Include:",
         bulletPoints: [ "AWS Amplify",
@@ -430,7 +430,7 @@ export const NAV_CARDS = [
     {
         id: "frontend-nav-card",
         titleId: "frontend-nav-card-title",
-        route: "/skills/frontend/vuejs",
+        route: "/skills/frontend",
     
         title: {
             text: "Frontend",

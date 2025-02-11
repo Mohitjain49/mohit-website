@@ -185,12 +185,12 @@ const SOFTWARE_SKILLS = [
         min-height: 0px;
     }
     .skills-section-title {
-        font-size: 75px;
-        height: 110px;
+        font-size: 70px;
+        height: 100px;
     }
     .skills-section-mainText {
         font-size: 17px;
-        padding: 20px 0px;
+        padding: 10px 0px 20px 0px;
     }
 
     .skills-section-icons {
