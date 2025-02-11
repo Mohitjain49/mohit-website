@@ -1,18 +1,18 @@
 <template>
-    <NavigationMain />
-    <div class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
-        <div class="main-nav-page-container">
-            <div class="nav-page-title center-flex-display gradient-text">My Skills</div>
-            <div class="main-nav-page">
-                <NavPageCard :sectorObj="NAV_CARDS[8]" />
-                <NavPageCard :sectorObj="NAV_CARDS[2]" />
-                <NavPageCard :sectorObj="NAV_CARDS[6]" id="third-nav-card" />
-            </div>
-            <div class="main-sector-bottom-linkBtn-container center-flex-display" style="padding-bottom: 30px;">
-                <RouterLink to="/" class="main-sector-bottom-linkBtn center-flex-display">Back to Home</RouterLink>
-            </div>
+<NavigationMain />
+<div id="skills-page" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
+    <div class="main-nav-page-container">
+        <div id="skills-title" class="nav-page-title">My Skills</div>
+        <div class="main-nav-page">
+            <NavPageCard :sectorObj="NAV_CARDS[8]" :skillsCard="true" />
+            <NavPageCard :sectorObj="NAV_CARDS[2]" :skillsCard="true" />
+            <NavPageCard :sectorObj="NAV_CARDS[6]" :skillsCard="true" id="third-nav-card" />
+        </div>
+        <div class="main-sector-bottom-linkBtn-container" style="padding-bottom: 30px;">
+            <RouterLink to="/" class="main-sector-bottom-linkBtn main-sector-bottom-linkBtn-blue">Back to Home</RouterLink>
         </div>
     </div>
+</div>
 </template>
 
 <script setup>
@@ -30,3 +30,17 @@ onMounted(() => {
     webData.mountWebData();
 })
 </script>
+
+<style scoped>
+#skills-page {
+    background: var(--blue-zero);
+}
+
+#skills-title {
+    background: var(--blue-cobalt);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: bold;
+}
+</style>

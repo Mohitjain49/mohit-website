@@ -442,7 +442,7 @@ export const NAV_CARDS = [
             size: "42px"
         },
     
-        color: "#F7DF1E",
+        color: "#FFF03C",
         desc: "Read about my experience on how I used numerous Frontend JavaScript Frameworks, " +
             "especially Vue.js, to create professional websites and applications.",
 

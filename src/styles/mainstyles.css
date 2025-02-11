@@ -110,11 +110,17 @@ h1, h2, h3, p {
 .main-sector-bottom-linkBtn-container {
     height: 75px;
     width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 .main-sector-bottom-linkBtn {
     cursor: pointer;
     height: 45px;
     width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: var(--website-text);
     font-size: 20px;
     font-weight: bold;
@@ -127,6 +133,16 @@ h1, h2, h3, p {
 }
 .main-sector-bottom-linkBtn:hover {
     border-color: var(--website-text);
+}
+
+.main-sector-bottom-linkBtn-blue {
+    color: var(--blue-cobalt);
+    border-color: var(--blue-cobalt);
+    background-color: var(--blue-zero);
+}
+.main-sector-bottom-linkBtn-blue:hover {
+    background-color: var(--blue-two);
+    border-color: var(--blue-cobalt);
 }
 
 /**

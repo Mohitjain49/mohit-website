@@ -27,6 +27,7 @@
     height: fit-content;
     text-align: center;
     font-size: 60px;
+    font-family: 'Lexend', sans-serif;
 }
 
 @media (max-width: 950px) and (min-width: 651px) {
