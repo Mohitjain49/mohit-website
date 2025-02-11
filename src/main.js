@@ -48,7 +48,9 @@ library.add(
     FaBrands.faAws,
     FaBrands.faDiscord,
     FaBrands.faFontAwesome,
-    FaBrands.faCloudflare
+    FaBrands.faCloudflare,
+    FaBrands.faJava,
+    FaBrands.faGolang
 );
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).

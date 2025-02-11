@@ -5,11 +5,11 @@
         @mouseenter="onNavCardHover"
         @mouseleave="onNavCardLeave">
 
-        <div :id="sectorObj.titleId" class="nav-card-header center-flex-display">
+        <div :id="sectorObj.titleId" class="nav-card-header" :style="getNavTitleStyle()">
             <font-awesome-icon v-if="sectorObj.title.faIcon"
                 class="nav-card-header-faIcon"
                 :icon="sectorObj.title.icon"
-                :style="getNavTitleStyle()"
+                :style="getNavTitleFAIconStyle()"
             />
             <img v-else class="nav-card-header-image" :src="sectorObj.title.icon" :style="{ 'width': sectorObj.title.size }" />
 
@@ -86,10 +86,15 @@ function getNavCardBackground() {
  * This function returns the style for the Navigation Card Titles.
  */
 function getNavTitleStyle() {
+    return { borderColor: (props.skillsCard ? 'var(--blue-cobalt)' : '') }
+}
+
+/**
+ * This function returns the style for the Navigation Card Titles.
+ */
+ function getNavTitleFAIconStyle() {
     const titleObj = props.sectorObj.title;
-    return { color: titleObj.color, fontSize: titleObj.size,
-        borderColor: (props.skillsCard ? 'var(--blue-cobalt) !important' : '')
-    }
+    return { color: titleObj.color, fontSize: titleObj.size }
 }
 
 /**
@@ -187,6 +192,9 @@ function getPictureBackground(picWidth = "50%") {
     border-bottom: 2px solid var(--nav-bar-border);
     transition: var(--default-transition);
     background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .nav-card-header-image {

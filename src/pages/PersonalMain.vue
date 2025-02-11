@@ -6,7 +6,6 @@
     <StartSection />
     <SkillsSection />
     <ExperienceSection />
-    <CreditsSection />
 
     <div id="copyright" class="center-flex-display">
         <font-awesome-icon icon="fa-copyright" />
@@ -23,9 +22,8 @@ import NavigationMain from '../components/NavigationMain.vue';
 import NavigationHome from '../components/home/NavigationHome.vue';
 
 import StartSection from '../components/home/StartSection.vue';
-import SkillsSection from '../components/home/SkillsSection.vue';
 import ExperienceSection from '../components/home/ExperienceSection.vue';
-import CreditsSection from '../components/home/CreditsSection.vue';
+import SkillsSection from '../components/home/SkillsSection.vue';
 
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
 import { onMounted } from 'vue';

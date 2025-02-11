@@ -1,79 +1,37 @@
 <template>
 <div id="skills"></div>
 <div class="skills-section">
-    <div class="skills-section-title center-flex-display"> My Skills </div>
-    <div class="skills-section-mainText center-flex-display">
+    <div class="skills-main-header">My Skills</div>
+    <div class="skills-main-desc">
         Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
-        by utilizing multiple programming languages, frontend frameworks, and web services.
+        by utilizing multiple programming languages, frontend frameworks, web services, and modules.
     </div>
 
-    <div class="skills-section-routeBtn-container">
-        <RouterLink to="/skills/" class="skills-section-routeBtn"> Want To Know More? </RouterLink>
-    </div>
-    <div class="skills-section-icons-container">
-        <div class="skills-section-icons">
-            <div v-for="skill in SOFTWARE_SKILLS" class="skills-section-tab">
-                <img v-if="!skill.faIcon" :src="skill.asset"
-                    @click="openWebsite(skill.link)"
-                    :title="skill.name"
-                    :style="getIconStyle(skill.link, undefined)"
-                    class="skills-section-tab-asset"
-                    draggable="false"
-                />
-                <font-awesome-icon v-else :icon="skill.asset"
-                    @click="openWebsite(skill.link)"
-                    :title="skill.name"
-                    :style="getIconStyle(skill.link, skill.color)"
-                    class="skills-section-tab-asset skills-section-tab-faIcon"
-                />
+    <div v-for="entity in SKILL_ENTITIES" class="skills-entity-container">
+        <a :href="entity.link" target="_blank" class="skills-entity">
+            <div class="skills-entity-image">
+                <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
+                <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
             </div>
-        </div>
+            <div class="skills-entity-body" :style="{ color: entity.color }">
+                <div class="skills-entity-header"> {{ entity.name }} </div>
+                <div class="skills-entity-desc"> {{ entity.desc }} </div>
+            </div>
+        </a>
     </div>
 </div>
 </template>
 
 <script setup>
-import { VUEJS_WEBSITE_LINK, REACT_NATIVE_WEBSITE_LINK } from "@/stores/Objects.js";
-import vuejs_icon from "@/assets/Vuejs_Icon.png";
-import aws_icon from "@/assets/aws/AWS_Icon.png";
-import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
-import angular_icon from "@/assets/Angular_Icon.webp";
-import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
+import { SKILL_ENTITIES } from '@/stores/Objects.js';
 
 /**
- * This function is simple. it opens a website for the visitor.
- * @param {String} website The website domain name.
+ * This function returns a style object for an Font Awesome icon on here.
+ * @param entity The object for the skills entity.
  */
-function openWebsite(website = "#") {
-    if(website === "#") { return; }
-    window.open(website, "_blank")
+function getFAIconStyle(entity) {
+    return { color: entity.color, fontSize: entity.icon.size }
 }
-
-/**
- * This function returns the style for an icon.
- * @param {String} website The website domain name.
- * @param {String} color The color of the icon. Can be undefined.
- */
-function getIconStyle(website = "#", color = undefined) {
-    return { color: ((color == undefined) ? "" : color),
-        cursor: ((website === "#") ? "default" : "pointer")
-    }
-}
-
-/**
- * These are the multiple software skills I have experience with.
- */
-const SOFTWARE_SKILLS = [
-    { name: "Vue.js", link: VUEJS_WEBSITE_LINK, asset: vuejs_icon, faIcon: false },
-    { name: "Amazon Web Services", link: "https://aws.amazon.com", asset: aws_icon, faIcon: false },
-    { name: "JavaScript", link: "#", asset: "fa-brands fa-js", faIcon: true, color: "#F7DF1E" },
-    { name: "React Native", link: REACT_NATIVE_WEBSITE_LINK, asset: "fa-brands fa-react", faIcon: true, color: "#61DBFB" },
-    { name: "Cesium", link: "https://cesium.com", asset: cesium_icon, faIcon: false },
-    { name: "HTML", link: "#", asset: "fa-brands fa-html5", faIcon: true, color: "#E34E26" },
-    { name: "Angular", link: "https://angular.dev", asset: angular_icon, faIcon: false },
-    { name: "MAVLink", link: "https://mavlink.io/en", asset: mavlink_icon, faIcon: false },
-    { name: "CSS", link: "#", asset: "fa-brands fa-css3-alt", faIcon: true, color: "#264DE4" },
-]
 </script>
 
 <style scoped>
@@ -83,140 +41,156 @@ const SOFTWARE_SKILLS = [
     background: linear-gradient(to bottom, rgb(248, 206, 171) 0%, var(--blue-zero) 100%);
 }
 .skills-section {
-    height: fit-content;
-    min-height: calc(var(--body-height));
-    padding: 20px 0px;
-    width: 100%;
     background: var(--blue-zero);
-    color: var(--blue-cobalt);
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 1200px;
+    padding: 0px calc(50% - 600px);
+    padding-bottom: 20px !important;
 }
 
-.skills-section-title {
-    position: relative;
+.skills-main-header {
+    grid-column: span 3;
+    height: fit-content;
+    width: 100%;
+    padding-top: 25px;
+    text-align: center;
     font-size: 90px;
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
     color: var(--blue-cobalt);
-    width: fit-content;
-    height: 18%;
 }
-.skills-section-mainText {
+.skills-main-desc {
     font-size: 22px;
     font-family: 'Lexend', 'sans-serif';
-    width: calc(100% - 20px);
+    width: calc(100% - 30px);
     height: fit-content;
-    max-width: 700px;
-    padding: 15px 10px;
+    padding: 0px 15px;
+    padding-top: 10px;
+    grid-column: span 3;
+    color: var(--blue-cobalt);
     text-align: center;
 }
 
-.skills-section-routeBtn-container {
+.skills-entity-container {
+    height: 475px;
+    width: 100%;
+    min-width: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 75px;
-    width: 100%;
-    padding-bottom: 25px;
 }
-.skills-section-routeBtn {
-    width: fit-content;
-    padding: 10px;
-    font-size: 26px;
-    font-family: 'Lexend', 'sans-serif';
-    font-weight: bold;
-    color: var(--blue-cobalt);
-    border: 2px solid var(--blue-cobalt);
-    border-radius: 15px;
+
+.skills-entity {
+    height: 400px;
+    width: 360px;
+    border: 3px solid var(--website-light-text);
+    border-radius: 20px;
+    overflow: hidden;
     transition: var(--default-transition);
+    background-color: white;
 }
-.skills-section-routeBtn:hover {
-    background-color: var(--blue-two);
-}
-
-.skills-section-icons-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: fit-content;
-    width: 100%;
-}
-.skills-section-icons {
-    height: fit-content;
-    width: fit-content;
-    padding: 20px;
-    border: 2px solid var(--blue-cobalt);
-    border-radius: 10px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+.skills-entity:hover {
+    border-color: var(--website-text);
 }
 
-.skills-section-tab {
-    height: 100%;
+.skills-entity-image {
+    height: 147px;
     width: 100%;
+    border-bottom: 3px solid var(--website-light-text);
+    background-color: var(--silver-light);
+    transition: var(--default-transition);
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.skills-section-tab-faIcon {
-    font-size: 70px;
+.skills-entity:hover .skills-entity-image {
+    border-color: var(--website-text);
 }
-
-.skills-section-tab-asset {
-    cursor: pointer;
+.skills-entity-image svg, .skills-entity-image img {
     user-select: none;
-    width: 70px;
-    padding: 12px;
-    margin: 10px;
-    border: 2px solid var(--blue-cobalt);
-    border-radius: 10px;
-    transition: var(--default-transition), padding 0.2s;
-    background-color: rgba(0, 0, 0, 0.15);
-}
-.skills-section-tab-asset:hover {
-    background-color: rgba(0, 0, 0, 0.25);
 }
 
-@media (max-width: 600px) {
-    .skills-section {
-        min-height: 0px;
-    }
-    .skills-section-title {
-        font-size: 70px;
-        height: 100px;
-    }
-    .skills-section-mainText {
-        font-size: 17px;
-        padding: 10px 0px 20px 0px;
-    }
+.skills-entity-body {
+    height: calc(100% - 160px);
+    width: calc(100% - 20px);
+    padding: 10px 10px 0px;
+    text-align: left;
+    font-family: 'Lexend', sans-serif;
+}
+.skills-entity-header {
+    font-size: 35px;
+    color: inherit;
+    margin-bottom: 12px;
+}
+.skills-entity-desc {
+    font-size: 16px;
+    color: inherit;
+}
 
-    .skills-section-icons {
-        margin: 20px 0px;
+@media (min-width: 1625px) {
+    .skills-section {
+        grid-template-columns: repeat(4, 1fr);
+        width: 1600px;
+        padding: 0px calc(50% - 800px);
     }
-    .skills-section-tab-asset {
-        width: 40px;
-    }
-    .skills-section-tab-faIcon {
-        font-size: 40px;
+    .skills-main-header, .skills-main-desc {
+        grid-column: span 4;
     }
 }
-@media (min-height: 900px) and (min-width: 601px) {
+@media (min-width: 2025px) {
     .skills-section {
-        justify-content: center;
+        grid-template-columns: repeat(5, 1fr);
+        width: 2000px;
+        padding: 0px calc(50% - 1000px);
     }
-    .skills-section-tab-asset {
-        width: 84px;
-        padding: 15px;
-        margin: 12px;
+    .skills-main-header, .skills-main-desc {
+        grid-column: span 5;
     }
-    .skills-section-tab-faIcon {
-        font-size: 84px;
+}
+
+@media (max-width: 1200px) {
+    .skills-section {
+        grid-template-columns: repeat(2, 1fr);
+        width: 800px;
+        padding: 0px calc(50% - 400px);
     }
-    .skills-section-routeBtn-container {
-        padding-bottom: 25px;
+    .skills-main-header, .skills-main-desc {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 825px) {
+    .skills-section {
+        grid-template-columns: repeat(1, 1fr);
+        width: 400px;
+        padding: 0px calc(50% - 200px);
+    }
+    .skills-main-header, .skills-main-desc {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 430px) {
+    .skills-section {
+        grid-template-columns: repeat(1, 1fr);
+        width: 100%;
+        padding: 0px;
+    }
+    .skills-main-header {
+        font-size: 75px;
+    }
+    .skills-main-desc {
+        font-size: 20px;
+    }
+
+    .skills-entity-container {
+        min-width: 0px;
+        height: 500px;
+    }
+    .skills-entity {
+        height: 425px;
+        width: 320px;
     }
 }
 </style>

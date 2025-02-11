@@ -42,6 +42,7 @@ export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
+export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/en/";
 
 export const SOCIALS = [
     {
@@ -82,45 +83,45 @@ export const SOCIALS = [
     },
 ];
 
-export const CREDIT_ENTITIES = [
-    {
-        name: "Font Awesome",
-        link: "https://fontawesome.com/",
-        color: "rgb(83, 141, 215)",
-        desc: "I have used free font awesome icons across this website. " +
-            "There's a paper plane next to \"Contact Me\", file icons for my resume and the website's updates, " +
-            "brand icons on the contact page, and many more icons across the website.",
-
-        icon: {
-            id: "fa-brands fa-font-awesome",
-            faIcon: true,
-            size: "110px"
-        }
-    },
-    {
-        name: "AWS Icons",
-        link: "https://aws-icons.com/",
-        color: "#F59D0A",
-        desc: "Amazon Web Services (AWS) has an entire website dedicated to their icons. " +
-            "Nearly every AWS service and more has a specialized icon, " +
-            "and I use these icons on the aws page and other places on my website.",
-
-        icon: {
-            id: aws_icons_logo,
-            faIcon: false,
-            width: "125"
-        }
-    },
+export const SKILL_ENTITIES = [
     {
         name: "Vue.js",
         link: VUEJS_WEBSITE_LINK,
         color: "#41B883",
         desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
-            "It's extremely lightweight compared to angular and react and simple for beginners. " +
+            "It's extremely lightweight compared to Angular and React and simple for beginners. " +
             "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
 
         icon: {
             id: vue_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "React Native",
+        link: REACT_NATIVE_WEBSITE_LINK,
+        color: "#61DBFB",
+        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
+            "It's extremely lightweight compared to angular and react and simple for beginners. " +
+            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+
+        icon: {
+            id: react_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "Angular",
+        link: "https://angular.dev/",
+        color: "#F3227F",
+        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
+            "It's extremely lightweight compared to angular and react and simple for beginners. " +
+            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+
+        icon: {
+            id: angular_icon,
             faIcon: false,
             width: "105"
         }
@@ -154,6 +155,20 @@ export const CREDIT_ENTITIES = [
         }
     },
     {
+        name: "MAVLink",
+        link: MAVLINK_WEBSITE_LINK,
+        color: "#FF6600",
+        desc: "I used Cesium as the main geospatial service for my personal globe. " +
+            "It's also used with Worlds iVue. Due to its extensive documentation on all its features, " +
+            "Cesium isn't that complicated to learn and can perform a variety of tasks related to geospatial platforms.",
+
+        icon: {
+            id: mavlink_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
         name: "GitHub",
         link: "https://github.com/",
         color: "black",
@@ -167,19 +182,6 @@ export const CREDIT_ENTITIES = [
         }
     },
     {
-        name: "iVue",
-        link: MAIN_IVUE_WEBSITE_LINK,
-        color: "black",
-        desc: "Throughout my website, I use many of iVue's logos, icons, and screenshots of the company's websites " +
-            "to outline my contributions to iVue and my experience with the company as a software developer.",
-
-        icon: {
-            id: ivue_black_text,
-            faIcon: false,
-            width: "155"
-        }
-    },
-    {
         name: "Cloudflare",
         link: "https://www.cloudflare.com/",
         color: "#F58A27",
@@ -188,6 +190,104 @@ export const CREDIT_ENTITIES = [
 
         icon: {
             id: "fa-brands fa-cloudflare",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "Font Awesome",
+        link: "https://fontawesome.com/",
+        color: "rgb(83, 141, 215)",
+        desc: "I have used free font awesome icons across this website. " +
+            "There's a paper plane next to \"Contact Me\", file icons for my resume and the website's updates, " +
+            "brand icons on the contact page, and many more icons across the website.",
+
+        icon: {
+            id: "fa-brands fa-font-awesome",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "AWS Icons",
+        link: "https://aws-icons.com/",
+        color: "#F59D0A",
+        desc: "Amazon Web Services (AWS) has an entire website dedicated to their icons. " +
+            "Nearly every AWS service and more has a specialized icon, " +
+            "and I use these icons on the aws page and other places on my website.",
+
+        icon: {
+            id: aws_icons_logo,
+            faIcon: false,
+            width: "125"
+        }
+    },
+    {
+        name: "JavaScript",
+        link: "#",
+        color: "#F7DF1E",
+        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
+            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
+            "and Amazon Route 53 to put this website under a custom domain.",
+
+        icon: {
+            id: "fa-brands fa-js",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "Java",
+        link: "https://www.java.com/en/",
+        color: "#EC2025",
+        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
+            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
+            "and Amazon Route 53 to put this website under a custom domain.",
+
+        icon: {
+            id: "fa-brands fa-java",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "GoLang",
+        link: "https://go.dev/",
+        color: "#00ABD7",
+        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
+            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
+            "and Amazon Route 53 to put this website under a custom domain.",
+
+        icon: {
+            id: "fa-brands fa-golang",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "HTML",
+        link: "#",
+        color: "#E34E26",
+        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
+            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
+            "and Amazon Route 53 to put this website under a custom domain.",
+
+        icon: {
+            id: "fa-brands fa-html5",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "CSS",
+        link: "#",
+        color: "#264DE4",
+        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
+            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
+            "and Amazon Route 53 to put this website under a custom domain.",
+
+        icon: {
+            id: "fa-brands fa-css3-alt",
             faIcon: true,
             size: "110px"
         }
@@ -613,7 +713,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
                 "I co-created " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ", iVue's 3D globe application. " +
                 "Furthermore, I lead iVue's Website Development Team, ensuring that iVue's websites promote our leading products and services. " +
                 "These projects have provided me the opportunity to master " + getLinkElement("Vue.js", VUEJS_WEBSITE_LINK) + ", " +
-                getLinkElement("Cesium", "https://cesium.com/") + ", " + getLinkElement("MAVLink", "https://mavlink.io/en/") + ", " +
+                getLinkElement("Cesium", "https://cesium.com/") + ", " + getLinkElement("MAVLink", MAVLINK_WEBSITE_LINK) + ", " +
                 getLinkElement("AWS", "https://aws.amazon.com/") + ", and a wide variety of other software skills.",
             "I began my journey at iVue in January 2023 as a high school intern and have grown with the company ever since. " +
                 "Over the years, iVue has expanded its team with skilled software developers and introduced a diverse range of new products and services. " + 
@@ -864,7 +964,7 @@ export const MAVLINK_INFO_SECTOR = {
     },
 
     buttons: [
-        { title: "Go To MAVLink Protocol Website", link: "https://mavlink.io/en/" }
+        { title: "Go To MAVLink Protocol Website", link: MAVLINK_WEBSITE_LINK }
     ],
     descriptions: [
         "The MAVLink Protocol, short for Micro Air Vehicle Communication Protocol, " +
@@ -885,7 +985,7 @@ export const MAVLINK_INFO_SECTOR = {
         {
             header: "",
             file: mavlink_banner,
-            fileLink: "https://mavlink.io/en/",
+            fileLink: MAVLINK_WEBSITE_LINK,
             links: []
         }
     ]
