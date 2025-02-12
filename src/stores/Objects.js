@@ -88,9 +88,8 @@ export const SKILL_ENTITIES = [
         name: "Vue.js",
         link: VUEJS_WEBSITE_LINK,
         color: "#41B883",
-        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
-            "It's extremely lightweight compared to Angular and React and simple for beginners. " +
-            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+        desc: "Vue.js is an extremely lightweight and simple web development framework that is mainly developed by a team of independent, professional developers. " +
+            "I used this for a majority of my projects, including Worlds iVue, iVue's company websites, and the website you are on right now.",
 
         icon: {
             id: vue_icon,
@@ -102,9 +101,8 @@ export const SKILL_ENTITIES = [
         name: "React Native",
         link: REACT_NATIVE_WEBSITE_LINK,
         color: "#61DBFB",
-        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
-            "It's extremely lightweight compared to angular and react and simple for beginners. " +
-            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+        desc: "React Native, created by Meta, is a popular library that can be used to make apps for all platforms. " +
+            "It shines in mobile app development, however, and I used it to help develop a mobile application with other college students.",
 
         icon: {
             id: react_icon,
@@ -116,9 +114,9 @@ export const SKILL_ENTITIES = [
         name: "Angular",
         link: "https://angular.dev/",
         color: "#F3227F",
-        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
-            "It's extremely lightweight compared to angular and react and simple for beginners. " +
-            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+        desc: "Angular is another popular web development framework that is supported by Google. " +
+            "With TypeScript at its base, an Angular project can scale to any size. " +
+            "I used it to make a mock piiza order and delivery system for my software engineering class.",
 
         icon: {
             id: angular_icon,
@@ -130,9 +128,9 @@ export const SKILL_ENTITIES = [
         name: "AWS",
         link: "https://aws.amazon.com/",
         color: "#5468ff",
-        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
-            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
-            "and Amazon Route 53 to put this website under a custom domain.",
+        desc: "I use Amazon Web Services (AWS) for almost any web service I need. " +
+            "Every big project I have worked on used AWS in some way, whether I needed to deploy an website, " +
+            "manage user authentication, setup business emails, or make an API for a Lambda function.",
 
         icon: {
             id: "fa-brands fa-aws",
@@ -144,9 +142,9 @@ export const SKILL_ENTITIES = [
         name: "Cesium",
         link: "https://cesium.com/",
         color: "#6DABE4",
-        desc: "I used Cesium as the main geospatial service for my personal globe. " +
-            "It's also used with Worlds iVue. Due to its extensive documentation on all its features, " +
-            "Cesium isn't that complicated to learn and can perform a variety of tasks related to geospatial platforms.",
+        desc: "Cesium is a 3D geospatial platform that I used to develop Worlds iVue and the Globe Webpage for my website. " +
+            "Due to its extensive documentation on all its features, Cesium isn't that complicated to learn and " +
+            "can perform a seemingly boundless variety of tasks related to geospatial platforms.",
 
         icon: {
             id: cesium_icon,
@@ -158,9 +156,9 @@ export const SKILL_ENTITIES = [
         name: "MAVLink",
         link: MAVLINK_WEBSITE_LINK,
         color: "#FF6600",
-        desc: "I used Cesium as the main geospatial service for my personal globe. " +
-            "It's also used with Worlds iVue. Due to its extensive documentation on all its features, " +
-            "Cesium isn't that complicated to learn and can perform a variety of tasks related to geospatial platforms.",
+        desc: "MAVLink is a lightweight messaging protocol that can communicate with drones. " +
+            "Worlds iVue extensively uses the protocol to have drones perform extensive actions, including running waypoint missions. " +
+            "The protocol can also control other servos connected to a drone in a wide variety of ways.",
 
         icon: {
             id: mavlink_icon,
@@ -172,8 +170,9 @@ export const SKILL_ENTITIES = [
         name: "GitHub",
         link: "https://github.com/",
         color: "black",
-        desc: "I use GitHub as this website's version control. It's very reliable due to " +
-            "its intuitive user interfaces on its website and desktop app and helpful CI/CD pipelines with GitHub Actions.",
+        desc: "I use GitHub as my go to version control app for all my projects. " +
+            "It's extremely reliable for me and my team at iVue to use this for all projects, and it helps store archived code. " +
+            "With GitHub Actions, I can even set up CI/CD pipelines for my websites to autonomously deploy updates online.",
 
         icon: {
             id: "fa-brands fa-github",
@@ -198,9 +197,9 @@ export const SKILL_ENTITIES = [
         name: "Font Awesome",
         link: "https://fontawesome.com/",
         color: "rgb(83, 141, 215)",
-        desc: "I have used free font awesome icons across this website. " +
-            "There's a paper plane next to \"Contact Me\", file icons for my resume and the website's updates, " +
-            "brand icons on the contact page, and many more icons across the website.",
+        desc: "I have used free font awesome icons across all my frontend development projects. " +
+            "By representing brands, webpages, and simple features with a wide catalog of icons, " +
+            "I add on to the visual appeal of my projects.",
 
         icon: {
             id: "fa-brands fa-font-awesome",
@@ -214,7 +213,7 @@ export const SKILL_ENTITIES = [
         color: "#F59D0A",
         desc: "Amazon Web Services (AWS) has an entire website dedicated to their icons. " +
             "Nearly every AWS service and more has a specialized icon, " +
-            "and I use these icons on the aws page and other places on my website.",
+            "and I use these icons on the AWS page and other places on my website.",
 
         icon: {
             id: aws_icons_logo,
@@ -225,10 +224,9 @@ export const SKILL_ENTITIES = [
     {
         name: "JavaScript",
         link: "#",
-        color: "#F7DF1E",
-        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
-            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
-            "and Amazon Route 53 to put this website under a custom domain.",
+        color: "#D3B62A",
+        desc: "I've learned how to code with JavaScript, TypeScript, and Node.js to make various functions. " +
+            "These sit at the core of all the frameworks and modules I have used for my projects.",
 
         icon: {
             id: "fa-brands fa-js",
@@ -240,9 +238,8 @@ export const SKILL_ENTITIES = [
         name: "Java",
         link: "https://www.java.com/en/",
         color: "#EC2025",
-        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
-            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
-            "and Amazon Route 53 to put this website under a custom domain.",
+        desc: "While I haven't developed any major projects with Java, this is the first language that I learned. " +
+            "I'll most likely use Kotlin to develop an Android App in the future if I have the time.",
 
         icon: {
             id: "fa-brands fa-java",
@@ -254,9 +251,8 @@ export const SKILL_ENTITIES = [
         name: "GoLang",
         link: "https://go.dev/",
         color: "#00ABD7",
-        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
-            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
-            "and Amazon Route 53 to put this website under a custom domain.",
+        desc: "GoLang, supported by Google, is great for developing backend systems for applications. " +
+            "I learned it when I started at iVue, and its used in the current order application for iVue Media's services.",
 
         icon: {
             id: "fa-brands fa-golang",
@@ -268,9 +264,7 @@ export const SKILL_ENTITIES = [
         name: "HTML",
         link: "#",
         color: "#E34E26",
-        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
-            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
-            "and Amazon Route 53 to put this website under a custom domain.",
+        desc: "Through my experience with frontend frameworks, I have learned how to develop intuitive UIs with HTML.",
 
         icon: {
             id: "fa-brands fa-html5",
@@ -282,9 +276,7 @@ export const SKILL_ENTITIES = [
         name: "CSS",
         link: "#",
         color: "#264DE4",
-        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
-            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
-            "and Amazon Route 53 to put this website under a custom domain.",
+        desc: "Through my experience with frontend frameworks, I have learned how to develop visually appealing styles with CSS.",
 
         icon: {
             id: "fa-brands fa-css3-alt",
@@ -547,7 +539,7 @@ export const NAV_CARDS = [
             "especially Vue.js, to create professional websites and applications.",
 
         pointsTitle: "Related Projects:",
-        bulletPoints: [ "Worlds iVue", "iVue's Company Websites", "Pizza Project", "Sublo", "My Website" ],
+        bulletPoints: [ "My Website", "Worlds iVue", "iVue's Company Websites", "Pizza Project", "Sublo" ],
 
         pictureBarClass: "vue-nav-picture-bar",
         pictures: [

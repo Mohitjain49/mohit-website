@@ -8,7 +8,18 @@
     </div>
 
     <div v-for="entity in SKILL_ENTITIES" class="skills-entity-container">
-        <a :href="entity.link" target="_blank" class="skills-entity">
+        <div v-if="entity.link === '#'" class="skills-entity no-link">
+            <div class="skills-entity-image">
+                <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
+                <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
+            </div>
+            <div class="skills-entity-body" :style="{ color: entity.color }">
+                <div class="skills-entity-header"> {{ entity.name }} </div>
+                <div class="skills-entity-desc"> {{ entity.desc }} </div>
+            </div>
+        </div>
+        
+        <a v-else :href="entity.link" target="_blank" class="skills-entity">
             <div class="skills-entity-image">
                 <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
                 <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
@@ -80,7 +91,6 @@ function getFAIconStyle(entity) {
     justify-content: center;
     align-items: center;
 }
-
 .skills-entity {
     height: 400px;
     width: 360px;
@@ -90,8 +100,12 @@ function getFAIconStyle(entity) {
     transition: var(--default-transition);
     background-color: white;
 }
+
 .skills-entity:hover {
     border-color: var(--website-text);
+}
+.skills-entity.no-link {
+    cursor: default;
 }
 
 .skills-entity-image {
