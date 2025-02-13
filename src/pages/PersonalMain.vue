@@ -48,6 +48,7 @@ function scrollToTop() {
 #homepage {
     background: var(--webpage-static-background);
     top: 0px;
+    min-height: 100%;
 }
 #copyright {
     background-color: black;

@@ -85,7 +85,7 @@ const ROUTE_COLLECTION = [
 }
 .web-navBar-links-side {
     display: flex;
-    width: 210px;
+    width: 140px;
     height: 100%;
 }
 
@@ -134,7 +134,7 @@ const ROUTE_COLLECTION = [
 }
 
 .web-navBar-contact {
-    width: 120px !important;
+    width: 140px !important;
     flex-direction: row;
     padding: 0px 7px;
 }
