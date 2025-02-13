@@ -8,6 +8,7 @@ import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_Icon.png";
+import expo_icon from "../assets/sublo/Expo_Icon.svg"
 
 import aws_icon from "../assets/aws/AWS_Icon.png";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
@@ -116,10 +117,23 @@ export const SKILL_ENTITIES = [
         color: "#F3227F",
         desc: "Angular is another popular web development framework that is supported by Google. " +
             "With TypeScript at its base, an Angular project can scale to any size. " +
-            "I used it to make a mock piiza order and delivery system for my software engineering class.",
+            "I used it to make a mock pizza order and delivery system for my software engineering class.",
 
         icon: {
             id: angular_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "Expo",
+        link: "https://expo.dev/",
+        color: "black",
+        desc: "Expo is a framework that utilizes React Native to help developers create, build, and deploy apps ." +
+            "that work on Android, iOS, and the web all at once. I used it to develop a mobile app at Sublo.",
+
+        icon: {
+            id: expo_icon,
             faIcon: false,
             width: "105"
         }
@@ -280,6 +294,19 @@ export const SKILL_ENTITIES = [
 
         icon: {
             id: "fa-brands fa-css3-alt",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "More Info",
+        link: "/skills",
+        color: "var(--website-light-text)",
+        desc: "I have made many pages describing the software development skills I accumalated since the start of my journey. " +
+            "Click on this card or the \"Skills\" link at the top for more info.",
+
+        icon: {
+            id: "fa-circle-info",
             faIcon: true,
             size: "110px"
         }

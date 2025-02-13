@@ -203,6 +203,7 @@ function getPictureBackground(picWidth = "50%") {
     overflow: hidden;
     background: transparent;
     box-shadow: 0px 0px 2px 2px rgb(0 0 0 / 20%);
+    --animate-duration: 1.5s 
 }
 .nav-card-header {
     width: 100%;

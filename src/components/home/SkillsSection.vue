@@ -21,7 +21,7 @@
             </div>
         </div>
         
-        <a v-else :href="entity.link" target="_blank" class="skills-entity"
+        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-entity"
             v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
 
             <div class="skills-entity-image">
@@ -33,12 +33,25 @@
                 <div class="skills-entity-desc"> {{ entity.desc }} </div>
             </div>
         </a>
+
+        <RouterLink v-else :to="entity.link" class="skills-entity"
+            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+
+            <div class="skills-entity-image">
+                <font-awesome-icon :icon="entity.icon.id" class="skills-entity-moreInfo-icon" />
+            </div>
+            <div class="skills-entity-body more-info">
+                <div class="skills-entity-header"> {{ entity.name }} </div>
+                <div class="skills-entity-desc"> {{ entity.desc }} </div>
+            </div>
+        </RouterLink>
     </div>
 </div>
 </template>
 
 <script setup>
 import { SKILL_ENTITIES } from '@/stores/Objects.js';
+import { RouterLink } from 'vue-router';
 
 /**
  * This function returns a style object for an Font Awesome icon on here.
@@ -163,6 +176,23 @@ function removeCardTransitions(isVisible) {
     text-align: left;
     font-family: 'Lexend', sans-serif;
 }
+.skills-entity-body.more-info {
+    color: var(--website-light-text);
+    transition: var(--default-transition);
+}
+.skills-entity:hover .skills-entity-body.more-info {
+    color: var(--website-text);
+}
+
+.skills-entity-moreInfo-icon {
+    color: var(--website-light-text);
+    transition: var(--default-transition);
+    font-size: 110px;
+}
+.skills-entity:hover .skills-entity-image .skills-entity-moreInfo-icon {
+    color: var(--website-text);
+}
+
 .skills-entity-header {
     font-size: 35px;
     color: inherit;
@@ -208,25 +238,27 @@ function removeCardTransitions(isVisible) {
 @media (max-width: 825px) {
     .skills-section {
         grid-template-columns: repeat(1, 1fr);
-        width: 400px;
-        padding: 0px calc(50% - 200px);
+        width: calc(100% - 20px);
+        padding: 0px 10px;
     }
     .skills-main-header, .skills-main-desc {
         grid-column: span 1;
     }
-}
 
-@media (max-width: 430px) {
-    .skills-section {
-        grid-template-columns: repeat(1, 1fr);
-        width: 100%;
-        padding: 0px;
-    }
     .skills-main-header {
         font-size: 75px;
     }
     .skills-main-desc {
         font-size: 20px;
+    }
+}
+
+@media (max-width: 430px) {
+    .skills-main-header {
+        font-size: 68px;
+    }
+    .skills-main-desc {
+        font-size: 17px;
     }
 
     .skills-entity-container {

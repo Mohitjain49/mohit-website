@@ -12,16 +12,18 @@
             <RouterLink to="/" class="main-sector-bottom-linkBtn main-sector-bottom-linkBtn-blue">Back to Home</RouterLink>
         </div>
     </div>
+    <WebFooter class="footer-nav-page" />
 </div>
 </template>
 
 <script setup>
-import NavigationMain from '../../components/NavigationMain.vue';
-import NavPageCard from '../../components/body-components/NavPageCard.vue';
-import "../../styles/navpage.css";
+import NavigationMain from '@/components/NavigationMain.vue';
+import WebFooter from '@/components/WebFooter.vue';
+import NavPageCard from '@/components/body-components/NavPageCard.vue';
+import "@/styles/navpage.css";
 
-import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
-import { NAV_CARDS } from '../../stores/Objects.js';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
+import { NAV_CARDS } from '@/stores/Objects.js';
 import { onMounted } from 'vue';
 
 const webData = useWebsiteDataStore();
