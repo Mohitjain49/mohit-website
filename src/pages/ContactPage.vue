@@ -82,6 +82,7 @@
             </div>
         </div>
     </div>
+    <WebFooter class="web-footer-contact" />
 </div>
 
 <Transition name="alertBoxTransition">
@@ -93,6 +94,7 @@
 
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
+import WebFooter from '../components/WebFooter.vue';
 import { SOCIALS } from '../stores/Objects.js';
 
 import axios from 'axios';
@@ -228,6 +230,9 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+.web-footer-contact {
+    grid-column: span 2;
+}
 
 .contact-me-box {
     position: relative;
@@ -241,6 +246,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     overflow: hidden;
     background: var(--webpage-static-background);
 }
+
 .contact-me-box.web-service {
     left: calc(100% - 525px);
 }
@@ -493,6 +499,20 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
         left: calc(50% - 300px);
     }
 }
+@media (min-height: 965px) and (min-width: 1051px) {
+    .web-footer-contact {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+}
+@media (min-height: 1820px) and (max-width: 1050px) {
+    .web-footer-contact {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+}
 
 @media (max-width: 1050px) and (min-width: 526px) {
     #contact-page {
@@ -501,23 +521,30 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     .contact-me-box {
         left: calc(50% - 225px) !important;
     }
+    .web-footer-contact {
+        grid-column: span 1;
+    }
 }
 
 @media (max-width: 525px) {
     #contact-page {
         grid-template-columns: 1fr;
     }
+    .web-footer-contact {
+        grid-column: span 1;
+        z-index: 20;
+    }
+
     .contact-me-box {
         width: 100%;
-        min-height: 100%;
         left: 0 !important;
-        padding: 20px 0px;
+        padding: 30px 0px;
         border: none;
         border-radius: 0px;
+        margin: 0px;
     }
     .contact-me-box.web-service {
-        margin-top: 0px;
-        padding-bottom: 0px;
+        border-bottom: 2px dashed var(--website-text);
     }
 
     .social-tab-link {

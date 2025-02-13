@@ -9,11 +9,13 @@
     <div class="icon-background green">
         <div class="icon-text">MKJ</div>
     </div>
+    <WebFooter />
 </div>
 </template>
 
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
+import WebFooter from '../components/WebFooter.vue';
 </script>
 
 <style scoped>

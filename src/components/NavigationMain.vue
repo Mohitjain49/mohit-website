@@ -134,7 +134,7 @@ const ROUTE_COLLECTION = [
 }
 
 .web-navBar-contact {
-    width: 140px !important;
+    width: 120px !important;
     flex-direction: row;
     padding: 0px 7px;
 }
