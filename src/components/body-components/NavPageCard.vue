@@ -34,7 +34,7 @@
                     class="nav-card-picture-bar-wrapper center-flex-display"
                     :style="{ 'width': 'calc(100% / ' + sectorObj.pictures.length  + ')' }">
 
-                    <div :class="['nav-card-picture-bar', sectorObj.pictureBarClass]"></div>
+                    <div :class="getNavPictureBarClasses()"></div>
                 </div>
             </div>
         </div>
@@ -92,10 +92,23 @@ function getNavTitleStyle() {
 /**
  * This function returns the style for the Navigation Card Titles.
  */
- function getNavTitleFAIconStyle() {
+function getNavTitleFAIconStyle() {
     const titleObj = props.sectorObj.title;
     return { color: titleObj.color, fontSize: titleObj.size }
 }
+
+/**
+ * This returns all the picture bar classes one needs.
+ */
+function getNavPictureBarClasses() {
+    return ['nav-card-picture-bar', props.sectorObj.pictureBarClass, (props.skillsCard ? 'blue' : '')]
+}
+
+/**
+ * -----------------------------------------------------------
+ * These functions are functions activated by event listeners.
+ * -----------------------------------------------------------
+ */
 
 /**
  * This function occurs whenever visitors hovers over the nav card.
@@ -120,6 +133,12 @@ function onNavCardLeave() {
     navCard.style.borderColor = borderColor;
     document.getElementById(props.sectorObj.titleId).style.borderColor = borderColor;
 }
+
+/**
+ * ----------------------------------------------
+ * These functions are for the picture slideshow.
+ * ----------------------------------------------
+ */
 
 /**
  * This is the function that runs within the interval.
@@ -180,8 +199,7 @@ function getPictureBackground(picWidth = "50%") {
     height: 92.5%;
     border: 3px solid var(--nav-bar-border);
     border-radius: 20px;
-    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0, 0.5);
-    transition: var(--default-transition), box-shadow 0.2s;
+    transition: var(--default-transition);
     overflow: hidden;
     background: transparent;
     box-shadow: 0px 0px 2px 2px rgb(0 0 0 / 20%);
@@ -237,6 +255,7 @@ function getPictureBackground(picWidth = "50%") {
     height: 100%;
     max-width: 100px;
 }
+
 .nav-card-picture-bar {
     width: 90%;
     max-width: 25px;
@@ -244,6 +263,9 @@ function getPictureBackground(picWidth = "50%") {
     border: 2px solid var(--nav-bar-border);
     border-radius: 7px;
     transition: background-color 0.5s;
+}
+.nav-card-picture-bar.blue {
+    border-color: var(--blue-cobalt);
 }
 
 .nav-card-desc-container {

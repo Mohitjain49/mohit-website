@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import VueObserveVisibility from 'vue3-observe-visibility'
 
 import App from './App.vue'
 import personalRouter from './routes.js'
@@ -54,6 +55,7 @@ library.add(
 );
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).
+    use(VueObserveVisibility).
     use(personalRouter).
     use(pinia).
     mount('#app');

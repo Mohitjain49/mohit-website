@@ -1,14 +1,16 @@
 <template>
 <div id="skills"></div>
-<div class="skills-section">
+<div class="skills-section" v-observe-visibility="removeCardTransitions">
     <div class="skills-main-header">My Skills</div>
     <div class="skills-main-desc">
         Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
         by utilizing multiple programming languages, frontend frameworks, web services, and modules.
     </div>
 
-    <div v-for="entity in SKILL_ENTITIES" class="skills-entity-container">
-        <div v-if="entity.link === '#'" class="skills-entity no-link">
+    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container">
+        <div v-if="entity.link === '#'" class="skills-entity no-link"
+            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+
             <div class="skills-entity-image">
                 <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
                 <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
@@ -19,7 +21,9 @@
             </div>
         </div>
         
-        <a v-else :href="entity.link" target="_blank" class="skills-entity">
+        <a v-else :href="entity.link" target="_blank" class="skills-entity"
+            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+
             <div class="skills-entity-image">
                 <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
                 <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
@@ -43,6 +47,27 @@ import { SKILL_ENTITIES } from '@/stores/Objects.js';
 function getFAIconStyle(entity) {
     return { color: entity.color, fontSize: entity.icon.size }
 }
+
+/**
+ * This adds a transition to the card as visitors scroll to it.
+ * @param {Number} index The index of the card.
+ */
+function addCardTransition(isVisible, index = 0) {
+    let skillCard = document.getElementsByClassName("skills-entity").item(index);
+    if(isVisible) { skillCard.classList.add("animate__animated", "animate__zoomIn"); }
+}
+
+/**
+ * This removes all transitions from all card should visitors scroll away from the skills section.
+ */
+function removeCardTransitions(isVisible) {
+    if(isVisible) { return; }
+    const skillCards = document.getElementsByClassName("skills-entity");
+
+    for(let i = 0; i < skillCards.length; i++) {
+        skillCards.item(i).classList.remove("animate__animated", "animate__zoomIn");
+    }
+}
 </script>
 
 <style scoped>
@@ -55,6 +80,8 @@ function getFAIconStyle(entity) {
     background: var(--blue-zero);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    height: fit-content;
+    min-height: calc(100% - var(--top-bar-height));
     width: 1200px;
     padding: 0px calc(50% - 600px);
     padding-bottom: 20px !important;
@@ -99,10 +126,14 @@ function getFAIconStyle(entity) {
     overflow: hidden;
     transition: var(--default-transition);
     background-color: white;
+    box-shadow: 0px 0px 3px 3px rgba(126, 90, 0, 0.25);
+    --animate-duration: 0.6s;
+    --animate-delay: 0.1s;
 }
 
 .skills-entity:hover {
     border-color: var(--website-text);
+    box-shadow: 0px 0px 10px 10px rgba(126, 90, 0, 0.25);
 }
 .skills-entity.no-link {
     cursor: default;

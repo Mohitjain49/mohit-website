@@ -1,3 +1,5 @@
+@import "animate.css";
+
 :root {
     --body-height: calc(100vh - 50px);
 
@@ -29,7 +31,7 @@
 
     --empty-border: 2px solid rgba(0, 0, 0, 0);
     --thin-empty-border: 1px solid rgba(0, 0, 0, 0);
-    --default-transition: border 0.2s, color 0.2s, background-color 0.2s;
+    --default-transition: border 0.2s, color 0.2s, background-color 0.2s, box-shadow 0.2s;
 }
 
 body {
@@ -41,7 +43,8 @@ body {
     min-width: 350px;
     top: 0;
     left: 0;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 a, RouterLink {
@@ -85,12 +88,6 @@ h1, h2, h3, p {
     font-weight: bold;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-align: center;
-}
-
-.main-line {
-    width: 100%;
-    height: 2px;
-    background-color: var(--nav-bar-border);
 }
 
 .webpage-cover {
@@ -143,6 +140,12 @@ h1, h2, h3, p {
 .main-sector-bottom-linkBtn-blue:hover {
     background-color: var(--blue-two);
     border-color: var(--blue-cobalt);
+}
+
+@media (max-width: 375px) {
+    body {
+        overflow-x: auto;
+    }
 }
 
 /**
