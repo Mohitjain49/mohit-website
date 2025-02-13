@@ -35,10 +35,10 @@ library.add(
     FaIcons.faEnvelope,
     FaIcons.faPhone,
     FaIcons.faCircleDot,
-    FaIcons.faStar,
+    FaIcons.faCircleInfo,
     FaIcons.faCopyright,
     FaIcons.faArrowUp,
-    FaIcons.faCircleInfo,
+    FaIcons.faPenFancy,
 
     FaBrands.faReact,
     FaBrands.faJs,

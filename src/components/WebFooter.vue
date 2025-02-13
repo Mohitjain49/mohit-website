@@ -10,6 +10,9 @@
     </div>
 
     <div class="copyright-side-container">
+        <RouterLink to="/icon" class="scroll-topBtn center-flex-display" title="My Icons">
+            <font-awesome-icon icon="fa-pen-fancy" />
+        </RouterLink>
         <div class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
             <font-awesome-icon icon="fa-arrow-up" />
         </div>
@@ -49,10 +52,10 @@ function scrollToTop() {
 }
 
 .copyright-side-container {
-    width: 100px;
+    width: 120px;
     height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     transition: var(--default-transition);
 }
@@ -67,8 +70,6 @@ function scrollToTop() {
 
 .scroll-topBtn {
     cursor: pointer;
-    position: relative;
-    left: 15px;
     width: 40px;
     height: 40px;
     background-color: var(--blue-one);
@@ -89,7 +90,7 @@ function scrollToTop() {
         font-size: 20px;
     }
     .copyright-side-container {
-        width: 70px;
+        width: 75px;
     }
 
     .personal-text-img {
