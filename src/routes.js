@@ -25,7 +25,7 @@ const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
     { path: "/resume", name: "My Resume", component: Resume },
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
-    { path: "/icon", alias: ["/icons"], name: "Icon Page", component: MyIcon },
+    { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
     { path: "/timeline", name: "My Timeline", component: Timeline },
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },

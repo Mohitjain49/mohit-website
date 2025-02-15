@@ -10,7 +10,7 @@
     </div>
 
     <div class="copyright-side-container">
-        <RouterLink to="/icon" class="scroll-topBtn center-flex-display" title="My Icons">
+        <RouterLink to="/icons" class="scroll-topBtn center-flex-display" title="My Icons">
             <font-awesome-icon icon="fa-pen-fancy" />
         </RouterLink>
         <div class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
