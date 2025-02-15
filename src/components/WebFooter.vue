@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import personal_icon from "/Personal_Icon_Transparent.png";
+import personal_icon from "/static-icons/Personal_Icon_Transparent.png";
 const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
 
 /**
