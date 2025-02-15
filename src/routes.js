@@ -28,9 +28,9 @@ const personalRoutes = [
     { path: "/icon", alias: ["/icons"], name: "Icon Page", component: MyIcon },
     { path: "/timeline", name: "My Timeline", component: Timeline },
 
-
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
     { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
+
     { path: "/ivue", redirect: "/experience/ivue" },
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
