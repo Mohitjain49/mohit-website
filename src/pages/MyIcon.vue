@@ -1,6 +1,8 @@
 <template>
+<InitPage :pageTitle="'Mohit Jain | My Icons'" :pageDesc="PAGE_DESC" />
 <NavigationMain />
-<div id="icons-body" class="personal-web-body">
+
+<div id="icons-body" class="personal-web-body" @click="closeNavBarDropdown()">
     <div id="start" class="icon-page-padding"></div>
     <div class="icon-background blue-zero">
         <div class="icon-start-header"> My Icons </div>
@@ -38,19 +40,13 @@
 </template>
 
 <script setup>
+import InitPage from '../components/InitPage.vue';
 import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
 
-import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-import { onMounted } from 'vue';
-
-const webData = useWebsiteDataStore();
+import { closeNavBarDropdown } from '../stores/WebsiteData.js';
 const ICON_IMPORT_START = "/static-icons/Personal_Icon";
-
-onMounted(() => {
-    document.title = "Mohit Jain | My Icons";
-    webData.mountWebData();
-})
+const PAGE_DESC = "I created my icons by using gradients and the Google Lexend Font."
 
 /**
  * This lets the visitor copy an image.

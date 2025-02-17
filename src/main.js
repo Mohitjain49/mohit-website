@@ -1,10 +1,13 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { createHead } from '@unhead/vue'
 import VueObserveVisibility from 'vue3-observe-visibility'
 
 import App from './App.vue'
 import personalRouter from './routes.js'
+
 const pinia = createPinia();
+const head = createHead();
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -59,4 +62,5 @@ createApp(App).component('font-awesome-icon', FontAwesomeIcon).
     use(VueObserveVisibility).
     use(personalRouter).
     use(pinia).
+    use(head).
     mount('#app');

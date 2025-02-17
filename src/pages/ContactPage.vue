@@ -1,6 +1,8 @@
 <template>
+<InitPage :pageTitle="'Mohit Jain | Contact Me'" />
 <NavigationMain />
-<div id="contact-page" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
+
+<div id="contact-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <div class="contact-me-box web-service">
         <div class="contact-box-title-container center-flex-display">
             <div class="gradient-text contact-box-title">Contact Me</div>
@@ -93,17 +95,16 @@
 </template>
 
 <script setup>
+import InitPage from '../components/InitPage.vue';
 import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
 import { SOCIALS } from '../stores/Objects.js';
 
 import axios from 'axios';
-import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-import { ref, onMounted } from 'vue';
+import { closeNavBarDropdown } from '../stores/WebsiteData.js';
+import { ref} from 'vue';
 
-const webData = useWebsiteDataStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
-
 const alertBoxText = ref("");
 var alertBoxTimeout = null;
 
@@ -111,11 +112,6 @@ const msgTitle = ref("");
 const msgMain = ref("");
 const senderName = ref("");
 const senderEmail = ref("");
-
-onMounted(() => {
-    document.title = "Mohit Jain | Contact Me";
-    webData.mountWebData();
-});
 
 /**
  * This function calls a AWS Lambda Function via Amazon API Gateway to send an email to me.
