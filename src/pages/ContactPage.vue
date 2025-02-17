@@ -26,6 +26,7 @@
                     <div class="contact-input-tab-header">Your Message</div>
                 </div>
                 <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
+                    placeholder="Type your message here..."
                     v-model="msgMain"
                     @click="setAlertBox('')"
                 ></textarea>
@@ -37,6 +38,7 @@
                     <div class="contact-input-tab-header">Your Name</div>
                 </div>
                 <input class="contact-input-tab-textbox"
+                    placeholder="Mohit Jain"
                     v-model="senderName"
                     @click="setAlertBox('')"
                 >
@@ -46,7 +48,7 @@
                     <div class="contact-input-tab-header">Your Email</div>
                 </div>
                 <input class="contact-input-tab-textbox"
-                    type="email"
+                    type="email" placeholder="example@example.com"
                     v-model="senderEmail"
                     @click="setAlertBox('')"
                 >
@@ -68,15 +70,22 @@
         </div>
 
         <div class="contact-box-content">
-            <div class="social-tab" v-for="social in SOCIALS">
+            <div class="social-tab" v-for="social in SOCIALS" :style="{ color: social.altColor }">
                 <div class="social-tab-header"> {{ social.name }} </div>
                 <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
+
                 <div class="social-tab-btn-container">
-                    <div class="social-tab-btn" @click="copyLink(social.displayLink)">
+                    <div class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
+                        @mouseenter="setSocialBtnTransition"
+                        @mouseleave="setSocialBtnTransition">
+
                         <span> {{ social.copyBtn }} </span>
                         <font-awesome-icon icon="fa-copy" />
                     </div>
-                    <a :href="social.link" target="_blank" class="social-tab-btn send">
+                    <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
+                        @mouseenter="setSocialBtnTransition"
+                        @mouseleave="setSocialBtnTransition">
+
                         <span> {{ social.linkBtn }} </span>
                         <font-awesome-icon :icon="social.linkIcon" />
                     </a>
@@ -104,12 +113,6 @@ import axios from 'axios';
 import { closeNavBarDropdown } from '../stores/WebsiteData.js';
 import { ref, onMounted } from 'vue';
 
-onMounted(() => {
-    if(window.innerWidth <= 525) { return; }
-    document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
-    document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
-})
-
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 const alertBoxText = ref("");
 var alertBoxTimeout = null;
@@ -118,6 +121,38 @@ const msgTitle = ref("");
 const msgMain = ref("");
 const senderName = ref("");
 const senderEmail = ref("");
+
+/**
+ * ----------------------------------------------------
+ * These functions add Transitions to the contact page.
+ * ----------------------------------------------------
+ */
+
+/**
+ * This adds a transition to the contact boxes if the screen width is large enough.
+ */
+onMounted(() => {
+    if(window.innerWidth <= 525) { return; }
+    document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
+    document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
+})
+
+/**
+ * This function adds or removes a transition to a social media link button.
+ */
+function setSocialBtnTransition(event = new MouseEvent("mouseenter")) {
+    if(event.type === "mouseenter") {
+        event.target.classList.add("animate__headShake");
+    } else {
+        event.target.classList.remove("animate__headShake");
+    }
+}
+
+/**
+ * ----------------------------------------------
+ * These functions manage sending an email to me.
+ * ----------------------------------------------
+ */
 
 /**
  * This function calls a AWS Lambda Function via Amazon API Gateway to send an email to me.
@@ -182,6 +217,12 @@ function checkAPIParameters(message) {
 function getAPIErrorRedirect() {
     return (" You can email me directly with my work email: " + getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink));
 }
+
+/**
+ * -----------------------------------------------------------
+ * These functions manage the alert box and some text strings.
+ * -----------------------------------------------------------
+ */
 
 /**
  * This sets the status of the alert box.
@@ -342,6 +383,10 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     padding: 5px 3px;
     transition: background-color 0.2s;
 }
+.contact-input-tab-textbox::placeholder {
+    font-size: 14px;
+}
+
 .contact-input-tab-textbox:hover {
     background-color: var(--translucent-background); 
 }
@@ -393,18 +438,19 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     height: 90px;
     width: 80%;
     left: calc(10% - 10px);
-    border: 2px solid var(--website-text);
+    border: 2px solid;
     border-radius: 7px;
     margin-bottom: 30px;
+    background-color: var(--silver-light);
 }
 .social-tab-header {
     margin-left: 5px;
-    color: var(--website-text);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: bold;
     font-size: 18px;
     text-align: left;
     margin-bottom: 3px;
+    color: inherit;
 }
 
 .social-tab-link {
@@ -435,8 +481,8 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     padding: 7px;
     width: fit-content;
     text-align: center;
-    border: 1px dotted var(--website-text);
-    color: var(--website-text);
+    color: inherit;
+    border: 1px solid;
     border-radius: 6px;
     font-size: 17px;
     font-weight: bold;
@@ -444,8 +490,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     transition: var(--default-transition);
 }
 .social-tab-btn:hover {
-    background-color: var(--translucent-background);
-    border: 1px solid var(--website-text);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .social-tab-btn.send {

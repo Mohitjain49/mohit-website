@@ -1,7 +1,7 @@
 <template>
 <NavigationMain />
 <div id="update-body" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
-    <UpdateMenu v-if="laptopScreen" />
+    <UpdateMenu v-if="webData.pageView == 0" />
     <div :id="Updates[versionIndex].versionPath" class="update-content update-log-content">
         <div class="gradient-text update-content-title">
             {{ 'Update ' + Updates[versionIndex].version }}
@@ -28,19 +28,18 @@
 </template>
 
 <script setup>
-import "../../styles/update.css";
-import UpdateMenu from "../../components/sidebars/UpdateMenu.vue";
-import NavigationMain from '../../components/NavigationMain.vue';
+import "@/styles/update.css";
+import UpdateMenu from "@/components/sidebars/UpdateMenu.vue";
+import NavigationMain from '@/components/NavigationMain.vue';
 
-import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
-import { Updates } from "../../stores/Updates.js";
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
+import { Updates } from "@/stores/Updates.js";
 
 import { useRoute, useRouter } from "vue-router";
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const webData = useWebsiteDataStore();
 const versionIndex = ref(0);
-const laptopScreen = ref(true);
 
 const route = useRoute();
 const router = useRouter();
@@ -55,18 +54,5 @@ onMounted(() => {
 
     document.title = ("Mohit Jain | Update " + Updates[versionIdx].version);
     webData.mountWebData();
-
-    setUpdateLog();
-    window.addEventListener("resize", setUpdateLog);
 });
-onUnmounted(() => {
-    window.removeEventListener("resize", setUpdateLog);
-});
-
-/**
- * This function sets whether the update log is in mobile or laptop form.
- */
-function setUpdateLog() {
-    laptopScreen.value = (window.innerWidth > 840);
-}
 </script>

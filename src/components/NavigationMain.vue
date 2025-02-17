@@ -147,7 +147,7 @@ const ROUTE_COLLECTION = [
     font-size: 17px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 825px) {
     .web-navBar-links-side {
         width: fit-content;
     }

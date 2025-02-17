@@ -1,5 +1,7 @@
 <template>
+<InitPage :pageTitle="'Mohit Jain | Updates'" />
 <NavigationMain />
+
 <div id="update-body" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
     <UpdateMenu />
 
@@ -16,21 +18,16 @@
 </template>
 
 <script setup>
-import "../../styles/update.css";
-import "../../styles/navpage.css";
+import "@/styles/update.css";
+import "@/styles/navpage.css";
 
-import UpdateMenu from "../../components/sidebars/UpdateMenu.vue";
-import NavigationMain from '../../components/NavigationMain.vue';
+import InitPage from "@/components/InitPage.vue";
+import NavigationMain from '@/components/NavigationMain.vue';
+import UpdateMenu from "@/components/sidebars/UpdateMenu.vue";
 
 import { Updates } from "@/stores/Updates.js";
-import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
-import { onMounted } from 'vue';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 
 const webData = useWebsiteDataStore();
 const LAST_UPDATE = Updates[Updates.length - 1];
-
-onMounted(() => {
-    document.title = "Mohit Jain | Updates";
-    webData.mountWebData();
-});
 </script>

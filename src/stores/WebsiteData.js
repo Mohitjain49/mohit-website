@@ -79,7 +79,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
         
         if(windowWidth <= 600) {
             pageView.value = 2;
-        } else if(windowWidth <= 800) {
+        } else if(windowWidth <= 825) {
             pageView.value = 1;
             closeMobileSidebar();
         } else {

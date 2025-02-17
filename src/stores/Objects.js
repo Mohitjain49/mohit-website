@@ -55,7 +55,8 @@ export const SOCIALS = [
         copyBtn: "Copy Email",
         linkBtn: "Send Email",
         linkIcon: "fa-envelope",
-        color: "var(--website-text)"
+        color: "var(--website-text)",
+        altColor: "var(--website-text)"
     },
     {
         name: "LinkedIn",
@@ -64,7 +65,8 @@ export const SOCIALS = [
         copyBtn: "Copy LinkedIn Link",
         linkBtn: "Go To LinkedIn",
         linkIcon: "fa-brands fa-linkedin",
-        color: "#0072B1"
+        color: "#0072B1",
+        altColor: "#0072B1"
     },
     {
         name: "Discord",
@@ -73,7 +75,8 @@ export const SOCIALS = [
         copyBtn: "Copy Discord Link",
         linkBtn: "Go To Discord",
         linkIcon: "fa-brands fa-discord",
-        color: "#5865F2"
+        color: "#5865F2",
+        altColor: "#5865F2"
     },
     {
         name: "GitHub",
@@ -82,7 +85,8 @@ export const SOCIALS = [
         copyBtn: "Copy GitHub Link",
         linkBtn: "Go To Github",
         linkIcon: "fa-brands fa-github",
-        color: "white"
+        color: "white",
+        altColor: "black"
     },
 ];
 

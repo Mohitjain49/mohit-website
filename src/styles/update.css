@@ -82,12 +82,12 @@
     text-decoration: underline;
 }
 
-@media (max-width: 1200px) and (min-width: 801px) {
+@media (max-width: 1200px) and (min-width: 826px) {
     #update-body {
         grid-template-columns: 340px calc(100% - 340px);
     }
 }
-@media (max-width: 800px) {
+@media (max-width: 825px) {
     #update-body {
         grid-template-columns: 1fr;
     }
