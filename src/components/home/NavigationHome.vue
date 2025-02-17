@@ -44,7 +44,10 @@ function goToHomeSection(id = "start") {
  * This function returns the classes for the main element.
  */
 function getCircleClasses() {
-    return ['home-nav', (menuExpanded.value ? 'home-nav-expanded' : '')];
+    return ['home-nav',
+        (menuExpanded.value ? 'home-nav-expanded' : ''),
+        'animate__animated', 'animate__fadeInBottomRight'
+    ];
 }
 
 /**

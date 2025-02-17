@@ -102,7 +102,13 @@ import { SOCIALS } from '../stores/Objects.js';
 
 import axios from 'axios';
 import { closeNavBarDropdown } from '../stores/WebsiteData.js';
-import { ref} from 'vue';
+import { ref, onMounted } from 'vue';
+
+onMounted(() => {
+    if(window.innerWidth <= 525) { return; }
+    document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
+    document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
+})
 
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 const alertBoxText = ref("");
@@ -515,7 +521,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
         grid-template-columns: 1fr;
     }
     .contact-me-box {
-        left: calc(50% - 225px) !important;
+        left: calc(50% - 237px) !important;
     }
     .web-footer-contact {
         grid-column: span 1;

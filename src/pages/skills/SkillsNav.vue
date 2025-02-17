@@ -1,6 +1,8 @@
 <template>
+<InitPage :pageTitle="'Mohit Jain | Skills'" />
 <NavigationMain />
-<div id="skills-page" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
+
+<div id="skills-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <div class="main-nav-page-container">
         <div id="skills-title" class="nav-page-title">My Skills</div>
         <div class="main-nav-page">
@@ -17,20 +19,14 @@
 </template>
 
 <script setup>
+import InitPage from '@/components/InitPage.vue';
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
-import NavPageCard from '@/components/body-components/NavPageCard.vue';
+import { closeNavBarDropdown } from '@/stores/WebsiteData.js';
+
 import "@/styles/navpage.css";
-
-import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
+import NavPageCard from '@/components/body-components/NavPageCard.vue';
 import { NAV_CARDS } from '@/stores/Objects.js';
-import { onMounted } from 'vue';
-
-const webData = useWebsiteDataStore();
-onMounted(() => {
-    document.title = "Mohit Jain | Skills";
-    webData.mountWebData();
-})
 </script>
 
 <style scoped>
