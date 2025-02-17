@@ -8,7 +8,9 @@ import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_Icon.png";
-import expo_icon from "../assets/sublo/Expo_Icon.svg"
+import expo_icon from "../assets/sublo/Expo_Icon.svg";
+import vite_icon from "../assets/Vite_Icon.svg";
+import nuxt_icon from "../assets/Nuxt_Icon.png";
 
 import aws_icon from "../assets/aws/AWS_Icon.png";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
@@ -126,16 +128,43 @@ export const SKILL_ENTITIES = [
         }
     },
     {
+        name: "Vite",
+        link: "https://vite.dev/",
+        color: "#9863FE",
+        desc: "Vite is a frontend building tool that simplifies developing, building, and deploying frontend applications. " +
+            "It is used by most major JS Frameworks today, including Vue.js, React Router, Angular, etc.",
+
+        icon: {
+            id: vite_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
         name: "Expo",
         link: "https://expo.dev/",
         color: "black",
-        desc: "Expo is a framework that utilizes React Native to help developers create, build, and deploy apps ." +
+        desc: "Expo is a framework that utilizes React Native to help developers create, build, and deploy apps " +
             "that work on Android, iOS, and the web all at once. I used it to develop a mobile app at Sublo.",
 
         icon: {
             id: expo_icon,
             faIcon: false,
             width: "105"
+        }
+    },
+    {
+        name: "Nuxt",
+        link: "https://nuxt.com/",
+        color: "#00DC82",
+        desc: "Nuxt is a web framework that's built with Vue.js and comes with a whole host of features. " +
+            "It's particularly useful when use Vue Components to generate a static site " +
+            "or a server-side rendered site for quality search engine optimization.",
+
+        icon: {
+            id: nuxt_icon,
+            faIcon: false,
+            width: "125"
         }
     },
     {
