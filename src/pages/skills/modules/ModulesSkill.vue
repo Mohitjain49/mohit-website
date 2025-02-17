@@ -7,11 +7,11 @@
 </template>
 
 <script setup>
-import ModulesSidebar from '../../../components/sidebars/ModulesSidebar.vue';
-import InfoSector from '../../../components/body-components/InfoSector.vue';
+import ModulesSidebar from '@/components/sidebars/ModulesSidebar.vue';
+import InfoSector from '@/components/body-components/InfoSector.vue';
 
-import { useWebsiteDataStore } from '../../../stores/WebsiteData.js';
-import { MAVLINK_INFO_SECTOR, CESIUM_INFO_SECTOR } from '../../../stores/Objects.js';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
+import { MAVLINK_INFO_SECTOR, CESIUM_INFO_SECTOR } from '@/stores/Objects.js';
 
 import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';

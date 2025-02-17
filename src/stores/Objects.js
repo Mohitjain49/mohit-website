@@ -48,8 +48,8 @@ export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/en/";
 export const SOCIALS = [
     {
         name: "Work Email",
-        displayLink: "mohitkjainwork@gmail.com",
-        link: "mailto:mohitkjainwork@gmail.com",
+        displayLink: "mohitkjain49@gmail.com",
+        link: "mailto:mohitkjain49@gmail.com",
         copyBtn: "Copy Email",
         linkBtn: "Send Email",
         linkIcon: "fa-envelope",

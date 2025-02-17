@@ -6,11 +6,11 @@
 </template>
 
 <script setup>
-import InfoSector from '../../../components/body-components/InfoSector.vue';
-import AmazonSidebar from '../../../components/sidebars/AmazonSidebar.vue';
+import InfoSector from '@/components/body-components/InfoSector.vue';
+import AmazonSidebar from '@/components/sidebars/AmazonSidebar.vue';
 
-import { useWebsiteDataStore } from '../../../stores/WebsiteData.js';
-import { AWS_INFO_SECTORS } from '../../../stores/Objects.js';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
+import { AWS_INFO_SECTORS } from '@/stores/Objects.js';
 
 import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from 'vue';
@@ -51,16 +51,7 @@ onMounted(() => {
         router.push("/skills/aws/cloudfront");
     } else if(subRoute === "WorkMail" || subRoute === "Workmail") {
         router.push("/skills/aws/workmail");
-    }
-    /*
-    else if(subRoute === "dynamodb") {
-        sectorOpen.value = 3;
-        document.title = (documentTitle + " | Amazon DynamoDB");
-    } else if(subRoute === "dynamo") {
-        router.replace("/skills/aws/dynamodb");
-    }
-    */
-    else {
+    } else {
         router.replace("/skills/invalid");
     }
 });

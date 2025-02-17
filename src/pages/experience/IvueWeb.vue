@@ -6,11 +6,11 @@
 </template>
 
 <script setup>
-import IvueWebSidebar from "../../components/sidebars/IvueWebSidebar.vue";
-import InfoSector from '../../components/body-components/InfoSector.vue';
+import IvueWebSidebar from "@/components/sidebars/IvueWebSidebar.vue";
+import InfoSector from '@/components/body-components/InfoSector.vue';
 
-import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
-import { IVUE_WEBSITE_INFO_SECTORS } from '../../stores/Objects.js';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
+import { IVUE_WEBSITE_INFO_SECTORS } from '@/stores/Objects.js';
 
 import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from 'vue';

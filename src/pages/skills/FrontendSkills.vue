@@ -8,11 +8,11 @@
 </template>
 
 <script setup>
-import InfoSector from '../../components/body-components/InfoSector.vue';
-import FrontendSidebar from "../../components/sidebars/FrontendSidebar.vue";
+import InfoSector from '@/components/body-components/InfoSector.vue';
+import FrontendSidebar from "@/components/sidebars/FrontendSidebar.vue";
 
-import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
-import { VUE_INFO_SECTOR, ANGULAR_INFO_SECTOR, REACT_NATIVE_INFO_SECTOR } from '../../stores/Objects.js';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
+import { VUE_INFO_SECTOR, ANGULAR_INFO_SECTOR, REACT_NATIVE_INFO_SECTOR } from '@/stores/Objects.js';
 
 import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from 'vue';
