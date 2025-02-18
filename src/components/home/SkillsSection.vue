@@ -7,7 +7,7 @@
         by utilizing multiple programming languages, frontend frameworks, web services, and modules.
     </div>
 
-    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container">
+    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container large">
         <div v-if="entity.link === '#'" class="skills-entity no-link"
             v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
 
@@ -46,6 +46,28 @@
             </div>
         </RouterLink>
     </div>
+
+    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container small">
+        <div v-if="entity.link === '#'" class="skills-widget no-link"
+            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+
+            <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
+            <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
+        </div>
+        
+        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-widget"
+            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+
+            <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
+            <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
+        </a>
+
+        <RouterLink v-else :to="entity.link" class="skills-widget"
+            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+
+            <font-awesome-icon :icon="entity.icon.id" class="skills-entity-moreInfo-icon"/>
+        </RouterLink>
+    </div>
 </div>
 </template>
 
@@ -62,23 +84,30 @@ function getFAIconStyle(entity) {
 }
 
 /**
- * This adds a transition to the card as visitors scroll to it.
+ * This adds a transition to a card/widget as visitors scroll to it.
  * @param {Number} index The index of the card.
  */
 function addCardTransition(isVisible, index = 0) {
-    let skillCard = document.getElementsByClassName("skills-entity").item(index);
-    if(isVisible) { skillCard.classList.add("animate__animated", "animate__zoomIn"); }
+    if(!isVisible) { return; }
+    const className = ((window.innerWidth > 825) ? "skills-entity" : "skills-widget");
+
+    let skillCard = document.getElementsByClassName(className).item(index);
+    skillCard.classList.add("animate__animated", "animate__zoomIn");
 }
 
 /**
- * This removes all transitions from all card should visitors scroll away from the skills section.
+ * This removes all transitions from all cards and wdigets should visitors scroll away from the skills section.
  */
 function removeCardTransitions(isVisible) {
     if(isVisible) { return; }
     const skillCards = document.getElementsByClassName("skills-entity");
+    const skillWidgets = document.getElementsByClassName("skills-widget");
 
     for(let i = 0; i < skillCards.length; i++) {
         skillCards.item(i).classList.remove("animate__animated", "animate__zoomIn");
+    }
+    for(let i = 0; i < skillWidgets.length; i++) {
+        skillWidgets.item(i).classList.remove("animate__animated", "animate__zoomIn");
     }
 }
 </script>
@@ -140,8 +169,7 @@ function removeCardTransitions(isVisible) {
     transition: var(--default-transition);
     background-color: white;
     box-shadow: 0px 0px 3px 3px rgba(126, 90, 0, 0.25);
-    --animate-duration: 0.6s;
-    --animate-delay: 0.1s;
+    --animate-duration: 0.7s;
 }
 
 .skills-entity:hover {
@@ -149,6 +177,34 @@ function removeCardTransitions(isVisible) {
     box-shadow: 0px 0px 10px 10px rgba(126, 90, 0, 0.25);
 }
 .skills-entity.no-link {
+    cursor: default;
+}
+.skills-entity-container.small {
+    height: 240px;
+    width: 100%;
+    min-width: 0px;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.skills-widget {
+    height: 175px;
+    width: 175px;
+    border: 3px solid var(--website-light-text);
+    border-radius: 25px;
+    background-color: var(--silver-light);
+    transition: var(--default-transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --animate-duration: 0.7s;
+}
+.skills-widget:hover {
+    border-color: var(--website-text);
+    box-shadow: 0px 0px 10px 10px rgba(126, 90, 0, 0.25);
+}
+.skills-widget.no-link {
     cursor: default;
 }
 
@@ -190,6 +246,9 @@ function removeCardTransitions(isVisible) {
     font-size: 110px;
 }
 .skills-entity:hover .skills-entity-image .skills-entity-moreInfo-icon {
+    color: var(--website-text);
+}
+.skills-widget:hover .skills-entity-moreInfo-icon {
     color: var(--website-text);
 }
 
@@ -237,12 +296,19 @@ function removeCardTransitions(isVisible) {
 
 @media (max-width: 825px) {
     .skills-section {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         width: calc(100% - 20px);
         padding: 0px 10px;
     }
     .skills-main-header, .skills-main-desc {
-        grid-column: span 1;
+        grid-column: span 3;
+    }
+
+    .skills-entity-container.large {
+        display: none;
+    }
+    .skills-entity-container.small {
+        display: flex;
     }
 
     .skills-main-header {
@@ -253,7 +319,15 @@ function removeCardTransitions(isVisible) {
     }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 650px) {
+    .skills-entity-container.small {
+        height: 175px;
+    }
+    .skills-widget {
+        transform: scale(0.75);
+    }
+}
+@media (max-width: 500px) {
     .skills-main-header {
         font-size: 68px;
     }
@@ -261,13 +335,11 @@ function removeCardTransitions(isVisible) {
         font-size: 17px;
     }
 
-    .skills-entity-container {
-        min-width: 0px;
-        height: 500px;
+    .skills-section {
+        grid-template-columns: repeat(2, 1fr);
     }
-    .skills-entity {
-        height: 425px;
-        width: 320px;
+    .skills-main-header, .skills-main-desc {
+        grid-column: span 2;
     }
 }
 </style>

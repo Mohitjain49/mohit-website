@@ -17,9 +17,6 @@ import ExperienceMain from "./pages/experience/ExperienceMain.vue";
 import IvueWeb from "./pages/experience/IvueWeb.vue";
 import SubloMain from "./pages/experience/SubloMain.vue";
 
-import Updates from "./pages/updates/Updates.vue";
-import UpdateLog from "./pages/updates/UpdateLog.vue";
-
 const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
     { path: "/resume", name: "My Resume", component: Resume },
@@ -28,6 +25,7 @@ const personalRoutes = [
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
     { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
+    { path: "/updates", alias: ['/update'], redirect: { path: "/", hash: "#skills" } },
 
     { path: "/ivue", redirect: "/experience/ivue" },
     { path: "/sublo", redirect: "/experience/sublo" },
@@ -68,14 +66,6 @@ const personalRoutes = [
             { path: "worldsivue", redirect: "/experience/ivue/worldsivue" },
         ]
     },
-    {
-        path: "/updates",
-        alias: ['/update'],
-        children: [
-            { path: "", name: "Updates Page", component: Updates, alias: ["home", "main"] },
-            { path: ":version", name: "Update Log", component: UpdateLog }
-        ]
-    }
 ];
 
 const personalRouter = createRouter({
