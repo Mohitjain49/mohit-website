@@ -1,6 +1,8 @@
 <template>
+<InitPage :pageTitle="'Mohit Jain | Contact Me'" />
 <NavigationMain />
-<div id="contact-page" class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
+
+<div id="contact-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <div class="contact-me-box web-service">
         <div class="contact-box-title-container center-flex-display">
             <div class="gradient-text contact-box-title">Contact Me</div>
@@ -14,13 +16,20 @@
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Title</div>
                 </div>
-                <input class="contact-input-tab-textbox" v-model="msgTitle">
+                <input class="contact-input-tab-textbox"
+                    v-model="msgTitle"
+                    @click="setAlertBox('')"
+                >
             </div>
             <div class="contact-input-tab" style="height: calc(100% - 70px);">
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Message</div>
                 </div>
-                <textarea class="contact-input-tab-textbox contact-input-tab-textarea" v-model="msgMain"></textarea>
+                <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
+                    placeholder="Type your message here..."
+                    v-model="msgMain"
+                    @click="setAlertBox('')"
+                ></textarea>
             </div>
             <div class="contact-box-line"></div>
 
@@ -28,13 +37,21 @@
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Name</div>
                 </div>
-                <input class="contact-input-tab-textbox" v-model="senderName">
+                <input class="contact-input-tab-textbox"
+                    placeholder="Mohit Jain"
+                    v-model="senderName"
+                    @click="setAlertBox('')"
+                >
             </div>
             <div class="contact-input-tab">
                 <div class="contact-input-tab-header-container">
                     <div class="contact-input-tab-header">Your Email</div>
                 </div>
-                <input class="contact-input-tab-textbox" v-model="senderEmail">
+                <input class="contact-input-tab-textbox"
+                    type="email" placeholder="example@example.com"
+                    v-model="senderEmail"
+                    @click="setAlertBox('')"
+                >
             </div>
             <div class="contact-box-buttons-container center-flex-display">
                 <div class="contact-input-tab-btn-container center-flex-display">
@@ -53,15 +70,22 @@
         </div>
 
         <div class="contact-box-content">
-            <div class="social-tab" v-for="social in SOCIALS">
+            <div class="social-tab" v-for="social in SOCIALS" :style="{ color: social.altColor }">
                 <div class="social-tab-header"> {{ social.name }} </div>
                 <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
+
                 <div class="social-tab-btn-container">
-                    <div class="social-tab-btn" @click="copyLink(social.displayLink)">
+                    <div class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
+                        @mouseenter="setSocialBtnTransition"
+                        @mouseleave="setSocialBtnTransition">
+
                         <span> {{ social.copyBtn }} </span>
                         <font-awesome-icon icon="fa-copy" />
                     </div>
-                    <a :href="social.link" target="_blank" class="social-tab-btn send">
+                    <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
+                        @mouseenter="setSocialBtnTransition"
+                        @mouseleave="setSocialBtnTransition">
+
                         <span> {{ social.linkBtn }} </span>
                         <font-awesome-icon :icon="social.linkIcon" />
                     </a>
@@ -69,6 +93,7 @@
             </div>
         </div>
     </div>
+    <WebFooter class="web-footer-contact" />
 </div>
 
 <Transition name="alertBoxTransition">
@@ -79,16 +104,16 @@
 </template>
 
 <script setup>
+import InitPage from '../components/InitPage.vue';
 import NavigationMain from '../components/NavigationMain.vue';
+import WebFooter from '../components/WebFooter.vue';
 import { SOCIALS } from '../stores/Objects.js';
 
 import axios from 'axios';
-import { useWebsiteDataStore } from '../stores/WebsiteData.js';
+import { closeNavBarDropdown } from '../stores/WebsiteData.js';
 import { ref, onMounted } from 'vue';
 
-const webData = useWebsiteDataStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
-
 const alertBoxText = ref("");
 var alertBoxTimeout = null;
 
@@ -97,10 +122,37 @@ const msgMain = ref("");
 const senderName = ref("");
 const senderEmail = ref("");
 
+/**
+ * ----------------------------------------------------
+ * These functions add Transitions to the contact page.
+ * ----------------------------------------------------
+ */
+
+/**
+ * This adds a transition to the contact boxes if the screen width is large enough.
+ */
 onMounted(() => {
-    document.title = "Mohit Jain | Contact Me";
-    webData.mountWebData();
-});
+    if(window.innerWidth <= 525) { return; }
+    document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
+    document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
+})
+
+/**
+ * This function adds or removes a transition to a social media link button.
+ */
+function setSocialBtnTransition(event = new MouseEvent("mouseenter")) {
+    if(event.type === "mouseenter") {
+        event.target.classList.add("animate__headShake");
+    } else {
+        event.target.classList.remove("animate__headShake");
+    }
+}
+
+/**
+ * ----------------------------------------------
+ * These functions manage sending an email to me.
+ * ----------------------------------------------
+ */
 
 /**
  * This function calls a AWS Lambda Function via Amazon API Gateway to send an email to me.
@@ -114,27 +166,63 @@ function sendEmail() {
         emailAddress: senderEmail.value
     }
 
-    // Clears all the input boxes.
-    msgTitle.value = "";
-    msgMain.value = "";
-    senderName.value = "";
-    senderEmail.value = "";
-    const errorRedirect = " You can email me directly with my work email: " +
-        getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink)
-
     if(AWS_API_LINK === "") {
-        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + errorRedirect);
-    } else {
-        axios.post(AWS_API_LINK, message).then((response) => {
-            if(response.status === 200) {
-                setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
-            }
-        }).catch((e) => {
-            console.error(e);
-            setAlertBox("This feature is not working at the moment." + errorRedirect);
-        })
+        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + getAPIErrorRedirect());
+        return;
+    } else if(!checkAPIParameters(message)) {
+        return;
     }
+
+    axios.post(AWS_API_LINK, message).then((response) => {
+        if(response.status !== 200) { return; }
+        setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
+    }).catch((e) => {
+        console.error(e);
+        setAlertBox("This feature is not working at the moment." + getAPIErrorRedirect());
+    })
+
 }
+
+/**
+ * This function checks the parameters for my API function.
+ * @param {Object} message The parameters for the API.
+ * @param {String} message.title The title of the message.
+ * @param {String} message.msgBody The body of the message.
+ * @param {String} message.name The name of the sender.
+ * @param {String} message.emailAddress The title of the email.
+ */
+function checkAPIParameters(message) {
+    if(message.title === "") {
+        setAlertBox("Please enter an appropriate title for your message.");
+    } else if(message.msgBody.length < 50) {
+        setAlertBox("Please ensure that your message is at least 50 characters long.");
+    } else if(message.name === "") {
+        setAlertBox("Please enter your name that I can refer to you as.");
+    } else if(message.emailAddress === "") {
+        setAlertBox("Please enter your email address so I can stay in touch with you.");
+    } else {
+        setAlertBox("Send Message. Please Wait...");
+        msgTitle.value = "";
+        msgMain.value = "";
+        senderName.value = "";
+        senderEmail.value = "";
+        return true;
+    }
+    return false;
+}
+
+/**
+ * This returns a string redirecting visitors to email my work email.
+ */
+function getAPIErrorRedirect() {
+    return (" You can email me directly with my work email: " + getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink));
+}
+
+/**
+ * -----------------------------------------------------------
+ * These functions manage the alert box and some text strings.
+ * -----------------------------------------------------------
+ */
 
 /**
  * This sets the status of the alert box.
@@ -147,6 +235,7 @@ function setAlertBox(text = "") {
         alertBoxTimeout = null;
     }
 
+    if(text === "") { return; }
     alertBoxTimeout = setTimeout(() => {
         alertBoxText.value = "";
         alertBoxTimeout = null;
@@ -173,9 +262,8 @@ function getLinkString(link = "/", text = "") {
     return ("<span><a href=\"" + link + "\" style=\"text-decoration: underline;\" target=\"_blank\">" + text + "</a></span>");
 }
 
-const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, please do so below. It uses " +
-    getLinkString("https://aws.amazon.com/ses/", "Amazon Simple Email Service (SES)") +
-    " to send an automatic email to me."
+const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, you can do so below. It uses " +
+    getLinkString("https://aws.amazon.com/ses/", "Amazon Simple Email Service (SES)") + " to send an automatic email to me.";
 const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, LinkedIn, Discord, and Github.";
 </script>
 
@@ -184,6 +272,9 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     background: linear-gradient(to bottom, var(--blue-one) 0%, var(--blue-three) 100%);
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+.web-footer-contact {
+    grid-column: span 2;
 }
 
 .contact-me-box {
@@ -198,6 +289,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     overflow: hidden;
     background: var(--webpage-static-background);
 }
+
 .contact-me-box.web-service {
     left: calc(100% - 525px);
 }
@@ -291,6 +383,10 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     padding: 5px 3px;
     transition: background-color 0.2s;
 }
+.contact-input-tab-textbox::placeholder {
+    font-size: 14px;
+}
+
 .contact-input-tab-textbox:hover {
     background-color: var(--translucent-background); 
 }
@@ -342,18 +438,19 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     height: 90px;
     width: 80%;
     left: calc(10% - 10px);
-    border: 2px solid var(--website-text);
+    border: 2px solid;
     border-radius: 7px;
     margin-bottom: 30px;
+    background-color: var(--silver-light);
 }
 .social-tab-header {
     margin-left: 5px;
-    color: var(--website-text);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: bold;
     font-size: 18px;
     text-align: left;
     margin-bottom: 3px;
+    color: inherit;
 }
 
 .social-tab-link {
@@ -384,8 +481,8 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     padding: 7px;
     width: fit-content;
     text-align: center;
-    border: 1px dotted var(--website-text);
-    color: var(--website-text);
+    color: inherit;
+    border: 1px solid;
     border-radius: 6px;
     font-size: 17px;
     font-weight: bold;
@@ -393,8 +490,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     transition: var(--default-transition);
 }
 .social-tab-btn:hover {
-    background-color: var(--translucent-background);
-    border: 1px solid var(--website-text);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .social-tab-btn.send {
@@ -450,13 +546,30 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
         left: calc(50% - 300px);
     }
 }
+@media (min-height: 965px) and (min-width: 1051px) {
+    .web-footer-contact {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+}
+@media (min-height: 1820px) and (max-width: 1050px) {
+    .web-footer-contact {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+}
 
 @media (max-width: 1050px) and (min-width: 526px) {
     #contact-page {
         grid-template-columns: 1fr;
     }
     .contact-me-box {
-        left: calc(50% - 225px) !important;
+        left: calc(50% - 237px) !important;
+    }
+    .web-footer-contact {
+        grid-column: span 1;
     }
 }
 
@@ -464,17 +577,21 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     #contact-page {
         grid-template-columns: 1fr;
     }
+    .web-footer-contact {
+        grid-column: span 1;
+        z-index: 20;
+    }
+
     .contact-me-box {
         width: 100%;
-        min-height: 100%;
         left: 0 !important;
-        padding: 20px 0px;
+        padding: 30px 0px;
         border: none;
         border-radius: 0px;
+        margin: 0px;
     }
     .contact-me-box.web-service {
-        margin-top: 0px;
-        padding-bottom: 0px;
+        border-bottom: 2px dashed var(--website-text);
     }
 
     .social-tab-link {

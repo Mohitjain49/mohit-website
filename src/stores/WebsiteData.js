@@ -38,6 +38,13 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     function mountWebData() {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         setNavBarDropdown(-1);
+
+        // On the main skills and experience pages, this adds a transition to the nav cards.
+        const navCards = document.getElementsByClassName("nav-card");
+
+        for(let i = 0; i < navCards.length; i++) {
+            navCards.item(i).classList.add("animate__animated", "animate__jackInTheBox");
+        }
     }
 
     /**
@@ -72,7 +79,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
         
         if(windowWidth <= 600) {
             pageView.value = 2;
-        } else if(windowWidth <= 800) {
+        } else if(windowWidth <= 825) {
             pageView.value = 1;
             closeMobileSidebar();
         } else {
@@ -153,6 +160,14 @@ export const useDateStore = defineStore("DateStore", () => {
         startDateInterval, stopDateInterval
     }
 });
+
+/**
+ * This function closes the Navigation Bar's dropdown menu.
+ */
+export function closeNavBarDropdown() {
+    const webData = useWebsiteDataStore();
+    webData.setNavBarDropdown(-1);
+}
 
 /**
  * This function downloads my resume for the visitor to see.

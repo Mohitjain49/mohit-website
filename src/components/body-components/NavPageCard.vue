@@ -1,14 +1,15 @@
 <template>
 <div class="card-container center-flex-display">
     <RouterLink :to="sectorObj.route" :id="sectorObj.id" class="nav-card"
+        :style="getNavCardBackground()"
         @mouseenter="onNavCardHover"
         @mouseleave="onNavCardLeave">
 
-        <div :id="sectorObj.titleId" class="nav-card-header center-flex-display">
+        <div :id="sectorObj.titleId" class="nav-card-header" :style="getNavTitleStyle()">
             <font-awesome-icon v-if="sectorObj.title.faIcon"
                 class="nav-card-header-faIcon"
                 :icon="sectorObj.title.icon"
-                :style="{ 'color': sectorObj.title.color, 'font-size': sectorObj.title.size }"
+                :style="getNavTitleFAIconStyle()"
             />
             <img v-else class="nav-card-header-image" :src="sectorObj.title.icon" :style="{ 'width': sectorObj.title.size }" />
 
@@ -33,7 +34,7 @@
                     class="nav-card-picture-bar-wrapper center-flex-display"
                     :style="{ 'width': 'calc(100% / ' + sectorObj.pictures.length  + ')' }">
 
-                    <div :class="['nav-card-picture-bar', sectorObj.pictureBarClass]"></div>
+                    <div :class="getNavPictureBarClasses()"></div>
                 </div>
             </div>
         </div>
@@ -57,7 +58,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-const props = defineProps({ sectorObj: Object });
+const props = defineProps({
+    sectorObj: { type: Object, required: true },
+    skillsCard: { type: Boolean, default: false }
+});
 
 const pictureShown = ref(0);
 var pictureInterval = null;
@@ -69,11 +73,52 @@ onMounted(() => {
 onUnmounted(() => { removePictureInterval(); })
 
 /**
+ * This function returns the background of the Navigation Card.
+ */
+function getNavCardBackground() {
+    const blueGradient = "linear-gradient(to bottom, var(--blue-zero) 0%, var(--blue-one) 50%, var(--blue-one) 100%)"
+    return { background: (props.skillsCard ? blueGradient : ''),
+        borderColor: (props.skillsCard ? 'var(--blue-cobalt)' : '')
+    }
+}
+
+/**
+ * This function returns the style for the Navigation Card Titles.
+ */
+function getNavTitleStyle() {
+    return { borderColor: (props.skillsCard ? 'var(--blue-cobalt)' : '') }
+}
+
+/**
+ * This function returns the style for the Navigation Card Titles.
+ */
+function getNavTitleFAIconStyle() {
+    const titleObj = props.sectorObj.title;
+    return { color: titleObj.color, fontSize: titleObj.size }
+}
+
+/**
+ * This returns all the picture bar classes one needs.
+ */
+function getNavPictureBarClasses() {
+    return ['nav-card-picture-bar', props.sectorObj.pictureBarClass, (props.skillsCard ? 'blue' : '')]
+}
+
+/**
+ * -----------------------------------------------------------
+ * These functions are functions activated by event listeners.
+ * -----------------------------------------------------------
+ */
+
+/**
  * This function occurs whenever visitors hovers over the nav card.
  */
 function onNavCardHover() {
     const color = props.sectorObj.color;
-    document.getElementById(props.sectorObj.id).style.borderColor = color;
+    const navCard = document.getElementById(props.sectorObj.id);
+
+    navCard.style.borderColor = color;
+    navCard.style.boxShadow = "0px 0px 10px 10px rgb(0 0 0 / 20%)";
     document.getElementById(props.sectorObj.titleId).style.borderColor = color;
 }
 
@@ -81,10 +126,19 @@ function onNavCardHover() {
  * This function runs whenever visitors' mouse leave the nav card.
  */
 function onNavCardLeave() {
-    const navBarBorder = "rgb(255, 115, 0)";
-    document.getElementById(props.sectorObj.id).style.borderColor = navBarBorder;
-    document.getElementById(props.sectorObj.titleId).style.borderColor = navBarBorder;
+    const borderColor = (props.skillsCard ? 'var(--blue-cobalt)' : '');
+    const navCard = document.getElementById(props.sectorObj.id);
+
+    navCard.style.boxShadow = "";
+    navCard.style.borderColor = borderColor;
+    document.getElementById(props.sectorObj.titleId).style.borderColor = borderColor;
 }
+
+/**
+ * ----------------------------------------------
+ * These functions are for the picture slideshow.
+ * ----------------------------------------------
+ */
 
 /**
  * This is the function that runs within the interval.
@@ -145,10 +199,11 @@ function getPictureBackground(picWidth = "50%") {
     height: 92.5%;
     border: 3px solid var(--nav-bar-border);
     border-radius: 20px;
-    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0, 0.5);
     transition: var(--default-transition);
     overflow: hidden;
-    background: var(--sector-background);
+    background: transparent;
+    box-shadow: 0px 0px 2px 2px rgb(0 0 0 / 20%);
+    --animate-duration: 1.5s 
 }
 .nav-card-header {
     width: 100%;
@@ -156,6 +211,9 @@ function getPictureBackground(picWidth = "50%") {
     border-bottom: 2px solid var(--nav-bar-border);
     transition: var(--default-transition);
     background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .nav-card-header-image {
@@ -198,6 +256,7 @@ function getPictureBackground(picWidth = "50%") {
     height: 100%;
     max-width: 100px;
 }
+
 .nav-card-picture-bar {
     width: 90%;
     max-width: 25px;
@@ -205,6 +264,9 @@ function getPictureBackground(picWidth = "50%") {
     border: 2px solid var(--nav-bar-border);
     border-radius: 7px;
     transition: background-color 0.5s;
+}
+.nav-card-picture-bar.blue {
+    border-color: var(--blue-cobalt);
 }
 
 .nav-card-desc-container {

@@ -6,7 +6,6 @@
         <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses()"> Start </RouterLink>
         <RouterLink to="/#skills" @click="goToHomeSection('skills')" :class="getCircleOptClasses()"> Skills </RouterLink>
         <RouterLink to="/#experience" @click="goToHomeSection('experience')" :class="getCircleOptClasses()"> Experience </RouterLink>
-        <RouterLink to="/#credits" @click="goToHomeSection('credits')" :class="getCircleOptClasses()"> Credits </RouterLink>
         <div class="close" :class="getCircleOptClasses()"> Close </div>
     </template>
 </div>
@@ -45,7 +44,10 @@ function goToHomeSection(id = "start") {
  * This function returns the classes for the main element.
  */
 function getCircleClasses() {
-    return ['home-nav', (menuExpanded.value ? 'home-nav-expanded' : '')];
+    return ['home-nav',
+        (menuExpanded.value ? 'home-nav-expanded' : ''),
+        'animate__animated', 'animate__fadeInBottomRight'
+    ];
 }
 
 /**
@@ -79,7 +81,7 @@ function getCircleOptClasses() {
 }
 
 .home-nav.home-nav-expanded {
-    height: 229px;
+    height: 183px;
     width: 200px;
     border-radius: 15px;
     background-color: var(--website-text);
@@ -111,5 +113,11 @@ function getCircleOptClasses() {
 }
 .home-nav-opt.close {
     border-bottom: none;
+}
+
+@media (max-width: 340px) {
+    .home-nav {
+        display: none;
+    }
 }
 </style>

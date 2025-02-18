@@ -20,16 +20,17 @@
             <font-awesome-icon icon="fa-file-lines" />
             <span>Resume</span>
         </RouterLink>
-        <RouterLink to="/updates" class="web-navBar-opt web-navBar-side" :title="UPDATES_TITLE">
-            <font-awesome-icon icon="fa-file-code" />
-            <span>Updates</span>
+        <RouterLink to="/icons" class="web-navBar-opt web-navBar-side" :title="ICONS_TITLE">
+            <font-awesome-icon icon="fa-pen-fancy" />
+            <span>Icons</span>
         </RouterLink>
-        <div class="web-navBar-opt web-navBar-side web-navBar-list"
+        <div class="web-navBar-opt web-navBar-side"
             v-if="webData.pageView != 0"
             @click="webData.setNavBarDropdown(0)"
             :title="ROUTE_MENU_TITLE">
 
             <font-awesome-icon icon="fa-list" />
+            <span>Menu</span>
         </div>
     </div>
 </div>
@@ -54,7 +55,7 @@ const webData = useWebsiteDataStore();
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
-const UPDATES_TITLE = "Update Logs for My Website.";
+const ICONS_TITLE = "My Icons";
 
 const ROUTE_COLLECTION = [
     { path: "/", title: "Home" },
@@ -85,7 +86,7 @@ const ROUTE_COLLECTION = [
 }
 .web-navBar-links-side {
     display: flex;
-    width: 210px;
+    width: 140px;
     height: 100%;
 }
 
@@ -126,13 +127,6 @@ const ROUTE_COLLECTION = [
     margin-top: 7px;
 }
 
-.web-navBar-list {
-    width: 50px;
-}
-.web-navBar-list svg {
-    margin-top: 0px;
-}
-
 .web-navBar-contact {
     width: 120px !important;
     flex-direction: row;
@@ -147,7 +141,7 @@ const ROUTE_COLLECTION = [
     font-size: 17px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 825px) {
     .web-navBar-links-side {
         width: fit-content;
     }

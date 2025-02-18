@@ -1,16 +1,16 @@
 <template>
 <div id="start"></div>
 <div class="start-section">
-    <div class="start-section-half">
-        <div class="start-section-title">Mohit Jain</div>
-        <div class="start-section-subtitle">
+    <div class="start-section-half" v-observe-visibility="setNameTransitions">
+        <div class="start-section-title animate__animated animate__lightSpeedInLeft">Mohit Jain</div>
+        <div class="start-section-subtitle animate__animated animate__lightSpeedInLeft">
             <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>'s Lead Software Developer
         </div>
-        <div class="start-section-subtitle">
+        <div class="start-section-subtitle animate__animated animate__lightSpeedInLeft">
             Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
         </div>
 
-        <div class="start-contacts">
+        <div class="start-contacts animate__animated animate__lightSpeedInLeft">
             <div class="start-contacts-row top">
                 <RouterLink to="/contact" class="start-contacts-btn start-contacts-mainBtn">
                     <font-awesome-icon icon="fa-paper-plane" />
@@ -38,6 +38,23 @@
 <script setup>
 import headshot from "@/assets/Mohit_Headshot.jpeg";
 import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Objects.js";
+
+/**
+ * This function sets the transitions for the left half of the start section.
+ */
+function setNameTransitions(isVisible) {
+    if(isVisible) {
+        document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-contacts").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+    } else {
+        document.getElementsByClassName("start-section-title").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-contacts").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+    }
+}
 </script>
 
 <style scoped>
@@ -75,24 +92,17 @@ import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Obje
     font-weight: bold;
     color: var(--website-text);
     width: fit-content;
+    --animate-duration: 1s;
 }
 
 .start-section-subtitle {
     width: fit-content;
     font-size: 19px;
     color: var(--website-text);
+    --animate-duration: 1s;
 }
 .start-section-subtitle a {
     text-decoration: underline;
-}
-
-.start-section-desc {
-    width: fit-content;
-    max-width: 700px;
-    font-size: 22px;
-    color: var(--website-text);
-    text-align: left;
-    margin-top: 20px;
 }
 
 .start-contacts {
@@ -102,6 +112,7 @@ import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Obje
     border: 2px solid var(--website-text);
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.8);
+    --animate-duration: 1s;
 }
 .start-contacts-row {
     width: 100%;

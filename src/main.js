@@ -1,9 +1,13 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { createHead } from '@unhead/vue'
+import VueObserveVisibility from 'vue3-observe-visibility'
 
 import App from './App.vue'
 import personalRouter from './routes.js'
+
 const pinia = createPinia();
+const head = createHead();
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -34,9 +38,10 @@ library.add(
     FaIcons.faEnvelope,
     FaIcons.faPhone,
     FaIcons.faCircleDot,
-    FaIcons.faStar,
+    FaIcons.faCircleInfo,
     FaIcons.faCopyright,
     FaIcons.faArrowUp,
+    FaIcons.faPenFancy,
 
     FaBrands.faReact,
     FaBrands.faJs,
@@ -48,10 +53,14 @@ library.add(
     FaBrands.faAws,
     FaBrands.faDiscord,
     FaBrands.faFontAwesome,
-    FaBrands.faCloudflare
+    FaBrands.faCloudflare,
+    FaBrands.faJava,
+    FaBrands.faGolang
 );
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).
+    use(VueObserveVisibility).
     use(personalRouter).
     use(pinia).
+    use(head).
     mount('#app');

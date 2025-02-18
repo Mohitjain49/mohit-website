@@ -8,6 +8,9 @@ import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_Icon.png";
+import expo_icon from "../assets/sublo/Expo_Icon.svg";
+import vite_icon from "../assets/Vite_Icon.svg";
+import nuxt_icon from "../assets/Nuxt_Icon.png";
 
 import aws_icon from "../assets/aws/AWS_Icon.png";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
@@ -42,16 +45,18 @@ export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
+export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/en/";
 
 export const SOCIALS = [
     {
         name: "Work Email",
-        displayLink: "mohitkjainwork@gmail.com",
-        link: "mailto:mohitkjainwork@gmail.com",
+        displayLink: "mohitkjain49@gmail.com",
+        link: "mailto:mohitkjain49@gmail.com",
         copyBtn: "Copy Email",
         linkBtn: "Send Email",
         linkIcon: "fa-envelope",
-        color: "var(--website-text)"
+        color: "var(--website-text)",
+        altColor: "var(--website-text)"
     },
     {
         name: "LinkedIn",
@@ -60,7 +65,8 @@ export const SOCIALS = [
         copyBtn: "Copy LinkedIn Link",
         linkBtn: "Go To LinkedIn",
         linkIcon: "fa-brands fa-linkedin",
-        color: "#0072B1"
+        color: "#0072B1",
+        altColor: "#0072B1"
     },
     {
         name: "Discord",
@@ -69,7 +75,8 @@ export const SOCIALS = [
         copyBtn: "Copy Discord Link",
         linkBtn: "Go To Discord",
         linkIcon: "fa-brands fa-discord",
-        color: "#5865F2"
+        color: "#5865F2",
+        altColor: "#5865F2"
     },
     {
         name: "GitHub",
@@ -78,18 +85,168 @@ export const SOCIALS = [
         copyBtn: "Copy GitHub Link",
         linkBtn: "Go To Github",
         linkIcon: "fa-brands fa-github",
-        color: "white"
+        color: "white",
+        altColor: "black"
     },
 ];
 
-export const CREDIT_ENTITIES = [
+export const SKILL_ENTITIES = [
+    {
+        name: "Vue.js",
+        link: VUEJS_WEBSITE_LINK,
+        color: "#41B883",
+        desc: "Vue.js is an extremely lightweight and simple web development framework that is mainly developed by a team of independent, professional developers. " +
+            "I used this for a majority of my projects, including Worlds iVue, iVue's company websites, and the website you are on right now.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "React Native",
+        link: REACT_NATIVE_WEBSITE_LINK,
+        color: "#61DBFB",
+        desc: "React Native, created by Meta, is a popular library that can be used to make apps for all platforms. " +
+            "It shines in mobile app development, however, and I used it to help develop a mobile application with other college students.",
+
+        icon: {
+            id: react_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "Angular",
+        link: "https://angular.dev/",
+        color: "#F3227F",
+        desc: "Angular is another popular web development framework that is supported by Google. " +
+            "With TypeScript at its base, an Angular project can scale to any size. " +
+            "I used it to make a mock pizza order and delivery system for my software engineering class.",
+
+        icon: {
+            id: angular_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "Vite",
+        link: "https://vite.dev/",
+        color: "#9863FE",
+        desc: "Vite is a frontend building tool that simplifies developing, building, and deploying frontend applications. " +
+            "It is used by most major JS Frameworks today, including Vue.js, React Router, Angular, etc.",
+
+        icon: {
+            id: vite_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "Expo",
+        link: "https://expo.dev/",
+        color: "black",
+        desc: "Expo is a framework that utilizes React Native to help developers create, build, and deploy apps " +
+            "that work on Android, iOS, and the web all at once. I used it to develop a mobile app at Sublo.",
+
+        icon: {
+            id: expo_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "Nuxt",
+        link: "https://nuxt.com/",
+        color: "#00DC82",
+        desc: "Nuxt is a web framework that's built with Vue.js and comes with a whole host of features. " +
+            "It's particularly useful when use Vue Components to generate a static site " +
+            "or a server-side rendered site for quality search engine optimization.",
+
+        icon: {
+            id: nuxt_icon,
+            faIcon: false,
+            width: "125"
+        }
+    },
+    {
+        name: "AWS",
+        link: "https://aws.amazon.com/",
+        color: "#5468ff",
+        desc: "I use Amazon Web Services (AWS) for almost any web service I need. " +
+            "Every big project I have worked on used AWS in some way, whether I needed to deploy an website, " +
+            "manage user authentication, setup business emails, or make an API for a Lambda function.",
+
+        icon: {
+            id: "fa-brands fa-aws",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "Cesium",
+        link: "https://cesium.com/",
+        color: "#6DABE4",
+        desc: "Cesium is a 3D geospatial platform that I used to develop Worlds iVue and the Globe Webpage for my website. " +
+            "Due to its extensive documentation on all its features, Cesium isn't that complicated to learn and " +
+            "can perform a seemingly boundless variety of tasks related to geospatial platforms.",
+
+        icon: {
+            id: cesium_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "MAVLink",
+        link: MAVLINK_WEBSITE_LINK,
+        color: "#FF6600",
+        desc: "MAVLink is a lightweight messaging protocol that can communicate with drones. " +
+            "Worlds iVue extensively uses the protocol to have drones perform extensive actions, including running waypoint missions. " +
+            "The protocol can also control other servos connected to a drone in a wide variety of ways.",
+
+        icon: {
+            id: mavlink_icon,
+            faIcon: false,
+            width: "105"
+        }
+    },
+    {
+        name: "GitHub",
+        link: "https://github.com/",
+        color: "black",
+        desc: "I use GitHub as my go to version control app for all my projects. " +
+            "It's extremely reliable for me and my team at iVue to use this for all projects, and it helps store archived code. " +
+            "With GitHub Actions, I can even set up CI/CD pipelines for my websites to autonomously deploy updates online.",
+
+        icon: {
+            id: "fa-brands fa-github",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "Cloudflare",
+        link: "https://www.cloudflare.com/",
+        color: "#F58A27",
+        desc: "Cloudflare has a free platform called Cloudflare Pages that simplifies deploying full-stack applications to the web. " +
+            "It has a free version that I use to ensure that my web development projects run smoothly online.",
+
+        icon: {
+            id: "fa-brands fa-cloudflare",
+            faIcon: true,
+            size: "110px"
+        }
+    },
     {
         name: "Font Awesome",
         link: "https://fontawesome.com/",
         color: "rgb(83, 141, 215)",
-        desc: "I have used free font awesome icons across this website. " +
-            "There's a paper plane next to \"Contact Me\", file icons for my resume and the website's updates, " +
-            "brand icons on the contact page, and many more icons across the website.",
+        desc: "I have used free font awesome icons across all my frontend development projects. " +
+            "By representing brands, webpages, and simple features with a wide catalog of icons, " +
+            "I add on to the visual appeal of my projects.",
 
         icon: {
             id: "fa-brands fa-font-awesome",
@@ -103,7 +260,7 @@ export const CREDIT_ENTITIES = [
         color: "#F59D0A",
         desc: "Amazon Web Services (AWS) has an entire website dedicated to their icons. " +
             "Nearly every AWS service and more has a specialized icon, " +
-            "and I use these icons on the aws page and other places on my website.",
+            "and I use these icons on the AWS page and other places on my website.",
 
         icon: {
             id: aws_icons_logo,
@@ -112,82 +269,77 @@ export const CREDIT_ENTITIES = [
         }
     },
     {
-        name: "Vue.js",
-        link: VUEJS_WEBSITE_LINK,
-        color: "#41B883",
-        desc: "I used Vue.js to develop this website, making it the main topic on one of this website's pages. " +
-            "It's extremely lightweight compared to angular and react and simple for beginners. " +
-            "My team and I at iVue have even developed iVue's company websites and Worlds iVue with this framework.",
+        name: "JavaScript",
+        link: "#",
+        color: "#D3B62A",
+        desc: "I've learned how to code with JavaScript, TypeScript, and Node.js to make various functions. " +
+            "These sit at the core of all the frameworks and modules I have used for my projects.",
 
         icon: {
-            id: vue_icon,
-            faIcon: false,
-            width: "105"
-        }
-    },
-    {
-        name: "AWS",
-        link: "https://aws.amazon.com/",
-        color: "#5468ff",
-        desc: "With Amazon Web Services (AWS), I am able to deploy and enhance my website with a combination of services. " +
-            "I use Amazon S3 to host this static website, Amazon CloudFront to deliver the website online, " +
-            "and Amazon Route 53 to put this website under a custom domain.",
-
-        icon: {
-            id: "fa-brands fa-aws",
+            id: "fa-brands fa-js",
             faIcon: true,
             size: "110px"
         }
     },
     {
-        name: "Cesium",
-        link: "https://cesium.com/",
-        color: "#6DABE4",
-        desc: "I used Cesium as the main geospatial service for my personal globe. " +
-            "It's also used with Worlds iVue. Due to its extensive documentation on all its features, " +
-            "Cesium isn't that complicated to learn and can perform a variety of tasks related to geospatial platforms.",
+        name: "Java",
+        link: "https://www.java.com/en/",
+        color: "#EC2025",
+        desc: "While I haven't developed any major projects with Java, this is the first language that I learned. " +
+            "I'll most likely use Kotlin to develop an Android App in the future if I have the time.",
 
         icon: {
-            id: cesium_icon,
-            faIcon: false,
-            width: "105"
-        }
-    },
-    {
-        name: "GitHub",
-        link: "https://github.com/",
-        color: "black",
-        desc: "I use GitHub as this website's version control. It's very reliable due to " +
-            "its intuitive user interfaces on its website and desktop app and helpful CI/CD pipelines with GitHub Actions.",
-
-        icon: {
-            id: "fa-brands fa-github",
+            id: "fa-brands fa-java",
             faIcon: true,
             size: "110px"
         }
     },
     {
-        name: "iVue",
-        link: MAIN_IVUE_WEBSITE_LINK,
-        color: "black",
-        desc: "Throughout my website, I use many of iVue's logos, icons, and screenshots of the company's websites " +
-            "to outline my contributions to iVue and my experience with the company as a software developer.",
+        name: "GoLang",
+        link: "https://go.dev/",
+        color: "#00ABD7",
+        desc: "GoLang, supported by Google, is great for developing backend systems for applications. " +
+            "I learned it when I started at iVue, and its used in the current order application for iVue Media's services.",
 
         icon: {
-            id: ivue_black_text,
-            faIcon: false,
-            width: "155"
+            id: "fa-brands fa-golang",
+            faIcon: true,
+            size: "110px"
         }
     },
     {
-        name: "Cloudflare",
-        link: "https://www.cloudflare.com/",
-        color: "#F58A27",
-        desc: "Cloudflare has a free platform called Cloudflare Pages that simplifies deploying full-stack applications to the web. " +
-            "It has a free version that I use to ensure that my web development projects run smoothly online.",
+        name: "HTML",
+        link: "#",
+        color: "#E34E26",
+        desc: "Through my experience with frontend frameworks, I have learned how to develop intuitive UIs with HTML.",
 
         icon: {
-            id: "fa-brands fa-cloudflare",
+            id: "fa-brands fa-html5",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "CSS",
+        link: "#",
+        color: "#264DE4",
+        desc: "Through my experience with frontend frameworks, I have learned how to develop visually appealing styles with CSS.",
+
+        icon: {
+            id: "fa-brands fa-css3-alt",
+            faIcon: true,
+            size: "110px"
+        }
+    },
+    {
+        name: "More Info",
+        link: "/skills",
+        color: "var(--website-light-text)",
+        desc: "I have made many pages describing the software development skills I accumalated since the start of my journey. " +
+            "Click on this card or the \"Skills\" link at the top for more info.",
+
+        icon: {
+            id: "fa-circle-info",
             faIcon: true,
             size: "110px"
         }
@@ -298,7 +450,7 @@ export const NAV_CARDS = [
         desc: "Explore my ongoing development with Worlds iVue, a geospatial app " +
             "that serves as a drone control operator and will serve as a media sharing app in the future.",
         
-        pointsTitle: "Frameworks/Modules Used:",
+        pointsTitle: "Dev Stack:",
         bulletPoints: [ "Vue.js", "Cesium", "MAVLink", "Amazon Web Services" ],
 
         pictureBarClass: "wiv-nav-picture-bar",
@@ -326,7 +478,7 @@ export const NAV_CARDS = [
         desc: "Navigate through my work with developing the latest versions of the iVue Websites, " +
             "serving as a way for potential customers to see our mission of making drones an everyday product.",
     
-        pointsTitle: "Frameworks I Used:",
+        pointsTitle: "Dev Stack:",
         bulletPoints: [ "Vue.js" ],
 
         pictureBarClass: "ivue-web-nav-picture-bar",
@@ -355,8 +507,8 @@ export const NAV_CARDS = [
         desc: "See my work with developing Sublo, a subleasing mobile app that will make subleasing easier " +
             "for college students to find and list subleases for their dormitories or apartments.",
     
-        pointsTitle: "Frameworks I Used:",
-        bulletPoints: [ "React Native" ],
+        pointsTitle: "Dev Stack:",
+        bulletPoints: [ "React Native", "Expo" ],
 
         pictureBarClass: "sublo-nav-picture-bar",
         pictures: [
@@ -379,7 +531,7 @@ export const NAV_CARDS = [
         },
 
         color: "#5468ff",
-        desc: "Check out some of the Amazon Web Sevrives that I configure to amplify Worlds iVue and Sublo.",
+        desc: "Check out some of the Amazon Web Services that I configure to amplify Worlds iVue and Sublo.",
 
         pointsTitle: "Services Include:",
         bulletPoints: [ "AWS Amplify",
@@ -430,7 +582,7 @@ export const NAV_CARDS = [
     {
         id: "frontend-nav-card",
         titleId: "frontend-nav-card-title",
-        route: "/skills/frontend/vuejs",
+        route: "/skills/frontend",
     
         title: {
             text: "Frontend",
@@ -442,12 +594,12 @@ export const NAV_CARDS = [
             size: "42px"
         },
     
-        color: "#F7DF1E",
+        color: "#FFF03C",
         desc: "Read about my experience on how I used numerous Frontend JavaScript Frameworks, " +
             "especially Vue.js, to create professional websites and applications.",
 
         pointsTitle: "Related Projects:",
-        bulletPoints: [ "Worlds iVue", "iVue's Company Websites", "Pizza Project", "Sublo", "My Website" ],
+        bulletPoints: [ "My Website", "Worlds iVue", "iVue's Company Websites", "Pizza Project", "Sublo" ],
 
         pictureBarClass: "vue-nav-picture-bar",
         pictures: [
@@ -613,7 +765,7 @@ export const IVUE_WEBSITE_INFO_SECTORS = [
                 "I co-created " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + ", iVue's 3D globe application. " +
                 "Furthermore, I lead iVue's Website Development Team, ensuring that iVue's websites promote our leading products and services. " +
                 "These projects have provided me the opportunity to master " + getLinkElement("Vue.js", VUEJS_WEBSITE_LINK) + ", " +
-                getLinkElement("Cesium", "https://cesium.com/") + ", " + getLinkElement("MAVLink", "https://mavlink.io/en/") + ", " +
+                getLinkElement("Cesium", "https://cesium.com/") + ", " + getLinkElement("MAVLink", MAVLINK_WEBSITE_LINK) + ", " +
                 getLinkElement("AWS", "https://aws.amazon.com/") + ", and a wide variety of other software skills.",
             "I began my journey at iVue in January 2023 as a high school intern and have grown with the company ever since. " +
                 "Over the years, iVue has expanded its team with skilled software developers and introduced a diverse range of new products and services. " + 
@@ -864,7 +1016,7 @@ export const MAVLINK_INFO_SECTOR = {
     },
 
     buttons: [
-        { title: "Go To MAVLink Protocol Website", link: "https://mavlink.io/en/" }
+        { title: "Go To MAVLink Protocol Website", link: MAVLINK_WEBSITE_LINK }
     ],
     descriptions: [
         "The MAVLink Protocol, short for Micro Air Vehicle Communication Protocol, " +
@@ -885,7 +1037,7 @@ export const MAVLINK_INFO_SECTOR = {
         {
             header: "",
             file: mavlink_banner,
-            fileLink: "https://mavlink.io/en/",
+            fileLink: MAVLINK_WEBSITE_LINK,
             links: []
         }
     ]
