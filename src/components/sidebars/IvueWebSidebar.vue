@@ -1,67 +1,38 @@
 <template>
 <div class="skill-sidebar-container skill-sidebar" :class="(classPrefix + 'ivue-sidebar')">
     <div class="skill-sidebar-container">
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            @click="navigateIvuePages('')"
-            title="My Role At iVue">
+        <RouterLink :to="getIvueRoute('')" :class="returnSidebarOptClasses()" title="My Role At iVue">
+            <font-awesome-icon class="skill-sidebar-opt-icon" icon="fa-laptop-code" :style="blackWhiteIcons.faIconColor" />
+        </RouterLink>
 
-            <font-awesome-icon class="skill-sidebar-opt-icon"
-                icon="fa-laptop-code" draggable="false"
-                :style="blackWhiteIcons.faIconColor"
-            />
-        </div>
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            @click="navigateIvuePages('web')"
-            title="Main iVue Website">
-
+        <RouterLink :to="getIvueRoute('website')" :class="returnSidebarOptClasses()" title="Main iVue Website">
             <img :src="blackWhiteIcons.ivueText" class="skill-sidebar-opt-icon-v2" width="40" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            @click="navigateIvuePages('ivuemedia')"
-            title="iVue Media Website">
+        </RouterLink>
 
+        <RouterLink :to="getIvueRoute('ivuemedia')" :class="returnSidebarOptClasses()" title="iVue Media">
             <img :src="media_icon" class="skill-sidebar-opt-icon-v2" width="30" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            @click="navigateIvuePages('ivuerobotics')"
-            title="iVue Robotics Website">
+        </RouterLink>
 
+        <RouterLink :to="getIvueRoute('ivuerobotics')" :class="returnSidebarOptClasses()" title="iVue Robotics">
             <img :src="robotics_icon" :class="returnRoboticsIconClass()" width="30" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            @click="navigateIvuePages('worldsivue')"
-            title="Worlds iVue">
+        </RouterLink>
 
+        <RouterLink :to="getIvueRoute('worldsivue')" :class="returnSidebarOptClasses()" title="Worlds iVue">
             <img :src="wiv_icon" :class="returnWIVIconClass()" width="30" draggable="false" />
-        </div>
+        </RouterLink>
     </div>
-    <div class="skill-sidebar-container">
-        <a :href="VUEJS_WEBSITE_LINK" target="_blank"
-            class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            title="Vue.js">
 
+    <div class="skill-sidebar-container">
+        <a :href="VUEJS_WEBSITE_LINK" target="_blank" :class="returnSidebarOptClasses()" title="Vue.js">
             <img :src="vuejs_icon" class="skill-sidebar-opt-icon-v2" width="25" draggable="false" />
         </a>
-        <RouterLink to="/experience" class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            title="Back To Experience Page">
 
+        <RouterLink to="/experience" :class="returnSidebarOptClasses()" title="Back To Experience Page">
             <img :src="blackWhiteIcons.returnIcon" class="skill-sidebar-opt-icon-v2" draggable="false" />
         </RouterLink>
-        <RouterLink to="/" class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'ivue-sidebar-opt')"
-            title="Back To Home Page">
 
-            <font-awesome-icon class="skill-sidebar-opt-icon"
-                icon="fa-house" draggable="false"
-                :style="blackWhiteIcons.faIconColor"
-            />
+        <RouterLink to="/" :class="returnSidebarOptClasses()" title="Back To Home Page">
+            <font-awesome-icon class="skill-sidebar-opt-icon" icon="fa-house" :style="blackWhiteIcons.faIconColor" />
         </RouterLink>
     </div>
 </div>
@@ -80,13 +51,12 @@ import media_icon from "@/assets/ivue/iVue_Media_Icon.png";
 import robotics_icon from "@/assets/ivue/iVue_Robotics_Cog_Icon.png";
 
 import { VUEJS_WEBSITE_LINK } from "@/stores/Objects.js";
-import { RouterLink, useRoute, useRouter } from "vue-router";
+import { RouterLink, useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 
 const route = useRoute();
-const router = useRouter();
-
 const classPrefix = ref("main-");
+
 const blackWhiteIcons= ref({
     faIconColor: { color: "black" },
     returnIcon: return_black_icon,
@@ -94,26 +64,30 @@ const blackWhiteIcons= ref({
 });
 
 onMounted(() => {
-    const subRoute = route.params.id;
+    const subRoute = route.path.substring("/experience/ivue/".length);
     setIconColor();
 
-    if(subRoute == undefined || subRoute === "web") {
-        classPrefix.value = "main-";
-    } else if(subRoute === "ivuemedia") {
-        classPrefix.value = "media-";
-    } else if(subRoute === "ivuerobotics") {
-        classPrefix.value = "robotics-";
-    } else if(subRoute === "worldsivue") {
-        classPrefix.value = "wiv-";
+    for(let i = 0; i < IVUE_EXPERIENCE_PATHS.length; i++) {
+        if(IVUE_EXPERIENCE_PATHS[i].paths.includes(subRoute)) {
+            classPrefix.value = IVUE_EXPERIENCE_PATHS[i].classPrefix;
+            return;
+        }
     }
 });
 
 /**
- * This function navigates to specific aws pages for the user.
- * @param subRoute The subroute within the aws path.
+ * This function returns the path for a specific iVue Page.
+ * @param subRoute The subroute within the ivue path.
  */
-function navigateIvuePages(subRoute = "") {
-    router.push("/experience/ivue/" + subRoute);
+function getIvueRoute(subRoute = "") {
+    return ("/experience/ivue/" + subRoute);
+}
+
+/**
+ * This returns the classes for a sidebar opt.
+ */
+function returnSidebarOptClasses() {
+    return ["skill-sidebar-opt", "center-flex-display", (classPrefix.value + 'ivue-sidebar-opt')];
 }
 
 /**
@@ -134,8 +108,11 @@ function returnRoboticsIconClass() {
  * This function sets the color of the black and white icons.
  */
 function setIconColor() {
-    const subRoute = route.params.id;
-    const array = [undefined, "web", "worldsivue"];
+    const subRoute = route.path.substring("/experience/ivue/".length);
+    const array = ["main", "me", "", "web",
+        "website", "ivue-website", "main-website",
+        "worldsivue", "wiv", "worlds-ivue"
+    ];
 
     blackWhiteIcons.value = {
         faIconColor: { color: "black" },
@@ -151,4 +128,11 @@ function setIconColor() {
         }
     }
 }
+
+const IVUE_EXPERIENCE_PATHS = [
+    { classPrefix: "main-", paths: ["main", "me", "", "web", "website", "ivue-website", "main-website"] },
+    { classPrefix: "media-", paths: ["ivuemedia", "media", "ivue-media"] },
+    { classPrefix: "robotics-", paths: ["ivuerobotics", "robotics", "ivue-robotics"] },
+    { classPrefix: "wiv-", paths: ["worldsivue", "wiv", "worlds-ivue"] }
+]
 </script>
