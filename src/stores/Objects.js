@@ -598,8 +598,8 @@ export const NAV_CARDS = [
         desc: "Read about my experience on how I used numerous Frontend JavaScript Frameworks, " +
             "especially Vue.js, to create professional websites and applications.",
 
-        pointsTitle: "Related Projects:",
-        bulletPoints: [ "My Website", "Worlds iVue", "iVue's Company Websites", "Pizza Project", "Sublo" ],
+        pointsTitle: "Frameworks:",
+        bulletPoints: [ "Vue.js", "React Native", "Angular" ],
 
         pictureBarClass: "vue-nav-picture-bar",
         pictures: [

@@ -9,11 +9,20 @@ import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
-import FrontendSkills from "./pages/skills/FrontendSkills.vue";
-import AWSSkills from "./pages/skills/AWSSkills.vue";
-
 import ExperienceMain from "./pages/experience/ExperienceMain.vue";
 import SubloMain from "./pages/experience/SubloMain.vue";
+
+import AmazonMain from "./pages/skills/amazon/AmazonMain.vue";
+import AmazonAmplify from "./pages/skills/amazon/AmazonAmplify.vue";
+import AmazonCognito from "./pages/skills/amazon/AmazonCognito.vue";
+import AmazonS3 from "./pages/skills/amazon/AmazonS3.vue";
+import AmazonWorkmail from "./pages/skills/amazon/AmazonWorkmail.vue";
+import AmazonCloudfront from "./pages/skills/amazon/AmazonCloudfront.vue";
+import AmazonRoute53 from "./pages/skills/amazon/AmazonRoute53.vue";
+
+import VuejsFrontend from "./pages/skills/frontend/VuejsFrontend.vue";
+import ReactNativeFrontend from "./pages/skills/frontend/ReactNativeFrontend.vue";
+import AngularFrontend from "./pages/skills/frontend/AngularFrontend.vue";
 
 import CesiumModule from "./pages/skills/modules/CesiumModule.vue";
 import MAVLinkModule from "./pages/skills/modules/MAVLinkModule.vue";
@@ -47,17 +56,24 @@ const personalRoutes = [
         children: [
             { path: "", name: "Main Skills Page", component: SkillsNav },
             { path: "frontend", children: [
-                { path: "", name: "Skills Frontend Page", component: FrontendSkills },
-                // { path: ":id", name: "Skills Frontend Dynamic Page", component: FrontendSkills },
+                { path: "", redirect: "/skills/frontend/vuejs" },
+                { path: "vuejs", alias: ['vue'], name: "Vuejs Frontend", component: VuejsFrontend },
+                { path: "reactnative", alias: ['react'], name: "React Native Frontend", component: ReactNativeFrontend },
+                { path: "angular", alias: ['angularjs'], name: "Angular Frontend", component: AngularFrontend },
             ]},
             { path: "modules", children: [
                 { path: "", redirect: "/skills/modules/cesium" },
                 { path: "cesium", alias: ["cesiumjs"], name: "Cesium Module", component: CesiumModule },
                 { path: "mavlink", alias: ["mavlink-protocol"], name: "MAVLink Module", component: MAVLinkModule }
             ]},
-            { path: "aws", alias: ['amazon'], children: [
-                { path: "", name: "Skills AWS Page", component: AWSSkills },
-                // { path: ":id", name: "Skills AWS Dynamic Page", component: AWSSkills },
+            { path: "aws", alias: ["amazon"], children: [
+                { path: "", alias: ["main"], name: "Skills AWS Page", component: AmazonMain },
+                { path: "amplify", name: "AWS Amplify Page", component: AmazonAmplify },
+                { path: "cognito", name: "Amazon Cognito Page", component: AmazonCognito },
+                { path: "s3", name: "Amazon S3 Page", component: AmazonS3 },
+                { path: "cloudfront", name: "Amazon Cloudfront Page", component: AmazonCloudfront },
+                { path: "route53", name: "Amazon Route 53 Page", component: AmazonRoute53 },
+                { path: "workmail", name: "Amazon Workmail Page", component: AmazonWorkmail },
             ]},
         ]
     },
