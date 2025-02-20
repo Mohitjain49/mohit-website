@@ -34,8 +34,7 @@ onMounted(() => { initWebData(); });
 
 const WEBSITE_PATH = "https://mohit-jain.com/experience/";
 const PAGE_TITLE = "Mohit Jain | My Experience";
-const PAGE_DESC = "My personal website extensively displays my skills as a software developer " +
-    "and the experience I have gathered through working with multiple companies. Made With Vue.js.";
+const PAGE_DESC = "On this page, I go into depth about my work experience.";
 
 useHead({
     title: PAGE_TITLE,

@@ -9,7 +9,7 @@
 
 <script setup>
 import NavigationMain from "../components/NavigationMain.vue";
-import resume from "../assets/documents/Mohit_Jain_Resume.pdf";
+import resume from "/Mohit_Jain_Resume.pdf";
 
 import { initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
 import { onMounted, onUnmounted } from "vue";

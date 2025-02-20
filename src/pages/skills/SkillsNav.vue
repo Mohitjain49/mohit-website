@@ -34,8 +34,9 @@ onMounted(() => { initWebData(); });
 
 const WEBSITE_PATH = "https://mohit-jain.com/skills/";
 const PAGE_TITLE = "Mohit Jain | My Skills";
-const PAGE_DESC = "My personal website extensively displays my skills as a software developer " +
-    "and the experience I have gathered through working with multiple companies. Made With Vue.js.";
+const PAGE_DESC = "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
+    "web applications, and projects by utilizing multiple programming languages, " +
+    "frontend frameworks, web services, and modules."
 
 useHead({
     title: PAGE_TITLE,

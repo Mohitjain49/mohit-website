@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import MJ_Resume from "../assets/documents/Mohit_Jain_Resume.pdf";
+import MJ_Resume from "/Mohit_Jain_Resume.pdf";
 
 export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     const dateStore = useDateStore();
