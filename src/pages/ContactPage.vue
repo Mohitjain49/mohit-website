@@ -1,117 +1,117 @@
 <template>
-<InitPage :pageTitle="'Mohit Jain | Contact Me'" />
-<NavigationMain />
-
-<div id="contact-page" class="personal-web-body" @click="closeNavBarDropdown()">
-    <div class="contact-me-box web-service">
-        <div class="contact-box-title-container center-flex-display">
-            <div class="gradient-text contact-box-title">Contact Me</div>
-        </div>
-        <div class="contact-box-desc">
-            <span v-html="CONTACT_ME_DESC"></span>
-        </div>
-
-        <div class="contact-box-content">
-            <div class="contact-input-tab">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Title</div>
-                </div>
-                <input class="contact-input-tab-textbox"
-                    v-model="msgTitle"
-                    @click="setAlertBox('')"
-                >
+<client-only>
+    <NavigationMain />
+    <div id="contact-page" class="personal-web-body" @click="closeNavBarDropdown()">
+        <div class="contact-me-box web-service">
+            <div class="contact-box-title-container center-flex-display">
+                <div class="gradient-text contact-box-title">Contact Me</div>
             </div>
-            <div class="contact-input-tab" style="height: calc(100% - 70px);">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Your Message</div>
-                </div>
-                <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
-                    placeholder="Type your message here..."
-                    v-model="msgMain"
-                    @click="setAlertBox('')"
-                ></textarea>
+            <div class="contact-box-desc">
+                <span v-html="CONTACT_ME_DESC"></span>
             </div>
-            <div class="contact-box-line"></div>
 
-            <div class="contact-input-tab">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Your Name</div>
-                </div>
-                <input class="contact-input-tab-textbox"
-                    placeholder="Mohit Jain"
-                    v-model="senderName"
-                    @click="setAlertBox('')"
-                >
-            </div>
-            <div class="contact-input-tab">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Your Email</div>
-                </div>
-                <input class="contact-input-tab-textbox"
-                    type="email" placeholder="example@example.com"
-                    v-model="senderEmail"
-                    @click="setAlertBox('')"
-                >
-            </div>
-            <div class="contact-box-buttons-container center-flex-display">
-                <div class="contact-input-tab-btn-container center-flex-display">
-                    <div class="contact-input-tab-btn center-flex-display" @click="sendEmail()">Send Message</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="contact-me-box socials">
-        <div class="contact-box-title-container center-flex-display">
-            <div class="gradient-text contact-box-title">My Socials</div>
-        </div>
-        <div class="contact-box-desc">
-            <span v-html="MY_SOCIALS_DESC"></span>
-        </div>
-
-        <div class="contact-box-content">
-            <div class="social-tab" v-for="social in SOCIALS" :style="{ color: social.altColor }">
-                <div class="social-tab-header"> {{ social.name }} </div>
-                <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
-
-                <div class="social-tab-btn-container">
-                    <div class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
-                        @mouseenter="setSocialBtnTransition"
-                        @mouseleave="setSocialBtnTransition">
-
-                        <span> {{ social.copyBtn }} </span>
-                        <font-awesome-icon icon="fa-copy" />
+            <div class="contact-box-content">
+                <div class="contact-input-tab">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">Title</div>
                     </div>
-                    <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
-                        @mouseenter="setSocialBtnTransition"
-                        @mouseleave="setSocialBtnTransition">
+                    <input class="contact-input-tab-textbox"
+                        v-model="msgTitle"
+                        @click="setAlertBox('')"
+                    >
+                </div>
+                <div class="contact-input-tab" style="height: calc(100% - 70px);">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">Your Message</div>
+                    </div>
+                    <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
+                        placeholder="Type your message here..."
+                        v-model="msgMain"
+                        @click="setAlertBox('')"
+                    ></textarea>
+                </div>
+                <div class="contact-box-line"></div>
 
-                        <span> {{ social.linkBtn }} </span>
-                        <font-awesome-icon :icon="social.linkIcon" />
-                    </a>
+                <div class="contact-input-tab">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">Your Name</div>
+                    </div>
+                    <input class="contact-input-tab-textbox"
+                        placeholder="Mohit Jain"
+                        v-model="senderName"
+                        @click="setAlertBox('')"
+                    >
+                </div>
+                <div class="contact-input-tab">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">Your Email</div>
+                    </div>
+                    <input class="contact-input-tab-textbox"
+                        type="email" placeholder="example@example.com"
+                        v-model="senderEmail"
+                        @click="setAlertBox('')"
+                    >
+                </div>
+                <div class="contact-box-buttons-container center-flex-display">
+                    <div class="contact-input-tab-btn-container center-flex-display">
+                        <div class="contact-input-tab-btn center-flex-display" @click="sendEmail()">Send Message</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <WebFooter class="web-footer-contact" />
-</div>
 
-<Transition name="alertBoxTransition">
-    <div class="contact-alert-box" v-if="(alertBoxText !== '')">
-        <div class="contact-alert-box-text" v-html="alertBoxText"></div>
+        <div class="contact-me-box socials">
+            <div class="contact-box-title-container center-flex-display">
+                <div class="gradient-text contact-box-title">My Socials</div>
+            </div>
+            <div class="contact-box-desc">
+                <span v-html="MY_SOCIALS_DESC"></span>
+            </div>
+
+            <div class="contact-box-content">
+                <div class="social-tab" v-for="social in SOCIALS" :style="{ color: social.altColor }">
+                    <div class="social-tab-header"> {{ social.name }} </div>
+                    <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
+
+                    <div class="social-tab-btn-container">
+                        <div class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
+                            @mouseenter="setSocialBtnTransition"
+                            @mouseleave="setSocialBtnTransition">
+
+                            <span> {{ social.copyBtn }} </span>
+                            <font-awesome-icon icon="fa-copy" />
+                        </div>
+                        <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
+                            @mouseenter="setSocialBtnTransition"
+                            @mouseleave="setSocialBtnTransition">
+
+                            <span> {{ social.linkBtn }} </span>
+                            <font-awesome-icon :icon="social.linkIcon" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <WebFooter class="web-footer-contact" />
     </div>
-</Transition>
+
+    <Transition name="alertBoxTransition">
+        <div class="contact-alert-box" v-if="(alertBoxText !== '')">
+            <div class="contact-alert-box-text" v-html="alertBoxText"></div>
+        </div>
+    </Transition>
+</client-only>
 </template>
 
 <script setup>
-import InitPage from '../components/InitPage.vue';
 import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
 import { SOCIALS } from '../stores/Objects.js';
 
 import axios from 'axios';
-import { closeNavBarDropdown } from '../stores/WebsiteData.js';
-import { ref, onMounted } from 'vue';
+import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
+import { ref, onMounted, nextTick } from 'vue';
+import { useHead } from '@unhead/vue';
 
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 const alertBoxText = ref("");
@@ -121,6 +121,26 @@ const msgTitle = ref("");
 const msgMain = ref("");
 const senderName = ref("");
 const senderEmail = ref("");
+
+const WEBSITE_PATH = "https://mohit-jain.com/contact";
+const PAGE_TITLE = "Mohit Jain | Contact Me";
+const PAGE_DESC = "This page hosts multiple links to platforms where you can contact me.";
+
+useHead({
+    title: PAGE_TITLE,
+
+    meta: [
+        { name: 'description', content: PAGE_DESC },
+
+        { property: 'og:url', content: WEBSITE_PATH },
+        { property: 'og:title', content: PAGE_TITLE },
+        { property: 'og:description', content: PAGE_DESC },
+
+        { property: 'twitter:url', content: WEBSITE_PATH },
+        { property: 'twitter:title', content: PAGE_TITLE },
+        { property: 'twitter:description', content: PAGE_DESC },
+    ]
+})
 
 /**
  * ----------------------------------------------------
@@ -132,9 +152,13 @@ const senderEmail = ref("");
  * This adds a transition to the contact boxes if the screen width is large enough.
  */
 onMounted(() => {
+    initWebData();
     if(window.innerWidth <= 525) { return; }
-    document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
-    document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
+
+    nextTick(() => {
+        document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
+        document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
+    })
 })
 
 /**
