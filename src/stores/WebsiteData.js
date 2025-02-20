@@ -162,6 +162,14 @@ export const useDateStore = defineStore("DateStore", () => {
 });
 
 /**
+ * This function mounts the website data pinia store on a page.
+ */
+export function initWebData() {
+    const webData = useWebsiteDataStore();
+    webData.mountWebData();
+}
+
+/**
  * This function closes the Navigation Bar's dropdown menu.
  */
 export function closeNavBarDropdown() {

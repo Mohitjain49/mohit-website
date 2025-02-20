@@ -1,5 +1,3 @@
-import { createRouter, createWebHistory } from "vue-router";
-
 import PersonalMain from "./pages/PersonalMain.vue";
 import ContactPage from "./pages/ContactPage.vue";
 import Resume from "./pages/Resume.vue";
@@ -33,7 +31,10 @@ import IvueMediaWebsite from "./pages/experience/ivue/IvueMediaWebsite.vue";
 import IvueRoboticsWebsite from "./pages/experience/ivue/IvueRoboticsWebsite.vue";
 import WorldsIvue from "./pages/experience/ivue/WorldsIvue.vue";
 
-const personalRoutes = [
+/**
+ * @type {import('vue-router').RouteRecordRaw[]} The raw route records for the website.
+ */
+export const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
     { path: "/resume", name: "My Resume", component: Resume },
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
@@ -93,10 +94,3 @@ const personalRoutes = [
         ]
     },
 ];
-
-const personalRouter = createRouter({
-    history: createWebHistory(),
-    routes: personalRoutes
-});
-
-export default personalRouter;
