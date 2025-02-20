@@ -67,6 +67,7 @@ const pictureShown = ref(0);
 var pictureInterval = null;
 
 onMounted(() => {
+    document.getElementById(props.sectorObj.id).classList.add("animate__animated", "animate__jackInTheBox");
     document.getElementsByClassName(props.sectorObj.pictureBarClass).item(0).style.backgroundColor = props.sectorObj.color;
     if(props.sectorObj.pictures.length > 1) { setPictureInterval(); }
 })

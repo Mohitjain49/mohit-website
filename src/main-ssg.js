@@ -1,20 +1,9 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import { createHead } from '@unhead/vue'
-
-import { createRouter, createWebHistory } from 'vue-router'
+import { ViteSSG } from "vite-ssg";
+import { createPinia } from "pinia";
 import VueObserveVisibility from 'vue3-observe-visibility'
 
-import App from './App.vue'
-import { personalRoutes } from './routes.js';
-
-const personalRouter = createRouter({
-    history: createWebHistory(),
-    routes: personalRoutes
-});
-
-const pinia = createPinia();
-const head = createHead();
+import App from "./App.vue";
+import { personalRoutes } from "./routes";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -65,9 +54,12 @@ library.add(
     FaBrands.faGolang
 );
 
-createApp(App).component('font-awesome-icon', FontAwesomeIcon).
-    use(VueObserveVisibility).
-    use(personalRouter).
-    use(pinia).
-    use(head).
-    mount('#app');
+export const createApp = ViteSSG(App, { routes: personalRoutes },
+    ({ app, router, isClient }) => {
+        const pinia = createPinia();
+        app.component('font-awesome-icon', FontAwesomeIcon);
+
+        app.use(VueObserveVisibility);
+        app.use(pinia);
+    }
+)

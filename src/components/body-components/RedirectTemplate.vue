@@ -1,25 +1,25 @@
 <template>
-<NavigationMain />
-<div class="personal-web-body" @click="() => {webData.setNavBarDropdown(-1)}">
-    <div class="redirect-statement"> {{ REDIRECT_TEXT }} </div>
-</div>
+<client-only>
+    <NavigationMain />
+    <div class="personal-web-body" @click="closeNavBarDropdown()">
+        <div class="redirect-statement"> {{ REDIRECT_TEXT }} </div>
+    </div>
+</client-only>
 </template>
 
 <script setup>
 import NavigationMain from '../NavigationMain.vue';
-import { useWebsiteDataStore } from '../../stores/WebsiteData.js';
+import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
 import { onMounted } from 'vue';
 
 const props = defineProps({
     websiteLink: { type: String, required: true }
 });
 
-const webData = useWebsiteDataStore();
 const REDIRECT_TEXT = ("Redirecting You To " + props.websiteLink);
 
 onMounted(() => {
-    document.title = REDIRECT_TEXT;
-    webData.mountWebData();
+    initWebData();
     window.location.assign(props.websiteLink);
 });
 </script>

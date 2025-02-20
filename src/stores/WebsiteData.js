@@ -38,13 +38,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     function mountWebData() {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         setNavBarDropdown(-1);
-
-        // On the main skills and experience pages, this adds a transition to the nav cards.
-        const navCards = document.getElementsByClassName("nav-card");
-
-        for(let i = 0; i < navCards.length; i++) {
-            navCards.item(i).classList.add("animate__animated", "animate__jackInTheBox");
-        }
     }
 
     /**
@@ -160,6 +153,14 @@ export const useDateStore = defineStore("DateStore", () => {
         startDateInterval, stopDateInterval
     }
 });
+
+/**
+ * This function mounts the website data pinia store on a page.
+ */
+export function initWebData() {
+    const webData = useWebsiteDataStore();
+    webData.mountWebData();
+}
 
 /**
  * This function closes the Navigation Bar's dropdown menu.

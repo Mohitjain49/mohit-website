@@ -1,25 +1,25 @@
 <template>
 <client-only>
-    <NavigationMain />
-    <div class="personal-web-body" @click="closeNavBarDropdown()">
-        <InfoSector :sectorObj="SUBLO_INFO_SECTOR" />
+    <AmazonSidebar />
+    <div class="personal-web-body personal-web-body-v2" @click="closeNavBarDropdown()">
+        <InfoSector :sectorObj="AWS_INFO_SECTORS[6]" class="info-sector-v2" />
     </div>
 </client-only>
 </template>
 
 <script setup>
-import NavigationMain from "@/components/NavigationMain.vue";
 import InfoSector from '@/components/body-components/InfoSector.vue';
-import { SUBLO_INFO_SECTOR } from '@/stores/Objects.js';
+import AmazonSidebar from '@/components/sidebars/AmazonSidebar.vue';
+import { AWS_INFO_SECTORS } from '@/stores/Objects.js';
 
-import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
+import { initWebData, closeNavBarDropdown } from "@/stores/WebsiteData.js";
 import { onMounted } from "vue";
 import { useHead } from "@unhead/vue";
 
-onMounted(() => { initWebData(); })
+onMounted(() => { initWebData(); });
 
-const WEBSITE_PATH = "https://mohit-jain.com/experience/sublo";
-const PAGE_TITLE = "Mohit Jain | Sublo";
+const WEBSITE_PATH = "https://mohit-jain.com/skills/aws/workmail";
+const PAGE_TITLE = "Mohit Jain | Amazon Web Services (AWS) | Amazon WorkMail";
 const PAGE_DESC = "My personal website extensively displays my skills as a software developer " +
     "and the experience I have gathered through working with multiple companies. Made With Vue.js.";
 
@@ -37,5 +37,5 @@ useHead({
         { property: 'twitter:title', content: PAGE_TITLE },
         { property: 'twitter:description', content: PAGE_DESC },
     ]
-})
+})  
 </script>

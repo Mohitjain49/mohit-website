@@ -1,12 +1,12 @@
 <template>
 <div class="skill-sidebar-container skill-sidebar aws-sidebar">
     <div class="skill-sidebar-container" v-if="webData.pageView != 2">
-        <div v-for="path in AWS_PATHS" :title="path.title"
-            class="skill-sidebar-opt aws-sidebar-opt center-flex-display"
-            @click="navigateAmazonPages(path.route)">
+        <RouterLink v-for="path in AWS_PATHS" :title="path.title"
+            :to="getAmazonRoute(path.route)"
+            class="skill-sidebar-opt aws-sidebar-opt center-flex-display">
 
             <img :src="path.icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </div>
+        </RouterLink>
     </div>
     <div class="skill-sidebar-container" v-if="webData.pageView == 2">
         <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="webData.toggleMobileSidebar()" title="Open Sidebar">
@@ -40,13 +40,14 @@
             <font-awesome-icon icon="fa-bars" class="mobile-skill-sidebar-opt-icon" />
             <span> Close Sidebar </span>
         </div>
-        <div v-for="path in AWS_PATHS"
-            class="mobile-skill-sidebar-opt aws-sidebar-opt"
-            @click="navigateAmazonPages(path.route)">
+
+        <RouterLink v-for="path in AWS_PATHS"
+            :to="getAmazonRoute(path.route)"
+            class="mobile-skill-sidebar-opt aws-sidebar-opt">
 
             <img :src="path.icon" class="mobile-skill-sidebar-opt-icon" draggable="false" />
             <span> {{ path.title }} </span>
-        </div>
+        </RouterLink>
     </div>
 </Transition>
 </template>
@@ -67,12 +68,9 @@ import workmail_icon from "@/assets/aws/AWS_WorkMail_Icon.svg";
 
 import { WORLDS_IVUE_LINK } from "@/stores/Objects.js";
 import { useWebsiteDataStore } from "@/stores/WebsiteData.js";
-
-import { useRouter } from "vue-router";
 import { onBeforeUnmount } from "vue";
 
 const webData = useWebsiteDataStore();
-const router = useRouter();
 const AWS_ICONS_LINK = "https://aws-icons.com/";
 
 onBeforeUnmount(() => {
@@ -80,11 +78,11 @@ onBeforeUnmount(() => {
 })
 
 /**
- * This function navigates to specific aws pages for the user.
+ * This function returns an aws route for a sidebar opt.
  * @param subRoute The subroute within the aws path.
  */
-function navigateAmazonPages(subRoute = "") {
-    router.push("/skills/aws/" + subRoute);
+function getAmazonRoute(subRoute = "") {
+    return ("/skills/aws/" + subRoute);
 }
 
 /**

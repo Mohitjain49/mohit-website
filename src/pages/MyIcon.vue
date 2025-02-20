@@ -1,52 +1,74 @@
 <template>
-<InitPage :pageTitle="'Mohit Jain | My Icons'" :pageDesc="PAGE_DESC" />
-<NavigationMain />
+<client-only>
+    <NavigationMain />
+    <div id="icons-body" class="personal-web-body" @click="closeNavBarDropdown()">
+        <div id="start" class="icon-page-padding"></div>
+        <div class="icon-background blue-zero">
+            <div class="icon-start-header"> My Icons </div>
+            <div class="icon-start-desc">
+                Using a combination of gradients and the Lexend Google Font, I was able to create "icons" for myself,
+                which works well as a stamp for my personal brand.
+            </div>
 
-<div id="icons-body" class="personal-web-body" @click="closeNavBarDropdown()">
-    <div id="start" class="icon-page-padding"></div>
-    <div class="icon-background blue-zero">
-        <div class="icon-start-header"> My Icons </div>
-        <div class="icon-start-desc">
-            Using a combination of gradients and the Lexend Google Font, I was able to create "icons" for myself,
-            which works well as a stamp for my personal brand.
-        </div>
+            <div class="icon-start-widgets">
+                <div v-for="widget in ICON_WIDGETS" class="web-widget-container"
+                    @click="copyImage(widget.img)" title="Copy Image">
 
-        <div class="icon-start-widgets">
-            <div v-for="widget in ICON_WIDGETS" class="web-widget-container"
-                @click="copyImage(widget.img)" title="Copy Image">
-
-                <div class="web-widget"> <img :src="widget.img" /> </div>
-                <div class="web-widget-label"> {{ widget.name }} </div>
+                    <div class="web-widget"> <img :src="widget.img" /> </div>
+                    <div class="web-widget-label"> {{ widget.name }} </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="main" class="icon-page-padding"></div>
-    <div class="icon-background">
-        <div class="icon-text"> MKJ </div>
-    </div>
+        <div id="main" class="icon-page-padding"></div>
+        <div class="icon-background">
+            <div class="icon-text"> MKJ </div>
+        </div>
 
-    <div id="green" class="icon-page-padding"></div>
-    <div class="icon-background green">
-        <div class="icon-text"> MKJ </div>
-    </div>
+        <div id="green" class="icon-page-padding"></div>
+        <div class="icon-background green">
+            <div class="icon-text"> MKJ </div>
+        </div>
 
-    <div id="orange" class="icon-page-padding"></div>
-    <div class="icon-background black">
-        <div class="icon-text orange"> MKJ </div>
+        <div id="orange" class="icon-page-padding"></div>
+        <div class="icon-background black">
+            <div class="icon-text orange"> MKJ </div>
+        </div>
+        <WebFooter />
     </div>
-    <WebFooter />
-</div>
+</client-only>
 </template>
 
 <script setup>
-import InitPage from '../components/InitPage.vue';
 import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
 
-import { closeNavBarDropdown } from '../stores/WebsiteData.js';
+import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
+import { onMounted } from 'vue';
+import { useHead } from '@unhead/vue';
+
+onMounted(() => { initWebData(); });
 const ICON_IMPORT_START = "/static-icons/Personal_Icon";
-const PAGE_DESC = "I created my icons by using gradients and the Google Lexend Font."
+
+const WEBSITE_PATH = "https://mohit-jain.com/icons";
+const PAGE_TITLE = "Mohit Jain | My Icons";
+const PAGE_DESC = "I created my icons by using gradients and the Google Lexend Font. You can view them on this page."
+
+useHead({
+    title: PAGE_TITLE,
+
+    meta: [
+        { name: 'description', content: PAGE_DESC },
+
+        { property: 'og:url', content: WEBSITE_PATH },
+        { property: 'og:title', content: PAGE_TITLE },
+        { property: 'og:description', content: PAGE_DESC },
+
+        { property: 'twitter:url', content: WEBSITE_PATH },
+        { property: 'twitter:title', content: PAGE_TITLE },
+        { property: 'twitter:description', content: PAGE_DESC },
+    ]
+})
 
 /**
  * This lets the visitor copy an image.

@@ -1,42 +1,24 @@
 <template>
 <div class="skill-sidebar-container skill-sidebar" :class="(classPrefix + 'frontend-sidebar')">
     <div class="skill-sidebar-container">
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'frontend-sidebar-opt')"
-            @click="navigateFrontendPages('vuejs')"
-            title="Vue.js">
-
+        <RouterLink :to="getFrontendRoute('vuejs')" :class="returnSidebarOptClasses()" title="Vue.js">
             <img :src="vue_icon" class="skill-sidebar-opt-icon-v2" width="25" draggable="false" />
-        </div>
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'frontend-sidebar-opt')"
-            @click="navigateFrontendPages('reactnative')"
-            title="React Native">
+        </RouterLink>
 
-            <img :src="react_icon" draggable="false"
-                class="skill-sidebar-wivIcon-visible"
-                style="background-color: black;"
-            />
-        </div>
-        <div class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'frontend-sidebar-opt')"
-            @click="navigateFrontendPages('angular')"
-            title="Angular">
+        <RouterLink :to="getFrontendRoute('reactnative')" :class="returnSidebarOptClasses()" title="React Native">
+            <img :src="react_icon" draggable="false" class="skill-sidebar-wivIcon-visible" style="background-color: black;" />
+        </RouterLink>
 
+        <RouterLink :to="getFrontendRoute('angular')" :class="returnSidebarOptClasses()" title="Angular">
             <img :src="angular_icon" class="skill-sidebar-wivIcon-visible" draggable="false" />
-        </div>
+        </RouterLink>
     </div>
     <div class="skill-sidebar-container">
-        <RouterLink to="/skills" class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'frontend-sidebar-opt')"
-            title="Back To Skills Page">
-
+        <RouterLink to="/skills" :class="returnSidebarOptClasses()" title="Back To Skills Page">
             <img :src="return_icon" class="skill-sidebar-opt-icon-v2" draggable="false" />
         </RouterLink>
-        <RouterLink to="/" class="skill-sidebar-opt center-flex-display"
-            :class="(classPrefix + 'frontend-sidebar-opt')"
-            title="Back To Home Page">
 
+        <RouterLink to="/" :class="returnSidebarOptClasses()" title="Back To Home Page">
             <font-awesome-icon class="skill-sidebar-opt-icon" icon="fa-house" draggable="false" />
         </RouterLink>
     </div>
@@ -51,18 +33,17 @@ import vue_icon from "@/assets/Vuejs_Icon.png";
 import angular_icon from "@/assets/Angular_Icon.webp";
 import react_icon from "@/assets/React_Icon.png";
 
-import { RouterLink, useRoute, useRouter } from "vue-router";
+import { RouterLink, useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 
 const route = useRoute();
-const router = useRouter();
 const classPrefix = ref("vue-");
 
 onMounted(() => {
-    const subRoute = route.params.id;
-    if(subRoute == undefined || subRoute === "vue") {
+    const subRoute = route.path.substring("/skills/frontend/".length);
+    if(subRoute == undefined || subRoute === "vue" || subRoute === "vuejs") {
         classPrefix.value = "vue-";
-    } else if(subRoute === "angular") {
+    } else if(subRoute === "angular" || subRoute === "angularjs") {
         classPrefix.value = "angular-";
     } else if(subRoute === "react" || subRoute === "reactnative") {
         classPrefix.value = "react-";
@@ -70,10 +51,17 @@ onMounted(() => {
 });
 
 /**
- * This function navigates to specific aws pages for the user.
- * @param subRoute The subroute within the aws path.
+ * This returns the classes for a sidebar opt.
  */
-function navigateFrontendPages(subRoute = "") {
-    router.push("/skills/frontend/" + subRoute);
+function returnSidebarOptClasses() {
+    return ["skill-sidebar-opt", "center-flex-display", (classPrefix.value + 'frontend-sidebar-opt')];
+}
+
+/**
+ * This function returns the route for a frontend page.
+ * @param subRoute The subroute for the module page.
+ */
+function getFrontendRoute(subRoute = "") {
+    return ("/skills/frontend/" + subRoute);
 }
 </script>

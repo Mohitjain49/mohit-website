@@ -9,5 +9,5 @@ import { onMounted, onUnmounted } from "vue";
 
 const webData = useWebsiteDataStore();
 onMounted(() => {webData.setEventListeners()})
-onUnmounted(() => {webData.removeEventListeners()}) 
+onUnmounted(() => {webData.removeEventListeners()})
 </script>
