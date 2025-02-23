@@ -125,8 +125,7 @@ function removeCardTransitions(isVisible) {
     height: fit-content;
     min-height: calc(100% - var(--top-bar-height));
     width: 1200px;
-    padding: 0px calc(50% - 600px);
-    padding-bottom: 20px !important;
+    padding: 30px calc(50% - 600px);
 }
 
 .skills-main-header {

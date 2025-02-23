@@ -5,7 +5,13 @@
         @mouseenter="onNavCardHover"
         @mouseleave="onNavCardLeave">
 
-        <div :id="sectorObj.titleId" class="nav-card-header" :style="getNavTitleStyle()">
+        <div v-if="sectorObj.id === 'ivue-web-nav-card'" :id="sectorObj.titleId"
+            class="nav-card-header"
+            style="background-color: rgba(0, 0, 0, 0.075);">
+
+            <img :src="ivue_black_text" width="125" />
+        </div>
+        <div v-else :id="sectorObj.titleId" class="nav-card-header" :style="getNavTitleStyle()">
             <font-awesome-icon v-if="sectorObj.title.faIcon"
                 class="nav-card-header-faIcon"
                 :icon="sectorObj.title.icon"
@@ -39,7 +45,7 @@
             </div>
         </div>
 
-        <div class="nav-card-desc-container center-flex-display">
+        <div class="nav-card-desc-container center-flex-display" :style="getIvueDescBackground()">
             <div class="nav-card-desc center-flex-display"
                 v-html="sectorObj.desc"
                 :style="{ 'color': sectorObj.color }">
@@ -57,7 +63,9 @@
 </template>
 
 <script setup>
+import ivue_black_text from "@/assets/ivue/iVue_Black_Text_Cropped.png";
 import { ref, onMounted, onUnmounted } from "vue";
+
 const props = defineProps({
     sectorObj: { type: Object, required: true },
     skillsCard: { type: Boolean, default: false }
@@ -77,10 +85,16 @@ onUnmounted(() => { removePictureInterval(); })
  * This function returns the background of the Navigation Card.
  */
 function getNavCardBackground() {
-    const blueGradient = "linear-gradient(to bottom, var(--blue-zero) 0%, var(--blue-one) 50%, var(--blue-one) 100%)"
-    return { background: (props.skillsCard ? blueGradient : ''),
-        borderColor: (props.skillsCard ? 'var(--blue-cobalt)' : '')
-    }
+    const blueGradient = "linear-gradient(to bottom, var(--blue-zero) 0%, var(--blue-one) 50%, var(--blue-one) 100%)";
+    const background = (props.skillsCard ? blueGradient : (props.sectorObj.id === 'ivue-web-nav-card' ? 'white' : ''));
+    return { background, borderColor: (props.skillsCard ? 'var(--blue-cobalt)' : '') }
+}
+
+/**
+ * This makes a new background for the iVue Nav Card.
+ */
+function getIvueDescBackground() {
+    return { 'background-color': (props.sectorObj.id === 'ivue-web-nav-card' ? 'rgba(0, 0, 0, 0.075)' : '') }
 }
 
 /**
@@ -211,7 +225,7 @@ function getPictureBackground(picWidth = "50%") {
     height: 123px;
     border-bottom: 2px solid var(--nav-bar-border);
     transition: var(--default-transition);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.25);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -274,14 +288,14 @@ function getPictureBackground(picWidth = "50%") {
     margin-top: 15px;
     height: 140px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.25);
 }
 .nav-card-desc {
     width: 95%;
     height: auto;
-    text-align: center;
-    font-family: 'Lexend', 'Roboto', sans-serif;
-    font-size: 16px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
 }
 
 .nav-card-bullet-points {

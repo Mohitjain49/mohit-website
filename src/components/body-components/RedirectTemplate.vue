@@ -20,7 +20,7 @@ const REDIRECT_TEXT = ("Redirecting You To " + props.websiteLink);
 
 onMounted(() => {
     initWebData();
-    window.location.assign(props.websiteLink);
+    window.location.replace(props.websiteLink);
 });
 </script>
 

@@ -39,6 +39,7 @@ export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
 export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
 
 export const MAIN_IVUE_WEBSITE_LINK = "https://ivueworld.com/";
+export const IVUE_NEWS_WEBSITE_LINK = "https://news.ivueworld.com/";
 export const IVUE_MEDIA_WEBSITE_LINK = "https://ivuemedia.com/";
 export const IVUE_ROBOTICS_WEBSITE_LINK = "https://ivuerobotics.com/";
 export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
@@ -434,7 +435,7 @@ export const NAV_CARDS = [
     {
         id: "wiv-nav-card",
         titleId: "wiv-card-title",
-        route: "/experience/ivue/worldsivue",
+        route: "/experience/worldsivue",
     
         title: {
             text: "Worlds iVue",
@@ -447,8 +448,8 @@ export const NAV_CARDS = [
         },
     
         color: "#0872BA",
-        desc: "Explore my ongoing development with Worlds iVue, a geospatial app " +
-            "that serves as a drone control operator and will serve as a media sharing app in the future.",
+        desc: "Explore Worlds iVue, a geospatial app that serves as a " +
+            "drone control operator and will serve as a media sharing app in the future.",
         
         pointsTitle: "Dev Stack:",
         bulletPoints: [ "Vue.js", "Cesium", "MAVLink", "Amazon Web Services" ],
@@ -462,24 +463,24 @@ export const NAV_CARDS = [
     {
         id: "ivue-web-nav-card",
         titleId: "ivue-web-card-title",
-        route: "/experience/ivue/web",
+        route: "/experience/ivue",
     
         title: {
-            text: "iVue Websites",
+            text: "iVue",
             icon: rc_icon,
             faIcon: false,
             extraClass: "",
             colorType: "color",
-            color: "#AB0F14",
-            size: "30px"
+            color: "white",
+            size: "35px"
         },
 
-        color: "#AB0F14",
-        desc: "Navigate through my work with developing the latest versions of the iVue Websites, " +
-            "serving as a way for potential customers to see our mission of making drones an everyday product.",
+        color: "black",
+        desc: "Read about my work as iVue's Lead Software Developer, " +
+            "where I lead a website development team and our use of Amazon Web Services.",
     
         pointsTitle: "Dev Stack:",
-        bulletPoints: [ "Vue.js" ],
+        bulletPoints: [ "Vue.js", "Nuxt", "Amazon Web Services" ],
 
         pictureBarClass: "ivue-web-nav-picture-bar",
         pictures: [

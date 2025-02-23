@@ -5,6 +5,11 @@ import MyIcon from "./pages/MyIcon.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
+import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
+import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
+import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
+import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
+import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import ExperienceMain from "./pages/experience/ExperienceMain.vue";
@@ -25,12 +30,6 @@ import AngularFrontend from "./pages/skills/frontend/AngularFrontend.vue";
 import CesiumModule from "./pages/skills/modules/CesiumModule.vue";
 import MAVLinkModule from "./pages/skills/modules/MAVLinkModule.vue";
 
-import IvueStart from "./pages/experience/ivue/IvueStart.vue";
-import IvueWebsite from "./pages/experience/ivue/IvueWebsite.vue";
-import IvueMediaWebsite from "./pages/experience/ivue/IvueMediaWebsite.vue";
-import IvueRoboticsWebsite from "./pages/experience/ivue/IvueRoboticsWebsite.vue";
-import WorldsIvue from "./pages/experience/ivue/WorldsIvue.vue";
-
 /**
  * @type {import('vue-router').RouteRecordRaw[]} The raw route records for the website.
  */
@@ -44,7 +43,12 @@ export const personalRoutes = [
     { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
     { path: "/updates", alias: ['/update'], redirect: { path: "/", hash: "#skills" } },
 
-    { path: "/ivue", redirect: "/experience/ivue" },
+    { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
+    { path: "/worldsivue", alias: ['/wiv', '/worlds-ivue'], main: "Main WIV Redirect Page", component: WIVRedirect },
+    { path: "/github",  main: "Main GitHub Redirect Page", component: GithubRedirect },
+    { path: "/linkedin",  main: "Main LinkedIn Redirect Page", component: LinkedinRedirect },
+    { path: "/discord",  main: "Main Discord Redirect Page", component: DiscordRedirect },
+
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
     { path: "/aws", redirect: "/skills/aws" },
@@ -83,14 +87,8 @@ export const personalRoutes = [
         children: [
             { path: "", name: "Main Experience Page", component: ExperienceMain },
             { path: "sublo", name: "Main Sublo Page", component: SubloMain },
-            { path: "ivue", children: [
-                { path: "", alias: ["main", "me", ""], name: "iVue Main Page", component: IvueStart },
-                { path: "main-website", alias: ["website", "ivue-website", "web"], name: "Main iVue Website", component: IvueWebsite },
-                { path: "ivuemedia", alias: ["media", "ivue-media"], name: "iVue Media Website", component: IvueMediaWebsite },
-                { path: "ivuerobotics", alias: ["robotics", "ivue-robotics"], name: "iVue Robotics Website", component: IvueRoboticsWebsite },
-                { path: "worldsivue", alias: ["wiv", "worlds-ivue"], name: "Worlds iVue Page", component: WorldsIvue },
-            ]},
-            { path: "worldsivue", redirect: "/experience/ivue/worldsivue" },
+            { path: "ivue", main: "iVue Redirect Page", component: IvueRedirect },
+            { path: "worldsivue", alias: ['wiv', 'worlds-ivue'], main: "WIV Redirect Page", component: WIVRedirect },
         ]
     },
 ];
