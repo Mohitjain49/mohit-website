@@ -479,7 +479,7 @@ export const NAV_CARDS = [
             "serving as a way for potential customers to see our mission of making drones an everyday product.",
     
         pointsTitle: "Dev Stack:",
-        bulletPoints: [ "Vue.js" ],
+        bulletPoints: [ "Vue.js", "Nuxt" ],
 
         pictureBarClass: "ivue-web-nav-picture-bar",
         pictures: [

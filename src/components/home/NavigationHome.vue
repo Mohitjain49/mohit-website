@@ -5,7 +5,7 @@
     <template v-if="menuExpanded">
         <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses()"> Start </RouterLink>
         <RouterLink to="/#skills" @click="goToHomeSection('skills')" :class="getCircleOptClasses()"> Skills </RouterLink>
-        <RouterLink to="/#experience" @click="goToHomeSection('experience')" :class="getCircleOptClasses()"> Experience </RouterLink>
+        <RouterLink to="/#ivue" @click="goToHomeSection('ivue')" :class="getCircleOptClasses()"> iVue </RouterLink>
         <div class="close" :class="getCircleOptClasses()"> Close </div>
     </template>
 </div>

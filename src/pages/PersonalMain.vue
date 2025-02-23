@@ -6,7 +6,7 @@
     <div id="homepage" class="personal-web-body" @click="closeNavBarDropdown()">
         <StartSection />
         <SkillsSection />
-        <ExperienceSection />
+        <IvueSection />
         <WebFooter />
     </div>
 </client-only>
@@ -22,7 +22,7 @@ import NavigationHome from '../components/home/NavigationHome.vue';
 import WebFooter from '../components/WebFooter.vue';
 
 import StartSection from '../components/home/StartSection.vue';
-import ExperienceSection from '../components/home/ExperienceSection.vue';
+import IvueSection from '../components/home/IvueSection.vue';
 import SkillsSection from '../components/home/SkillsSection.vue';
 
 onMounted(() => { initWebData(); })

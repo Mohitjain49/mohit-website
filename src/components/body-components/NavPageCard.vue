@@ -211,7 +211,7 @@ function getPictureBackground(picWidth = "50%") {
     height: 123px;
     border-bottom: 2px solid var(--nav-bar-border);
     transition: var(--default-transition);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.25);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -274,14 +274,14 @@ function getPictureBackground(picWidth = "50%") {
     margin-top: 15px;
     height: 140px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.25);
 }
 .nav-card-desc {
     width: 95%;
     height: auto;
-    text-align: center;
-    font-family: 'Lexend', 'Roboto', sans-serif;
-    font-size: 16px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
 }
 
 .nav-card-bullet-points {

@@ -72,7 +72,7 @@ h1, h2, h3, p {
     min-height: calc(100% - 50px);
     width: 100%;
     min-width: 340px;
-    background: var(--webpage-background);
+    background: var(--webpage-static-background);
 }
 .center-flex-display {
     display: flex;
