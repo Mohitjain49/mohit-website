@@ -480,7 +480,7 @@ export const NAV_CARDS = [
             "where I lead a website development team and our use of Amazon Web Services.",
     
         pointsTitle: "Dev Stack:",
-        bulletPoints: [ "Vue.js", "Nuxt" ],
+        bulletPoints: [ "Vue.js", "Nuxt", "Amazon Web Services" ],
 
         pictureBarClass: "ivue-web-nav-picture-bar",
         pictures: [

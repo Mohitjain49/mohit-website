@@ -7,6 +7,9 @@ import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
 import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
 import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
+import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
+import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
+import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import ExperienceMain from "./pages/experience/ExperienceMain.vue";
@@ -42,6 +45,10 @@ export const personalRoutes = [
 
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
     { path: "/worldsivue", alias: ['/wiv', '/worlds-ivue'], main: "Main WIV Redirect Page", component: WIVRedirect },
+    { path: "/github",  main: "Main GitHub Redirect Page", component: GithubRedirect },
+    { path: "/linkedin",  main: "Main LinkedIn Redirect Page", component: LinkedinRedirect },
+    { path: "/discord",  main: "Main Discord Redirect Page", component: DiscordRedirect },
+
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
     { path: "/aws", redirect: "/skills/aws" },
