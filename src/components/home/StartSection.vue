@@ -1,12 +1,12 @@
 <template>
 <div id="start"></div>
-<div class="start-section">
+<div id="start-content" class="start-section">
     <div class="start-section-half" v-observe-visibility="setNameTransitions">
         <div class="start-section-title animate__animated animate__lightSpeedInLeft">Mohit Jain</div>
-        <div class="start-section-subtitle animate__animated animate__lightSpeedInLeft">
+        <div class="start-section-subtitle animate__animated animate__lightSpeedInRight">
             <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>'s Lead Software Developer
         </div>
-        <div class="start-section-subtitle animate__animated animate__lightSpeedInLeft">
+        <div class="start-section-subtitle animate__animated animate__lightSpeedInRight">
             Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
         </div>
 
@@ -29,14 +29,16 @@
         </div>
     </div>
 
+    <!-- THIS HEADSHOT CAN BE ADDED LATER.
     <div class="start-section-half headshot-side">
         <img :src="headshot" class="start-section-headshot" />
     </div>
+    -->
 </div>
 </template>
 
 <script setup>
-import headshot from "@/assets/Mohit_Headshot.jpeg";
+// import headshot from "@/assets/Mohit_Headshot.jpeg"; *NOT USED AT THE MOMENT.
 import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Objects.js";
 
 /**
@@ -45,13 +47,13 @@ import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Obje
 function setNameTransitions(isVisible) {
     if(isVisible) {
         document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-contacts").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
     } else {
         document.getElementsByClassName("start-section-title").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-section-subtitle").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-contacts").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
     }
 }
@@ -65,11 +67,12 @@ function setNameTransitions(isVisible) {
 .start-section {
     height: calc(var(--body-height));
     min-height: 700px;
-    width: 100%;
-    background: var(--webpage-static-background);
+    max-height: 1000px;
+    width: 1200px;
+    padding: 0px calc(50% - 600px);
     color: var(--website-text);
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 1fr;
 }
 
 .start-section-half {
@@ -87,32 +90,34 @@ function setNameTransitions(isVisible) {
 }
 
 .start-section-title {
+    text-align: center;
     position: relative;
-    font-size: 90px;
+    font-size: 100px;
     font-weight: bold;
     color: var(--website-text);
-    width: fit-content;
-    --animate-duration: 1s;
+    width: 100%;
+    height: fit-content;
+    margin-bottom: 15px;
 }
 
 .start-section-subtitle {
-    width: fit-content;
-    font-size: 19px;
+    text-align: center;
+    width: 100%;
+    font-size: 25px;
+    line-height: 35px;
     color: var(--website-text);
-    --animate-duration: 1s;
 }
 .start-section-subtitle a {
     text-decoration: underline;
 }
 
 .start-contacts {
-    margin-top: 30px;
+    margin-top: 45px;
     width: 700px;
     height: 250px;
     border: 2px solid var(--website-text);
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.8);
-    --animate-duration: 1s;
 }
 .start-contacts-row {
     width: 100%;
@@ -159,6 +164,8 @@ function setNameTransitions(isVisible) {
 @media (max-width: 1225px) {
     .start-section {
         grid-template-columns: 1fr;
+        width: 100%;
+        padding: 0px;
     }
     .start-section-half.headshot-side {
         display: none;
@@ -193,11 +200,17 @@ function setNameTransitions(isVisible) {
 }
 @media (max-width: 600px) {
     .start-section-title {
-        font-size: 60px;
+        font-size: 56px;
+        margin-bottom: 10px;
+    }
+    .start-section-subtitle {
+        font-size: 17px;
+        line-height: 23px;
     }
     .start-contacts {
+        margin-top: 30px;
         height: 450px;
-        width: 315px;
+        width: 300px;
     }
 
     .start-contacts-row.bottom {

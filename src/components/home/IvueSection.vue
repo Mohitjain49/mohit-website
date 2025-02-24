@@ -1,6 +1,6 @@
 <template>
 <div id="ivue"></div>
-<div class="ivue-section">
+<div class="ivue-section" v-observe-visibility="setInitTranstions">
     <div class="ivue-section-title">
         <img :src="ivue_white_text" draggable="false" />
     </div>
@@ -58,6 +58,27 @@ import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
 import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
 import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
+const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds.
+
+/**
+ * This functions sets initial transitions upon entering this section for iVue.
+ */
+function setInitTranstions(isVisible) {
+    if(!isVisible) { return; }
+    document.getElementsByClassName('ivue-section-title').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+    document.getElementById('wiv-tab').classList.add("animate__animated", "animate__lightSpeedInRight");
+    document.getElementById('main-tab').classList.add("animate__animated", "animate__lightSpeedInLeft");
+    document.getElementById('media-tab').classList.add("animate__animated", "animate__lightSpeedInRight");
+    document.getElementById('robotics-tab').classList.add("animate__animated", "animate__lightSpeedInLeft");
+
+    setTimeout(() => {
+        document.getElementsByClassName('ivue-section-title').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft");
+    }, ANIMATE_DURATION)
+}
 
 /**
  * This function adds an animation when the visitor hovers over a tab.
@@ -80,13 +101,14 @@ function onIvueTabLeave(id = "main-tab") {
 #ivue {
     height: 50px;
     width: 100%;
-    background: linear-gradient(to top, #232323 0%, var(--blue-zero) 100%);
+    background: linear-gradient(to top, var(--dark-background) 0%, var(--blue-zero) 100%);
 }
 .ivue-section {
+    background: var(--dark-background);
     height: fit-content;
     min-height: 800px;
     width: 100%;
-    background-color: #232323;
+    padding: 50px 0px;
 }
 
 .ivue-section-title {

@@ -1,6 +1,6 @@
 <template>
 <div id="skills"></div>
-<div class="skills-section" v-observe-visibility="removeCardTransitions">
+<div id="skills-content" class="skills-section" v-observe-visibility="setSkillsTransitions">
     <div class="skills-main-header">My Skills</div>
     <div class="skills-main-desc">
         Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
@@ -96,10 +96,19 @@ function addCardTransition(isVisible, index = 0) {
 }
 
 /**
- * This removes all transitions from all cards and wdigets should visitors scroll away from the skills section.
+ * This removes all transitions from all cards and widgets should visitors scroll away from the skills section.
+ * It adds transitions to the description text upon entry.
  */
-function removeCardTransitions(isVisible) {
-    if(isVisible) { return; }
+function setSkillsTransitions(isVisible) {
+    if(isVisible) {
+        document.getElementsByClassName('skills-main-header').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName('skills-main-desc').item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
+        return;
+    }
+
+    document.getElementsByClassName('skills-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+    document.getElementsByClassName('skills-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
+
     const skillCards = document.getElementsByClassName("skills-entity");
     const skillWidgets = document.getElementsByClassName("skills-widget");
 
@@ -132,27 +141,28 @@ function removeCardTransitions(isVisible) {
     grid-column: span 3;
     height: fit-content;
     width: 100%;
-    padding-top: 25px;
+    padding-top: 50px;
     text-align: center;
-    font-size: 90px;
+    font-size: 100px;
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
     color: var(--blue-cobalt);
 }
 .skills-main-desc {
-    font-size: 22px;
+    font-size: 25px;
     font-family: 'Lexend', 'sans-serif';
     width: calc(100% - 30px);
     height: fit-content;
-    padding: 0px 15px;
-    padding-top: 10px;
+    padding: 20px 15px;
+    padding-bottom: 50px;
     grid-column: span 3;
     color: var(--blue-cobalt);
     text-align: center;
+    line-height: 35px;
 }
 
 .skills-entity-container {
-    height: 475px;
+    height: 525px;
     width: 100%;
     min-width: 400px;
     display: flex;
@@ -179,7 +189,7 @@ function removeCardTransitions(isVisible) {
     cursor: default;
 }
 .skills-entity-container.small {
-    height: 240px;
+    height: 200px;
     width: 100%;
     min-width: 0px;
     justify-content: center;
@@ -198,6 +208,7 @@ function removeCardTransitions(isVisible) {
     justify-content: center;
     align-items: center;
     --animate-duration: 0.7s;
+    transform: scale(0.75);
 }
 .skills-widget:hover {
     border-color: var(--website-text);
@@ -261,27 +272,6 @@ function removeCardTransitions(isVisible) {
     color: inherit;
 }
 
-@media (min-width: 1625px) {
-    .skills-section {
-        grid-template-columns: repeat(4, 1fr);
-        width: 1600px;
-        padding: 0px calc(50% - 800px);
-    }
-    .skills-main-header, .skills-main-desc {
-        grid-column: span 4;
-    }
-}
-@media (min-width: 2025px) {
-    .skills-section {
-        grid-template-columns: repeat(5, 1fr);
-        width: 2000px;
-        padding: 0px calc(50% - 1000px);
-    }
-    .skills-main-header, .skills-main-desc {
-        grid-column: span 5;
-    }
-}
-
 @media (max-width: 1200px) {
     .skills-section {
         grid-template-columns: repeat(2, 1fr);
@@ -315,18 +305,11 @@ function removeCardTransitions(isVisible) {
     }
     .skills-main-desc {
         font-size: 20px;
+        line-height: 28px;
     }
 }
 
-@media (max-width: 650px) {
-    .skills-entity-container.small {
-        height: 175px;
-    }
-    .skills-widget {
-        transform: scale(0.75);
-    }
-}
-@media (max-width: 500px) {
+@media (max-width: 550px) {
     .skills-main-header {
         font-size: 68px;
     }
