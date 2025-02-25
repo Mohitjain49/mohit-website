@@ -447,7 +447,7 @@ export const NAV_CARDS = [
             size: "35px"
         },
     
-        color: "#0872BA",
+        color: "#48A548",
         desc: "Explore Worlds iVue, a geospatial app that serves as a " +
             "drone control operator and will serve as a media sharing app in the future.",
         
@@ -615,13 +615,13 @@ export const VUE_INFO_SECTOR = {
     title: "Vue.js",
     image: vue_icon,
     style: {
-        background: "linear-gradient(to bottom, #41B883 0%, #35495E 100%)",
+        background: "transparent",
         color: "white",
         minHeight: "100vh"
     },
 
     buttons: [
-        { title: "Go To Vue.js Website", link: VUEJS_WEBSITE_LINK }
+        { title: "Go To The Vue.js Website", link: VUEJS_WEBSITE_LINK }
     ],
     descriptions: [
         "Vue.js is a versatile web development framework that enhances traditional HTML, CSS, and JavaScript, offering a familiar yet more intuitive learning curve for developers. " +
@@ -634,8 +634,8 @@ export const VUE_INFO_SECTOR = {
             "Vue Router provides seamless navigation for single-page applications (SPAs), allowing developers to easily manage routes and handle dynamic page transitions without refreshing the entire page. " +
             "Pinia serves as Vue’s state management library, offering a lightweight yet robust solution for managing application-wide state. " +
             "Other notable libraries many Vue.js applications use are Vuetify and Nuxt.",
-        "I began my frontend development journey using Vue.js to create <u>Worlds iVue</u> and <u>iVue's Company Websites.</u> " +
-            "Known as \"The Progressive Framework\", Vue.js is designed to scale with your experience level, making it accessible for both beginners and seasoned developers. " +
+        "I began my frontend development journey using Vue.js to create " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + " and " + getLinkElement("iVue's Company's Websites", MAIN_IVUE_WEBSITE_LINK) +
+            ". Known as \"The Progressive Framework\", Vue.js is designed to scale with your experience level, making it accessible for both beginners and seasoned developers. " +
             "Whether you're just starting with coding or are an expert in frontend development, Vue.js provides a flexible and powerful toolkit. " +
             "I highly recommend this framework to anyone looking to showcase their software development skills, just as I did with Worlds iVue."
     ],
@@ -676,7 +676,7 @@ export const ANGULAR_INFO_SECTOR = {
         { title: "Go To Angular's Website", link: "https://angular.dev/" }
     ],
     descriptions: [
-        "Angular, like Vue.js and React, is a component-based web development framework made primarily by Google. " +
+        "Angular, like Vue.js and React, is an opiniated, component-based web development framework made primarily by Google. " +
             "It is great for creating single page applications, has a reactive data flow, and provides efficient performance speeds. " +
             "It also has a wide ecosystem of tools, including its own routing module, an animations module, and muce more. " +
             "This ecosystem, along with its extensive use of Typescript, sets Angular out from other frameworks.",
@@ -717,18 +717,10 @@ export const REACT_NATIVE_INFO_SECTOR = {
         { title: "Go To React Native's Website", link: REACT_NATIVE_WEBSITE_LINK }
     ],
     descriptions: [
-        "React Native is an JavaScript framework capable of developing apps for any mainstream platform. " +
-            "As its namesake would suggest, this framework contains many aspects seen in React, including the familiar markup syntax JSX. " +
-            "Together, developers could use this framework to create all their projects without the need to use different frameworks if the operating system is different. " +
-            "While this strategy doesn't work well for web development, it benefits shine with mobile app development instead.",
-        "React Native is the only mobile app framework that primarily uses JavaScript/TypeScript. " +
-            "There are plenty of web frameworks like Vue.js, Angular, React (Not Native), and plenty more that exceeds at web development already. " +
-            "There are also plenty of desktop app frameworks and wrappers like <span><a href=\"https://electronjs.org\" style=\"text-decoration: underline;\">Electron</a></span> " +
-            "that make web development and desktop app development practically identical to each other. " +
-            "On the flipside, however, React Native is the only framework for Android and iOS apps that can use widespread npm modules. " +
-            "Its mainstream alternatives either use a different programming language which doesn't have access to npm modules, " +
-            "support only one of the major two mobile operating systems, or both. " +
-            "It should go without saying that this gives React Native a huge competitive edge and a less steep learning curve than other frameworks.",
+        "React Native is an JavaScript library capable of developing apps for any mainstream platform. " +
+            "As its namesake would suggest, this library contains many aspects seen in React, including the familiar markup syntax JSX. " +
+            "Together, developers could use this library to create all their projects without the need to use different frameworks if the operating system is different. " +
+            "In fact, it benefits shine with mobile app development.",
         "I've used the framework primarily to help Sublo develop a mobile subleasing app. " +
             "The app seeks to make subleasing more efficient, as platforms like facebook marketplace can sometimes be rather inefficient for finding homes or tenants. " +
             "While I have left Sublo for more pursuits at iVue and My University, I am certain I'll be using React Native for other projects in the future."

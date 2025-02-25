@@ -162,7 +162,7 @@ function setNameTransitions(isVisible) {
     .start-section {
         grid-template-columns: 1fr;
         width: 100%;
-        padding: 0px;
+        padding: 50px 0px;
     }
     .start-section-half.headshot-side {
         display: none;

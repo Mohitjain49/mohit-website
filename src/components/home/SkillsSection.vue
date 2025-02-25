@@ -6,10 +6,10 @@
         by utilizing multiple programming languages, frontend frameworks, web services, and modules.
     </div>
 
-    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container large">
-        <div v-if="entity.link === '#'" class="skills-entity no-link"
-            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container large"
+        v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
 
+        <div v-if="entity.link === '#'" class="skills-entity no-link">
             <div class="skills-entity-image">
                 <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
                 <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
@@ -20,9 +20,7 @@
             </div>
         </div>
         
-        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-entity"
-            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
-
+        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-entity">
             <div class="skills-entity-image">
                 <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
                 <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
@@ -33,9 +31,7 @@
             </div>
         </a>
 
-        <RouterLink v-else :to="entity.link" class="skills-entity"
-            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
-
+        <RouterLink v-else :to="entity.link" class="skills-entity">
             <div class="skills-entity-image">
                 <font-awesome-icon :icon="entity.icon.id" class="skills-entity-moreInfo-icon" />
             </div>
@@ -46,24 +42,20 @@
         </RouterLink>
     </div>
 
-    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container small">
-        <div v-if="entity.link === '#'" class="skills-widget no-link"
-            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container small"
+        v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
 
+        <div v-if="entity.link === '#'" class="skills-widget no-link">
             <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
             <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
         </div>
         
-        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-widget"
-            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
-
+        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-widget">
             <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
             <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
         </a>
 
-        <RouterLink v-else :to="entity.link" class="skills-widget"
-            v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
-
+        <RouterLink v-else :to="entity.link" class="skills-widget">
             <font-awesome-icon :icon="entity.icon.id" class="skills-entity-moreInfo-icon"/>
         </RouterLink>
     </div>
@@ -88,9 +80,9 @@ function getFAIconStyle(entity) {
  */
 function addCardTransition(isVisible, index = 0) {
     if(!isVisible) { return; }
-    const className = ((window.innerWidth > 825) ? "skills-entity" : "skills-widget");
+    const classNames = ("skills-entity-container " + ((window.innerWidth > 825) ? "large" : "small"));
 
-    let skillCard = document.getElementsByClassName(className).item(index);
+    let skillCard = document.getElementsByClassName(classNames).item(index);
     skillCard.classList.add("animate__animated", "animate__zoomIn");
 }
 
@@ -107,15 +99,10 @@ function setSkillsTransitions(isVisible) {
 
     document.getElementsByClassName('skills-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
     document.getElementsByClassName('skills-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
-
-    const skillCards = document.getElementsByClassName("skills-entity");
-    const skillWidgets = document.getElementsByClassName("skills-widget");
+    const skillCards = document.getElementsByClassName("skills-entity-container");
 
     for(let i = 0; i < skillCards.length; i++) {
         skillCards.item(i).classList.remove("animate__animated", "animate__zoomIn");
-    }
-    for(let i = 0; i < skillWidgets.length; i++) {
-        skillWidgets.item(i).classList.remove("animate__animated", "animate__zoomIn");
     }
 }
 </script>
@@ -161,7 +148,7 @@ function setSkillsTransitions(isVisible) {
 }
 
 .skills-entity-container {
-    height: 525px;
+    height: 550px;
     width: 100%;
     min-width: 400px;
     display: flex;
@@ -188,7 +175,7 @@ function setSkillsTransitions(isVisible) {
     cursor: default;
 }
 .skills-entity-container.small {
-    height: 200px;
+    height: 225px;
     width: 100%;
     min-width: 0px;
     justify-content: center;

@@ -1,7 +1,9 @@
 <template>
 <client-only>
     <FrontendSidebar />
-    <div class="personal-web-body personal-web-body-v3" @click="closeNavBarDropdown()">
+    <vue-particles id="particlests" :options="VUEJS_BACKGROUND"></vue-particles>
+
+    <div id="vue-page" class="personal-web-body personal-web-body-v3" @click="closeNavBarDropdown()">
         <InfoSector :sectorObj="VUE_INFO_SECTOR" class="info-sector-v3" />
     </div>
 </client-only>
@@ -10,7 +12,9 @@
 <script setup>
 import FrontendSidebar from "@/components/sidebars/FrontendSidebar.vue";
 import InfoSector from '@/components/body-components/InfoSector.vue';
+
 import { VUE_INFO_SECTOR } from '@/stores/Objects.js';
+import { VUEJS_BACKGROUND } from "@/stores/ParticlesConfig.js";
 
 import { initWebData, closeNavBarDropdown } from "@/stores/WebsiteData.js";
 import { onMounted } from "vue";
@@ -20,8 +24,8 @@ onMounted(() => { initWebData(); });
 
 const WEBSITE_PATH = "https://mohit-jain.com/skills/frontend/vuejs";
 const PAGE_TITLE = "Mohit Jain | Vue.js";
-const PAGE_DESC = "My personal website extensively displays my skills as a software developer " +
-    "and the experience I have gathered through working with multiple companies. Made With Vue.js.";
+const PAGE_DESC = "Vue.js sits at the core of my software development journey, " +
+    "as I developed Worlds iVue, iVue's Company Websites, and my portfolio website with the framework.";
 
 useHead({
     title: PAGE_TITLE,
@@ -39,3 +43,9 @@ useHead({
     ]
 })  
 </script>
+
+<style scoped>
+#vue-page {
+    background: transparent;
+}
+</style>

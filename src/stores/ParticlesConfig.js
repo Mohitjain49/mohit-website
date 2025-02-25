@@ -99,3 +99,37 @@ export const ORANGE_BACKGROUND = {
     detectRetina: true,
     tRetina: true,
 };
+
+export const VUEJS_BACKGROUND = {
+    background: {
+        color: "#41B883",
+    },
+    fpsLimit: 100,
+    particles: {
+        color: { value: "#35495E" },
+        move: {
+            direction: "none",
+            enable: true,
+            outModes: { default: "out" },
+            random: true,
+            speed: 0.75,
+            straight: false,
+        },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 3000
+        },
+        opacity: {
+            value: { min: 0.1, max: 0.75 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "square"
+        },
+        size: {
+            value: { min: 2, max: 3 },
+        },
+    },
+    detectRetina: true,
+    tRetina: true,
+};

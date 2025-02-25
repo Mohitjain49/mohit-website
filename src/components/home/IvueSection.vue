@@ -132,7 +132,7 @@ function onIvueTabLeave(id = "main-tab") {
     width: 90%;
     max-width: 1100px;
     height: 145px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
     border: 3px solid white;
     border-radius: 20px;
     transition: box-shadow 0.35s;
