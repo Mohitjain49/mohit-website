@@ -2,6 +2,9 @@ import { ViteSSG } from "vite-ssg";
 import { createPinia } from "pinia";
 import VueObserveVisibility from 'vue3-observe-visibility'
 
+import VueParticles from "@tsparticles/vue3";
+import { loadSlim } from "@tsparticles/slim";
+
 import App from "./App.vue";
 import { personalRoutes } from "./routes";
 
@@ -38,6 +41,7 @@ library.add(
     FaIcons.faCopyright,
     FaIcons.faArrowUp,
     FaIcons.faPenFancy,
+    FaIcons.faStar,
 
     FaBrands.faReact,
     FaBrands.faJs,
@@ -61,5 +65,11 @@ export const createApp = ViteSSG(App, { routes: personalRoutes },
 
         app.use(VueObserveVisibility);
         app.use(pinia);
+
+        if(isClient) {
+            app.use(VueParticles, {
+                init: async engine => { await loadSlim(engine); },
+            });
+        }
     }
 )

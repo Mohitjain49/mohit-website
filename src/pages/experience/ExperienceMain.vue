@@ -1,7 +1,9 @@
 <template>
 <client-only>
     <NavigationMain />
-    <div class="personal-web-body" @click="closeNavBarDropdown()">
+    <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
+
+    <div id="exp-page" class="personal-web-body" @click="closeNavBarDropdown()">
         <div class="main-nav-page-container">
             <div class="nav-page-title center-flex-display gradient-text">My Experience</div>
             <div class="main-nav-page">
@@ -19,12 +21,13 @@
 </template>
 
 <script setup>
+import "@/styles/navpage.css";
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 
 import NavPageCard from '@/components/body-components/NavPageCard.vue';
 import { NAV_CARDS } from '@/stores/Objects.js';
-import "@/styles/navpage.css";
+import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 
 import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
 import { onMounted } from 'vue';
@@ -52,3 +55,9 @@ useHead({
     ]
 })
 </script>
+
+<style scoped>
+#exp-page {
+    background: transparent;
+}
+</style>

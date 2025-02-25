@@ -1,6 +1,8 @@
 <template>
 <client-only>
     <NavigationMain />
+    <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
+
     <div id="contact-page" class="personal-web-body" @click="closeNavBarDropdown()">
         <div class="contact-me-box web-service">
             <div class="contact-box-title-container center-flex-display">
@@ -106,7 +108,9 @@
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
+
 import { SOCIALS } from '../stores/Objects.js';
+import { BLUE_BACKGROUND } from '../stores/ParticlesConfig.js';
 
 import axios from 'axios';
 import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
@@ -293,7 +297,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
 
 <style scoped>
 #contact-page {
-    background: linear-gradient(to bottom, var(--blue-one) 0%, var(--blue-three) 100%);
+    background: transparent;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }

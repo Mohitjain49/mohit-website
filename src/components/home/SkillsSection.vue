@@ -1,6 +1,5 @@
 <template>
-<div id="skills"></div>
-<div id="skills-content" class="skills-section" v-observe-visibility="setSkillsTransitions">
+<div id="skills" class="skills-section" v-observe-visibility="setSkillsTransitions">
     <div class="skills-main-header">My Skills</div>
     <div class="skills-main-desc">
         Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
@@ -122,19 +121,14 @@ function setSkillsTransitions(isVisible) {
 </script>
 
 <style scoped>
-#skills {
-    height: 50px;
-    width: 100%;
-    background: linear-gradient(to bottom, rgb(248, 206, 171) 0%, var(--blue-zero) 100%);
-}
 .skills-section {
-    background: var(--blue-zero);
+    background: transparent;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     height: fit-content;
     min-height: calc(100% - var(--top-bar-height));
     width: 1200px;
-    padding: 30px calc(50% - 600px);
+    padding: 80px calc(50% - 600px);
 }
 
 .skills-main-header {
@@ -147,16 +141,21 @@ function setSkillsTransitions(isVisible) {
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
     color: var(--blue-cobalt);
+    text-shadow:
+        -1px -1px 0 var(--blue-zero), /* Top-left shadow */
+        1px -1px 0 var(--blue-zero),  /* Top-right shadow */
+        -1px 1px 0 var(--blue-zero),  /* Bottom-left shadow */
+        1px 1px 0 var(--blue-zero);   /* Bottom-right shadow */
 }
 .skills-main-desc {
-    font-size: 25px;
+    font-size: 27px;
     font-family: 'Lexend', 'sans-serif';
     width: calc(100% - 30px);
     height: fit-content;
     padding: 20px 15px;
-    padding-bottom: 50px;
+    margin-bottom: 30px;
     grid-column: span 3;
-    color: var(--blue-cobalt);
+    color: var(--blue-zero);
     text-align: center;
     line-height: 35px;
 }
@@ -177,13 +176,13 @@ function setSkillsTransitions(isVisible) {
     overflow: hidden;
     transition: var(--default-transition);
     background-color: white;
-    box-shadow: 0px 0px 3px 3px rgba(126, 90, 0, 0.25);
+    box-shadow: 0px 0px 3px 3px rgba(255, 255, 255, 0.25);
     --animate-duration: 0.7s;
 }
 
 .skills-entity:hover {
     border-color: var(--website-text);
-    box-shadow: 0px 0px 10px 10px rgba(126, 90, 0, 0.25);
+    box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.25);
 }
 .skills-entity.no-link {
     cursor: default;
@@ -212,7 +211,7 @@ function setSkillsTransitions(isVisible) {
 }
 .skills-widget:hover {
     border-color: var(--website-text);
-    box-shadow: 0px 0px 10px 10px rgba(126, 90, 0, 0.25);
+    box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.25);
 }
 .skills-widget.no-link {
     cursor: default;

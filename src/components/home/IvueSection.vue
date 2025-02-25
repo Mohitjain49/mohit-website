@@ -1,6 +1,5 @@
 <template>
-<div id="ivue"></div>
-<div class="ivue-section" v-observe-visibility="setInitTranstions">
+<div id="ivue" class="ivue-section" v-observe-visibility="setInitTranstions">
     <div class="ivue-section-title">
         <img :src="ivue_white_text" draggable="false" />
     </div>
@@ -98,17 +97,13 @@ function onIvueTabLeave(id = "main-tab") {
 </script>
 
 <style scoped>
-#ivue {
-    height: 50px;
-    width: 100%;
-    background: linear-gradient(to top, var(--dark-background) 0%, var(--blue-zero) 100%);
-}
 .ivue-section {
-    background: var(--dark-background);
+    background: transparent;
     height: fit-content;
     min-height: 800px;
     width: 100%;
-    padding: 50px 0px;
+    padding-bottom: 50px;
+    padding-top: 100px
 }
 
 .ivue-section-title {
@@ -137,7 +132,7 @@ function onIvueTabLeave(id = "main-tab") {
     width: 90%;
     max-width: 1100px;
     height: 145px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
     border: 3px solid white;
     border-radius: 20px;
     transition: box-shadow 0.35s;

@@ -216,7 +216,7 @@ function getPictureBackground(picWidth = "50%") {
     border-radius: 20px;
     transition: var(--default-transition);
     overflow: hidden;
-    background: transparent;
+    background: var(--webpage-static-background);
     box-shadow: 0px 0px 2px 2px rgb(0 0 0 / 20%);
     --animate-duration: 1.5s 
 }

@@ -3,6 +3,7 @@
     <NavigationMain />
     <NavigationHome />
 
+    <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
     <div id="homepage" class="personal-web-body" @click="closeNavBarDropdown()">
         <StartSection />
         <SkillsSection />
@@ -13,7 +14,9 @@
 </template>
 
 <script setup>
+import { HOME_BACKGROUND } from '../stores/ParticlesConfig.js';
 import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
+
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
@@ -51,7 +54,7 @@ useHead({
 
 <style scoped>
 #homepage {
-    background: var(--webpage-static-background);
+    background: transparent;
     top: 0px;
     min-height: 100%;
 }

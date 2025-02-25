@@ -1,6 +1,5 @@
 <template>
-<div id="start"></div>
-<div id="start-content" class="start-section">
+<div id="start" class="start-section">
     <div class="start-section-half" v-observe-visibility="setNameTransitions">
         <div class="start-section-title animate__animated animate__lightSpeedInLeft">Mohit Jain</div>
         <div class="start-section-subtitle animate__animated animate__lightSpeedInRight">
@@ -60,16 +59,13 @@ function setNameTransitions(isVisible) {
 </script>
 
 <style scoped>
-#start {
-    width: 100%;
-    height: 50px;
-}
 .start-section {
     height: calc(var(--body-height));
     min-height: 700px;
     max-height: 1000px;
     width: 1200px;
-    padding: 0px calc(50% - 600px);
+    padding: 50px calc(50% - 600px);
+    padding-bottom: 10px;
     color: var(--website-text);
     display: grid;
     grid-template-columns: 1fr;
@@ -98,14 +94,15 @@ function setNameTransitions(isVisible) {
     width: 100%;
     height: fit-content;
     margin-bottom: 15px;
+    text-shadow: var(--website-text) 1px 0 10px;
 }
-
 .start-section-subtitle {
     text-align: center;
     width: 100%;
     font-size: 25px;
     line-height: 35px;
     color: var(--website-text);
+    text-shadow: var(--website-text) 1px 0 10px;
 }
 .start-section-subtitle a {
     text-decoration: underline;
@@ -117,7 +114,7 @@ function setNameTransitions(isVisible) {
     height: 250px;
     border: 2px solid var(--website-text);
     border-radius: 15px;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
 }
 .start-contacts-row {
     width: 100%;

@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createHead } from '@unhead/vue'
 
+import Particles from "@tsparticles/vue3";
+import { loadSlim } from "@tsparticles/slim";
+
 import { createRouter, createWebHistory } from 'vue-router'
 import VueObserveVisibility from 'vue3-observe-visibility'
 
@@ -70,4 +73,6 @@ createApp(App).component('font-awesome-icon', FontAwesomeIcon).
     use(personalRouter).
     use(pinia).
     use(head).
-    mount('#app');
+    use(Particles, {
+        init: async engine => { await loadSlim(engine); },
+    }).mount('#app');

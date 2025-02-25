@@ -1,6 +1,8 @@
 <template>
 <client-only>
     <NavigationMain />
+    <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
+
     <div id="skills-page" class="personal-web-body" @click="closeNavBarDropdown()">
         <div class="main-nav-page-container">
             <div id="skills-title" class="nav-page-title">My Skills</div>
@@ -19,12 +21,13 @@
 </template>
 
 <script setup>
+import "@/styles/navpage.css";
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 
 import NavPageCard from '@/components/body-components/NavPageCard.vue';
 import { NAV_CARDS } from '@/stores/Objects.js';
-import "@/styles/navpage.css";
+import { BLUE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 
 import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
 import { onMounted } from 'vue';
@@ -57,7 +60,7 @@ useHead({
 
 <style scoped>
 #skills-page {
-    background: var(--blue-zero);
+    background: transparent;
 }
 
 #skills-title {
