@@ -44,7 +44,7 @@ import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Obje
  * This function sets the transitions for the left half of the start section.
  */
 function setNameTransitions(isVisible) {
-    if(isVisible && window.innerWidth > 375) {
+    if(isVisible && window.innerWidth > 450) {
         document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
@@ -206,7 +206,7 @@ function onContactBtnLeave(id = "main-tab") {
         justify-content: center;
         align-items: center;
     }
-    .start-contacts-mainBtn {
+    #start-contacts-mainBtn {
         left: 0;
         width: auto;
     }
@@ -232,7 +232,7 @@ function onContactBtnLeave(id = "main-tab") {
     .start-contacts-btn {
         margin-bottom: 25px;
     }
-    .start-contacts-mainBtn {
+    #start-contacts-mainBtn {
         margin-bottom: 0px;
     }
 }

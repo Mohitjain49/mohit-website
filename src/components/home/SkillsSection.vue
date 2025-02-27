@@ -91,7 +91,7 @@ function addCardTransition(isVisible, index = 0) {
  * It adds transitions to the description text upon entry.
  */
 function setSkillsTransitions(isVisible) {
-    if(isVisible && window.innerWidth > 375) {
+    if(isVisible && window.innerWidth > 450) {
         document.getElementsByClassName('skills-main-header').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('skills-main-desc').item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
         return;

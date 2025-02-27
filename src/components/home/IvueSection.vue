@@ -63,7 +63,7 @@ const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds
  * This functions sets initial transitions upon entering this section for iVue.
  */
 function setInitTranstions(isVisible) {
-    if(!isVisible || window.innerWidth <= 375) { return; }
+    if(!isVisible || window.innerWidth <= 450) { return; }
     document.getElementsByClassName('ivue-section-title').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
     document.getElementById('wiv-tab').classList.add("animate__animated", "animate__lightSpeedInRight");
     document.getElementById('main-tab').classList.add("animate__animated", "animate__lightSpeedInLeft");
