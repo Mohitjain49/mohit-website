@@ -91,18 +91,18 @@ function addCardTransition(isVisible, index = 0) {
  * It adds transitions to the description text upon entry.
  */
 function setSkillsTransitions(isVisible) {
-    if(isVisible) {
+    if(isVisible && window.innerWidth > 375) {
         document.getElementsByClassName('skills-main-header').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('skills-main-desc').item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
         return;
-    }
+    } else if(!isVisible) {
+        document.getElementsByClassName('skills-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName('skills-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
 
-    document.getElementsByClassName('skills-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-    document.getElementsByClassName('skills-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
-    const skillCards = document.getElementsByClassName("skills-entity-container");
-
-    for(let i = 0; i < skillCards.length; i++) {
-        skillCards.item(i).classList.remove("animate__animated", "animate__zoomIn");
+        const skillCards = document.getElementsByClassName("skills-entity-container");
+        for(let i = 0; i < skillCards.length; i++) {
+            skillCards.item(i).classList.remove("animate__animated", "animate__zoomIn");
+        }
     }
 }
 </script>

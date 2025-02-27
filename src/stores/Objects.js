@@ -51,6 +51,7 @@ export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/en/";
 export const SOCIALS = [
     {
         name: "Work Email",
+        id: "work_email",
         displayLink: "mohitkjain49@gmail.com",
         link: "mailto:mohitkjain49@gmail.com",
         copyBtn: "Copy Email",
@@ -61,6 +62,7 @@ export const SOCIALS = [
     },
     {
         name: "LinkedIn",
+        id: "linkedin",
         displayLink: "https://www.linkedin.com/in/mohitjain49",
         link: "https://www.linkedin.com/in/mohitjain49",
         copyBtn: "Copy LinkedIn Link",
@@ -71,6 +73,7 @@ export const SOCIALS = [
     },
     {
         name: "Discord",
+        id: "discord",
         displayLink: "https://discord.com/users/mohitjainn",
         link: "https://discord.com/users/mohitjainn",
         copyBtn: "Copy Discord Link",
@@ -81,6 +84,7 @@ export const SOCIALS = [
     },
     {
         name: "GitHub",
+        id: "github",
         displayLink: "https://github.com/Mohitjain49",
         link: "https://github.com/Mohitjain49",
         copyBtn: "Copy GitHub Link",
@@ -505,8 +509,7 @@ export const NAV_CARDS = [
         },
 
         color: "#36A1D9",
-        desc: "See my work with developing Sublo, a subleasing mobile app that will make subleasing easier " +
-            "for college students to find and list subleases for their dormitories or apartments.",
+        desc: "During my time at Sublo, I helped develop a mobile app that will make subleasing easier for college students.",
     
         pointsTitle: "Dev Stack:",
         bulletPoints: [ "React Native", "Expo" ],
@@ -1034,34 +1037,6 @@ export const MAVLINK_INFO_SECTOR = {
             links: []
         }
     ]
-}
-
-export const SUBLO_INFO_SECTOR = {
-    title: "Sublo",
-    image: sublo_icon,
-    style: {
-        background: "#031427",
-        color: "#d1efff",
-        minHeight: "calc(100vh - 75px)"
-    },
-
-    buttons: [
-        { title: "Sublo's Website", link: SUBLO_WEBSITE_LINK },
-    ],
-    descriptions: [
-        "Sublo is a work-in-progress mobile subleasing app that will allow students to sublease to others safely and quickly. " +
-            "Today, college students typically use platforms like Facebook Marketplace. " +
-            "While these platforms are good, they lack many important filters for specific traits that college students are looking for, " +
-            "from specifying the number of bedrooms and bathrooms to whether pets are allowed or not. " +
-            "Sublo intends to fix this, focusing on creating proper filters to make searching for subleases efficient.",
-        "During my time at Sublo, I learned a lot about <span><a href=\"https://reactnative.dev\" style=\"text-decoration: underline;\">React Native</a></span>. " +
-            "Being one of the only mobile development frameworks that supports JavaScript packages and a platform that works for both Android and iOS, " +
-            "I have truly learned a lot with mobile app development. Though I have parted ways with Sublo due to College starting back up, " +
-            "I'm sure I'll be at the front of making mobile apps for iVue and maybe other organizations I'll join in the future."
-    ],
-
-    addBottomSpace: true,
-    pictures: []
 }
 
 export const AWS_INFO_SECTORS = [

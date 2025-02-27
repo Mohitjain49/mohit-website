@@ -5,15 +5,15 @@ import MyIcon from "./pages/MyIcon.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
-import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
-import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
 import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
 import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
 import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import ExperienceMain from "./pages/experience/ExperienceMain.vue";
-import SubloMain from "./pages/experience/SubloMain.vue";
+import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
+import SubloRedirect from "./pages/redirects/SubloRedirect.vue";
+import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
 
 import AmazonMain from "./pages/skills/amazon/AmazonMain.vue";
 import AmazonAmplify from "./pages/skills/amazon/AmazonAmplify.vue";
@@ -43,6 +43,7 @@ export const personalRoutes = [
     { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
     { path: "/updates", alias: ['/update'], redirect: { path: "/", hash: "#skills" } },
 
+    { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
     { path: "/worldsivue", alias: ['/wiv', '/worlds-ivue'], main: "Main WIV Redirect Page", component: WIVRedirect },
     { path: "/github",  main: "Main GitHub Redirect Page", component: GithubRedirect },
@@ -51,9 +52,8 @@ export const personalRoutes = [
 
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
+    { path: "/vuejs", redirect: "/skills/frontend/vuejs" },
     { path: "/aws", redirect: "/skills/aws" },
-
-    { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
     {
@@ -86,7 +86,7 @@ export const personalRoutes = [
         path: "/experience",
         children: [
             { path: "", name: "Main Experience Page", component: ExperienceMain },
-            { path: "sublo", name: "Main Sublo Page", component: SubloMain },
+            { path: "sublo", name: "Sublo Redirect Page", component: SubloRedirect },
             { path: "ivue", main: "iVue Redirect Page", component: IvueRedirect },
             { path: "worldsivue", alias: ['wiv', 'worlds-ivue'], main: "WIV Redirect Page", component: WIVRedirect },
         ]

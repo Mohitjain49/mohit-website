@@ -1,17 +1,20 @@
 <template>
 <div id="start" class="start-section">
     <div class="start-section-half" v-observe-visibility="setNameTransitions">
-        <div class="start-section-title animate__animated animate__lightSpeedInLeft">Mohit Jain</div>
-        <div class="start-section-subtitle animate__animated animate__lightSpeedInRight">
+        <div class="start-section-title">Mohit Jain</div>
+        <div class="start-section-subtitle">
             <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>'s Lead Software Developer
         </div>
-        <div class="start-section-subtitle animate__animated animate__lightSpeedInRight">
+        <div class="start-section-subtitle">
             Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
         </div>
 
-        <div class="start-contacts animate__animated animate__lightSpeedInLeft">
+        <div class="start-contacts">
             <div class="start-contacts-row top">
-                <RouterLink to="/contact" class="start-contacts-btn start-contacts-mainBtn">
+                <RouterLink to="/contact" id="start-contacts-mainBtn" class="start-contacts-btn"
+                    @mouseenter="onContactBtnHover('start-contacts-mainBtn')"
+                    @mouseleave="onContactBtnLeave('start-contacts-mainBtn')">
+
                     <font-awesome-icon icon="fa-paper-plane" />
                     <span>My Contact Info</span>
                 </RouterLink>
@@ -19,7 +22,10 @@
             <div class="start-contacts-row bottom">
                 <a v-for="contact in SOCIALS" :href="contact.link"
                     class="start-contacts-btn"
-                    :style="{ 'color': contact.color, 'border-color': contact.color }">
+                    :id="contact.id"
+                    :style="{ 'color': contact.color, 'border-color': contact.color }"
+                    @mouseenter="onContactBtnHover(contact.id)"
+                    @mouseleave="onContactBtnLeave(contact.id)">
 
                     <font-awesome-icon :icon="contact.linkIcon" />
                     <span> {{ contact.name }} </span>
@@ -27,12 +33,6 @@
             </div>
         </div>
     </div>
-
-    <!-- THIS HEADSHOT CAN BE ADDED LATER.
-    <div class="start-section-half headshot-side">
-        <img :src="headshot" class="start-section-headshot" />
-    </div>
-    -->
 </div>
 </template>
 
@@ -44,7 +44,7 @@ import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Obje
  * This function sets the transitions for the left half of the start section.
  */
 function setNameTransitions(isVisible) {
-    if(isVisible) {
+    if(isVisible && window.innerWidth > 375) {
         document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
@@ -55,6 +55,22 @@ function setNameTransitions(isVisible) {
         document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-contacts").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
     }
+}
+
+/**
+ * This function adds an animation when the visitor hovers over a contact button.
+ * @param {Number} index The index of the tab.
+ */
+function onContactBtnHover(id = "main-tab") {
+    document.getElementById(id).classList.add('animate__animated', 'animate__heartBeat');
+}
+
+/**
+ * This function removes an animation when the visitor leaves a contact button.
+ * @param {Number} index The index of the tab.
+ */
+function onContactBtnLeave(id = "main-tab") {
+    document.getElementById(id).classList.remove('animate__animated', 'animate__heartBeat');
 }
 </script>
 
@@ -149,11 +165,11 @@ function setNameTransitions(isVisible) {
     margin-right: 5px;
 }
 
-.start-contacts-mainBtn {
+#start-contacts-mainBtn {
     padding: 15px;
     font-size: 24px;
 }
-.start-contacts-mainBtn svg {
+#start-contacts-mainBtn svg {
     position: relative;
     bottom: 2px;
 }

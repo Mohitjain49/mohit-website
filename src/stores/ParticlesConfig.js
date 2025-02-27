@@ -2,7 +2,7 @@ export const HOME_BACKGROUND = {
     background: {
         color: "#232323",
     },
-    fpsLimit: 100,
+    fpsLimit: 40,
     particles: {
         color: { value: ["rgba(126, 90, 0, 0.9)", "#0047ABE6", "#FFFFFFE6"] },
         move: {
@@ -36,7 +36,7 @@ export const BLUE_BACKGROUND = {
     background: {
         color: "rgb(187, 210, 255)",
     },
-    fpsLimit: 100,
+    fpsLimit: 40,
     particles: {
         color: { value: ["#0047ABE6"] },
         move: {
@@ -70,7 +70,7 @@ export const ORANGE_BACKGROUND = {
     background: {
         color: "rgb(248, 206, 171)",
     },
-    fpsLimit: 100,
+    fpsLimit: 40,
     particles: {
         color: { value: ["rgb(126, 90, 0)"] },
         move: {
@@ -104,7 +104,7 @@ export const VUEJS_BACKGROUND = {
     background: {
         color: "#41B883",
     },
-    fpsLimit: 100,
+    fpsLimit: 40,
     particles: {
         color: { value: "#35495E" },
         move: {
@@ -124,7 +124,7 @@ export const VUEJS_BACKGROUND = {
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "square"
+            type: "triangle"
         },
         size: {
             value: { min: 2, max: 3 },
