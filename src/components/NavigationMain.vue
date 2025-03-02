@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import ksu_icon from "../assets/Kennesaw_State_Icon.png";
+import ksu_icon from "../assets/ksu/Kennesaw_State_Icon.png";
 import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
 const webData = useWebsiteDataStore();

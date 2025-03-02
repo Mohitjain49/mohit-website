@@ -8,6 +8,7 @@
         <StartSection />
         <SkillsSection />
         <IvueSection />
+        <KennesawSection />
         <WebFooter />
     </div>
 </client-only>
@@ -27,6 +28,7 @@ import WebFooter from '../components/WebFooter.vue';
 import StartSection from '../components/home/StartSection.vue';
 import IvueSection from '../components/home/IvueSection.vue';
 import SkillsSection from '../components/home/SkillsSection.vue';
+import KennesawSection from '../components/home/KennesawSection.vue';
 
 onMounted(() => { initWebData(); })
 
