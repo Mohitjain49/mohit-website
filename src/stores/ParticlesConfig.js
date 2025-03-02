@@ -49,7 +49,7 @@ export const BLUE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 2500
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -83,7 +83,7 @@ export const ORANGE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 1500
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -117,7 +117,7 @@ export const VUEJS_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 1500
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -128,6 +128,40 @@ export const VUEJS_BACKGROUND = {
         },
         size: {
             value: { min: 2, max: 3 },
+        },
+    },
+    detectRetina: true,
+    tRetina: true,
+};
+
+export const KSU_BACKGROUND = {
+    background: {
+        color: "#2D2926",
+    },
+    fpsLimit: 40,
+    particles: {
+        color: { value: ["#ffc629"] },
+        move: {
+            direction: "none",
+            enable: true,
+            outModes: { default: "out" },
+            random: true,
+            speed: 0.75,
+            straight: false,
+        },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 1500
+        },
+        opacity: {
+            value: { min: 1, max: 1 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "square"
+        },
+        size: {
+            value: { min: 2, max: 2.5 },
         },
     },
     detectRetina: true,

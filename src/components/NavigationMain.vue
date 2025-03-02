@@ -20,9 +20,9 @@
             <font-awesome-icon icon="fa-file-lines" />
             <span>Resume</span>
         </RouterLink>
-        <RouterLink to="/icons" class="web-navBar-opt web-navBar-side" :title="ICONS_TITLE">
-            <font-awesome-icon icon="fa-pen-fancy" />
-            <span>Icons</span>
+        <RouterLink to="/ksu-edu" class="web-navBar-opt web-navBar-side" :title="KSU_TITLE">
+            <img :src="ksu_icon" class="navBar-ksu-icon" />
+            <span>KSU</span>
         </RouterLink>
         <div class="web-navBar-opt web-navBar-side"
             v-if="webData.pageView != 0"
@@ -48,6 +48,7 @@
 </template>
 
 <script setup>
+import ksu_icon from "../assets/Kennesaw_State_Icon.png";
 import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
 const webData = useWebsiteDataStore();
@@ -55,7 +56,7 @@ const webData = useWebsiteDataStore();
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
-const ICONS_TITLE = "My Icons";
+const KSU_TITLE = "Kennesaw State University";
 
 const ROUTE_COLLECTION = [
     { path: "/", title: "Home" },
@@ -125,6 +126,12 @@ const ROUTE_COLLECTION = [
 }
 .web-navBar-side svg {
     margin-top: 7px;
+}
+
+.navBar-ksu-icon {
+    margin-top: 7px;
+    width: 22px;
+    user-select: none;
 }
 
 .web-navBar-contact {
