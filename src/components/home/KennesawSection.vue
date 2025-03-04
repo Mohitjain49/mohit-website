@@ -8,7 +8,8 @@
     </a>
     <div class="ksu-section-chunk ksu-section-desc">
         Currently, I am pursuing a bachelor's degree in Computer Science at Kennesaw State University, 
-        and I'm set to graduate on May 2027. I made a page dedicated to describing how my education.
+        and I'm set to graduate on May 2027. I made a page dedicated to describing how my 
+        education shapes my software development skills.
     </div>
     <RouterLink to="/ksu-edu" class="ksu-section-chunk ksu-section-link"
         @mouseenter="onKennesawChunkHover(2)"
@@ -21,7 +22,7 @@
 
 <script setup>
 import ksu_banner from "@/assets/ksu/Kennesaw_State_Banner.svg";
-const KSU_LINK = "https://kennesaw.edu/";
+import { KSU_LINK } from "@/stores/Objects.js";
 const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds.
 
 /**

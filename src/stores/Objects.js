@@ -36,6 +36,8 @@ import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
 export const PERSONAL_GLOBE_LINK = "https://globe.mohit-jain.com/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
+
+export const KSU_LINK = "https://kennesaw.edu/"
 export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
 
 export const MAIN_IVUE_WEBSITE_LINK = "https://ivueworld.com/";

@@ -136,7 +136,7 @@ export const VUEJS_BACKGROUND = {
 
 export const KSU_BACKGROUND = {
     background: {
-        color: "#2D2926",
+        color: "#FFFFFF",
     },
     fpsLimit: 40,
     particles: {
