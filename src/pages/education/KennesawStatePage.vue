@@ -4,13 +4,13 @@
     <vue-particles id="particlests" :options="KSU_BACKGROUND"></vue-particles>
 
     <div id="ksu-page" class="personal-web-body" @click="closeNavBarDropdown()">
-        <div id="start"></div>
-        <div class="ksu-page-header">
+        <div id="start" class="ksu-page-section" v-observe-visibility="(isVisible) => { manageKennesawVisibilityTransition(isVisible, 'start') }">
             <a :href="KSU_LINK" target="_blank" class="ksu-page-header-img">
                 <img :src="ksu_banner" draggable="false" />
             </a>
             <div class="ksu-page-header-caption"> {{ PAGE_DESC }} </div>
         </div>
+        <WebFooter />
     </div>
 
     <div class="ksu-credits-link" @click="closeNavBarDropdown()">
@@ -30,6 +30,8 @@
 import ksu_banner from "@/assets/ksu/Kennesaw_State_Banner.svg";
 
 import NavigationMain from '@/components/NavigationMain.vue';
+import WebFooter from "@/components/WebFooter.vue";
+
 import { KSU_BACKGROUND } from '@/stores/ParticlesConfig.js';
 import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 import { KSU_LINK } from "@/stores/Objects.js";
@@ -42,7 +44,7 @@ const KSU_STYLES_LINK = "https://styleguide.kennesaw.edu/";
 
 const WEBSITE_PATH = "https://mohit-jain.com/ksu-edu";
 const PAGE_TITLE = "Mohit Jain | Kennesaw State University";
-const PAGE_DESC = "As an undergraduate at Kennesaw State University, I have taken numerous courses " +
+const PAGE_DESC = "As I pursue a Bachelor's Degree of Computer Science at Kennesaw State University, I have taken numerous courses " +
     "that help shape my understanding and practice of software development.";
 
 onMounted(() => { webData.mountWebData(); })
@@ -52,6 +54,26 @@ onMounted(() => { webData.mountWebData(); })
  */
 function closeNavBarDropdown() {
     webData.setNavBarDropdown(-1);
+}
+
+/**
+ * This manages the transition that appears when the visibility of a section changes.
+ * @param {String} id The id of the page section.
+ */
+function manageKennesawVisibilityTransition(isVisible, id = "start") {
+    console.log
+    const children = document.getElementById(id).children;
+    const transition = (leftTransition = true) => {
+        return (leftTransition ? "animate__lightSpeedInLeft" : "animate__lightSpeedInRight");
+    }
+
+    for(let i = 0; i < children.length; i++) {
+        if(isVisible) {
+            children[i].classList.add("animate__animated", transition((i % 2) == 0));
+        } else {
+            children[i].classList.remove("animate__animated", transition((i % 2) == 0));
+        }
+    }
 }
 
 useHead({
@@ -76,35 +98,32 @@ useHead({
     background: rgba(0, 0, 0, 0.25);
     top: 0px;
     min-height: 100%;
-    width: 1200px;
-    padding: 0px calc(50% - 600px);
-}
-#start {
-    height: 50px;
-    width: 100%;
 }
 
-.ksu-page-header {
+.ksu-page-section {
+    padding-top: 50px;
     height: fit-content;
+    min-height: var(--body-height);
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 .ksu-page-header-caption {
     height: fit-content;
-    width: calc(100% - 70px);
-    margin-left: 35px;
+    width: calc(100% - 50px);
+    max-width: 1150px;
     border-radius: 10px;
     color: black;
     font-family: 'Montserrat', sans-serif;
-    font-size: 32px;
+    font-size: 33px;
     text-align: center;
+    padding-bottom: 100px;
 }
 
 .ksu-page-header-img {
-    position: relative;
-    left: calc(50% - 275px);
-    width: 500px;
+    width: 750px;
     height: fit-content;
     padding: 10px 25px;
     margin: 10px 0px;
@@ -124,8 +143,8 @@ useHead({
     position: fixed;
     width: fit-content;
     height: fit-content;
-    bottom: 10px;
-    right: 15px;
+    top: 60px;
+    left: 15px;
     color: black;
     font-family: 'Montserrat', sans-serif;
     font-size: 15px;
@@ -152,25 +171,19 @@ useHead({
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
     .ksu-page-header-caption {
-        font-size: 20px;
+        font-size: 25px;
     }
     .ksu-page-header-img {
         width: calc(100% - 75px);
-        left: 20px;
         padding: 5px 15px;
     }
 }
-@media (max-width: 450px) {
-    .ksu-page-header-caption {
-        font-size: 16px;
-    }
-}
 
-@media (max-width: 375px) {
-    .ksu-credits-link {
-        position: absolute;
+@media (max-width: 600px) {
+    .ksu-page-header-caption {
+        font-size: 17px;
     }
 }
 </style>
