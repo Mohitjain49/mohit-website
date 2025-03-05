@@ -20,10 +20,15 @@
             <font-awesome-icon icon="fa-file-lines" />
             <span>Resume</span>
         </RouterLink>
+        <RouterLink to="/qrcode" class="web-navBar-opt web-navBar-side" :title="RESUME_TITLE">
+            <font-awesome-icon icon="fa-qrcode" />
+            <span>QR Code</span>
+        </RouterLink>
         <RouterLink to="/ksu-edu" class="web-navBar-opt web-navBar-side" :title="KSU_TITLE">
             <img :src="ksu_icon" class="navBar-ksu-icon" />
             <span>KSU</span>
         </RouterLink>
+
         <div class="web-navBar-opt web-navBar-side"
             v-if="webData.pageView != 0"
             @click="webData.setNavBarDropdown(0)"
@@ -87,7 +92,7 @@ const ROUTE_COLLECTION = [
 }
 .web-navBar-links-side {
     display: flex;
-    width: 140px;
+    width: 210px;
     height: 100%;
 }
 
@@ -111,7 +116,7 @@ const ROUTE_COLLECTION = [
 
 .web-navBar-side {
     height: 100%;
-    width: 70px;
+    width: 60px;
     padding: 0px;
     border: none;
     margin-top: 0px;
@@ -122,7 +127,7 @@ const ROUTE_COLLECTION = [
     flex-direction: column;
 }
 .web-navBar-side span {
-    font-size: 12px;
+    font-size: 11px;
 }
 .web-navBar-side svg {
     margin-top: 7px;
@@ -153,10 +158,10 @@ const ROUTE_COLLECTION = [
         width: fit-content;
     }
     .web-navBar-side {
-        width: 50px;
+        width: 45px;
     }
     .web-navBar-side span {
-        font-size: 10px;
+        font-size: 9px;
     }
 }
 @media (max-width: 340px) {

@@ -42,6 +42,7 @@ library.add(
     FaIcons.faArrowUp,
     FaIcons.faPenFancy,
     FaIcons.faStar,
+    FaIcons.faQrcode,
 
     FaBrands.faReact,
     FaBrands.faJs,

@@ -3,6 +3,7 @@ import ContactPage from "./pages/ContactPage.vue";
 import Resume from "./pages/Resume.vue";
 import MyIcon from "./pages/MyIcon.vue";
 import KennesawStatePage from "./pages/education/KennesawStatePage.vue";
+import QRCodePage from "./pages/QRCodePage.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
@@ -40,6 +41,7 @@ export const personalRoutes = [
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
     { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
     { path: "/ksu-edu", name: "Kennesaw State University Page", component: KennesawStatePage },
+    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
     { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
@@ -52,12 +54,14 @@ export const personalRoutes = [
     { path: "/linkedin",  main: "Main LinkedIn Redirect Page", component: LinkedinRedirect },
     { path: "/discord",  main: "Main Discord Redirect Page", component: DiscordRedirect },
 
+    { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
     { path: "/kennesaw-state", alias: ["/ksu"], redirect: "/ksu-edu" },
+    { path: "/qrcodes", alias: ["/qr"], redirect: "/qrcode" },
+
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
     { path: "/vuejs", redirect: "/skills/frontend/vuejs" },
     { path: "/aws", redirect: "/skills/aws" },
-    { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
     {
         path: "/skills",

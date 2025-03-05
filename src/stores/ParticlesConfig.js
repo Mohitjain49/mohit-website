@@ -15,7 +15,7 @@ export const HOME_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 1250
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -162,6 +162,40 @@ export const KSU_BACKGROUND = {
         },
         size: {
             value: { min: 2, max: 2.5 },
+        },
+    },
+    detectRetina: true,
+    tRetina: true,
+};
+
+export const QR_PAGE_BACKGROUND = {
+    background: {
+        color: "#a373eb",
+    },
+    fpsLimit: 40,
+    particles: {
+        color: { value: ["#700606"] },
+        move: {
+            direction: "none",
+            enable: true,
+            outModes: { default: "out" },
+            random: true,
+            speed: 0.75,
+            straight: false,
+        },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 750
+        },
+        opacity: {
+            value: { min: 0.5, max: 1 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "triangle"
+        },
+        size: {
+            value: { min: 3, max: 3 },
         },
     },
     detectRetina: true,
