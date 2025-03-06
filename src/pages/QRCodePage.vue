@@ -1,31 +1,48 @@
 <template>
 <client-only>
     <NavigationMain />
-    <vue-particles id="particlests" :options="QR_PAGE_BACKGROUND"></vue-particles>
+    <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 
     <div id="qr-code-page" class="personal-web-body" @click="closeNavBarDropdown()">
-        <div class="qr-element-separator"></div>
-        <div class="qr-element" v-html="renderSVG(PORTFOLIO_WEBSITE_LINK)"></div>
-        <div class="qr-element-separator"></div>
-    </div>
-
-    <div class="qr-package-link" @click="closeNavBarDropdown()">
-        <span><a :href="UQR_PACKAGE_PAGE" target="_blank"> {{ UQR_PACKAGE_PAGE }} </a></span>
+        <div class="qr-page-grid">
+            <div class="qr-element-container animate__animated animate__bounceInDown">
+                <div class="qr-element" v-html="renderSVG(PORTFOLIO_WEBSITE_LINK)"></div>
+                <a :href="PORTFOLIO_WEBSITE_LINK" class="qr-element-link">
+                    <span> {{ PORTFOLIO_WEBSITE_LINK }} </span>
+                </a>
+            </div>
+            <div class="qr-element-container animate__animated animate__bounceInDown">
+                <div class="qr-element" v-html="renderSVG(PERSONAL_GLOBE_LINK)"></div>
+                <a :href="PERSONAL_GLOBE_LINK" class="qr-element-link">
+                    <span> {{ PERSONAL_GLOBE_LINK }} </span>
+                </a>
+            </div>
+            <div class="qr-element-container last animate__animated animate__bounceInDown">
+                <div class="qr-element" v-html="renderSVG(UQR_PACKAGE_PAGE)"></div>
+                <a :href="UQR_PACKAGE_PAGE" class="qr-element-link">
+                    <span> {{ UQR_PACKAGE_PAGE }} </span>
+                </a>
+            </div>
+        </div>
+        <WebFooter />
     </div>
 </client-only>
 </template>
 
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
-import { QR_PAGE_BACKGROUND } from '../stores/ParticlesConfig.js';
-import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
+import WebFooter from '../components/WebFooter.vue';
+import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
+
+import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
+import { PERSONAL_GLOBE_LINK, WORLDS_IVUE_LINK } from '../stores/Objects.js';
 
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 import { renderSVG } from 'uqr';
 
 onMounted(() => { initWebData(); });
-const PORTFOLIO_WEBSITE_LINK = "https://mohit-jain.com/";
+const PORTFOLIO_WEBSITE_LINK = "https://www.mohit-jain.com/";
 const UQR_PACKAGE_PAGE = "https://unjs.io/packages/uqr";
 
 const WEBSITE_PATH = "https://mohit-jain.com/qrcode";
@@ -52,57 +69,71 @@ useHead({
 <style scoped>
 #qr-code-page {
     background: transparent;
+}
+
+.qr-page-grid {
+    width: 100%;
+    height: fit-content;
+    min-height: var(--body-height);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.qr-element-container {
+    width: 100%;
+    height: fit-content;
+    min-height: calc(100% - 150px);
+    padding: 75px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-.qr-element-separator {
-    height: 75px;
-    width: 100%;
-}
 
 .qr-element {
     padding: 25px;
-    background-color: rgba(0, 0, 0, 0.25);
-    border: 1px solid white;
+    background-color: rgba(255, 255, 255, 0.25);
+    border: 1px solid black;
     border-radius: 15px;
 }
 .qr-element, .qr-element svg {
-    width: 475px;
-    height: 475px;
+    width: 300px;
+    height: 300px;
 }
 
-.qr-package-link {
-    position: fixed;
+.qr-element-link {
     width: fit-content;
     height: fit-content;
-    top: 60px;
-    left: 15px;
-    color: black;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 15px;
-    background-color: rgba(255, 255, 255, 0.5);
-    padding: 10px;
-    border-radius: 10px;
-    z-index: 10;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.25);
+    font-family: 'Lexend', sans-serif;
+    color: var(--website-text);
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
 }
-.qr-package-link a {
-    color: var(--blue-five);
+.qr-element-link span {
+    border-bottom: var(--empty-border);
     transition: var(--default-transition);
-    border-bottom: var(--thin-empty-border);
-    padding-top: 2px;
-    padding-bottom: 1px;
+    padding: 2px 0px;
 }
-.qr-package-link a:hover {
-    border-color: var(--blue-five);
+.qr-element-link:hover span {
+    border-color: var(--website-text);
 }
 
-@media (max-width: 600px) {
-    .qr-element, .qr-element svg {
-        width: 300px;
-        height: 300px;
+@media (max-width: 1150px) {
+    .qr-page-grid {
+        grid-template-columns: 1fr;
     }
+    .qr-element-container {
+        min-height: 0px;
+        padding-bottom: 0px;
+    }
+    .qr-element-container.last {
+        padding-bottom: 75px;
+    }
+}
+@media (max-width: 600px) {
     .qr-element {
         padding: 15px;
     }

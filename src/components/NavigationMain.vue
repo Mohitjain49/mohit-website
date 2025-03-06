@@ -180,7 +180,7 @@ const ROUTE_COLLECTION = [
     top: 50px;
     height: 200px;
     width: 300px;
-    z-index: 6;
+    z-index: 15;
     overflow: hidden;
     border-bottom: 1px solid var(--nav-bar-border);
     border-left: 1px solid var(--nav-bar-border);
