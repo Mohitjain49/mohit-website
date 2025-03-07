@@ -2,7 +2,6 @@ import PersonalMain from "./pages/PersonalMain.vue";
 import ContactPage from "./pages/ContactPage.vue";
 import Resume from "./pages/Resume.vue";
 import MyIcon from "./pages/MyIcon.vue";
-import KennesawStatePage from "./pages/education/KennesawStatePage.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
@@ -13,6 +12,8 @@ import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import ExperienceMain from "./pages/experience/ExperienceMain.vue";
+import VuejsPage from "./pages/skills/VuejsPage.vue";
+
 import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
 import SubloRedirect from "./pages/redirects/SubloRedirect.vue";
 import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
@@ -25,7 +26,6 @@ import AmazonWorkmail from "./pages/skills/amazon/AmazonWorkmail.vue";
 import AmazonCloudfront from "./pages/skills/amazon/AmazonCloudfront.vue";
 import AmazonRoute53 from "./pages/skills/amazon/AmazonRoute53.vue";
 
-import VuejsFrontend from "./pages/skills/frontend/VuejsFrontend.vue";
 import ReactNativeFrontend from "./pages/skills/frontend/ReactNativeFrontend.vue";
 import AngularFrontend from "./pages/skills/frontend/AngularFrontend.vue";
 
@@ -40,12 +40,14 @@ export const personalRoutes = [
     { path: "/resume", name: "My Resume", component: Resume },
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
     { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
-    { path: "/ksu-edu", name: "Kennesaw State University Page", component: KennesawStatePage },
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
+
+    { path: "/vuejs", name: "New Vue.js Page", component: VuejsPage },
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
     { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
     { path: "/updates", alias: ['/update'], redirect: { path: "/", hash: "#skills" } },
+    { path: "/ksu-edu", alias: ["/ksu", "/kennesaw-state"], redirect: { path: "/", hash: "#ksu" } },
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
@@ -55,12 +57,11 @@ export const personalRoutes = [
     { path: "/discord",  main: "Main Discord Redirect Page", component: DiscordRedirect },
 
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
-    { path: "/kennesaw-state", alias: ["/ksu"], redirect: "/ksu-edu" },
     { path: "/qrcodes", alias: ["/qr"], redirect: "/qrcode" },
 
+    { path: "/vue", redirect: "/vuejs" },
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
-    { path: "/vuejs", redirect: "/skills/frontend/vuejs" },
     { path: "/aws", redirect: "/skills/aws" },
 
     {
@@ -68,8 +69,8 @@ export const personalRoutes = [
         children: [
             { path: "", name: "Main Skills Page", component: SkillsNav },
             { path: "frontend", children: [
-                { path: "", redirect: "/skills/frontend/vuejs" },
-                { path: "vuejs", alias: ['vue'], name: "Vuejs Frontend", component: VuejsFrontend },
+                { path: "", redirect: "/skills/frontend/reactnative" },
+                { path: "vuejs", alias: ['vue'], redirect: "/vuejs" },
                 { path: "reactnative", alias: ['react'], name: "React Native Frontend", component: ReactNativeFrontend },
                 { path: "angular", alias: ['angularjs'], name: "Angular Frontend", component: AngularFrontend },
             ]},

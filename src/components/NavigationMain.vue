@@ -5,7 +5,9 @@
             to="/contact"
             :title="CONTACT_TITLE">
             
-            <font-awesome-icon icon="fa-paper-plane" />
+            <client-only>
+                <font-awesome-icon icon="fa-paper-plane" />
+            </client-only>
             <span>Contact Me!</span>
         </RouterLink>
     </div>
@@ -17,16 +19,20 @@
 
     <div class="web-navBar-links-side" style="justify-content: right;">
         <RouterLink to="/resume" class="web-navBar-opt web-navBar-side" :title="RESUME_TITLE">
-            <font-awesome-icon icon="fa-file-lines" />
+            <client-only>
+                <font-awesome-icon icon="fa-file-lines" />
+            </client-only>
             <span>Resume</span>
         </RouterLink>
         <RouterLink to="/qrcode" class="web-navBar-opt web-navBar-side" :title="RESUME_TITLE">
-            <font-awesome-icon icon="fa-qrcode" />
+            <client-only>
+                <font-awesome-icon icon="fa-qrcode" />
+            </client-only>
             <span>QR Code</span>
         </RouterLink>
-        <RouterLink to="/ksu-edu" class="web-navBar-opt web-navBar-side" :title="KSU_TITLE">
-            <img :src="ksu_icon" class="navBar-ksu-icon" />
-            <span>KSU</span>
+        <RouterLink to="/vuejs" class="web-navBar-opt web-navBar-side" :title="KSU_TITLE">
+            <img :src="vuejs_icon" class="navBar-vuejs-icon" />
+            <span>Vue.js</span>
         </RouterLink>
 
         <div class="web-navBar-opt web-navBar-side"
@@ -34,7 +40,9 @@
             @click="webData.setNavBarDropdown(0)"
             :title="ROUTE_MENU_TITLE">
 
-            <font-awesome-icon icon="fa-list" />
+            <client-only>
+                <font-awesome-icon icon="fa-list" />
+            </client-only>
             <span>Menu</span>
         </div>
     </div>
@@ -53,7 +61,7 @@
 </template>
 
 <script setup>
-import ksu_icon from "../assets/ksu/Kennesaw_State_Icon.png";
+import vuejs_icon from "../assets/Vuejs_Icon.png";
 import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
 const webData = useWebsiteDataStore();
@@ -133,7 +141,7 @@ const ROUTE_COLLECTION = [
     margin-top: 7px;
 }
 
-.navBar-ksu-icon {
+.navBar-vuejs-icon {
     margin-top: 7px;
     width: 22px;
     user-select: none;

@@ -1,32 +1,32 @@
 <template>
+<NavigationMain />
 <client-only>
-    <NavigationMain />
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
-
-    <div id="qr-code-page" class="personal-web-body" @click="closeNavBarDropdown()">
-        <div class="qr-page-grid">
-            <div class="qr-element-container animate__animated animate__bounceInDown">
-                <div class="qr-element" v-html="renderSVG(PORTFOLIO_WEBSITE_LINK)"></div>
-                <a :href="PORTFOLIO_WEBSITE_LINK" class="qr-element-link">
-                    <span> {{ PORTFOLIO_WEBSITE_LINK }} </span>
-                </a>
-            </div>
-            <div class="qr-element-container animate__animated animate__bounceInDown">
-                <div class="qr-element" v-html="renderSVG(PERSONAL_GLOBE_LINK)"></div>
-                <a :href="PERSONAL_GLOBE_LINK" class="qr-element-link">
-                    <span> {{ PERSONAL_GLOBE_LINK }} </span>
-                </a>
-            </div>
-            <div class="qr-element-container last animate__animated animate__bounceInDown">
-                <div class="qr-element" v-html="renderSVG(UQR_PACKAGE_PAGE)"></div>
-                <a :href="UQR_PACKAGE_PAGE" class="qr-element-link">
-                    <span> {{ UQR_PACKAGE_PAGE }} </span>
-                </a>
-            </div>
-        </div>
-        <WebFooter />
-    </div>
 </client-only>
+
+<div id="qr-code-page" class="personal-web-body" @click="closeNavBarDropdown()">
+    <div class="qr-page-grid">
+        <div class="qr-element-container animate__animated animate__bounceInDown">
+            <div class="qr-element" v-html="renderSVG(PORTFOLIO_WEBSITE_LINK)"></div>
+            <a :href="PORTFOLIO_WEBSITE_LINK" class="qr-element-link">
+                <span> {{ PORTFOLIO_WEBSITE_LINK }} </span>
+            </a>
+        </div>
+        <div class="qr-element-container animate__animated animate__bounceInDown">
+            <div class="qr-element" v-html="renderSVG(PERSONAL_GLOBE_LINK)"></div>
+            <a :href="PERSONAL_GLOBE_LINK" class="qr-element-link">
+                <span> {{ PERSONAL_GLOBE_LINK }} </span>
+            </a>
+        </div>
+        <div class="qr-element-container last animate__animated animate__bounceInDown">
+            <div class="qr-element" v-html="renderSVG(UQR_PACKAGE_PAGE)"></div>
+            <a :href="UQR_PACKAGE_PAGE" class="qr-element-link">
+                <span> {{ UQR_PACKAGE_PAGE }} </span>
+            </a>
+        </div>
+    </div>
+    <WebFooter />
+</div>
 </template>
 
 <script setup>
@@ -35,7 +35,7 @@ import WebFooter from '../components/WebFooter.vue';
 import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
 
 import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
-import { PERSONAL_GLOBE_LINK, WORLDS_IVUE_LINK } from '../stores/Objects.js';
+import { PERSONAL_GLOBE_LINK } from '../stores/Objects.js';
 
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';

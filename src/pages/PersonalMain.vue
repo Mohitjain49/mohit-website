@@ -1,9 +1,10 @@
 <template>
-<client-only>
-    <NavigationMain />
-    <NavigationHome />
+<NavigationMain />
 
+<client-only>
+    <NavigationHome />
     <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
+
     <div id="homepage" class="personal-web-body" @click="closeNavBarDropdown()">
         <StartSection />
         <SkillsSection />
@@ -56,7 +57,7 @@ useHead({
 
 <style scoped>
 #homepage {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.25);
     top: 0px;
     min-height: 100%;
 }

@@ -4,7 +4,7 @@ export const HOME_BACKGROUND = {
     },
     fpsLimit: 40,
     particles: {
-        color: { value: ["rgba(126, 90, 0, 0.9)", "#0047ABE6", "#FFFFFFE6"] },
+        color: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163"] },
         move: {
             direction: "none",
             enable: true,
@@ -15,7 +15,7 @@ export const HOME_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1250
+            value: 1000
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -49,7 +49,7 @@ export const BLUE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 2500
+            value: 1000
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -83,7 +83,7 @@ export const ORANGE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1500
+            value: 1000
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -102,11 +102,11 @@ export const ORANGE_BACKGROUND = {
 
 export const VUEJS_BACKGROUND = {
     background: {
-        color: "#41B883",
+        color: "#1a1a1a",
     },
     fpsLimit: 40,
     particles: {
-        color: { value: "#35495E" },
+        color: { value: "#41B883" },
         move: {
             direction: "none",
             enable: true,
@@ -117,7 +117,7 @@ export const VUEJS_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1500
+            value: 900
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -127,41 +127,7 @@ export const VUEJS_BACKGROUND = {
             type: "triangle"
         },
         size: {
-            value: { min: 2, max: 3 },
-        },
-    },
-    detectRetina: true,
-    tRetina: true,
-};
-
-export const KSU_BACKGROUND = {
-    background: {
-        color: "#FFFFFF",
-    },
-    fpsLimit: 40,
-    particles: {
-        color: { value: ["#ffc629"] },
-        move: {
-            direction: "none",
-            enable: true,
-            outModes: { default: "out" },
-            random: true,
-            speed: 0.75,
-            straight: false,
-        },
-        number: {
-            density: { enable: true, area: 1200 },
-            value: 1500
-        },
-        opacity: {
-            value: { min: 1, max: 1 },
-            animation: { enable: true, speed: 1.5, sync: false },
-        },
-        shape: {
-            type: "square"
-        },
-        size: {
-            value: { min: 2, max: 2.5 },
+            value: { min: 3, max: 3.5 },
         },
     },
     detectRetina: true,

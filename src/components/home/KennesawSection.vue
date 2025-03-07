@@ -11,12 +11,6 @@
         and I'm set to graduate on May 2027. I made a page dedicated to describing how my 
         education shapes my software development skills.
     </div>
-    <RouterLink to="/ksu-edu" class="ksu-section-chunk ksu-section-link"
-        @mouseenter="onKennesawChunkHover(2)"
-        @mouseleave="onKennesawChunkLeave(2)">
-
-        <span> Go To My KSU Page </span>
-    </RouterLink>
 </div>
 </template>
 
@@ -32,12 +26,10 @@ function setInitTranstions(isVisible) {
     if(!isVisible || window.innerWidth <= 450) { return; }
     document.getElementsByClassName("ksu-section-chunk").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
     document.getElementsByClassName("ksu-section-chunk").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
-    document.getElementsByClassName("ksu-section-chunk").item(2).classList.add("animate__animated", "animate__lightSpeedInLeft");
 
     setTimeout(() => {
         document.getElementsByClassName("ksu-section-chunk").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("ksu-section-chunk").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("ksu-section-chunk").item(2).classList.remove("animate__animated", "animate__lightSpeedInLeft");
     }, ANIMATE_DURATION)
 }
 

@@ -614,59 +614,7 @@ export const NAV_CARDS = [
             { image: angular_icon, width: "41%" }
         ]
     },
-]
-
-export const VUE_INFO_SECTOR = {
-    title: "Vue.js",
-    image: vue_icon,
-    style: {
-        background: "transparent",
-        color: "white",
-        minHeight: "100vh"
-    },
-
-    buttons: [
-        { title: "Go To The Vue.js Website", link: VUEJS_WEBSITE_LINK }
-    ],
-    descriptions: [
-        "Vue.js is a versatile web development framework that enhances traditional HTML, CSS, and JavaScript, offering a familiar yet more intuitive learning curve for developers. " +
-            "It allows you to structure your HTML based on a dynamic JavaScript state, automatically updating the Document Object Model (DOM) whenever changes occur. " +
-            "This reactive nature makes Vue.js suitable for a wide range of use cases—from enhancing static HTML websites to building fully-fledged single-page applications (SPAs) like Worlds iVue.",
-        "Like many modern UI frameworks, Vue.js follows a component-based architecture, making it straightforward to build even complex user interfaces. " +
-            "It leverages Single-File Components (SFCs), stored in .vue files, which bundle the template, logic, and styling for each component into one cohesive file. " +
-            "Each Vue component can include custom CSS, import external resources (e.g., JavaScript, CSS, JSON), and support various media types like .png, .jpg, and .ico.",
-        "Vue.js, similar to other web development frameworks, also contains an ecosystem of helpful libraries. " +
-            "Vue Router provides seamless navigation for single-page applications (SPAs), allowing developers to easily manage routes and handle dynamic page transitions without refreshing the entire page. " +
-            "Pinia serves as Vue’s state management library, offering a lightweight yet robust solution for managing application-wide state. " +
-            "Other notable libraries many Vue.js applications use are Vuetify and Nuxt.",
-        "I began my frontend development journey using Vue.js to create " + getLinkElement("Worlds iVue", WORLDS_IVUE_LINK) + " and " + getLinkElement("iVue's Company's Websites", MAIN_IVUE_WEBSITE_LINK) +
-            ". Known as \"The Progressive Framework\", Vue.js is designed to scale with your experience level, making it accessible for both beginners and seasoned developers. " +
-            "Whether you're just starting with coding or are an expert in frontend development, Vue.js provides a flexible and powerful toolkit. " +
-            "I highly recommend this framework to anyone looking to showcase their software development skills, just as I did with Worlds iVue."
-    ],
-
-    addBottomSpace: false,
-    pictures: [
-        {
-            header: "Worlds iVue",
-            file: wiv_app,
-            fileLink: WORLDS_IVUE_LINK,
-            links: [
-                { text: "See My Contributions", path: "/experience/ivue/worldsivue", nativeRoute: true },
-                { text: "Open App", path: WORLDS_IVUE_LINK, nativeRoute: false }
-            ]
-        },
-        {
-            header: "iVue Websites",
-            file: ivue_website,
-            fileLink: MAIN_IVUE_WEBSITE_LINK,
-            links: [
-                { text: "See My Contributions", path: "/experience/ivue", nativeRoute: true },
-                { text: "Go To Website", path: MAIN_IVUE_WEBSITE_LINK, nativeRoute: false }
-            ]
-        }
-    ]
-}
+];
 
 export const ANGULAR_INFO_SECTOR = {
     title: "Angular",

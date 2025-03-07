@@ -1,7 +1,7 @@
 <template>
 <div class="skill-sidebar-container skill-sidebar" :class="(classPrefix + 'frontend-sidebar')">
     <div class="skill-sidebar-container">
-        <RouterLink :to="getFrontendRoute('vuejs')" :class="returnSidebarOptClasses()" title="Vue.js">
+        <RouterLink to="/vuejs" :class="returnSidebarOptClasses()" title="Vue.js">
             <img :src="vue_icon" class="skill-sidebar-opt-icon-v2" width="25" draggable="false" />
         </RouterLink>
 
