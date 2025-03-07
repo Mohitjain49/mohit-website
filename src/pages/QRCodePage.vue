@@ -6,19 +6,19 @@
 
 <div id="qr-code-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <div class="qr-page-grid">
-        <div class="qr-element-container animate__animated animate__bounceInDown">
+        <div class="qr-element-container">
             <div class="qr-element" v-html="renderSVG(PORTFOLIO_WEBSITE_LINK)"></div>
             <a :href="PORTFOLIO_WEBSITE_LINK" class="qr-element-link">
                 <span> {{ PORTFOLIO_WEBSITE_LINK }} </span>
             </a>
         </div>
-        <div class="qr-element-container animate__animated animate__bounceInDown">
+        <div class="qr-element-container">
             <div class="qr-element" v-html="renderSVG(PERSONAL_GLOBE_LINK)"></div>
             <a :href="PERSONAL_GLOBE_LINK" class="qr-element-link">
                 <span> {{ PERSONAL_GLOBE_LINK }} </span>
             </a>
         </div>
-        <div class="qr-element-container last animate__animated animate__bounceInDown">
+        <div class="qr-element-container last">
             <div class="qr-element" v-html="renderSVG(UQR_PACKAGE_PAGE)"></div>
             <a :href="UQR_PACKAGE_PAGE" class="qr-element-link">
                 <span> {{ UQR_PACKAGE_PAGE }} </span>
@@ -41,7 +41,16 @@ import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 import { renderSVG } from 'uqr';
 
-onMounted(() => { initWebData(); });
+onMounted(() => {
+    initWebData();
+    if(window.innerWidth <= 1150) { return; }
+    const qrCodes = document.getElementsByClassName("qr-element-container");
+
+    for(let i = 0; i < qrCodes.length; i++) {
+        qrCodes.item(i).classList.add("animate__animated", "animate__bounceInDown")
+    }
+});
+
 const PORTFOLIO_WEBSITE_LINK = "https://www.mohit-jain.com/";
 const UQR_PACKAGE_PAGE = "https://unjs.io/packages/uqr";
 
@@ -72,9 +81,10 @@ useHead({
 }
 
 .qr-page-grid {
-    width: 100%;
+    width: 1450px;
     height: fit-content;
     min-height: var(--body-height);
+    padding: 0px calc(50% - 725px);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
@@ -121,6 +131,12 @@ useHead({
     border-color: var(--website-text);
 }
 
+@media (max-width: 1450px) {
+    .qr-page-grid {
+        width: 100%;
+        padding: 0px;
+    }
+}
 @media (max-width: 1150px) {
     .qr-page-grid {
         grid-template-columns: 1fr;

@@ -1,10 +1,8 @@
 <template>
-<client-only>
-    <NavigationMain />
-    <div id="resume-container" @click="closeNavBarDropdown()">
-        <iframe :src="resume" height="100%" width="100%"></iframe>
-    </div>
-</client-only>
+<NavigationMain />
+<div id="resume-container" @click="closeNavBarDropdown()">
+    <iframe :src="resume" height="100%" width="100%"></iframe>
+</div>
 </template>
 
 <script setup>

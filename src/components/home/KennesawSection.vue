@@ -8,8 +8,7 @@
     </a>
     <div class="ksu-section-chunk ksu-section-desc">
         Currently, I am pursuing a bachelor's degree in Computer Science at Kennesaw State University, 
-        and I'm set to graduate on May 2027. I made a page dedicated to describing how my 
-        education shapes my software development skills.
+        and I'm set to graduate on May 2027. My education shapes how I develop code everyday.
     </div>
 </div>
 </template>

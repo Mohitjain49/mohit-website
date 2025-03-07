@@ -1,10 +1,8 @@
 <template>
-<client-only>
-    <NavigationMain />
-    <div class="personal-web-body" @click="closeNavBarDropdown()">
-        <div class="redirect-statement"> {{ REDIRECT_TEXT }} </div>
-    </div>
-</client-only>
+<NavigationMain />
+<div class="personal-web-body" @click="closeNavBarDropdown()">
+    <div class="redirect-statement"> {{ REDIRECT_TEXT }} </div>
+</div>
 </template>
 
 <script setup>

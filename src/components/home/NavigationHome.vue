@@ -1,6 +1,8 @@
 <template>
 <div :class="getCircleClasses()" @click="toggleMenuExpanded()" title="Navigate This Page">
-    <font-awesome-icon v-if="!menuExpanded" icon="fa-bars" class="home-nav-barsIcon" :beat="iconBeating" />
+    <client-only>
+        <font-awesome-icon v-if="!menuExpanded" icon="fa-bars" class="home-nav-barsIcon" :beat="iconBeating" />
+    </client-only>
 
     <template v-if="menuExpanded">
         <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses()"> Start </RouterLink>

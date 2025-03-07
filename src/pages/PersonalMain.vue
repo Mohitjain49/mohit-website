@@ -1,18 +1,20 @@
 <template>
 <NavigationMain />
+<NavigationHome />
 
 <client-only>
-    <NavigationHome />
     <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
+</client-only>
 
-    <div id="homepage" class="personal-web-body" @click="closeNavBarDropdown()">
+<div id="homepage" class="personal-web-body" @click="closeNavBarDropdown()">
+    <client-only>
         <StartSection />
         <SkillsSection />
         <IvueSection />
         <KennesawSection />
-        <WebFooter />
-    </div>
-</client-only>
+    </client-only>
+    <WebFooter />
+</div>
 </template>
 
 <script setup>
