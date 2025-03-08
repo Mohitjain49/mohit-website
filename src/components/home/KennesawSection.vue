@@ -10,6 +10,12 @@
         Currently, I am pursuing a bachelor's degree in Computer Science at Kennesaw State University, 
         and I'm set to graduate on May 2027. My education shapes how I develop code everyday.
     </div>
+    <a :href="KSU_LINK" class="ksu-section-chunk ksu-section-link"
+        @mouseenter="onKennesawChunkHover(2)"
+        @mouseleave="onKennesawChunkLeave(2)">
+
+        <span> {{ KSU_LINK }} </span>
+    </a>
 </div>
 </template>
 
@@ -25,10 +31,12 @@ function setInitTranstions(isVisible) {
     if(!isVisible || window.innerWidth <= 450) { return; }
     document.getElementsByClassName("ksu-section-chunk").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
     document.getElementsByClassName("ksu-section-chunk").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
+    document.getElementsByClassName("ksu-section-chunk").item(2).classList.add("animate__animated", "animate__lightSpeedInLeft");
 
     setTimeout(() => {
         document.getElementsByClassName("ksu-section-chunk").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("ksu-section-chunk").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("ksu-section-chunk").item(2).classList.remove("animate__animated", "animate__lightSpeedInLeft");
     }, ANIMATE_DURATION)
 }
 
@@ -103,6 +111,7 @@ function onKennesawChunkLeave(chunkIndex = 0) {
     .ksu-section {
         width: 100%;
         padding: 60px 0px;
+        padding-bottom: 100px;
     }
     .ksu-section-chunk {
         width: calc(88% - 50px);

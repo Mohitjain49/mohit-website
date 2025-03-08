@@ -48,6 +48,7 @@ export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
+export const NUXT_WEBSITE_LINK = "https://nuxt.com/";
 export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/en/";
 
 export const SOCIALS = [
@@ -166,7 +167,7 @@ export const SKILL_ENTITIES = [
     },
     {
         name: "Nuxt",
-        link: "https://nuxt.com/",
+        link: NUXT_WEBSITE_LINK,
         color: "#00DC82",
         desc: "Nuxt is a web framework that's built with Vue.js and comes with a whole host of features. " +
             "It's particularly useful when use Vue Components to generate a static site " +
