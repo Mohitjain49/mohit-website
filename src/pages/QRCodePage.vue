@@ -18,12 +18,6 @@
                 <span> {{ PERSONAL_GLOBE_LINK }} </span>
             </a>
         </div>
-        <div class="qr-element-container last">
-            <div class="qr-element" v-html="renderSVG(UQR_PACKAGE_PAGE)"></div>
-            <a :href="UQR_PACKAGE_PAGE" class="qr-element-link">
-                <span> {{ UQR_PACKAGE_PAGE }} </span>
-            </a>
-        </div>
     </div>
     <WebFooter />
 </div>
@@ -56,7 +50,8 @@ const UQR_PACKAGE_PAGE = "https://unjs.io/packages/uqr";
 
 const WEBSITE_PATH = "https://mohit-jain.com/qrcode";
 const PAGE_TITLE = "Mohit Jain | QR Codes";
-const PAGE_DESC = "This page hosts QR (Quick Response) codes that lead to projects or pages that I work on.";
+const PAGE_DESC = "This page hosts QR (Quick Response) codes that lead to projects or pages that I work on. " +
+    "I used the uqr (" + UQR_PACKAGE_PAGE + ") Code Package for this page.";
 
 useHead({
     title: PAGE_TITLE,
@@ -81,12 +76,12 @@ useHead({
 }
 
 .qr-page-grid {
-    width: 1450px;
+    width: 1000px;
     height: fit-content;
     min-height: var(--body-height);
-    padding: 0px calc(50% - 725px);
+    padding: 0px calc(50% - 500px);
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 }
 .qr-element-container {
     width: 100%;
@@ -131,13 +126,13 @@ useHead({
     border-color: var(--website-text);
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 1000px) {
     .qr-page-grid {
         width: 100%;
         padding: 0px;
     }
 }
-@media (max-width: 1150px) {
+@media (max-width: 800px) {
     .qr-page-grid {
         grid-template-columns: 1fr;
     }
