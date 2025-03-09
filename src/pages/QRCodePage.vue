@@ -8,8 +8,8 @@
     <div class="qr-page-grid">
         <div class="qr-element-container">
             <div class="qr-element" v-html="renderSVG(PERSONAL_WEBSITE_LINK)"></div>
-            <a :href="PORTFOLIO_WEBSITE_LINK" class="qr-element-link">
-                <span> {{ PORTFOLIO_WEBSITE_LINK }} </span>
+            <a :href="PERSONAL_WEBSITE_LINK" class="qr-element-link">
+                <span> {{ PERSONAL_WEBSITE_LINK }} </span>
             </a>
         </div>
         <div class="qr-element-container">
