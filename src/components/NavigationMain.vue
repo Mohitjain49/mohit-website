@@ -13,8 +13,8 @@
     </div>
 
     <div v-if="webData.pageView == 0" class="web-navBar-links-section center-flex-display">
-        <RouterLink v-for="route in ROUTE_COLLECTION" class="web-navBar-opt" :to="route.path" v-html="route.title" />
-        <a class="web-navBar-opt" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
+        <RouterLink v-for="route in ROUTE_COLLECTION" :class="route.classes" :to="route.path" v-html="route.title" />
+        <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
     </div>
 
     <div class="web-navBar-links-side" style="justify-content: right;">
@@ -72,9 +72,9 @@ const RESUME_TITLE = "See My Resume!";
 const KSU_TITLE = "Kennesaw State University";
 
 const ROUTE_COLLECTION = [
-    { path: "/", title: "Home" },
-    { path: "/skills", title: "Skills" },
-    { path: "/experience", title: "Experience" }
+    { path: "/", title: "Home", classes: "web-navBar-opt" },
+    { path: "/skills", title: "Skills", classes: "web-navBar-opt skills" },
+    { path: "/experience", title: "Experience", classes: "web-navBar-opt" }
 ];
 </script>
 
@@ -159,6 +159,20 @@ const ROUTE_COLLECTION = [
 .web-navBar-contact svg {
     margin-top: -4px;
     font-size: 17px;
+}
+
+.web-navBar-opt.skills {
+    color: var(--blue-three);
+}
+.web-navBar-opt.skills:hover {
+    border-color: var(--blue-three);
+}
+
+.web-navBar-opt.globe {
+    color: var(--globe-green);
+}
+.web-navBar-opt.globe:hover {
+    border-color: var(--globe-green);
 }
 
 @media (max-width: 825px) {

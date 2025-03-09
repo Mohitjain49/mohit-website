@@ -6,16 +6,15 @@ export const HOME_BACKGROUND = {
     particles: {
         color: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163"] },
         move: {
-            direction: "none",
+            direction: "bottom",
             enable: true,
             outModes: { default: "out" },
-            random: true,
-            speed: 0.75,
+            speed: 1.5,
             straight: false,
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1000
+            value: 500
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },

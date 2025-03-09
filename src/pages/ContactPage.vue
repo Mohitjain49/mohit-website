@@ -1,7 +1,7 @@
 <template>
 <NavigationMain />
 <client-only>
-    <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
+    <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
 <div id="contact-page" class="personal-web-body" @click="closeNavBarDropdown()">
@@ -78,8 +78,8 @@
 
                 <div class="social-tab-btn-container">
                     <div class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
-                        @mouseenter="setSocialBtnTransition"
-                        @mouseleave="setSocialBtnTransition">
+                        @mouseenter="setSocialBtnAnimation"
+                        @mouseleave="setSocialBtnAnimation">
 
                         <span> {{ social.copyBtn }} </span>
                         <client-only>
@@ -87,8 +87,8 @@
                         </client-only>
                     </div>
                     <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
-                        @mouseenter="setSocialBtnTransition"
-                        @mouseleave="setSocialBtnTransition">
+                        @mouseenter="setSocialBtnAnimation"
+                        @mouseleave="setSocialBtnAnimation">
 
                         <span> {{ social.linkBtn }} </span>
                         <client-only>
@@ -114,7 +114,7 @@ import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
 
 import { SOCIALS } from '../stores/Objects.js';
-import { BLUE_BACKGROUND } from '../stores/ParticlesConfig.js';
+import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
 
 import axios from 'axios';
 import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
@@ -170,7 +170,7 @@ onMounted(() => {
 /**
  * This function adds or removes a transition to a social media link button.
  */
-function setSocialBtnTransition(event = new MouseEvent("mouseenter")) {
+function setSocialBtnAnimation(event = new MouseEvent("mouseenter")) {
     if(event.type === "mouseenter") {
         event.target.classList.add("animate__headShake");
     } else {
@@ -318,8 +318,8 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     border-radius: 20px;
     overflow: hidden;
     background: var(--webpage-static-background);
+    box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.25);
 }
-
 .contact-me-box.web-service {
     left: calc(100% - 525px);
 }

@@ -31,6 +31,7 @@ library.add(
     FaIcons.faMessage,
     FaIcons.faLaptopCode,
     FaIcons.faFileCode,
+    FaIcons.faCode,
     FaIcons.faFileArrowDown,
     FaIcons.faFileArrowUp,
     FaIcons.faCopy,
@@ -43,6 +44,7 @@ library.add(
     FaIcons.faPenFancy,
     FaIcons.faStar,
     FaIcons.faQrcode,
+    FaIcons.faGlobe,
 
     FaBrands.faReact,
     FaBrands.faJs,
