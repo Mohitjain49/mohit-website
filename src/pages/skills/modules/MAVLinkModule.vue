@@ -10,32 +10,16 @@
 <script setup>
 import ModulesSidebar from '@/components/sidebars/ModulesSidebar.vue';
 import InfoSector from '@/components/body-components/InfoSector.vue';
-import { MAVLINK_INFO_SECTOR } from '@/stores/Objects.js';
 
+import { MAVLINK_INFO_SECTOR } from '@/stores/Objects.js';
 import { initWebData, closeNavBarDropdown } from "@/stores/WebsiteData.js";
+import { getMeta } from '@/stores/GetMeta.js';
+
 import { onMounted } from "vue";
 import { useHead } from "@unhead/vue";
 
 onMounted(() => { initWebData(); });
-
-const WEBSITE_PATH = "https://mohit-jain.com/skills/modules/mavlink";
-const PAGE_TITLE = "Mohit Jain | MAVLink Protocol";
-const PAGE_DESC = "My personal website extensively displays my skills as a software developer " +
-    "and the experience I have gathered through working with multiple companies. Made With Vue.js.";
-
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})  
+useHead(getMeta("Mohit Jain | MAVLink Protocol", "skills/modules/mavlink",
+    "I learned how to use the MAVLink Protoicol so that Worlds iVue can programmatically operate drones."
+));
 </script>

@@ -1,28 +1,15 @@
 <template>
-<RedirectTemplate :websiteLink="'/#ivue'" />
+<RedirectTemplate :websiteLink="MAIN_IVUE_WEBSITE_LINK" />
 </template>
 
 <script setup>
 import RedirectTemplate from '@/components/body-components/RedirectTemplate.vue';
 import { useHead } from '@unhead/vue';
 
-const WEBSITE_PATH = "https://mohit-jain.com/#ivue";
-const PAGE_TITLE = "Mohit Jain | iVue";
-const PAGE_DESC = "This link will redirect you to my website's section of iVue.";
+import { MAIN_IVUE_WEBSITE_LINK } from '@/stores/Objects.js';
+import { getMetaWithLink } from '@/stores/GetMeta.js';
 
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})
+useHead(getMetaWithLink("iVue - iVue The World", MAIN_IVUE_WEBSITE_LINK,
+    "This link will redirect you to the Main iVue Website."
+));
 </script>

@@ -28,32 +28,16 @@ import WebFooter from '@/components/WebFooter.vue';
 import NavPageCard from '@/components/body-components/NavPageCard.vue';
 import { NAV_CARDS } from '@/stores/Objects.js';
 import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
+import { getMeta } from "@/stores/GetMeta.js";
 
 import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
 onMounted(() => { initWebData(); });
-
-const WEBSITE_PATH = "https://mohit-jain.com/experience/";
-const PAGE_TITLE = "Mohit Jain | My Experience";
-const PAGE_DESC = "On this page, I go into depth about my work experience.";
-
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})
+useHead(getMeta("Mohit Jain | My Experience", "experience/",
+    "On this page, I go into depth about my work experience."
+));
 </script>
 
 <style scoped>

@@ -115,6 +115,7 @@ import WebFooter from '../components/WebFooter.vue';
 
 import { SOCIALS } from '../stores/Objects.js';
 import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
+import { getMeta } from '../stores/GetMeta.js';
 
 import axios from 'axios';
 import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
@@ -130,25 +131,9 @@ const msgMain = ref("");
 const senderName = ref("");
 const senderEmail = ref("");
 
-const WEBSITE_PATH = "https://mohit-jain.com/contact";
-const PAGE_TITLE = "Mohit Jain | Contact Me";
-const PAGE_DESC = "This page hosts multiple links to platforms where you can contact me.";
-
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})
+useHead(getMeta("Mohit Jain | Contact Me", "contact",
+    "This page hosts multiple links to platforms where you can contact me."
+));
 
 /**
  * ----------------------------------------------------
@@ -470,7 +455,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     left: calc(10% - 10px);
     border: 2px solid;
     border-radius: 7px;
-    margin-bottom: 30px;
+    margin-bottom: 13px;
     background-color: var(--silver-light);
 }
 .social-tab-header {

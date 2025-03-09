@@ -1,5 +1,5 @@
 <template>
-<RedirectTemplate :websiteLink="GITHUB_LINK" />
+<RedirectTemplate :websiteLink="GITLAB_LINK" />
 </template>
 
 <script setup>
@@ -8,9 +8,9 @@ import { SOCIALS } from '@/stores/Objects.js';
 import { useHead } from '@unhead/vue';
 
 import { getMetaWithLink } from '@/stores/GetMeta.js';
-const GITHUB_LINK = SOCIALS[3].link;
+const GITLAB_LINK = SOCIALS[4].link;
 
-useHead(getMetaWithLink("Mohit Jain | GitHub", GITHUB_LINK,
-    "This link will redirect you to my GitHub Profile."
-))
+useHead(getMetaWithLink("Mohit Jain | GitLab", GITLAB_LINK,
+    "This link will redirect you to my GitLab Profile."
+));
 </script>

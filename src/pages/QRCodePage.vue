@@ -7,7 +7,7 @@
 <div id="qr-code-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <div class="qr-page-grid">
         <div class="qr-element-container">
-            <div class="qr-element" v-html="renderSVG(PORTFOLIO_WEBSITE_LINK)"></div>
+            <div class="qr-element" v-html="renderSVG(PERSONAL_WEBSITE_LINK)"></div>
             <a :href="PORTFOLIO_WEBSITE_LINK" class="qr-element-link">
                 <span> {{ PORTFOLIO_WEBSITE_LINK }} </span>
             </a>
@@ -29,7 +29,8 @@ import WebFooter from '../components/WebFooter.vue';
 import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
 
 import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
-import { PERSONAL_GLOBE_LINK } from '../stores/Objects.js';
+import { PERSONAL_WEBSITE_LINK, PERSONAL_GLOBE_LINK } from '../stores/Objects.js';
+import { getMeta } from '../stores/GetMeta.js';
 
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
@@ -45,29 +46,11 @@ onMounted(() => {
     }
 });
 
-const PORTFOLIO_WEBSITE_LINK = "https://www.mohit-jain.com/";
 const UQR_PACKAGE_PAGE = "https://unjs.io/packages/uqr";
-
-const WEBSITE_PATH = "https://mohit-jain.com/qrcode";
-const PAGE_TITLE = "Mohit Jain | QR Codes";
 const PAGE_DESC = "This page hosts QR (Quick Response) codes that lead to projects or pages that I work on. " +
     "I used the uqr (" + UQR_PACKAGE_PAGE + ") Code Package for this page.";
 
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})
+useHead(getMeta("Mohit Jain | QR Codes", "qrcode", PAGE_DESC));
 </script>
 
 <style scoped>

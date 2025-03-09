@@ -81,6 +81,7 @@ import nuxt_icon from "@/assets/Nuxt_Icon.png";
 
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
+import { getMeta } from "@/stores/GetMeta.js";
 
 import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
 import { VUEJS_BACKGROUND } from '@/stores/ParticlesConfig.js';
@@ -143,30 +144,14 @@ function goToVuejsWebsite() {
 /**
  * This function navigates the user to the Nuxt Website.
  */
- function goToNuxtWebsite() {
+function goToNuxtWebsite() {
     window.open(NUXT_WEBSITE_LINK, "nuxt-website");
 }
 
-const WEBSITE_PATH = "https://mohit-jain.com/vuejs/";
-const PAGE_TITLE = "Mohit Jain | Vue.js";
 const PAGE_DESC = "As a frontend developer, Vue.js is my go-to web development framework, " +
     "offering simplicity, quick performance, and a vast ecosystem to all developers.";
 
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})
+useHead(getMeta("Mohit Jain | Vue.js", "vuejs", PAGE_DESC));
 
 const PROJECT_LINKS = [
     WORLDS_IVUE_LINK,

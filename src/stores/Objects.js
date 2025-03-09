@@ -34,6 +34,7 @@ import sublo_white_background_icon from "../assets/sublo/Sublo_Blue_Background.p
 import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
 import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
 
+export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/"
 export const PERSONAL_GLOBE_LINK = "https://globe.mohit-jain.com/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
 
@@ -96,6 +97,17 @@ export const SOCIALS = [
         color: "white",
         altColor: "black"
     },
+    {
+        name: "GitLab",
+        id: "gitlab",
+        displayLink: "https://gitlab.com/mohitkjain49",
+        link: "https://gitlab.com/mohitkjain49",
+        copyBtn: "Copy GitLab Link",
+        linkBtn: "Go To GitLab",
+        linkIcon: "fa-brands fa-gitlab",
+        color: "#E24329",
+        altColor: "#E24329"
+    }
 ];
 
 export const SKILL_ENTITIES = [

@@ -28,7 +28,8 @@
         </a>
     </div>
     <div class="start-buttonRow contact-links">
-        <a v-for="contact in SOCIALS" :href="contact.link"
+        <template v-for="(contact, index) in SOCIALS">
+            <a v-if="index != 0" :href="contact.link"
             class="start-buttonRow-btn"
             :style="getSpecialBtnStyles(contact.color)"
             @mouseenter="setHeartbeatAnimation"
@@ -36,6 +37,7 @@
 
             <font-awesome-icon :icon="contact.linkIcon" />
         </a>
+        </template>
     </div>
 </div>
 </template>

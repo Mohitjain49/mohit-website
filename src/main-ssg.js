@@ -58,7 +58,8 @@ library.add(
     FaBrands.faFontAwesome,
     FaBrands.faCloudflare,
     FaBrands.faJava,
-    FaBrands.faGolang
+    FaBrands.faGolang,
+    FaBrands.faGitlab
 );
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },

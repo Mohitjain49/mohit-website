@@ -8,6 +8,7 @@
 <script setup>
 import NavigationMain from "../components/NavigationMain.vue";
 import resume from "/Mohit_Jain_Resume.pdf";
+import { getMeta } from "../stores/GetMeta.js";
 
 import { initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
 import { onMounted, onBeforeUnmount, nextTick } from "vue";
@@ -16,33 +17,25 @@ import { useHead } from "@unhead/vue";
 onMounted(() => {
     initWebData();
     nextTick().then(() => {
-        document.body.style.overflowY = "hidden";
+        hideVerticalOverflow();
+        document.addEventListener("resize", hideVerticalOverflow);
     })
 });
 onBeforeUnmount(() => {
     document.body.style.overflowY = "";
+    document.removeEventListener("resize", hideVerticalOverflow);
 });
 
-const WEBSITE_PATH = "https://mohit-jain.com/resume";
-const PAGE_TITLE = "Mohit Jain | My Resume";
-const PAGE_DESC = "Feel free to take a look at my resume. " +
-    "Like any good resume, it sums up all my most relevant skills in one page.";
+/**
+ * This function hides the body's vertical overflow.
+ */
+function hideVerticalOverflow() {
+    document.body.style.overflowY = "hidden";
+}
 
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})
+useHead(getMeta("Mohit Jain | My Resume", "resume",
+    "Feel free to take a look at my resume."
+));
 </script>
 
 <style scoped>

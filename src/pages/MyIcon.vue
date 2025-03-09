@@ -40,6 +40,7 @@
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
+import { getMeta } from '../stores/GetMeta.js';
 
 import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
 import { onMounted } from 'vue';
@@ -48,25 +49,9 @@ import { useHead } from '@unhead/vue';
 onMounted(() => { initWebData(); });
 const ICON_IMPORT_START = "/static-icons/Personal_Icon";
 
-const WEBSITE_PATH = "https://mohit-jain.com/icons";
-const PAGE_TITLE = "Mohit Jain | My Icons";
-const PAGE_DESC = "I created my icons by using gradients and the Google Lexend Font. You can view them on this page."
-
-useHead({
-    title: PAGE_TITLE,
-
-    meta: [
-        { name: 'description', content: PAGE_DESC },
-
-        { property: 'og:url', content: WEBSITE_PATH },
-        { property: 'og:title', content: PAGE_TITLE },
-        { property: 'og:description', content: PAGE_DESC },
-
-        { property: 'twitter:url', content: WEBSITE_PATH },
-        { property: 'twitter:title', content: PAGE_TITLE },
-        { property: 'twitter:description', content: PAGE_DESC },
-    ]
-})
+useHead(getMeta("Mohit Jain | My Icons", "icons",
+    "I created my icons by using gradients and the Google Lexend Font. You can view them on this page."
+));
 
 /**
  * This lets the visitor copy an image.
