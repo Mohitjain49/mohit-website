@@ -4,18 +4,17 @@ export const HOME_BACKGROUND = {
     },
     fpsLimit: 40,
     particles: {
-        color: { value: ["rgba(126, 90, 0, 0.9)", "#0047ABE6", "#FFFFFFE6"] },
+        color: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163"] },
         move: {
-            direction: "none",
+            direction: "bottom",
             enable: true,
             outModes: { default: "out" },
-            random: true,
-            speed: 0.75,
+            speed: 1.5,
             straight: false,
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 500
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -49,7 +48,7 @@ export const BLUE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 1000
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -83,7 +82,7 @@ export const ORANGE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 1000
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -102,11 +101,11 @@ export const ORANGE_BACKGROUND = {
 
 export const VUEJS_BACKGROUND = {
     background: {
-        color: "#41B883",
+        color: "#1a1a1a",
     },
     fpsLimit: 40,
     particles: {
-        color: { value: "#35495E" },
+        color: { value: "#41B883" },
         move: {
             direction: "none",
             enable: true,
@@ -117,7 +116,7 @@ export const VUEJS_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 3000
+            value: 900
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -127,7 +126,7 @@ export const VUEJS_BACKGROUND = {
             type: "triangle"
         },
         size: {
-            value: { min: 2, max: 3 },
+            value: { min: 3, max: 3.5 },
         },
     },
     detectRetina: true,

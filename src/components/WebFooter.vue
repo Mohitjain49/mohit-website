@@ -5,16 +5,22 @@
     </RouterLink>
 
     <div class="copyright-statement">
-        <font-awesome-icon icon="fa-copyright" />
+        <client-only>
+            <font-awesome-icon icon="fa-copyright" />
+        </client-only>
         <span> {{ COPYRIGHT_TEXT }} </span>
     </div>
 
     <div class="copyright-side-container">
         <RouterLink to="/icons" class="scroll-topBtn center-flex-display" title="My Icons">
-            <font-awesome-icon icon="fa-pen-fancy" />
+            <client-only>
+                <font-awesome-icon icon="fa-pen-fancy" />
+            </client-only>
         </RouterLink>
         <div class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
-            <font-awesome-icon icon="fa-arrow-up" />
+            <client-only>
+                <font-awesome-icon icon="fa-arrow-up" />
+            </client-only>
         </div>
     </div>
 </div>

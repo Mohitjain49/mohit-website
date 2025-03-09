@@ -1,16 +1,20 @@
 <template>
-<client-only>
-    <NavigationMain />
-    <NavigationHome />
+<NavigationMain />
+<NavigationHome />
 
+<client-only>
     <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
-    <div id="homepage" class="personal-web-body" @click="closeNavBarDropdown()">
+</client-only>
+
+<div id="homepage" class="personal-web-body" @click="closeNavBarDropdown()">
+    <client-only>
         <StartSection />
         <SkillsSection />
         <IvueSection />
-        <WebFooter />
-    </div>
-</client-only>
+        <KennesawSection />
+    </client-only>
+    <WebFooter />
+</div>
 </template>
 
 <script setup>
@@ -27,6 +31,7 @@ import WebFooter from '../components/WebFooter.vue';
 import StartSection from '../components/home/StartSection.vue';
 import IvueSection from '../components/home/IvueSection.vue';
 import SkillsSection from '../components/home/SkillsSection.vue';
+import KennesawSection from '../components/home/KennesawSection.vue';
 
 onMounted(() => { initWebData(); })
 
@@ -54,7 +59,7 @@ useHead({
 
 <style scoped>
 #homepage {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.25);
     top: 0px;
     min-height: 100%;
 }

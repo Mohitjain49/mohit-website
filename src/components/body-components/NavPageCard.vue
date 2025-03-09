@@ -12,12 +12,18 @@
             <img :src="ivue_black_text" width="125" />
         </div>
         <div v-else :id="sectorObj.titleId" class="nav-card-header" :style="getNavTitleStyle()">
-            <font-awesome-icon v-if="sectorObj.title.faIcon"
-                class="nav-card-header-faIcon"
-                :icon="sectorObj.title.icon"
-                :style="getNavTitleFAIconStyle()"
+            <client-only>
+                <font-awesome-icon v-if="sectorObj.title.faIcon"
+                    class="nav-card-header-faIcon"
+                    :icon="sectorObj.title.icon"
+                    :style="getNavTitleFAIconStyle()"
+                />
+            </client-only>
+            <img v-if="!sectorObj.title.faIcon"
+                class="nav-card-header-image"
+                :src="sectorObj.title.icon"
+                :style="{ 'width': sectorObj.title.size }"
             />
-            <img v-else class="nav-card-header-image" :src="sectorObj.title.icon" :style="{ 'width': sectorObj.title.size }" />
 
             <div :class="[ 'nav-card-header-text', sectorObj.title.extraClass ]" v-html="sectorObj.title.text"
                 :style="{ [sectorObj.title.colorType]: sectorObj.title.color, 'fontSize': sectorObj.title.size }">

@@ -1,10 +1,8 @@
 <template>
-<client-only>
-    <NavigationMain />
-    <div id="resume-container" @click="closeNavBarDropdown()">
-        <iframe :src="resume" height="100%" width="100%"></iframe>
-    </div>
-</client-only>
+<NavigationMain />
+<div id="resume-container" @click="closeNavBarDropdown()">
+    <iframe :src="resume" height="100%" width="100%"></iframe>
+</div>
 </template>
 
 <script setup>
@@ -12,14 +10,16 @@ import NavigationMain from "../components/NavigationMain.vue";
 import resume from "/Mohit_Jain_Resume.pdf";
 
 import { initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useHead } from "@unhead/vue";
 
 onMounted(() => {
     initWebData();
-    document.body.style.overflowY = "hidden";
+    nextTick().then(() => {
+        document.body.style.overflowY = "hidden";
+    })
 });
-onUnmounted(() => {
+onBeforeUnmount(() => {
     document.body.style.overflowY = "";
 });
 

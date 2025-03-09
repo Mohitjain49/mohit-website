@@ -1,44 +1,47 @@
 <template>
-<div id="start" class="start-section">
-    <div class="start-section-half" v-observe-visibility="setNameTransitions">
-        <div class="start-section-title">Mohit Jain</div>
-        <div class="start-section-subtitle">
-            <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>'s Lead Software Developer
-        </div>
-        <div class="start-section-subtitle">
-            Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
-        </div>
+<div id="start" class="start-section" v-observe-visibility="setNameTransitions">
+    <div class="start-section-title">Mohit Jain</div>
+    <div class="start-section-subtitle">
+        <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>'s Lead Software Developer
+    </div>
+    <div class="start-section-subtitle">
+        Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
+    </div>
 
-        <div class="start-contacts">
-            <div class="start-contacts-row top">
-                <RouterLink to="/contact" id="start-contacts-mainBtn" class="start-contacts-btn"
-                    @mouseenter="onContactBtnHover('start-contacts-mainBtn')"
-                    @mouseleave="onContactBtnLeave('start-contacts-mainBtn')">
+    <div class="start-buttonRow main">
+        <RouterLink v-for="link in MAIN_BTNS" :to="link.path"
+            class="start-buttonRow-btn"
+            :style="getSpecialBtnStyles(link.color)"
+            :title="link.title"
+            @mouseenter="setHeartbeatAnimation"
+            @mouseleave="setHeartbeatAnimation">
 
-                    <font-awesome-icon icon="fa-paper-plane" />
-                    <span>My Contact Info</span>
-                </RouterLink>
-            </div>
-            <div class="start-contacts-row bottom">
-                <a v-for="contact in SOCIALS" :href="contact.link"
-                    class="start-contacts-btn"
-                    :id="contact.id"
-                    :style="{ 'color': contact.color, 'border-color': contact.color }"
-                    @mouseenter="onContactBtnHover(contact.id)"
-                    @mouseleave="onContactBtnLeave(contact.id)">
+            <font-awesome-icon :icon="link.icon" />
+        </RouterLink>
+        <a :href="PERSONAL_GLOBE_LINK" class="start-buttonRow-btn"
+            :style="getSpecialBtnStyles('var(--globe-green)')"
+            title="Go To My Globe"
+            @mouseenter="setHeartbeatAnimation"
+            @mouseleave="setHeartbeatAnimation">
 
-                    <font-awesome-icon :icon="contact.linkIcon" />
-                    <span> {{ contact.name }} </span>
-                </a>
-            </div>
-        </div>
+            <font-awesome-icon icon="fa-globe" />
+        </a>
+    </div>
+    <div class="start-buttonRow contact-links">
+        <a v-for="contact in SOCIALS" :href="contact.link"
+            class="start-buttonRow-btn"
+            :style="getSpecialBtnStyles(contact.color)"
+            @mouseenter="setHeartbeatAnimation"
+            @mouseleave="setHeartbeatAnimation">
+
+            <font-awesome-icon :icon="contact.linkIcon" />
+        </a>
     </div>
 </div>
 </template>
 
 <script setup>
-// import headshot from "@/assets/Mohit_Headshot.jpeg"; *NOT USED AT THE MOMENT.
-import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK } from "@/stores/Objects.js";
+import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK, PERSONAL_GLOBE_LINK } from "@/stores/Objects.js";
 
 /**
  * This function sets the transitions for the left half of the start section.
@@ -48,170 +51,176 @@ function setNameTransitions(isVisible) {
         document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-contacts").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-buttonRow").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-buttonRow").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
     } else {
         document.getElementsByClassName("start-section-title").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-contacts").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-buttonRow").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-buttonRow").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
     }
 }
 
 /**
- * This function adds an animation when the visitor hovers over a contact button.
- * @param {Number} index The index of the tab.
+ * This function adds or removes a transition to a social media link button.
  */
-function onContactBtnHover(id = "main-tab") {
-    document.getElementById(id).classList.add('animate__animated', 'animate__heartBeat');
+function setHeartbeatAnimation(event = new MouseEvent("mouseenter")) {
+    if(event.type === "mouseenter") {
+        event.target.classList.add('animate__animated', 'animate__heartBeat');
+    } else {
+        event.target.classList.remove('animate__animated', 'animate__heartBeat');
+    }
 }
 
 /**
- * This function removes an animation when the visitor leaves a contact button.
- * @param {Number} index The index of the tab.
+ * This function returns the styles for a special button.
  */
-function onContactBtnLeave(id = "main-tab") {
-    document.getElementById(id).classList.remove('animate__animated', 'animate__heartBeat');
+function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
+    return { color, borderColor: color, boxShadow: ("0px 0px 10px 1px " + color) }
 }
+
+const MAIN_BTNS = [
+    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
+    { path: "/skills", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
+    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
+    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "My Resume" }
+]
 </script>
 
 <style scoped>
 .start-section {
-    height: calc(var(--body-height));
-    min-height: 700px;
-    max-height: 1000px;
+    height: 600px;
+    min-height: calc(100vh - 100px);
     width: 1200px;
     padding: 50px calc(50% - 600px);
-    padding-bottom: 10px;
+    padding-bottom: 60px;
     color: var(--website-text);
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-.start-section-half {
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     font-family: 'Lexend', 'sans-serif';
 }
-.start-section-headshot {
-    width: 80%;
-    max-width: 575px;
-}
 
 .start-section-title {
     text-align: center;
     position: relative;
-    font-size: 100px;
+    font-size: 135px;
     font-weight: bold;
     color: var(--website-text);
     width: 100%;
     height: fit-content;
     margin-bottom: 15px;
-    text-shadow: var(--website-text) 1px 0 10px;
+    text-shadow: var(--website-text) 1px 0 30px;
 }
 .start-section-subtitle {
     text-align: center;
     width: 100%;
-    font-size: 25px;
-    line-height: 35px;
+    font-size: 30px;
+    line-height: 42px;
     color: var(--website-text);
     text-shadow: var(--website-text) 1px 0 10px;
 }
+
 .start-section-subtitle a {
+    transition: var(--default-transition);
     text-decoration: underline;
+    padding: 0px 3px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+}
+.start-section-subtitle a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-.start-contacts {
-    margin-top: 45px;
+.start-buttonRow {
+    margin-top: 20px;
     width: 700px;
-    height: 250px;
-    border: 2px solid var(--website-text);
+    height: fit-content;
     border-radius: 15px;
-    background-color: rgba(0, 0, 0, 0.9);
-}
-.start-contacts-row {
-    width: 100%;
+    background-color: transparent;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
 }
-
-.start-contacts-row.top {
-    height: 125px;
+.start-buttonRow.main {
+    margin-top: 40px;
 }
-.start-contacts-row.bottom {
-    height: 125px;
+.start-buttonRow.contact-links {
+    width: 580px;
 }
 
-.start-contacts-btn {
+.start-buttonRow-btn {
     cursor: pointer;
     text-decoration: none;
     color: var(--website-text);
-    font-size: 18px;
+    background-color: rgba(0, 0, 0, 1);
+    font-size: 32px;
     font-weight: bold;
-    margin-top: 2px;
     padding: 10px;
-    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 15px;
     border: 2px solid var(--website-text);
     transition: var(--default-transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 10px 1px var(--website-text);
 }
-.start-contacts-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-.start-contacts-btn svg {
-    margin-right: 5px;
-}
-
-#start-contacts-mainBtn {
-    padding: 15px;
-    font-size: 24px;
-}
-#start-contacts-mainBtn svg {
-    position: relative;
-    bottom: 2px;
+.start-buttonRow-btn:hover {
+    background-color: rgb(39, 39, 39);
 }
 
 @media (max-width: 1225px) {
     .start-section {
-        grid-template-columns: 1fr;
         width: 100%;
         padding: 50px 0px;
-    }
-    .start-section-half.headshot-side {
-        display: none;
+        padding-bottom: 60px;
     }
 }
-@media (max-width: 775px) {
-    .start-section {
-        height: fit-content;
-        min-height: 750px;
+@media (max-width: 800px) {
+    .start-section-title {
+        font-size: 100px;
     }
-    .start-contacts {
-        height: 290px;
-        width: 400px;
+    .start-section-subtitle {
+        font-size: 26px;
+        line-height: 35px;
     }
-    .start-contacts-row.bottom {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 700px) {
+    .start-buttonRow.main {
+        width: 100%;
     }
-
-    .start-contacts-btn {
-        position: relative;
-        left: calc((100% - 153px) / 2);
-        width: 135px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    #start-contacts-mainBtn {
-        left: 0;
-        width: auto;
+    .start-buttonRow.contact-links {
+        width: calc(100% - 120px)
     }
 }
 @media (max-width: 600px) {
+    .start-section {
+        height: 450px;
+    }
+    .start-section-title {
+        font-size: 70px;
+        margin-bottom: 10px;
+    }
+    .start-section-subtitle {
+        font-size: 23px;
+        line-height: 31px;
+    }
+
+    .start-buttonRow.contact-links {
+        width: calc(100% - 80px);
+    }
+    .start-buttonRow-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 23px;
+    }
+}
+
+@media (max-width: 450px) {
     .start-section-title {
         font-size: 56px;
         margin-bottom: 10px;
@@ -220,20 +229,8 @@ function onContactBtnLeave(id = "main-tab") {
         font-size: 17px;
         line-height: 23px;
     }
-    .start-contacts {
-        margin-top: 30px;
-        height: 450px;
-        width: 300px;
-    }
-
-    .start-contacts-row.bottom {
-        grid-template-columns: 1fr;
-    }
-    .start-contacts-btn {
-        margin-bottom: 25px;
-    }
-    #start-contacts-mainBtn {
-        margin-bottom: 0px;
+    .start-buttonRow.start-buttonRow.main {
+        margin-top: 32px;
     }
 }
 </style>

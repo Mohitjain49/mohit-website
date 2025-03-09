@@ -5,31 +5,44 @@
             to="/contact"
             :title="CONTACT_TITLE">
             
-            <font-awesome-icon icon="fa-paper-plane" />
+            <client-only>
+                <font-awesome-icon icon="fa-paper-plane" />
+            </client-only>
             <span>Contact Me!</span>
         </RouterLink>
     </div>
 
     <div v-if="webData.pageView == 0" class="web-navBar-links-section center-flex-display">
-        <RouterLink v-for="route in ROUTE_COLLECTION" class="web-navBar-opt" :to="route.path" v-html="route.title" />
-        <a class="web-navBar-opt" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
+        <RouterLink v-for="route in ROUTE_COLLECTION" :class="route.classes" :to="route.path" v-html="route.title" />
+        <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
     </div>
 
     <div class="web-navBar-links-side" style="justify-content: right;">
         <RouterLink to="/resume" class="web-navBar-opt web-navBar-side" :title="RESUME_TITLE">
-            <font-awesome-icon icon="fa-file-lines" />
+            <client-only>
+                <font-awesome-icon icon="fa-file-lines" />
+            </client-only>
             <span>Resume</span>
         </RouterLink>
-        <RouterLink to="/icons" class="web-navBar-opt web-navBar-side" :title="ICONS_TITLE">
-            <font-awesome-icon icon="fa-pen-fancy" />
-            <span>Icons</span>
+        <RouterLink to="/qrcode" class="web-navBar-opt web-navBar-side" :title="RESUME_TITLE">
+            <client-only>
+                <font-awesome-icon icon="fa-qrcode" />
+            </client-only>
+            <span>QR Code</span>
         </RouterLink>
+        <RouterLink to="/vuejs" class="web-navBar-opt web-navBar-side" :title="KSU_TITLE">
+            <img :src="vuejs_icon" class="navBar-vuejs-icon" />
+            <span>Vue.js</span>
+        </RouterLink>
+
         <div class="web-navBar-opt web-navBar-side"
             v-if="webData.pageView != 0"
             @click="webData.setNavBarDropdown(0)"
             :title="ROUTE_MENU_TITLE">
 
-            <font-awesome-icon icon="fa-list" />
+            <client-only>
+                <font-awesome-icon icon="fa-list" />
+            </client-only>
             <span>Menu</span>
         </div>
     </div>
@@ -48,6 +61,7 @@
 </template>
 
 <script setup>
+import vuejs_icon from "../assets/Vuejs_Icon.png";
 import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
 const webData = useWebsiteDataStore();
@@ -55,12 +69,12 @@ const webData = useWebsiteDataStore();
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
-const ICONS_TITLE = "My Icons";
+const KSU_TITLE = "Kennesaw State University";
 
 const ROUTE_COLLECTION = [
-    { path: "/", title: "Home" },
-    { path: "/skills", title: "Skills" },
-    { path: "/experience", title: "Experience" }
+    { path: "/", title: "Home", classes: "web-navBar-opt" },
+    { path: "/skills", title: "Skills", classes: "web-navBar-opt skills" },
+    { path: "/experience", title: "Experience", classes: "web-navBar-opt" }
 ];
 </script>
 
@@ -86,7 +100,7 @@ const ROUTE_COLLECTION = [
 }
 .web-navBar-links-side {
     display: flex;
-    width: 140px;
+    width: 210px;
     height: 100%;
 }
 
@@ -110,7 +124,7 @@ const ROUTE_COLLECTION = [
 
 .web-navBar-side {
     height: 100%;
-    width: 70px;
+    width: 60px;
     padding: 0px;
     border: none;
     margin-top: 0px;
@@ -121,10 +135,16 @@ const ROUTE_COLLECTION = [
     flex-direction: column;
 }
 .web-navBar-side span {
-    font-size: 12px;
+    font-size: 11px;
 }
 .web-navBar-side svg {
     margin-top: 7px;
+}
+
+.navBar-vuejs-icon {
+    margin-top: 7px;
+    width: 22px;
+    user-select: none;
 }
 
 .web-navBar-contact {
@@ -141,15 +161,29 @@ const ROUTE_COLLECTION = [
     font-size: 17px;
 }
 
+.web-navBar-opt.skills {
+    color: var(--blue-three);
+}
+.web-navBar-opt.skills:hover {
+    border-color: var(--blue-three);
+}
+
+.web-navBar-opt.globe {
+    color: var(--globe-green);
+}
+.web-navBar-opt.globe:hover {
+    border-color: var(--globe-green);
+}
+
 @media (max-width: 825px) {
     .web-navBar-links-side {
         width: fit-content;
     }
     .web-navBar-side {
-        width: 50px;
+        width: 45px;
     }
     .web-navBar-side span {
-        font-size: 10px;
+        font-size: 9px;
     }
 }
 @media (max-width: 340px) {
@@ -168,7 +202,7 @@ const ROUTE_COLLECTION = [
     top: 50px;
     height: 200px;
     width: 300px;
-    z-index: 6;
+    z-index: 15;
     overflow: hidden;
     border-bottom: 1px solid var(--nav-bar-border);
     border-left: 1px solid var(--nav-bar-border);
