@@ -13,6 +13,7 @@ import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 import SkillsNav from "./pages/skills/SkillsNav.vue";
 import ExperienceMain from "./pages/experience/ExperienceMain.vue";
 import VuejsPage from "./pages/skills/VuejsPage.vue";
+import AmazonPage from "./pages/skills/AmazonPage.vue";
 
 import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
 import SubloRedirect from "./pages/redirects/SubloRedirect.vue";
@@ -42,7 +43,8 @@ export const personalRoutes = [
     { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
 
-    { path: "/vuejs", name: "New Vue.js Page", component: VuejsPage },
+    { path: "/vuejs", name:  "Vue.js Skills Page", component: VuejsPage },
+    { path: "/aws", name: "AWS Skills Page", component: AmazonPage },
 
     { path: "/copyright", name: "Copyright Section", redirect: { path: "/", hash: "#copyright" } },
     { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
@@ -62,7 +64,7 @@ export const personalRoutes = [
     { path: "/vue", redirect: "/vuejs" },
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
-    { path: "/aws", redirect: "/skills/aws" },
+    { path: "/amazon", redirect: "/aws" },
 
     {
         path: "/skills",

@@ -1,10 +1,17 @@
+<script setup>
+import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
+import { useWebsiteDataStore } from "../stores/WebsiteData.js";
+const webData = useWebsiteDataStore();
+
+const CONTACT_TITLE = "Contact Me!";
+const ROUTE_MENU_TITLE = "Navigation Menu";
+const RESUME_TITLE = "See My Resume!";
+</script>
+
 <template>
 <div class="web-navBar">
-    <div class="web-navBar-links-side" style="justify-content: left;">
-        <RouterLink class="web-navBar-opt web-navBar-side web-navBar-contact"
-            to="/contact"
-            :title="CONTACT_TITLE">
-            
+    <div class="web-navBar-links-side">
+        <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE">
             <client-only>
                 <font-awesome-icon icon="fa-paper-plane" />
             </client-only>
@@ -12,59 +19,47 @@
         </RouterLink>
     </div>
 
-    <div v-if="webData.pageView == 0" class="web-navBar-links-section center-flex-display">
+    <div v-if="webData.pageView == 0" class="web-navBar-links-section">
         <RouterLink class="web-navBar-opt" to="/"> Home </RouterLink>
         <RouterLink class="web-navBar-opt skills" to="/skills"> Skills </RouterLink>
         <RouterLink class="web-navBar-opt" to="/experience"> Experience </RouterLink>
         <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
     </div>
 
-    <div class="web-navBar-links-side" style="justify-content: right;">
-        <RouterLink to="/resume" class="web-navBar-opt web-navBar-side" :title="RESUME_TITLE">
+    <div class="web-navBar-links-side" >
+        <RouterLink v-if="webData.pageView == 0" class="web-navBar-largeSide" to="/resume" :title="RESUME_TITLE">
             <client-only>
                 <font-awesome-icon icon="fa-file-lines" />
             </client-only>
-            <span>Resume</span>
-        </RouterLink>
-        <RouterLink to="/vuejs" class="web-navBar-opt web-navBar-side" :title="VUEJS_TITLE">
-            <img :src="vuejs_icon" class="navBar-vuejs-icon" />
-            <span>Vue.js</span>
+            <span>My Resume</span>
         </RouterLink>
 
-        <div class="web-navBar-opt web-navBar-side"
-            v-if="webData.pageView != 0"
-            @click="webData.setNavBarDropdown(0)"
-            :title="ROUTE_MENU_TITLE">
-
+        <template v-if="webData.pageView != 0">
             <client-only>
-                <font-awesome-icon icon="fa-list" />
+                <RouterLink class="web-navBar-menuIcon" to="/resume" :title="RESUME_TITLE">
+                    <client-only>
+                        <font-awesome-icon icon="fa-file-lines" />
+                    </client-only>
+                </RouterLink>
+                <div class="web-navBar-menuIcon" @click="webData.setNavBarDropdown(0)" :title="ROUTE_MENU_TITLE">
+                    <client-only>
+                        <font-awesome-icon icon="fa-bars" />
+                    </client-only>
+                </div>
             </client-only>
-            <span>Menu</span>
-        </div>
+        </template>
     </div>
 </div>
 
 <Transition name="navBarDDTransition">
     <div class="navBar-dropdown" v-if="webData.navBarDropdown == 0">
-        <RouterLink class="navBar-dropdown-opt" to="/"> Home </RouterLink>
-        <RouterLink class="navBar-dropdown-opt skills" to="/skills"> Skills </RouterLink>
-        <RouterLink class="navBar-dropdown-opt" to="/experience"> Experience </RouterLink>
-        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt globe"> My Globe </a>
+        <RouterLink class="navBar-dropdown-opt" to="/"> <span> Home </span> </RouterLink>
+        <RouterLink class="navBar-dropdown-opt skills" to="/skills"> <span> Skills </span> </RouterLink>
+        <RouterLink class="navBar-dropdown-opt" to="/experience"> <span> Experience </span> </RouterLink>
+        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt globe"> <span> My Globe </span> </a>
     </div>
 </Transition>
 </template>
-
-<script setup>
-import vuejs_icon from "../assets/Vuejs_Icon.png";
-import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
-import { useWebsiteDataStore } from "../stores/WebsiteData.js";
-const webData = useWebsiteDataStore();
-
-const CONTACT_TITLE = "Contact Me!";
-const ROUTE_MENU_TITLE = "Route Menu";
-const RESUME_TITLE = "See My Resume!";
-const VUEJS_TITLE = "Vue.js";
-</script>
 
 <style scoped>
 .web-navBar {
@@ -83,12 +78,16 @@ const VUEJS_TITLE = "Vue.js";
 
 .web-navBar-links-section {
     width: 500px;
+    display: flex;
+    align-items: center;
     justify-content: space-evenly;
     height: 100%;
 }
 .web-navBar-links-side {
     display: flex;
-    width: 140px;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
     height: 100%;
 }
 
@@ -110,43 +109,54 @@ const VUEJS_TITLE = "Vue.js";
     background-color: var(--translucent-background);
 }
 
-.web-navBar-side {
-    height: 100%;
-    width: 60px;
-    padding: 0px;
-    border: none;
-    margin-top: 0px;
-    border-radius: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.web-navBar-largeSide {
+    height: fit-content;
+    width: fit-content;
+    margin-top: 1px;
+    padding: 7px 9px;
+    border-radius: 10px;
+    border: 2px dashed var(--website-text);
+    border-style: dotted;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--website-text);
+    font-family: 'Lexend', sans-serif;
+    font-weight: bold;
+    transition: var(--default-transition);
 }
-.web-navBar-side span {
-    font-size: 11px;
-}
-.web-navBar-side svg {
-    margin-top: 7px;
-}
-
-.navBar-vuejs-icon {
-    margin-top: 7px;
-    width: 22px;
-    user-select: none;
+.web-navBar-largeSide:hover {
+    background-color: black;
+    color: var(--website-light-text);
 }
 
-.web-navBar-contact {
-    width: 120px !important;
-    flex-direction: row;
-    padding: 0px 7px;
-}
-.web-navBar-contact span {
-    font-size: 16px !important;
-    margin-left: 5px;
-}
-.web-navBar-contact svg {
+.web-navBar-largeSide svg {
     margin-top: -4px;
     font-size: 17px;
+}
+.web-navBar-largeSide span {
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.web-navBar-menuIcon {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 2px dashed var(--website-text);
+    border-style: dotted;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--website-text);
+    font-size: 22px;
+    transition: var(--default-transition);
+}
+.web-navBar-menuIcon:hover {
+    background-color: black;
+    color: var(--website-light-text);
 }
 
 .web-navBar-opt.skills {
@@ -166,18 +176,15 @@ const VUEJS_TITLE = "Vue.js";
 @media (max-width: 825px) {
     .web-navBar-links-side {
         width: fit-content;
+        min-width: 100px;
+        justify-content: space-evenly;
     }
-    .web-navBar-side {
-        width: 45px;
-    }
-    .web-navBar-side span {
-        font-size: 9px;
-    }
-    .navBar-vuejs-icon {
-        width: 19px;
+    .web-navBar-largeSide {
+        margin: 0px 5px;
+        margin-top: 1px;
     }
 }
-@media (max-width: 340px) {
+@media (max-width: 360px) {
     .web-navBar {
         position: absolute;
     }
@@ -209,7 +216,7 @@ const VUEJS_TITLE = "Vue.js";
     align-items: center;
     border: var(--thin-empty-border);
     transition: var(--default-transition);
-    text-align: center;
+    text-align: left;
     font-size: 17px;
     font-weight: bold;
     font-family: 'Lexend', sans-serif;
@@ -244,5 +251,11 @@ const VUEJS_TITLE = "Vue.js";
 .navBarDDTransition-enter-to, .navBarDDTransition-leave-from {
     opacity: 1;
     height: 200px;
+}
+
+@media (max-width: 360px) {
+    .navBar-dropdown {
+        position: absolute;
+    }
 }
 </style>

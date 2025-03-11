@@ -7,10 +7,11 @@
 <div id="skills-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <div class="main-nav-page-container">
         <div id="skills-title" class="nav-page-title">My Skills</div>
-        <div class="main-nav-page">
+        <div class="main-nav-page twoColumn-nav-page">
+            <NavPageCard :sectorObj="NAV_CARDS[0]" :skillsCard="true" />
             <NavPageCard :sectorObj="NAV_CARDS[8]" :skillsCard="true" />
             <NavPageCard :sectorObj="NAV_CARDS[2]" :skillsCard="true" />
-            <NavPageCard :sectorObj="NAV_CARDS[6]" :skillsCard="true" id="third-nav-card" />
+            <NavPageCard :sectorObj="NAV_CARDS[6]" :skillsCard="true" />
         </div>
         <div class="main-sector-bottom-linkBtn-container" style="padding-bottom: 30px;">
             <RouterLink to="/" class="main-sector-bottom-linkBtn main-sector-bottom-linkBtn-blue">Back to Home</RouterLink>

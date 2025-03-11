@@ -132,3 +132,37 @@ export const VUEJS_BACKGROUND = {
     detectRetina: true,
     tRetina: true,
 };
+
+export const AWS_BACKGROUND = {
+    background: {
+        color: "#1a1a1a",
+    },
+    fpsLimit: 40,
+    particles: {
+        color: { value: "rgb(157, 113, 249)" },
+        move: {
+            direction: "none",
+            enable: true,
+            outModes: { default: "out" },
+            random: true,
+            speed: 0.75,
+            straight: false,
+        },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 900
+        },
+        opacity: {
+            value: { min: 0.1, max: 0.75 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "triangle"
+        },
+        size: {
+            value: { min: 3, max: 3.5 },
+        },
+    },
+    detectRetina: true,
+    tRetina: true,
+};
