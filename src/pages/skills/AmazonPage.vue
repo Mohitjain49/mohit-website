@@ -1,6 +1,6 @@
 <template>
 <NavigationMain />
-<SkillsReturnWidget />
+<AmazonSidebar />
 
 <client-only>
     <vue-particles id="particlests" :options="AWS_BACKGROUND"></vue-particles>
@@ -8,17 +8,16 @@
 
 <div id="aws-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <client-only>
-        <div id="title" class="aws-page-section">
+        <div id="start" class="aws-page-section">
 
         </div>
     </client-only>
     <WebFooter />
 </div>
-
 </template>
 
 <script setup>
-import SkillsReturnWidget from '@/components/body-components/SkillsReturnWidget.vue';
+import AmazonSidebar from '@/components/sidebars/AmazonSidebar.vue';
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 

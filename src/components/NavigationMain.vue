@@ -1,7 +1,18 @@
 <script setup>
 import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
 import { useWebsiteDataStore } from "../stores/WebsiteData.js";
+import { useRoute } from "vue-router";
+
 const webData = useWebsiteDataStore();
+const route = useRoute();
+
+/**
+ * This function, given a route, will scroll to the top of the page if they click on the same route.
+ */
+function scrollToTop(navRoute = "/") {
+    if((navRoute != route.path) && ((navRoute + "/") != route.path)) { return; }
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+}
 
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Navigation Menu";
@@ -11,40 +22,34 @@ const RESUME_TITLE = "See My Resume!";
 <template>
 <div class="web-navBar">
     <div class="web-navBar-links-side">
-        <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE">
-            <client-only>
-                <font-awesome-icon icon="fa-paper-plane" />
-            </client-only>
+        <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE" @click="scrollToTop('/contact')">
+            <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
             <span>Contact Me!</span>
         </RouterLink>
     </div>
 
     <div v-if="webData.pageView == 0" class="web-navBar-links-section">
-        <RouterLink class="web-navBar-opt" to="/"> Home </RouterLink>
-        <RouterLink class="web-navBar-opt skills" to="/skills"> Skills </RouterLink>
-        <RouterLink class="web-navBar-opt" to="/experience"> Experience </RouterLink>
+        <RouterLink class="web-navBar-opt" to="/" @click="scrollToTop('/')"> Home </RouterLink>
+        <RouterLink class="web-navBar-opt skills" to="/skills" @click="scrollToTop('/skills')"> Skills </RouterLink>
+        <RouterLink class="web-navBar-opt" to="/experience" @click="scrollToTop('/experience')"> Experience </RouterLink>
         <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
     </div>
 
     <div class="web-navBar-links-side" >
-        <RouterLink v-if="webData.pageView == 0" class="web-navBar-largeSide" to="/resume" :title="RESUME_TITLE">
-            <client-only>
-                <font-awesome-icon icon="fa-file-lines" />
-            </client-only>
-            <span>My Resume</span>
-        </RouterLink>
+        <template v-if="webData.pageView == 0">
+            <RouterLink class="web-navBar-largeSide" to="/resume" :title="RESUME_TITLE" @click="scrollToTop('/resume')">
+                <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
+                <span>My Resume</span>
+            </RouterLink>
+        </template>
 
         <template v-if="webData.pageView != 0">
             <client-only>
-                <RouterLink class="web-navBar-menuIcon" to="/resume" :title="RESUME_TITLE">
-                    <client-only>
-                        <font-awesome-icon icon="fa-file-lines" />
-                    </client-only>
+                <RouterLink class="web-navBar-menuIcon" to="/resume" :title="RESUME_TITLE" @click="scrollToTop('/resume')">
+                    <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
                 </RouterLink>
                 <div class="web-navBar-menuIcon" @click="webData.setNavBarDropdown(0)" :title="ROUTE_MENU_TITLE">
-                    <client-only>
-                        <font-awesome-icon icon="fa-bars" />
-                    </client-only>
+                    <client-only> <font-awesome-icon icon="fa-bars" /> </client-only>
                 </div>
             </client-only>
         </template>

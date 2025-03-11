@@ -619,7 +619,7 @@ export const NAV_CARDS = [
         pointsTitle: "Frameworks:",
         bulletPoints: [ "Vue.js", "React Native", "Angular" ],
 
-        pictureBarClass: "vue-nav-picture-bar",
+        pictureBarClass: "frontend-nav-picture-bar",
         pictures: [
             { image: vue_icon, width: "40%" },
             { image: react_icon, width: "39%" },

@@ -13,7 +13,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     const pageView = ref(0);
     const navBarDropdown = ref(-1);
-    const mobileSidebarOpen = ref(false);
+    const skillsSidebarOpen = ref(false);
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
@@ -49,19 +49,20 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
-     * This toggles the status of the mobile sidebar for a skills or experience page.
+     * This toggles the status of a skills sidebar.
      */
-    function toggleMobileSidebar() {
-        mobileSidebarOpen.value = ((pageView.value != 2) ? false : !mobileSidebarOpen.value);
-        document.body.style.overflowY = (mobileSidebarOpen.value ? 'hidden' : '');
+    function toggleSkillsSidebar() {
+        skillsSidebarOpen.value = !skillsSidebarOpen.value;
+        document.body.style.overflowY = (skillsSidebarOpen.value ? 'hidden' : '');
     }
 
     /**
-     * This closes the mobile sidebar for a skills or experience page.
+     * This scrolls to the section the visitor requested.
+     * @param {String} id The element ID of the section.
      */
-    function closeMobileSidebar() {
-        mobileSidebarOpen.value = false;
-        document.body.style.overflowY = '';
+    function goToPageSection(id = "start") {
+        const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
+        window.scrollTo({ top: top, left: 0, behavior: "smooth" });
     }
 
     /**
@@ -74,17 +75,15 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
             pageView.value = 2;
         } else if(windowWidth <= 825) {
             pageView.value = 1;
-            closeMobileSidebar();
         } else {
             pageView.value = 0;
-            closeMobileSidebar();
             if(navBarDropdown.value == 0) { setNavBarDropdown(-1); }
         }
     }
 
-    return { navBarDropdown, pageView, mobileSidebarOpen,
+    return { navBarDropdown, pageView, skillsSidebarOpen,
         setEventListeners, removeEventListeners, mountWebData,
-        setNavBarDropdown, toggleMobileSidebar, closeMobileSidebar
+        setNavBarDropdown, toggleSkillsSidebar, goToPageSection
     }
 });
 
