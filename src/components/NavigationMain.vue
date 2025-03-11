@@ -13,7 +13,9 @@
     </div>
 
     <div v-if="webData.pageView == 0" class="web-navBar-links-section center-flex-display">
-        <RouterLink v-for="route in ROUTE_COLLECTION" :class="route.classes" :to="route.path" v-html="route.title" />
+        <RouterLink class="web-navBar-opt" to="/"> Home </RouterLink>
+        <RouterLink class="web-navBar-opt skills" to="/skills"> Skills </RouterLink>
+        <RouterLink class="web-navBar-opt" to="/experience"> Experience </RouterLink>
         <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
     </div>
 
@@ -24,13 +26,7 @@
             </client-only>
             <span>Resume</span>
         </RouterLink>
-        <RouterLink to="/qrcode" class="web-navBar-opt web-navBar-side" :title="RESUME_TITLE">
-            <client-only>
-                <font-awesome-icon icon="fa-qrcode" />
-            </client-only>
-            <span>QR Code</span>
-        </RouterLink>
-        <RouterLink to="/vuejs" class="web-navBar-opt web-navBar-side" :title="KSU_TITLE">
+        <RouterLink to="/vuejs" class="web-navBar-opt web-navBar-side" :title="VUEJS_TITLE">
             <img :src="vuejs_icon" class="navBar-vuejs-icon" />
             <span>Vue.js</span>
         </RouterLink>
@@ -50,12 +46,10 @@
 
 <Transition name="navBarDDTransition">
     <div class="navBar-dropdown" v-if="webData.navBarDropdown == 0">
-        <RouterLink class="navBar-dropdown-opt" v-for="route in ROUTE_COLLECTION" :to="route.path">
-            <span> {{ route.title }} </span>
-        </RouterLink>
-        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt">
-            <span> My Globe </span>
-        </a>
+        <RouterLink class="navBar-dropdown-opt" to="/"> Home </RouterLink>
+        <RouterLink class="navBar-dropdown-opt skills" to="/skills"> Skills </RouterLink>
+        <RouterLink class="navBar-dropdown-opt" to="/experience"> Experience </RouterLink>
+        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt globe"> My Globe </a>
     </div>
 </Transition>
 </template>
@@ -69,13 +63,7 @@ const webData = useWebsiteDataStore();
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Route Menu";
 const RESUME_TITLE = "See My Resume!";
-const KSU_TITLE = "Kennesaw State University";
-
-const ROUTE_COLLECTION = [
-    { path: "/", title: "Home", classes: "web-navBar-opt" },
-    { path: "/skills", title: "Skills", classes: "web-navBar-opt skills" },
-    { path: "/experience", title: "Experience", classes: "web-navBar-opt" }
-];
+const VUEJS_TITLE = "Vue.js";
 </script>
 
 <style scoped>
@@ -100,7 +88,7 @@ const ROUTE_COLLECTION = [
 }
 .web-navBar-links-side {
     display: flex;
-    width: 210px;
+    width: 140px;
     height: 100%;
 }
 
@@ -169,10 +157,10 @@ const ROUTE_COLLECTION = [
 }
 
 .web-navBar-opt.globe {
-    color: var(--globe-green);
+    color: var(--globe-green-opaque);
 }
 .web-navBar-opt.globe:hover {
-    border-color: var(--globe-green);
+    border-color: var(--globe-green-opaque);
 }
 
 @media (max-width: 825px) {
@@ -184,6 +172,9 @@ const ROUTE_COLLECTION = [
     }
     .web-navBar-side span {
         font-size: 9px;
+    }
+    .navBar-vuejs-icon {
+        width: 19px;
     }
 }
 @media (max-width: 340px) {
@@ -218,18 +209,29 @@ const ROUTE_COLLECTION = [
     align-items: center;
     border: var(--thin-empty-border);
     transition: var(--default-transition);
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: 'Lexend', sans-serif;
+    color: var(--website-text);
 }
 .navBar-dropdown-opt:hover {
     background-color: rgba(255, 255, 255, 0.25);
     border-color: var(--website-text);
 }
-.navBar-dropdown-opt span {
-    text-align: center;
-    font-size: 17px;
-    font-weight: bold;
-    font-family: 'Lexend', sans-serif;
-    transition: var(--default-transition);
-    color: var(--website-text);
+
+.navBar-dropdown-opt.skills {
+    color: var(--blue-three);
+}
+.navBar-dropdown-opt.skills:hover {
+    border-color: var(--blue-three);
+}
+
+.navBar-dropdown-opt.globe {
+    color: var(--globe-green-opaque);
+}
+.navBar-dropdown-opt.globe:hover {
+    border-color: var(--globe-green-opaque);
 }
 
 .navBarDDTransition-enter-active, .navBarDDTransition-leave-active {

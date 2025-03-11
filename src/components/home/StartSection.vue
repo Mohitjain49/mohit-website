@@ -26,6 +26,13 @@
 
             <font-awesome-icon icon="fa-globe" />
         </a>
+        <RouterLink to="/resume" title="My Resume"
+            class="start-buttonRow-btn"
+            @mouseenter="setHeartbeatAnimation"
+            @mouseleave="setHeartbeatAnimation">
+
+            <font-awesome-icon icon="fa-file-lines" />
+        </RouterLink>
     </div>
     <div class="start-buttonRow contact-links">
         <template v-for="(contact, index) in SOCIALS">
@@ -85,8 +92,7 @@ function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
 const MAIN_BTNS = [
     { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
     { path: "/skills", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
-    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
-    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "My Resume" }
+    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" }
 ]
 </script>
 
