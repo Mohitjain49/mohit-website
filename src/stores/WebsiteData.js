@@ -66,6 +66,28 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
+     * This adds and removes a flash animation for any element.
+     */
+    function setFlashAnimation(event = new MouseEvent("mouseenter")) {
+        if(event.type === "mouseenter") {
+            event.target.classList.add("animate__animated", "animate__flash");
+        } else {
+            event.target.classList.remove("animate__animated", "animate__flash");
+        }
+    }
+
+    /**
+     * This function adds or removes a heartbeat animation to any element.
+     */
+    function setHeartbeatAnimation(event = new MouseEvent("mouseenter")) {
+        if(event.type === "mouseenter") {
+            event.target.classList.add('animate__animated', 'animate__heartBeat');
+        } else {
+            event.target.classList.remove('animate__animated', 'animate__heartBeat');
+        }
+    }
+
+    /**
      * This sets the size of crucial components within the website.
      */
     function resizePageComponents() {
@@ -83,7 +105,8 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
 
     return { navBarDropdown, pageView, skillsSidebarOpen,
         setEventListeners, removeEventListeners, mountWebData,
-        setNavBarDropdown, toggleSkillsSidebar, goToPageSection
+        setNavBarDropdown, toggleSkillsSidebar, goToPageSection,
+        setFlashAnimation, setHeartbeatAnimation
     }
 });
 

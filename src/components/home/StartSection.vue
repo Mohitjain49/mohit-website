@@ -13,23 +13,23 @@
             class="start-buttonRow-btn"
             :style="getSpecialBtnStyles(link.color)"
             :title="link.title"
-            @mouseenter="setHeartbeatAnimation"
-            @mouseleave="setHeartbeatAnimation">
+            @mouseenter="webData.setHeartbeatAnimation"
+            @mouseleave="webData.setHeartbeatAnimation">
 
             <font-awesome-icon :icon="link.icon" />
         </RouterLink>
         <a :href="PERSONAL_GLOBE_LINK" class="start-buttonRow-btn"
             :style="getSpecialBtnStyles('var(--globe-green)')"
             title="Go To My Globe"
-            @mouseenter="setHeartbeatAnimation"
-            @mouseleave="setHeartbeatAnimation">
+            @mouseenter="webData.setHeartbeatAnimation"
+            @mouseleave="webData.setHeartbeatAnimation">
 
             <font-awesome-icon icon="fa-globe" />
         </a>
         <RouterLink to="/resume" title="My Resume"
             class="start-buttonRow-btn"
-            @mouseenter="setHeartbeatAnimation"
-            @mouseleave="setHeartbeatAnimation">
+            @mouseenter="webData.setHeartbeatAnimation"
+            @mouseleave="webData.setHeartbeatAnimation">
 
             <font-awesome-icon icon="fa-file-lines" />
         </RouterLink>
@@ -39,8 +39,8 @@
             <a v-if="index != 0" :href="contact.link"
             class="start-buttonRow-btn"
             :style="getSpecialBtnStyles(contact.color)"
-            @mouseenter="setHeartbeatAnimation"
-            @mouseleave="setHeartbeatAnimation">
+            @mouseenter="webData.setHeartbeatAnimation"
+            @mouseleave="webData.setHeartbeatAnimation">
 
             <font-awesome-icon :icon="contact.linkIcon" />
         </a>
@@ -51,6 +51,8 @@
 
 <script setup>
 import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK, PERSONAL_GLOBE_LINK } from "@/stores/Objects.js";
+import { useWebsiteDataStore } from "@/stores/WebsiteData.js";
+const webData = useWebsiteDataStore();
 
 /**
  * This function sets the transitions for the left half of the start section.
@@ -68,17 +70,6 @@ function setNameTransitions(isVisible) {
         document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-buttonRow").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-buttonRow").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
-    }
-}
-
-/**
- * This function adds or removes a transition to a social media link button.
- */
-function setHeartbeatAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
-        event.target.classList.add('animate__animated', 'animate__heartBeat');
-    } else {
-        event.target.classList.remove('animate__animated', 'animate__heartBeat');
     }
 }
 
