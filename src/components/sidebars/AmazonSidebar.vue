@@ -7,6 +7,10 @@
     <RouterLink to="/skills" class="aws-nav-widget-opt" title="Back To Skills Page">
         <img :src="return_icon" draggable="false" />
     </RouterLink>
+    <div class="aws-nav-widget-line"></div>
+    <a :href="AWS_ICONS_LINK" target="aws-icons-website" class="aws-nav-widget-opt" title="AWS Icons">
+        <img :src="icons_logo" id="aws-icon-widgetLogo" draggable="false" />
+    </a>
 </div>
 
 <div v-if="webData.skillsSidebarOpen" class="webpage-cover"
@@ -20,15 +24,15 @@
             <span> Close Menu </span>
         </div>
 
-        <RouterLink v-for="path in AWS_PATHS"
-            :to="getAmazonRoute('#' + path.route)"
-            @click="goToAmazonSection(path.route)"
+        <a v-for="path in AWS_PATHS" target="aws-website"
+            :href="(AWS_WEBSITE_LINK + path.route)"
+            @click="closeAmazonSidebar()"
             class="mobile-skill-sidebar-opt aws-sidebar-opt">
 
             <img :src="path.icon" class="mobile-skill-sidebar-opt-icon" draggable="false" />
             <span> {{ path.title }} </span>
-        </RouterLink>
-        <a :href="AWS_ICONS_LINK" target="_blank" class="mobile-skill-sidebar-opt aws-sidebar-opt">
+        </a>
+        <a :href="AWS_ICONS_LINK" target="aws-icons-website" class="mobile-skill-sidebar-opt aws-sidebar-opt">
             <img :src="icons_logo" id="aws-icon-logo" draggable="false" />
             <span> AWS Icons </span>
         </a>
@@ -53,26 +57,17 @@ import { useWebsiteDataStore } from "@/stores/WebsiteData.js";
 import { onBeforeUnmount } from "vue";
 
 const webData = useWebsiteDataStore();
+const AWS_WEBSITE_LINK = "https://aws.amazon.com/";
 const AWS_ICONS_LINK = "https://aws-icons.com/";
 
 onBeforeUnmount(() => {
-    if(webData.skillsSidebarOpen) { webData.toggleSkillsSidebar(); }
+    closeAmazonSidebar();
 })
 
 /**
- * This function returns an object that navigates visitors to a specific section of the AWS Page.
- * @param hash The id of the section.
+ * This function closes the amazon sidebar should it be open.
  */
-function getAmazonRoute(hash = "#start") {
-    return { path: "/aws/", hash };
-}
-
-/**
- * This function navigates the user to a section on the AWS Page.
- * @param id The id of the AWS section.
- */
-function goToAmazonSection(id) {
-    webData.goToPageSection(id);
+function closeAmazonSidebar() {
     if(webData.skillsSidebarOpen) { webData.toggleSkillsSidebar(); }
 }
 
@@ -80,13 +75,13 @@ function goToAmazonSection(id) {
  * This is the list of available paths in the AWS skills page.
  */
 const AWS_PATHS = [
-    { title: "Amazon Web Services", icon: aws_icon, route: "start" },
-    { title: "AWS Amplify", icon: amplify_icon, route: "amplify" },
-    { title: "Amazon Cognito", icon: cognito_icon, route: "cognito" },
-    { title: "Amazon S3", icon: s3_icon, route: "s3" },
-    { title: "Amazon CloudFront", icon: cloudfront_icon, route: "cloudfront" },
-    { title: "Amazon Route 53", icon: route53_icon, route: "route53" },
-    { title: "Amazon WorkMail", icon: workmail_icon, route: "workmail" }
+    { title: "Amazon Web Services", icon: aws_icon, route: "" },
+    { title: "AWS Amplify", icon: amplify_icon, route: "amplify/" },
+    { title: "Amazon Cognito", icon: cognito_icon, route: "cognito/" },
+    { title: "Amazon S3", icon: s3_icon, route: "s3/" },
+    { title: "Amazon CloudFront", icon: cloudfront_icon, route: "cloudfront/" },
+    { title: "Amazon Route 53", icon: route53_icon, route: "route53/" },
+    { title: "Amazon WorkMail", icon: workmail_icon, route: "workmail/" }
 ];
 </script>
 
@@ -97,7 +92,7 @@ const AWS_PATHS = [
     overflow: hidden;
     top: 65px;
     left: 15px;
-    height: 122px;
+    height: 183px;
     width: 40px;
     background-color: rgba(0, 0, 0, 0.5);
     border: 2px solid #402C6D;
@@ -133,6 +128,9 @@ const AWS_PATHS = [
     background-color: #402C6D;
 }
 
+#aws-icon-widgetLogo {
+    width: 30px;
+}
 #aws-icon-logo {
     margin: 0px 15px;
     width: 25px;

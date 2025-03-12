@@ -11,6 +11,7 @@ import react_icon from "../assets/React_Icon.png";
 import expo_icon from "../assets/sublo/Expo_Icon.svg";
 import vite_icon from "../assets/Vite_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
+import pinia_icon from "../assets/Pinia_Icon.svg";
 
 import aws_icon from "../assets/aws/AWS_Icon.png";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
@@ -392,7 +393,8 @@ export const NAV_CARDS = [
         pictureBarClass: "vue-nav-picture-bar",
         pictures: [
             { image: vue_icon, width: "40%" },
-            { image: nuxt_icon, width: "40%" },
+            { image: nuxt_icon, width: "50%" },
+            { image: pinia_icon, width: "32%" },
         ]
     },
     {
