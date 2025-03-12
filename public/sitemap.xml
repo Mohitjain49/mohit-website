@@ -4,82 +4,75 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
 
 <url>
-  <loc>https://mohit-jain.com/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/</loc>
   <priority>1.00</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/contact/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/contact/</loc>
   <priority>0.80</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/skills/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/skills/</loc>
   <priority>0.80</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/experience/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/experience/</loc>
   <priority>0.80</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/vuejs/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/resume/</loc>
   <priority>0.80</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/resume/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/vuejs/</loc>
+  <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
+</url>
+<url>
+  <loc>https://www.mohit-jain.com/aws/</loc>
+  <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
+</url>
+<url>
+  <loc>https://www.mohit-jain.com/icons/</loc>
   <priority>0.80</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/qrcode/</loc>
-  <lastmod>2025-03-09</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://mohit-jain.com/icons/</loc>
-  <lastmod>2025-03-09</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://mohit-jain.com/skills/frontend/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/skills/frontend/</loc>
   <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/skills/modules/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/skills/modules/</loc>
   <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/skills/aws/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/experience/worldsivue/</loc>
   <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/experience/worldsivue/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/experience/ivue/</loc>
   <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/experience/ivue/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/experience/sublo/</loc>
   <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 <url>
-  <loc>https://mohit-jain.com/experience/sublo/</loc>
-  <lastmod>2025-03-09</lastmod>
+  <loc>https://www.mohit-jain.com/Mohit_Jain_Resume.pdf</loc>
   <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://mohit-jain.com/Mohit_Jain_Resume.pdf</loc>
-  <lastmod>2025-03-09</lastmod>
-  <priority>0.64</priority>
+  <lastmod>2025-03-12</lastmod>
 </url>
 </urlset>
