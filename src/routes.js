@@ -19,14 +19,6 @@ import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
 import SubloRedirect from "./pages/redirects/SubloRedirect.vue";
 import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
 
-import AmazonMain from "./pages/skills/amazon/AmazonMain.vue";
-import AmazonAmplify from "./pages/skills/amazon/AmazonAmplify.vue";
-import AmazonCognito from "./pages/skills/amazon/AmazonCognito.vue";
-import AmazonS3 from "./pages/skills/amazon/AmazonS3.vue";
-import AmazonWorkmail from "./pages/skills/amazon/AmazonWorkmail.vue";
-import AmazonCloudfront from "./pages/skills/amazon/AmazonCloudfront.vue";
-import AmazonRoute53 from "./pages/skills/amazon/AmazonRoute53.vue";
-
 import ReactNativeFrontend from "./pages/skills/frontend/ReactNativeFrontend.vue";
 import AngularFrontend from "./pages/skills/frontend/AngularFrontend.vue";
 
@@ -64,7 +56,7 @@ export const personalRoutes = [
     { path: "/vue", redirect: "/vuejs" },
     { path: "/sublo", redirect: "/experience/sublo" },
     { path: "/frontend", redirect: "/skills/frontend" },
-    { path: "/amazon", redirect: "/aws" },
+    { path: "/amazon", redirect: "/aws/" },
 
     {
         path: "/skills",
@@ -81,15 +73,7 @@ export const personalRoutes = [
                 { path: "cesium", alias: ["cesiumjs"], name: "Cesium Module", component: CesiumModule },
                 { path: "mavlink", alias: ["mavlink-protocol"], name: "MAVLink Module", component: MAVLinkModule }
             ]},
-            { path: "aws", alias: ["amazon"], children: [
-                { path: "", alias: ["main"], name: "Skills AWS Page", component: AmazonMain },
-                { path: "amplify", name: "AWS Amplify Page", component: AmazonAmplify },
-                { path: "cognito", name: "Amazon Cognito Page", component: AmazonCognito },
-                { path: "s3", name: "Amazon S3 Page", component: AmazonS3 },
-                { path: "cloudfront", name: "Amazon Cloudfront Page", component: AmazonCloudfront },
-                { path: "route53", name: "Amazon Route 53 Page", component: AmazonRoute53 },
-                { path: "workmail", name: "Amazon Workmail Page", component: AmazonWorkmail },
-            ]},
+            { path: "aws", alias: ["amazon"], redirect: "/aws" }
         ]
     },
     {

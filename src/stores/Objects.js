@@ -536,7 +536,7 @@ export const NAV_CARDS = [
     {
         id: "aws-nav-card",
         titleId: "aws-nav-title",
-        route: "/aws",
+        route: "/aws/",
 
         title: {
             text: "Amazon",

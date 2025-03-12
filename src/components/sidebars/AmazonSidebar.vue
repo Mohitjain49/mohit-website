@@ -21,7 +21,7 @@
         </div>
 
         <RouterLink v-for="path in AWS_PATHS"
-            :to="getAmazonRoute(path.route)"
+            :to="getAmazonRoute('#' + path.route)"
             @click="goToAmazonSection(path.route)"
             class="mobile-skill-sidebar-opt aws-sidebar-opt">
 
@@ -64,7 +64,7 @@ onBeforeUnmount(() => {
  * @param hash The id of the section.
  */
 function getAmazonRoute(hash = "#start") {
-    return { path: "/aws", hash };
+    return { path: "/aws/", hash };
 }
 
 /**
@@ -80,13 +80,13 @@ function goToAmazonSection(id) {
  * This is the list of available paths in the AWS skills page.
  */
 const AWS_PATHS = [
-    { title: "Amazon Web Services", icon: aws_icon, route: "#start" },
-    { title: "AWS Amplify", icon: amplify_icon, route: "#amplify" },
-    { title: "Amazon Cognito", icon: cognito_icon, route: "#cognito" },
-    { title: "Amazon S3", icon: s3_icon, route: "#s3" },
-    { title: "Amazon CloudFront", icon: cloudfront_icon, route: "#cloudfront" },
-    { title: "Amazon Route 53", icon: route53_icon, route: "#route53" },
-    { title: "Amazon WorkMail", icon: workmail_icon, route: "#workmail" }
+    { title: "Amazon Web Services", icon: aws_icon, route: "start" },
+    { title: "AWS Amplify", icon: amplify_icon, route: "amplify" },
+    { title: "Amazon Cognito", icon: cognito_icon, route: "cognito" },
+    { title: "Amazon S3", icon: s3_icon, route: "s3" },
+    { title: "Amazon CloudFront", icon: cloudfront_icon, route: "cloudfront" },
+    { title: "Amazon Route 53", icon: route53_icon, route: "route53" },
+    { title: "Amazon WorkMail", icon: workmail_icon, route: "workmail" }
 ];
 </script>
 

@@ -11,6 +11,24 @@
         <div id="start" class="aws-page-section">
 
         </div>
+        <div id="amplify" class="aws-page-section">
+
+        </div>
+        <div id="cognito" class="aws-page-section">
+
+        </div>
+        <div id="s3" class="aws-page-section">
+
+        </div>
+        <div id="cloudfront" class="aws-page-section">
+
+        </div>
+        <div id="route53" class="aws-page-section">
+
+        </div>
+        <div id="workmail" class="aws-page-section">
+
+        </div>
     </client-only>
     <WebFooter />
 </div>
