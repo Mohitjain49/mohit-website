@@ -181,8 +181,8 @@ const SMALL_ICONS = [
 
 @media (max-width: 800px) {
     .aws-page-mainDesc {
-        width: calc(100% - 20px);
-        padding: 10px;
+        width: calc(100% - 40px);
+        padding: 10px 0px;
     }
 }
 
@@ -199,6 +199,15 @@ const SMALL_ICONS = [
     }
     .aws-page-smallIcon-grid {
         grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 450px) {
+    .aws-page-title span {
+        display: none;
+    }
+    .aws-page-mainDesc {
+        font-size: 18px;
     }
 }
 </style>

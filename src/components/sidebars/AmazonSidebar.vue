@@ -139,9 +139,9 @@ const AWS_PATHS = [
     border-radius: 5px;
 }
 
-@media (max-width: 340px) {
+@media (max-width: 460px) {
     .aws-nav-widget {
-        display: none;
+        height: 135px;
     }
 }
 </style>
