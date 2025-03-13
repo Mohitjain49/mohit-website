@@ -18,12 +18,12 @@ onMounted(() => {
     initWebData();
     nextTick().then(() => {
         hideVerticalOverflow();
-        document.addEventListener("resize", hideVerticalOverflow);
+        window.addEventListener("resize", hideVerticalOverflow);
     })
 });
 onBeforeUnmount(() => {
     document.body.style.overflowY = "";
-    document.removeEventListener("resize", hideVerticalOverflow);
+    window.removeEventListener("resize", hideVerticalOverflow);
 });
 
 /**

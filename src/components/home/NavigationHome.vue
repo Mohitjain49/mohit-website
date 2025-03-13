@@ -15,7 +15,10 @@
 </template>
 
 <script setup>
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 import { ref, onMounted } from 'vue';
+
+const webData = useWebsiteDataStore();
 const menuExpanded = ref(false);
 const iconBeating = ref(true);
 
@@ -39,8 +42,7 @@ function toggleMenuExpanded() {
  * @param {String} id The element ID of the section.
  */
 function goToHomeSection(id = "start") {
-    const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
-    window.scrollTo({ top: top, left: 0, behavior: "smooth" });
+    webData.goToPageSection(id);
 }
 
 /**

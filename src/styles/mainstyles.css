@@ -15,6 +15,7 @@
     --silver-color: #adadad;
     --silver-light: #e4e2e2;
     --globe-green: #4fc20ca8;
+    --globe-green-opaque: #3C7F13;
     --dark-background: #232323;
 
     --website-text: rgb(126, 90, 0);
@@ -94,7 +95,7 @@ h1, h2, h3, p {
 .webpage-cover {
     margin: 0;
     padding: 0;
-    position: absolute;
+    position: fixed;
     height: auto;
     min-height: 100%;
     width: 100%;

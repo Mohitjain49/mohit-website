@@ -1,53 +1,41 @@
 <template>
-<div class="skill-sidebar-container skill-sidebar aws-sidebar">
-    <div class="skill-sidebar-container" v-if="webData.pageView != 2">
-        <RouterLink v-for="path in AWS_PATHS" :title="path.title"
-            :to="getAmazonRoute(path.route)"
-            class="skill-sidebar-opt aws-sidebar-opt center-flex-display">
-
-            <img :src="path.icon" class="skill-sidebar-opt-icon" draggable="false" />
-        </RouterLink>
+<div class="aws-nav-widget animate__animated animate__fadeInRight">
+    <div class="aws-nav-widget-opt" @click="webData.toggleSkillsSidebar()" title="Open Menu">
+        <client-only> <font-awesome-icon icon="fa-bars" /> </client-only>
     </div>
-    <div class="skill-sidebar-container" v-if="webData.pageView == 2">
-        <div class="skill-sidebar-opt aws-sidebar-opt center-flex-display" @click="webData.toggleMobileSidebar()" title="Open Sidebar">
-            <font-awesome-icon icon="fa-bars" class="skill-sidebar-opt-icon" />
-        </div>
-    </div>
-
-    <div class="skill-sidebar-container">
-        <a :href="AWS_ICONS_LINK" target="_blank" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="AWS Icons">
-            <img :src="icons_logo" class="skill-sidebar-opt-icon-v2" width="35" draggable="false" />
-        </a>
-        <a :href="WORLDS_IVUE_LINK" target="_blank" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="Worlds iVue">
-            <img :src="wiv_icon" class="skill-sidebar-opt-icon-v2" width="30" draggable="false" />
-        </a>
-        <RouterLink to="/skills" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="Back To Skills Page">
-            <img :src="return_icon" class="skill-sidebar-opt-icon-v2" draggable="false" />
-        </RouterLink>
-        <RouterLink to="/" class="skill-sidebar-opt aws-sidebar-opt center-flex-display" title="Back To Home Page">
-            <font-awesome-icon class="skill-sidebar-opt-icon" icon="fa-house" draggable="false" />
-        </RouterLink>
-    </div>
+    <div class="aws-nav-widget-line"></div>
+    <RouterLink to="/skills" class="aws-nav-widget-opt" title="Back To Skills Page">
+        <img :src="return_icon" draggable="false" />
+    </RouterLink>
+    <div class="aws-nav-widget-line"></div>
+    <a :href="AWS_ICONS_LINK" target="aws-icons-website" class="aws-nav-widget-opt" title="AWS Icons">
+        <img :src="icons_logo" id="aws-icon-widgetLogo" draggable="false" />
+    </a>
 </div>
 
-<div v-if="webData.mobileSidebarOpen" class="webpage-cover"
-    @click="webData.closeMobileSidebar()"
+<div v-if="webData.skillsSidebarOpen" class="webpage-cover"
+    @click="webData.toggleSkillsSidebar()"
     style="z-index: 1499;">
 </div>
 <Transition name="mobile-skill-sidebar-transition">
-    <div v-if="webData.mobileSidebarOpen" class="mobile-skill-sidebar aws-sidebar" draggable="false">
-        <div class="mobile-skill-sidebar-opt aws-sidebar-opt" @click="webData.toggleMobileSidebar()">
+    <div v-if="webData.skillsSidebarOpen" class="mobile-skill-sidebar aws-sidebar" draggable="false">
+        <div class="mobile-skill-sidebar-opt aws-sidebar-opt" @click="webData.toggleSkillsSidebar()">
             <font-awesome-icon icon="fa-bars" class="mobile-skill-sidebar-opt-icon" />
-            <span> Close Sidebar </span>
+            <span> Close Menu </span>
         </div>
 
-        <RouterLink v-for="path in AWS_PATHS"
-            :to="getAmazonRoute(path.route)"
+        <a v-for="path in AWS_PATHS" target="aws-website"
+            :href="(AWS_WEBSITE_LINK + path.route)"
+            @click="closeAmazonSidebar()"
             class="mobile-skill-sidebar-opt aws-sidebar-opt">
 
             <img :src="path.icon" class="mobile-skill-sidebar-opt-icon" draggable="false" />
             <span> {{ path.title }} </span>
-        </RouterLink>
+        </a>
+        <a :href="AWS_ICONS_LINK" target="aws-icons-website" class="mobile-skill-sidebar-opt aws-sidebar-opt">
+            <img :src="icons_logo" id="aws-icon-logo" draggable="false" />
+            <span> AWS Icons </span>
+        </a>
     </div>
 </Transition>
 </template>
@@ -55,7 +43,6 @@
 <script setup>
 import "@/styles/sidebars.css";
 import return_icon from "@/assets/google-icons/Return_White_Icon.svg";
-import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 import icons_logo from "@/assets/aws/AWS_Icons_Logo.svg";
 
 import aws_icon from "@/assets/aws/AWS_Icon.png"
@@ -66,35 +53,95 @@ import cloudfront_icon from "@/assets/aws/AWS_CloudFront_Icon.svg";
 import route53_icon from "@/assets/aws/AWS_Route_53_Icon.svg";
 import workmail_icon from "@/assets/aws/AWS_WorkMail_Icon.svg";
 
-import { WORLDS_IVUE_LINK } from "@/stores/Objects.js";
 import { useWebsiteDataStore } from "@/stores/WebsiteData.js";
 import { onBeforeUnmount } from "vue";
 
 const webData = useWebsiteDataStore();
+const AWS_WEBSITE_LINK = "https://aws.amazon.com/";
 const AWS_ICONS_LINK = "https://aws-icons.com/";
 
 onBeforeUnmount(() => {
-    if(webData.mobileSidebarOpen) { webData.closeMobileSidebar(); }
+    closeAmazonSidebar();
 })
 
 /**
- * This function returns an aws route for a sidebar opt.
- * @param subRoute The subroute within the aws path.
+ * This function closes the amazon sidebar should it be open.
  */
-function getAmazonRoute(subRoute = "") {
-    return ("/skills/aws/" + subRoute);
+function closeAmazonSidebar() {
+    if(webData.skillsSidebarOpen) { webData.toggleSkillsSidebar(); }
 }
 
 /**
  * This is the list of available paths in the AWS skills page.
  */
 const AWS_PATHS = [
-    { title: "Amazon Web Services", icon: aws_icon, route: "main" },
-    { title: "AWS Amplify", icon: amplify_icon, route: "amplify" },
-    { title: "Amazon Cognito", icon: cognito_icon, route: "cognito" },
-    { title: "Amazon S3", icon: s3_icon, route: "s3" },
-    { title: "Amazon CloudFront", icon: cloudfront_icon, route: "cloudfront" },
-    { title: "Amazon Route 53", icon: route53_icon, route: "route53" },
-    { title: "Amazon WorkMail", icon: workmail_icon, route: "workmail" }
+    { title: "Amazon Web Services", icon: aws_icon, route: "" },
+    { title: "AWS Amplify", icon: amplify_icon, route: "amplify/" },
+    { title: "Amazon Cognito", icon: cognito_icon, route: "cognito/" },
+    { title: "Amazon S3", icon: s3_icon, route: "s3/" },
+    { title: "Amazon CloudFront", icon: cloudfront_icon, route: "cloudfront/" },
+    { title: "Amazon Route 53", icon: route53_icon, route: "route53/" },
+    { title: "Amazon WorkMail", icon: workmail_icon, route: "workmail/" }
 ];
 </script>
+
+<style>
+.aws-nav-widget {
+    position: fixed;
+    cursor: pointer;
+    overflow: hidden;
+    top: 65px;
+    left: 15px;
+    height: 183px;
+    width: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid #402C6D;
+    box-shadow: 0px 0px 7px 0px white;
+    border-radius: 30px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.aws-nav-widget-opt {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 25px;
+    transition: var(--default-transition);
+}
+.aws-nav-widget-opt:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.aws-nav-widget-opt img {
+    width: 25px;
+    user-select: none;
+}
+.aws-nav-widget-line {
+    width: 100%;
+    height: 2px;
+    background-color: #402C6D;
+}
+
+#aws-icon-widgetLogo {
+    width: 30px;
+}
+#aws-icon-logo {
+    margin: 0px 15px;
+    width: 25px;
+    background-color: rgb(255, 255, 255);
+    padding: 4px;
+    border-radius: 5px;
+}
+
+@media (max-width: 340px) {
+    .aws-nav-widget {
+        display: none;
+    }
+}
+</style>

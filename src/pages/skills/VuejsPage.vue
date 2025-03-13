@@ -4,7 +4,7 @@
     <vue-particles id="particlests" :options="VUEJS_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="vuejs-page" class="personal-web-body" @click="closeNavBarDropdown()">
+<div id="vuejs-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
     <client-only>
         <div id="title" class="vuejs-page-section"
             v-observe-visibility="(isVisible) => {manageVisibilityTransition(isVisible, 'title')}">
@@ -13,8 +13,8 @@
                 <img :src="vuejs_icon" draggable="false"
                     :title="VUEJS_WEBSITE_LINK"
                     @click="goToVuejsWebsite()"
-                    @mouseenter="setFlashAnimation"
-                    @mouseleave="setFlashAnimation"
+                    @mouseenter="webData.setFlashAnimation"
+                    @mouseleave="webData.setFlashAnimation"
                 />
                 <span>ue.js</span>
             </div>
@@ -23,8 +23,8 @@
                 compared to React and Angular and incredibly simple for developers to use.
             </div>
             <div class="vuejs-page-mainLink" @click="goToVuejsWebsite()" :title="VUEJS_WEBSITE_LINK"
-                @mouseenter="setFlashAnimation"
-                @mouseleave="setFlashAnimation">
+                @mouseenter="webData.setFlashAnimation"
+                @mouseleave="webData.setFlashAnimation">
 
                 <span> {{ VUEJS_WEBSITE_LINK }} </span>
             </div>
@@ -36,8 +36,8 @@
                 <img :src="nuxt_icon" draggable="false"
                     :title="NUXT_WEBSITE_LINK"
                     @click="goToNuxtWebsite()"
-                    @mouseenter="setFlashAnimation"
-                    @mouseleave="setFlashAnimation"
+                    @mouseenter="webData.setFlashAnimation"
+                    @mouseleave="webData.setFlashAnimation"
                 />
                 <span>Nuxt</span>
             </div>
@@ -47,8 +47,8 @@
                 on Vue.js Websites and Web Apps.
             </div>
             <div class="vuejs-page-mainLink" @click="goToNuxtWebsite()" :title="NUXT_WEBSITE_LINK"
-                @mouseenter="setFlashAnimation"
-                @mouseleave="setFlashAnimation">
+                @mouseenter="webData.setFlashAnimation"
+                @mouseleave="webData.setFlashAnimation">
 
                 <span> {{ NUXT_WEBSITE_LINK }} </span>
             </div>
@@ -64,8 +64,8 @@
             <a v-for="link in PROJECT_LINKS" :title="link"
                 class="vuejs-page-mainLink vuejs-projects-link"
                 :href="link" target="_blank"
-                @mouseenter="setFlashAnimation"
-                @mouseleave="setFlashAnimation">
+                @mouseenter="webData.setFlashAnimation"
+                @mouseleave="webData.setFlashAnimation">
 
                 <span> {{ link }} </span>
             </a>
@@ -83,7 +83,7 @@ import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 import { getMeta } from "@/stores/GetMeta.js";
 
-import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 import { VUEJS_BACKGROUND } from '@/stores/ParticlesConfig.js';
 import { VUEJS_WEBSITE_LINK,
     NUXT_WEBSITE_LINK,
@@ -98,7 +98,8 @@ import { VUEJS_WEBSITE_LINK,
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
-onMounted(() => { initWebData(); });
+onMounted(() => { webData.mountWebData(); });
+const webData = useWebsiteDataStore();
 const ANIMATE_DURATION = 1000; // The time spent for the duration in milliseconds.
 
 /**
@@ -121,17 +122,6 @@ function manageVisibilityTransition(isVisible, id = "start") {
             children[i].classList.remove("animate__animated", animation);
         }
     }, ANIMATE_DURATION);
-}
-
-/**
- * This adds and removes a flash animation for any element on this page.
- */
-function setFlashAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
-        event.target.classList.add("animate__animated", "animate__flash");
-    } else {
-        event.target.classList.remove("animate__animated", "animate__flash");
-    }
 }
 
 /**

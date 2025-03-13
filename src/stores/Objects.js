@@ -11,6 +11,7 @@ import react_icon from "../assets/React_Icon.png";
 import expo_icon from "../assets/sublo/Expo_Icon.svg";
 import vite_icon from "../assets/Vite_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
+import pinia_icon from "../assets/Pinia_Icon.svg";
 
 import aws_icon from "../assets/aws/AWS_Icon.png";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
@@ -370,7 +371,7 @@ export const NAV_CARDS = [
     {
         id: "vue-nav-card",
         titleId: "vue-nav-card-title",
-        route: "/skills/frontend/vuejs",
+        route: "/vuejs/",
     
         title: {
             text: "Vue.js",
@@ -383,17 +384,17 @@ export const NAV_CARDS = [
         },
     
         color: "#41B883",
-        desc: "Read about my continuing journey with Vue.js, " +
-            "a web development platform that's the base of my earliest projects!",
+        desc: "Vue.js is my go-to web development framework, offering simplicity, " +
+            "quick performance, and a vast ecosystem for all developers.",
 
-        pointsTitle: "Related Projects:",
-        bulletPoints: [ "Worlds iVue", "iVue Websites", "Even This Website!" ],
+        pointsTitle: "Projects:",
+        bulletPoints: [ "Worlds iVue", "My Portfolio", "iVue's Company Websites", "My Personal Globe" ],
 
         pictureBarClass: "vue-nav-picture-bar",
         pictures: [
-            { image: wiv_app, width: "90%" },
-            { image: ivue_website, width: "90%" },
-            { image: ivue_media_website, width: "90%" }
+            { image: vue_icon, width: "40%" },
+            { image: nuxt_icon, width: "50%" },
+            { image: pinia_icon, width: "32%" },
         ]
     },
     {
@@ -537,7 +538,7 @@ export const NAV_CARDS = [
     {
         id: "aws-nav-card",
         titleId: "aws-nav-title",
-        route: "/skills/aws",
+        route: "/aws/",
 
         title: {
             text: "Amazon",
@@ -620,7 +621,7 @@ export const NAV_CARDS = [
         pointsTitle: "Frameworks:",
         bulletPoints: [ "Vue.js", "React Native", "Angular" ],
 
-        pictureBarClass: "vue-nav-picture-bar",
+        pictureBarClass: "frontend-nav-picture-bar",
         pictures: [
             { image: vue_icon, width: "40%" },
             { image: react_icon, width: "39%" },
