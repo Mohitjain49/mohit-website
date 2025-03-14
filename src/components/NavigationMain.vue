@@ -18,6 +18,7 @@ function scrollToTop(event, navRoute = "/") {
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Navigation Menu";
 const RESUME_TITLE = "See My Resume!";
+const QR_CODE_TITLE = "QR Codes for My Website";
 </script>
 
 <template>
@@ -54,6 +55,11 @@ const RESUME_TITLE = "See My Resume!";
                     @click="(event) => { scrollToTop(event, '/resume') }">
 
                     <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
+                </RouterLink>
+                <RouterLink class="web-navBar-menuIcon" to="/qrcode" :title="QR_CODE_TITLE"
+                    @click="(event) => { scrollToTop(event, '/qrcode') }">
+
+                    <client-only> <font-awesome-icon icon="fa-qrcode" /> </client-only>
                 </RouterLink>
                 <div class="web-navBar-menuIcon" @click="webData.setNavBarDropdown(0)" :title="ROUTE_MENU_TITLE">
                     <client-only> <font-awesome-icon icon="fa-bars" /> </client-only>
@@ -196,7 +202,7 @@ const RESUME_TITLE = "See My Resume!";
 @media (max-width: 825px) {
     .web-navBar-links-side {
         width: fit-content;
-        min-width: 100px;
+        min-width: 150px;
         justify-content: space-evenly;
     }
     .web-navBar-largeSide {

@@ -7,7 +7,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
-     * If it equals 0, it is on laptop mode, or the screen width is above 800px.
+     * If it equals 0, it is on laptop mode, or the screen width is above 825px.
      * If it equals 1, it is on tablet mode, or the screen width is above 600px.
      * If it equals 2, it is on phone mode, or the screen width is at most 600px.
      */
