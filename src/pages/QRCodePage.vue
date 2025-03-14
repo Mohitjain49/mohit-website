@@ -12,7 +12,7 @@
                 <span> {{ PERSONAL_WEBSITE_LINK }} </span>
             </a>
         </div>
-        <div class="qr-element-container">
+        <div class="qr-element-container last">
             <div class="qr-element" v-html="renderSVG(PERSONAL_GLOBE_LINK)"></div>
             <a :href="PERSONAL_GLOBE_LINK" class="qr-element-link">
                 <span> {{ PERSONAL_GLOBE_LINK }} </span>
