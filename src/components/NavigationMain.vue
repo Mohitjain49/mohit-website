@@ -9,35 +9,41 @@ const route = useRoute();
 /**
  * This function, given a route, will scroll to the top of the page if they click on the same route.
  */
-function scrollToTop(navRoute = "/") {
+function scrollToTop(event, navRoute = "/") {
     if((navRoute != route.path) && ((navRoute + "/") != route.path)) { return; }
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    webData.addFlashAnimation(event);
 }
 
 const CONTACT_TITLE = "Contact Me!";
 const ROUTE_MENU_TITLE = "Navigation Menu";
 const RESUME_TITLE = "See My Resume!";
+const QR_CODE_TITLE = "QR Codes for My Website";
 </script>
 
 <template>
 <div class="web-navBar">
     <div class="web-navBar-links-side">
-        <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE" @click="scrollToTop('/contact')">
+        <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE"
+            @click="(event) => { scrollToTop(event, '/contact') }">
+
             <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
             <span>Contact Me!</span>
         </RouterLink>
     </div>
 
     <div v-if="webData.pageView == 0" class="web-navBar-links-section">
-        <RouterLink class="web-navBar-opt" to="/" @click="scrollToTop('/')"> Home </RouterLink>
-        <RouterLink class="web-navBar-opt skills" to="/skills" @click="scrollToTop('/skills')"> Skills </RouterLink>
-        <RouterLink class="web-navBar-opt" to="/experience" @click="scrollToTop('/experience')"> Experience </RouterLink>
+        <RouterLink class="web-navBar-opt" to="/" @click="(event) => { scrollToTop(event, '/') }"> Home </RouterLink>
+        <RouterLink class="web-navBar-opt skills" to="/skills/" @click="(event) => { scrollToTop(event, '/skills') }"> Skills </RouterLink>
+        <RouterLink class="web-navBar-opt" to="/experience/" @click="(event) => { scrollToTop(event, '/experience') }"> Experience </RouterLink>
         <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
     </div>
 
     <div class="web-navBar-links-side" >
         <template v-if="webData.pageView == 0">
-            <RouterLink class="web-navBar-largeSide" to="/resume" :title="RESUME_TITLE" @click="scrollToTop('/resume')">
+            <RouterLink class="web-navBar-largeSide" to="/resume" :title="RESUME_TITLE"
+                @click="(event) => { scrollToTop(event, '/resume') }">
+
                 <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
                 <span>My Resume</span>
             </RouterLink>
@@ -45,8 +51,15 @@ const RESUME_TITLE = "See My Resume!";
 
         <template v-if="webData.pageView != 0">
             <client-only>
-                <RouterLink class="web-navBar-menuIcon" to="/resume" :title="RESUME_TITLE" @click="scrollToTop('/resume')">
+                <RouterLink class="web-navBar-menuIcon" to="/resume" :title="RESUME_TITLE"
+                    @click="(event) => { scrollToTop(event, '/resume') }">
+
                     <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
+                </RouterLink>
+                <RouterLink class="web-navBar-menuIcon" to="/qrcode" :title="QR_CODE_TITLE"
+                    @click="(event) => { scrollToTop(event, '/qrcode') }">
+
+                    <client-only> <font-awesome-icon icon="fa-qrcode" /> </client-only>
                 </RouterLink>
                 <div class="web-navBar-menuIcon" @click="webData.setNavBarDropdown(0)" :title="ROUTE_MENU_TITLE">
                     <client-only> <font-awesome-icon icon="fa-bars" /> </client-only>
@@ -58,10 +71,18 @@ const RESUME_TITLE = "See My Resume!";
 
 <Transition name="navBarDDTransition">
     <div class="navBar-dropdown" v-if="webData.navBarDropdown == 0">
-        <RouterLink class="navBar-dropdown-opt" to="/"> <span> Home </span> </RouterLink>
-        <RouterLink class="navBar-dropdown-opt skills" to="/skills"> <span> Skills </span> </RouterLink>
-        <RouterLink class="navBar-dropdown-opt" to="/experience"> <span> Experience </span> </RouterLink>
-        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt globe"> <span> My Globe </span> </a>
+        <RouterLink class="navBar-dropdown-opt" to="/" @click="(event) => { scrollToTop(event, '/') }">
+            <span> Home </span>
+        </RouterLink>
+        <RouterLink class="navBar-dropdown-opt skills" to="/skills/" @click="(event) => { scrollToTop(event, '/skills') }">
+            <span> Skills </span>
+        </RouterLink>
+        <RouterLink class="navBar-dropdown-opt" to="/experience/" @click="(event) => { scrollToTop(event, '/experience') }">
+            <span> Experience </span>
+        </RouterLink>
+        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt globe">
+            <span> My Globe </span>
+        </a>
     </div>
 </Transition>
 </template>
@@ -181,7 +202,7 @@ const RESUME_TITLE = "See My Resume!";
 @media (max-width: 825px) {
     .web-navBar-links-side {
         width: fit-content;
-        min-width: 100px;
+        min-width: 150px;
         justify-content: space-evenly;
     }
     .web-navBar-largeSide {

@@ -7,7 +7,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
-     * If it equals 0, it is on laptop mode, or the screen width is above 800px.
+     * If it equals 0, it is on laptop mode, or the screen width is above 825px.
      * If it equals 1, it is on tablet mode, or the screen width is above 600px.
      * If it equals 2, it is on phone mode, or the screen width is at most 600px.
      */
@@ -88,6 +88,16 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
+     * This function adds the flash animation, then removes it after 0.8s.
+     */
+    function addFlashAnimation(event = new MouseEvent("click")) {
+        event.target.classList.add('animate__animated', 'animate__flash');
+        setTimeout(() => {
+            event.target.classList.remove('animate__animated', 'animate__flash');
+        }, 800)
+    }
+
+    /**
      * This sets the size of crucial components within the website.
      */
     function resizePageComponents() {
@@ -106,7 +116,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     return { navBarDropdown, pageView, skillsSidebarOpen,
         setEventListeners, removeEventListeners, mountWebData,
         setNavBarDropdown, toggleSkillsSidebar, goToPageSection,
-        setFlashAnimation, setHeartbeatAnimation
+        setFlashAnimation, setHeartbeatAnimation, addFlashAnimation
     }
 });
 

@@ -6,7 +6,10 @@
 
     <div class="copyright-statement">
         <client-only>
-            <font-awesome-icon icon="fa-copyright" />
+            <font-awesome-icon icon="fa-copyright"
+                class="copyright-mainIcon"
+                @click="goToCopyrightPage()"
+            />
         </client-only>
         <span> {{ COPYRIGHT_TEXT }} </span>
     </div>
@@ -28,13 +31,23 @@
 
 <script setup>
 import personal_icon from "/static-icons/Personal_Icon_Transparent.png";
+import { useRouter } from "vue-router";
+
 const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
+const router = useRouter();
 
 /**
  * This scrolls to the top of the webpage.
  */
 function scrollToTop() {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+}
+
+/**
+ * This function navigates visitors to the copyright page.
+ */
+function goToCopyrightPage() {
+    router.push("/copyright");
 }
 </script>
 
@@ -55,6 +68,14 @@ function scrollToTop() {
     font-size: 23px;
     font-family: 'Lexend', sans-serif;
     margin-left: 6px;
+}
+
+.copyright-mainIcon {
+    cursor: pointer;
+    transition: font-size 0.2s;
+}
+.copyright-mainIcon:hover {
+    font-size: 29px;
 }
 
 .copyright-side-container {

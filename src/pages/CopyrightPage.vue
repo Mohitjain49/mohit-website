@@ -1,0 +1,81 @@
+<template>
+<NavigationMain />
+<div class="personal-web-body" @click="closeNavBarDropdown()">
+    <div class="copyright-body">
+        <div class="copyright-body-header">
+            <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
+            <span> {{ COPYRIGHT_TEXT }} </span>
+        </div>
+
+        <div class="copyright-body-desc">
+            I'm glad you're here and hope you find inspiration in my work.
+            Feel free to explore the site, take ideas, and use them to spark your own creativity.
+            However, please don't directly copy my content, design, or code without my permission.
+            <br> <br>
+            If you would like to collaborate or discuss using any part of my work, 
+            I'd love to hear from you! The button on the top left will take you to my Contact Page.
+        </div>
+    </div>
+    <WebFooter />
+</div>
+</template>
+
+<script setup>
+import NavigationMain from "../components/NavigationMain.vue";
+import WebFooter from "@/components/WebFooter.vue";
+import { getMeta } from "../stores/GetMeta.js";
+
+import { initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
+import { onMounted } from "vue";
+import { useHead } from "@unhead/vue";
+
+const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
+onMounted(() => { initWebData(); });
+
+useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
+    "A legal disclaimer for any vistors on my website."
+));
+</script>
+
+<style scoped>
+.copyright-body {
+    height: fit-content;
+    min-height: calc(100vh - 150px);
+    width: calc(100% - 40px);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.copyright-body-header {
+    width: fit-content;
+    height: fit-content;
+    font-size: 60px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: bold;
+    color: var(--website-text)
+}
+
+.copyright-body-header svg {
+    margin-right: 10px;
+}
+.copyright-body-desc {
+    padding-top: 20px;
+    width: 100%;
+    height: fit-content;
+    max-width: 700px;
+    font-size: 25px;
+    font-family: 'Montserrat', 'Roboto', sans-serif;
+    color: var(--website-text);
+}
+
+@media (max-width: 600px) {
+    .copyright-body-header {
+        font-size: 50px;
+    }
+    .copyright-body-desc {
+        font-size: 20px;
+    }
+}
+</style>

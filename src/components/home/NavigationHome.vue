@@ -12,6 +12,12 @@
         <div class="close" :class="getCircleOptClasses()"> Close </div>
     </template>
 </div>
+
+<RouterLink to="qrcode" :class="getQRCodeClasses()" title="QR Codes for My Website">
+    <client-only>
+        <font-awesome-icon icon="fa-qrcode" class="home-nav-barsIcon" :beat="iconBeating" />
+    </client-only>
+</RouterLink>
 </template>
 
 <script setup>
@@ -56,6 +62,15 @@ function getCircleClasses() {
 }
 
 /**
+ * This function returns the classes for the QR code widget.
+ */
+function getQRCodeClasses() {
+    return ['home-nav', 'qrcode-nav',
+        'animate__animated', 'animate__fadeInBottomLeft'
+    ];
+}
+
+/**
  * This function returns the classes for the option elements.
  */
 function getCircleOptClasses() {
@@ -83,6 +98,11 @@ function getCircleOptClasses() {
 }
 .home-nav:hover {
     background-color: var(--website-light-text);
+}
+
+.qrcode-nav {
+    left: auto;
+    right: 10px;
 }
 
 .home-nav.home-nav-expanded {
@@ -120,6 +140,11 @@ function getCircleOptClasses() {
     border-bottom: none;
 }
 
+@media (max-width: 825px) {
+    .qrcode-nav {
+        display: none;
+    }
+}
 @media (max-width: 340px) {
     .home-nav {
         display: none;
