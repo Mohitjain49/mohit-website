@@ -32,11 +32,16 @@
     height: 123px;
     border-bottom: 2px solid var(--nav-bar-border);
     transition: var(--default-transition);
-    background: rgba(255, 255, 255, 0.25);
+    background: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+.nav-newCard-header-text {
+    font-size: 60px;
+    font-family: 'Lexend', sans-serif;
+}
+
 .nav-newCard-picture {
     width: 100%;
     height: 150px;
@@ -149,4 +154,38 @@
 }
 .nav-newCard#ivue-nav-newCard:hover .nav-newCard-desc {
     border-color: black;
+}
+
+.nav-newCard#sublo-nav-newCard {
+    border-color: #d1efff;
+    color: #d1efff;
+    background-color: #031427;
+}
+.nav-newCard#sublo-nav-newCard .nav-newCard-header {
+    border-color: #d1efff;
+}
+.nav-newCard#sublo-nav-newCard .nav-newCard-desc {
+    border-color: #d1efff;
+}
+
+.nav-newCard#sublo-nav-newCard .newCard-module {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-newCard#sublo-nav-newCard:hover {
+    border-color: #36A1D9;
+    color: #36A1D9;
+}
+.nav-newCard#sublo-nav-newCard:hover .nav-newCard-header {
+    border-color: #36A1D9;
+}
+.nav-newCard#sublo-nav-newCard:hover .nav-newCard-desc {
+    border-color: #36A1D9;
+}
+
+@media (max-width: 950px) and (min-width: 651px) {
+    #sublo-nav-newCard-container {
+        position: relative;
+        left: 50%;
+    }
 }

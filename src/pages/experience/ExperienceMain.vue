@@ -10,7 +10,7 @@
         <div class="main-nav-page">
             <WIVNavCard />
             <IvueNavCard />
-            <NavPageCard :sectorObj="NAV_CARDS[5]" id="third-nav-card" />
+            <SubloNavCard />
         </div>
         <div class="main-sector-bottom-linkBtn-container center-flex-display" style="padding-bottom: 30px;">
             <RouterLink to="/" class="main-sector-bottom-linkBtn center-flex-display">Back to Home</RouterLink>
@@ -25,11 +25,10 @@ import "@/styles/navpage.css";
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 
-import NavPageCard from '@/components/body-components/NavPageCard.vue';
 import WIVNavCard from "@/components/cards/WIVNavCard.vue";
 import IvueNavCard from "@/components/cards/IvueNavCard.vue";
+import SubloNavCard from "@/components/cards/SubloNavCard.vue";
 
-import { NAV_CARDS } from '@/stores/Objects.js';
 import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 import { getMeta } from "@/stores/GetMeta.js";
 
