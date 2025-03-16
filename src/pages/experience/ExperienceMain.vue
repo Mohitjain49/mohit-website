@@ -8,7 +8,7 @@
     <div class="main-nav-page-container">
         <div class="nav-page-title center-flex-display gradient-text">My Experience</div>
         <div class="main-nav-page">
-            <NavPageCard :sectorObj="NAV_CARDS[3]" />
+            <WIVNavCard />
             <NavPageCard :sectorObj="NAV_CARDS[4]" />
             <NavPageCard :sectorObj="NAV_CARDS[5]" id="third-nav-card" />
         </div>
@@ -26,6 +26,8 @@ import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 
 import NavPageCard from '@/components/body-components/NavPageCard.vue';
+import WIVNavCard from "@/components/cards/WIVNavCard.vue";
+
 import { NAV_CARDS } from '@/stores/Objects.js';
 import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 import { getMeta } from "@/stores/GetMeta.js";

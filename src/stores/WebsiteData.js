@@ -88,6 +88,17 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
+     * This function sets a bounce animation for any element.
+     */
+    function setBounceAnimation(event = new MouseEvent("mouseenter")) {
+        if(event.type === "mouseenter") {
+            event.target.classList.add('animate__animated', 'animate__bounce');
+        } else {
+            event.target.classList.remove('animate__animated', 'animate__bounce');
+        }
+    }
+
+    /**
      * This function adds the flash animation, then removes it after 0.8s.
      */
     function addFlashAnimation(event = new MouseEvent("click")) {
@@ -116,7 +127,8 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     return { navBarDropdown, pageView, skillsSidebarOpen,
         setEventListeners, removeEventListeners, mountWebData,
         setNavBarDropdown, toggleSkillsSidebar, goToPageSection,
-        setFlashAnimation, setHeartbeatAnimation, addFlashAnimation
+        setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
+        addFlashAnimation
     }
 });
 
@@ -210,4 +222,12 @@ export function downloadResume() {
    link.href = MJ_Resume;
    link.download = 'Mohit_Jain_Resume.pdf';
    link.click();
+}
+
+/**
+ * This function sets a bounce animation for any element.
+ */
+export function setBounceAnimation(event = new MouseEvent("mouseenter")) {
+    const webData = useWebsiteDataStore();
+    webData.setBounceAnimation(event)
 }
