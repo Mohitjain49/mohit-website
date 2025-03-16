@@ -1,14 +1,14 @@
 <template>
 <div class="newCard-container">
-    <a :href="WORLDS_IVUE_LINK" id="wiv-nav-newCard" class="nav-newCard"
+    <a :href="MAIN_IVUE_WEBSITE_LINK" id="ivue-nav-newCard" class="nav-newCard"
         @mouseenter="setBounceAnimation"
         @mouseleave="setBounceAnimation">
 
         <div class="nav-newCard-header">
-            <img :src="wiv_banner" width="250" />
+            <img :src="ivue_text" width="150" />
         </div>
         <div class="nav-newCard-picture">
-            <img :src="wiv_page" width="80%" draggable="false" />
+            <img :src="main_webpage" width="77.5%" draggable="false" />
         </div>
 
         <div class="newCard-devStack">
@@ -17,11 +17,15 @@
                 <img :src="module.icon" draggable="false" />
                 <span> {{ module.title }} </span>
             </div>
+            <div class="newCard-module">
+                <client-only> <font-awesome-icon icon="fa-brands fa-cloudflare" style="color: #F58A27" /> </client-only>
+                <span> Cloudflare </span>
+            </div>
         </div>
 
         <div class="nav-newCard-desc center-flex-display">
-            Explore Worlds iVue, a geospatial app that serves as a 
-            drone control operator and will serve as a media sharing app in the future.
+            As iVue's lead software developer, I develop iVue's company websites 
+            and manage how they are hosted online.
         </div>
     </a>
 </div>
@@ -29,28 +33,26 @@
 
 <script setup>
 import "@/styles/navcards.css";
-import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
-import wiv_page from "@/assets/ivue/Worlds_iVue_Main_App.png";
+import ivue_text from "@/assets/ivue/iVue_Black_Text_Cropped.png";
+import main_webpage from "@/assets/ivue/iVue_Main_Website_Home.png";
 
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
-import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
-import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
-import aws_icon from "@/assets/aws/AWS_Icon.png"; 
+import nuxt_icon from "@/assets/Nuxt_Icon.png";
+import aws_icon from "@/assets/aws/AWS_Icon.png";
 
 import { setBounceAnimation } from "@/stores/WebsiteData.js";
-import { WORLDS_IVUE_LINK } from '@/stores/Objects.js';
+import { MAIN_IVUE_WEBSITE_LINK } from '@/stores/Objects.js';
 import { onMounted } from "vue";
 
 onMounted(() => {
-    const navCard = document.getElementById("wiv-nav-newCard").classList;
+    const navCard = document.getElementById("ivue-nav-newCard").classList;
     navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
     setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
 });
 
 const DEV_STACK = [
     { title: "Vue.js", icon: vuejs_icon },
-    { title: "Cesium", icon: cesium_icon },
-    { title: "MAVLink", icon: mavlink_icon },
-    { title: "Amazon Web Services", icon: aws_icon }
+    { title: "Nuxt", icon: nuxt_icon },
+    { title: "Amazon Web Services", icon: aws_icon },
 ];
 </script>

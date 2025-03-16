@@ -21,13 +21,14 @@
 }
 
 .nav-page-title {
-    padding-top: 25px;
-    padding-bottom: 15px;
-    width: fit-content;
+    padding: 25px 15px 15px 15px;
+    width: calc(100% - 30px);
     height: fit-content;
     text-align: center;
     font-size: 60px;
     font-family: 'Lexend', sans-serif;
+    color: var(--website-text);
+    font-weight: bold;
 }
 
 @media (max-width: 950px) and (min-width: 651px) {

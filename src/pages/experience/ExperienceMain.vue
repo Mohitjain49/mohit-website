@@ -6,10 +6,10 @@
 
 <div id="exp-page" class="personal-web-body" @click="closeNavBarDropdown()">
     <div class="main-nav-page-container">
-        <div class="nav-page-title center-flex-display gradient-text">My Experience</div>
+        <div class="nav-page-title">My Experience</div>
         <div class="main-nav-page">
             <WIVNavCard />
-            <NavPageCard :sectorObj="NAV_CARDS[4]" />
+            <IvueNavCard />
             <NavPageCard :sectorObj="NAV_CARDS[5]" id="third-nav-card" />
         </div>
         <div class="main-sector-bottom-linkBtn-container center-flex-display" style="padding-bottom: 30px;">
@@ -27,6 +27,7 @@ import WebFooter from '@/components/WebFooter.vue';
 
 import NavPageCard from '@/components/body-components/NavPageCard.vue';
 import WIVNavCard from "@/components/cards/WIVNavCard.vue";
+import IvueNavCard from "@/components/cards/IvueNavCard.vue";
 
 import { NAV_CARDS } from '@/stores/Objects.js';
 import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
