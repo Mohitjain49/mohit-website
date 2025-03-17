@@ -4,7 +4,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="contact-page" class="personal-web-body" @click="closeNavBarDropdown()">
+<div id="contact-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
     <div class="contact-me-box web-service">
         <div class="contact-box-title-container center-flex-display">
             <div class="gradient-text contact-box-title">Contact Me</div>
@@ -57,7 +57,12 @@
             </div>
             <div class="contact-box-buttons-container center-flex-display">
                 <div class="contact-input-tab-btn-container center-flex-display">
-                    <div class="contact-input-tab-btn center-flex-display" @click="sendEmail()">Send Message</div>
+                    <div class="contact-input-tab-btn center-flex-display"
+                        @click="sendEmail()"
+                        @mouseenter="webData.setHeartbeatAnimation"
+                        @mouseleave="webData.setHeartbeatAnimation"
+                        v-html="'Send Message'">
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,11 +123,13 @@ import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
 import { getMeta } from '../stores/GetMeta.js';
 
 import axios from 'axios';
-import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
+import { useWebsiteDataStore } from '../stores/WebsiteData.js';
 import { ref, onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
+const webData = useWebsiteDataStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
+
 const alertBoxText = ref("");
 var alertBoxTimeout = null;
 
@@ -145,7 +152,7 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
  * This adds a transition to the contact boxes if the screen width is large enough.
  */
 onMounted(() => {
-    initWebData();
+    webData.mountWebData();
     if(window.innerWidth <= 525) { return; }
 
     document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");

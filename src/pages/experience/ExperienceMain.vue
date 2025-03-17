@@ -4,16 +4,19 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="exp-page" class="personal-web-body" @click="closeNavBarDropdown()">
+<div id="exp-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
     <div class="main-nav-page-container">
-        <div class="nav-page-title center-flex-display gradient-text">My Experience</div>
+        <div class="nav-page-title">My Experience</div>
         <div class="main-nav-page">
-            <NavPageCard :sectorObj="NAV_CARDS[3]" />
-            <NavPageCard :sectorObj="NAV_CARDS[4]" />
-            <NavPageCard :sectorObj="NAV_CARDS[5]" id="third-nav-card" />
+            <WIVNavCard />
+            <IvueNavCard />
+            <SubloNavCard />
         </div>
-        <div class="main-sector-bottom-linkBtn-container center-flex-display" style="padding-bottom: 30px;">
-            <RouterLink to="/" class="main-sector-bottom-linkBtn center-flex-display">Back to Home</RouterLink>
+        <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
+            <RouterLink to="/" v-html="'Back to Home'"
+                @mouseenter="webData.setHeartbeatAnimation"
+                @mouseleave="webData.setHeartbeatAnimation"
+            />
         </div>
     </div>
     <WebFooter class="footer-nav-page" />
@@ -25,16 +28,20 @@ import "@/styles/navpage.css";
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 
-import NavPageCard from '@/components/body-components/NavPageCard.vue';
-import { NAV_CARDS } from '@/stores/Objects.js';
+import WIVNavCard from "@/components/cards/WIVNavCard.vue";
+import IvueNavCard from "@/components/cards/IvueNavCard.vue";
+import SubloNavCard from "@/components/cards/SubloNavCard.vue";
+
 import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 import { getMeta } from "@/stores/GetMeta.js";
 
-import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
+import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
-onMounted(() => { initWebData(); });
+const webData = useWebsiteDataStore();
+onMounted(() => { webData.mountWebData(); });
+
 useHead(getMeta("Mohit Jain | My Experience", "experience/",
     "On this page, I go into depth about my work experience."
 ));

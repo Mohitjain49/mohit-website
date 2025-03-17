@@ -106,14 +106,14 @@ h1, h2, h3, p {
     background-color: rgba(0, 0, 0, 0.75);
 }
 
-.main-sector-bottom-linkBtn-container {
+.main-sector-bottom-linkBtn {
     height: 75px;
     width: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
 }
-.main-sector-bottom-linkBtn {
+.main-sector-bottom-linkBtn a {
     cursor: pointer;
     height: 45px;
     width: 250px;
@@ -130,16 +130,16 @@ h1, h2, h3, p {
     background-color: var(--website-light-text);
     transition: var(--default-transition);
 }
-.main-sector-bottom-linkBtn:hover {
+.main-sector-bottom-linkBtn a:hover {
     border-color: var(--website-text);
 }
 
-.main-sector-bottom-linkBtn-blue {
+.main-sector-bottom-linkBtn a.linkBtn-blue {
     color: var(--blue-cobalt);
     border-color: var(--blue-cobalt);
     background-color: var(--blue-zero);
 }
-.main-sector-bottom-linkBtn-blue:hover {
+.main-sector-bottom-linkBtn a.linkBtn-blue:hover {
     background-color: var(--blue-two);
     border-color: var(--blue-cobalt);
 }

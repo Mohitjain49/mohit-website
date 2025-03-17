@@ -1,0 +1,191 @@
+.newCard-container {
+    width: 100%;
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.animate__slowLess {
+    --animate-duration: 1.5s !important;
+}
+
+.nav-newCard {
+    cursor: pointer;
+    text-decoration: none;
+    width: 90%;
+    min-width: 290px;
+    max-width: 400px;
+    height: 725px;
+    border: 3px solid var(--nav-bar-border);
+    border-radius: 20px;
+    transition: var(--default-transition);
+    overflow: hidden;
+    box-shadow: 0px 0px 2px 2px rgb(0 0 0 / 20%);
+    --animate-duration: 1s
+}
+.nav-newCard:hover {
+    box-shadow: 0px 0px 20px 2px black;
+}
+
+.nav-newCard-header {
+    width: 100%;
+    height: 123px;
+    border-bottom: 2px solid var(--nav-bar-border);
+    transition: var(--default-transition);
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nav-newCard-header-text {
+    font-size: 60px;
+    font-family: 'Lexend', sans-serif;
+}
+
+.nav-newCard-picture {
+    width: 100%;
+    height: 150px;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nav-newCard-picture img {
+    border-radius: 2px;
+    user-select: none;
+}
+
+.newCard-devStack {
+    width: 100%;
+    height: 315px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    border-color: inherit;
+    padding-bottom: 10px;
+}
+.newCard-devStack-title {
+    font-size: 32px;
+    font-family: 'Lexend', sans-serif;
+    border-bottom: 1px solid;
+}
+
+.newCard-module {
+    width: 90%;
+    height: 45px;
+    border: 2px dotted;
+    border-radius: 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+.newCard-module img {
+    height: 30px;
+    user-select: none;
+    margin-left: 10px;
+}
+.newCard-module svg {
+    height: 30px;
+    margin-left: 10px;
+}
+.newCard-module span {
+    margin-left: 10px;
+    font-size: 18px;
+    font-family: 'Lexend', sans-serif;
+}
+
+.nav-newCard-desc {
+    width: calc(100% - 20px);
+    height: calc(100% - 625px);
+    padding: 0px 10px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    color: inherit;
+    border-top: var(--empty-border);
+}
+
+.nav-newCard#wiv-nav-newCard {
+    border-color: #48A548;
+    color: #48A548;
+    background-color: rgba(41, 46, 56, 0.95);
+}
+.nav-newCard#wiv-nav-newCard .nav-newCard-header {
+    border-color: #48A548;
+    background: transparent;
+}
+.nav-newCard#wiv-nav-newCard .nav-newCard-desc {
+    border-color: #48A548;
+}
+
+.nav-newCard#wiv-nav-newCard:hover {
+    border-color: #0872BA;
+    color: #0872BA;
+}
+.nav-newCard#wiv-nav-newCard:hover .nav-newCard-header {
+    border-color: #0872BA;
+}
+.nav-newCard#wiv-nav-newCard:hover .nav-newCard-desc {
+    border-color: #0872BA;
+}
+
+.nav-newCard#ivue-nav-newCard {
+    border-color: rgb(70, 70, 70);
+    color: rgb(70, 70, 70);
+    background-color: white;
+}
+.nav-newCard#ivue-nav-newCard .nav-newCard-header {
+    border-color: rgb(70, 70, 70);
+    background: transparent;
+}
+.nav-newCard#ivue-nav-newCard .nav-newCard-desc {
+    border-color: rgb(70, 70, 70);
+}
+
+.nav-newCard#ivue-nav-newCard:hover {
+    border-color: black;
+    color: black;
+}
+.nav-newCard#ivue-nav-newCard:hover .nav-newCard-header {
+    border-color: black;
+}
+.nav-newCard#ivue-nav-newCard:hover .nav-newCard-desc {
+    border-color: black;
+}
+
+.nav-newCard#sublo-nav-newCard {
+    border-color: #d1efff;
+    color: #d1efff;
+    background-color: #031427;
+}
+.nav-newCard#sublo-nav-newCard .nav-newCard-header {
+    border-color: #d1efff;
+}
+.nav-newCard#sublo-nav-newCard .nav-newCard-desc {
+    border-color: #d1efff;
+}
+
+.nav-newCard#sublo-nav-newCard .newCard-module {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-newCard#sublo-nav-newCard:hover {
+    border-color: #36A1D9;
+    color: #36A1D9;
+}
+.nav-newCard#sublo-nav-newCard:hover .nav-newCard-header {
+    border-color: #36A1D9;
+}
+.nav-newCard#sublo-nav-newCard:hover .nav-newCard-desc {
+    border-color: #36A1D9;
+}
+
+@media (max-width: 950px) and (min-width: 651px) {
+    #sublo-nav-newCard-container {
+        position: relative;
+        left: 50%;
+    }
+}
