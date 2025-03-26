@@ -1,6 +1,6 @@
 <template>
 <div id="ivue" class="ivue-section" v-observe-visibility="setInitTranstions">
-    <div class="ivue-section-title">
+    <div id="ivue-section-title">
         <img :src="ivue_white_text" draggable="false" />
     </div>
     <div class="ivue-section-tabs-container">
@@ -63,19 +63,27 @@ const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds
  * This functions sets initial transitions upon entering this section for iVue.
  */
 function setInitTranstions(isVisible) {
-    if(!isVisible || window.innerWidth <= 450) { return; }
-    document.getElementsByClassName('ivue-section-title').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-    document.getElementById('wiv-tab').classList.add("animate__animated", "animate__lightSpeedInRight");
-    document.getElementById('main-tab').classList.add("animate__animated", "animate__lightSpeedInLeft");
-    document.getElementById('media-tab').classList.add("animate__animated", "animate__lightSpeedInRight");
-    document.getElementById('robotics-tab').classList.add("animate__animated", "animate__lightSpeedInLeft");
+    if(!isVisible) { return; }
+    var leftAnimation = "animate__lightSpeedInLeft";
+    var rightAnimation = "animate__lightSpeedInRight";
+
+    if(window.innerWidth <= 450) {
+        leftAnimation = "animate__fadeIn";
+        rightAnimation = "animate__fadeIn";
+    }
+
+    document.getElementById('ivue-section-title').classList.add("animate__animated", leftAnimation);
+    document.getElementById('wiv-tab').classList.add("animate__animated", rightAnimation);
+    document.getElementById('main-tab').classList.add("animate__animated", leftAnimation);
+    document.getElementById('media-tab').classList.add("animate__animated", rightAnimation);
+    document.getElementById('robotics-tab').classList.add("animate__animated", leftAnimation);
 
     setTimeout(() => {
-        document.getElementsByClassName('ivue-section-title').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
     }, ANIMATE_DURATION)
 }
 
@@ -84,7 +92,7 @@ function setInitTranstions(isVisible) {
  * @param {Number} index The index of the tab.
  */
 function onIvueTabHover(id = "main-tab") {
-    document.getElementById(id).classList.add('animate__animated', 'animate__shakeY');
+    document.getElementById(id).classList.add('animate__animated', 'animate__pulse', "animate__repeat-2");
 }
 
 /**
@@ -92,7 +100,7 @@ function onIvueTabHover(id = "main-tab") {
  * @param {Number} index The index of the tab.
  */
 function onIvueTabLeave(id = "main-tab") {
-    document.getElementById(id).classList.remove('animate__animated', 'animate__shakeY');
+    document.getElementById(id).classList.remove('animate__animated', 'animate__pulse', "animate__repeat-2");
 }
 </script>
 
@@ -106,15 +114,16 @@ function onIvueTabLeave(id = "main-tab") {
     padding-top: 100px
 }
 
-.ivue-section-title {
+#ivue-section-title {
     width: 100%;
     height: 125px;
     padding-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    --animate-duration: 1.2s;
 }
-.ivue-section-title img {
+#ivue-section-title img {
     height: 115px;
     user-select: none;
 }
@@ -141,6 +150,7 @@ function onIvueTabLeave(id = "main-tab") {
     justify-content: space-evenly;
     align-items: flex-start;
     flex-direction: column;
+    --animate-duration: 1.2s;
 }
 .ivue-section-tab:hover {
     box-shadow: 0px 0px 15px 15px rgba(255, 255, 255, 0.25);
@@ -197,7 +207,7 @@ function onIvueTabLeave(id = "main-tab") {
     }
 }
 @media (max-width: 600px) {
-    .ivue-section-title img {
+    #ivue-section-title img {
         height: 80px;
     }
     .ivue-section-tabs-container {

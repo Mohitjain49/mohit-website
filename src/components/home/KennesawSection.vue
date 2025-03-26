@@ -28,15 +28,23 @@ const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds
  * This functions sets initial transitions upon entering this section for the KSU chunks.
  */
 function setInitTranstions(isVisible) {
-    if(!isVisible || window.innerWidth <= 450) { return; }
-    document.getElementsByClassName("ksu-section-chunk").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-    document.getElementsByClassName("ksu-section-chunk").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
-    document.getElementsByClassName("ksu-section-chunk").item(2).classList.add("animate__animated", "animate__lightSpeedInLeft");
+    if(!isVisible) { return; }
+    var leftAnimation = "animate__lightSpeedInLeft";
+    var rightAnimation = "animate__lightSpeedInRight";
+
+    if(window.innerWidth <= 450) {
+        leftAnimation = "animate__fadeIn";
+        rightAnimation = "animate__fadeIn";
+    }
+
+    document.getElementsByClassName("ksu-section-chunk").item(0).classList.add("animate__animated", leftAnimation);
+    document.getElementsByClassName("ksu-section-chunk").item(1).classList.add("animate__animated", rightAnimation);
+    document.getElementsByClassName("ksu-section-chunk").item(2).classList.add("animate__animated", leftAnimation);
 
     setTimeout(() => {
-        document.getElementsByClassName("ksu-section-chunk").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("ksu-section-chunk").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("ksu-section-chunk").item(2).classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("ksu-section-chunk").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementsByClassName("ksu-section-chunk").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementsByClassName("ksu-section-chunk").item(2).classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
     }, ANIMATE_DURATION)
 }
 
@@ -45,7 +53,7 @@ function setInitTranstions(isVisible) {
  * @param {Number} chunkIndex The index of the chunk in this section.
  */
 function onKennesawChunkHover(chunkIndex = 0) {
-    document.getElementsByClassName("ksu-section-chunk").item(chunkIndex).classList.add("animate__animated", "animate__shakeX");
+    document.getElementsByClassName("ksu-section-chunk").item(chunkIndex).classList.add("animate__animated", "animate__pulse", "animate__repeat-2");
 }
 
 /**
@@ -53,7 +61,7 @@ function onKennesawChunkHover(chunkIndex = 0) {
  * @param {Number} chunkIndex The index of the chunk in this section.
  */
 function onKennesawChunkLeave(chunkIndex = 0) {
-    document.getElementsByClassName("ksu-section-chunk").item(chunkIndex).classList.remove("animate__animated", "animate__shakeX");
+    document.getElementsByClassName("ksu-section-chunk").item(chunkIndex).classList.remove("animate__animated", "animate__pulse", "animate__repeat-2");
 }
 </script>
 

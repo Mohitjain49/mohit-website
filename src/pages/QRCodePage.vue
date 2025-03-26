@@ -38,11 +38,11 @@ import { renderSVG } from 'uqr';
 
 onMounted(() => {
     initWebData();
-    if(window.innerWidth <= 1150) { return; }
+    const animation = (window.innerWidth > 1150 ? "animate__bounceInDown" : "animate__fadeIn");
     const qrCodes = document.getElementsByClassName("qr-element-container");
 
     for(let i = 0; i < qrCodes.length; i++) {
-        qrCodes.item(i).classList.add("animate__animated", "animate__bounceInDown")
+        qrCodes.item(i).classList.add("animate__animated", animation);
     }
 });
 

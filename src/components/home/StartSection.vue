@@ -1,50 +1,52 @@
 <template>
 <div id="start" class="start-section" v-observe-visibility="setNameTransitions">
-    <div class="start-section-title">Mohit Jain</div>
-    <div class="start-section-subtitle">
-        <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>'s Lead Software Developer
-    </div>
-    <div class="start-section-subtitle">
-        Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
-    </div>
+    <div id="start-innerContainer">
+        <div class="start-section-title">Mohit Jain</div>
+        <div class="start-section-subtitle">
+            <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>'s Lead Software Developer
+        </div>
+        <div class="start-section-subtitle">
+            Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
+        </div>
 
-    <div class="start-buttonRow main">
-        <RouterLink v-for="link in MAIN_BTNS" :to="link.path"
-            class="start-buttonRow-btn"
-            :style="getSpecialBtnStyles(link.color)"
-            :title="link.title"
-            @mouseenter="webData.setHeartbeatAnimation"
-            @mouseleave="webData.setHeartbeatAnimation">
+        <div class="start-buttonRow main">
+            <RouterLink v-for="link in MAIN_BTNS" :to="link.path"
+                class="start-buttonRow-btn"
+                :style="getSpecialBtnStyles(link.color)"
+                :title="link.title"
+                @mouseenter="webData.setHeartbeatAnimation"
+                @mouseleave="webData.setHeartbeatAnimation">
 
-            <font-awesome-icon :icon="link.icon" />
-        </RouterLink>
-        <a :href="PERSONAL_GLOBE_LINK" class="start-buttonRow-btn"
-            :style="getSpecialBtnStyles('var(--globe-green)')"
-            title="Go To My Globe"
-            @mouseenter="webData.setHeartbeatAnimation"
-            @mouseleave="webData.setHeartbeatAnimation">
+                <font-awesome-icon :icon="link.icon" />
+            </RouterLink>
+            <a :href="PERSONAL_GLOBE_LINK" class="start-buttonRow-btn"
+                :style="getSpecialBtnStyles('var(--globe-green)')"
+                title="Go To My Globe"
+                @mouseenter="webData.setHeartbeatAnimation"
+                @mouseleave="webData.setHeartbeatAnimation">
 
-            <font-awesome-icon icon="fa-globe" />
-        </a>
-        <RouterLink to="/resume" title="My Resume"
-            class="start-buttonRow-btn"
-            @mouseenter="webData.setHeartbeatAnimation"
-            @mouseleave="webData.setHeartbeatAnimation">
+                <font-awesome-icon icon="fa-globe" />
+            </a>
+            <RouterLink to="/resume" title="My Resume"
+                class="start-buttonRow-btn"
+                @mouseenter="webData.setHeartbeatAnimation"
+                @mouseleave="webData.setHeartbeatAnimation">
 
-            <font-awesome-icon icon="fa-file-lines" />
-        </RouterLink>
-    </div>
-    <div class="start-buttonRow contact-links">
-        <template v-for="(contact, index) in SOCIALS">
-            <a v-if="index != 0" :href="contact.link"
-            class="start-buttonRow-btn"
-            :style="getSpecialBtnStyles(contact.color)"
-            @mouseenter="webData.setHeartbeatAnimation"
-            @mouseleave="webData.setHeartbeatAnimation">
+                <font-awesome-icon icon="fa-file-lines" />
+            </RouterLink>
+        </div>
+        <div class="start-buttonRow contact-links">
+            <template v-for="(contact, index) in SOCIALS">
+                <a v-if="index != 0" :href="contact.link"
+                class="start-buttonRow-btn"
+                :style="getSpecialBtnStyles(contact.color)"
+                @mouseenter="webData.setHeartbeatAnimation"
+                @mouseleave="webData.setHeartbeatAnimation">
 
-            <font-awesome-icon :icon="contact.linkIcon" />
-        </a>
-        </template>
+                <font-awesome-icon :icon="contact.linkIcon" />
+            </a>
+            </template>
+        </div>
     </div>
 </div>
 </template>
@@ -58,18 +60,24 @@ const webData = useWebsiteDataStore();
  * This function sets the transitions for the left half of the start section.
  */
 function setNameTransitions(isVisible) {
-    if(isVisible && window.innerWidth > 450) {
-        document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-buttonRow").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-buttonRow").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
-    } else {
+    if(!isVisible) {
+        document.getElementById("start-innerContainer").classList.remove("animate__animated", "animate__fadeIn");
         document.getElementsByClassName("start-section-title").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-buttonRow").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-buttonRow").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
+        return;
+    }
+
+    if(window.innerWidth <= 450) {
+        document.getElementById("start-innerContainer").classList.add("animate__animated", "animate__fadeIn");
+    } else {
+        document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-buttonRow").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-buttonRow").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
     }
 }
 
@@ -90,22 +98,32 @@ const MAIN_BTNS = [
 <style scoped>
 .start-section {
     height: 600px;
-    min-height: calc(100vh - 100px);
+    min-height: 100vh;
     width: 1200px;
-    padding: 50px calc(50% - 600px);
-    padding-bottom: 60px;
+    padding: 0px calc(50% - 600px);
+    padding-bottom: 10px;
     color: var(--website-text);
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     font-family: 'Lexend', 'sans-serif';
+}
+#start-innerContainer {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: inherit;
+    color: inherit;
+    --animate-duration: 1.2s;
 }
 
 .start-section-title {
     text-align: center;
     position: relative;
-    font-size: 135px;
+    font-size: 115px;
     font-weight: bold;
     color: var(--website-text);
     width: 100%;
@@ -116,8 +134,8 @@ const MAIN_BTNS = [
 .start-section-subtitle {
     text-align: center;
     width: 100%;
-    font-size: 30px;
-    line-height: 42px;
+    font-size: 27px;
+    line-height: 38px;
     color: var(--website-text);
     text-shadow: var(--website-text) 1px 0 10px;
 }
@@ -155,11 +173,11 @@ const MAIN_BTNS = [
     text-decoration: none;
     color: var(--website-text);
     background-color: rgba(0, 0, 0, 1);
-    font-size: 32px;
+    font-size: 29px;
     font-weight: bold;
     padding: 10px;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 15px;
     border: 2px solid var(--website-text);
     transition: var(--default-transition);
@@ -175,8 +193,11 @@ const MAIN_BTNS = [
 @media (max-width: 1225px) {
     .start-section {
         width: 100%;
-        padding: 50px 0px;
-        padding-bottom: 60px;
+        padding: 0px;
+        padding-bottom: 10px;
+    }
+    .start-section-title {
+        font-size: 120px;
     }
 }
 @media (max-width: 800px) {
