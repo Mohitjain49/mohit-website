@@ -122,7 +122,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: vue_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -135,7 +135,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: react_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -149,7 +149,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: angular_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -162,7 +162,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: vite_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -175,7 +175,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: expo_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -189,7 +189,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: nuxt_icon,
             faIcon: false,
-            width: "125"
+            size: "125"
         }
     },
     {
@@ -203,7 +203,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-aws",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -217,7 +217,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: cesium_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -231,7 +231,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: mavlink_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -245,7 +245,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-github",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -258,7 +258,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-cloudflare",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -272,7 +272,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-font-awesome",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -299,7 +299,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-js",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -312,7 +312,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-java",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -325,7 +325,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-golang",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -337,7 +337,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-html5",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -349,7 +349,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-css3-alt",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -362,7 +362,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-circle-info",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
 ];

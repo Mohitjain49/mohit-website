@@ -9,37 +9,16 @@
     <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container large"
         v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
 
-        <div v-if="entity.link === '#'" class="skills-entity no-link">
-            <div class="skills-entity-image">
-                <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
-                <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
-            </div>
-            <div class="skills-entity-body" :style="{ color: entity.color }">
-                <div class="skills-entity-header"> {{ entity.name }} </div>
-                <div class="skills-entity-desc"> {{ entity.desc }} </div>
-            </div>
-        </div>
-        
-        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-entity">
-            <div class="skills-entity-image">
-                <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
-                <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
-            </div>
-            <div class="skills-entity-body" :style="{ color: entity.color }">
-                <div class="skills-entity-header"> {{ entity.name }} </div>
-                <div class="skills-entity-desc"> {{ entity.desc }} </div>
-            </div>
-        </a>
-
-        <RouterLink v-else :to="entity.link" class="skills-entity">
-            <div class="skills-entity-image">
-                <font-awesome-icon :icon="entity.icon.id" class="skills-entity-moreInfo-icon" />
-            </div>
-            <div class="skills-entity-body more-info">
-                <div class="skills-entity-header"> {{ entity.name }} </div>
-                <div class="skills-entity-desc"> {{ entity.desc }} </div>
-            </div>
-        </RouterLink>
+        <SkillNote v-if="entity.link !== '/skills'"
+            :link="entity.link"
+            :color="entity.color"
+            :desc="entity.desc"
+            :faIcon="entity.icon.faIcon"
+            :id="entity.icon.id"
+            :name="entity.name"
+            :size="entity.icon.size"
+        />
+        <MoreInfoNote v-else />
     </div>
 
     <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container small"
@@ -63,6 +42,9 @@
 </template>
 
 <script setup>
+import SkillNote from '../skills/SkillNote.vue';
+import MoreInfoNote from '../skills/MoreInfoNote.vue';
+
 import { SKILL_ENTITIES } from '@/stores/Objects.js';
 import { RouterLink } from 'vue-router';
 
