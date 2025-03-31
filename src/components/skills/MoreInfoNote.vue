@@ -6,8 +6,7 @@
     <div class="skills-note-body more-info">
         <div class="skills-note-header"> More Info </div>
         <div class="skills-note-desc">
-            I have made many pages describing the software development skills I accumalated since the start of my journey. 
-            Click on this card or the "Skills" link at the top for more info.
+            Click on this card or the "Skills" link at the top for a detailed description on all my skills.
         </div>
     </div>
 </RouterLink>

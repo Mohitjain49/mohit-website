@@ -68,3 +68,9 @@
     font-size: 16px;
     color: inherit;
 }
+
+@media (max-width: 450px) {
+    .skills-note {
+        width: 325px;
+    }
+}

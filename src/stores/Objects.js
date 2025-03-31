@@ -367,6 +367,86 @@ export const SKILL_ENTITIES = [
     },
 ];
 
+export const NEW_SKILL_ENTITIES = [
+    {
+        name: "More Info",
+        link: "/skills",
+        color: "var(--website-light-text)",
+        desc: "",
+
+        icon: {
+            id: "fa-circle-info",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Vue.js",
+        link: VUEJS_WEBSITE_LINK,
+        color: "#41B883",
+        desc: "Vue.js is an extremely lightweight and simple web development framework that is mainly developed by a team of independent, professional developers. " +
+            "I used this for a majority of my projects, including Worlds iVue, iVue's company websites, and the website you are on right now.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Frontend",
+        link: "#",
+        color: "#D3B62A",
+        desc: "I've learned numerous other JavaScript Frameworks other than Vue.js, " +
+            "including React Native, Angular, and Expo.",
+
+        icon: {
+            id: "fa-brands fa-js",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Modules",
+        link: "#",
+        color: "#5C9E57",
+        desc: "I've used many unique modules for my websites and applications to either " +
+            "create more appealing and intuitive user interfaces or for testing and app deployment.",
+
+        icon: {
+            id: "fa-brands fa-node-js",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Languages",
+        link: "#",
+        color: "#E34E26",
+        desc: "Throughout all my work with application development, I have learned multiple programming languages " +
+            "as a way of broadening my skillset.",
+
+        icon: {
+            id: "fa-laptop-code",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Icons",
+        link: "https://fontawesome.com/",
+        color: "rgb(83, 141, 215)",
+        desc: "I use icon sets to make websites and apps more appealing. " +
+            "This section is my way of saying thanks to them.",
+
+        icon: {
+            id: "fa-brands fa-font-awesome",
+            faIcon: true,
+            size: "110"
+        }
+    },
+];
+
 export const NAV_CARDS = [
     {
         id: "vue-nav-card",

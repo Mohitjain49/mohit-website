@@ -6,10 +6,11 @@
         by utilizing multiple programming languages, frontend frameworks, web services, and modules.
     </div>
 
-    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container large"
+    <div v-for="(entity, index) in NEW_SKILL_ENTITIES" class="skills-entity-container"
         v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
 
-        <SkillNote v-if="entity.link !== '/skills'"
+        <MoreInfoNote v-if="entity.link === '/skills'" />
+        <SkillNote v-else
             :link="entity.link"
             :color="entity.color"
             :desc="entity.desc"
@@ -18,25 +19,6 @@
             :name="entity.name"
             :size="entity.icon.size"
         />
-        <MoreInfoNote v-else />
-    </div>
-
-    <div v-for="(entity, index) in SKILL_ENTITIES" class="skills-entity-container small"
-        v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
-
-        <div v-if="entity.link === '#'" class="skills-widget no-link">
-            <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
-            <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
-        </div>
-        
-        <a v-else-if="entity.link !== '/skills'" :href="entity.link" target="_blank" class="skills-widget">
-            <font-awesome-icon v-if="entity.icon.faIcon" :icon="entity.icon.id" :style="getFAIconStyle(entity)" />
-            <img v-if="!entity.icon.faIcon" :src="entity.icon.id" :width="entity.icon.width" draggable="false" />
-        </a>
-
-        <RouterLink v-else :to="entity.link" class="skills-widget">
-            <font-awesome-icon :icon="entity.icon.id" class="skills-entity-moreInfo-icon"/>
-        </RouterLink>
     </div>
 </div>
 </template>
@@ -44,17 +26,7 @@
 <script setup>
 import SkillNote from '../skills/SkillNote.vue';
 import MoreInfoNote from '../skills/MoreInfoNote.vue';
-
-import { SKILL_ENTITIES } from '@/stores/Objects.js';
-import { RouterLink } from 'vue-router';
-
-/**
- * This function returns a style object for an Font Awesome icon on here.
- * @param entity The object for the skills entity.
- */
-function getFAIconStyle(entity) {
-    return { color: entity.color, fontSize: entity.icon.size }
-}
+import { NEW_SKILL_ENTITIES } from '@/stores/Objects.js';
 
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
@@ -62,9 +34,7 @@ function getFAIconStyle(entity) {
  */
 function addCardTransition(isVisible, index = 0) {
     if(!isVisible) { return; }
-    const classNames = ("skills-entity-container " + ((window.innerWidth > 825) ? "large" : "small"));
-
-    let skillCard = document.getElementsByClassName(classNames).item(index);
+    let skillCard = document.getElementsByClassName("skills-entity-container").item(index);
     skillCard.classList.add("animate__animated", "animate__zoomIn");
 }
 
@@ -137,108 +107,6 @@ function setSkillsTransitions(isVisible) {
     justify-content: center;
     align-items: center;
 }
-.skills-entity {
-    height: 400px;
-    width: 360px;
-    border: 3px solid var(--website-light-text);
-    border-radius: 20px;
-    overflow: hidden;
-    transition: var(--default-transition);
-    background-color: white;
-    box-shadow: 0px 0px 3px 3px rgba(255, 255, 255, 0.25);
-    --animate-duration: 0.7s;
-}
-
-.skills-entity:hover {
-    border-color: var(--website-text);
-    box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.25);
-}
-.skills-entity.no-link {
-    cursor: default;
-}
-.skills-entity-container.small {
-    height: 225px;
-    width: 100%;
-    min-width: 0px;
-    justify-content: center;
-    align-items: center;
-    display: none;
-}
-
-.skills-widget {
-    height: 175px;
-    width: 175px;
-    border: 3px solid var(--website-light-text);
-    border-radius: 25px;
-    background-color: var(--silver-light);
-    transition: var(--default-transition);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    --animate-duration: 0.7s;
-    transform: scale(0.75);
-}
-.skills-widget:hover {
-    border-color: var(--website-text);
-    box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.25);
-}
-.skills-widget.no-link {
-    cursor: default;
-}
-
-.skills-entity-image {
-    height: 147px;
-    width: 100%;
-    border-bottom: 3px solid var(--website-light-text);
-    background-color: var(--silver-light);
-    transition: var(--default-transition);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.skills-entity:hover .skills-entity-image {
-    border-color: var(--website-text);
-}
-.skills-entity-image svg, .skills-entity-image img {
-    user-select: none;
-}
-
-.skills-entity-body {
-    height: calc(100% - 160px);
-    width: calc(100% - 20px);
-    padding: 10px 10px 0px;
-    text-align: left;
-    font-family: 'Lexend', sans-serif;
-}
-.skills-entity-body.more-info {
-    color: var(--website-light-text);
-    transition: var(--default-transition);
-}
-.skills-entity:hover .skills-entity-body.more-info {
-    color: var(--website-text);
-}
-
-.skills-entity-moreInfo-icon {
-    color: var(--website-light-text);
-    transition: var(--default-transition);
-    font-size: 110px;
-}
-.skills-entity:hover .skills-entity-image .skills-entity-moreInfo-icon {
-    color: var(--website-text);
-}
-.skills-widget:hover .skills-entity-moreInfo-icon {
-    color: var(--website-text);
-}
-
-.skills-entity-header {
-    font-size: 35px;
-    color: inherit;
-    margin-bottom: 12px;
-}
-.skills-entity-desc {
-    font-size: 16px;
-    color: inherit;
-}
 
 @media (max-width: 1200px) {
     .skills-section {
@@ -253,19 +121,15 @@ function setSkillsTransitions(isVisible) {
 
 @media (max-width: 825px) {
     .skills-section {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr;
         width: calc(100% - 20px);
         padding: 0px 10px;
     }
+    .skills-entity-container {
+        min-width: 0px;
+    }
     .skills-main-header, .skills-main-desc {
-        grid-column: span 3;
-    }
-
-    .skills-entity-container.large {
-        display: none;
-    }
-    .skills-entity-container.small {
-        display: flex;
+        grid-column: span 1;
     }
 
     .skills-main-header {
@@ -274,22 +138,6 @@ function setSkillsTransitions(isVisible) {
     .skills-main-desc {
         font-size: 20px;
         line-height: 28px;
-    }
-}
-
-@media (max-width: 550px) {
-    .skills-main-header {
-        font-size: 68px;
-    }
-    .skills-main-desc {
-        font-size: 17px;
-    }
-
-    .skills-section {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .skills-main-header, .skills-main-desc {
-        grid-column: span 2;
     }
 }
 </style>
