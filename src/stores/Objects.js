@@ -384,8 +384,8 @@ export const NEW_SKILL_ENTITIES = [
         name: "Vue.js",
         link: VUEJS_WEBSITE_LINK,
         color: "#41B883",
-        desc: "Vue.js is an extremely lightweight and simple web development framework that is mainly developed by a team of independent, professional developers. " +
-            "I used this for a majority of my projects, including Worlds iVue, iVue's company websites, and the website you are on right now.",
+        desc: "As a frontend developer, Vue.js is my go-to web development framework, " +
+            "offering simplicity, quick performance, and a vast ecosystem to all developers.",
 
         icon: {
             id: vue_icon,

@@ -1,8 +1,8 @@
 <template>
 <div id="sublo-nav-newCard-container" class="newCard-container">
     <a :href="SUBLO_WEBSITE_LINK" id="sublo-nav-newCard" class="nav-newCard"
-        @mouseenter="setBounceAnimation"
-        @mouseleave="setBounceAnimation">
+        @mouseenter="setPulseLoopAnimation"
+        @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">
             <img :src="sublo_icon" width="55" />
@@ -38,7 +38,7 @@ import expo_icon from "@/assets/sublo/Expo_Icon.svg";
 import cognito_icon from "@/assets/aws/AWS_Cognito_Icon.svg";
 import amplify_icon from "@/assets/aws/AWS_Amplify_Icon.svg";
 
-import { setBounceAnimation } from "@/stores/WebsiteData.js";
+import { setPulseLoopAnimation } from "@/stores/WebsiteData.js";
 import { SUBLO_WEBSITE_LINK } from '@/stores/Objects.js';
 import { onMounted } from "vue";
 

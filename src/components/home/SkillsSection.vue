@@ -9,7 +9,18 @@
     <div v-for="(entity, index) in NEW_SKILL_ENTITIES" class="skills-entity-container"
         v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
 
-        <MoreInfoNote v-if="entity.link === '/skills'" />
+        <RouterLink v-if="entity.link === '/skills'" to="/skills" class="skills-note">
+            <div class="skills-note-image">
+                <font-awesome-icon icon="fa-circle-info" class="skills-note-moreInfo-icon" />
+            </div>
+            <div class="skills-note-body more-info">
+                <div class="skills-note-header"> More Info </div>
+                <div class="skills-note-desc">
+                    Click on this card or the "Skills" link at the top for a detailed description on all my skills.
+                </div>
+            </div>
+        </RouterLink>
+
         <SkillNote v-else
             :link="entity.link"
             :color="entity.color"
@@ -24,9 +35,9 @@
 </template>
 
 <script setup>
-import SkillNote from '../skills/SkillNote.vue';
-import MoreInfoNote from '../skills/MoreInfoNote.vue';
+import SkillNote from '../body-components/SkillNote.vue';
 import { NEW_SKILL_ENTITIES } from '@/stores/Objects.js';
+import "@/styles/note.css";
 
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
@@ -127,6 +138,7 @@ function setSkillsTransitions(isVisible) {
     }
     .skills-entity-container {
         min-width: 0px;
+        height: 500px;
     }
     .skills-main-header, .skills-main-desc {
         grid-column: span 1;
@@ -138,6 +150,14 @@ function setSkillsTransitions(isVisible) {
     .skills-main-desc {
         font-size: 20px;
         line-height: 28px;
+        margin-bottom: 0px;
+        text-align: left;
+    }
+}
+
+@media (max-width: 370px) {
+    .skills-main-header {
+        font-size: 68px;
     }
 }
 </style>

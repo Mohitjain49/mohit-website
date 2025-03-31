@@ -5,11 +5,11 @@
     </client-only>
 
     <template v-if="menuExpanded">
-        <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses()"> Start </RouterLink>
-        <RouterLink to="/#skills" @click="goToHomeSection('skills')" :class="getCircleOptClasses()"> Skills </RouterLink>
-        <RouterLink to="/#ivue" @click="goToHomeSection('ivue')" :class="getCircleOptClasses()"> iVue </RouterLink>
-        <RouterLink to="/#ksu" @click="goToHomeSection('ksu')" :class="getCircleOptClasses()"> KSU </RouterLink>
-        <div class="close" :class="getCircleOptClasses()"> Close </div>
+        <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses('start')"> Start </RouterLink>
+        <RouterLink to="/#skills" @click="goToHomeSection('skills')" :class="getCircleOptClasses('skills')"> Skills </RouterLink>
+        <RouterLink to="/#ivue" @click="goToHomeSection('ivue')" :class="getCircleOptClasses('')"> <img :src="ivue_text" width="50" /> </RouterLink>
+        <RouterLink to="/#ksu" @click="goToHomeSection('ksu')" :class="getCircleOptClasses('')"> <img :src="ksu_banner" width="130" /> </RouterLink>
+        <div class="close" :class="getCircleOptClasses()"> Close Menu </div>
     </template>
 </div>
 
@@ -21,6 +21,9 @@
 </template>
 
 <script setup>
+import ivue_text from "@/assets/ivue/iVue_Black_Text_Cropped.png";
+import ksu_banner from "@/assets/ksu/Kennesaw_State_Banner.svg";
+
 import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 import { ref, onMounted } from 'vue';
 
@@ -72,9 +75,10 @@ function getQRCodeClasses() {
 
 /**
  * This function returns the classes for the option elements.
+ * @param {String} specialClass An extra class that can be added onto the list of classes.
  */
-function getCircleOptClasses() {
-    return ['home-nav-opt', (menuExpanded.value ? '' : 'hidden')];
+function getCircleOptClasses(specialClass = '') {
+    return ['home-nav-opt', (menuExpanded.value ? '' : 'hidden'), specialClass];
 }
 </script>
 
@@ -113,12 +117,13 @@ function getCircleOptClasses() {
 }
 .home-nav-barsIcon {
     color: rgba(0, 0, 0, 0.8);
-    font-size: 22px;
+    font-size: 25px;
 }
 
 .home-nav-opt {
     color: rgba(0, 0, 0, 0.8);
     font-family: "Lexend", "Roboto", sans-serif;
+    font-weight: bold;
     font-size: 18px;
     display: flex;
     justify-content: center;
@@ -138,6 +143,14 @@ function getCircleOptClasses() {
 }
 .home-nav-opt.close {
     border-bottom: none;
+    font-weight: 400;
+}
+.home-nav-opt.start {
+    color: white;
+    text-shadow: 0px 0px 10px var(--website-light-text);
+}
+.home-nav-opt.skills {
+    color: var(--blue-zero);
 }
 
 @media (max-width: 825px) {
@@ -145,7 +158,7 @@ function getCircleOptClasses() {
         display: none;
     }
 }
-@media (max-width: 340px) {
+@media (max-width: 360px) {
     .home-nav {
         display: none;
     }

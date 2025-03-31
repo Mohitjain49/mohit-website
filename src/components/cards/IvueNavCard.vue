@@ -1,8 +1,8 @@
 <template>
 <div class="newCard-container">
     <a :href="MAIN_IVUE_WEBSITE_LINK" id="ivue-nav-newCard" class="nav-newCard"
-        @mouseenter="setBounceAnimation"
-        @mouseleave="setBounceAnimation">
+        @mouseenter="setPulseLoopAnimation"
+        @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">
             <img :src="ivue_text" width="150" />
@@ -40,7 +40,7 @@ import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import nuxt_icon from "@/assets/Nuxt_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
-import { setBounceAnimation } from "@/stores/WebsiteData.js";
+import { setPulseLoopAnimation } from "@/stores/WebsiteData.js";
 import { MAIN_IVUE_WEBSITE_LINK } from '@/stores/Objects.js';
 import { onMounted } from "vue";
 

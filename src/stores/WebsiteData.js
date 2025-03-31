@@ -3,8 +3,6 @@ import { ref } from "vue";
 import MJ_Resume from "/Mohit_Jain_Resume.pdf";
 
 export const useWebsiteDataStore = defineStore("WebsiteData", () => {
-    const dateStore = useDateStore();
-
     /**
      * An reference integer that determines the Mode of the Nav Bar.
      * If it equals 0, it is on laptop mode, or the screen width is above 825px.
@@ -21,7 +19,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     function setEventListeners() {
         resizePageComponents();
         window.addEventListener("resize", () => { resizePageComponents(); });
-        dateStore.startDateInterval();
     }
 
     /**
@@ -29,7 +26,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     function removeEventListeners() {
         window.removeEventListener("resize", () => { resizePageComponents(); });
-        dateStore.stopDateInterval();
     }
 
     /**
@@ -99,6 +95,17 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
+     * This function sets a pulse animation for any element for an infinite amount of time.
+     */
+    function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
+        if(event.type === "mouseenter") {
+            event.target.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
+        } else {
+            event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
+        }
+    }
+
+    /**
      * This function adds the flash animation, then removes it after 0.8s.
      */
     function addFlashAnimation(event = new MouseEvent("click")) {
@@ -128,73 +135,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
         setEventListeners, removeEventListeners, mountWebData,
         setNavBarDropdown, toggleSkillsSidebar, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
-        addFlashAnimation
-    }
-});
-
-export const useDateStore = defineStore("DateStore", () => {
-    const dateObj = ref({
-        day: -1,
-        month: -1,
-        year: -1,
-        hour: -1,
-        minute: -1,
-        second: -1,
-        meridian: "",
-    });
-    const dateStrings = ref({
-        daySection: "",
-        timeSection: "",
-        timeSectionWithSec: ""
-    })
-
-    var dateInterval = null;
-
-    /**
-     * This sets the date object and date strings.
-     */
-    function setDateObj() {
-        const dateNow = new Date();
-        const newDateObj = {
-            day: dateNow.getDate(),
-            month: (dateNow.getMonth() + 1),
-            year: dateNow.getFullYear(),
-            hour: ((dateNow.getHours() % 12 == 0) ? 12 : (dateNow.getHours() % 12)),
-            minute: (dateNow.getMinutes()),
-            second: (dateNow.getSeconds()),
-            meridian: (dateNow.getHours() >= 12 ? "PM" : "AM")
-        }
-        dateObj.value = newDateObj;
-
-        const minuteNum = ((newDateObj.minute < 10) ? String('0' + newDateObj.minute) : newDateObj.minute);
-        const secondNum = ((newDateObj.second < 10) ? String('0' + newDateObj.second) : newDateObj.second);
-
-        dateStrings.value.daySection = String(newDateObj.month + "/" + newDateObj.day + "/" + newDateObj.year);
-        dateStrings.value.timeSection = String(newDateObj.hour + ":" + minuteNum + " " + newDateObj.meridian);
-        dateStrings.value.timeSectionWithSec = String(newDateObj.hour + ":" + minuteNum + ":" + secondNum + " " + newDateObj.meridian);
-    }
-
-    /**
-     * This function starts the date interval.
-     */
-    function startDateInterval() {
-        if(dateInterval != null) { return; }
-        dateInterval = setInterval(() => {
-            setDateObj();
-        }, 1000);
-    }
-
-    /**
-     * This function stops the date interval.
-     */
-    function stopDateInterval() {
-        if(dateInterval != null) { return; }
-        clearInterval(dateInterval);
-        dateInterval = null;
-    }
-
-    return { dateObj, dateStrings, setDateObj,
-        startDateInterval, stopDateInterval
+        addFlashAnimation, setPulseLoopAnimation
     }
 });
 
@@ -230,4 +171,12 @@ export function downloadResume() {
 export function setBounceAnimation(event = new MouseEvent("mouseenter")) {
     const webData = useWebsiteDataStore();
     webData.setBounceAnimation(event)
+}
+
+/**
+ * This function sets a pulse animation for any element for an infinite number of time.
+ */
+export function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
+    const webData = useWebsiteDataStore();
+    webData.setPulseLoopAnimation(event);
 }

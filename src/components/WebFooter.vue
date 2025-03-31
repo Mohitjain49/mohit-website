@@ -1,6 +1,6 @@
 <template>
 <div id="copyright">
-    <RouterLink to="/" class="copyright-side-container personal-text">
+    <RouterLink to="/" @click="checkHomePage()" class="copyright-side-container personal-text">
         <img class="personal-text-img" :src="personal_icon" draggable="false" />
     </RouterLink>
 
@@ -48,6 +48,14 @@ function scrollToTop() {
  */
 function goToCopyrightPage() {
     router.push("/copyright");
+}
+
+/**
+ * This function checks whether the user is on the home page.
+ * If so, this function will scroll to the top of the page.
+ */
+function checkHomePage() {
+    if(router.currentRoute.value.path === "/") { scrollToTop(); }
 }
 </script>
 
