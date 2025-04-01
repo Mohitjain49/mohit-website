@@ -5,17 +5,15 @@
 </client-only>
 
 <div id="skills-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
-    <div class="main-nav-page-container">
-        <div class="main-nav-page">
-            
-        </div>
+    <div class="skills-body">
 
-        <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-            <RouterLink to="/" class="linkBtn-blue" v-html="'Back to Home'"
-                @mouseenter="webData.setHeartbeatAnimation"
-                @mouseleave="webData.setHeartbeatAnimation"
-            />
-        </div>
+    </div>
+
+    <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
+        <RouterLink to="/" class="linkBtn-blue" v-html="'Back to Home'"
+            @mouseenter="webData.setHeartbeatAnimation"
+            @mouseleave="webData.setHeartbeatAnimation"
+        />
     </div>
     <WebFooter class="footer-nav-page" />
 </div>
@@ -45,5 +43,12 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", PAGE_DESC));
 <style scoped>
 #skills-page {
     background: transparent;
+    top: 0px;
+    min-height: 100%;
+}
+.skills-body {
+    width: 100%;
+    height: fit-content;
+    min-height: 100vh;
 }
 </style>

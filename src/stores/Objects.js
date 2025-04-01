@@ -357,7 +357,7 @@ export const NEW_SKILL_ENTITIES = [
     },
     {
         name: "Vue.js",
-        link: VUEJS_WEBSITE_LINK,
+        link: "/skills/#vuejs",
         color: "#41B883",
         desc: "As a frontend developer, Vue.js is my go-to web development framework, " +
             "offering simplicity, quick performance, and a vast ecosystem to all developers.",
@@ -370,7 +370,7 @@ export const NEW_SKILL_ENTITIES = [
     },
     {
         name: "Frontend",
-        link: "#",
+        link: "/skills/#frontend",
         color: "#D3B62A",
         desc: "I've learned numerous other JavaScript Frameworks other than Vue.js, " +
             "including React Native, Angular, and Expo.",
@@ -383,7 +383,7 @@ export const NEW_SKILL_ENTITIES = [
     },
     {
         name: "Modules",
-        link: "#",
+        link: "/skills/#modules",
         color: "#5C9E57",
         desc: "I've used many unique modules for my websites and applications to either " +
             "create more appealing and intuitive user interfaces or for testing and app deployment.",
@@ -396,7 +396,7 @@ export const NEW_SKILL_ENTITIES = [
     },
     {
         name: "Languages",
-        link: "#",
+        link: "/skills/#languages",
         color: "#E34E26",
         desc: "Throughout all my work with application development, I have learned multiple programming languages " +
             "as a way of broadening my skillset.",
@@ -409,7 +409,7 @@ export const NEW_SKILL_ENTITIES = [
     },
     {
         name: "Icons",
-        link: "https://fontawesome.com/",
+        link: "/skills/#icons",
         color: "rgb(83, 141, 215)",
         desc: "I use icon sets to make websites and apps more appealing. " +
             "This section is my way of saying thanks to them.",

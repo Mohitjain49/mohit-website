@@ -1,6 +1,6 @@
 {
   "name": "mohit-website",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -27,10 +27,10 @@
     "vue3-observe-visibility": "^1.0.3"
   },
   "devDependencies": {
-    "@unhead/vue": "^2.0.0-rc.13",
+    "@unhead/vue": "^2.0.2",
     "@vitejs/plugin-vue": "^5.1.4",
     "vite": "^6.2.0",
-    "vite-ssg": "^25.2.0",
+    "vite-ssg": "^26.1.1",
     "vue-router": "^4.5.0"
   }
 }
