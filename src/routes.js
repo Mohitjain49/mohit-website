@@ -24,16 +24,17 @@ import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
  */
 export const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
-    { path: "/resume", name: "My Resume", component: Resume },
-    { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
-    { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
-    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
-    { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
-
+    { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/skills", name: "Main Skills Page", component: SkillsNav },
-    { path: "/credits", name: "Credits Section", redirect: { path: "/", hash: "#skills" } },
-    { path: "/updates", alias: ['/update'], redirect: { path: "/", hash: "#skills" } },
-    { path: "/ksu-edu", alias: ["/ksu", "/kennesaw-state"], redirect: { path: "/", hash: "#ksu" } },
+
+    { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
+    { path: "/resume", name: "My Resume", component: Resume },
+    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
+
+    { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
+    { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
+    { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
+    { path: "/ksu", alias: ["/ksu-edu", "/kennesaw-state"], redirect: { path: "/", hash: "#ksu" } },
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
@@ -44,17 +45,4 @@ export const personalRoutes = [
     { path: "/gitlab",  main: "Main GitLab Redirect Page", component: GitlabRedirect },
     { path: "/linkedin",  main: "Main LinkedIn Redirect Page", component: LinkedinRedirect },
     { path: "/discord",  main: "Main Discord Redirect Page", component: DiscordRedirect },
-
-    { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
-    { path: "/qrcodes", alias: ["/qr"], redirect: "/qrcode" },
-
-    {
-        path: "/experience",
-        children: [
-            { path: "", name: "Main Experience Page", component: ExperienceMain },
-            { path: "sublo", name: "Sublo Redirect Page", component: SubloRedirect },
-            { path: "ivue", main: "iVue Redirect Page", component: IvueRedirect },
-            { path: "worldsivue", alias: ['wiv', 'worlds-ivue'], main: "WIV Redirect Page", component: WIVRedirect },
-        ]
-    },
 ];
