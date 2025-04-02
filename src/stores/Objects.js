@@ -6,6 +6,8 @@ import react_icon from "../assets/React_Icon.png";
 import expo_icon from "../assets/sublo/Expo_Icon.svg";
 import vite_icon from "../assets/Vite_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
+import pinia_icon from "../assets/Pinia_Icon.svg";
+import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 
 import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
@@ -420,4 +422,73 @@ export const NEW_SKILL_ENTITIES = [
             size: "110"
         }
     },
+];
+
+export const VUEJS_SKILL_NOTES = [
+    {
+        name: "Vue.js",
+        link: VUEJS_WEBSITE_LINK,
+        color: "#41B883",
+        desc: "Vue.js is an extremely lightweight and simple web development framework that is mainly developed by a team of independent, professional developers. " +
+            "I used this for a majority of my projects, including Worlds iVue, iVue's company websites, and the website you are on right now.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Nuxt",
+        link: NUXT_WEBSITE_LINK,
+        color: "#00DC82",
+        desc: "Nuxt is a web framework that's built with Vue.js and comes with a whole host of features. " +
+            "It's particularly useful when use Vue Components to generate a static site " +
+            "or a server-side rendered site for quality search engine optimization.",
+
+        icon: {
+            id: nuxt_icon,
+            faIcon: false,
+            size: "125"
+        }
+    },
+    {
+        name: "Pinia",
+        link: "https://pinia.vuejs.org/",
+        color: "#dec96e",
+        desc: "Vue.js is an extremely lightweight and simple web development framework that is mainly developed by a team of independent, professional developers. " +
+            "I used this for a majority of my projects, including Worlds iVue, iVue's company websites, and the website you are on right now.",
+
+        icon: {
+            id: pinia_icon,
+            faIcon: false,
+            size: "90"
+        }
+    },
+    {
+        name: "Vue Router",
+        link: "https://router.vuejs.org/",
+        color: "#34495E",
+        desc: "Vue.js is an extremely lightweight and simple web development framework that is mainly developed by a team of independent, professional developers. " +
+            "I used this for a majority of my projects, including Worlds iVue, iVue's company websites, and the website you are on right now.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Vite SSG",
+        link: "https://github.com/antfu-collective/vite-ssg",
+        color: "#9863FE",
+        desc: "Vite is a frontend building tool that simplifies developing, building, and deploying frontend applications. " +
+            "It is used by most major JS Frameworks today, including Vue.js, React Router, Angular, etc.",
+
+        icon: {
+            id: awesome_vite_icon,
+            faIcon: false,
+            size: "115"
+        }
+    }
 ];
