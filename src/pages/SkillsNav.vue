@@ -5,11 +5,11 @@
 </client-only>
 
 <div id="skills-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
-    <div class="skills-body">
-        <div id="vuejs" class="skills-category">
-            <h1 class="skills-category-header vue"> Vue.js </h1>
+    <client-only>
+        <div class="skills-body">
+            <div id="vuejs" class="skills-category">
+                <h1 class="skills-category-header vue"> Vue.js </h1>
 
-            <client-only>
                 <div v-for="entity in VUEJS_SKILL_NOTES"
                     class="skills-entity-container"
                     v-observe-visibility="setCardTransition">
@@ -23,17 +23,15 @@
                         :size="entity.icon.size"
                     />
                 </div>
-            </client-only>
-        </div>
+            </div>
 
-        <div id="frontend" class="skills-category">
-            <h1 class="skills-category-header vue"> Frontend </h1>
+            <div id="frontend" class="skills-category">
+                <h1 class="skills-category-header vue"> Frontend </h1>
 
-            <client-only>
                 <div v-for="entity in VUEJS_SKILL_NOTES"
                     class="skills-entity-container"
                     v-observe-visibility="setCardTransition">
-                    
+
                     <SkillNote :link="entity.link"
                         :color="entity.color"
                         :desc="entity.desc"
@@ -43,9 +41,9 @@
                         :size="entity.icon.size"
                     />
                 </div>
-            </client-only>
+            </div>
         </div>
-    </div>
+    </client-only>
 
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
         <RouterLink to="/" class="linkBtn-blue" v-html="'Back to Home'"
