@@ -135,13 +135,13 @@ h1, h2, h3, p {
 }
 
 .main-sector-bottom-linkBtn a.linkBtn-blue {
-    color: var(--blue-cobalt);
-    border-color: var(--blue-cobalt);
-    background-color: var(--blue-zero);
+    color: var(--blue-zero);
+    border-color: var(--blue-zero);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 .main-sector-bottom-linkBtn a.linkBtn-blue:hover {
-    background-color: var(--blue-two);
-    border-color: var(--blue-cobalt);
+    background-color: var(--blue-three);
+    border-color: var(--blue-zero);
 }
 
 @media (max-width: 375px) {

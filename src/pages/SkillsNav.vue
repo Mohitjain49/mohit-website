@@ -8,7 +8,10 @@
     <client-only>
         <div class="skills-body">
             <div id="vuejs" class="skills-category">
-                <h1 class="skills-category-header vue"> Vue.js </h1>
+                <div class="skills-category-header vue" v-observe-visibility="setCardTransition">
+                    <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
+                    <span> ue.js </span>
+                </div>
 
                 <div v-for="entity in VUEJS_SKILL_NOTES"
                     class="skills-entity-container"
@@ -26,7 +29,94 @@
             </div>
 
             <div id="frontend" class="skills-category">
-                <h1 class="skills-category-header vue"> Frontend </h1>
+                <div class="skills-category-header frontend" v-observe-visibility="setCardTransition">
+                    <font-awesome-icon icon="fa-brands fa-js" />
+                    <span> Frontend </span>
+                </div>
+
+                <div v-for="entity in VUEJS_SKILL_NOTES"
+                    class="skills-entity-container"
+                    v-observe-visibility="setCardTransition">
+
+                    <SkillNote :link="entity.link"
+                        :color="entity.color"
+                        :desc="entity.desc"
+                        :faIcon="entity.icon.faIcon"
+                        :id="entity.icon.id"
+                        :name="entity.name"
+                        :size="entity.icon.size"
+                    />
+                </div>
+            </div>
+
+            <div id="aws" class="skills-category">
+                <div class="skills-category-header aws" v-observe-visibility="setCardTransition">
+                    <img :src="aws_icon" draggable="false" />
+                    <span> AWS </span>
+                </div>
+
+                <div v-for="entity in VUEJS_SKILL_NOTES"
+                    class="skills-entity-container"
+                    v-observe-visibility="setCardTransition">
+
+                    <SkillNote :link="entity.link"
+                        :color="entity.color"
+                        :desc="entity.desc"
+                        :faIcon="entity.icon.faIcon"
+                        :id="entity.icon.id"
+                        :name="entity.name"
+                        :size="entity.icon.size"
+                    />
+                </div>
+            </div>
+
+            <div id="modules" class="skills-category">
+                <div class="skills-category-header modules" v-observe-visibility="setCardTransition">
+                    <font-awesome-icon icon="fa-brands fa-node-js" />
+                    <span> Modules </span>
+                </div>
+
+                <div v-for="entity in VUEJS_SKILL_NOTES"
+                    class="skills-entity-container"
+                    v-observe-visibility="setCardTransition">
+
+                    <SkillNote :link="entity.link"
+                        :color="entity.color"
+                        :desc="entity.desc"
+                        :faIcon="entity.icon.faIcon"
+                        :id="entity.icon.id"
+                        :name="entity.name"
+                        :size="entity.icon.size"
+                    />
+                </div>
+            </div>
+
+            <div id="languages" class="skills-category">
+                <div class="skills-category-header languages" v-observe-visibility="setCardTransition">
+                    <font-awesome-icon icon="fa-laptop-code" />
+                    <span> Languages </span>
+                </div>
+
+                <div v-for="entity in VUEJS_SKILL_NOTES"
+                    class="skills-entity-container"
+                    v-observe-visibility="setCardTransition">
+
+                    <SkillNote :link="entity.link"
+                        :color="entity.color"
+                        :desc="entity.desc"
+                        :faIcon="entity.icon.faIcon"
+                        :id="entity.icon.id"
+                        :name="entity.name"
+                        :size="entity.icon.size"
+                    />
+                </div>
+            </div>
+
+            <div id="icons" class="skills-category">
+                <div class="skills-category-header icons" v-observe-visibility="setCardTransition">
+                    <font-awesome-icon icon="fa-brands fa-font-awesome" />
+                    <span> Icons </span>
+                </div>
 
                 <div v-for="entity in VUEJS_SKILL_NOTES"
                     class="skills-entity-container"
@@ -57,6 +147,9 @@
 
 <script setup>
 import "@/styles/navpage.css";
+import vuejs_icon from "@/assets/Vuejs_Icon.png";
+import aws_icon from "@/assets/aws/AWS_Icon.png"
+
 import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 import SkillNote from "@/components/body-components/SkillNote.vue";
@@ -66,32 +159,40 @@ import { BLUE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 import { getMeta } from "@/stores/GetMeta.js";
 
 import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
-import { onMounted } from 'vue';
+import { onMounted, nextTick } from 'vue';
 import { useHead } from '@unhead/vue';
+import { useRoute } from "vue-router";
 
 const webData = useWebsiteDataStore();
-const PAGE_DESC = "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
+const route = useRoute();
+
+onMounted(() => {
+    webData.mountWebData();
+    if(route.hash.substring(1) == "") { return; }
+    nextTick(() => { webData.goToPageSection(route.hash.substring(1)); });
+});
+
+useHead(getMeta("Mohit Jain | My Skills", "skills/",
+    "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
     "web applications, and projects by utilizing multiple programming languages, " +
     "frontend frameworks, web services, and modules."
-
-onMounted(() => { webData.mountWebData(); });
-useHead(getMeta("Mohit Jain | My Skills", "skills/", PAGE_DESC));
+));
 
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
  */
 function setCardTransition(isVisible, entry) {
     if(isVisible) {
-        entry.target.classList.add("animate__animated", "animate__rotateIn");
+        entry.target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__rotateIn" : "animate__fadeIn"));
     } else {
-        entry.target.classList.remove("animate__animated", "animate__rotateIn");
+        entry.target.classList.remove("animate__animated", "animate__rotateIn", "animate__fadeIn");
     }
 }
 </script>
 
 <style scoped>
 #skills-page {
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.05);
     top: 0px;
     min-height: 100%;
 }
@@ -118,22 +219,47 @@ function setCardTransition(isVisible, entry) {
 }
 
 .skills-category-header {
-    width: fit-content;
+    width: 375px;
     height: fit-content;
-    margin-left: 20px;
-    margin-top: 20px;
-    padding: 5px;
-    font-size: 90px;
+    margin-left: 10px;
+    margin-top: 100px;
+    padding: 5px 0px;
+    font-size: 50px;
     font-family: 'Lexend', sans-serif;
+    font-weight: bold;
     grid-column: span 3;
-    text-shadow:
-        -1px -1px 0 #34495E, /* Top-left shadow */
-        1px -1px 0 #34495E,  /* Top-right shadow */
-        -1px 1px 0 #34495E,  /* Bottom-left shadow */
-        1px 1px 0 #34495E;   /* Bottom-right shadow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 1);
+    border: 2px solid white;
+    border-radius: 20px;
 }
+.skills-category-header img, .skills-category-header svg {
+    width: 50px;
+    font-size: 50px;
+    user-select: none;
+    margin-right: 3px;
+}
+
 .skills-category-header.vue {
     color: #41B883;
+    margin-top: 20px;
+}
+.skills-category-header.aws {
+    color: #5468ff;
+}
+.skills-category-header.modules {
+    color: #5C9E57;
+}
+.skills-category-header.icons {
+    color: rgb(83, 141, 215);
+}
+.skills-category-header.languages {
+    color: #E34E26;
+}
+.skills-category-header.frontend {
+    color: #D3B62A;
 }
 
 @media (max-width: 1200px) {
@@ -141,6 +267,9 @@ function setCardTransition(isVisible, entry) {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
         padding: 50px calc(50% - 400px);
+    }
+    .skills-category-header {
+        grid-column: span 2;
     }
 }
 
@@ -150,8 +279,26 @@ function setCardTransition(isVisible, entry) {
         width: calc(100% - 20px);
         padding: 50px 10px;
     }
+    .skills-category-header {
+        grid-column: span 1;
+        margin-left: 0px;
+        position: relative;
+        left: calc((100% - 400px) / 2);
+    }
     .skills-entity-container {
         min-width: 0px;
+    }
+}
+
+@media (max-width: 450px) {
+    .skills-category-header {
+        width: 325px;
+        left: calc((100% - 325px) / 2);
+        font-size: 45px;
+    }
+    .skills-category-header img, .skills-category-header svg {
+        font-size: 45px;
+        width: 45px;
     }
 }
 </style>

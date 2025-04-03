@@ -346,18 +346,6 @@ export const SKILL_ENTITIES = [
 
 export const NEW_SKILL_ENTITIES = [
     {
-        name: "More Info",
-        link: "/skills",
-        color: "var(--website-light-text)",
-        desc: "",
-
-        icon: {
-            id: "fa-circle-info",
-            faIcon: true,
-            size: "110"
-        }
-    },
-    {
         name: "Vue.js",
         link: "/skills/#vuejs",
         color: "#41B883",
@@ -379,6 +367,20 @@ export const NEW_SKILL_ENTITIES = [
 
         icon: {
             id: "fa-brands fa-js",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "AWS",
+        link: "/skills/#aws",
+        color: "#5468ff",
+        desc: "I use Amazon Web Services (AWS) for almost any web service I need. " +
+            "Every big project I have worked on used AWS in some way, whether I needed to deploy an website, " +
+            "manage user authentication, setup business emails, or make an API for a Lambda function.",
+
+        icon: {
+            id: "fa-brands fa-aws",
             faIcon: true,
             size: "110"
         }

@@ -33,11 +33,11 @@ export const HOME_BACKGROUND = {
 
 export const BLUE_BACKGROUND = {
     background: {
-        color: "rgb(187, 210, 255)",
+        color: "#0047AB"
     },
     fpsLimit: 40,
     particles: {
-        color: { value: ["#0047ABE6"] },
+        color: { value: ["rgb(187, 210, 255)"] },
         move: {
             direction: "none",
             enable: true,
@@ -48,14 +48,14 @@ export const BLUE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1000
+            value: 750
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "square"
+            type: "circle"
         },
         size: {
             value: { min: 2, max: 3 },
