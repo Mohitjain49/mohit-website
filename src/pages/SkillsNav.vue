@@ -34,7 +34,7 @@
                     <span> Frontend </span>
                 </div>
 
-                <div v-for="entity in VUEJS_SKILL_NOTES"
+                <div v-for="entity in FRONTEND_SKILL_NOTES"
                     class="skills-entity-container"
                     v-observe-visibility="setCardTransition">
 
@@ -55,7 +55,7 @@
                     <span> AWS </span>
                 </div>
 
-                <div v-for="entity in VUEJS_SKILL_NOTES"
+                <div v-for="entity in AWS_SKILL_NOTES"
                     class="skills-entity-container"
                     v-observe-visibility="setCardTransition">
 
@@ -76,7 +76,7 @@
                     <span> Modules </span>
                 </div>
 
-                <div v-for="entity in VUEJS_SKILL_NOTES"
+                <div v-for="entity in MODULES_SKILL_NOTES"
                     class="skills-entity-container"
                     v-observe-visibility="setCardTransition">
 
@@ -97,7 +97,7 @@
                     <span> Languages </span>
                 </div>
 
-                <div v-for="entity in VUEJS_SKILL_NOTES"
+                <div v-for="entity in LANGUAGES_SKILL_NOTES"
                     class="skills-entity-container"
                     v-observe-visibility="setCardTransition">
 
@@ -118,7 +118,7 @@
                     <span> Icons </span>
                 </div>
 
-                <div v-for="entity in VUEJS_SKILL_NOTES"
+                <div v-for="entity in ICONS_SKILL_NOTES"
                     class="skills-entity-container"
                     v-observe-visibility="setCardTransition">
 
@@ -154,12 +154,19 @@ import NavigationMain from '@/components/NavigationMain.vue';
 import WebFooter from '@/components/WebFooter.vue';
 import SkillNote from "@/components/body-components/SkillNote.vue";
 
-import { VUEJS_SKILL_NOTES } from "@/stores/Objects.js";
-import { BLUE_BACKGROUND } from "@/stores/ParticlesConfig.js";
-import { getMeta } from "@/stores/GetMeta.js";
+import { VUEJS_SKILL_NOTES,
+    FRONTEND_SKILL_NOTES,
+    AWS_SKILL_NOTES,
+    MODULES_SKILL_NOTES,
+    LANGUAGES_SKILL_NOTES,
+    ICONS_SKILL_NOTES
+} from "@/stores/Objects.js";
 
+import { BLUE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 import { onMounted, nextTick } from 'vue';
+
+import { getMeta } from "@/stores/GetMeta.js";
 import { useHead } from '@unhead/vue';
 import { useRoute } from "vue-router";
 
