@@ -33,11 +33,11 @@ export const HOME_BACKGROUND = {
 
 export const BLUE_BACKGROUND = {
     background: {
-        color: "rgb(187, 210, 255)",
+        color: "#0047AB"
     },
     fpsLimit: 40,
     particles: {
-        color: { value: ["#0047ABE6"] },
+        color: { value: ["rgb(187, 210, 255)"] },
         move: {
             direction: "none",
             enable: true,
@@ -48,14 +48,14 @@ export const BLUE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1000
+            value: 750
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "square"
+            type: "circle"
         },
         size: {
             value: { min: 2, max: 3 },
@@ -93,74 +93,6 @@ export const ORANGE_BACKGROUND = {
         },
         size: {
             value: { min: 2, max: 3 },
-        },
-    },
-    detectRetina: true,
-    tRetina: true,
-};
-
-export const VUEJS_BACKGROUND = {
-    background: {
-        color: "#1a1a1a",
-    },
-    fpsLimit: 40,
-    particles: {
-        color: { value: "#41B883" },
-        move: {
-            direction: "none",
-            enable: true,
-            outModes: { default: "out" },
-            random: true,
-            speed: 0.75,
-            straight: false,
-        },
-        number: {
-            density: { enable: true, area: 1200 },
-            value: 900
-        },
-        opacity: {
-            value: { min: 0.1, max: 0.75 },
-            animation: { enable: true, speed: 1.5, sync: false },
-        },
-        shape: {
-            type: "triangle"
-        },
-        size: {
-            value: { min: 3, max: 3.5 },
-        },
-    },
-    detectRetina: true,
-    tRetina: true,
-};
-
-export const AWS_BACKGROUND = {
-    background: {
-        color: "#1a1a1a",
-    },
-    fpsLimit: 40,
-    particles: {
-        color: { value: "rgb(157, 113, 249)" },
-        move: {
-            direction: "none",
-            enable: true,
-            outModes: { default: "out" },
-            random: true,
-            speed: 0.75,
-            straight: false,
-        },
-        number: {
-            density: { enable: true, area: 1200 },
-            value: 900
-        },
-        opacity: {
-            value: { min: 0.1, max: 0.75 },
-            animation: { enable: true, speed: 1.5, sync: false },
-        },
-        shape: {
-            type: "triangle"
-        },
-        size: {
-            value: { min: 3, max: 3.5 },
         },
     },
     detectRetina: true,

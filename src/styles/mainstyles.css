@@ -22,9 +22,9 @@
     --website-light-text: rgb(198, 147, 19);
     --website-gradient-text: linear-gradient(to left, rgb(126, 90, 0) 0%, rgb(198, 147, 19) 50%, rgb(126, 90, 0) 100%);
 
-    --nav-bar-background: linear-gradient(to bottom, rgb(255, 115, 0) 0%, rgb(248, 206, 171) 100%);
-    --nav-bar-border: rgb(255, 115, 0);
-    --webpage-background: linear-gradient(to top, rgb(255, 115, 0) 0%, rgb(248, 206, 171) 100%);
+    --nav-bar-background: linear-gradient(to bottom, rgb(250, 134, 38) 0%, rgb(248, 206, 171) 100%);
+    --nav-bar-border: rgb(250, 134, 38);
+    --webpage-background: linear-gradient(to top, rgb(250, 134, 38) 0%, rgb(248, 206, 171) 100%);
     --webpage-static-background: rgb(248, 206, 171);
 
     --translucent-background: rgba(255, 255, 255, 0.25);
@@ -135,13 +135,13 @@ h1, h2, h3, p {
 }
 
 .main-sector-bottom-linkBtn a.linkBtn-blue {
-    color: var(--blue-cobalt);
-    border-color: var(--blue-cobalt);
-    background-color: var(--blue-zero);
+    color: var(--blue-zero);
+    border-color: var(--blue-zero);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 .main-sector-bottom-linkBtn a.linkBtn-blue:hover {
-    background-color: var(--blue-two);
-    border-color: var(--blue-cobalt);
+    background-color: var(--blue-three);
+    border-color: var(--blue-zero);
 }
 
 @media (max-width: 375px) {

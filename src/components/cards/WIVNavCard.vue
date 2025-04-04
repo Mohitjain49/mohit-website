@@ -1,8 +1,8 @@
 <template>
 <div class="newCard-container">
     <a :href="WORLDS_IVUE_LINK" id="wiv-nav-newCard" class="nav-newCard"
-        @mouseenter="setBounceAnimation"
-        @mouseleave="setBounceAnimation">
+        @mouseenter="setPulseLoopAnimation"
+        @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">
             <img :src="wiv_banner" width="250" />
@@ -37,7 +37,7 @@ import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png"; 
 
-import { setBounceAnimation } from "@/stores/WebsiteData.js";
+import { setPulseLoopAnimation } from "@/stores/WebsiteData.js";
 import { WORLDS_IVUE_LINK } from '@/stores/Objects.js';
 import { onMounted } from "vue";
 

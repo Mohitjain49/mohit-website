@@ -59,7 +59,8 @@ library.add(
     FaBrands.faCloudflare,
     FaBrands.faJava,
     FaBrands.faGolang,
-    FaBrands.faGitlab
+    FaBrands.faGitlab,
+    FaBrands.faPython
 );
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },

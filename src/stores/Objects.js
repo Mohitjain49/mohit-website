@@ -1,39 +1,22 @@
 import vue_icon from "../assets/Vuejs_Icon.png";
-import wiv_icon from "../assets/ivue/Worlds_iVue_Icon.png";
-import rc_icon from "../assets/ivue/iVue_Robotics_Cog_Icon.png";
-import ivue_media_icon from "../assets/ivue/iVue_Media_Icon.png";
-import sublo_icon from "../assets/sublo/Sublo_Blue_Transparent.png";
-import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
-import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
-import ivue_black_text from "../assets/ivue/iVue_Black_Text.png";
 import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_Icon.png";
 import expo_icon from "../assets/sublo/Expo_Icon.svg";
 import vite_icon from "../assets/Vite_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
 import pinia_icon from "../assets/Pinia_Icon.svg";
+import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 
-import aws_icon from "../assets/aws/AWS_Icon.png";
-import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
-import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
-import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
-import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
-import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
-import workmail_icon from "../assets/aws/AWS_WorkMail_Icon.svg";
+import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
+import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
+import ivue_black_text from "../assets/ivue/iVue_Black_Text_Cropped.png";
+
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
-
-import wiv_banner from "../assets/ivue/Worlds_iVue_Banner.png";
-import cesium_picture from "../assets/Cesium_Globe_Banner.jpg";
-import wiv_app from "../assets/ivue/Worlds_iVue_Main_App.png";
-import ivue_website from "../assets/ivue/iVue_Main_Website_Home.png";
-import ivue_media_website from "../assets/ivue/iVue_Media_Website_Home.png";
-import ivue_robotics_website from "../assets/ivue/iVue_Robotics_Website_Home.png";
-import globe_page from "../assets/Personal_Globe_Page.png";
-import pizza_page from "../assets/Pizza_Project_Page.png";
-
-import sublo_white_background_icon from "../assets/sublo/Sublo_Blue_Background.png";
-import wiv_waypoints from "../assets/ivue/iVue_RC_Waypoints.png";
-import mavlink_banner from "../assets/ivue/Mavlink_Banner.png";
+import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
+import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
+import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
+import ses_icon from "../assets/aws/AWS_SES_Icon.svg";
+import api_gateway_icon from "../assets/aws/AWS_API_Gateway_Icon.svg";
 
 export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/"
 export const PERSONAL_GLOBE_LINK = "https://globe.mohit-jain.com/";
@@ -51,7 +34,7 @@ export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 export const NUXT_WEBSITE_LINK = "https://nuxt.com/";
-export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/en/";
+export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/";
 
 export const SOCIALS = [
     {
@@ -111,7 +94,89 @@ export const SOCIALS = [
     }
 ];
 
-export const SKILL_ENTITIES = [
+export const NEW_SKILL_ENTITIES = [
+    {
+        name: "Vue.js",
+        link: "/skills/#vuejs",
+        color: "#41B883",
+        desc: "As a frontend developer, Vue.js is my go-to web development framework, " +
+            "offering simplicity, quick performance, and a vast ecosystem to all developers.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Frontend",
+        link: "/skills/#frontend",
+        color: "#D3B62A",
+        desc: "Apart from Vue.js, I've utilized numerous other Frontend Development Tools for my projects, " +
+            "including React Native, Angular, and Expo.",
+
+        icon: {
+            id: "fa-brands fa-js",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "AWS",
+        link: "/skills/#aws",
+        color: "#5468ff",
+        desc: "I use Amazon Web Services (AWS) for almost any web service I need. " +
+            "Every big project I have worked on used AWS in some way, whether I needed to deploy an website, " +
+            "manage user authentication, setup business emails, or make an API for a Lambda function.",
+
+        icon: {
+            id: "fa-brands fa-aws",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Modules",
+        link: "/skills/#modules",
+        color: "#5C9E57",
+        desc: "I've used many unique modules AND tools for my websites and applications to either " +
+            "create more appealing and intuitive user interfaces or for version control and app deployment.",
+
+        icon: {
+            id: "fa-brands fa-node-js",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Languages",
+        link: "/skills/#languages",
+        color: "#E34E26",
+        desc: "Throughout all my work with application development, I have learned multiple programming languages " +
+            "as a way of broadening my skillset.",
+
+        icon: {
+            id: "fa-laptop-code",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Icons",
+        link: "/skills/#icons",
+        color: "rgb(83, 141, 215)",
+        desc: "I use icon sets to make websites and apps more appealing. " +
+            "This section is my way of saying thanks to them.",
+
+        icon: {
+            id: "fa-brands fa-font-awesome",
+            faIcon: true,
+            size: "110"
+        }
+    },
+];
+
+export const VUEJS_SKILL_NOTES = [
     {
         name: "Vue.js",
         link: VUEJS_WEBSITE_LINK,
@@ -122,60 +187,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: vue_icon,
             faIcon: false,
-            width: "105"
-        }
-    },
-    {
-        name: "React Native",
-        link: REACT_NATIVE_WEBSITE_LINK,
-        color: "#61DBFB",
-        desc: "React Native, created by Meta, is a popular library that can be used to make apps for all platforms. " +
-            "It shines in mobile app development, however, and I used it to help develop a mobile application with other college students.",
-
-        icon: {
-            id: react_icon,
-            faIcon: false,
-            width: "105"
-        }
-    },
-    {
-        name: "Angular",
-        link: "https://angular.dev/",
-        color: "#F3227F",
-        desc: "Angular is another popular web development framework that is supported by Google. " +
-            "With TypeScript at its base, an Angular project can scale to any size. " +
-            "I used it to make a mock pizza order and delivery system for my software engineering class.",
-
-        icon: {
-            id: angular_icon,
-            faIcon: false,
-            width: "105"
-        }
-    },
-    {
-        name: "Vite",
-        link: "https://vite.dev/",
-        color: "#9863FE",
-        desc: "Vite is a frontend building tool that simplifies developing, building, and deploying frontend applications. " +
-            "It is used by most major JS Frameworks today, including Vue.js, React Router, Angular, etc.",
-
-        icon: {
-            id: vite_icon,
-            faIcon: false,
-            width: "105"
-        }
-    },
-    {
-        name: "Expo",
-        link: "https://expo.dev/",
-        color: "black",
-        desc: "Expo is a framework that utilizes React Native to help developers create, build, and deploy apps " +
-            "that work on Android, iOS, and the web all at once. I used it to develop a mobile app at Sublo.",
-
-        icon: {
-            id: expo_icon,
-            faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -189,23 +201,176 @@ export const SKILL_ENTITIES = [
         icon: {
             id: nuxt_icon,
             faIcon: false,
-            width: "125"
+            size: "125"
         }
     },
     {
-        name: "AWS",
-        link: "https://aws.amazon.com/",
-        color: "#5468ff",
-        desc: "I use Amazon Web Services (AWS) for almost any web service I need. " +
-            "Every big project I have worked on used AWS in some way, whether I needed to deploy an website, " +
-            "manage user authentication, setup business emails, or make an API for a Lambda function.",
+        name: "Pinia",
+        link: "https://pinia.vuejs.org/",
+        color: "#dec96e",
+        desc: "Pinia is Vue.js's official module for global state management. " +
+            "It's extremely simple to use and works even better than modules like Redux or RxJS.",
 
         icon: {
-            id: "fa-brands fa-aws",
-            faIcon: true,
-            size: "110px"
+            id: pinia_icon,
+            faIcon: false,
+            size: "90"
         }
     },
+    {
+        name: "Vue Router",
+        link: "https://router.vuejs.org/",
+        color: "#34495E",
+        desc: "Vue Router is a routing module that integrates seamlessly with Vue.js Apps. " +
+            "It's similar to any other framework's routing module.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Vite SSG",
+        link: "https://github.com/antfu-collective/vite-ssg",
+        color: "#9863FE",
+        desc: "Vite-SSG can build any Vue.js application with Static Site Generation, allowing for better Search Engine Optimization. " +
+            "This was created and is currently maintained by Anthony Fu, a core developer of Vue.js, Vite, and Nuxt.",
+
+        icon: {
+            id: awesome_vite_icon,
+            faIcon: false,
+            size: "115"
+        }
+    }
+];
+
+export const FRONTEND_SKILL_NOTES = [
+    {
+        name: "React Native",
+        link: REACT_NATIVE_WEBSITE_LINK,
+        color: "#61DBFB",
+        desc: "React Native, created by Meta, is a popular library that can be used to make apps for all platforms. " +
+            "It shines in mobile app development, however, and I used it to help develop a mobile application with other college students.",
+
+        icon: {
+            id: react_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Angular",
+        link: "https://angular.dev/",
+        color: "#F3227F",
+        desc: "Angular is another popular web development framework that is supported by Google. " +
+            "With TypeScript at its base, an Angular project can scale to any size. " +
+            "I used it to make a mock pizza order and delivery system for my software engineering class.",
+
+        icon: {
+            id: angular_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Vite",
+        link: "https://vite.dev/",
+        color: "#9863FE",
+        desc: "Vite is a frontend building tool that simplifies developing, building, and deploying frontend applications. " +
+            "It is used by most major JS Frameworks today, including Vue.js, React Router, Angular, etc.",
+
+        icon: {
+            id: vite_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Expo",
+        link: "https://expo.dev/",
+        color: "black",
+        desc: "Expo is a framework that utilizes React Native to help developers create, build, and deploy apps " +
+            "that work on Android, iOS, and the web all at once. I used it to develop a mobile app at Sublo.",
+
+        icon: {
+            id: expo_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+];
+
+export const AWS_SKILL_NOTES = [
+    {
+        name: "Amazon Cognito",
+        link: "https://aws.amazon.com/cognito/",
+        color: "#C81520",
+        desc: "Amazon Cognito is Amazon's primary service for user authentication. " +
+            "I have configured this service to develop user authentiaction systems for both Worlds iVue and Sublo.",
+
+        icon: {
+            id: cognito_icon,
+            faIcon: false,
+            size: "110"
+        }
+    },
+    {
+        name: "AWS Amplify",
+        link: "https://aws.amazon.com/amplify/",
+        color: "#C81520",
+        desc: "AWS Amplify serves as an effective module for full-stack development. " +
+            "It can easily pair web and mobile apps with other services such as Amazon Cognito. " +
+            "Therefore, both Worlds iVue and Sublo utilizes AWS Amplify.",
+
+        icon: {
+            id: amplify_icon,
+            faIcon: false,
+            size: "110"
+        }
+    },
+    {
+        name: "Web Hosting",
+        link: "https://aws.amazon.com/websites/",
+        color: "#5468ff",
+        desc: "I use AWS to host websites for myself and iVue with Amazon S3 to store a website's files, " +
+            "Amazon CloudFront to deliver the websites, and Amazon Route 53 to tie these websites to the preferred domain names.",
+
+        icon: {
+            id: cloudfront_icon,
+            faIcon: false,
+            size: "110"
+        }
+    },
+    {
+        name: "Email Services",
+        link: "https://aws.amazon.com/ses/",
+        color: "#C81520",
+        desc: "I've utilized multiple email services made by AWS including Amazon Simple Email Service (SES) " +
+            "for making my contact form and Amazon WorkMail for iVue's Company Emails.",
+
+        icon: {
+            id: ses_icon,
+            faIcon: false,
+            size: "110"
+        }
+    },
+    {
+        name: "Serverless APIs",
+        link: "https://aws.amazon.com/api-gateway/",
+        color: "#D5296A",
+        desc: "With all these services, I utilize AWS Lambda and Amazon API Gateway to implement some backend functionality " +
+            "into my projects, such as for the contact forms I have made.",
+
+        icon: {
+            id: api_gateway_icon,
+            faIcon: false,
+            size: "110"
+        }
+    }
+];
+
+export const MODULES_SKILL_NOTES = [
     {
         name: "Cesium",
         link: "https://cesium.com/",
@@ -217,7 +382,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: cesium_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -231,7 +396,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: mavlink_icon,
             faIcon: false,
-            width: "105"
+            size: "105"
         }
     },
     {
@@ -245,7 +410,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-github",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
     {
@@ -258,9 +423,90 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-cloudflare",
             faIcon: true,
-            size: "110px"
+            size: "110"
         }
     },
+];
+
+export const LANGUAGES_SKILL_NOTES = [
+    {
+        name: "JavaScript",
+        link: "#",
+        color: "#D3B62A",
+        desc: "I've learned how to code with JavaScript, TypeScript, and Node.js to make various functions. " +
+            "These sit at the core of all the frameworks and modules I have used for my projects.",
+
+        icon: {
+            id: "fa-brands fa-js",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Python",
+        link: "https://www.python.org/",
+        color: "#346E9E",
+        desc: "I use python for testing the MAVLink Protocol for Worlds iVue and to create AWS Lambda Functions.",
+
+        icon: {
+            id: "fa-brands fa-python",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Java",
+        link: "https://www.java.com/en/",
+        color: "#EC2025",
+        desc: "While I haven't developed any major projects with Java, this is the first language that I learned. " +
+            "I'll most likely use Kotlin to develop an Android App in the future if I have the time.",
+
+        icon: {
+            id: "fa-brands fa-java",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "GoLang",
+        link: "https://go.dev/",
+        color: "#00ABD7",
+        desc: "GoLang, supported by Google, is great for developing backend systems for applications. " +
+            "I learned it when I started at iVue, and its used in the current order application for iVue Media's services.",
+
+        icon: {
+            id: "fa-brands fa-golang",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "HTML",
+        link: "#",
+        color: "#E34E26",
+        desc: "Through my experience with frontend frameworks, I have learned how to develop intuitive UIs with HTML.",
+
+        icon: {
+            id: "fa-brands fa-html5",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "CSS",
+        link: "#",
+        color: "#264DE4",
+        desc: "Through my experience with frontend frameworks, I have learned how to develop visually appealing styles with CSS.",
+
+        icon: {
+            id: "fa-brands fa-css3-alt",
+            faIcon: true,
+            size: "110"
+        }
+    },
+];
+
+export const ICONS_SKILL_NOTES = [
     {
         name: "Font Awesome",
         link: "https://fontawesome.com/",
@@ -272,7 +518,7 @@ export const SKILL_ENTITIES = [
         icon: {
             id: "fa-brands fa-font-awesome",
             faIcon: true,
-            size: "110px"
+            size: "100"
         }
     },
     {
@@ -286,503 +532,20 @@ export const SKILL_ENTITIES = [
         icon: {
             id: aws_icons_logo,
             faIcon: false,
-            width: "125"
+            size: "125"
         }
     },
     {
-        name: "JavaScript",
-        link: "#",
-        color: "#D3B62A",
-        desc: "I've learned how to code with JavaScript, TypeScript, and Node.js to make various functions. " +
-            "These sit at the core of all the frameworks and modules I have used for my projects.",
+        name: "iVue",
+        link: MAIN_IVUE_WEBSITE_LINK,
+        color: "#000000",
+        desc: "I use iVue's icons and logos to make my own website, " +
+            "particularly on the home page and the experience page.",
 
         icon: {
-            id: "fa-brands fa-js",
-            faIcon: true,
-            size: "110px"
-        }
-    },
-    {
-        name: "Java",
-        link: "https://www.java.com/en/",
-        color: "#EC2025",
-        desc: "While I haven't developed any major projects with Java, this is the first language that I learned. " +
-            "I'll most likely use Kotlin to develop an Android App in the future if I have the time.",
-
-        icon: {
-            id: "fa-brands fa-java",
-            faIcon: true,
-            size: "110px"
-        }
-    },
-    {
-        name: "GoLang",
-        link: "https://go.dev/",
-        color: "#00ABD7",
-        desc: "GoLang, supported by Google, is great for developing backend systems for applications. " +
-            "I learned it when I started at iVue, and its used in the current order application for iVue Media's services.",
-
-        icon: {
-            id: "fa-brands fa-golang",
-            faIcon: true,
-            size: "110px"
-        }
-    },
-    {
-        name: "HTML",
-        link: "#",
-        color: "#E34E26",
-        desc: "Through my experience with frontend frameworks, I have learned how to develop intuitive UIs with HTML.",
-
-        icon: {
-            id: "fa-brands fa-html5",
-            faIcon: true,
-            size: "110px"
-        }
-    },
-    {
-        name: "CSS",
-        link: "#",
-        color: "#264DE4",
-        desc: "Through my experience with frontend frameworks, I have learned how to develop visually appealing styles with CSS.",
-
-        icon: {
-            id: "fa-brands fa-css3-alt",
-            faIcon: true,
-            size: "110px"
-        }
-    },
-    {
-        name: "More Info",
-        link: "/skills",
-        color: "var(--website-light-text)",
-        desc: "I have made many pages describing the software development skills I accumalated since the start of my journey. " +
-            "Click on this card or the \"Skills\" link at the top for more info.",
-
-        icon: {
-            id: "fa-circle-info",
-            faIcon: true,
-            size: "110px"
-        }
-    },
-];
-
-export const NAV_CARDS = [
-    {
-        id: "vue-nav-card",
-        titleId: "vue-nav-card-title",
-        route: "/vuejs/",
-    
-        title: {
-            text: "Vue.js",
-            icon: vue_icon,
+            id: ivue_black_text,
             faIcon: false,
-            extraClass: "gradient-text",
-            colorType: "background-image",
-            color: "linear-gradient(to left, #359D5E 0%, #41CF83 50%, #359D5E 100%)",
-            size: "42px"
-        },
-    
-        color: "#41B883",
-        desc: "Vue.js is my go-to web development framework, offering simplicity, " +
-            "quick performance, and a vast ecosystem for all developers.",
-
-        pointsTitle: "Projects:",
-        bulletPoints: [ "Worlds iVue", "My Portfolio", "iVue's Company Websites", "My Personal Globe" ],
-
-        pictureBarClass: "vue-nav-picture-bar",
-        pictures: [
-            { image: vue_icon, width: "40%" },
-            { image: nuxt_icon, width: "50%" },
-            { image: pinia_icon, width: "32%" },
-        ]
-    },
-    {
-        id: "react-nav-card",
-        titleId: "react-nav-card-title",
-        route: "/skills/react",
-    
-        title: {
-            text: "React",
-            icon: "fa-brands fa-react",
-            faIcon: true,
-            extraClass: "",
-            colorType: "color",
-            color: "#087EA4",
-            size: "42px"
-        },
-    
-        color: "#087EA4",
-        desc: "Explore my ongoing adventure with React and React Native, " +
-            "frameworks that make it simple to develop an app for any platform.",
-    
-        pointsTitle: "Related Projects:",
-        bulletPoints: [ "Sublo", "This Website" ],
-
-        pictureBarClass: "react-nav-picture-bar",
-        pictures: [
-            { image: sublo_white_background_icon, width: "50%" }
-        ]
-    },
-    {
-        id: "modules-nav-card",
-        titleId: "modules-nav-card-title",
-        route: "/skills/modules",
-    
-        title: {
-            text: "Modules",
-            icon: "fa-brands fa-node-js",
-            faIcon: true,
-            extraClass: "",
-            colorType: "color",
-            color: "#5C9E57",
-            size: "42px"
-        },
-    
-        color: "#5C9E57",
-        desc: "Learn about some of the unique modules I use to develop Worlds iVue and other websites.",
-    
-        pointsTitle: "Modules Include:",
-        bulletPoints: [ "Cesium", "Mavlink Protocol" ],
-
-        pictureBarClass: "backend-nav-picture-bar",
-        pictures: [
-            { image: wiv_banner, width: "76%" },
-            { image: mavlink_banner, width: "80%" },
-            { image: cesium_picture, width: "80%" }
-        ]
-    },
-    {
-        id: "wiv-nav-card",
-        titleId: "wiv-card-title",
-        route: "/experience/worldsivue",
-    
-        title: {
-            text: "Worlds iVue",
-            icon: wiv_icon,
-            faIcon: false,
-            extraClass: "gradient-text",
-            colorType: "background-image",
-            color: "linear-gradient(to left, #0872BA 0%, #48A548 50%, #0872BA 100%)",
-            size: "35px"
-        },
-    
-        color: "#48A548",
-        desc: "Explore Worlds iVue, a geospatial app that serves as a " +
-            "drone control operator and will serve as a media sharing app in the future.",
-        
-        pointsTitle: "Dev Stack:",
-        bulletPoints: [ "Vue.js", "Cesium", "MAVLink", "Amazon Web Services" ],
-
-        pictureBarClass: "wiv-nav-picture-bar",
-        pictures: [
-            { image: wiv_app, width: "90%" },
-            { image: wiv_waypoints, width: "90%" }
-        ]
-    },
-    {
-        id: "ivue-web-nav-card",
-        titleId: "ivue-web-card-title",
-        route: "/experience/ivue",
-    
-        title: {
-            text: "iVue",
-            icon: rc_icon,
-            faIcon: false,
-            extraClass: "",
-            colorType: "color",
-            color: "white",
-            size: "35px"
-        },
-
-        color: "black",
-        desc: "Read about my work as iVue's Lead Software Developer, " +
-            "where I lead a website development team and our use of Amazon Web Services.",
-    
-        pointsTitle: "Dev Stack:",
-        bulletPoints: [ "Vue.js", "Nuxt", "Amazon Web Services" ],
-
-        pictureBarClass: "ivue-web-nav-picture-bar",
-        pictures: [
-            { image: ivue_website, width: "90%" },
-            { image: ivue_media_website, width: "90%" },
-            { image: ivue_robotics_website, width: "90%" }
-        ]
-    },
-    {
-        id: "sublo-nav-card",
-        titleId: "sublo-card-title",
-        route: "/experience/sublo",
-    
-        title: {
-            text: "Sublo",
-            icon: sublo_icon,
-            faIcon: false,
-            extraClass: "",
-            colorType: "color",
-            color: "#36A1D9",
-            size: "35px"
-        },
-
-        color: "#36A1D9",
-        desc: "During my time at Sublo, I helped develop a mobile app that will make subleasing easier for college students.",
-    
-        pointsTitle: "Dev Stack:",
-        bulletPoints: [ "React Native", "Expo" ],
-
-        pictureBarClass: "sublo-nav-picture-bar",
-        pictures: [
-            { image: sublo_white_background_icon, width: "50%" },
-        ]
-    },
-    {
-        id: "aws-nav-card",
-        titleId: "aws-nav-title",
-        route: "/aws/",
-
-        title: {
-            text: "Amazon",
-            icon: "fa-brands fa-aws",
-            faIcon: true,
-            extraClass: "",
-            colorType: "color",
-            color: "#5468ff",
-            size: "35px"
-        },
-
-        color: "#5468ff",
-        desc: "Check out some of the Amazon Web Services that I configure to amplify Worlds iVue and Sublo.",
-
-        pointsTitle: "Services Include:",
-        bulletPoints: [ "AWS Amplify",
-            "Amazon Cognito",
-            "Data Storage",
-            "Web Hosting",
-            "Business Email Services"
-        ],
-
-        pictureBarClass: "aws-nav-picture-bar",
-        pictures: [
-            { image: aws_icon, width: "40%" },
-            { image: amplify_icon, width: "40%" },
-            { image: cognito_icon, width: "40%" },
-            { image: s3_icon, width: "40%" },
-            { image: route53_icon, width: "40%" },
-            { image: workmail_icon, width: "40%" },
-        ]
-    },
-    {
-        id: "angular-nav-card",
-        titleId: "angular-nav-card-title",
-        route: "/skills/frontend/angular",
-    
-        title: {
-            text: "Angular",
-            icon: angular_icon,
-            faIcon: false,
-            extraClass: "gradient-text",
-            colorType: "background-image",
-            color: "linear-gradient(to right, #F3227F 0%, #933BFF 100%)",
-            size: "40px"
-        },
-    
-        color: "#933BFF",
-        desc: "See my work with Angular, a web development framework maintained primarly by Google " +
-            "to inspire unique and focused designs.",
-    
-        pointsTitle: "Related Projects:",
-        bulletPoints: [ "Pizza Software Engineering Project" ],
-
-        pictureBarClass: "angular-nav-picture-bar",
-        pictures: [
-            { image: angular_icon, width: "51%" },
-            { image: pizza_page, width: "90%" }
-        ]
-    },
-    {
-        id: "frontend-nav-card",
-        titleId: "frontend-nav-card-title",
-        route: "/skills/frontend",
-    
-        title: {
-            text: "Frontend",
-            icon: "fa-brands fa-js",
-            faIcon: true,
-            extraClass: "",
-            colorType: "color",
-            color: "#FFF03C",
-            size: "42px"
-        },
-    
-        color: "#FFF03C",
-        desc: "Read about my experience on how I used numerous Frontend JavaScript Frameworks, " +
-            "especially Vue.js, to create professional websites and applications.",
-
-        pointsTitle: "Frameworks:",
-        bulletPoints: [ "Vue.js", "React Native", "Angular" ],
-
-        pictureBarClass: "frontend-nav-picture-bar",
-        pictures: [
-            { image: vue_icon, width: "40%" },
-            { image: react_icon, width: "39%" },
-            { image: angular_icon, width: "41%" }
-        ]
-    },
-];
-
-export const ANGULAR_INFO_SECTOR = {
-    title: "Angular",
-    image: angular_icon,
-    style: {
-        background: "whitesmoke",
-        color: "#F3227F",
-        minHeight: "100vh"
-    },
-
-    buttons: [
-        { title: "Go To Angular's Website", link: "https://angular.dev/" }
-    ],
-    descriptions: [
-        "Angular, like Vue.js and React, is an opiniated, component-based web development framework made primarily by Google. " +
-            "It is great for creating single page applications, has a reactive data flow, and provides efficient performance speeds. " +
-            "It also has a wide ecosystem of tools, including its own routing module, an animations module, and muce more. " +
-            "This ecosystem, along with its extensive use of Typescript, sets Angular out from other frameworks.",
-        "Unlike other frameworks, Angular is made to be a rigid \"all-for-one\" solution for many problems faced by enterprise-level projects. " +
-            "Rather than consolidating everything into a single file or object, each component is generated as a folder of files which organizes its logic, template, and styles. " +
-            "Essential tools, like the routing module and HTTP client, are built directly within a project for robust functionality. " +
-            "For more specialized needs, developers can easily add and integrate advanced Angular Modules like Angular Material as well. " +
-            "These factors work together to ensure efficient scalability, maintainability, and productivity.",
-        "While I haven't used Angular for any company project, I have used Angular to create a mock Pizza Order and Payment System for a college project. " +
-            "Since Google developed Angular, many of its web applications, such as <u>Google Messages for Web</u> and <u>Google Gemini</u>, are built using this framework. " +
-            "Papa John's also uses Angular for their website, which inspired me to adopt it for my pizza website mockup. " +
-            "I believe it's an excellent platform for experienced frontend developers seeking a cost-effective, long-term solution for building applications. "
-    ],
-
-    addBottomSpace: false,
-    pictures: [
-        {
-            header: "Mock Pizza Website",
-            file: pizza_page,
-            fileLink: PIZZA_WEBSITE_LINK,
-            links: [
-                { text: "Go To Website", path: PIZZA_WEBSITE_LINK, nativeRoute: false }
-            ]
+            size: "160"
         }
-    ]
-}
-
-export const REACT_NATIVE_INFO_SECTOR = {
-    title: "React Native",
-    image: react_icon,
-    style: {
-        background: "rgb(25, 25, 25)",
-        color: "#087EA4",
-        minHeight: "100vh"
     },
-
-    buttons: [
-        { title: "Go To React Native's Website", link: REACT_NATIVE_WEBSITE_LINK }
-    ],
-    descriptions: [
-        "React Native is an JavaScript library capable of developing apps for any mainstream platform. " +
-            "As its namesake would suggest, this library contains many aspects seen in React, including the familiar markup syntax JSX. " +
-            "Together, developers could use this library to create all their projects without the need to use different frameworks if the operating system is different. " +
-            "In fact, it benefits shine with mobile app development.",
-        "I've used the framework primarily to help Sublo develop a mobile subleasing app. " +
-            "The app seeks to make subleasing more efficient, as platforms like facebook marketplace can sometimes be rather inefficient for finding homes or tenants. " +
-            "While I have left Sublo for more pursuits at iVue and My University, I am certain I'll be using React Native for other projects in the future."
-    ],
-
-    addBottomSpace: false,
-    pictures: [
-        {
-            header: "Sublo",
-            file: sublo_white_background_icon,
-            fileLink: SUBLO_WEBSITE_LINK,
-            links: [
-                { text: "See my experience with Sublo", path: "/experience/sublo", nativeRoute: true }
-            ]
-        }
-    ]
-}
-
-export const CESIUM_INFO_SECTOR = {
-    title: "Cesium",
-    image: cesium_icon,
-    style: {
-        background: "linear-gradient(to bottom, #709C49 0%, #6DABE4 100%)",
-        color: "white",
-        minHeight: "100vh"
-    },
-
-    buttons: [
-        { title: "Go To Cesium Website", link: "https://cesium.com/" }
-    ],
-    descriptions: [
-        "Cesium is a geospatial platform that can enhance applications and video games alike. " +
-            "Similar to Google Earth, users can search locations and observe many different places around the world virtually. " +
-            "And since Cesium is open-source, unlike Google Earth and Google Maps, " +
-            "many developers have added very useful tools to their application that push the boundaries of the platform. " +
-            "Therefore, Worlds iVue and My Personal Globe has uses Cesium for its geospatial needs.",
-        "Worlds iVue utilizes Cesium in many ways, most notably with making waypoint missions within iVue RoboControl. " +
-            "By simply clicking on the map, users can add waypoints by clicking on the map and clicking on where tehy want their drone to navigate to. " +
-            "Furthermore, users can simply drag and drop these waypoints after they are added in. " +
-            "There are some more Cesium-Unique features as well, including a locator, geofences, and a representation of user's position on the map."
-    ],
-
-    addBottomSpace: false,
-    pictures: [
-        {
-            header: "",
-            file: cesium_picture,
-            fileLink: "https://cesium.com/",
-            links: []
-        },
-        {
-            header: "My Globe",
-            file: globe_page,
-            fileLink: "#",
-            links: [
-                { text: "Go To My Globe", path: "/globe", nativeRoute: true },
-                { text: "Go To Cesium's Website", path: "https://cesium.com/", nativeRoute: false },
-            ]
-        }
-    ]
-}
-
-export const MAVLINK_INFO_SECTOR = {
-    title: "MAVLink Protocol",
-    image: mavlink_icon,
-    style: {
-        background: "linear-gradient(to bottom, #FF6600 0%, black 100%)",
-        color: "white",
-        minHeight: "100vh"
-    },
-
-    buttons: [
-        { title: "Go To MAVLink Protocol Website", link: MAVLINK_WEBSITE_LINK }
-    ],
-    descriptions: [
-        "The MAVLink Protocol, short for Micro Air Vehicle Communication Protocol, " +
-            "is a lightweight communication messaging system used for communication with drones. " +
-            "Hosted under the Dronecode project and the Linux foundation, this protocol is adaptable " +
-            "with many different programming languages and microcontrollers/operating systems. " +
-            "Furthermore, the MAVLink Protocol is open-source, making it accessible to all sorts of organizations. " +
-            "Therefore, this protocol is used within iVue RoboControl, and app within Worlds iVue, to operate drones made by iVue Robotics.",
-        "iVue RoboControl (iVue RC) uses the protocol extensively to support its many features. " +
-            "There are many basic commands, such as arming the drone, setting its mode, etc. " +
-            "A more advanced command that I personally contributed to is creating waypoint missions for drones with iVue RC. " +
-            "The app also supports gamepad compatibility as well, " +
-            "where users can plug in a typical gaming controller into their PC to operate the drone directly."
-    ],
-
-    addBottomSpace: true,
-    pictures: [
-        {
-            header: "",
-            file: mavlink_banner,
-            fileLink: MAVLINK_WEBSITE_LINK,
-            links: []
-        }
-    ]
-}
+]
