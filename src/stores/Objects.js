@@ -14,10 +14,9 @@ import ivue_black_text from "../assets/ivue/iVue_Black_Text_Cropped.png";
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
 import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
-import s3_icon from "../assets/aws/AWS_S3_Icon.svg";
 import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
-import route53_icon from "../assets/aws/AWS_Route_53_Icon.svg";
 import ses_icon from "../assets/aws/AWS_SES_Icon.svg";
+import api_gateway_icon from "../assets/aws/AWS_API_Gateway_Icon.svg";
 
 export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/"
 export const PERSONAL_GLOBE_LINK = "https://globe.mohit-jain.com/";
@@ -331,26 +330,11 @@ export const AWS_SKILL_NOTES = [
         }
     },
     {
-        name: "Amazon S3",
-        link: "https://aws.amazon.com/s3/",
-        color: "#60A337",
-        desc: "AWS Amplify serves as an effective module for full-stack development. " +
-            "It can easily pair web and mobile apps with other services such as Amazon Cognito. " +
-            "Therefore, both Worlds iVue and Sublo utilizes AWS Amplify.",
-
-        icon: {
-            id: s3_icon,
-            faIcon: false,
-            size: "110"
-        }
-    },
-    {
-        name: "Amazon CloudFront",
-        link: "https://aws.amazon.com/cloudfront/",
+        name: "Web Hosting",
+        link: "https://aws.amazon.com/websites/",
         color: "#5468ff",
-        desc: "AWS Amplify serves as an effective module for full-stack development. " +
-            "It can easily pair web and mobile apps with other services such as Amazon Cognito. " +
-            "Therefore, both Worlds iVue and Sublo utilizes AWS Amplify.",
+        desc: "I use AWS to host websites for myself and iVue with Amazon S3 to store a website's files, " +
+            "Amazon CloudFront to deliver the websites, and Amazon Route 53 to tie these websites to the preferred domain names.",
 
         icon: {
             id: cloudfront_icon,
@@ -359,26 +343,11 @@ export const AWS_SKILL_NOTES = [
         }
     },
     {
-        name: "Amazon Route 53",
-        link: "https://aws.amazon.com/route53/",
-        color: "#5468ff",
-        desc: "AWS Amplify serves as an effective module for full-stack development. " +
-            "It can easily pair web and mobile apps with other services such as Amazon Cognito. " +
-            "Therefore, both Worlds iVue and Sublo utilizes AWS Amplify.",
-
-        icon: {
-            id: route53_icon,
-            faIcon: false,
-            size: "110"
-        }
-    },
-    {
-        name: "Amazon SES",
+        name: "Email Services",
         link: "https://aws.amazon.com/ses/",
         color: "#C81520",
-        desc: "AWS Amplify serves as an effective module for full-stack development. " +
-            "It can easily pair web and mobile apps with other services such as Amazon Cognito. " +
-            "Therefore, both Worlds iVue and Sublo utilizes AWS Amplify.",
+        desc: "I've utilized multiple email services made by AWS including Amazon Simple Email Service (SES) " +
+            "for making my contact form and Amazon WorkMail for iVue's Company Emails.",
 
         icon: {
             id: ses_icon,
@@ -386,6 +355,19 @@ export const AWS_SKILL_NOTES = [
             size: "110"
         }
     },
+    {
+        name: "Serverless APIs",
+        link: "https://aws.amazon.com/api-gateway/",
+        color: "#D5296A",
+        desc: "With all these services, I utilize AWS Lambda and Amazon API Gateway to implement some backend functionality " +
+            "into my projects, such as for the contact forms I have made.",
+
+        icon: {
+            id: api_gateway_icon,
+            faIcon: false,
+            size: "110"
+        }
+    }
 ];
 
 export const MODULES_SKILL_NOTES = [
