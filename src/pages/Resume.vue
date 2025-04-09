@@ -1,18 +1,27 @@
 <template>
 <NavigationMain />
 <div id="resume-container" @click="closeNavBarDropdown()">
-    <iframe :src="resume" height="100%" width="100%"></iframe>
+    <iframe :src="VIEWER_URL" height="100%" width="100%"></iframe>
+</div>
+
+<div @click="downloadResume()" :class="WIDGET_CLASSES" title="Download My Resume">
+    <client-only> <font-awesome-icon icon="fa-download" class="home-nav-barsIcon" /> </client-only>
+</div>
+<div @click="reloadPage()" :class="WIDGET_CLASSES" class="reload" title="Reload Page">
+    <client-only> <font-awesome-icon icon="fa-rotate-right" class="home-nav-barsIcon" /> </client-only>
 </div>
 </template>
 
 <script setup>
 import NavigationMain from "../components/NavigationMain.vue";
-import resume from "/Mohit_Jain_Resume.pdf";
-import { getMeta } from "../stores/GetMeta.js";
-
-import { initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
+import { downloadResume, initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
 import { onMounted, onBeforeUnmount, nextTick } from "vue";
+
+import { getMeta } from "../stores/GetMeta.js";
 import { useHead } from "@unhead/vue";
+
+const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent("https://www.mohit-jain.com/Mohit_Jain_Resume.pdf")}&embedded=true`;
+const WIDGET_CLASSES = ['home-nav', 'resume-widget', 'animate__animated', 'animate__fadeInBottomRight'];
 
 onMounted(() => {
     initWebData();
@@ -31,6 +40,13 @@ onBeforeUnmount(() => {
  */
 function hideVerticalOverflow() {
     document.body.style.overflowY = "hidden";
+}
+
+/**
+ * This function reloads the website.
+ */
+function reloadPage() {
+    window.location.reload();
 }
 
 useHead(getMeta("Mohit Jain | My Resume", "resume",

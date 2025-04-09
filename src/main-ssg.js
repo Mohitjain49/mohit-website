@@ -45,6 +45,8 @@ library.add(
     FaIcons.faStar,
     FaIcons.faQrcode,
     FaIcons.faGlobe,
+    FaIcons.faDownload,
+    FaIcons.faRotateRight,
 
     FaBrands.faReact,
     FaBrands.faJs,

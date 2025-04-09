@@ -533,7 +533,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     border: 2px solid var(--website-text);
     border-radius: 20px;
     background-color: var(--webpage-static-background);
-    z-index: 5;
+    z-index: 100;
     box-shadow: 0px 0px 10px 0px black;
     text-align: center;
     display: flex;

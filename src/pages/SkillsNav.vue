@@ -7,8 +7,9 @@
 <div id="skills-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
     <client-only>
         <div class="skills-body">
+            <div>H</div>
             <div id="vuejs" class="skills-category">
-                <div class="skills-category-header vue" v-observe-visibility="setCardTransition">
+                <div class="skills-category-header vue" v-observe-visibility="setTitleTransition">
                     <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
                     <span> ue.js </span>
                 </div>
@@ -29,7 +30,7 @@
             </div>
 
             <div id="frontend" class="skills-category">
-                <div class="skills-category-header frontend" v-observe-visibility="setCardTransition">
+                <div class="skills-category-header frontend" v-observe-visibility="setTitleTransition">
                     <font-awesome-icon icon="fa-brands fa-js" />
                     <span> Frontend </span>
                 </div>
@@ -50,7 +51,7 @@
             </div>
 
             <div id="aws" class="skills-category">
-                <div class="skills-category-header aws" v-observe-visibility="setCardTransition">
+                <div class="skills-category-header aws" v-observe-visibility="setTitleTransition">
                     <img :src="aws_icon" draggable="false" />
                     <span> AWS </span>
                 </div>
@@ -71,7 +72,7 @@
             </div>
 
             <div id="modules" class="skills-category">
-                <div class="skills-category-header modules" v-observe-visibility="setCardTransition">
+                <div class="skills-category-header modules" v-observe-visibility="setTitleTransition">
                     <font-awesome-icon icon="fa-brands fa-node-js" />
                     <span> Modules </span>
                 </div>
@@ -92,7 +93,7 @@
             </div>
 
             <div id="languages" class="skills-category">
-                <div class="skills-category-header languages" v-observe-visibility="setCardTransition">
+                <div class="skills-category-header languages" v-observe-visibility="setTitleTransition">
                     <font-awesome-icon icon="fa-laptop-code" />
                     <span> Languages </span>
                 </div>
@@ -113,7 +114,7 @@
             </div>
 
             <div id="icons" class="skills-category">
-                <div class="skills-category-header icons" v-observe-visibility="setCardTransition">
+                <div class="skills-category-header icons" v-observe-visibility="setTitleTransition">
                     <font-awesome-icon icon="fa-brands fa-font-awesome" />
                     <span> Icons </span>
                 </div>
@@ -189,11 +190,18 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
  * This adds a transition to a card/widget as visitors scroll to it.
  */
 function setCardTransition(isVisible, entry) {
-    if(isVisible) {
-        entry.target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__rotateIn" : "animate__fadeIn"));
-    } else {
-        entry.target.classList.remove("animate__animated", "animate__rotateIn", "animate__fadeIn");
-    }
+    if(!isVisible) { return; }
+    entry.target.classList.add("animate__animated", "animate__zoomIn");
+    setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__zoomIn"); }, 1000);
+}
+
+/**
+ * This adds a transition to a title as visitors scroll to it.
+ */
+ function setTitleTransition(isVisible, entry) {
+    if(!isVisible) { return; }
+    entry.target.classList.add("animate__animated", "animate__flipInX");
+    setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__flipInX"); }, 1000);
 }
 </script>
 

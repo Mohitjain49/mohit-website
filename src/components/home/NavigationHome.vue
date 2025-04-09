@@ -13,7 +13,7 @@
     </template>
 </div>
 
-<RouterLink to="qrcode" :class="getQRCodeClasses()" title="QR Codes for My Website">
+<RouterLink to="/qrcode" :class="getQRCodeClasses()" title="QR Codes for My Website">
     <client-only>
         <font-awesome-icon icon="fa-qrcode" class="home-nav-barsIcon" :beat="iconBeating" />
     </client-only>
@@ -153,9 +153,31 @@ function getCircleOptClasses(specialClass = '') {
     color: var(--blue-zero);
 }
 
+.resume-widget {
+    width: 45px;
+    height: 45px;
+}
+.resume-widget.reload {
+    top: 110px;
+}
+.resume-widget .home-nav-barsIcon {
+    font-size: 22px !important;
+}
+
 @media (max-width: 825px) {
     .qrcode-nav {
         display: none;
+    }
+    .resume-widget {
+        width: 32px;
+        height: 32px;
+    }
+
+    .resume-widget.reload {
+        top: 97px;
+    }
+    .resume-widget .home-nav-barsIcon {
+        font-size: 17px !important;
     }
 }
 @media (max-width: 360px) {
