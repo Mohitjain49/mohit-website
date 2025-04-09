@@ -15,76 +15,77 @@ function scrollToTop(event, navRoute = "/") {
     webData.addFlashAnimation(event);
 }
 
+const HOME_TITLE = "Home Page";
+const SKILLS_TITLE = "My Skills";
+const EXP_TITLE = "My Experience";
+const GLOBE_TITLE = "My Globe";
+
 const CONTACT_TITLE = "Contact Me!";
-const ROUTE_MENU_TITLE = "Navigation Menu";
 const RESUME_TITLE = "See My Resume!";
-const QR_CODE_TITLE = "QR Codes for My Website";
 </script>
 
 <template>
 <div class="web-navBar">
-    <div class="web-navBar-links-side">
-        <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE"
-            @click="(event) => { scrollToTop(event, '/contact') }">
+    <template v-if="webData.pageView == 0">
+        <div class="web-navBar-links-side">
+            <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE"
+                @click="(event) => { scrollToTop(event, '/contact') }">
 
-            <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
-            <span>Contact Me!</span>
-        </RouterLink>
-    </div>
+                <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
+                <span>Contact Me!</span>
+            </RouterLink>
+        </div>
 
-    <div v-if="webData.pageView == 0" class="web-navBar-links-section">
-        <RouterLink class="web-navBar-opt" to="/" @click="(event) => { scrollToTop(event, '/') }"> Home </RouterLink>
-        <RouterLink class="web-navBar-opt skills" to="/skills/" @click="(event) => { scrollToTop(event, '/skills') }"> Skills </RouterLink>
-        <RouterLink class="web-navBar-opt" to="/experience/" @click="(event) => { scrollToTop(event, '/experience') }"> Experience </RouterLink>
-        <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
-    </div>
+        <div class="web-navBar-links-section">
+            <RouterLink class="web-navBar-opt" to="/" @click="(event) => { scrollToTop(event, '/') }"> Home </RouterLink>
+            <RouterLink class="web-navBar-opt skills" to="/skills/" @click="(event) => { scrollToTop(event, '/skills') }"> Skills </RouterLink>
+            <RouterLink class="web-navBar-opt" to="/experience/" @click="(event) => { scrollToTop(event, '/experience') }"> Experience </RouterLink>
+            <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
+        </div>
 
-    <div class="web-navBar-links-side" >
-        <template v-if="webData.pageView == 0">
+        <div class="web-navBar-links-side" >
             <RouterLink class="web-navBar-largeSide" to="/resume" :title="RESUME_TITLE"
                 @click="(event) => { scrollToTop(event, '/resume') }">
 
                 <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
                 <span>My Resume</span>
             </RouterLink>
-        </template>
+        </div>
+    </template>
 
-        <template v-if="webData.pageView != 0">
-            <client-only>
-                <RouterLink class="web-navBar-menuIcon" to="/resume" :title="RESUME_TITLE"
-                    @click="(event) => { scrollToTop(event, '/resume') }">
+    <div class="web-navBar-mobile" v-if="webData.pageView != 0">
+        <RouterLink class="web-navBar-menuIcon inverse" to="/contact" :title="CONTACT_TITLE"
+            @click="(event) => { scrollToTop(event, '/contact') }">
 
-                    <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
-                </RouterLink>
-                <RouterLink class="web-navBar-menuIcon" to="/qrcode" :title="QR_CODE_TITLE"
-                    @click="(event) => { scrollToTop(event, '/qrcode') }">
+            <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
+        </RouterLink>
+        <RouterLink class="web-navBar-menuIcon skills" to="/skills/" :title="SKILLS_TITLE"
+            @click="(event) => { scrollToTop(event, '/skills') }">
 
-                    <client-only> <font-awesome-icon icon="fa-qrcode" /> </client-only>
-                </RouterLink>
-                <div class="web-navBar-menuIcon" @click="webData.setNavBarDropdown(0)" :title="ROUTE_MENU_TITLE">
-                    <client-only> <font-awesome-icon icon="fa-bars" /> </client-only>
-                </div>
-            </client-only>
-        </template>
+            <client-only> <font-awesome-icon icon="fa-code" /> </client-only>
+        </RouterLink>
+
+        <RouterLink class="web-navBar-menuIcon" to="/" :title="HOME_TITLE"
+            @click="(event) => { scrollToTop(event, '/') }">
+
+            <client-only> <font-awesome-icon icon="fa-house" /> </client-only>
+        </RouterLink>
+        <RouterLink class="web-navBar-menuIcon" to="/experience/" :title="EXP_TITLE"
+            @click="(event) => { scrollToTop(event, '/experience') }">
+
+            <client-only> <font-awesome-icon icon="fa-file-code" /> </client-only>
+        </RouterLink>
+
+        <a :href="PERSONAL_GLOBE_LINK" class="web-navBar-menuIcon globe" :title="GLOBE_TITLE">
+            <client-only> <font-awesome-icon icon="fa-globe" /> </client-only>
+        </a>
+        <RouterLink class="web-navBar-menuIcon inverse" to="/resume" :title="RESUME_TITLE"
+            @click="(event) => { scrollToTop(event, '/resume') }">
+
+            <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
+        </RouterLink>
     </div>
 </div>
-
-<Transition name="navBarDDTransition">
-    <div class="navBar-dropdown" v-if="webData.navBarDropdown == 0">
-        <RouterLink class="navBar-dropdown-opt" to="/" @click="(event) => { scrollToTop(event, '/') }">
-            <span> Home </span>
-        </RouterLink>
-        <RouterLink class="navBar-dropdown-opt skills" to="/skills/" @click="(event) => { scrollToTop(event, '/skills') }">
-            <span> Skills </span>
-        </RouterLink>
-        <RouterLink class="navBar-dropdown-opt" to="/experience/" @click="(event) => { scrollToTop(event, '/experience') }">
-            <span> Experience </span>
-        </RouterLink>
-        <a :href="PERSONAL_GLOBE_LINK" class="navBar-dropdown-opt globe">
-            <span> My Globe </span>
-        </a>
-    </div>
-</Transition>
 </template>
 
 <style scoped>
@@ -163,6 +164,14 @@ const QR_CODE_TITLE = "QR Codes for My Website";
     margin-left: 5px;
 }
 
+.web-navBar-mobile {
+    width: 350px;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
 .web-navBar-menuIcon {
     cursor: pointer;
     width: 25px;
@@ -199,88 +208,44 @@ const QR_CODE_TITLE = "QR Codes for My Website";
     border-color: var(--globe-green-opaque);
 }
 
+.web-navBar-menuIcon.inverse {
+    color: var(--website-dark-text);
+    border-color: var(--website-dark-text);
+    background-color: rgba(255, 255, 255, 0.15);
+}
+.web-navBar-menuIcon.inverse:hover {
+    background-color: black;
+    color: var(--website-light-text);
+    border-color: var(--website-light-text);
+}
+
+.web-navBar-menuIcon.skills {
+    color: var(--blue-three);
+    border-color: var(--blue-three);
+}
+.web-navBar-menuIcon.skills:hover {
+    background-color: var(--blue-zero);
+    color: var(--blue-cobalt);
+    border-color: var(--blue-cobalt);
+}
+
+.web-navBar-menuIcon.globe {
+    color: var(--globe-green-opaque);
+    border-color: var(--globe-green-opaque);
+}
+.web-navBar-menuIcon.globe:hover {
+    background-color: var(--dark-background);
+    color: var(--globe-green-opaque);
+    border-color: var(--globe-green-opaque);
+}
+
 @media (max-width: 825px) {
-    .web-navBar-links-side {
-        width: fit-content;
-        min-width: 150px;
-        justify-content: space-evenly;
-    }
-    .web-navBar-largeSide {
-        margin: 0px 5px;
-        margin-top: 1px;
+    .web-navBar {
+        justify-content: center;
     }
 }
 @media (max-width: 360px) {
     .web-navBar {
-        position: absolute;
-    }
-}
-
-/**
- * These styles are for the route menu.
- */
-
-.navBar-dropdown {
-    position: fixed;
-    right: 0;
-    top: 50px;
-    height: 200px;
-    width: 300px;
-    z-index: 15;
-    overflow: hidden;
-    border-bottom: 1px solid var(--nav-bar-border);
-    border-left: 1px solid var(--nav-bar-border);
-    background: var(--webpage-background);
-}
-
-.navBar-dropdown-opt {
-    cursor: pointer;
-    height: 48px;
-    width: calc(100% - 2px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: var(--thin-empty-border);
-    transition: var(--default-transition);
-    text-align: left;
-    font-size: 17px;
-    font-weight: bold;
-    font-family: 'Lexend', sans-serif;
-    color: var(--website-text);
-}
-.navBar-dropdown-opt:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-    border-color: var(--website-text);
-}
-
-.navBar-dropdown-opt.skills {
-    color: var(--blue-three);
-}
-.navBar-dropdown-opt.skills:hover {
-    border-color: var(--blue-three);
-}
-
-.navBar-dropdown-opt.globe {
-    color: var(--globe-green-opaque);
-}
-.navBar-dropdown-opt.globe:hover {
-    border-color: var(--globe-green-opaque);
-}
-
-.navBarDDTransition-enter-active, .navBarDDTransition-leave-active {
-    transition: height 0.5s, opacity 0.5s;
-}
-.navBarDDTransition-enter-from, .navBarDDTransition-leave-to {
-    opacity: 0;
-    height: 0;
-}
-.navBarDDTransition-enter-to, .navBarDDTransition-leave-from {
-    opacity: 1;
-    height: 200px;
-}
-
-@media (max-width: 360px) {
-    .navBar-dropdown {
         position: absolute;
     }
 }

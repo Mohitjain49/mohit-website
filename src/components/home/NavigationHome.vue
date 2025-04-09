@@ -1,10 +1,10 @@
 <template>
-<div :class="getCircleClasses()" @click="toggleMenuExpanded()" title="Navigate This Page">
+<div :class="getCircleClasses()" @click="!webData.toggleHomeNav()" title="Navigate This Page">
     <client-only>
-        <font-awesome-icon v-if="!menuExpanded" icon="fa-bars" class="home-nav-barsIcon" :beat="iconBeating" />
+        <font-awesome-icon v-if="!webData.homeNavExpanded" icon="fa-bars" class="home-nav-barsIcon" :beat="iconBeating" />
     </client-only>
 
-    <template v-if="menuExpanded">
+    <template v-if="webData.homeNavExpanded">
         <RouterLink to="/#start" @click="goToHomeSection('start')" :class="getCircleOptClasses('start')"> Start </RouterLink>
         <RouterLink to="/#skills" @click="goToHomeSection('skills')" :class="getCircleOptClasses('skills')"> Skills </RouterLink>
         <RouterLink to="/#ivue" @click="goToHomeSection('ivue')" :class="getCircleOptClasses('')"> <img :src="ivue_text" width="50" /> </RouterLink>
@@ -13,7 +13,7 @@
     </template>
 </div>
 
-<RouterLink to="/qrcode" :class="getQRCodeClasses()" title="QR Codes for My Website">
+<RouterLink to="/qrcode" :class="QR_CODE_CLASSES" title="QR Codes for My Website">
     <client-only>
         <font-awesome-icon icon="fa-qrcode" class="home-nav-barsIcon" :beat="iconBeating" />
     </client-only>
@@ -28,7 +28,6 @@ import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
 import { ref, onMounted } from 'vue';
 
 const webData = useWebsiteDataStore();
-const menuExpanded = ref(false);
 const iconBeating = ref(true);
 
 /**
@@ -37,14 +36,6 @@ const iconBeating = ref(true);
 onMounted(() => {
     setTimeout(() => { iconBeating.value = false; }, 5000);
 })
-
-/**
- * This function toggles the status of this menu.
- */
-function toggleMenuExpanded() {
-    menuExpanded.value = !menuExpanded.value;
-    iconBeating.value = false;
-}
 
 /**
  * This scrolls to the section the visitor requested.
@@ -59,17 +50,8 @@ function goToHomeSection(id = "start") {
  */
 function getCircleClasses() {
     return ['home-nav',
-        (menuExpanded.value ? 'home-nav-expanded' : ''),
+        (webData.homeNavExpanded ? 'home-nav-expanded' : ''),
         'animate__animated', 'animate__fadeInBottomRight'
-    ];
-}
-
-/**
- * This function returns the classes for the QR code widget.
- */
-function getQRCodeClasses() {
-    return ['home-nav', 'qrcode-nav',
-        'animate__animated', 'animate__fadeInBottomLeft'
     ];
 }
 
@@ -78,8 +60,10 @@ function getQRCodeClasses() {
  * @param {String} specialClass An extra class that can be added onto the list of classes.
  */
 function getCircleOptClasses(specialClass = '') {
-    return ['home-nav-opt', (menuExpanded.value ? '' : 'hidden'), specialClass];
+    return ['home-nav-opt', (webData.homeNavExpanded ? '' : 'hidden'), specialClass];
 }
+
+const QR_CODE_CLASSES = ['home-nav', 'qrcode-nav', 'animate__animated', 'animate__fadeInBottomLeft'];
 </script>
 
 <style>
@@ -165,14 +149,18 @@ function getCircleOptClasses(specialClass = '') {
 }
 
 @media (max-width: 825px) {
-    .qrcode-nav {
-        display: none;
+    .home-nav {
+        width: 38px;
+        height: 38px;
     }
+    .home-nav-barsIcon {
+        font-size: 21px !important;
+    }
+
     .resume-widget {
         width: 32px;
         height: 32px;
     }
-
     .resume-widget.reload {
         top: 97px;
     }

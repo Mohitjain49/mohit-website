@@ -10,8 +10,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      * If it equals 2, it is on phone mode, or the screen width is at most 600px.
      */
     const pageView = ref(0);
-    const navBarDropdown = ref(-1);
-    const skillsSidebarOpen = ref(false);
+    const homeNavExpanded = ref(false);
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
@@ -33,23 +32,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     function mountWebData() {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        setNavBarDropdown(-1);
-    }
-
-    /**
-     * This sets which Navigation Bar dropdown is open.
-     * @param {Number} newIndex The index of the dropdown.
-     */
-    function setNavBarDropdown(newIndex = -1) {
-        navBarDropdown.value = ((newIndex == navBarDropdown.value) ? -1 : newIndex);
-    }
-
-    /**
-     * This toggles the status of a skills sidebar.
-     */
-    function toggleSkillsSidebar() {
-        skillsSidebarOpen.value = !skillsSidebarOpen.value;
-        document.body.style.overflowY = (skillsSidebarOpen.value ? 'hidden' : '');
     }
 
     /**
@@ -59,6 +41,13 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     function goToPageSection(id = "start") {
         const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
         window.scrollTo({ top: top, left: 0, behavior: "smooth" });
+    }
+
+    /**
+     * The toggles the status of the home navigation menu.
+     */
+    function toggleHomeNav() {
+        homeNavExpanded.value = !homeNavExpanded.value;
     }
 
     /**
@@ -127,13 +116,11 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
             pageView.value = 1;
         } else {
             pageView.value = 0;
-            if(navBarDropdown.value == 0) { setNavBarDropdown(-1); }
         }
     }
 
-    return { navBarDropdown, pageView, skillsSidebarOpen,
-        setEventListeners, removeEventListeners, mountWebData,
-        setNavBarDropdown, toggleSkillsSidebar, goToPageSection,
+    return { pageView, homeNavExpanded, toggleHomeNav,
+        setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation
     }
@@ -152,7 +139,7 @@ export function initWebData() {
  */
 export function closeNavBarDropdown() {
     const webData = useWebsiteDataStore();
-    webData.setNavBarDropdown(-1);
+    // webData.setNavBarDropdown(-1);
 }
 
 /**
