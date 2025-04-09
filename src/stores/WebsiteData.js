@@ -135,14 +135,6 @@ export function initWebData() {
 }
 
 /**
- * This function closes the Navigation Bar's dropdown menu.
- */
-export function closeNavBarDropdown() {
-    const webData = useWebsiteDataStore();
-    // webData.setNavBarDropdown(-1);
-}
-
-/**
  * This function downloads my resume for the visitor to see.
  */
 export function downloadResume() {

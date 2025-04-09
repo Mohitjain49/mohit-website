@@ -1,6 +1,6 @@
 <template>
 <NavigationMain />
-<div id="invalid" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
+<div id="invalid" class="personal-web-body">
     <div class="gradient-text incomplete-title"> {{ message }} </div>
     <div class="incomplete-subtitle"> {{ subtitle }} </div>
     
