@@ -12,7 +12,9 @@
         <SkillsSection />
         <IvueSection />
         <KennesawSection />
+        <ExtrasSection />
     </client-only>
+    
     <WebFooter />
 </div>
 </template>
@@ -33,6 +35,7 @@ import StartSection from '../components/home/StartSection.vue';
 import IvueSection from '../components/home/IvueSection.vue';
 import SkillsSection from '../components/home/SkillsSection.vue';
 import KennesawSection from '../components/home/KennesawSection.vue';
+import ExtrasSection from '../components/home/ExtrasSection.vue';
 
 const webData = useWebsiteDataStore();
 onMounted(() => { webData.mountWebData(); });

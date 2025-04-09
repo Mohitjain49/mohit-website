@@ -15,14 +15,9 @@
     </div>
 
     <div class="copyright-side-container">
-        <RouterLink to="/icons" class="scroll-topBtn center-flex-display" title="My Icons">
-            <client-only>
-                <font-awesome-icon icon="fa-pen-fancy" />
-            </client-only>
-        </RouterLink>
         <div class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
             <client-only>
-                <font-awesome-icon icon="fa-arrow-up" />
+                <font-awesome-icon icon="fa-arrow-up" flip />
             </client-only>
         </div>
     </div>
@@ -87,7 +82,7 @@ function checkHomePage() {
 }
 
 .copyright-side-container {
-    width: 120px;
+    width: 100px;
     height: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -112,6 +107,7 @@ function checkHomePage() {
     transition: var(--default-transition);
     color: black;
     font-size: 20px;
+    margin-left: 40px;
 }
 .scroll-topBtn:hover {
     background-color: var(--blue-three);
@@ -125,16 +121,17 @@ function checkHomePage() {
         font-size: 20px;
     }
     .copyright-side-container {
-        width: 75px;
+        width: 70px;
     }
 
     .personal-text-img {
         height: 18px;
     }
     .scroll-topBtn {
-        width: 30px;
-        height: 30px;
-        font-size: 16px;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        margin-left: 20px;
     }
 }
 </style>

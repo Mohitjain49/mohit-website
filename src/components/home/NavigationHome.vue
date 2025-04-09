@@ -9,6 +9,7 @@
         <RouterLink to="/#skills" @click="goToHomeSection('skills')" :class="getCircleOptClasses('skills')"> Skills </RouterLink>
         <RouterLink to="/#ivue" @click="goToHomeSection('ivue')" :class="getCircleOptClasses('')"> <img :src="ivue_text" width="50" /> </RouterLink>
         <RouterLink to="/#ksu" @click="goToHomeSection('ksu')" :class="getCircleOptClasses('')"> <img :src="ksu_banner" width="130" /> </RouterLink>
+        <RouterLink to="/#extras" @click="goToHomeSection('extras')" :class="getCircleOptClasses('')"> Extras </RouterLink>
         <div class="close" :class="getCircleOptClasses()"> Close Menu </div>
     </template>
 </div>
