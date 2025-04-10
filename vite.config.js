@@ -14,6 +14,10 @@ export default defineConfig({
         VitePWA({
             registerType: "autoUpdate",
             devOptions: { enabled: true },
+            workbox: {
+                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}']
+            },
+
             manifest: {
                 name: 'Mohit Jain\'s Portfolio',
                 short_name: 'Mohit Jain',
