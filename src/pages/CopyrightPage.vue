@@ -1,6 +1,6 @@
 <template>
 <NavigationMain />
-<div class="personal-web-body" @click="closeNavBarDropdown()">
+<div class="personal-web-body">
     <div class="copyright-body">
         <div class="copyright-body-header">
             <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
@@ -25,7 +25,7 @@ import NavigationMain from "../components/NavigationMain.vue";
 import WebFooter from "@/components/WebFooter.vue";
 import { getMeta } from "../stores/GetMeta.js";
 
-import { initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
+import { initWebData } from "../stores/WebsiteData.js";
 import { onMounted } from "vue";
 import { useHead } from "@unhead/vue";
 

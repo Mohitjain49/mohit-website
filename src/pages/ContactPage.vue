@@ -4,7 +4,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="contact-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
+<div id="contact-page" class="personal-web-body">
     <div class="contact-me-box web-service">
         <div class="contact-box-title-container center-flex-display">
             <div class="gradient-text contact-box-title">Contact Me</div>

@@ -4,7 +4,7 @@
     <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="skills-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
+<div id="skills-page" class="personal-web-body">
     <client-only>
         <div class="skills-body">
             <div>H</div>

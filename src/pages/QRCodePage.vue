@@ -4,7 +4,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="qr-code-page" class="personal-web-body" @click="closeNavBarDropdown()">
+<div id="qr-code-page" class="personal-web-body">
     <div class="qr-page-grid">
         <div class="qr-element-container">
             <div class="qr-element" v-html="renderSVG(PERSONAL_WEBSITE_LINK)"></div>
@@ -26,7 +26,7 @@
 <script setup>
 import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
-import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
+import { initWebData } from '../stores/WebsiteData.js';
 
 import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
 import { PERSONAL_WEBSITE_LINK, PERSONAL_GLOBE_LINK } from '../stores/Objects.js';

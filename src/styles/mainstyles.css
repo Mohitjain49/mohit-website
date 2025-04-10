@@ -20,6 +20,7 @@
 
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
+    --website-dark-text: rgb(85, 61, 1);
     --website-gradient-text: linear-gradient(to left, rgb(126, 90, 0) 0%, rgb(198, 147, 19) 50%, rgb(126, 90, 0) 100%);
 
     --nav-bar-background: linear-gradient(to bottom, rgb(250, 134, 38) 0%, rgb(248, 206, 171) 100%);

@@ -4,7 +4,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="exp-page" class="personal-web-body" @click="webData.setNavBarDropdown(-1)">
+<div id="exp-page" class="personal-web-body">
     <div class="main-nav-page-container">
         <div class="nav-page-title">My Experience</div>
         <div class="main-nav-page">

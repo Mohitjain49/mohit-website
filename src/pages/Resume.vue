@@ -1,6 +1,6 @@
 <template>
 <NavigationMain />
-<div id="resume-container" @click="closeNavBarDropdown()">
+<div id="resume-container">
     <iframe :src="VIEWER_URL" height="100%" width="100%"></iframe>
 </div>
 
@@ -14,7 +14,7 @@
 
 <script setup>
 import NavigationMain from "../components/NavigationMain.vue";
-import { downloadResume, initWebData, closeNavBarDropdown } from "../stores/WebsiteData.js";
+import { downloadResume, initWebData } from "../stores/WebsiteData.js";
 import { onMounted, onBeforeUnmount, nextTick } from "vue";
 
 import { getMeta } from "../stores/GetMeta.js";

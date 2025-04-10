@@ -34,7 +34,9 @@ export const personalRoutes = [
     { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
+
     { path: "/ksu", alias: ["/ksu-edu", "/kennesaw-state"], redirect: { path: "/", hash: "#ksu" } },
+    { path: "/extras", alias: ["/extra"], redirect: { path: "/", hash: "#extras" } },
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },

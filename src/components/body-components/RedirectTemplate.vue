@@ -1,13 +1,13 @@
 <template>
 <NavigationMain />
-<div class="personal-web-body" @click="closeNavBarDropdown()">
+<div class="personal-web-body">
     <div class="redirect-statement"> {{ REDIRECT_TEXT }} </div>
 </div>
 </template>
 
 <script setup>
 import NavigationMain from '../NavigationMain.vue';
-import { initWebData, closeNavBarDropdown } from '@/stores/WebsiteData.js';
+import { initWebData } from '@/stores/WebsiteData.js';
 import { onMounted } from 'vue';
 
 const props = defineProps({

@@ -1,6 +1,6 @@
 <template>
 <NavigationMain />
-<div id="icons-body" class="personal-web-body" @click="closeNavBarDropdown()">
+<div id="icons-body" class="personal-web-body">
     <div id="start" class="icon-page-padding"></div>
     <div class="icon-background blue-zero">
         <div class="icon-start-header"> My Icons </div>
@@ -42,7 +42,7 @@ import NavigationMain from '../components/NavigationMain.vue';
 import WebFooter from '../components/WebFooter.vue';
 import { getMeta } from '../stores/GetMeta.js';
 
-import { initWebData, closeNavBarDropdown } from '../stores/WebsiteData.js';
+import { initWebData } from '../stores/WebsiteData.js';
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
