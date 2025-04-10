@@ -142,11 +142,15 @@ const QR_CODE_CLASSES = ['home-nav', 'qrcode-nav', 'animate__animated', 'animate
     width: 45px;
     height: 45px;
 }
+.resume-widget .home-nav-barsIcon {
+    font-size: 22px !important;
+}
+
 .resume-widget.reload {
     top: 110px;
 }
-.resume-widget .home-nav-barsIcon {
-    font-size: 22px !important;
+.resume-widget.nav {
+    top: 160px;
 }
 
 @media (max-width: 825px) {
@@ -162,11 +166,15 @@ const QR_CODE_CLASSES = ['home-nav', 'qrcode-nav', 'animate__animated', 'animate
         width: 32px;
         height: 32px;
     }
+    .resume-widget .home-nav-barsIcon {
+        font-size: 17px !important;
+    }
+
     .resume-widget.reload {
         top: 97px;
     }
-    .resume-widget .home-nav-barsIcon {
-        font-size: 17px !important;
+    .resume-widget.nav {
+        top: 133px;
     }
 }
 @media (max-width: 360px) {

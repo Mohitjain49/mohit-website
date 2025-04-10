@@ -32,8 +32,7 @@ library.add(
     FaIcons.faLaptopCode,
     FaIcons.faFileCode,
     FaIcons.faCode,
-    FaIcons.faFileArrowDown,
-    FaIcons.faFileArrowUp,
+    FaIcons.faFilePdf,
     FaIcons.faCopy,
     FaIcons.faEnvelope,
     FaIcons.faPhone,
@@ -62,7 +61,8 @@ library.add(
     FaBrands.faJava,
     FaBrands.faGolang,
     FaBrands.faGitlab,
-    FaBrands.faPython
+    FaBrands.faPython,
+    FaBrands.faGoogleDrive
 );
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },

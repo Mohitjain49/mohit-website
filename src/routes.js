@@ -1,9 +1,11 @@
 import PersonalMain from "./pages/PersonalMain.vue";
 import ContactPage from "./pages/ContactPage.vue";
-import Resume from "./pages/Resume.vue";
 import MyIcon from "./pages/MyIcon.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
+
+import Resume from "./pages/Resume.vue";
+import ResumeNative from "./pages/ResumeNative.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
@@ -26,11 +28,18 @@ export const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/skills", name: "Main Skills Page", component: SkillsNav },
-
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
-    { path: "/resume", name: "My Resume", component: Resume },
-    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
 
+    {
+        path: "/resume",
+        children: [
+            { path: "", name: "My Resume", component: Resume },
+            { path: "pdf", name: "My Resume (Native)", component: ResumeNative },
+            { path: "google", alias: ["googledoc", "google-doc"], redirect: "/resume" },
+        ]
+    },
+
+    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
