@@ -52,6 +52,6 @@ function reloadPage() {
  * This function checks if the visitor is using the Google Doc Viewer or the Built-In PDF Viewer.
  */
 function checkRoute() {
-    return (route.path === "/resume");
+    return (route.path === "/resume" || route.path === "/resume/");
 }
 </script>

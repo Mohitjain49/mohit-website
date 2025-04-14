@@ -17,7 +17,7 @@
     <div class="copyright-side-container">
         <div class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
             <client-only>
-                <font-awesome-icon icon="fa-arrow-up" flip />
+                <font-awesome-icon icon="fa-arrow-up" :flip="!checkCopyrightPage()" />
             </client-only>
         </div>
     </div>
@@ -51,6 +51,15 @@ function goToCopyrightPage() {
  */
 function checkHomePage() {
     if(router.currentRoute.value.path === "/") { scrollToTop(); }
+}
+
+/**
+ * This function checks whether the user is on the copyright page.
+ * If so, an animation will be disabled.
+ */
+ function checkCopyrightPage() {
+    const path = router.currentRoute.value.path;
+    return (path === "/copyright" || path === "/copyright.")
 }
 </script>
 

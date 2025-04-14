@@ -184,7 +184,7 @@ const RESUME_TITLE = "See My Resume!";
     border-radius: 10px;
     border: 2px dashed var(--website-text);
     border-style: dotted;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(255, 255, 255, 0.125);
     color: var(--website-text);
     font-size: 22px;
     transition: var(--default-transition);
@@ -211,7 +211,7 @@ const RESUME_TITLE = "See My Resume!";
 .web-navBar-menuIcon.inverse {
     color: var(--website-dark-text);
     border-color: var(--website-dark-text);
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 .web-navBar-menuIcon.inverse:hover {
     background-color: black;
@@ -222,6 +222,7 @@ const RESUME_TITLE = "See My Resume!";
 .web-navBar-menuIcon.skills {
     color: var(--blue-three);
     border-color: var(--blue-three);
+    background-color: rgba(255, 255, 255, 0.25);
 }
 .web-navBar-menuIcon.skills:hover {
     background-color: var(--blue-zero);
@@ -232,6 +233,7 @@ const RESUME_TITLE = "See My Resume!";
 .web-navBar-menuIcon.globe {
     color: var(--globe-green-opaque);
     border-color: var(--globe-green-opaque);
+    background-color: rgba(255, 255, 255, 0.25);
 }
 .web-navBar-menuIcon.globe:hover {
     background-color: var(--dark-background);
