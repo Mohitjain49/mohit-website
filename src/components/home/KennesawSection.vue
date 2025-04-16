@@ -21,7 +21,6 @@
 
 <script setup>
 import ksu_banner from "@/assets/ksu/Kennesaw_State_Banner.svg";
-import { KSU_LINK } from "@/stores/Objects.js";
 const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds.
 
 /**
@@ -33,8 +32,8 @@ function setInitTranstions(isVisible) {
     var rightAnimation = "animate__lightSpeedInRight";
 
     if(window.innerWidth <= 450) {
-        leftAnimation = "animate__fadeIn";
-        rightAnimation = "animate__fadeIn";
+        leftAnimation = "animate__flipInX";
+        rightAnimation = "animate__flipInX";
     }
 
     document.getElementsByClassName("ksu-section-chunk").item(0).classList.add("animate__animated", leftAnimation);
@@ -42,9 +41,9 @@ function setInitTranstions(isVisible) {
     document.getElementsByClassName("ksu-section-chunk").item(2).classList.add("animate__animated", leftAnimation);
 
     setTimeout(() => {
-        document.getElementsByClassName("ksu-section-chunk").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementsByClassName("ksu-section-chunk").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementsByClassName("ksu-section-chunk").item(2).classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementsByClassName("ksu-section-chunk").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
+        document.getElementsByClassName("ksu-section-chunk").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
+        document.getElementsByClassName("ksu-section-chunk").item(2).classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
     }, ANIMATE_DURATION)
 }
 

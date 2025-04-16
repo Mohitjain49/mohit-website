@@ -4,8 +4,6 @@
 
 <script setup>
 import { useHead } from '@unhead/vue';
-import { WORLDS_IVUE_LINK } from '@/stores/Objects.js';
-import { getMetaWithLink } from '@/stores/GetMeta';
 
 useHead(getMetaWithLink("Worlds iVue", WORLDS_IVUE_LINK,
     "This link will redirect you to Worlds iVue."

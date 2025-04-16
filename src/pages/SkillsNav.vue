@@ -149,24 +149,9 @@
 <script setup>
 import "@/styles/navpage.css";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
-import aws_icon from "@/assets/aws/AWS_Icon.png"
+import aws_icon from "@/assets/aws/AWS_Icon.png";
 
-import { VUEJS_SKILL_NOTES,
-    FRONTEND_SKILL_NOTES,
-    AWS_SKILL_NOTES,
-    MODULES_SKILL_NOTES,
-    LANGUAGES_SKILL_NOTES,
-    ICONS_SKILL_NOTES
-} from "@/stores/Objects.js";
-
-import { BLUE_BACKGROUND } from "@/stores/ParticlesConfig.js";
-import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
-import { onMounted, nextTick } from 'vue';
-
-import { getMeta } from "@/stores/GetMeta.js";
 import { useHead } from '@unhead/vue';
-import { useRoute } from "vue-router";
-
 const webData = useWebsiteDataStore();
 const route = useRoute();
 

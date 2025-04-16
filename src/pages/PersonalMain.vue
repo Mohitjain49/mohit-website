@@ -20,14 +20,9 @@
 </template>
 
 <script setup>
-import { HOME_BACKGROUND } from '../stores/ParticlesConfig.js';
-import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-
-import { getMeta } from '../stores/GetMeta.js';
-import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
-
 const webData = useWebsiteDataStore();
+
 onMounted(() => { webData.mountWebData(); });
 useHead(getMeta());
 

@@ -38,10 +38,6 @@ import expo_icon from "@/assets/sublo/Expo_Icon.svg";
 import cognito_icon from "@/assets/aws/AWS_Cognito_Icon.svg";
 import amplify_icon from "@/assets/aws/AWS_Amplify_Icon.svg";
 
-import { setPulseLoopAnimation } from "@/stores/WebsiteData.js";
-import { SUBLO_WEBSITE_LINK } from '@/stores/Objects.js';
-import { onMounted } from "vue";
-
 onMounted(() => {
     const navCard = document.getElementById("sublo-nav-newCard").classList;
     navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");

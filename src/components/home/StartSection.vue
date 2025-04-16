@@ -52,8 +52,6 @@
 </template>
 
 <script setup>
-import { SOCIALS, MAIN_IVUE_WEBSITE_LINK, WORLDS_IVUE_LINK, PERSONAL_GLOBE_LINK } from "@/stores/Objects.js";
-import { useWebsiteDataStore } from "@/stores/WebsiteData.js";
 const webData = useWebsiteDataStore();
 
 /**

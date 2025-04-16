@@ -25,11 +25,6 @@
 
 <script setup>
 import "@/styles/navpage.css";
-import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
-import { getMeta } from "@/stores/GetMeta.js";
-
-import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
-import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
 const webData = useWebsiteDataStore();

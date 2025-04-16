@@ -2,8 +2,10 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
 
 import vue from "@vitejs/plugin-vue";
-import Components from "unplugin-vue-components/vite";
 import { VitePWA } from 'vite-plugin-pwa';
+
+import Components from "unplugin-vue-components/vite";
+import AutoImport from 'unplugin-auto-import/vite';
 
 export default defineConfig({
     base: "/",
@@ -13,6 +15,12 @@ export default defineConfig({
     plugins: [
         vue(),
         Components({ dts: true }),
+        AutoImport({
+            imports: ['vue', 'vue-router', 'pinia'],
+            dirs: ['./src/stores'],
+            dts: true,
+            vueTemplate: true
+        }),
         VitePWA({
             registerType: "autoUpdate",
             devOptions: { enabled: true },

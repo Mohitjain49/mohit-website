@@ -1,8 +1,4 @@
 <script setup>
-import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
-import { useWebsiteDataStore } from "../stores/WebsiteData.js";
-import { useRoute } from "vue-router";
-
 const webData = useWebsiteDataStore();
 const route = useRoute();
 

@@ -1,6 +1,5 @@
 import doc_img from "/static-icons/Personal_Icon_Expanded_Transparent.png";
 import og_img from "/static-icons/Personal_Icon_Expanded.png";
-import { PERSONAL_WEBSITE_LINK } from "./Objects.js";
 
 const WEBSITE_TITLE = "Mohit Jain | My Portfolio";
 const WEBSITE_DESC = "My personal website extensively displays my skills as a software developer " +

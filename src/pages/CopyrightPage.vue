@@ -21,15 +21,10 @@
 </template>
 
 <script setup>
-import { initWebData } from "../stores/WebsiteData.js";
-import { getMeta } from "../stores/GetMeta.js";
-
-import { onMounted } from "vue";
 import { useHead } from "@unhead/vue";
-
 const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
-onMounted(() => { initWebData(); });
 
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website."
 ));

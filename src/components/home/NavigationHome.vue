@@ -25,9 +25,6 @@
 import ivue_text from "@/assets/ivue/iVue_Black_Text_Cropped.png";
 import ksu_banner from "@/assets/ksu/Kennesaw_State_Banner.svg";
 
-import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
-import { ref, onMounted } from 'vue';
-
 const webData = useWebsiteDataStore();
 const iconBeating = ref(true);
 

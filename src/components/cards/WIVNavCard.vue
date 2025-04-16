@@ -35,11 +35,7 @@ import wiv_page from "@/assets/ivue/Worlds_iVue_Main_App.png";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
-import aws_icon from "@/assets/aws/AWS_Icon.png"; 
-
-import { setPulseLoopAnimation } from "@/stores/WebsiteData.js";
-import { WORLDS_IVUE_LINK } from '@/stores/Objects.js';
-import { onMounted } from "vue";
+import aws_icon from "@/assets/aws/AWS_Icon.png";
 
 onMounted(() => {
     const navCard = document.getElementById("wiv-nav-newCard").classList;

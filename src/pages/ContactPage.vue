@@ -115,16 +115,7 @@
 </template>
 
 <script setup>
-import { SOCIALS } from '../stores/Objects.js';
-import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
-
-import axios from 'axios';
-import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-
-import { getMeta } from '../stores/GetMeta.js';
 import { useHead } from '@unhead/vue';
-import { ref, onMounted } from 'vue';
-
 const webData = useWebsiteDataStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 

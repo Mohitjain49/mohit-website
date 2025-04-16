@@ -38,15 +38,10 @@
 </template>
 
 <script setup>
-import { initWebData } from '../stores/WebsiteData.js';
-import { getMeta } from '../stores/GetMeta.js';
-
-import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
-
-onMounted(() => { initWebData(); });
 const ICON_IMPORT_START = "/static-icons/Personal_Icon";
 
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Icons", "icons",
     "I created my icons by using gradients and the Google Lexend Font. You can view them on this page."
 ));

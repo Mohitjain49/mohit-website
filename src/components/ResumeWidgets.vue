@@ -15,10 +15,6 @@
 </template>
 
 <script setup>
-import { downloadResume, initWebData } from "../stores/WebsiteData.js";
-import { onMounted, onBeforeUnmount, nextTick } from "vue";
-import { useRoute } from "vue-router";
-
 const route = useRoute();
 const WIDGET_CLASSES = ['home-nav', 'resume-widget', 'animate__animated', 'animate__fadeInBottomRight'];
 

@@ -4,7 +4,7 @@
         <img :src="ivue_white_text" draggable="false" />
     </div>
     <div class="ivue-section-tabs-container">
-        <a :href="Links.WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
+        <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
             @mouseenter="onIvueTabHover('wiv-tab')"
             @mouseleave="onIvueTabLeave('wiv-tab')">
 
@@ -14,7 +14,7 @@
                 It's Dev Stack, amongst other modules, contains Vue.js, Cesium, MAVLink, and Amazon Web Services.
             </p>
         </a>
-        <a :href="Links.MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab"
+        <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab"
             @mouseenter="onIvueTabHover('main-tab')"
             @mouseleave="onIvueTabLeave('main-tab')">
 
@@ -25,7 +25,7 @@
                 I also oversee iVue's usage of Amazon Web Services.
             </p>
         </a>
-        <a :href="Links.IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab"
+        <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab"
             @mouseenter="onIvueTabHover('media-tab')"
             @mouseleave="onIvueTabLeave('media-tab')">
 
@@ -36,7 +36,7 @@
                 the Worlds iVue Development Team is currently creating an app for iVue Media on Worlds iVue.
             </p>
         </a>
-        <a :href="Links.IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab"
+        <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab"
             @mouseenter="onIvueTabHover('robotics-tab')"
             @mouseleave="onIvueTabLeave('robotics-tab')">
 
@@ -52,7 +52,6 @@
 </template>
 
 <script setup>
-import * as Links from "@/stores/Objects.js";
 import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
 import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
@@ -68,8 +67,8 @@ function setInitTranstions(isVisible) {
     var rightAnimation = "animate__lightSpeedInRight";
 
     if(window.innerWidth <= 450) {
-        leftAnimation = "animate__fadeIn";
-        rightAnimation = "animate__fadeIn";
+        leftAnimation = "animate__flipInX";
+        rightAnimation = "animate__flipInX";
     }
 
     document.getElementById('ivue-section-title').classList.add("animate__animated", leftAnimation);
@@ -79,11 +78,11 @@ function setInitTranstions(isVisible) {
     document.getElementById('robotics-tab').classList.add("animate__animated", leftAnimation);
 
     setTimeout(() => {
-        document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
+        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
+        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
+        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
+        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
     }, ANIMATE_DURATION)
 }
 

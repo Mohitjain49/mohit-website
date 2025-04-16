@@ -24,8 +24,6 @@
 
 <script setup>
 import personal_icon from "/static-icons/Personal_Icon_Transparent.png";
-import { useRouter } from "vue-router";
-
 const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
 const router = useRouter();
 
