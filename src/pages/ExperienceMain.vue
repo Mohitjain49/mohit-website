@@ -25,13 +25,6 @@
 
 <script setup>
 import "@/styles/navpage.css";
-import NavigationMain from '@/components/NavigationMain.vue';
-import WebFooter from '@/components/WebFooter.vue';
-
-import WIVNavCard from "@/components/cards/WIVNavCard.vue";
-import IvueNavCard from "@/components/cards/IvueNavCard.vue";
-import SubloNavCard from "@/components/cards/SubloNavCard.vue";
-
 import { ORANGE_BACKGROUND } from "@/stores/ParticlesConfig.js";
 import { getMeta } from "@/stores/GetMeta.js";
 

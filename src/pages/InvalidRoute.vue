@@ -3,9 +3,7 @@
 </template>
 
 <script setup>
-import NotCompleted from '@/components/body-components/NotCompleted.vue';
 import { useHead } from '@unhead/vue';
-
 import { getMeta } from '@/stores/GetMeta.js';
 const PAGE_DESC = "404 - Page Not Found.";
 

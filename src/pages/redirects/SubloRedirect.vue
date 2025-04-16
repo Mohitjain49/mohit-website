@@ -3,9 +3,7 @@
 </template>
 
 <script setup>
-import RedirectTemplate from '@/components/body-components/RedirectTemplate.vue';
 import { useHead } from '@unhead/vue';
-
 import { SUBLO_WEBSITE_LINK } from '@/stores/Objects.js';
 import { getMetaWithLink } from '@/stores/GetMeta.js';
 

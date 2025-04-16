@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-import NavigationMain from '../NavigationMain.vue';
 import { initWebData } from '@/stores/WebsiteData.js';
 import { onMounted } from 'vue';
 

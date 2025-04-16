@@ -22,20 +22,10 @@
 <script setup>
 import { HOME_BACKGROUND } from '../stores/ParticlesConfig.js';
 import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-import { getMeta } from '../stores/GetMeta.js';
 
+import { getMeta } from '../stores/GetMeta.js';
 import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
-
-import NavigationMain from '../components/NavigationMain.vue';
-import NavigationHome from '../components/home/NavigationHome.vue';
-import WebFooter from '../components/WebFooter.vue';
-
-import StartSection from '../components/home/StartSection.vue';
-import IvueSection from '../components/home/IvueSection.vue';
-import SkillsSection from '../components/home/SkillsSection.vue';
-import KennesawSection from '../components/home/KennesawSection.vue';
-import ExtrasSection from '../components/home/ExtrasSection.vue';
 
 const webData = useWebsiteDataStore();
 onMounted(() => { webData.mountWebData(); });

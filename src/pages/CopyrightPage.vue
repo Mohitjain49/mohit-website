@@ -21,11 +21,9 @@
 </template>
 
 <script setup>
-import NavigationMain from "../components/NavigationMain.vue";
-import WebFooter from "@/components/WebFooter.vue";
+import { initWebData } from "../stores/WebsiteData.js";
 import { getMeta } from "../stores/GetMeta.js";
 
-import { initWebData } from "../stores/WebsiteData.js";
 import { onMounted } from "vue";
 import { useHead } from "@unhead/vue";
 

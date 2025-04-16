@@ -3,7 +3,6 @@
 </template>
 
 <script setup>
-import RedirectTemplate from '@/components/body-components/RedirectTemplate.vue';
 import { SOCIALS } from '@/stores/Objects.js';
 import { useHead } from '@unhead/vue';
 

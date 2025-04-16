@@ -151,10 +151,6 @@ import "@/styles/navpage.css";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png"
 
-import NavigationMain from '@/components/NavigationMain.vue';
-import WebFooter from '@/components/WebFooter.vue';
-import SkillNote from "@/components/body-components/SkillNote.vue";
-
 import { VUEJS_SKILL_NOTES,
     FRONTEND_SKILL_NOTES,
     AWS_SKILL_NOTES,
