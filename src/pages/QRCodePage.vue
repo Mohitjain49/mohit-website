@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import { renderSVG } from 'uqr';
 import { useHead } from '@unhead/vue';
 
 onMounted(() => {
