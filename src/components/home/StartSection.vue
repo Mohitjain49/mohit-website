@@ -19,32 +19,17 @@
 
                 <font-awesome-icon :icon="link.icon" />
             </RouterLink>
-            <a :href="PERSONAL_GLOBE_LINK" class="start-buttonRow-btn"
-                :style="getSpecialBtnStyles('var(--globe-green)')"
-                title="Go To My Globe"
-                @mouseenter="webData.setHeartbeatAnimation"
-                @mouseleave="webData.setHeartbeatAnimation">
-
-                <font-awesome-icon icon="fa-globe" />
-            </a>
-            <RouterLink to="/resume" title="My Resume"
-                class="start-buttonRow-btn"
-                @mouseenter="webData.setHeartbeatAnimation"
-                @mouseleave="webData.setHeartbeatAnimation">
-
-                <font-awesome-icon icon="fa-file-lines" />
-            </RouterLink>
         </div>
         <div class="start-buttonRow contact-links">
             <template v-for="(contact, index) in SOCIALS">
                 <a v-if="index != 0" :href="contact.link"
-                class="start-buttonRow-btn"
-                :style="getSpecialBtnStyles(contact.color)"
-                @mouseenter="webData.setHeartbeatAnimation"
-                @mouseleave="webData.setHeartbeatAnimation">
+                    class="start-buttonRow-btn"
+                    :style="getSpecialBtnStyles(contact.color)"
+                    @mouseenter="webData.setHeartbeatAnimation"
+                    @mouseleave="webData.setHeartbeatAnimation">
 
-                <font-awesome-icon :icon="contact.linkIcon" />
-            </a>
+                    <font-awesome-icon :icon="contact.linkIcon" />
+                </a>
             </template>
         </div>
     </div>
@@ -89,7 +74,9 @@ function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
 const MAIN_BTNS = [
     { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
     { path: "/skills", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
-    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" }
+    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
+    { path: "/projects", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
+    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
 ]
 </script>
 

@@ -14,7 +14,7 @@ function scrollToTop(event, navRoute = "/") {
 const HOME_TITLE = "Home Page";
 const SKILLS_TITLE = "My Skills";
 const EXP_TITLE = "My Experience";
-const GLOBE_TITLE = "My Globe";
+const PROJECTS_TITLE = "My Projects";
 
 const CONTACT_TITLE = "Contact Me!";
 const RESUME_TITLE = "See My Resume!";
@@ -36,7 +36,7 @@ const RESUME_TITLE = "See My Resume!";
             <RouterLink class="web-navBar-opt" to="/" @click="(event) => { scrollToTop(event, '/') }"> Home </RouterLink>
             <RouterLink class="web-navBar-opt skills" to="/skills/" @click="(event) => { scrollToTop(event, '/skills') }"> Skills </RouterLink>
             <RouterLink class="web-navBar-opt" to="/experience/" @click="(event) => { scrollToTop(event, '/experience') }"> Experience </RouterLink>
-            <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
+            <RouterLink class="web-navBar-opt projects" to="/projects/" @click="(event) => { scrollToTop(event, '/projects') }"> Projects </RouterLink>
         </div>
 
         <div class="web-navBar-links-side" >
@@ -72,9 +72,11 @@ const RESUME_TITLE = "See My Resume!";
             <client-only> <font-awesome-icon icon="fa-file-code" /> </client-only>
         </RouterLink>
 
-        <a :href="PERSONAL_GLOBE_LINK" class="web-navBar-menuIcon globe" :title="GLOBE_TITLE">
-            <client-only> <font-awesome-icon icon="fa-globe" /> </client-only>
-        </a>
+        <RouterLink class="web-navBar-menuIcon projects" to="/projects/" :title="PROJECTS_TITLE"
+            @click="(event) => { scrollToTop(event, '/projects') }">
+
+            <client-only> <font-awesome-icon icon="fa-cubes" /> </client-only>
+        </RouterLink>
         <RouterLink class="web-navBar-menuIcon inverse" to="/resume" :title="RESUME_TITLE"
             @click="(event) => { scrollToTop(event, '/resume') }">
 
@@ -197,10 +199,10 @@ const RESUME_TITLE = "See My Resume!";
     border-color: var(--blue-three);
 }
 
-.web-navBar-opt.globe {
+.web-navBar-opt.projects {
     color: var(--globe-green-opaque);
 }
-.web-navBar-opt.globe:hover {
+.web-navBar-opt.projects:hover {
     border-color: var(--globe-green-opaque);
 }
 
@@ -226,12 +228,12 @@ const RESUME_TITLE = "See My Resume!";
     border-color: var(--blue-cobalt);
 }
 
-.web-navBar-menuIcon.globe {
+.web-navBar-menuIcon.projects {
     color: var(--globe-green-opaque);
     border-color: var(--globe-green-opaque);
     background-color: rgba(255, 255, 255, 0.25);
 }
-.web-navBar-menuIcon.globe:hover {
+.web-navBar-menuIcon.projects:hover {
     background-color: var(--dark-background);
     color: var(--globe-green-opaque);
     border-color: var(--globe-green-opaque);

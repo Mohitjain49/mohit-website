@@ -16,6 +16,7 @@
     --silver-light: #e4e2e2;
     --globe-green: #4fc20ca8;
     --globe-green-opaque: #3C7F13;
+    --globe-green-light: rgb(144, 238, 144);
     --dark-background: #232323;
 
     --website-text: rgb(126, 90, 0);
@@ -151,6 +152,14 @@ h1, h2, h3, p {
 .main-sector-bottom-linkBtn a.linkBtn-blue:hover {
     background-color: var(--blue-three);
     border-color: var(--blue-zero);
+}
+
+.main-sector-bottom-linkBtn a.linkBtn-green {
+    color: var(--globe-green-opaque);
+    background-color: var(--globe-green-light);
+}
+.main-sector-bottom-linkBtn a.linkBtn-green:hover {
+    border-color: var(--globe-green-opaque);
 }
 
 @media (max-width: 375px) {
