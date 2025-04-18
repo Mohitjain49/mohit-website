@@ -21,7 +21,8 @@
 }
 
 .nav-page-title {
-    padding: 20px 15px 0px 15px;
+    padding: 15px;
+    padding-bottom: 0px;
     width: calc(100% - 30px);
     height: fit-content;
     text-align: center;
@@ -29,6 +30,7 @@
     font-family: 'Lexend', sans-serif;
     color: var(--website-text);
     font-weight: bold;
+    text-shadow: var(--website-text) 1px 0 30px;
 }
 .nav-page-title.project {
     color: var(--globe-green-light);
@@ -73,6 +75,7 @@
     flex-direction: column;
     width: calc(100% - 40px);
     padding: 0px 20px;
+    padding-top: 70px;
 }
 .incomplete-title {
     font-size: 60px;

@@ -586,6 +586,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
 
 @media (max-width: 525px) {
     #contact-page {
+        padding-top: 70px;
         grid-template-columns: 1fr;
     }
     .web-footer-contact {

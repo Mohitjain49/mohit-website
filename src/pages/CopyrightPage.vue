@@ -33,7 +33,7 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
 <style scoped>
 .copyright-body {
     height: fit-content;
-    min-height: calc(100vh - 150px);
+    min-height: calc(100vh - 160px);
     width: calc(100% - 40px);
     padding: 20px;
     display: flex;

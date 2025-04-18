@@ -7,7 +7,7 @@
 <div id="skills-page" class="personal-web-body">
     <client-only>
         <div class="skills-body">
-            <div>H</div>
+            <div style="color: rgba(0, 0, 0, 0)">H</div>
             <div id="vuejs" class="skills-category">
                 <div class="skills-category-header vue" v-observe-visibility="setTitleTransition">
                     <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
@@ -188,8 +188,8 @@ function setCardTransition(isVisible, entry) {
 
 <style scoped>
 #skills-page {
-    background: rgba(0, 0, 0, 0.05);
-    top: 0px;
+    background: transparent;
+    padding-top: 0px;
     min-height: 100%;
 }
 .skills-body {
@@ -201,10 +201,15 @@ function setCardTransition(isVisible, entry) {
 .skills-category {
     height: fit-content;
     width: 1200px;
-    padding: 50px calc(50% - 600px);
+    padding: 0px calc(50% - 600px);
+    padding-bottom: 40px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
+.skills-category#vuejs {
+    padding-top: 60px;
+}
+
 .skills-entity-container {
     height: 475px;
     width: 100%;
@@ -262,7 +267,8 @@ function setCardTransition(isVisible, entry) {
     .skills-category {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
-        padding: 50px calc(50% - 400px);
+        padding: 0px calc(50% - 400px);
+        padding-bottom: 40px;
     }
     .skills-category-header {
         grid-column: span 2;
@@ -273,7 +279,8 @@ function setCardTransition(isVisible, entry) {
     .skills-category {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
-        padding: 50px 10px;
+        padding: 0px 10px;
+        padding-bottom: 40px;
     }
     .skills-category-header {
         grid-column: span 1;

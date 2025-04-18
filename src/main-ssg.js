@@ -47,6 +47,7 @@ library.add(
     FaIcons.faCubes,
     FaIcons.faDownload,
     FaIcons.faRotateRight,
+    FaIcons.faSquareXmark,
 
     FaBrands.faReact,
     FaBrands.faJs,

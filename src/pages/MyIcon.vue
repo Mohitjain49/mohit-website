@@ -78,8 +78,8 @@ const ICON_WIDGETS = [
 
 <style scoped>
 #icons-body {
-    background-color: white;
-    top: 0px;
+    background-color: var(--blue-zero);
+    padding-top: 0px;
     min-height: 100%;
 }
 .icon-background {
@@ -106,7 +106,7 @@ const ICON_WIDGETS = [
 .icon-page-padding {
     width: 100%;
     height: 50px;
-    background-color: white;
+    background-color: var(--blue-zero);
 }
 .icon-page-padding#main {
     background: linear-gradient(to top, white 0%, var(--blue-zero) 100%);
