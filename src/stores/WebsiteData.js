@@ -10,21 +10,28 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     const pageView = ref(0);
     const navMenuOpen = ref(false);
 
+    const controller = new AbortController();
+
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
     function setEventListeners() {
+        const signal = controller.signal;
         resizePageComponents();
-        window.addEventListener("resize", () => { resizePageComponents(); });
-        document.body.addEventListener("click", onDocumentBodyClick);
+
+        window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
+        window.addEventListener("scroll", closeNavMenu, { signal });
+
+        document.body.addEventListener("click", onDocumentBodyClick, { signal });
+        document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
+        document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
     }
 
     /**
      * This function removes event listeners to the website as soon as its loaded.
      */
     function removeEventListeners() {
-        window.removeEventListener("resize", () => { resizePageComponents(); });
-        document.body.removeEventListener("click", onDocumentBodyClick);
+        controller.abort();
     }
 
     /**
@@ -129,10 +136,10 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
-     * This function closes the Nav Menu if the user clicks anywheere on the screen that isn't the Navigation bar.
+     * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
      * @param event The event.
      */
-    function onDocumentBodyClick(event = new MouseEvent("click")) {
+    function onDocumentBodyClick(event = new MouseEvent("mousedown")) {
         const navMenu = document.getElementById("mohit-navBar");
         const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
         const srcElement = event.target;

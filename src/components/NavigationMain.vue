@@ -1,7 +1,7 @@
 <template>
 <div id="mohit-navBar">
     <div class="mohit-navBar-top">
-        <RouterLink to="/" class="mohit-navBar-banner">
+        <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
             <img :src="mkj_text" draggable="false" />
         </RouterLink>
 
