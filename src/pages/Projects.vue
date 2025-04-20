@@ -8,7 +8,7 @@
     <div class="main-nav-page-container">
         <div class="nav-page-title project">My Projects</div>
         <div class="main-nav-page">
-            <WIVNavCard />
+            <MNDCard />
             <IvueNavCard />
             <SubloNavCard />
         </div>

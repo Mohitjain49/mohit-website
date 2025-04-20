@@ -33,6 +33,11 @@
     <div class="icon-background black">
         <div class="icon-text orange"> MKJ </div>
     </div>
+
+    <div id="mnd" class="icon-page-padding"></div>
+    <div class="icon-background">
+        <div class="icon-text"> MND </div>
+    </div>
     <WebFooter />
 </div>
 </template>
@@ -116,6 +121,9 @@ const ICON_WIDGETS = [
 }
 .icon-page-padding#orange {
     background: linear-gradient(to top, #333333 0%, var(--globe-green) 100%);
+}
+.icon-page-padding#mnd {
+    background: linear-gradient(to bottom, #333333 0%, white 100%);
 }
 
 .icon-text {

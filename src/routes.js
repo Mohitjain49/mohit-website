@@ -9,6 +9,8 @@ import ResumeNative from "./pages/ResumeNative.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
+import MNDRedirect from "./pages/redirects/MNDRedirect.vue";
+
 import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
 import GitlabRedirect from "./pages/redirects/GitlabRedirect.vue";
 import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
@@ -50,6 +52,8 @@ export const personalRoutes = [
     { path: "/extras", alias: ["/extra"], redirect: { path: "/", hash: "#extras" } },
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
+    { path: "/mnd", name: "Mapping Neurodivergence", component: MNDRedirect },
+
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
     { path: "/sublo", name: "Sublo Main Redirect Page", component: SubloRedirect },
     { path: "/worldsivue", alias: ['/wiv', '/worlds-ivue'], main: "Main WIV Redirect Page", component: WIVRedirect },

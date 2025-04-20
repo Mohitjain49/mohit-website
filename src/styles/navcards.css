@@ -167,7 +167,6 @@
 .nav-newCard#sublo-nav-newCard .nav-newCard-desc {
     border-color: #d1efff;
 }
-
 .nav-newCard#sublo-nav-newCard .newCard-module {
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -181,6 +180,27 @@
 }
 .nav-newCard#sublo-nav-newCard:hover .nav-newCard-desc {
     border-color: #36A1D9;
+}
+
+.nav-newCard#mnd-nav-newCard {
+    border-color: white;
+    color: white;
+    background-color: #008080;
+}
+.nav-newCard#mnd-nav-newCard .nav-newCard-header {
+    border-color: white;
+}
+.nav-newCard#mnd-nav-newCard .nav-newCard-desc {
+    border-color: white;
+}
+
+.nav-newCard#mnd-nav-newCard .nav-newCard-header img {
+    padding: 10px 20px;
+    border: 3px dashed white;
+    border-radius: 20px;
+}
+.nav-newCard#mnd-nav-newCard:hover {   
+    background-color: #8B4513;
 }
 
 @media (max-width: 950px) and (min-width: 651px) {
