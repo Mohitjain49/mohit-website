@@ -41,9 +41,7 @@ import nuxt_icon from "@/assets/Nuxt_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
 onMounted(() => {
-    const navCard = document.getElementById("ivue-nav-newCard").classList;
-    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
-    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+    setNavCardTransition("ivue-nav-newCard");
 });
 
 const DEV_STACK = [

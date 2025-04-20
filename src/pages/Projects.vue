@@ -9,7 +9,7 @@
         <div class="nav-page-title project">My Projects</div>
         <div class="main-nav-page">
             <MNDCard />
-            <IvueNavCard />
+            <GlobeNavCard />
             <SubloNavCard />
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">

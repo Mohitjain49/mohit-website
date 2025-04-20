@@ -173,6 +173,16 @@ export function downloadResume() {
 }
 
 /**
+ * This function sets the initial transition for a Nav Card.
+ * @param {String} cardId The element id for the card.
+ */
+export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
+    const navCard = document.getElementById(cardId).classList;
+    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
+    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+}
+
+/**
  * This function sets a bounce animation for any element.
  */
 export function setBounceAnimation(event = new MouseEvent("mouseenter")) {

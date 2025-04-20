@@ -5,7 +5,7 @@
         @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">
-            <img :src="mnd_text" width="200" />
+            <img :src="mnd_text" width="200" class="nav-newCard-personalText" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="main_app_page" width="77.5%" draggable="false" />
@@ -38,9 +38,7 @@ import dynamodb_icon from "@/assets/aws/AWS_DynamoDB_Icon.svg";
 import api_gateway_icon from "@/assets/aws/AWS_API_Gateway_Icon.svg";
 
 onMounted(() => {
-    const navCard = document.getElementById("mnd-nav-newCard").classList;
-    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
-    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+    setNavCardTransition("mnd-nav-newCard");
 });
 
 const DEV_STACK = [

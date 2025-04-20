@@ -107,6 +107,11 @@
     color: inherit;
     border-top: var(--empty-border);
 }
+.nav-newCard-personalText {
+    padding: 10px 20px;
+    border: 3px dashed white;
+    border-radius: 20px;
+}
 
 .nav-newCard#wiv-nav-newCard {
     border-color: #48A548;
@@ -193,14 +198,32 @@
 .nav-newCard#mnd-nav-newCard .nav-newCard-desc {
     border-color: white;
 }
-
-.nav-newCard#mnd-nav-newCard .nav-newCard-header img {
-    padding: 10px 20px;
-    border: 3px dashed white;
-    border-radius: 20px;
-}
 .nav-newCard#mnd-nav-newCard:hover {   
     background-color: #8B4513;
+}
+
+.nav-newCard#globe-nav-newCard {
+    border-color: white;
+    color: white;
+    background-color: var(--globe-green-opaque);
+}
+.nav-newCard#globe-nav-newCard .nav-newCard-header {
+    border-color: white;
+}
+.nav-newCard#globe-nav-newCard .nav-newCard-desc {
+    border-color: white;
+}
+
+.nav-newCard#globe-nav-newCard:hover {   
+    background-color: var(--blue-one);
+    color: black;
+    border-color: black;
+}
+.nav-newCard#globe-nav-newCard:hover .nav-newCard-header {
+    border-color: black;
+}
+.nav-newCard#globe-nav-newCard:hover .nav-newCard-desc {
+    border-color: black;
 }
 
 @media (max-width: 950px) and (min-width: 651px) {
