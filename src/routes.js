@@ -10,6 +10,7 @@ import ResumeNative from "./pages/ResumeNative.vue";
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
 import MNDRedirect from "./pages/redirects/MNDRedirect.vue";
+import PizzaRedirect from "./pages/redirects/PizzaRedirect.vue";
 
 import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
 import GitlabRedirect from "./pages/redirects/GitlabRedirect.vue";
@@ -53,6 +54,7 @@ export const personalRoutes = [
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/mnd", name: "Mapping Neurodivergence", component: MNDRedirect },
+    { path: "/pizza", name: "Pizza Project", component: PizzaRedirect },
 
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
     { path: "/sublo", name: "Sublo Main Redirect Page", component: SubloRedirect },

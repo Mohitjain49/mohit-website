@@ -226,6 +226,30 @@
     border-color: black;
 }
 
+.nav-newCard#pizza-nav-newCard {
+    border-color: #8B0000;
+    color: #8B0000;
+    background-color: #F5F5DC;
+}
+.nav-newCard#pizza-nav-newCard .nav-newCard-header {
+    border-color: #8B0000;
+}
+.nav-newCard#pizza-nav-newCard .nav-newCard-desc {
+    border-color: #8B0000;
+}
+
+.nav-newCard#pizza-nav-newCard:hover {   
+    background-color: #4B2E1A;
+    color: #F5F5DC;
+    border-color: #F5F5DC;
+}
+.nav-newCard#pizza-nav-newCard:hover .nav-newCard-header {
+    border-color: #F5F5DC;
+}
+.nav-newCard#pizza-nav-newCard:hover .nav-newCard-desc {
+    border-color: #F5F5DC;
+}
+
 @media (max-width: 950px) and (min-width: 651px) {
     #sublo-nav-newCard-container {
         position: relative;
