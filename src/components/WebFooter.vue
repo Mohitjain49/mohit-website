@@ -15,10 +15,8 @@
     </div>
 
     <div class="copyright-side-container">
-        <div class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
-            <client-only>
-                <font-awesome-icon icon="fa-arrow-up" :flip="!checkCopyrightPage()" />
-            </client-only>
+        <div v-if="!checkCopyrightPage()" class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
+            <client-only> <font-awesome-icon icon="fa-arrow-up" flip /> </client-only>
         </div>
     </div>
 </div>
@@ -26,8 +24,6 @@
 
 <script setup>
 import personal_icon from "/static-icons/Personal_Icon_Transparent.png";
-import { useRouter } from "vue-router";
-
 const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
 const router = useRouter();
 
@@ -59,7 +55,7 @@ function checkHomePage() {
  */
  function checkCopyrightPage() {
     const path = router.currentRoute.value.path;
-    return (path === "/copyright" || path === "/copyright.")
+    return (path === "/copyright" || path === "/copyright/")
 }
 </script>
 

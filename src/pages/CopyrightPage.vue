@@ -21,17 +21,10 @@
 </template>
 
 <script setup>
-import NavigationMain from "../components/NavigationMain.vue";
-import WebFooter from "@/components/WebFooter.vue";
-import { getMeta } from "../stores/GetMeta.js";
-
-import { initWebData } from "../stores/WebsiteData.js";
-import { onMounted } from "vue";
 import { useHead } from "@unhead/vue";
-
 const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
-onMounted(() => { initWebData(); });
 
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website."
 ));
@@ -40,7 +33,7 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
 <style scoped>
 .copyright-body {
     height: fit-content;
-    min-height: calc(100vh - 150px);
+    min-height: calc(100vh - 160px);
     width: calc(100% - 40px);
     padding: 20px;
     display: flex;

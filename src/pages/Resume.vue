@@ -8,12 +8,7 @@
 </template>
 
 <script setup>
-import NavigationMain from "../components/NavigationMain.vue";
-import ResumeWidgets from "../components/ResumeWidgets.vue";
-
-import { getMeta } from "../stores/GetMeta.js";
-import { useHead } from "@unhead/vue";
-
+import { useHead } from '@unhead/vue';
 const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent("https://www.mohit-jain.com/Mohit_Jain_Resume.pdf")}&embedded=true`;
 
 useHead(getMeta("Mohit Jain | My Resume", "resume",

@@ -107,6 +107,11 @@
     color: inherit;
     border-top: var(--empty-border);
 }
+.nav-newCard-personalText {
+    padding: 10px 20px;
+    border: 3px dashed white;
+    border-radius: 20px;
+}
 
 .nav-newCard#wiv-nav-newCard {
     border-color: #48A548;
@@ -167,7 +172,6 @@
 .nav-newCard#sublo-nav-newCard .nav-newCard-desc {
     border-color: #d1efff;
 }
-
 .nav-newCard#sublo-nav-newCard .newCard-module {
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -181,6 +185,69 @@
 }
 .nav-newCard#sublo-nav-newCard:hover .nav-newCard-desc {
     border-color: #36A1D9;
+}
+
+.nav-newCard#mnd-nav-newCard {
+    border-color: white;
+    color: white;
+    background-color: #008080;
+}
+.nav-newCard#mnd-nav-newCard .nav-newCard-header {
+    border-color: white;
+}
+.nav-newCard#mnd-nav-newCard .nav-newCard-desc {
+    border-color: white;
+}
+.nav-newCard#mnd-nav-newCard:hover {   
+    background-color: #8B4513;
+}
+
+.nav-newCard#globe-nav-newCard {
+    border-color: white;
+    color: white;
+    background-color: var(--globe-green-opaque);
+}
+.nav-newCard#globe-nav-newCard .nav-newCard-header {
+    border-color: white;
+}
+.nav-newCard#globe-nav-newCard .nav-newCard-desc {
+    border-color: white;
+}
+
+.nav-newCard#globe-nav-newCard:hover {   
+    background-color: var(--blue-one);
+    color: black;
+    border-color: black;
+}
+.nav-newCard#globe-nav-newCard:hover .nav-newCard-header {
+    border-color: black;
+}
+.nav-newCard#globe-nav-newCard:hover .nav-newCard-desc {
+    border-color: black;
+}
+
+.nav-newCard#pizza-nav-newCard {
+    border-color: #8B0000;
+    color: #8B0000;
+    background-color: #F5F5DC;
+}
+.nav-newCard#pizza-nav-newCard .nav-newCard-header {
+    border-color: #8B0000;
+}
+.nav-newCard#pizza-nav-newCard .nav-newCard-desc {
+    border-color: #8B0000;
+}
+
+.nav-newCard#pizza-nav-newCard:hover {   
+    background-color: #4B2E1A;
+    color: #F5F5DC;
+    border-color: #F5F5DC;
+}
+.nav-newCard#pizza-nav-newCard:hover .nav-newCard-header {
+    border-color: #F5F5DC;
+}
+.nav-newCard#pizza-nav-newCard:hover .nav-newCard-desc {
+    border-color: #F5F5DC;
 }
 
 @media (max-width: 950px) and (min-width: 651px) {

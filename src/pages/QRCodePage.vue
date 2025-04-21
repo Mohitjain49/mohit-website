@@ -24,17 +24,8 @@
 </template>
 
 <script setup>
-import NavigationMain from '../components/NavigationMain.vue';
-import WebFooter from '../components/WebFooter.vue';
-import { initWebData } from '../stores/WebsiteData.js';
-
-import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
-import { PERSONAL_WEBSITE_LINK, PERSONAL_GLOBE_LINK } from '../stores/Objects.js';
-import { getMeta } from '../stores/GetMeta.js';
-
-import { onMounted } from 'vue';
-import { useHead } from '@unhead/vue';
 import { renderSVG } from 'uqr';
+import { useHead } from '@unhead/vue';
 
 onMounted(() => {
     initWebData();

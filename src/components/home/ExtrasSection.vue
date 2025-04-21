@@ -18,8 +18,6 @@
 </template>
 
 <script setup>
-import { setPulseLoopAnimation } from '@/stores/WebsiteData.js';
-
 /**
  * This adds a animation to a card/widget as visitors scroll to it.
  */

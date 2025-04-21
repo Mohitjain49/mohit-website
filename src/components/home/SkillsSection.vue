@@ -22,9 +22,6 @@
 </template>
 
 <script setup>
-import SkillNote from '../body-components/SkillNote.vue';
-import { NEW_SKILL_ENTITIES } from '@/stores/Objects.js';
-
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
  * @param {Number} index The index of the card.

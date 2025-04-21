@@ -1,19 +1,19 @@
 <template>
 <NavigationMain />
 <client-only>
-    <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
+    <vue-particles id="particlests" :options="GREEN_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="exp-page" class="personal-web-body">
+<div id="project-page" class="personal-web-body">
     <div class="main-nav-page-container">
-        <div class="nav-page-title">My Experience</div>
+        <div class="nav-page-title project">My Projects</div>
         <div class="main-nav-page">
-            <WIVNavCard />
-            <IvueNavCard />
-            <SubloNavCard />
+            <MNDCard />
+            <GlobeNavCard />
+            <PizzaProjectCard />
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-            <RouterLink to="/" v-html="'Back to Home'"
+            <RouterLink to="/" class="linkBtn-green" v-html="'Back to Home'"
                 @mouseenter="webData.setHeartbeatAnimation"
                 @mouseleave="webData.setHeartbeatAnimation"
             />
@@ -30,13 +30,13 @@ import { useHead } from '@unhead/vue';
 const webData = useWebsiteDataStore();
 onMounted(() => { webData.mountWebData(); });
 
-useHead(getMeta("Mohit Jain | My Experience", "experience/",
-    "On this page, I go into depth about my work experience."
+useHead(getMeta("Mohit Jain | My Projects", "projects/",
+    "On this page, I go into depth on the projects that I have made."
 ));
 </script>
 
 <style scoped>
-#exp-page {
+#project-page {
     background: transparent;
 }
 </style>

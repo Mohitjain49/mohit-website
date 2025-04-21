@@ -1,5 +1,3 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
 import MJ_Resume from "/Mohit_Jain_Resume.pdf";
 
 export const useWebsiteDataStore = defineStore("WebsiteData", () => {
@@ -10,21 +8,30 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      * If it equals 2, it is on phone mode, or the screen width is at most 600px.
      */
     const pageView = ref(0);
-    const homeNavExpanded = ref(false);
+    const navMenuOpen = ref(false);
+
+    const controller = new AbortController();
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
     function setEventListeners() {
+        const signal = controller.signal;
         resizePageComponents();
-        window.addEventListener("resize", () => { resizePageComponents(); });
+
+        window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
+        window.addEventListener("scroll", closeNavMenu, { signal });
+
+        document.body.addEventListener("click", onDocumentBodyClick, { signal });
+        document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
+        document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
     }
 
     /**
      * This function removes event listeners to the website as soon as its loaded.
      */
     function removeEventListeners() {
-        window.removeEventListener("resize", () => { resizePageComponents(); });
+        controller.abort();
     }
 
     /**
@@ -32,6 +39,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     function mountWebData() {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        closeNavMenu();
     }
 
     /**
@@ -46,8 +54,15 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     /**
      * The toggles the status of the home navigation menu.
      */
-    function toggleHomeNav() {
-        homeNavExpanded.value = !homeNavExpanded.value;
+    function toggleNavMenu() {
+        navMenuOpen.value = ((pageView.value == 0) ? false : !navMenuOpen.value);
+    }
+
+    /**
+     * This function closes the Navigation Menu.
+     */
+    function closeNavMenu() {
+        navMenuOpen.value = false;
     }
 
     /**
@@ -116,10 +131,24 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
             pageView.value = 1;
         } else {
             pageView.value = 0;
+            closeNavMenu();
         }
     }
 
-    return { pageView, homeNavExpanded, toggleHomeNav,
+    /**
+     * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
+     * @param event The event.
+     */
+    function onDocumentBodyClick(event = new MouseEvent("mousedown")) {
+        const navMenu = document.getElementById("mohit-navBar");
+        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
+        const srcElement = event.target;
+
+        if(navMenu === srcElement || navMenuElements.includes(srcElement)) { return; }
+        closeNavMenu();
+    }
+
+    return { pageView, navMenuOpen, toggleNavMenu, closeNavMenu,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation
@@ -130,8 +159,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
  * This function mounts the website data pinia store on a page.
  */
 export function initWebData() {
-    const webData = useWebsiteDataStore();
-    webData.mountWebData();
+    useWebsiteDataStore().mountWebData();
 }
 
 /**
@@ -145,17 +173,25 @@ export function downloadResume() {
 }
 
 /**
+ * This function sets the initial transition for a Nav Card.
+ * @param {String} cardId The element id for the card.
+ */
+export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
+    const navCard = document.getElementById(cardId).classList;
+    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
+    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+}
+
+/**
  * This function sets a bounce animation for any element.
  */
 export function setBounceAnimation(event = new MouseEvent("mouseenter")) {
-    const webData = useWebsiteDataStore();
-    webData.setBounceAnimation(event)
+    useWebsiteDataStore().setBounceAnimation(event);
 }
 
 /**
  * This function sets a pulse animation for any element for an infinite number of time.
  */
 export function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
-    const webData = useWebsiteDataStore();
-    webData.setPulseLoopAnimation(event);
+    useWebsiteDataStore().setPulseLoopAnimation(event);
 }

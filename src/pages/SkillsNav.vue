@@ -7,7 +7,7 @@
 <div id="skills-page" class="personal-web-body">
     <client-only>
         <div class="skills-body">
-            <div>H</div>
+            <div style="color: rgba(0, 0, 0, 0)">H</div>
             <div id="vuejs" class="skills-category">
                 <div class="skills-category-header vue" v-observe-visibility="setTitleTransition">
                     <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
@@ -149,28 +149,9 @@
 <script setup>
 import "@/styles/navpage.css";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
-import aws_icon from "@/assets/aws/AWS_Icon.png"
+import aws_icon from "@/assets/aws/AWS_Icon.png";
 
-import NavigationMain from '@/components/NavigationMain.vue';
-import WebFooter from '@/components/WebFooter.vue';
-import SkillNote from "@/components/body-components/SkillNote.vue";
-
-import { VUEJS_SKILL_NOTES,
-    FRONTEND_SKILL_NOTES,
-    AWS_SKILL_NOTES,
-    MODULES_SKILL_NOTES,
-    LANGUAGES_SKILL_NOTES,
-    ICONS_SKILL_NOTES
-} from "@/stores/Objects.js";
-
-import { BLUE_BACKGROUND } from "@/stores/ParticlesConfig.js";
-import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
-import { onMounted, nextTick } from 'vue';
-
-import { getMeta } from "@/stores/GetMeta.js";
 import { useHead } from '@unhead/vue';
-import { useRoute } from "vue-router";
-
 const webData = useWebsiteDataStore();
 const route = useRoute();
 
@@ -207,8 +188,8 @@ function setCardTransition(isVisible, entry) {
 
 <style scoped>
 #skills-page {
-    background: rgba(0, 0, 0, 0.05);
-    top: 0px;
+    background: transparent;
+    padding-top: 0px;
     min-height: 100%;
 }
 .skills-body {
@@ -220,10 +201,15 @@ function setCardTransition(isVisible, entry) {
 .skills-category {
     height: fit-content;
     width: 1200px;
-    padding: 50px calc(50% - 600px);
+    padding: 0px calc(50% - 600px);
+    padding-bottom: 40px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
+.skills-category#vuejs {
+    padding-top: 60px;
+}
+
 .skills-entity-container {
     height: 475px;
     width: 100%;
@@ -281,7 +267,8 @@ function setCardTransition(isVisible, entry) {
     .skills-category {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
-        padding: 50px calc(50% - 400px);
+        padding: 0px calc(50% - 400px);
+        padding-bottom: 40px;
     }
     .skills-category-header {
         grid-column: span 2;
@@ -292,7 +279,8 @@ function setCardTransition(isVisible, entry) {
     .skills-category {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
-        padding: 50px 10px;
+        padding: 0px 10px;
+        padding-bottom: 40px;
     }
     .skills-category-header {
         grid-column: span 1;

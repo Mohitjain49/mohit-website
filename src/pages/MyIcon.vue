@@ -33,22 +33,20 @@
     <div class="icon-background black">
         <div class="icon-text orange"> MKJ </div>
     </div>
+
+    <div id="mnd" class="icon-page-padding"></div>
+    <div class="icon-background">
+        <div class="icon-text"> MND </div>
+    </div>
     <WebFooter />
 </div>
 </template>
 
 <script setup>
-import NavigationMain from '../components/NavigationMain.vue';
-import WebFooter from '../components/WebFooter.vue';
-import { getMeta } from '../stores/GetMeta.js';
-
-import { initWebData } from '../stores/WebsiteData.js';
-import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
-
-onMounted(() => { initWebData(); });
 const ICON_IMPORT_START = "/static-icons/Personal_Icon";
 
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Icons", "icons",
     "I created my icons by using gradients and the Google Lexend Font. You can view them on this page."
 ));
@@ -85,8 +83,8 @@ const ICON_WIDGETS = [
 
 <style scoped>
 #icons-body {
-    background-color: white;
-    top: 0px;
+    background-color: var(--blue-zero);
+    padding-top: 0px;
     min-height: 100%;
 }
 .icon-background {
@@ -113,7 +111,7 @@ const ICON_WIDGETS = [
 .icon-page-padding {
     width: 100%;
     height: 50px;
-    background-color: white;
+    background-color: var(--blue-zero);
 }
 .icon-page-padding#main {
     background: linear-gradient(to top, white 0%, var(--blue-zero) 100%);
@@ -123,6 +121,9 @@ const ICON_WIDGETS = [
 }
 .icon-page-padding#orange {
     background: linear-gradient(to top, #333333 0%, var(--globe-green) 100%);
+}
+.icon-page-padding#mnd {
+    background: linear-gradient(to bottom, #333333 0%, white 100%);
 }
 
 .icon-text {

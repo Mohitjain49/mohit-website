@@ -58,8 +58,6 @@
 </template>
 
 <script setup>
-import { setPulseLoopAnimation } from "@/stores/WebsiteData.js";
-
 const props = defineProps({
     link: { type: String, default: "#" },
     faIcon: { type: Boolean, default: true },

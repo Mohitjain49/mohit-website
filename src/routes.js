@@ -9,6 +9,9 @@ import ResumeNative from "./pages/ResumeNative.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
+import MNDRedirect from "./pages/redirects/MNDRedirect.vue";
+import PizzaRedirect from "./pages/redirects/PizzaRedirect.vue";
+
 import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
 import GitlabRedirect from "./pages/redirects/GitlabRedirect.vue";
 import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
@@ -16,6 +19,7 @@ import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 
 import SkillsNav from "./pages/SkillsNav.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
+import Projects from "./pages/Projects.vue";
 
 import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
 import SubloRedirect from "./pages/redirects/SubloRedirect.vue";
@@ -26,8 +30,9 @@ import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
  */
 export const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
-    { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/skills", name: "Main Skills Page", component: SkillsNav },
+    { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
+    { path: "/projects", name: "Main Projects Page", component: Projects },
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
 
     {
@@ -48,6 +53,9 @@ export const personalRoutes = [
     { path: "/extras", alias: ["/extra"], redirect: { path: "/", hash: "#extras" } },
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
+    { path: "/mnd", name: "Mapping Neurodivergence", component: MNDRedirect },
+    { path: "/pizza", name: "Pizza Project", component: PizzaRedirect },
+
     { path: "/ivue", main: "Main iVue Redirect Page", component: IvueRedirect },
     { path: "/sublo", name: "Sublo Main Redirect Page", component: SubloRedirect },
     { path: "/worldsivue", alias: ['/wiv', '/worlds-ivue'], main: "Main WIV Redirect Page", component: WIVRedirect },

@@ -4,6 +4,9 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { VitePWA } from 'vite-plugin-pwa';
 
+import Components from "unplugin-vue-components/vite";
+import AutoImport from 'unplugin-auto-import/vite';
+
 export default defineConfig({
     base: "/",
     server: {
@@ -11,11 +14,20 @@ export default defineConfig({
     },
     plugins: [
         vue(),
+        Components({ dts: true }),
+        AutoImport({
+            imports: ['vue', 'vue-router', 'pinia'],
+            dirs: ['./src/stores'],
+            dts: true,
+            vueTemplate: true
+        }),
         VitePWA({
             registerType: "autoUpdate",
-            devOptions: { enabled: true },
+            devOptions: { enabled: false },
             workbox: {
-                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}']
+                cacheId: "v2.5.0",
+                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}'],
+                maximumFileSizeToCacheInBytes: 3000000
             },
 
             manifest: {

@@ -1,253 +1,256 @@
-<script setup>
-import { PERSONAL_GLOBE_LINK } from "../stores/Objects.js";
-import { useWebsiteDataStore } from "../stores/WebsiteData.js";
-import { useRoute } from "vue-router";
+<template>
+<div id="mohit-navBar">
+    <div class="mohit-navBar-top">
+        <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
+            <img :src="mkj_text" draggable="false" />
+        </RouterLink>
 
+        <div v-if="webData.pageView == 0" class="mohit-navBar-icons">
+            <RouterLink v-for="btn in MAIN_BTNS" :to="btn.path"
+                @click="(event) => { flashNavOpt(event, btn.path) }"
+                :title="btn.title"
+                class="mohit-navBar-icon"
+                :style="getColorStyles(btn.color)"
+                @mouseenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon :icon="btn.icon" />
+            </RouterLink>
+        </div>
+
+        <div v-if="webData.pageView != 0" class="mohit-navBar-icons">
+            <RouterLink v-for="btn in MOBILE_MAIN_BTNS" :to="btn.path"
+                @click="(event) => { flashNavOpt(event, btn.path) }"
+                :title="btn.title"
+                class="mohit-navBar-icon"
+                :style="getColorStyles('var(--website-light-text)')"
+                @mouseenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon :icon="btn.icon" />
+            </RouterLink>
+            <div class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+                :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
+                @mouseenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
+            </div>
+        </div>
+    </div>
+
+    <Transition name="navMenu-transition">
+        <div v-if="webData.navMenuOpen" class="mohit-navMenu">
+            <template v-for="(btn, index) in MAIN_BTNS">
+                <div v-if="index != 0 && index != 6" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
+                    <RouterLink :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
+                        <font-awesome-icon :icon="btn.icon" />
+                        <span> {{ btn.title }} </span>
+                    </RouterLink>
+                </div>
+            </template>
+        </div>
+    </Transition>
+</div>
+</template>
+
+<script setup>
+import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const route = useRoute();
 
 /**
- * This function, given a route, will scroll to the top of the page if they click on the same route.
+ * This sets the color and border color of an icon.
+ * @param {String} color The color to use.
  */
-function scrollToTop(event, navRoute = "/") {
-    if((navRoute != route.path) && ((navRoute + "/") != route.path)) { return; }
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    webData.addFlashAnimation(event);
+function getColorStyles(color = "var(--website-text)") {
+    return { color, borderColor: color }
 }
 
-const HOME_TITLE = "Home Page";
-const SKILLS_TITLE = "My Skills";
-const EXP_TITLE = "My Experience";
-const GLOBE_TITLE = "My Globe";
+/**
+ * This function makes a button flash if it will do nothing.
+ * @param event The event made when the user clicks on the navigation option.
+ * @param path The route the option leads to.
+ */
+function flashNavOpt(event = new MouseEvent("click"), path = "/") {
+    path = (path.endsWith("/") ? path.slice(0, -1) : path);
+    
+    if(route.path !== path && route.path !== (path + "/")) { return; }
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
-const CONTACT_TITLE = "Contact Me!";
-const RESUME_TITLE = "See My Resume!";
+    webData.addFlashAnimation(event);
+    webData.closeNavMenu();
+}
+
+const MAIN_BTNS = [
+    { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
+    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
+    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
+    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
+    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
+    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
+    { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
+];
+
+const MOBILE_MAIN_BTNS = [
+    { path: "/", icon: "fa-house", title: "Home Page" },
+    { path: "/qrcode", icon: "fa-qrcode", title: "QR Codes" },
+];
 </script>
 
-<template>
-<div class="web-navBar">
-    <template v-if="webData.pageView == 0">
-        <div class="web-navBar-links-side">
-            <RouterLink to="/contact" class="web-navBar-largeSide" :title="CONTACT_TITLE"
-                @click="(event) => { scrollToTop(event, '/contact') }">
-
-                <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
-                <span>Contact Me!</span>
-            </RouterLink>
-        </div>
-
-        <div class="web-navBar-links-section">
-            <RouterLink class="web-navBar-opt" to="/" @click="(event) => { scrollToTop(event, '/') }"> Home </RouterLink>
-            <RouterLink class="web-navBar-opt skills" to="/skills/" @click="(event) => { scrollToTop(event, '/skills') }"> Skills </RouterLink>
-            <RouterLink class="web-navBar-opt" to="/experience/" @click="(event) => { scrollToTop(event, '/experience') }"> Experience </RouterLink>
-            <a class="web-navBar-opt globe" :href="PERSONAL_GLOBE_LINK"> My Globe </a>
-        </div>
-
-        <div class="web-navBar-links-side" >
-            <RouterLink class="web-navBar-largeSide" to="/resume" :title="RESUME_TITLE"
-                @click="(event) => { scrollToTop(event, '/resume') }">
-
-                <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
-                <span>My Resume</span>
-            </RouterLink>
-        </div>
-    </template>
-
-    <div class="web-navBar-mobile" v-if="webData.pageView != 0">
-        <RouterLink class="web-navBar-menuIcon inverse" to="/contact" :title="CONTACT_TITLE"
-            @click="(event) => { scrollToTop(event, '/contact') }">
-
-            <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
-        </RouterLink>
-        <RouterLink class="web-navBar-menuIcon skills" to="/skills/" :title="SKILLS_TITLE"
-            @click="(event) => { scrollToTop(event, '/skills') }">
-
-            <client-only> <font-awesome-icon icon="fa-code" /> </client-only>
-        </RouterLink>
-
-        <RouterLink class="web-navBar-menuIcon" to="/" :title="HOME_TITLE"
-            @click="(event) => { scrollToTop(event, '/') }">
-
-            <client-only> <font-awesome-icon icon="fa-house" /> </client-only>
-        </RouterLink>
-        <RouterLink class="web-navBar-menuIcon" to="/experience/" :title="EXP_TITLE"
-            @click="(event) => { scrollToTop(event, '/experience') }">
-
-            <client-only> <font-awesome-icon icon="fa-file-code" /> </client-only>
-        </RouterLink>
-
-        <a :href="PERSONAL_GLOBE_LINK" class="web-navBar-menuIcon globe" :title="GLOBE_TITLE">
-            <client-only> <font-awesome-icon icon="fa-globe" /> </client-only>
-        </a>
-        <RouterLink class="web-navBar-menuIcon inverse" to="/resume" :title="RESUME_TITLE"
-            @click="(event) => { scrollToTop(event, '/resume') }">
-
-            <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
-        </RouterLink>
-    </div>
-</div>
-</template>
-
 <style scoped>
-.web-navBar {
+#mohit-navBar {
     position: fixed;
-    width: 100%;
+    top: 8px;
+    left: calc((100% - 775px) / 2);
+    width: 775px;
+    height: fit-content;
+    min-width: 320px;
+    min-height: 50px;
+    background-color: black;
+    z-index: 15;
+    border: 2px solid var(--website-text);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: height 0.2s;
+}
+.mohit-navBar-top {
     height: 50px;
-    top: 0;
-    left: 0;
-    background: var(--nav-bar-background);
-    border-bottom: 1px solid var(--nav-bar-border);
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 5;
+    flex-direction: row;
 }
 
-.web-navBar-links-section {
-    width: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    height: 100%;
-}
-.web-navBar-links-side {
+.mohit-navBar-banner {
+    width: 100px;
+    height: 46px;
+    padding-left: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
-    height: 100%;
-}
-
-.web-navBar-opt {
-    cursor: pointer;
-    text-decoration: none;
-    color: var(--website-text);
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 2px;
-    padding: 5px;
-    border-radius: 5px;
-    border-bottom: var(--empty-border);
     transition: var(--default-transition);
-    font-family: 'Lexend', sans-serif;
+    border: var(--empty-border);
+    border-radius: 14px;
 }
-.web-navBar-opt:hover {
-    border-color: var(--website-text);
-    background-color: var(--translucent-background);
+.mohit-navBar-banner img {
+    user-select: none;
+    width: 80px;
 }
-
-.web-navBar-largeSide {
-    height: fit-content;
-    width: fit-content;
-    margin-top: 1px;
-    padding: 7px 9px;
-    border-radius: 10px;
-    border: 2px dashed var(--website-text);
-    border-style: dotted;
-    background-color: rgba(0, 0, 0, 0.05);
-    color: var(--website-text);
-    font-family: 'Lexend', sans-serif;
-    font-weight: bold;
-    transition: var(--default-transition);
-}
-.web-navBar-largeSide:hover {
-    background-color: black;
-    color: var(--website-light-text);
+.mohit-navBar-banner:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--blue-one);
 }
 
-.web-navBar-largeSide svg {
-    margin-top: -4px;
-    font-size: 17px;
-}
-.web-navBar-largeSide span {
-    font-size: 16px;
-    margin-left: 5px;
-}
-
-.web-navBar-mobile {
+.mohit-navBar-icons {
     width: 350px;
+    padding-right: 7px;
     height: 100%;
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 }
-
-.web-navBar-menuIcon {
-    cursor: pointer;
-    width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
+.mohit-navBar-icons.centered {
     justify-content: center;
-    margin-top: 2px;
-    padding: 5px;
-    border-radius: 10px;
-    border: 2px dashed var(--website-text);
-    border-style: dotted;
-    background-color: rgba(255, 255, 255, 0.125);
+    width: 100%;
+    gap: 12px;
+    padding-right: 0px;
+}
+
+.mohit-navBar-icon {
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
     color: var(--website-text);
-    font-size: 22px;
+    border: 1px solid var(--website-text);
+    border-radius: 10px;
+    font-size: 23px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: var(--default-transition);
 }
-.web-navBar-menuIcon:hover {
-    background-color: black;
-    color: var(--website-light-text);
+.mohit-navBar-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-.web-navBar-opt.skills {
-    color: var(--blue-three);
+.mohit-navMenu {
+    width: 100%;
+    height: 305px;
+    overflow: hidden;
 }
-.web-navBar-opt.skills:hover {
-    border-color: var(--blue-three);
-}
-
-.web-navBar-opt.globe {
-    color: var(--globe-green-opaque);
-}
-.web-navBar-opt.globe:hover {
-    border-color: var(--globe-green-opaque);
-}
-
-.web-navBar-menuIcon.inverse {
-    color: var(--website-dark-text);
-    border-color: var(--website-dark-text);
-    background-color: rgba(255, 255, 255, 0.5);
-}
-.web-navBar-menuIcon.inverse:hover {
-    background-color: black;
-    color: var(--website-light-text);
-    border-color: var(--website-light-text);
+.mohit-navMenu-opt {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--website-text);
+    font-family: 'Lexend', sans-serif;
+    font-size: 18px;
 }
 
-.web-navBar-menuIcon.skills {
-    color: var(--blue-three);
-    border-color: var(--blue-three);
-    background-color: rgba(255, 255, 255, 0.25);
+.mohit-navMenu-opt a {
+    cursor: pointer;
+    background-color: rgba(20, 20, 20);
+    height: 40px;
+    width: calc(100% - 50px);
+    padding: 0px 10px;
+    color: inherit;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 2px dashed;
+    border-radius: 15px;
+    transition: var(--default-transition);
+    user-select: none;
 }
-.web-navBar-menuIcon.skills:hover {
-    background-color: var(--blue-zero);
-    color: var(--blue-cobalt);
-    border-color: var(--blue-cobalt);
+.mohit-navMenu-opt a:hover {
+    background-color: rgba(40, 40, 40);
+}
+.mohit-navMenu-opt svg {
+    margin-right: 10px;
+    width: 25px;
 }
 
-.web-navBar-menuIcon.globe {
-    color: var(--globe-green-opaque);
-    border-color: var(--globe-green-opaque);
-    background-color: rgba(255, 255, 255, 0.25);
+.navMenu-transition-enter-active, .navMenu-transition-leave-active {
+    transition: height 0.5s;
 }
-.web-navBar-menuIcon.globe:hover {
-    background-color: var(--dark-background);
-    color: var(--globe-green-opaque);
-    border-color: var(--globe-green-opaque);
+.navMenu-transition-enter-from, .navMenu-transition-leave-to {
+    height: 0;
+}
+.navMenu-transition-enter-to, .navMenu-transition-leave-from {
+    height: 305px;
 }
 
 @media (max-width: 825px) {
-    .web-navBar {
-        justify-content: center;
+    #mohit-navBar {
+        width: calc(100% - 30px);
+        left: 15px;
+    }
+    #mohit-navBar.layout_v2 {
+        width: 380px;
+        left: calc(50% - 190px);
+    }
+    .mohit-navBar-icons {
+        width: 140px;
     }
 }
-@media (max-width: 360px) {
-    .web-navBar {
+@media (max-width: 450px) {
+    .mohit-navBar-icons.centered .mohit-navBar-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+    .mohit-navBar.layout_v2 {
+        width: calc(100% - 20px);
+        left: 10px;
+    }
+}
+@media (max-width: 350px) {
+    #mohit-navBar {
         position: absolute;
     }
 }

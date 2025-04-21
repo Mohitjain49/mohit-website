@@ -115,18 +115,7 @@
 </template>
 
 <script setup>
-import NavigationMain from '../components/NavigationMain.vue';
-import WebFooter from '../components/WebFooter.vue';
-
-import { SOCIALS } from '../stores/Objects.js';
-import { ORANGE_BACKGROUND } from '../stores/ParticlesConfig.js';
-import { getMeta } from '../stores/GetMeta.js';
-
-import axios from 'axios';
-import { useWebsiteDataStore } from '../stores/WebsiteData.js';
-import { ref, onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
-
 const webData = useWebsiteDataStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 
@@ -597,6 +586,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
 
 @media (max-width: 525px) {
     #contact-page {
+        padding-top: 70px;
         grid-template-columns: 1fr;
     }
     .web-footer-contact {

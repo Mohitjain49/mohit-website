@@ -40,14 +40,8 @@ import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import nuxt_icon from "@/assets/Nuxt_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
-import { setPulseLoopAnimation } from "@/stores/WebsiteData.js";
-import { MAIN_IVUE_WEBSITE_LINK } from '@/stores/Objects.js';
-import { onMounted } from "vue";
-
 onMounted(() => {
-    const navCard = document.getElementById("ivue-nav-newCard").classList;
-    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
-    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+    setNavCardTransition("ivue-nav-newCard");
 });
 
 const DEV_STACK = [

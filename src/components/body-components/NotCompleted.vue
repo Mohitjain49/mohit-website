@@ -15,11 +15,6 @@
 
 <script setup>
 import "@/styles/navpage.css";
-import NavigationMain from '../NavigationMain.vue';
-
-import { useWebsiteDataStore } from '@/stores/WebsiteData.js';
-import { onMounted } from "vue";
-
 const webData = useWebsiteDataStore();
 onMounted(() => { webData.mountWebData(); });
 
