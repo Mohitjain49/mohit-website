@@ -25,6 +25,7 @@ export default defineConfig({
             registerType: "autoUpdate",
             devOptions: { enabled: false },
             workbox: {
+                cacheId: "v2.5.0",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
