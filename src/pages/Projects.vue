@@ -9,8 +9,8 @@
         <div class="nav-page-title project">My Projects</div>
         <div class="main-nav-page">
             <MNDCard />
-            <GlobeNavCard />
             <PizzaProjectCard />
+            <GlobeNavCard />
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
             <RouterLink to="/" class="linkBtn-green" v-html="'Back to Home'"
