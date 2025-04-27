@@ -116,7 +116,7 @@ h1, h2, h3, p {
     min-width: 350px;
     top: 0;
     left: 0;
-    z-index: 5000;
+    z-index: 500;
     background-color: rgba(0, 0, 0, 0.75);
 }
 

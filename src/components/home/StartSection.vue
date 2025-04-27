@@ -11,13 +11,14 @@
 
         <div class="start-buttonRow main">
             <RouterLink v-for="link in MAIN_BTNS" :to="link.path"
-                class="start-buttonRow-btn"
+                class="start-buttonRow-btn inner-path"
                 :style="getSpecialBtnStyles(link.color)"
                 :title="link.title"
                 @mouseenter="webData.setHeartbeatAnimation"
                 @mouseleave="webData.setHeartbeatAnimation">
 
                 <font-awesome-icon :icon="link.icon" />
+                <div class="start-btn-caption"> {{ link.shortTitle }} </div>
             </RouterLink>
         </div>
         <div class="start-buttonRow contact-links">
@@ -72,11 +73,11 @@ function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
 }
 
 const MAIN_BTNS = [
-    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
-    { path: "/skills", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
-    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
-    { path: "/projects", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
-    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
+    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me", shortTitle: "Contact" },
+    { path: "/skills", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills", shortTitle: "Skills" },
+    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience", shortTitle: "Exp" },
+    { path: "/projects", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects", shortTitle: "Projects" },
+    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume", shortTitle: "Resume" },
 ]
 </script>
 
@@ -169,10 +170,20 @@ const MAIN_BTNS = [
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     box-shadow: 0px 0px 10px 1px var(--website-text);
 }
 .start-buttonRow-btn:hover {
     background-color: rgb(39, 39, 39);
+}
+
+.start-buttonRow-btn.inner-path {
+    height: 47px;
+}
+.start-btn-caption {
+    position: relative;
+    top: 4px;
+    font-size: 10.5px;
 }
 
 @media (max-width: 1225px) {
@@ -222,6 +233,9 @@ const MAIN_BTNS = [
         width: 28px;
         height: 28px;
         font-size: 23px;
+    }
+    .start-btn-caption {
+        font-size: 9.5px;
     }
 }
 

@@ -41,14 +41,12 @@
 
     <Transition name="navMenu-transition">
         <div v-if="webData.navMenuOpen" class="mohit-navMenu">
-            <template v-for="(btn, index) in MAIN_BTNS">
-                <div v-if="index != 0 && index != 6" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-                    <RouterLink :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
-                        <font-awesome-icon :icon="btn.icon" />
-                        <span> {{ btn.title }} </span>
-                    </RouterLink>
-                </div>
-            </template>
+            <div v-for="(btn, index) in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
+                <RouterLink :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
+                    <font-awesome-icon :icon="btn.icon" />
+                    <span> {{ btn.title }} </span>
+                </RouterLink>
+            </div>
         </div>
     </Transition>
 </div>
@@ -108,7 +106,7 @@ const MOBILE_MAIN_BTNS = [
     min-width: 320px;
     min-height: 50px;
     background-color: black;
-    z-index: 15;
+    z-index: 515;
     border: 2px solid var(--website-text);
     border-radius: 15px;
     overflow: hidden;
@@ -178,7 +176,7 @@ const MOBILE_MAIN_BTNS = [
 
 .mohit-navMenu {
     width: 100%;
-    height: 305px;
+    height: 427px;
     overflow: hidden;
 }
 .mohit-navMenu-opt {
@@ -222,7 +220,7 @@ const MOBILE_MAIN_BTNS = [
     height: 0;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
-    height: 305px;
+    height: 427px;
 }
 
 @media (max-width: 825px) {
