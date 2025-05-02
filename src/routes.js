@@ -4,8 +4,9 @@ import MyIcon from "./pages/MyIcon.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
 
-import Resume from "./pages/Resume.vue";
-import ResumeNative from "./pages/ResumeNative.vue";
+import Resume from "./pages/resume/Resume.vue";
+import ResumeNative from "./pages/resume/ResumeNative.vue";
+import ResumeDownload from "./pages/resume/ResumeDownload.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
@@ -40,6 +41,7 @@ export const personalRoutes = [
         children: [
             { path: "", name: "My Resume", component: Resume },
             { path: "pdf", name: "My Resume (Native)", component: ResumeNative },
+            { path: "download", name: "My Resume (Download)", component: ResumeDownload },
             { path: "google", alias: ["googledoc", "google-doc"], redirect: "/resume" },
         ]
     },
