@@ -6,6 +6,7 @@ import vite_icon from "../assets/Vite_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
 import pinia_icon from "../assets/Pinia_Icon.svg";
 import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
+import unjs_icon from "../assets/UnJS_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -409,9 +410,22 @@ export const MODULES_SKILL_NOTES = [
             "With GitHub Actions, I can even set up CI/CD pipelines for my websites to autonomously deploy updates online.",
 
         icon: {
-            id: "fa-brands fa-github",
-            faIcon: true,
-            size: "110"
+            id: mavlink_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "UnJS",
+        link: "https://unjs.io/",
+        color: "#D3B62A",
+        desc: "UnJS is an ecosystem of JavaScript Modules that help with developing websites and apps. " +
+            "I use some of its modules within my own projects like this portfolio website and iVue's websites.",
+
+        icon: {
+            id: unjs_icon,
+            faIcon: false,
+            size: "105"
         }
     },
     {

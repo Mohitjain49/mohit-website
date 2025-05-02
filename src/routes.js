@@ -18,7 +18,7 @@ import GitlabRedirect from "./pages/redirects/GitlabRedirect.vue";
 import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
 import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 
-import SkillsNav from "./pages/SkillsNav.vue";
+import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
 
@@ -31,7 +31,7 @@ import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
  */
 export const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
-    { path: "/skills", name: "Main Skills Page", component: SkillsNav },
+    { path: "/skills", name: "Main Skills Page", component: SkillsPage },
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
