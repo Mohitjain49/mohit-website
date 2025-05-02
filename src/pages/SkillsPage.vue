@@ -172,8 +172,8 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
  */
 function setCardTransition(isVisible, entry) {
     if(!isVisible) { return; }
-    entry.target.classList.add("animate__animated", "animate__zoomIn");
-    setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__zoomIn"); }, 1000);
+    entry.target.classList.add("animate__animated", ((window.innerWidth > 825) ? "animate__zoomIn" : "animate__fadeIn"));
+    setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
 }
 
 /**

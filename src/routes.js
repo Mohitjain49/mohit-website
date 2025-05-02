@@ -4,8 +4,9 @@ import MyIcon from "./pages/MyIcon.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
 
-import Resume from "./pages/Resume.vue";
-import ResumeNative from "./pages/ResumeNative.vue";
+import Resume from "./pages/resume/Resume.vue";
+import ResumeNative from "./pages/resume/ResumeNative.vue";
+import ResumeDownload from "./pages/resume/ResumeDownload.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
@@ -17,7 +18,7 @@ import GitlabRedirect from "./pages/redirects/GitlabRedirect.vue";
 import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
 import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
 
-import SkillsNav from "./pages/SkillsNav.vue";
+import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
 
@@ -30,7 +31,7 @@ import WIVRedirect from "./pages/redirects/WIVRedirect.vue";
  */
 export const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
-    { path: "/skills", name: "Main Skills Page", component: SkillsNav },
+    { path: "/skills", name: "Main Skills Page", component: SkillsPage },
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
     { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
@@ -40,6 +41,7 @@ export const personalRoutes = [
         children: [
             { path: "", name: "My Resume", component: Resume },
             { path: "pdf", name: "My Resume (Native)", component: ResumeNative },
+            { path: "download", name: "My Resume (Download)", component: ResumeDownload },
             { path: "google", alias: ["googledoc", "google-doc"], redirect: "/resume" },
         ]
     },

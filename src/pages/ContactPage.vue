@@ -28,7 +28,7 @@
                     <div class="contact-input-tab-header">Your Message</div>
                 </div>
                 <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
-                    placeholder="Type your message here..."
+                    placeholder="Type your message here (minimum 50 characters)..."
                     v-model="msgMain"
                     @click="setAlertBox('')"
                 ></textarea>
@@ -116,6 +116,8 @@
 
 <script setup>
 import { useHead } from '@unhead/vue';
+import { ofetch } from 'ofetch';
+
 const webData = useWebsiteDataStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 
@@ -170,7 +172,7 @@ function setSocialBtnAnimation(event = new MouseEvent("mouseenter")) {
  */
 function sendEmail() {
     // Stores the necessary parameters for the message.
-    const message = {
+    const body = {
         title: msgTitle.value,
         msgBody: msgMain.value,
         name: senderName.value,
@@ -180,11 +182,11 @@ function sendEmail() {
     if(AWS_API_LINK === "") {
         setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + getAPIErrorRedirect());
         return;
-    } else if(!checkAPIParameters(message)) {
+    } else if(!checkAPIParameters(body)) {
         return;
     }
 
-    axios.post(AWS_API_LINK, message).then((response) => {
+    ofetch.raw(AWS_API_LINK, { method: 'POST', body }).then((response) => {
         if(response.status !== 200) { return; }
         setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
     }).catch((e) => {
@@ -212,7 +214,7 @@ function checkAPIParameters(message) {
     } else if(message.emailAddress === "") {
         setAlertBox("Please enter your email address so I can stay in touch with you.");
     } else {
-        setAlertBox("Send Message. Please Wait...");
+        setAlertBox("Sending Message. Please Wait...");
         msgTitle.value = "";
         msgMain.value = "";
         senderName.value = "";
