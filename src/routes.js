@@ -50,7 +50,9 @@ export const personalRoutes = [
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
+
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
+    { path: "/footer", redirect: { path: "/", hash: "#footer" } },
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/mnd", name: "Mapping Neurodivergence", component: MNDRedirect },

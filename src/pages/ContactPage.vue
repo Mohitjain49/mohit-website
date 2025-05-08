@@ -559,20 +559,6 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
         left: calc(50% - 300px);
     }
 }
-@media (min-height: 965px) and (min-width: 1051px) {
-    .web-footer-contact {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }
-}
-@media (min-height: 1820px) and (max-width: 1050px) {
-    .web-footer-contact {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }
-}
 
 @media (max-width: 1050px) and (min-width: 526px) {
     #contact-page {

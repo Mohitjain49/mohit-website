@@ -1,142 +1,280 @@
 <template>
-<div id="copyright">
-    <RouterLink to="/" @click="checkHomePage()" class="copyright-side-container personal-text">
-        <img class="personal-text-img" :src="personal_icon" draggable="false" />
-    </RouterLink>
+<div id="footer">
+    <div class="footer-body">
+        <div class="footer-routes-column">
+            <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
+                <client-only> <font-awesome-icon icon="fa-house" /> </client-only>
+                <span> Home Page </span>
+            </RouterLink>
 
-    <div class="copyright-statement">
-        <client-only>
-            <font-awesome-icon icon="fa-copyright"
-                class="copyright-mainIcon"
-                @click="goToCopyrightPage()"
-            />
-        </client-only>
-        <span> {{ COPYRIGHT_TEXT }} </span>
+            <RouterLink v-for="tab in MAIN_ROUTES" :to="(tab.path + '/')"
+                :class="['footer-routes-opt', tab.extraClass]"
+                @click="scrollToTop(tab.path)">
+
+                <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                <span> {{ tab.name }} </span>
+            </RouterLink>
+        </div>
+
+        <div class="footer-routes-column">
+            <RouterLink to="/contact" class="footer-routes-header">
+                <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
+                <span> Contact Me </span>
+            </RouterLink>
+
+            <a :href="SOCIALS[0].link" class="footer-routes-opt">
+                <client-only> <font-awesome-icon icon="fa-envelope" /> </client-only>
+                <span> {{ 'Email' }} </span>
+            </a>
+            <RouterLink v-for="tab in CONTACT_ROUTES" :to="tab.path" :class="['footer-routes-opt', tab.extraClass]">
+                <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                <span> {{ tab.name }} </span>
+            </RouterLink>
+        </div>
+
+        <div class="footer-routes-column extras">
+            <RouterLink to="/qrcode" class="footer-routes-header light">
+                <client-only> <font-awesome-icon icon="fa-qrcode" /> </client-only>
+                <span> QR Codes </span>
+            </RouterLink>
+
+            <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
+                :class="['footer-routes-opt', tab.extraClass]"
+                @click="scrollToTop(tab.path)">
+
+                <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                <span> {{ tab.name }} </span>
+            </RouterLink>
+        </div>
     </div>
 
-    <div class="copyright-side-container">
-        <div v-if="!checkCopyrightPage()" class="scroll-topBtn center-flex-display" @click="scrollToTop()" title="Scroll To Start">
-            <client-only> <font-awesome-icon icon="fa-arrow-up" flip /> </client-only>
-        </div>
+    <div class="footer-bottom">
+        <RouterLink to="/copyright" class="copyright-statement">
+            <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
+            <span> {{ COPYRIGHT_TEXT }} </span>
+        </RouterLink>
     </div>
 </div>
 </template>
 
 <script setup>
-import personal_icon from "/static-icons/Personal_Icon_Transparent.png";
-const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
-const router = useRouter();
+const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
+const route = useRoute();
+
+onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain"); })
 
 /**
- * This scrolls to the top of the webpage.
+ * This scrolls to the top of the webpage if the user won't change routes.
+ * @param {String} routeStr The route the button is attached to.
  */
-function scrollToTop() {
+function scrollToTop(routeStr = "/") {
+    if(routeStr !== route.path && (routeStr + "/") !== route.path) { return; }
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 }
 
-/**
- * This function navigates visitors to the copyright page.
- */
-function goToCopyrightPage() {
-    router.push("/copyright");
-}
+const MAIN_ROUTES = [
+    { name: "My Skills", path: "/skills", icon: "fa-code", extraClass: "skills" },
+    { name: "My Experience", path: "/experience", icon: "fa-file-code", extraClass: "" },
+    { name: "My Projects", path: "/projects", icon: "fa-cubes", extraClass: "projects" },
+    { name: "My Resume", path: "/resume", icon: "fa-file-lines", extraClass: "" },
+];
 
-/**
- * This function checks whether the user is on the home page.
- * If so, this function will scroll to the top of the page.
- */
-function checkHomePage() {
-    if(router.currentRoute.value.path === "/") { scrollToTop(); }
-}
+const CONTACT_ROUTES = [
+    { name: "LinkedIn", path: "/linkedin", icon: "fa-brands fa-linkedin", extraClass: "linkedin" },
+    { name: "Discord", path: "/discord", icon: "fa-brands fa-discord", extraClass: "discord" },
+    { name: "GitHub", path: "/github", icon: "fa-brands fa-github", extraClass: "github" },
+    { name: "GitLab", path: "/gitlab", icon: "fa-brands fa-gitlab", extraClass: "gitlab" },
+];
 
-/**
- * This function checks whether the user is on the copyright page.
- * If so, an animation will be disabled.
- */
- function checkCopyrightPage() {
-    const path = router.currentRoute.value.path;
-    return (path === "/copyright" || path === "/copyright/")
-}
+const EXTRA_ROUTES = [
+    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
+    { name: "Copyright", path: "/copyright", icon: "fa-copyright", extraClass: "copyright" },
+];
 </script>
 
 <style scoped>
-#copyright {
-    background-color: black;
+#footer {
+    background-color: rgba(0, 0, 0, 0.95);
     width: 100%;
-    height: 60px;
-    color: var(--blue-cobalt);
-    font-size: 20px;
+    height: 325px;
     border: none;
+    padding-top: 25px;
+}
+
+.footer-body {
+    position: relative;
+    left: calc((100% - 750px) / 2);
+    width: 750px;
+    height: fit-content;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.footer-bottom {
+    width: 100%;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
     text-align: center;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding-bottom: 15px;
 }
-#copyright span {
-    font-size: 23px;
+
+.copyright-statement {
+    width: fit-content;
+    text-align: center;
+    color: var(--blue-cobalt);
+    font-size: 25px;
     font-family: 'Lexend', sans-serif;
-    margin-left: 6px;
-}
-
-.copyright-mainIcon {
     cursor: pointer;
-    transition: font-size 0.2s;
+    border-bottom: var(--empty-border);
+    transition: var(--default-transition);
 }
-.copyright-mainIcon:hover {
-    font-size: 29px;
+.copyright-statement svg {
+    font-size: 23px;
+    margin-right: 4px;
+}
+.copyright-statement:hover {
+    border-color: var(--blue-cobalt);
 }
 
-.copyright-side-container {
-    width: 100px;
-    height: 100%;
+.footer-routes-column {
+    height: 260px;
+    width: 100%;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    transition: var(--default-transition);
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
 }
-.copyright-side-container.personal-text:hover {
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.25);
-}
-.personal-text-img {
-    height: 25px;
-    user-select: none;
+.footer-routes-column.extras {
+    height: fit-content;
+    padding-bottom: 20px;
 }
 
-.scroll-topBtn {
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    background-color: var(--blue-one);
-    border-radius: 10px;
+.footer-routes-header {
+    color: var(--website-text);
+    font-family: 'Roboto', sans-serif;
+    font-size: 27px;
+    font-weight: bold;
+    border-bottom: var(--thin-empty-border);
     transition: var(--default-transition);
-    color: black;
-    font-size: 20px;
+    padding-bottom: 1px;
+    margin-bottom: 20px;
     margin-left: 40px;
 }
-.scroll-topBtn:hover {
-    background-color: var(--blue-three);
+.footer-routes-header svg {
+    font-size: 22px;
+    margin-bottom: 2px;
+}
+.footer-routes-header:hover {
+    border-color: var(--website-text);
 }
 
-@media (max-width: 600px) {
-    #copyright {
-        font-size: 17px;
+.footer-routes-header.light {
+    color: var(--website-light-text);
+}
+.footer-routes-header.light:hover {
+    border-color: var(--website-light-text);
+}
+
+
+.footer-routes-opt {
+    color: var(--website-text);
+    font-family: 'Roboto', sans-serif;
+    font-size: 19px;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0);
+    transition: var(--default-transition);
+    padding-bottom: 2px;
+    margin-bottom: 10px;
+    margin-left: 40px;
+}
+.footer-routes-opt:hover {
+    border-color: var(--website-text);
+}
+.footer-routes-opt svg {
+    width: 25px;
+    margin-right: 8px;
+}
+
+.footer-routes-opt.skills {
+    color: var(--blue-two);
+}
+.footer-routes-opt.skills:hover {
+    border-color: var(--blue-two);
+}
+
+.footer-routes-opt.projects {
+    color: var(--globe-green);
+}
+.footer-routes-opt.projects:hover {
+    border-color: var(--globe-green);
+}
+
+.footer-routes-opt.copyright {
+    color: var(--blue-cobalt);
+}
+.footer-routes-opt.copyright:hover {
+    border-color: var(--blue-cobalt);
+}
+
+.footer-routes-opt.linkedin {
+    color: #0072B1;
+}
+.footer-routes-opt.linkedin:hover {
+    border-color: #0072B1;
+}
+
+.footer-routes-opt.discord {
+    color: #5865F2;
+}
+.footer-routes-opt.discord:hover {
+    border-color: #5865F2;
+}
+
+.footer-routes-opt.github {
+    color: white;
+}
+.footer-routes-opt.github:hover {
+    border-color: white;
+}
+
+.footer-routes-opt.gitlab {
+    color: #E24329;
+}
+.footer-routes-opt.gitlab:hover {
+    border-color: #E24329;
+}
+
+@media (max-width: 825px) {
+    #footer {
+        height: 475px;
     }
-    #copyright span {
+    .footer-body {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 700px) {
+    .footer-body {
+        left: 0px;
+        width: 100%;
+    }
+}
+@media (max-width: 525px) {
+    .footer-routes-header {
         font-size: 20px;
+        margin-left: 18px;
+        margin-bottom: 15px;
     }
-    .copyright-side-container {
-        width: 70px;
+    .footer-routes-header svg {
+        font-size: 18px;
     }
 
-    .personal-text-img {
-        height: 18px;
-    }
-    .scroll-topBtn {
-        width: 35px;
-        height: 35px;
-        font-size: 18px;
+    .footer-routes-opt {
+        font-size: 14px;
         margin-left: 20px;
+    }
+    .footer-routes-opt svg {
+        width: 15px;
+        margin-right: 5px;
     }
 }
 </style>
