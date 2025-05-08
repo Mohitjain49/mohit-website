@@ -9,6 +9,7 @@
         <StartSection />
         <SkillsSection />
         <IvueSection />
+        <ProjectsSection />
     </client-only>
     
     <WebFooter />

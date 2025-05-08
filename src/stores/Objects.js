@@ -11,6 +11,7 @@ import unjs_icon from "../assets/UnJS_Icon.png";
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text_Cropped.png";
+import mnd_text from "/static-icons/MND_Icon_Transparent.png";
 
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
 import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
@@ -563,4 +564,46 @@ export const ICONS_SKILL_NOTES = [
             size: "160"
         }
     },
-]
+];
+
+export const PROJECT_ENTITIES = [
+    {
+        name: "MND",
+        link: MND_PROJECT_LINK,
+        color: "#008080",
+        desc: "This project utiltizes Vue.js, Cesium, and numerous Amazon Web Services to help connect people in-person. " +
+            "It was for the Spring 2025 KSU Hackathon.",
+
+        icon: {
+            id: mnd_text,
+            faIcon: false,
+            size: "210"
+        }
+    },
+    {
+        name: "My Pizza App",
+        link: PIZZA_WEBSITE_LINK,
+        color: "#8B0000",
+        desc: "I created a Mock UI for a pizza ordering and delivery system using Angular. " +
+            "It is hosted onlive via GitHub Pages.",
+
+        icon: {
+            id: "fa-pizza-slice",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "My Globe UI",
+        link: PERSONAL_GLOBE_LINK,
+        color: "var(--blue-one)",
+        desc: "This is a simple Globe UI that I created with Cesium. " +
+            "It uses the built-in Cesium Geocoder to search locations across the world.",
+
+        icon: {
+            id: cesium_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+];
