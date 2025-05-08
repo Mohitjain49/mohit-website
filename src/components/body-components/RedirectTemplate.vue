@@ -1,20 +1,28 @@
 <template>
 <NavigationMain />
 <div class="personal-web-body">
-    <div class="redirect-statement"> {{ REDIRECT_TEXT }} </div>
+    <div class="redirect-statement">
+        {{ (emailPage ? EMAIL_REDIRECT_TEXT : REDIRECT_TEXT) }}
+    </div>
 </div>
 </template>
 
 <script setup>
 const props = defineProps({
-    websiteLink: { type: String, required: true }
+    websiteLink: { type: String, required: true },
+    emailPage: { type: Boolean, default: false }
 });
 
 const REDIRECT_TEXT = ("Redirecting You To " + props.websiteLink);
+const EMAIL_REDIRECT_TEXT = ("Redirecting You To Your Email Client...");
+const router = useRouter();
 
 onMounted(() => {
     initWebData();
     window.location.replace(props.websiteLink);
+    
+    if(!props.emailPage) { return; }
+    setTimeout(() => { router.push("/") }, 1500);
 });
 </script>
 

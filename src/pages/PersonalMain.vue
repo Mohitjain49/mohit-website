@@ -12,7 +12,7 @@
         <ProjectsSection />
     </client-only>
     
-    <WebFooter />
+    <NewFooter />
 </div>
 </template>
 
