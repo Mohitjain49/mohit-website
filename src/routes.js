@@ -13,6 +13,7 @@ import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
 import MNDRedirect from "./pages/redirects/MNDRedirect.vue";
 import PizzaRedirect from "./pages/redirects/PizzaRedirect.vue";
 
+import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
 import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
 import GitlabRedirect from "./pages/redirects/GitlabRedirect.vue";
 import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
@@ -49,10 +50,9 @@ export const personalRoutes = [
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
-    { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
-    { path: "/ksu", alias: ["/ksu-edu", "/kennesaw-state"], redirect: { path: "/", hash: "#ksu" } },
-    { path: "/extras", alias: ["/extra"], redirect: { path: "/", hash: "#extras" } },
+    { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
+    { path: "/footer", redirect: { path: "/", hash: "#footer" } },
 
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/mnd", name: "Mapping Neurodivergence", component: MNDRedirect },
@@ -62,6 +62,7 @@ export const personalRoutes = [
     { path: "/sublo", name: "Sublo Main Redirect Page", component: SubloRedirect },
     { path: "/worldsivue", alias: ['/wiv', '/worlds-ivue'], main: "Main WIV Redirect Page", component: WIVRedirect },
 
+    { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: "/github",  main: "Main GitHub Redirect Page", component: GithubRedirect },
     { path: "/gitlab",  main: "Main GitLab Redirect Page", component: GitlabRedirect },
     { path: "/linkedin",  main: "Main LinkedIn Redirect Page", component: LinkedinRedirect },

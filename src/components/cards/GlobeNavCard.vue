@@ -17,6 +17,10 @@
                 <img :src="module.icon" draggable="false" />
                 <span> {{ module.title }} </span>
             </div>
+            <div class="newCard-module">
+                <client-only> <font-awesome-icon icon="fa-brands fa-github" style="color: black" /> </client-only>
+                <span> GitHub </span>
+            </div>
         </div>
 
         <div class="nav-newCard-desc center-flex-display">
@@ -34,7 +38,6 @@ import globe_page from "@/assets/Personal_Globe_Page.png";
 
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
-import cognito_icon from "@/assets/aws/AWS_CloudFront_Icon.svg";
 import pinia_icon from "@/assets/Pinia_Icon.svg";
 
 onMounted(() => {
@@ -43,8 +46,7 @@ onMounted(() => {
 
 const DEV_STACK = [
     { title: "Vue.js", icon: vuejs_icon },
-    { title: "Cesium", icon: cesium_icon },
-    { title: "AWS Website Hosting", icon: cognito_icon },
     { title: "Pinia", icon: pinia_icon },
+    { title: "Cesium", icon: cesium_icon },
 ];
 </script>

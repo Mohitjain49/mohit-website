@@ -1,7 +1,7 @@
 .main-nav-page-container {
     width: 100%;
     height: fit-content;
-    min-height: 100%;
+    min-height: 100vh;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -98,30 +98,4 @@
     .incomplete-title {
         font-size: 42px;
     }
-}
-
-/**
- * These styles are for web footer on Navigation pages.
- */
-
-@media (min-height: 1130px) and (min-width: 951px) {
-    .footer-nav-page {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }   
-}
-@media (min-height: 1930px) and (min-width: 651px) {
-    .footer-nav-page {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }   
-}
-@media (min-height: 2730px) {
-    .footer-nav-page {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }   
 }

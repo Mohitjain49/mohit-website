@@ -109,8 +109,7 @@ function onIvueTabLeave(id = "main-tab") {
     height: fit-content;
     min-height: 800px;
     width: 100%;
-    padding-bottom: 50px;
-    padding-top: 100px
+    padding: 100px 0px;
 }
 
 #ivue-section-title {
