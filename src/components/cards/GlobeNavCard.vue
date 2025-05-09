@@ -1,5 +1,5 @@
 <template>
-<div class="newCard-container">
+<div id="third-nav-card" class="newCard-container">
     <a :href="PERSONAL_GLOBE_LINK" id="globe-nav-newCard" class="nav-newCard"
         @mouseenter="setPulseLoopAnimation"
         @mouseleave="setPulseLoopAnimation">

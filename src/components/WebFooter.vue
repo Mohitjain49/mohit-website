@@ -259,6 +259,22 @@ const EXTRA_ROUTES = [
     }
 }
 @media (max-width: 525px) {
+    #footer {
+        height: 450px;
+    }
+    .footer-body {
+        height: 390px;
+    }
+    .footer-bottom {
+        padding-bottom: 10px;
+    }
+    .copyright-statement {
+        font-size: 23px;
+    }
+    .copyright-statement svg {
+        font-size: 21px;
+    }
+
     .footer-routes-header {
         font-size: 20px;
         margin-left: 18px;

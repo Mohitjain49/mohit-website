@@ -1,5 +1,5 @@
 <template>
-<div id="sublo-nav-newCard-container" class="newCard-container">
+<div id="third-nav-card" class="newCard-container">
     <a :href="SUBLO_WEBSITE_LINK" id="sublo-nav-newCard" class="nav-newCard"
         @mouseenter="setPulseLoopAnimation"
         @mouseleave="setPulseLoopAnimation">

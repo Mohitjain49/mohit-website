@@ -251,7 +251,7 @@
 }
 
 @media (max-width: 950px) and (min-width: 651px) {
-    #sublo-nav-newCard-container {
+    #third-nav-card {
         position: relative;
         left: 50%;
     }

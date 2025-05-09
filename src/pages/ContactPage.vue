@@ -294,7 +294,8 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     position: relative;
     width: 450px;
     padding: 25px 10px;
-    margin: 25px 0px;
+    margin-top: 25px;
+    margin-bottom: 50px;
     height: fit-content;
     min-height: 750px;
     border: 2px solid var(--website-text);

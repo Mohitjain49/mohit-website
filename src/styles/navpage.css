@@ -47,7 +47,7 @@
         grid-template-columns: 1fr;
     }
     .nav-page-title {
-        font-size: 45px;
+        font-size: 42px;
     }
 }
 
@@ -55,12 +55,6 @@
     .twoColumn-nav-page {
         grid-template-columns: 1fr 1fr 1fr 1fr;
         max-width: 1800px;
-    }
-}
-
-@media (max-width: 950px) and (min-width: 651px) {
-    #third-nav-card {
-        left: 52.5%;
     }
 }
 
