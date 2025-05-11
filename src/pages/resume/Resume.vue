@@ -1,7 +1,5 @@
 <template>
-<NavigationMain />
 <ResumeWidgets />
-
 <div id="resume-container">
     <iframe :src="VIEWER_URL" height="100%" width="100%"></iframe>
 </div>

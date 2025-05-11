@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <client-only>
     <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
 </client-only>

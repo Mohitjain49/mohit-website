@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <div id="icons-body" class="personal-web-body">
     <div id="start" class="icon-page-padding"></div>
     <div class="icon-background blue-zero">

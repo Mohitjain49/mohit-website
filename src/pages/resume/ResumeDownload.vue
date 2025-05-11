@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <ResumeWidgets />
 <div id="resume-container"></div>
 </template>

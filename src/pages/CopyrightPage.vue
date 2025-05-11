@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <div class="personal-web-body">
     <div class="copyright-body">
         <div class="copyright-body-header">

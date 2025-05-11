@@ -12,6 +12,10 @@ joypad.on("button_press", (e) => {
     if(buttonName === "button_12") { direction = "up"; }
     if(buttonName === "button_13") { direction = "down"; }
     if(direction !== "") { useGamepadStore().setScrollInterval(direction); }
+
+    if(buttonName === "button_8" || buttonName === "button_9") {
+        useWebsiteDataStore().toggleNavMenu();
+    }
 })
 
 joypad.on("button_release", (e) => {
