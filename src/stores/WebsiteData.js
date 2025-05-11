@@ -1,6 +1,8 @@
 import MJ_Resume from "/Mohit_Jain_Resume.pdf";
 
 export const useWebsiteDataStore = defineStore("WebsiteData", () => {
+    const controller = new AbortController();
+
     /**
      * An reference integer that determines the Mode of the Nav Bar.
      * If it equals 0, it is on laptop mode, or the screen width is above 825px.
@@ -9,8 +11,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     const pageView = ref(0);
     const navMenuOpen = ref(false);
-
-    const controller = new AbortController();
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
@@ -32,6 +32,35 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     function removeEventListeners() {
         controller.abort();
+    }
+
+    /**
+     * This sets the size of crucial components within the website.
+     */
+    function resizePageComponents() {
+        const windowWidth = window.innerWidth;
+        
+        if(windowWidth <= 600) {
+            pageView.value = 2;
+        } else if(windowWidth <= 825) {
+            pageView.value = 1;
+        } else {
+            pageView.value = 0;
+            closeNavMenu();
+        }
+    }
+
+    /**
+     * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
+     * @param event The event.
+     */
+    function onDocumentBodyClick(event = new MouseEvent("mousedown")) {
+        const navMenu = document.getElementById("mohit-navBar");
+        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
+        const srcElement = event.target;
+
+        if(navMenu === srcElement || navMenuElements.includes(srcElement)) { return; }
+        closeNavMenu();
     }
 
     /**
@@ -117,35 +146,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
         setTimeout(() => {
             event.target.classList.remove('animate__animated', 'animate__flash');
         }, 800)
-    }
-
-    /**
-     * This sets the size of crucial components within the website.
-     */
-    function resizePageComponents() {
-        const windowWidth = window.innerWidth;
-        
-        if(windowWidth <= 600) {
-            pageView.value = 2;
-        } else if(windowWidth <= 825) {
-            pageView.value = 1;
-        } else {
-            pageView.value = 0;
-            closeNavMenu();
-        }
-    }
-
-    /**
-     * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
-     * @param event The event.
-     */
-    function onDocumentBodyClick(event = new MouseEvent("mousedown")) {
-        const navMenu = document.getElementById("mohit-navBar");
-        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        const srcElement = event.target;
-
-        if(navMenu === srcElement || navMenuElements.includes(srcElement)) { return; }
-        closeNavMenu();
     }
 
     return { pageView, navMenuOpen, toggleNavMenu, closeNavMenu,
