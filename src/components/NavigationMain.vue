@@ -6,7 +6,7 @@
         </RouterLink>
 
         <div v-if="webData.pageView == 0" class="mohit-navBar-icons">
-            <RouterLink v-for="btn in MAIN_BTNS" :to="btn.path"
+            <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
                 @click="(event) => { flashNavOpt(event, btn.path) }"
                 :title="btn.title"
                 class="mohit-navBar-icon"
@@ -16,6 +16,14 @@
 
                 <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
+            <div class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+                :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
+                :style="getColorStyles('var(--website-light-text)')"
+                @mouseenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
+            </div>
         </div>
 
         <div v-if="webData.pageView != 0" class="mohit-navBar-icons">
@@ -90,6 +98,12 @@ const MAIN_BTNS = [
     { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
 ];
 
+const LAPTOP_MAIN_BTNS = [
+    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
+    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
+    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
+];
+
 const MOBILE_MAIN_BTNS = [
     { path: "/", icon: "fa-house", title: "Home Page" },
     { path: "/qrcode", icon: "fa-qrcode", title: "QR Codes" },
@@ -142,7 +156,7 @@ const MOBILE_MAIN_BTNS = [
 }
 
 .mohit-navBar-icons {
-    width: 350px;
+    width: 200px;
     padding-right: 7px;
     height: 100%;
     display: flex;

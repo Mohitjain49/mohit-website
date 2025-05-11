@@ -1,6 +1,6 @@
 import MJ_Resume from "/Mohit_Jain_Resume.pdf";
 
-export const useWebsiteDataStore = defineStore("WebsiteData", () => {
+export const useWebsiteDataStore = defineStore("web-data", () => {
     const controller = new AbortController();
 
     /**
@@ -46,7 +46,6 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
             pageView.value = 1;
         } else {
             pageView.value = 0;
-            closeNavMenu();
         }
     }
 
@@ -84,7 +83,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      * The toggles the status of the home navigation menu.
      */
     function toggleNavMenu() {
-        navMenuOpen.value = ((pageView.value == 0) ? false : !navMenuOpen.value);
+        navMenuOpen.value = !navMenuOpen.value;
     }
 
     /**
