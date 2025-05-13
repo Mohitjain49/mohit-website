@@ -19,6 +19,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function setEventListeners() {
         const signal = controller.signal;
         resizePageComponents();
+        gamepadStore.hideCustomCursor();
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("scroll", closeNavMenu, { signal });
@@ -41,6 +42,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
+        gamepadStore.setCustomCursor(true);
         
         if(windowWidth <= 600) {
             pageView.value = 2;

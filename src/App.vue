@@ -24,7 +24,7 @@ onBeforeUnmount(() => {webData.removeEventListeners()})
 
 <style>
 .mohit-custom-cursor {
-    font-size: 22px;
+    font-size: 27px;
     color: red;
     position: fixed;
     pointer-events: none;

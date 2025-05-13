@@ -1,6 +1,9 @@
 <template>
-<div id="mohit-bookmark" :title="bookmarkTitle">
+<div class="mohit-bookmark" :title="bookmarkTitle">
     <client-only> <font-awesome-icon :icon="bookmarkItem" /> </client-only>
+</div>
+<div class="mohit-bookmark right" title="Use Your Gamepad!">
+    <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
 </div>
 </template>
 
@@ -18,17 +21,19 @@ const bookmarkTitle = computed(() => {
 });
 
 const BOOKMARK_ITEMS = [
-    { path: "/skills", icon: "fa-code", title: "My skills" },
-    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)" },
-    { path: "/projects", icon: "fa-cubes", color: "var(--globe-green-opaque)" },
-    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)" },
-    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)" },
-    { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)" },
+    { path: "/skills", icon: "fa-code" },
+    { path: "/experience", icon: "fa-file-code" },
+    { path: "/projects", icon: "fa-cubes" },
+    { path: "/resume", icon: "fa-file-lines" },
+    { path: "/contact", icon: "fa-paper-plane" },
+    { path: "/qrcode", icon: "fa-qrcode" },
+    { path: "/icon", icon: "fa-pen-fancy" },
+    { path: "/copyright", icon: "fa-copyright" },
 ];
 </script>
 
 <style scoped>
-#mohit-bookmark {
+.mohit-bookmark {
     position: fixed;
     top: 0;
     left: 10px;
@@ -49,13 +54,18 @@ const BOOKMARK_ITEMS = [
         0 100%
     );
 }
-#mohit-bookmark svg {
+
+.mohit-bookmark svg {
     font-size: 19px;
     margin-bottom: 15px;
 }
+.mohit-bookmark.right {
+    left: auto;
+    right: 10px;
+}
 
 @media (max-width: 450px) {
-    #mohit-bookmark {
+    .mohit-bookmark {
         display: none;
     }
 }

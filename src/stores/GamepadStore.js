@@ -8,13 +8,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         left: "0px", top: "0px"
     });
 
-    /**
-     * This converts any number to pixels that can be used by HTML elements.
-     * @param {Number} num The number to convert.
-     */
-    function convertNumToPixels(num = 0) {
-        return (String(num) + "px");
-    }
+    const cursorX = ref(0);
+    const cursorY = ref(0);
 
     /**
      * This function moves onto the next page.
@@ -41,11 +36,34 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      */
     function manageCustomCursor(event) {
         if(event.stickMoved !== "left_stick") { return; }
-        document.body.style.cursor = "none";
-        customCursor.value.display = "block";
+        if(event.axis == 0) {
+            cursorX.value += (5 * event.axisMovementValue);
+            if(cursorX.value < 30) { cursorX.value = 30; }
+            if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
+        } else {
+            cursorY.value += (10 * event.axisMovementValue);
+            if(cursorY.value < 30) { cursorY.value = 30; }
+            if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
+        }
 
-        customCursor.value.left = convertNumToPixels(window.innerWidth / 2);
-        customCursor.value.top = convertNumToPixels(window.innerHeight / 2);
+        setCustomCursor(false);
+    }
+
+    /**
+     * This function displays and sets the cursor.
+     * @param {Boolean} reset If true, this function resets the cursor.
+     */
+    function setCustomCursor(reset = false) {
+        document.body.style.cursor = "none";
+        if(reset) {
+            cursorX.value = (window.innerWidth / 2);
+            cursorY.value = (window.innerHeight / 2);
+        }
+
+        customCursor.value = { display: "block",
+            left: (String(cursorX.value) + "px"),
+            top: (String(cursorY.value) + "px")
+        };
     }
 
     /**
@@ -57,14 +75,21 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
-     * Using the directional pad on a controller, this function will scroll on the page depending on which button is held down.
+     * This function emits a click event at the cursor's location.
+     */
+    function emitClick() {
+        const foundElement = document.elementFromPoint(cursorX.value, cursorY.value);
+        const usuableElement = foundElement?.closest('a');
+        if(usuableElement) { usuableElement.click(); }
+    }
+
+    /**
+     * Using the directional pad on a controller, this function will create an interval for scrolling on the page.
      * @param {String} direction The direction to scroll.
      */
-    function setScrollInterval(direction = 'up') {
+    function setScrollInterval(direction = 'top') {
         if(scrollInterval != null || route.path.includes("resume")) { return; }
-        scrollInterval = setInterval(() => {
-            window.scrollBy(0, ((direction === "up") ? -10 : 10));
-        }, 1);
+        scrollInterval = setInterval(() => { initScrollBy(direction, 7); }, 1);
     }
 
     /**
@@ -76,8 +101,17 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         scrollInterval = null;
     }
 
-    return { customCursor,
-        navigatePages, manageCustomCursor, hideCustomCursor,
-        setScrollInterval, stopScrollInterval
+    /**
+     * This function will scroll on the page depending on which button is held down.
+     * @param {String} direction The direction to scroll.
+     * @param {Number} speed The number of pixels to scroll.
+     */
+    function initScrollBy(direction = 'top', speed = 10) {
+        window.scrollBy(0, (speed * ((direction === "top") ? -1 : 1)));
+    }
+
+    return { customCursor, emitClick, navigatePages,
+        setCustomCursor, manageCustomCursor, hideCustomCursor,
+        initScrollBy, setScrollInterval, stopScrollInterval
     }
 });
