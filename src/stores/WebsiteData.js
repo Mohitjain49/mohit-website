@@ -2,6 +2,7 @@ import MJ_Resume from "/Mohit_Jain_Resume.pdf";
 
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const controller = new AbortController();
+    const gamepadStore = useGamepadStore();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -21,6 +22,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("scroll", closeNavMenu, { signal });
+        window.addEventListener("mousemove", () => { gamepadStore.hideCustomCursor() }, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });

@@ -33,3 +33,9 @@ joypad.on("button_release", (e) => {
         useGamepadStore().stopScrollInterval();
     }
 });
+
+joypad.on("axis_move", (e) => {
+    const event = e.detail;
+    console.log(event);
+    useGamepadStore().manageCustomCursor(event);
+})

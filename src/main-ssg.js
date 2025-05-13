@@ -50,6 +50,7 @@ library.add(
     FaIcons.faSquareXmark,
     FaIcons.faPizzaSlice,
     FaIcons.faGamepad,
+    FaIcons.faArrowPointer,
 
     FaBrands.faReact,
     FaBrands.faJs,

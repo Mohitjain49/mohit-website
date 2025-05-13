@@ -3,6 +3,19 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     const route = useRoute();
     var scrollInterval = null;
 
+    const customCursor = ref({
+        display: "none",
+        left: "0px", top: "0px"
+    });
+
+    /**
+     * This converts any number to pixels that can be used by HTML elements.
+     * @param {Number} num The number to convert.
+     */
+    function convertNumToPixels(num = 0) {
+        return (String(num) + "px");
+    }
+
     /**
      * This function moves onto the next page.
      * @param {Boolean} forward If true, moves onto the next page.
@@ -21,6 +34,26 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
         if(currentPath == -1) { navIndex = 0; }
         router.push(NAV_PAGES[navIndex]);
+    }
+
+    /**
+     * This function manages the custom cursor based on an event.
+     */
+    function manageCustomCursor(event) {
+        if(event.stickMoved !== "left_stick") { return; }
+        document.body.style.cursor = "none";
+        customCursor.value.display = "block";
+
+        customCursor.value.left = convertNumToPixels(window.innerWidth / 2);
+        customCursor.value.top = convertNumToPixels(window.innerHeight / 2);
+    }
+
+    /**
+     * This function hides the Custom Cursor.
+     */
+    function hideCustomCursor() {
+        customCursor.value = { display: "none", left: "0px", top: "0px" };
+        document.body.style.cursor = "";
     }
 
     /**
@@ -43,5 +76,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         scrollInterval = null;
     }
 
-    return { navigatePages, setScrollInterval, stopScrollInterval }
+    return { customCursor,
+        navigatePages, manageCustomCursor, hideCustomCursor,
+        setScrollInterval, stopScrollInterval
+    }
 });
