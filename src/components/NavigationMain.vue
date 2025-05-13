@@ -114,8 +114,8 @@ const MOBILE_MAIN_BTNS = [
 #mohit-navBar {
     position: fixed;
     top: 8px;
-    left: calc((100% - 775px) / 2);
-    width: 775px;
+    left: calc((100% - 695px) / 2);
+    width: 695px;
     height: fit-content;
     min-width: 320px;
     min-height: 50px;
@@ -239,8 +239,8 @@ const MOBILE_MAIN_BTNS = [
 
 @media (max-width: 825px) {
     #mohit-navBar {
-        width: calc(100% - 30px);
-        left: 15px;
+        width: calc(100% - 120px);
+        left: 60px;
     }
     #mohit-navBar.layout_v2 {
         width: 380px;
@@ -251,6 +251,11 @@ const MOBILE_MAIN_BTNS = [
     }
 }
 @media (max-width: 450px) {
+    #mohit-navBar {
+        width: calc(100% - 20px);
+        left: 10px;
+    }
+
     .mohit-navBar-icons.centered .mohit-navBar-icon {
         width: 32px;
         height: 32px;

@@ -283,7 +283,7 @@ function setCardTransition(isVisible, entry) {
     }
     .skills-category-header {
         grid-column: span 1;
-        margin-left: 0px;
+        margin-left: 10px;
         position: relative;
         left: calc((100% - 400px) / 2);
     }

@@ -1,5 +1,7 @@
 <template>
 <NavigationMain />
+<PageBookmark />
+
 <RouterView :key="$route.path" />
 <div v-if="webData.navMenuOpen" class="webpage-cover"></div>
 </template>
