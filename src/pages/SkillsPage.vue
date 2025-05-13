@@ -297,6 +297,7 @@ function setCardTransition(isVisible, entry) {
         width: 325px;
         left: calc((100% - 325px) / 2);
         font-size: 45px;
+        margin-left: 0px;
     }
     .skills-category-header img, .skills-category-header svg {
         font-size: 45px;
