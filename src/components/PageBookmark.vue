@@ -2,14 +2,15 @@
 <div class="mohit-bookmark" :title="bookmarkTitle">
     <client-only> <font-awesome-icon :icon="bookmarkItem" /> </client-only>
 </div>
-<div class="mohit-bookmark right" title="Use Your Gamepad!">
+<div v-if="gamepadUsuable" class="mohit-bookmark right" title="Use Your Gamepad!">
     <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
 </div>
 </template>
 
 <script setup>
-const webData = useWebsiteDataStore();
 const route = useRoute();
+const gamepadUsuable = ref(false);
+onMounted(() => { gamepadUsuable.value = Boolean(navigator.getGamepads()); })
 
 const bookmarkItem = computed(() => {
     const path = (route.path.endsWith("/") ? route.path.slice(0, -1) : route.path);

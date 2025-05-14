@@ -79,10 +79,8 @@ export const createApp = ViteSSG(App, { routes: personalRoutes },
         app.use(pinia);
 
         if(isClient) {
-            import("./joypad-events.js");
-            app.use(VueParticles, {
-                init: async engine => { await loadSlim(engine); },
-            });
+            app.use(VueParticles, { init: async engine => { await loadSlim(engine); } });
+            if(navigator.getGamepads()) { import("./joypad-events.js"); }
         }
     }
 )

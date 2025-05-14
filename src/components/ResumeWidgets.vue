@@ -1,10 +1,10 @@
 <template>
-<div @click="downloadResume()" :class="WIDGET_CLASSES" title="Download My Resume">
+<button @click="downloadResume()" :class="WIDGET_CLASSES" title="Download My Resume">
     <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
-</div>
-<div @click="reloadPage()" :class="WIDGET_CLASSES" class="reload" title="Reload Page">
+</button>
+<button @click="reloadPage()" :class="WIDGET_CLASSES" class="reload" title="Reload Page">
     <client-only> <font-awesome-icon icon="fa-rotate-right" /> </client-only>
-</div>
+</button>
 
 <RouterLink v-if="checkRoute()" to="/resume/pdf" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
     <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>

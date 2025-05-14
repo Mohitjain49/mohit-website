@@ -80,7 +80,10 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     function emitClick() {
         const foundElement = document.elementFromPoint(cursorX.value, cursorY.value);
         const usuableElement = foundElement?.closest('a');
+        const usuableButton = foundElement?.closest('button');
+
         if(usuableElement) { usuableElement.click(); }
+        if(usuableButton) { usuableButton.click(); }
     }
 
     /**

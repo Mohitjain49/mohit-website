@@ -42,7 +42,6 @@ joypad.on("axis_move", (e) => {
     if(event.stickMoved === "left_stick") {
         useGamepadStore().manageCustomCursor(event);
     } else {
-        console.log(event);
         useGamepadStore().initScrollBy(event.directionOfMovement, 15);
     }
 })

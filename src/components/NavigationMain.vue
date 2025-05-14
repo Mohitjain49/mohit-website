@@ -5,7 +5,7 @@
             <img :src="mkj_text" draggable="false" />
         </RouterLink>
 
-        <div v-if="webData.pageView == 0" class="mohit-navBar-icons">
+        <div v-if="webData.pageView != 2" class="mohit-navBar-icons">
             <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
                 @click="(event) => { flashNavOpt(event, btn.path) }"
                 :title="btn.title"
@@ -16,17 +16,17 @@
 
                 <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
-            <div class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
                 :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
                 :style="getColorStyles('var(--website-light-text)')"
                 @mouseenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
                 <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
-            </div>
+            </button>
         </div>
 
-        <div v-if="webData.pageView != 0" class="mohit-navBar-icons">
+        <div v-if="webData.pageView == 2" class="mohit-navBar-icons">
             <RouterLink v-for="btn in MOBILE_MAIN_BTNS" :to="btn.path"
                 @click="(event) => { flashNavOpt(event, btn.path) }"
                 :title="btn.title"
@@ -37,13 +37,13 @@
 
                 <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
-            <div class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
                 :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
                 @mouseenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
                 <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
-            </div>
+            </button>
         </div>
     </div>
 
@@ -246,16 +246,18 @@ const MOBILE_MAIN_BTNS = [
         width: 380px;
         left: calc(50% - 190px);
     }
+}
+@media (max-width: 600px) {
     .mohit-navBar-icons {
         width: 140px;
     }
 }
+
 @media (max-width: 450px) {
     #mohit-navBar {
         width: calc(100% - 20px);
         left: 10px;
     }
-
     .mohit-navBar-icons.centered .mohit-navBar-icon {
         width: 32px;
         height: 32px;

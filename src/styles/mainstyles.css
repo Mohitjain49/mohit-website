@@ -68,6 +68,10 @@ h1, h2, h3, p {
     font-family: 'Trebuchet MS', 'Calibri', sans-serif;
     color: var(--website-text);
 }
+button {
+    all: unset;
+    cursor: pointer;
+}
 
 .personal-web-body {
     position: absolute;
