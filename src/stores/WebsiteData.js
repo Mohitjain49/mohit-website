@@ -160,9 +160,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(wakeLock.value != null) {
             await wakeLock.value.release();
             wakeLock.value = null;
+            alert("Screen Wake Lock Released.");
         } else {
             try {
                 wakeLock.value = await navigator.wakeLock.request("screen");
+                alert("Screen Wake Lock Set.");
             } catch(e) {
                 alert(e.name);
             }
