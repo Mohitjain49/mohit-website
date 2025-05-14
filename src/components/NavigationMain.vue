@@ -50,9 +50,21 @@
     <Transition name="navMenu-transition">
         <div v-if="webData.navMenuOpen" class="mohit-navMenu">
             <div v-for="(btn, index) in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-                <RouterLink :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
+                <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
                     <span> {{ btn.title }} </span>
+                </RouterLink>
+            </div>
+
+            <div class="mohit-navMenu-opt">
+                <RouterLink to="/qrcode" class="mohit-navMenu-extra" title="QR Codes">
+                    <font-awesome-icon icon="fa-qrcode" />
+                </RouterLink>
+                <button class="mohit-navMenu-extra" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
+                    <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
+                </button>
+                <RouterLink to="/icons" class="mohit-navMenu-extra icons" title="My Icons">
+                    <font-awesome-icon icon="fa-pen-fancy" />
                 </RouterLink>
             </div>
         </div>
@@ -64,6 +76,10 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const route = useRoute();
+
+const wakeLockStatement = computed(() => {
+    return (((webData.wakeLock == null) ? "Set" : "Release") + " Screen Wake Lock");
+});
 
 /**
  * This sets the color and border color of an icon.
@@ -95,7 +111,6 @@ const MAIN_BTNS = [
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
     { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
-    { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
 ];
 
 const LAPTOP_MAIN_BTNS = [
@@ -204,7 +219,7 @@ const MOBILE_MAIN_BTNS = [
     font-size: 18px;
 }
 
-.mohit-navMenu-opt a {
+.mohit-navMenu-mainOpt {
     cursor: pointer;
     background-color: rgba(20, 20, 20);
     height: 40px;
@@ -219,12 +234,35 @@ const MOBILE_MAIN_BTNS = [
     transition: var(--default-transition);
     user-select: none;
 }
-.mohit-navMenu-opt a:hover {
+.mohit-navMenu-mainOpt:hover {
     background-color: rgba(40, 40, 40);
 }
-.mohit-navMenu-opt svg {
+.mohit-navMenu-mainOpt svg {
     margin-right: 10px;
     width: 25px;
+}
+
+.mohit-navMenu-extra {
+    height: 40px;
+    width: 40px;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed var(--website-light-text);
+    border-radius: 15px;
+    transition: var(--default-transition);
+    background-color: rgb(20, 20, 20);
+    color: var(--website-light-text);
+    margin: 0px 10px;
+}
+.mohit-navMenu-extra:hover {
+    background-color: rgb(40, 40, 40);
+}
+
+.mohit-navMenu-extra.icons {
+    color: var(--blue-zero);
+    border-color: var(--blue-zero);
 }
 
 .navMenu-transition-enter-active, .navMenu-transition-leave-active {
@@ -242,10 +280,6 @@ const MOBILE_MAIN_BTNS = [
         width: calc(100% - 120px);
         left: 60px;
     }
-    #mohit-navBar.layout_v2 {
-        width: 380px;
-        left: calc(50% - 190px);
-    }
 }
 @media (max-width: 600px) {
     .mohit-navBar-icons {
@@ -262,10 +296,6 @@ const MOBILE_MAIN_BTNS = [
         width: 32px;
         height: 32px;
         font-size: 20px;
-    }
-    .mohit-navBar.layout_v2 {
-        width: calc(100% - 20px);
-        left: 10px;
     }
 }
 @media (max-width: 350px) {

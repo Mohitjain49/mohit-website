@@ -48,7 +48,7 @@ export const personalRoutes = [
     },
 
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
-    { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
+    { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
 
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },

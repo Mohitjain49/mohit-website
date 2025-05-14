@@ -3,13 +3,16 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     const route = useRoute();
     var scrollInterval = null;
 
-    const customCursor = ref({
-        display: "none",
-        left: "0px", top: "0px"
-    });
-
+    const showCursor = ref(false);
     const cursorX = ref(0);
     const cursorY = ref(0);
+
+    const customCursor = computed(() => {
+        return {
+            left: (String(cursorX.value) + "px"),
+            top: (String(cursorY.value) + "px")
+        }
+    });
 
     /**
      * This function moves onto the next page.
@@ -36,42 +39,34 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      */
     function manageCustomCursor(event) {
         if(event.stickMoved !== "left_stick") { return; }
+        setCustomCursor(true);
+
         if(event.axis == 0) {
             cursorX.value += (5 * event.axisMovementValue);
             if(cursorX.value < 30) { cursorX.value = 30; }
             if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
         } else {
-            cursorY.value += (10 * event.axisMovementValue);
+            cursorY.value += (5 * event.axisMovementValue);
             if(cursorY.value < 30) { cursorY.value = 30; }
             if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
         }
-
-        setCustomCursor(false);
     }
 
     /**
-     * This function displays and sets the cursor.
-     * @param {Boolean} reset If true, this function resets the cursor.
+     * This function sets the visibility of the custom cursor.
+     * @param {Boolean} reset If true, this function displays the cursor, else it hides the cursor.
      */
-    function setCustomCursor(reset = false) {
-        document.body.style.cursor = "none";
-        if(reset) {
-            cursorX.value = (window.innerWidth / 2);
-            cursorY.value = (window.innerHeight / 2);
-        }
-
-        customCursor.value = { display: "block",
-            left: (String(cursorX.value) + "px"),
-            top: (String(cursorY.value) + "px")
-        };
+    function setCustomCursor(visible = false) {
+        document.body.style.cursor = (visible ? "none" : "");
+        showCursor.value = visible;
     }
 
     /**
-     * This function hides the Custom Cursor.
+     * This function initializes the custom cursor position.
      */
-    function hideCustomCursor() {
-        customCursor.value = { display: "none", left: "0px", top: "0px" };
-        document.body.style.cursor = "";
+    function initCustomCursorPosition() {
+        cursorX.value = (window.innerWidth / 2);
+        cursorY.value = (window.innerHeight / 2);
     }
 
     /**
@@ -113,8 +108,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         window.scrollBy(0, (speed * ((direction === "top") ? -1 : 1)));
     }
 
-    return { customCursor, emitClick, navigatePages,
-        setCustomCursor, manageCustomCursor, hideCustomCursor,
+    return { customCursor, showCursor, emitClick, navigatePages,
+        setCustomCursor, manageCustomCursor, initCustomCursorPosition,
         initScrollBy, setScrollInterval, stopScrollInterval
     }
 });

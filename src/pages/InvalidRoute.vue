@@ -23,9 +23,10 @@ const PAGE_DESC = "404 - Page Not Found.";
 useHead(getMeta("Mohit Jain | 404 Error", "404", PAGE_DESC));
 onMounted(() => {
     webData.mountWebData();
-    const path = router.currentRoute.value;
+    const path = router.currentRoute.value.path;
 
     if(path === "/contact-me" || path === "/contact-me/") { router.replace("/contact"); }
     if(path === "/exp" || path === "/exp/") { router.replace("/experience/"); }
+    if(path === "/icon" || path === "/icon/") { router.replace("/icons"); }
 });
 </script>

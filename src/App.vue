@@ -6,7 +6,8 @@
 <div v-if="webData.navMenuOpen" class="webpage-cover"></div>
 
 <client-only>
-    <font-awesome-icon icon="fa-arrow-pointer"
+    <font-awesome-icon v-if="gamepadStore.showCursor"
+        icon="fa-arrow-pointer"
         class="mohit-custom-cursor"
         :style="gamepadStore.customCursor"
     />

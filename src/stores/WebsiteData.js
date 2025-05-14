@@ -12,6 +12,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     const pageView = ref(0);
     const navMenuOpen = ref(false);
+    const wakeLock = ref(null);
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
@@ -19,11 +20,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function setEventListeners() {
         const signal = controller.signal;
         resizePageComponents();
-        gamepadStore.hideCustomCursor();
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("scroll", closeNavMenu, { signal });
-        window.addEventListener("mousemove", () => { gamepadStore.hideCustomCursor() }, { signal });
+        window.addEventListener("mousemove", () => { gamepadStore.setCustomCursor(false); }, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
@@ -42,7 +42,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
-        gamepadStore.setCustomCursor(true);
+        gamepadStore.initCustomCursorPosition();
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -151,7 +151,26 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }, 800)
     }
 
-    return { pageView, navMenuOpen, toggleNavMenu, closeNavMenu,
+    /**
+     * This function toggles the wake lock for the website.
+     */
+    async function toggleWakeLock() {
+        if(!("wakeLock" in navigator)) { return; }
+
+        if(wakeLock.value != null) {
+            await wakeLock.value.release();
+            wakeLock.value = null;
+        } else {
+            try {
+                wakeLock.value = await navigator.wakeLock.request("screen");
+            } catch(e) {
+                alert(e.name);
+            }
+        }
+    }
+
+    return { pageView, navMenuOpen, wakeLock,
+        toggleNavMenu, closeNavMenu, toggleWakeLock,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation

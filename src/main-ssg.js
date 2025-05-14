@@ -51,6 +51,8 @@ library.add(
     FaIcons.faPizzaSlice,
     FaIcons.faGamepad,
     FaIcons.faArrowPointer,
+    FaIcons.faLock,
+    FaIcons.faUnlock,
 
     FaBrands.faReact,
     FaBrands.faJs,
