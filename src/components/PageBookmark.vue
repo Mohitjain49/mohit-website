@@ -2,13 +2,18 @@
 <div class="mohit-bookmark" :title="bookmarkTitle">
     <client-only> <font-awesome-icon :icon="bookmarkItem" /> </client-only>
 </div>
-<div v-if="gamepadUsuable" class="mohit-bookmark right" title="Use Your Gamepad!">
+<div v-if="webData.wakeLock != null" class="mohit-bookmark lock" title="Screen Wake Lock Set">
+    <client-only> <font-awesome-icon icon="fa-lock" /> </client-only>
+</div>
+<div v-if="gamepadUsuable" class="mohit-bookmark gamepad" title="Use Your Gamepad!">
     <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
 </div>
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const route = useRoute();
+
 const gamepadUsuable = ref(false);
 onMounted(() => { gamepadUsuable.value = Boolean(navigator.getGamepads()); })
 
@@ -41,7 +46,8 @@ const BOOKMARK_ITEMS = [
     height: 50px;
     width: 30px;
     background-color: var(--blue-one);
-    z-index: 515;
+    color: black;
+    z-index: 514;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,19 +61,49 @@ const BOOKMARK_ITEMS = [
         0 100%
     );
 }
-
 .mohit-bookmark svg {
     font-size: 19px;
     margin-bottom: 15px;
 }
-.mohit-bookmark.right {
+
+.mohit-bookmark.lock {
     left: auto;
     right: 10px;
+    background: linear-gradient(to right, black 0%, #E92A60 10%, #E92A60 90%, black 100%);
+    color: white;
+}
+.mohit-bookmark.gamepad {
+    top: auto;
+    bottom: 0px;
+    clip-path: polygon(
+        0 0,
+        40% 25%,
+        50% 30%,
+        100% 0,
+        100% 100%,
+        0 100%
+    );
+}
+.mohit-bookmark.gamepad svg {
+    margin-bottom: 0px;
+    margin-top: 15px;
 }
 
 @media (max-width: 450px) {
     .mohit-bookmark {
+        width: 20px;
+        height: 50px;
+    }
+    .mohit-bookmark svg {
+        font-size: 15px;
+    }
+    .mohit-bookmark.gamepad {
         display: none;
+    }
+}
+@media (max-width: 350px) {
+    .mohit-bookmark {
+        position: absolute;
     }
 }
 </style>

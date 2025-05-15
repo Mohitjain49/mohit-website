@@ -1,5 +1,5 @@
 <template>
-<div id="mohit-navBar">
+<div id="mohit-navBar" :class="(webData.navMenuOpen ? 'widen' : '')">
     <div class="mohit-navBar-top">
         <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
             <img :src="mkj_text" draggable="false" />
@@ -121,7 +121,6 @@ const LAPTOP_MAIN_BTNS = [
 
 const MOBILE_MAIN_BTNS = [
     { path: "/", icon: "fa-house", title: "Home Page" },
-    { path: "/qrcode", icon: "fa-qrcode", title: "QR Codes" },
 ];
 </script>
 
@@ -132,7 +131,6 @@ const MOBILE_MAIN_BTNS = [
     left: calc((100% - 695px) / 2);
     width: 695px;
     height: fit-content;
-    min-width: 320px;
     min-height: 50px;
     background-color: black;
     z-index: 515;
@@ -178,12 +176,6 @@ const MOBILE_MAIN_BTNS = [
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-}
-.mohit-navBar-icons.centered {
-    justify-content: center;
-    width: 100%;
-    gap: 12px;
-    padding-right: 0px;
 }
 
 .mohit-navBar-icon {
@@ -283,19 +275,18 @@ const MOBILE_MAIN_BTNS = [
 }
 @media (max-width: 600px) {
     .mohit-navBar-icons {
-        width: 140px;
+        width: 90px;
     }
 }
 
 @media (max-width: 450px) {
     #mohit-navBar {
-        width: calc(100% - 20px);
-        left: 10px;
+        width: calc(100% - 80px);
+        left: 40px;
     }
-    .mohit-navBar-icons.centered .mohit-navBar-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 20px;
+    #mohit-navBar.widen {
+        width: calc(100% - 30px);
+        left: 15px;
     }
 }
 @media (max-width: 350px) {
