@@ -53,6 +53,7 @@ library.add(
     FaIcons.faArrowPointer,
     FaIcons.faLock,
     FaIcons.faUnlock,
+    FaIcons.faCodeBranch,
 
     FaBrands.faReact,
     FaBrands.faJs,

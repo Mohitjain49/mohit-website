@@ -12,7 +12,7 @@
             However, please don't directly copy my content, design, or code without my permission.
             <br> <br>
             If you would like to collaborate or discuss using any part of my work, 
-            I'd love to hear from you! The button on the top left will take you to my Contact Page.
+            I'd love to hear from you! You'll find some links to contact me on the footer below.
         </div>
     </div>
     <WebFooter />

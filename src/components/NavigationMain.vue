@@ -57,15 +57,18 @@
             </div>
 
             <div class="mohit-navMenu-opt">
+                <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
+                    <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
+                </button>
                 <RouterLink to="/qrcode" class="mohit-navMenu-extra" title="QR Codes">
                     <font-awesome-icon icon="fa-qrcode" />
                 </RouterLink>
-                <button class="mohit-navMenu-extra" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
-                    <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
-                </button>
                 <RouterLink to="/icons" class="mohit-navMenu-extra icons" title="My Icons">
                     <font-awesome-icon icon="fa-pen-fancy" />
                 </RouterLink>
+                <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="_blank" class="mohit-navMenu-extra repo" title="Website Repository">
+                    <font-awesome-icon icon="fa-code-branch" />
+                </a>
             </div>
         </div>
     </Transition>
@@ -246,15 +249,23 @@ const MOBILE_MAIN_BTNS = [
     transition: var(--default-transition);
     background-color: rgb(20, 20, 20);
     color: var(--website-light-text);
-    margin: 0px 10px;
+    margin: 0px 6px;
 }
 .mohit-navMenu-extra:hover {
     background-color: rgb(40, 40, 40);
 }
 
+.mohit-navMenu-extra.lock {
+    color: var(--vibrant-flame);
+    border-color: var(--vibrant-flame);
+}
 .mohit-navMenu-extra.icons {
     color: var(--blue-zero);
     border-color: var(--blue-zero);
+}
+.mohit-navMenu-extra.repo {
+    color: white;
+    border-color: white;
 }
 
 .navMenu-transition-enter-active, .navMenu-transition-leave-active {

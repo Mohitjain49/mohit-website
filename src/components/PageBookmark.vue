@@ -69,7 +69,7 @@ const BOOKMARK_ITEMS = [
 .mohit-bookmark.lock {
     left: auto;
     right: 10px;
-    background: linear-gradient(to right, black 0%, #E92A60 10%, #E92A60 90%, black 100%);
+    background: linear-gradient(to right, black 0%, var(--vibrant-flame) 10%, var(--vibrant-flame) 90%, black 100%);
     color: white;
 }
 .mohit-bookmark.gamepad {
