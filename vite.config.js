@@ -12,6 +12,9 @@ export default defineConfig({
     server: {
         port: 5000
     },
+    preview: {
+        port: 4007
+    },
     plugins: [
         vue(),
         Components({ dts: true }),
