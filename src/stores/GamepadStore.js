@@ -1,6 +1,9 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
     const router = useRouter();
     const route = useRoute();
+
+    var cursorXInterval = null;
+    var cursorYInterval = null;
     var scrollInterval = null;
 
     const showCursor = ref(false);
@@ -32,6 +35,18 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
         if(currentPath == -1) { navIndex = 0; }
         router.push(NAV_PAGES[navIndex]);
+    }
+
+    /**
+     * This function emits a click event at the cursor's location.
+     */
+    function emitClick() {
+        const foundElement = document.elementFromPoint(cursorX.value, cursorY.value);
+        const usuableElement = foundElement?.closest('a');
+        const usuableButton = foundElement?.closest('button');
+
+        if(usuableElement) { usuableElement.click(); }
+        if(usuableButton) { usuableButton.click(); }
     }
 
     /**
@@ -70,15 +85,65 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
-     * This function emits a click event at the cursor's location.
+     * This function sets the Cursor X Interval.
+     * @param {Boolean} negative If true, multiplies the speed by -1.
      */
-    function emitClick() {
-        const foundElement = document.elementFromPoint(cursorX.value, cursorY.value);
-        const usuableElement = foundElement?.closest('a');
-        const usuableButton = foundElement?.closest('button');
+    function setCursorXInterval(negative = false) {
+        if(cursorXInterval != null) { return; }
+        setCustomCursor(true);
 
-        if(usuableElement) { usuableElement.click(); }
-        if(usuableButton) { usuableButton.click(); }
+        cursorXInterval = setInterval(() => {
+            cursorX.value += (5 * (negative ? -1 : 1));
+            if(cursorX.value < 30) { cursorX.value = 30; }
+            if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
+        }, 20);
+    }
+
+    /**
+     * This function sets the Cursor Y Interval.
+     * @param {Boolean} negative If true, multiplies the speed by -1.
+     */
+    function setCursorYInterval(negative = false) {
+        if(cursorYInterval != null) { return; }
+        setCustomCursor(true);
+
+        cursorYInterval = setInterval(() => {
+            cursorY.value += (5 * (negative ? -1 : 1));
+            if(cursorY.value < 30) { cursorY.value = 30; }
+            if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
+        }, 20);
+    }
+
+    /**
+     * This function stops any of the cursor intervals.
+     * @param {String} direction If "x", stops the cursor x interval. If "y", stops the cursor y interval.
+     */
+    function stopCursorInterval(direction = "x") {
+        if(direction === "x" && cursorXInterval != null) {
+            clearInterval(cursorXInterval);
+            cursorXInterval = null;
+        } else if(direction === "y" && cursorYInterval != null) {
+            clearInterval(cursorYInterval);
+            cursorYInterval = null;
+        }
+    }
+
+    /**
+     * This function will scroll on the page vertically depending on which button is held down.
+     * @param {String} direction The direction to scroll.
+     * @param {Number} speed The number of pixels to scroll.
+     */
+    function initScrollYBy(direction = 'top', speed = 10) {
+        window.scrollBy(window.scrollX, (speed * ((direction === "top") ? -1 : 1)));
+    }
+
+    /**
+     * This function will scroll on the page horizontally depending on which button is held down.
+     * @param {String} direction The direction to scroll.
+     * @param {Number} speed The number of pixels to scroll.
+     */
+    function initScrollXBy(direction = 'left', speed = 10) {
+        window.scrollBy((speed * ((direction === "left") ? -1 : 1)), window.scrollY);
     }
 
     /**
@@ -87,7 +152,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      */
     function setScrollInterval(direction = 'top') {
         if(scrollInterval != null || route.path.includes("resume")) { return; }
-        scrollInterval = setInterval(() => { initScrollBy(direction, 7); }, 1);
+        scrollInterval = setInterval(() => { initScrollYBy(direction, 7); }, 1);
     }
 
     /**
@@ -99,17 +164,9 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         scrollInterval = null;
     }
 
-    /**
-     * This function will scroll on the page depending on which button is held down.
-     * @param {String} direction The direction to scroll.
-     * @param {Number} speed The number of pixels to scroll.
-     */
-    function initScrollBy(direction = 'top', speed = 10) {
-        window.scrollBy(0, (speed * ((direction === "top") ? -1 : 1)));
-    }
-
     return { customCursor, showCursor, emitClick, navigatePages,
         setCustomCursor, manageCustomCursor, initCustomCursorPosition,
-        initScrollBy, setScrollInterval, stopScrollInterval
+        setCursorXInterval, setCursorYInterval, stopCursorInterval,
+        initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval
     }
 });
