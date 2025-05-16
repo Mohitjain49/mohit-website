@@ -21,6 +21,8 @@ import ses_icon from "../assets/aws/AWS_SES_Icon.svg";
 import api_gateway_icon from "../assets/aws/AWS_API_Gateway_Icon.svg";
 
 export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/";
+export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/mohit-website";
+
 export const MND_PROJECT_LINK = "https://mnd.mohit-jain.com/";
 export const PERSONAL_GLOBE_LINK = "https://mohitjain49.github.io/globe/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";

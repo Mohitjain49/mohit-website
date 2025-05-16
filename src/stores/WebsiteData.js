@@ -1,6 +1,9 @@
 import MJ_Resume from "/Mohit_Jain_Resume.pdf";
 
-export const useWebsiteDataStore = defineStore("WebsiteData", () => {
+export const useWebsiteDataStore = defineStore("web-data", () => {
+    const controller = new AbortController();
+    const gamepadStore = useGamepadStore();
+
     /**
      * An reference integer that determines the Mode of the Nav Bar.
      * If it equals 0, it is on laptop mode, or the screen width is above 825px.
@@ -9,8 +12,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     const pageView = ref(0);
     const navMenuOpen = ref(false);
-
-    const controller = new AbortController();
+    const wakeLock = ref(null);
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
@@ -21,6 +23,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("scroll", closeNavMenu, { signal });
+        window.addEventListener("mousemove", () => { gamepadStore.setCustomCursor(false); }, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
@@ -32,6 +35,35 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      */
     function removeEventListeners() {
         controller.abort();
+    }
+
+    /**
+     * This sets the size of crucial components within the website.
+     */
+    function resizePageComponents() {
+        const windowWidth = window.innerWidth;
+        gamepadStore.initCustomCursorPosition();
+        
+        if(windowWidth <= 600) {
+            pageView.value = 2;
+        } else if(windowWidth <= 825) {
+            pageView.value = 1;
+        } else {
+            pageView.value = 0;
+        }
+    }
+
+    /**
+     * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
+     * @param event The event.
+     */
+    function onDocumentBodyClick(event = new MouseEvent("mousedown")) {
+        const navMenu = document.getElementById("mohit-navBar");
+        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
+        const srcElement = event.target;
+
+        if(navMenu === srcElement || navMenuElements.includes(srcElement)) { return; }
+        closeNavMenu();
     }
 
     /**
@@ -55,7 +87,7 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
      * The toggles the status of the home navigation menu.
      */
     function toggleNavMenu() {
-        navMenuOpen.value = ((pageView.value == 0) ? false : !navMenuOpen.value);
+        navMenuOpen.value = !navMenuOpen.value;
     }
 
     /**
@@ -120,35 +152,25 @@ export const useWebsiteDataStore = defineStore("WebsiteData", () => {
     }
 
     /**
-     * This sets the size of crucial components within the website.
+     * This function toggles the wake lock for the website.
      */
-    function resizePageComponents() {
-        const windowWidth = window.innerWidth;
-        
-        if(windowWidth <= 600) {
-            pageView.value = 2;
-        } else if(windowWidth <= 825) {
-            pageView.value = 1;
+    async function toggleWakeLock() {
+        if(!("wakeLock" in navigator)) { return; }
+
+        if(wakeLock.value != null) {
+            await wakeLock.value.release();
+            wakeLock.value = null;
         } else {
-            pageView.value = 0;
-            closeNavMenu();
+            try {
+                wakeLock.value = await navigator.wakeLock.request("screen");
+            } catch(e) {
+                console.error(e);
+            }
         }
     }
 
-    /**
-     * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
-     * @param event The event.
-     */
-    function onDocumentBodyClick(event = new MouseEvent("mousedown")) {
-        const navMenu = document.getElementById("mohit-navBar");
-        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        const srcElement = event.target;
-
-        if(navMenu === srcElement || navMenuElements.includes(srcElement)) { return; }
-        closeNavMenu();
-    }
-
-    return { pageView, navMenuOpen, toggleNavMenu, closeNavMenu,
+    return { pageView, navMenuOpen, wakeLock,
+        toggleNavMenu, closeNavMenu, toggleWakeLock,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation

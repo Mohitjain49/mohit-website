@@ -6,11 +6,15 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
+import generateSitemap from 'vite-ssg-sitemap';
 
 export default defineConfig({
     base: "/",
     server: {
         port: 5000
+    },
+    preview: {
+        port: 4007
     },
     plugins: [
         vue(),
@@ -25,7 +29,7 @@ export default defineConfig({
             registerType: "autoUpdate",
             devOptions: { enabled: false },
             workbox: {
-                cacheId: "v2.5.2",
+                cacheId: "v2.6.0",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
@@ -53,7 +57,13 @@ export default defineConfig({
         })
     ],
     ssgOptions: {
-        dirStyle: 'nested'
+        dirStyle: 'nested',
+        onFinished() {
+            generateSitemap({
+                hostname: "https://www.mohit-jain.com/",
+                readable: true
+            })
+        }
     },
     resolve: {
         alias: {

@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <client-only>
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
@@ -57,12 +56,12 @@
             </div>
             <div class="contact-box-buttons-container center-flex-display">
                 <div class="contact-input-tab-btn-container center-flex-display">
-                    <div class="contact-input-tab-btn center-flex-display"
+                    <button class="contact-input-tab-btn center-flex-display"
                         @click="sendEmail()"
                         @mouseenter="webData.setHeartbeatAnimation"
                         @mouseleave="webData.setHeartbeatAnimation"
                         v-html="'Send Message'">
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -82,7 +81,7 @@
                 <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
 
                 <div class="social-tab-btn-container">
-                    <div class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
+                    <button class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
                         @mouseenter="setSocialBtnAnimation"
                         @mouseleave="setSocialBtnAnimation">
 
@@ -90,7 +89,7 @@
                         <client-only>
                             <font-awesome-icon icon="fa-copy" />
                         </client-only>
-                    </div>
+                    </button>
                     <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
                         @mouseenter="setSocialBtnAnimation"
                         @mouseleave="setSocialBtnAnimation">

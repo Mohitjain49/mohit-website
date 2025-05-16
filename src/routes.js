@@ -35,7 +35,7 @@ export const personalRoutes = [
     { path: "/skills", name: "Main Skills Page", component: SkillsPage },
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
-    { path: "/contact", alias: ['/contact-me'], name: "Contact Mohit", component: ContactPage },
+    { path: "/contact", name: "Contact Mohit", component: ContactPage },
 
     {
         path: "/resume",
@@ -48,7 +48,7 @@ export const personalRoutes = [
     },
 
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
-    { path: "/icons", alias: ["/icon"], name: "Icon Page", component: MyIcon },
+    { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
 
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },

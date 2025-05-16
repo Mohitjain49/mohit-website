@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <div class="personal-web-body">
     <div class="redirect-statement">
         {{ (emailPage ? EMAIL_REDIRECT_TEXT : REDIRECT_TEXT) }}

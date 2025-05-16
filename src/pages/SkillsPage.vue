@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <client-only>
     <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
 </client-only>
@@ -284,7 +283,7 @@ function setCardTransition(isVisible, entry) {
     }
     .skills-category-header {
         grid-column: span 1;
-        margin-left: 0px;
+        margin-left: 10px;
         position: relative;
         left: calc((100% - 400px) / 2);
     }
@@ -298,6 +297,7 @@ function setCardTransition(isVisible, entry) {
         width: 325px;
         left: calc((100% - 325px) / 2);
         font-size: 45px;
+        margin-left: 0px;
     }
     .skills-category-header img, .skills-category-header svg {
         font-size: 45px;

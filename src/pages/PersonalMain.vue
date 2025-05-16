@@ -1,5 +1,4 @@
 <template>
-<NavigationMain />
 <client-only>
     <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
 </client-only>

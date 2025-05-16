@@ -1,12 +1,12 @@
 <template>
-<div id="mohit-navBar">
+<div id="mohit-navBar" :class="(webData.navMenuOpen ? 'widen' : '')">
     <div class="mohit-navBar-top">
         <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
             <img :src="mkj_text" draggable="false" />
         </RouterLink>
 
-        <div v-if="webData.pageView == 0" class="mohit-navBar-icons">
-            <RouterLink v-for="btn in MAIN_BTNS" :to="btn.path"
+        <div v-if="webData.pageView != 2" class="mohit-navBar-icons">
+            <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
                 @click="(event) => { flashNavOpt(event, btn.path) }"
                 :title="btn.title"
                 class="mohit-navBar-icon"
@@ -16,9 +16,17 @@
 
                 <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
+            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+                :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
+                :style="getColorStyles('var(--website-light-text)')"
+                @mouseenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
+            </button>
         </div>
 
-        <div v-if="webData.pageView != 0" class="mohit-navBar-icons">
+        <div v-if="webData.pageView == 2" class="mohit-navBar-icons">
             <RouterLink v-for="btn in MOBILE_MAIN_BTNS" :to="btn.path"
                 @click="(event) => { flashNavOpt(event, btn.path) }"
                 :title="btn.title"
@@ -29,23 +37,38 @@
 
                 <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
-            <div class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
                 :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
                 @mouseenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
                 <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
-            </div>
+            </button>
         </div>
     </div>
 
     <Transition name="navMenu-transition">
         <div v-if="webData.navMenuOpen" class="mohit-navMenu">
             <div v-for="(btn, index) in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-                <RouterLink :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
+                <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
                     <span> {{ btn.title }} </span>
                 </RouterLink>
+            </div>
+
+            <div class="mohit-navMenu-opt">
+                <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
+                    <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
+                </button>
+                <RouterLink to="/qrcode" class="mohit-navMenu-extra" title="QR Codes">
+                    <font-awesome-icon icon="fa-qrcode" />
+                </RouterLink>
+                <RouterLink to="/icons" class="mohit-navMenu-extra icons" title="My Icons">
+                    <font-awesome-icon icon="fa-pen-fancy" />
+                </RouterLink>
+                <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="_blank" class="mohit-navMenu-extra repo" title="Website Repository">
+                    <font-awesome-icon icon="fa-code-branch" />
+                </a>
             </div>
         </div>
     </Transition>
@@ -56,6 +79,10 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const route = useRoute();
+
+const wakeLockStatement = computed(() => {
+    return (((webData.wakeLock == null) ? "Set" : "Release") + " Screen Wake Lock");
+});
 
 /**
  * This sets the color and border color of an icon.
@@ -87,12 +114,16 @@ const MAIN_BTNS = [
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
     { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
-    { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
+];
+
+const LAPTOP_MAIN_BTNS = [
+    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
+    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
+    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
 ];
 
 const MOBILE_MAIN_BTNS = [
     { path: "/", icon: "fa-house", title: "Home Page" },
-    { path: "/qrcode", icon: "fa-qrcode", title: "QR Codes" },
 ];
 </script>
 
@@ -100,10 +131,9 @@ const MOBILE_MAIN_BTNS = [
 #mohit-navBar {
     position: fixed;
     top: 8px;
-    left: calc((100% - 775px) / 2);
-    width: 775px;
+    left: calc((100% - 695px) / 2);
+    width: 695px;
     height: fit-content;
-    min-width: 320px;
     min-height: 50px;
     background-color: black;
     z-index: 515;
@@ -142,19 +172,13 @@ const MOBILE_MAIN_BTNS = [
 }
 
 .mohit-navBar-icons {
-    width: 350px;
+    width: 200px;
     padding-right: 7px;
     height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-}
-.mohit-navBar-icons.centered {
-    justify-content: center;
-    width: 100%;
-    gap: 12px;
-    padding-right: 0px;
 }
 
 .mohit-navBar-icon {
@@ -190,7 +214,7 @@ const MOBILE_MAIN_BTNS = [
     font-size: 18px;
 }
 
-.mohit-navMenu-opt a {
+.mohit-navMenu-mainOpt {
     cursor: pointer;
     background-color: rgba(20, 20, 20);
     height: 40px;
@@ -205,12 +229,43 @@ const MOBILE_MAIN_BTNS = [
     transition: var(--default-transition);
     user-select: none;
 }
-.mohit-navMenu-opt a:hover {
+.mohit-navMenu-mainOpt:hover {
     background-color: rgba(40, 40, 40);
 }
-.mohit-navMenu-opt svg {
+.mohit-navMenu-mainOpt svg {
     margin-right: 10px;
     width: 25px;
+}
+
+.mohit-navMenu-extra {
+    height: 40px;
+    width: 40px;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed var(--website-light-text);
+    border-radius: 15px;
+    transition: var(--default-transition);
+    background-color: rgb(20, 20, 20);
+    color: var(--website-light-text);
+    margin: 0px 6px;
+}
+.mohit-navMenu-extra:hover {
+    background-color: rgb(40, 40, 40);
+}
+
+.mohit-navMenu-extra.lock {
+    color: var(--vibrant-flame);
+    border-color: var(--vibrant-flame);
+}
+.mohit-navMenu-extra.icons {
+    color: var(--blue-zero);
+    border-color: var(--blue-zero);
+}
+.mohit-navMenu-extra.repo {
+    color: white;
+    border-color: white;
 }
 
 .navMenu-transition-enter-active, .navMenu-transition-leave-active {
@@ -225,26 +280,24 @@ const MOBILE_MAIN_BTNS = [
 
 @media (max-width: 825px) {
     #mohit-navBar {
-        width: calc(100% - 30px);
-        left: 15px;
-    }
-    #mohit-navBar.layout_v2 {
-        width: 380px;
-        left: calc(50% - 190px);
-    }
-    .mohit-navBar-icons {
-        width: 140px;
+        width: calc(100% - 120px);
+        left: 60px;
     }
 }
-@media (max-width: 450px) {
-    .mohit-navBar-icons.centered .mohit-navBar-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 20px;
+@media (max-width: 600px) {
+    .mohit-navBar-icons {
+        width: 90px;
     }
-    .mohit-navBar.layout_v2 {
-        width: calc(100% - 20px);
-        left: 10px;
+}
+
+@media (max-width: 450px) {
+    #mohit-navBar {
+        width: calc(100% - 80px);
+        left: 40px;
+    }
+    #mohit-navBar.widen {
+        width: calc(100% - 30px);
+        left: 15px;
     }
 }
 @media (max-width: 350px) {

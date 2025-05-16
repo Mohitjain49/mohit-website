@@ -49,6 +49,11 @@ library.add(
     FaIcons.faRotateRight,
     FaIcons.faSquareXmark,
     FaIcons.faPizzaSlice,
+    FaIcons.faGamepad,
+    FaIcons.faArrowPointer,
+    FaIcons.faLock,
+    FaIcons.faUnlock,
+    FaIcons.faCodeBranch,
 
     FaBrands.faReact,
     FaBrands.faJs,
@@ -77,9 +82,8 @@ export const createApp = ViteSSG(App, { routes: personalRoutes },
         app.use(pinia);
 
         if(isClient) {
-            app.use(VueParticles, {
-                init: async engine => { await loadSlim(engine); },
-            });
+            app.use(VueParticles, { init: async engine => { await loadSlim(engine); } });
+            if(navigator.getGamepads()) { import("./joypad-events.js"); }
         }
     }
 )
