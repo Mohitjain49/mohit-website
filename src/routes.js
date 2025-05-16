@@ -9,6 +9,7 @@ import ResumeNative from "./pages/resume/ResumeNative.vue";
 import ResumeDownload from "./pages/resume/ResumeDownload.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
+import RepoRedirect from "./pages/redirects/RepoRedirect.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
 import MNDRedirect from "./pages/redirects/MNDRedirect.vue";
 import PizzaRedirect from "./pages/redirects/PizzaRedirect.vue";
@@ -54,6 +55,7 @@ export const personalRoutes = [
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
     { path: "/footer", redirect: { path: "/", hash: "#footer" } },
 
+    { path: "/repo", alias: ['/repository'], name: "Website Repository", component: RepoRedirect },
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/mnd", name: "Mapping Neurodivergence", component: MNDRedirect },
     { path: "/pizza", name: "Pizza Project", component: PizzaRedirect },

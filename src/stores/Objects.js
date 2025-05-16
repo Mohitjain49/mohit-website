@@ -413,9 +413,9 @@ export const MODULES_SKILL_NOTES = [
             "With GitHub Actions, I can even set up CI/CD pipelines for my websites to autonomously deploy updates online.",
 
         icon: {
-            id: mavlink_icon,
-            faIcon: false,
-            size: "105"
+            id: "fa-brands fa-github",
+            faIcon: true,
+            size: "110"
         }
     },
     {

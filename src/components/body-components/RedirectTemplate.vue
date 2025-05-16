@@ -35,4 +35,10 @@ onMounted(() => {
     color: var(--website-text);
     text-align: center;
 }
+
+@media (max-width: 700px) {
+    .redirect-statement {
+        font-size: 15px;
+    }
+}
 </style>
