@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
+import generateSitemap from 'vite-ssg-sitemap';
 
 export default defineConfig({
     base: "/",
@@ -56,7 +57,13 @@ export default defineConfig({
         })
     ],
     ssgOptions: {
-        dirStyle: 'nested'
+        dirStyle: 'nested',
+        onFinished() {
+            generateSitemap({
+                hostname: "https://www.mohit-jain.com/",
+                readable: true
+            })
+        }
     },
     resolve: {
         alias: {
