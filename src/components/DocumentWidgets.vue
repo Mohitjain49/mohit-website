@@ -14,6 +14,10 @@
         <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
     </RouterLink>
 </template>
+
+<a v-if="!checkResumePage()" :href="FCS_CERTIFICATE_LINK" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
+    <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
+</a>
 </template>
 
 <script setup>

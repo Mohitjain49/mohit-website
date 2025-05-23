@@ -61,7 +61,8 @@
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const route = useRoute();
 
-onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain"); })
+onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain"); });
+const CERTIFICATE_PATH = "/certificates/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025";
 
 /**
  * This scrolls to the top of the webpage if the user won't change routes.
@@ -77,6 +78,7 @@ const MAIN_ROUTES = [
     { name: "My Experience", path: "/experience", icon: "fa-file-code", extraClass: "" },
     { name: "My Projects", path: "/projects", icon: "fa-cubes", extraClass: "projects" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", extraClass: "" },
+    { name: "FCS Certification", path: CERTIFICATE_PATH, icon: "fa-school-flag", extraClass: "fulton" },
 ];
 
 const CONTACT_ROUTES = [
@@ -242,6 +244,13 @@ const EXTRA_ROUTES = [
 }
 .footer-routes-opt.gitlab:hover {
     border-color: #E24329;
+}
+
+.footer-routes-opt.fulton {
+    color: #005941;
+}
+.footer-routes-opt.fulton:hover {
+    border-color: #005941;
 }
 
 @media (max-width: 825px) {

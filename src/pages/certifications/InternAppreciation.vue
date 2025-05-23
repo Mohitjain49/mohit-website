@@ -1,13 +1,13 @@
 <template>
 <DocumentWidgets />
 <div id="resume-container">
-    <iframe :src="intern_appreciation_certificate" height="100%" width="100%"></iframe>
+    <iframe :src="VIEWER_URL" height="100%" width="100%"></iframe>
 </div>
 </template>
 
 <script setup>
 import { useHead } from '@unhead/vue';
-import intern_appreciation_certificate from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
+const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent(FCS_CERTIFICATE_LINK)}&embedded=true`;
 
 useHead(getMeta("Mohit Jain | Fulton Internship Program Appreciation Certificate Spring 2025",
     "certificates/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025",
