@@ -54,6 +54,7 @@ library.add(
     FaIcons.faLock,
     FaIcons.faUnlock,
     FaIcons.faCodeBranch,
+    FaIcons.faSchoolFlag,
 
     FaBrands.faReact,
     FaBrands.faJs,

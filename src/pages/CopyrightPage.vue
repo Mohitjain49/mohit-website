@@ -21,9 +21,12 @@
 
 <script setup>
 import { useHead } from "@unhead/vue";
-const COPYRIGHT_TEXT = (new Date().getFullYear() + " Mohit Jain");
+const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 
-onMounted(() => { initWebData(); });
+onMounted(() => {
+    initWebData();
+    COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
+});
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website."
 ));

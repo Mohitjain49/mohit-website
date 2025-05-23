@@ -1,41 +1,32 @@
 <template>
-<button @click="downloadResume()" :class="WIDGET_CLASSES" title="Download My Resume">
+<button @click="docStore.downloadDoc()" :class="WIDGET_CLASSES" title="Download Document">
     <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
 </button>
 <button @click="reloadPage()" :class="WIDGET_CLASSES" class="reload" title="Reload Page">
     <client-only> <font-awesome-icon icon="fa-rotate-right" /> </client-only>
 </button>
 
-<RouterLink v-if="checkRoute()" to="/resume/pdf" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
+<template v-if="checkResumePage()">
+    <RouterLink v-if="checkRoute()" to="/resume/pdf" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
+        <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
+    </RouterLink>
+    <RouterLink v-if="!checkRoute()" to="/resume" :class="WIDGET_CLASSES" class="nav" title="Use Google Doc Viewer">
+        <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
+    </RouterLink>
+</template>
+
+<a v-if="!checkResumePage()" :href="FCS_CERTIFICATE_LINK" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
     <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
-</RouterLink>
-<RouterLink v-if="!checkRoute()" to="/resume" :class="WIDGET_CLASSES" class="nav" title="Use Google Doc Viewer">
-    <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
-</RouterLink>
+</a>
 </template>
 
 <script setup>
 const route = useRoute();
-const WIDGET_CLASSES = ['resume-widget', 'animate__animated', 'animate__fadeInBottomRight'];
+const docStore = useDocumentStore();
+const WIDGET_CLASSES = ['document-widget', 'animate__animated', 'animate__fadeInBottomRight'];
 
-onMounted(() => {
-    initWebData();
-    nextTick().then(() => {
-        hideVerticalOverflow();
-        window.addEventListener("resize", hideVerticalOverflow);
-    })
-});
-onBeforeUnmount(() => {
-    document.body.style.overflowY = "";
-    window.removeEventListener("resize", hideVerticalOverflow);
-});
-
-/**
- * This function hides the body's vertical overflow.
- */
-function hideVerticalOverflow() {
-    document.body.style.overflowY = "hidden";
-}
+onMounted(() => { docStore.mountDocumentPage(); });
+onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
 
 /**
  * This function reloads the website.
@@ -50,10 +41,17 @@ function reloadPage() {
 function checkRoute() {
     return (route.path === "/resume" || route.path === "/resume/");
 }
+
+/**
+ * This function checks if the page is a resume page or not.
+ */
+function checkResumePage() {
+    return route.path.includes("resume");
+}
 </script>
 
 <style>
-.resume-widget {
+.document-widget {
     position: fixed;
     cursor: pointer;
     overflow: hidden;
@@ -72,33 +70,33 @@ function checkRoute() {
     color: rgba(0, 0, 0, 0.8);
     font-size: 22px;
 }
-.resume-widget:hover {
+.document-widget:hover {
     background-color: var(--website-light-text);
 }
 
-.resume-widget.reload {
+.document-widget.reload {
     top: 125px;
 }
-.resume-widget.nav {
+.document-widget.nav {
     top: 175px;
 }
 
 @media (max-width: 825px) {
-    .resume-widget {
+    .document-widget {
         width: 32px;
         height: 32px;
         font-size: 17px;
     }
 
-    .resume-widget.reload {
+    .document-widget.reload {
         top: 112px;
     }
-    .resume-widget.nav {
+    .document-widget.nav {
         top: 148px;
     }
 }
 @media (max-width: 360px) {
-    .resume-widget {
+    .document-widget {
         display: none;
     }
 }

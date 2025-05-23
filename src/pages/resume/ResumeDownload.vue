@@ -1,5 +1,5 @@
 <template>
-<ResumeWidgets />
+<DocumentWidgets />
 <div id="resume-container"></div>
 </template>
 
