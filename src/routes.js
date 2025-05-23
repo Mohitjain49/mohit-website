@@ -53,7 +53,7 @@ export const personalRoutes = [
     {
         path: "/certificates",
         children: [
-            { path: "", name: "Intern Appreciation Certificate", component: InternAppreciation }
+            { path: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", alias: [""], component: InternAppreciation }
         ]
     },
 

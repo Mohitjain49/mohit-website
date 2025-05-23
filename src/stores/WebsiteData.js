@@ -1,5 +1,3 @@
-import MJ_Resume from "/Mohit_Jain_Resume.pdf";
-
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const controller = new AbortController();
     const gamepadStore = useGamepadStore();
@@ -178,23 +176,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 });
 
 /**
- * This function mounts the website data pinia store on a page.
- */
-export function initWebData() {
-    useWebsiteDataStore().mountWebData();
-}
-
-/**
- * This function downloads my resume for the visitor to see.
- */
-export function downloadResume() {
-   const link = document.createElement('a');
-   link.href = MJ_Resume;
-   link.download = 'Mohit_Jain_Resume.pdf';
-   link.click();
-}
-
-/**
  * This function sets the initial transition for a Nav Card.
  * @param {String} cardId The element id for the card.
  */
@@ -202,6 +183,14 @@ export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
     const navCard = document.getElementById(cardId).classList;
     navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
     setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+}
+
+
+/**
+ * This function mounts the website data pinia store on a page.
+ */
+export function initWebData() {
+    useWebsiteDataStore().mountWebData();
 }
 
 /**

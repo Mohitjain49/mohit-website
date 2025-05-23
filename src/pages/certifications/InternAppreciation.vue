@@ -1,4 +1,5 @@
 <template>
+<DocumentWidgets />
 <div id="resume-container">
     <iframe :src="intern_appreciation_certificate" height="100%" width="100%"></iframe>
 </div>
@@ -6,9 +7,10 @@
 
 <script setup>
 import { useHead } from '@unhead/vue';
-import intern_appreciation_certificate from "/Fulton_Internship_Program_Appreciation_Certificate_2025.pdf";
+import intern_appreciation_certificate from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 
-useHead(getMeta("Mohit Jain | My Certificates", "certificates",
-    "Feel free to take a look at my certificates."
+useHead(getMeta("Mohit Jain | Fulton Internship Program Appreciation Certificate Spring 2025",
+    "certificates/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025",
+    "This is my Fulton Internship Program Appreciation Certificate for Spring 2025."
 ));
 </script>
