@@ -15,9 +15,14 @@
     </RouterLink>
 </template>
 
-<a v-if="!checkResumePage()" :href="FCS_CERTIFICATE_LINK" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
-    <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
-</a>
+<template v-if="!checkResumePage()">
+    <a :href="FCS_CERTIFICATE_LINK" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
+        <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
+    </a>
+    <a :href="FCS_CERTIFICATE_LINKEDIN_POST" target="_blank" :class="WIDGET_CLASSES" class="post" title="See LinkedIn Post">
+        <client-only> <font-awesome-icon icon="fa-brands fa-linkedin" /> </client-only>
+    </a>
+</template>
 </template>
 
 <script setup>
@@ -80,6 +85,9 @@ function checkResumePage() {
 .document-widget.nav {
     top: 175px;
 }
+.document-widget.post {
+    top: 225px;
+}
 
 @media (max-width: 825px) {
     .document-widget {
@@ -93,6 +101,9 @@ function checkResumePage() {
     }
     .document-widget.nav {
         top: 148px;
+    }
+    .document-widget.post {
+        top: 184px;
     }
 }
 @media (max-width: 360px) {
