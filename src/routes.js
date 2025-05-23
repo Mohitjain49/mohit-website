@@ -8,6 +8,8 @@ import Resume from "./pages/resume/Resume.vue";
 import ResumeNative from "./pages/resume/ResumeNative.vue";
 import ResumeDownload from "./pages/resume/ResumeDownload.vue";
 
+import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
+
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import RepoRedirect from "./pages/redirects/RepoRedirect.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
@@ -45,6 +47,13 @@ export const personalRoutes = [
             { path: "pdf", name: "My Resume (Native)", component: ResumeNative },
             { path: "download", name: "My Resume (Download)", component: ResumeDownload },
             { path: "google", alias: ["googledoc", "google-doc"], redirect: "/resume" },
+        ]
+    },
+
+    {
+        path: "/certificates",
+        children: [
+            { path: "", name: "Intern Appreciation Certificate", component: InternAppreciation }
         ]
     },
 
