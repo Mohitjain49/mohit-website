@@ -46,5 +46,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         document.body.style.overflowY = "hidden";
     }
 
-    return { downloadDoc, mountDocumentPage, unmountDocumentPage, hideVerticalOverflow }
+    /**
+     * This function returns true if the user is using a pdf route.
+     */
+    function checkPDFRoute() {
+        return route.path.includes('pdf');
+    }
+
+    return { downloadDoc, hideVerticalOverflow, checkPDFRoute,
+        mountDocumentPage, unmountDocumentPage
+    }
 });

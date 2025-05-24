@@ -5,9 +5,7 @@ import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
 
 import Resume from "./pages/resume/Resume.vue";
-import ResumeNative from "./pages/resume/ResumeNative.vue";
 import ResumeDownload from "./pages/resume/ResumeDownload.vue";
-
 import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
@@ -44,16 +42,18 @@ export const personalRoutes = [
         path: "/resume",
         children: [
             { path: "", name: "My Resume", component: Resume },
-            { path: "pdf", name: "My Resume (Native)", component: ResumeNative },
+            { path: "pdf", name: "My Resume (Native)", component: Resume },
             { path: "download", name: "My Resume (Download)", component: ResumeDownload },
             { path: "google", alias: ["googledoc", "google-doc"], redirect: "/resume" },
         ]
     },
 
     {
-        path: "/certificates",
+        path: FCS_CERTIFICATE_ROUTE,
         children: [
-            { path: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", alias: [""], component: InternAppreciation }
+            { path: "", component: InternAppreciation },
+            { path: "pdf", component: InternAppreciation },
+            { path: "google", alias: ["googledoc", "google-doc"], redirect: "" },
         ]
     },
 
