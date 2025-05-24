@@ -5,17 +5,17 @@
 <div v-if="webData.wakeLock != null" class="mohit-bookmark lock" title="Screen Wake Lock Set">
     <client-only> <font-awesome-icon icon="fa-lock" /> </client-only>
 </div>
-<div v-if="gamepadUsuable" class="mohit-bookmark gamepad" title="Use Your Gamepad!">
-    <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
-</div>
+
+<client-only>
+    <RouterLink to="/gamepad" v-if="showGamepadBookmark()" class="mohit-bookmark gamepad" title="Use Your Gamepad!">
+        <font-awesome-icon icon="fa-gamepad" />
+    </RouterLink>
+</client-only>
 </template>
 
 <script setup>
 const webData = useWebsiteDataStore();
 const route = useRoute();
-
-const gamepadUsuable = ref(false);
-onMounted(() => { gamepadUsuable.value = Boolean(navigator.getGamepads()); })
 
 const bookmarkItem = computed(() => {
     const path = (route.path.endsWith("/") ? route.path.slice(0, -1) : route.path);
@@ -26,6 +26,13 @@ const bookmarkTitle = computed(() => {
     return PERSONAL_WEBSITE_LINK + route.path.substring(1);
 });
 
+/**
+ * This returns whether or not the Gamepad Icon is good to show or not.
+ */
+function showGamepadBookmark() {
+    return (Boolean(navigator.getGamepads()) && !route.path.includes('gamepad'));
+}
+
 const BOOKMARK_ITEMS = [
     { path: "/skills", icon: "fa-code" },
     { path: "/experience", icon: "fa-file-code" },
@@ -35,6 +42,7 @@ const BOOKMARK_ITEMS = [
     { path: "/qrcode", icon: "fa-qrcode" },
     { path: "/icon", icon: "fa-pen-fancy" },
     { path: "/copyright", icon: "fa-copyright" },
+    { path: "/gamepad", icon: "fa-gamepad" },
 ];
 </script>
 

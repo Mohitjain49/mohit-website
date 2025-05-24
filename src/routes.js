@@ -1,8 +1,13 @@
 import PersonalMain from "./pages/PersonalMain.vue";
+import SkillsPage from "./pages/SkillsPage.vue";
+import ExperienceMain from "./pages/ExperienceMain.vue";
+import Projects from "./pages/Projects.vue";
 import ContactPage from "./pages/ContactPage.vue";
+
 import MyIcon from "./pages/MyIcon.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
+import GamepadPage from "./pages/GamepadPage.vue";
 
 import Resume from "./pages/resume/Resume.vue";
 import ResumeDownload from "./pages/resume/ResumeDownload.vue";
@@ -19,10 +24,6 @@ import GithubRedirect from "./pages/redirects/GithubRedirect.vue";
 import GitlabRedirect from "./pages/redirects/GitlabRedirect.vue";
 import LinkedinRedirect from "./pages/redirects/LinkedinRedirect.vue";
 import DiscordRedirect from "./pages/redirects/DiscordRedirect.vue";
-
-import SkillsPage from "./pages/SkillsPage.vue";
-import ExperienceMain from "./pages/ExperienceMain.vue";
-import Projects from "./pages/Projects.vue";
 
 import IvueRedirect from "./pages/redirects/IvueRedirect.vue";
 import SubloRedirect from "./pages/redirects/SubloRedirect.vue";
@@ -58,6 +59,7 @@ export const personalRoutes = [
     },
 
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
+    { path: "/gamepad", name: "Gamepad Page", component: GamepadPage },
     { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
 

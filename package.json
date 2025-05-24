@@ -1,6 +1,6 @@
 {
   "name": "mohit-website",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,9 +12,9 @@
     "open:build": "vite-ssg build & vite preview --open"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-brands-svg-icons": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@tsparticles/slim": "^3.8.1",
     "@tsparticles/vue3": "^3.0.1",
@@ -22,20 +22,20 @@
     "fontawesome": "^5.6.3",
     "joypad.js": "^2.3.5",
     "ofetch": "^1.4.1",
-    "pinia": "^2.2.5",
+    "pinia": "^3.0.2",
     "uqr": "^0.1.2",
-    "vue": "^3.4.29",
+    "vue": "^3.5.14",
     "vue3-observe-visibility": "^1.0.3"
   },
   "devDependencies": {
     "@unhead/vue": "^2.0.10",
-    "@vitejs/plugin-vue": "^5.1.4",
-    "unplugin-auto-import": "^19.1.2",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "unplugin-auto-import": "^19.2.0",
     "unplugin-vue-components": "^28.5.0",
-    "vite": "^6.2.0",
+    "vite": "^6.3.5",
     "vite-plugin-pwa": "^1.0.0",
     "vite-ssg": "^27.0.1",
     "vite-ssg-sitemap": "^0.9.0",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.1"
   }
 }
