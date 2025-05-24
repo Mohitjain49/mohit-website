@@ -89,6 +89,7 @@ const CONTACT_ROUTES = [
 const EXTRA_ROUTES = [
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
     { name: "Copyright", path: "/copyright", icon: "fa-copyright", extraClass: "copyright" },
+    { name: "Gamepad Controls", path: "/gamepad", icon: "fa-gamepad", extraClass: "" },
 ];
 </script>
 
@@ -253,7 +254,7 @@ const EXTRA_ROUTES = [
 
 @media (max-width: 825px) {
     #footer {
-        height: 475px;
+        height: 510px;
     }
     .footer-body {
         grid-template-columns: 1fr 1fr;
