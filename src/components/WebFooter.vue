@@ -17,7 +17,7 @@
         </div>
 
         <div class="footer-routes-column">
-            <RouterLink to="/contact" class="footer-routes-header">
+            <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')">
                 <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
                 <span> Contact Me </span>
             </RouterLink>
@@ -33,7 +33,7 @@
         </div>
 
         <div class="footer-routes-column extras">
-            <RouterLink to="/qrcode" class="footer-routes-header light">
+            <RouterLink to="/qrcode" class="footer-routes-header light" @click="scrollToTop('/qrcode')">
                 <client-only> <font-awesome-icon icon="fa-qrcode" /> </client-only>
                 <span> QR Codes </span>
             </RouterLink>
