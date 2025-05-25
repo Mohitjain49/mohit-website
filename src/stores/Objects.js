@@ -44,7 +44,8 @@ export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/";
 
 export const FCS_CERTIFICATE_ROUTE = "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025";
 export const FCS_CERTIFICATE_LINK = "https://www.mohit-jain.com/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
-export const FCS_CERTIFICATE_LINKEDIN_POST = "https://www.linkedin.com/posts/mohitjain49_sharing-my-certificate-of-appreciation-from-activity-7331780981911080960-W_aN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-tIy0BLb0spd_jNR2x-8zVBRSshOre_lI"
+export const FCS_CERTIFICATE_LINKEDIN_POST = "https://www.linkedin.com/posts/mohitjain49_sharing-my-certificate-of-appreciation-from-activity-7331780981911080960-W_aN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-tIy0BLb0spd_jNR2x-8zVBRSshOre_lI";
+export const FCS_CAREER_INTERNSHIP_LINK = "https://www.fultonschools.org/all-departments/academics/learning-teaching/academic-programs/accelerated-extended-programming/advanced-studies/talented-and-gifted-tag/career-internship-program";
 
 export const SOCIALS = [
     {

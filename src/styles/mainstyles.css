@@ -54,9 +54,13 @@ body {
 .mohit-custom-cursor {
     font-size: 27px;
     color: var(--vibrant-flame);
+    padding: 5px;
     position: fixed;
     pointer-events: none;
     z-index: 9999;
+    border: var(--empty-border);
+    border-radius: 10px;
+    transition: var(--default-transition);
 }
 
 a, RouterLink {
