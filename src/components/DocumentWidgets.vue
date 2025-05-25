@@ -25,6 +25,9 @@
     <a :href="FCS_CERTIFICATE_LINKEDIN_POST" target="_blank" :class="WIDGET_CLASSES" class="post" title="See LinkedIn Post">
         <client-only> <font-awesome-icon icon="fa-brands fa-linkedin" /> </client-only>
     </a>
+    <a :href="FCS_CAREER_INTERNSHIP_LINK" target="_blank" :class="WIDGET_CLASSES" class="career" title="FCS Career Internship Program">
+        <client-only> <font-awesome-icon icon="fa-school-flag" /> </client-only>
+    </a>
 </template>
 </template>
 
@@ -77,6 +80,9 @@ function reloadPage() {
 .document-widget.post {
     top: 225px;
 }
+.document-widget.career {
+    top: 275px;
+}
 
 @media (max-width: 825px) {
     .document-widget {
@@ -93,6 +99,9 @@ function reloadPage() {
     }
     .document-widget.post {
         top: 184px;
+    }
+    .document-widget.career {
+        top: 220px;
     }
 }
 @media (max-width: 360px) {

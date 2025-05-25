@@ -20,7 +20,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         resizePageComponents();
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
-        window.addEventListener("scroll", closeNavMenu, { signal });
+        window.addEventListener("scroll", () => { onWindowScroll(); }, { signal });
         window.addEventListener("mousemove", () => { gamepadStore.setCustomCursor(false); }, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
@@ -63,6 +63,14 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         if(navMenu === srcElement || navMenuElements.includes(srcElement)) { return; }
         closeNavMenu();
+    }
+
+    /**
+     * This function runs whenever the window scroll event is triggered.
+     */
+    function onWindowScroll() {
+        closeNavMenu();
+        gamepadStore.setCursorClickElement();
     }
 
     /**

@@ -22,6 +22,9 @@ joypad.on("button_press", (e) => {
     if(buttonIndex == 0 || buttonIndex == 1) {
         useGamepadStore().emitClick();
     }
+    if(buttonIndex == 2 || buttonIndex == 3) {
+        useGamepadStore().setMaxCursorSpeed(5);
+    }
     if(buttonIndex == 8 || buttonIndex == 9) {
         useWebsiteDataStore().toggleNavMenu();
     }
@@ -38,6 +41,9 @@ joypad.on("button_release", (e) => {
     const buttonIndex = parseInt(e.detail.buttonName.split('_')[1], 10);
     // console.log(buttonIndex);
 
+    if(buttonIndex == 2 || buttonIndex == 3) {
+        useGamepadStore().setMaxCursorSpeed(10);
+    }
     if(buttonIndex == 12 || buttonIndex == 13) {
         useGamepadStore().stopCursorInterval("y")
     }

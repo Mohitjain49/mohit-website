@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
 
 import vue from "@vitejs/plugin-vue";
+import swc from "unplugin-swc"
 import { VitePWA } from 'vite-plugin-pwa';
 
 import Components from "unplugin-vue-components/vite";
@@ -18,6 +19,7 @@ export default defineConfig({
     },
     plugins: [
         vue(),
+        swc.vite(),
         Components({ dts: true }),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia'],
@@ -29,7 +31,7 @@ export default defineConfig({
             registerType: "autoUpdate",
             devOptions: { enabled: false },
             workbox: {
-                cacheId: "v2.6.0",
+                cacheId: "v2.6.3",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },

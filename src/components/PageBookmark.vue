@@ -84,14 +84,9 @@ const BOOKMARK_ITEMS = [
     color: white;
 }
 .mohit-bookmark.lock {
-    left: auto;
-    right: 10px;
-}
-
-.mohit-bookmark.gamepad {
-    top: auto;
     bottom: 0px;
-    clip-path: polygon(
+    top: auto;
+clip-path: polygon(
         0 0,
         40% 25%,
         50% 30%,
@@ -100,9 +95,14 @@ const BOOKMARK_ITEMS = [
         0 100%
     );
 }
-.mohit-bookmark.gamepad svg {
+.mohit-bookmark.lock svg {
     margin-bottom: 0px;
     margin-top: 15px;
+}
+
+.mohit-bookmark.gamepad {
+    left: auto;
+    right: 10px;
 }
 .mohit-bookmark.gamepad.active svg {
     font-size: 16px;
@@ -116,13 +116,16 @@ const BOOKMARK_ITEMS = [
     .mohit-bookmark svg {
         font-size: 15px;
     }
-    .mohit-bookmark.gamepad {
-        display: none;
+    .mohit-bookmark.gamepad.active svg {
+        font-size: 11px;
     }
 }
 @media (max-width: 350px) {
     .mohit-bookmark {
         position: absolute;
+    }
+    .mohit-bookmark.lock {
+        position: fixed;
     }
 }
 </style>
