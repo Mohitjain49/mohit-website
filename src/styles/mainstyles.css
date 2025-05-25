@@ -85,12 +85,15 @@ button {
     min-width: 340px;
     background: var(--webpage-static-background);
 }
+.personal-web-body.transparent {
+    background: transparent;
+}
+
 .center-flex-display {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
 .gradient-text {
     background: var(--website-gradient-text);
     -webkit-background-clip: text;

@@ -7,9 +7,9 @@
 </div>
 
 <client-only>
-    <RouterLink to="/gamepad" v-if="showGamepadBookmark()" class="mohit-bookmark gamepad" title="Use Your Gamepad!">
+    <div v-if="showGamepadBookmark()" class="mohit-bookmark gamepad" title="Use Your Gamepad!">
         <font-awesome-icon icon="fa-gamepad" />
-    </RouterLink>
+    </div>
 </client-only>
 </template>
 
@@ -30,7 +30,7 @@ const bookmarkTitle = computed(() => {
  * This returns whether or not the Gamepad Icon is good to show or not.
  */
 function showGamepadBookmark() {
-    return (Boolean(navigator.getGamepads()) && !route.path.includes('gamepad'));
+    return Boolean(navigator.getGamepads());
 }
 
 const BOOKMARK_ITEMS = [
@@ -38,11 +38,11 @@ const BOOKMARK_ITEMS = [
     { path: "/experience", icon: "fa-file-code" },
     { path: "/projects", icon: "fa-cubes" },
     { path: "/resume", icon: "fa-file-lines" },
+    { path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag" },
     { path: "/contact", icon: "fa-paper-plane" },
     { path: "/qrcode", icon: "fa-qrcode" },
     { path: "/icon", icon: "fa-pen-fancy" },
     { path: "/copyright", icon: "fa-copyright" },
-    { path: "/gamepad", icon: "fa-gamepad" },
 ];
 </script>
 

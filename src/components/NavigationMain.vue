@@ -64,7 +64,12 @@
                 <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
                     <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
                 </button>
-                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path" class="mohit-navMenu-extra" :style="getColorStyles(extra.color)" :title="extra.title">
+                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
+                    :title="extra.title"
+                    class="mohit-navMenu-extra"
+                    @click="(event) => { flashNavOpt(event, extra.path) }"
+                    :style="getColorStyles(extra.color)">
+
                     <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
                 </RouterLink>
             </div>
@@ -122,7 +127,6 @@ const LAPTOP_MAIN_BTNS = [
 
 const NAV_MENU_EXTRAS = [
     { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
-    { path: "/gamepad", icon: "fa-gamepad", color: "var(--website-text)", title: "Gamepad Controls" },
     { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
     { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
 ];

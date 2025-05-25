@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="GREEN_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="project-page" class="personal-web-body">
+<div id="project-page" class="personal-web-body transparent">
     <div class="main-nav-page-container">
         <div class="nav-page-title project">My Projects</div>
         <div class="main-nav-page">
@@ -33,9 +33,3 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
     "On this page, I go into depth on the projects that I have made."
 ));
 </script>
-
-<style scoped>
-#project-page {
-    background: transparent;
-}
-</style>

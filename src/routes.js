@@ -7,7 +7,6 @@ import ContactPage from "./pages/ContactPage.vue";
 import MyIcon from "./pages/MyIcon.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
-import GamepadPage from "./pages/GamepadPage.vue";
 
 import Resume from "./pages/resume/Resume.vue";
 import ResumeDownload from "./pages/resume/ResumeDownload.vue";
@@ -59,7 +58,6 @@ export const personalRoutes = [
     },
 
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
-    { path: "/gamepad", name: "Gamepad Page", component: GamepadPage },
     { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
 

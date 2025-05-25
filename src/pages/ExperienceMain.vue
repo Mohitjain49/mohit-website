@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="exp-page" class="personal-web-body">
+<div id="exp-page" class="personal-web-body transparent">
     <div class="main-nav-page-container">
         <div class="nav-page-title">My Experience</div>
         <div class="main-nav-page">
@@ -33,9 +33,3 @@ useHead(getMeta("Mohit Jain | My Experience", "experience/",
     "On this page, I go into depth about my work experience."
 ));
 </script>
-
-<style scoped>
-#exp-page {
-    background: transparent;
-}
-</style>
