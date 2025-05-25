@@ -51,6 +51,13 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+.mohit-custom-cursor {
+    font-size: 27px;
+    color: var(--vibrant-flame);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+}
 
 a, RouterLink {
     text-decoration: none;

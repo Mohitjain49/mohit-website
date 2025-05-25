@@ -2,12 +2,12 @@
 <div class="mohit-bookmark" :title="bookmarkTitle">
     <client-only> <font-awesome-icon :icon="bookmarkItem" /> </client-only>
 </div>
-<div v-if="webData.wakeLock != null" class="mohit-bookmark lock" title="Screen Wake Lock Set">
+<div v-if="webData.wakeLock != null" class="mohit-bookmark lock active" title="Screen Wake Lock Set">
     <client-only> <font-awesome-icon icon="fa-lock" /> </client-only>
 </div>
 
 <client-only>
-    <div v-if="showGamepadBookmark()" class="mohit-bookmark gamepad" title="Use Your Gamepad!">
+    <div v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" title="Use Your Gamepad!">
         <font-awesome-icon icon="fa-gamepad" />
     </div>
 </client-only>
@@ -15,6 +15,7 @@
 
 <script setup>
 const webData = useWebsiteDataStore();
+const gamepadStore = useGamepadStore();
 const route = useRoute();
 
 const bookmarkItem = computed(() => {
@@ -25,6 +26,10 @@ const bookmarkItem = computed(() => {
 const bookmarkTitle = computed(() => {
     return PERSONAL_WEBSITE_LINK + route.path.substring(1);
 });
+
+function getGamepadBookmarkClasses() {
+    return ['mohit-bookmark', 'gamepad', (gamepadStore.gamepadConnected ? 'active' : '')]
+};
 
 /**
  * This returns whether or not the Gamepad Icon is good to show or not.
@@ -74,12 +79,15 @@ const BOOKMARK_ITEMS = [
     margin-bottom: 15px;
 }
 
-.mohit-bookmark.lock {
-    left: auto;
-    right: 10px;
+.mohit-bookmark.active {
     background: linear-gradient(to right, black 0%, var(--vibrant-flame) 10%, var(--vibrant-flame) 90%, black 100%);
     color: white;
 }
+.mohit-bookmark.lock {
+    left: auto;
+    right: 10px;
+}
+
 .mohit-bookmark.gamepad {
     top: auto;
     bottom: 0px;
@@ -95,6 +103,9 @@ const BOOKMARK_ITEMS = [
 .mohit-bookmark.gamepad svg {
     margin-bottom: 0px;
     margin-top: 15px;
+}
+.mohit-bookmark.gamepad.active svg {
+    font-size: 16px;
 }
 
 @media (max-width: 450px) {

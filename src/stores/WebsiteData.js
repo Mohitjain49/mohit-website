@@ -33,6 +33,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function removeEventListeners() {
         controller.abort();
+        gamepadStore.stopGamepadConnectedInterval();
     }
 
     /**

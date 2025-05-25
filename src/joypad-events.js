@@ -5,7 +5,7 @@ joypad.set({
 })
 
 joypad.on("connect", (e) => {
-    console.log(e.gamepad);
+    useGamepadStore().startGamepadConnectedInterval();
 })
 
 joypad.on("button_press", (e) => {
