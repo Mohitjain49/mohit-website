@@ -6,19 +6,22 @@
     <client-only> <font-awesome-icon icon="fa-rotate-right" /> </client-only>
 </button>
 
-<template v-if="checkResumePage()">
-    <RouterLink v-if="checkRoute()" to="/resume/pdf" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
+<template v-if="route.path.includes('resume')">
+    <RouterLink v-if="!docStore.checkPDFRoute()" to="/resume/pdf" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
         <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
     </RouterLink>
-    <RouterLink v-if="!checkRoute()" to="/resume" :class="WIDGET_CLASSES" class="nav" title="Use Google Doc Viewer">
+    <RouterLink v-if="docStore.checkPDFRoute()" to="/resume" :class="WIDGET_CLASSES" class="nav" title="Use Google Doc Viewer">
         <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
     </RouterLink>
 </template>
 
-<template v-if="!checkResumePage()">
-    <a :href="FCS_CERTIFICATE_LINK" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
+<template v-if="!route.path.includes('resume')">
+    <RouterLink v-if="!docStore.checkPDFRoute()" :to="(FCS_CERTIFICATE_ROUTE + '/pdf')" :class="WIDGET_CLASSES" class="nav" title="Use Built-In PDF Viewer">
         <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
-    </a>
+    </RouterLink>
+    <RouterLink v-if="docStore.checkPDFRoute()" :to="FCS_CERTIFICATE_ROUTE" :class="WIDGET_CLASSES" class="nav" title="Use Google Doc Viewer">
+        <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
+    </RouterLink>
     <a :href="FCS_CERTIFICATE_LINKEDIN_POST" target="_blank" :class="WIDGET_CLASSES" class="post" title="See LinkedIn Post">
         <client-only> <font-awesome-icon icon="fa-brands fa-linkedin" /> </client-only>
     </a>
@@ -38,20 +41,6 @@ onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
  */
 function reloadPage() {
     window.location.reload();
-}
-
-/**
- * This function checks if the visitor is using the Google Doc Viewer or the Built-In PDF Viewer.
- */
-function checkRoute() {
-    return (route.path === "/resume" || route.path === "/resume/");
-}
-
-/**
- * This function checks if the page is a resume page or not.
- */
-function checkResumePage() {
-    return route.path.includes("resume");
 }
 </script>
 

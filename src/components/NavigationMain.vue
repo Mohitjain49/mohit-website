@@ -27,15 +27,13 @@
         </div>
 
         <div v-if="webData.pageView == 2" class="mohit-navBar-icons">
-            <RouterLink v-for="btn in MOBILE_MAIN_BTNS" :to="btn.path"
-                @click="(event) => { flashNavOpt(event, btn.path) }"
-                :title="btn.title"
-                class="mohit-navBar-icon"
+            <RouterLink to="/" class="mohit-navBar-icon" title="Home Page"
+                @click="(event) => { flashNavOpt(event, '/') }"
                 :style="getColorStyles('var(--website-light-text)')"
                 @mouseenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
-                <font-awesome-icon :icon="btn.icon" />
+                <font-awesome-icon icon="fa-house" />
             </RouterLink>
             <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
                 :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
@@ -49,26 +47,31 @@
 
     <Transition name="navMenu-transition">
         <div v-if="webData.navMenuOpen" class="mohit-navMenu">
-            <div v-for="(btn, index) in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
+            <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
                 <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
                     <span> {{ btn.title }} </span>
                 </RouterLink>
+            </div>
+            <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
+                <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="mohit-repo" class="mohit-navMenu-mainOpt">
+                    <font-awesome-icon icon="fa-code-branch" />
+                    <span> Website Repository </span>
+                </a>
             </div>
 
             <div class="mohit-navMenu-opt">
                 <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
                     <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
                 </button>
-                <RouterLink to="/qrcode" class="mohit-navMenu-extra" title="QR Codes">
-                    <font-awesome-icon icon="fa-qrcode" />
+                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
+                    :title="extra.title"
+                    class="mohit-navMenu-extra"
+                    @click="(event) => { flashNavOpt(event, extra.path) }"
+                    :style="getColorStyles(extra.color)">
+
+                    <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
                 </RouterLink>
-                <RouterLink to="/icons" class="mohit-navMenu-extra icons" title="My Icons">
-                    <font-awesome-icon icon="fa-pen-fancy" />
-                </RouterLink>
-                <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="_blank" class="mohit-navMenu-extra repo" title="Website Repository">
-                    <font-awesome-icon icon="fa-code-branch" />
-                </a>
             </div>
         </div>
     </Transition>
@@ -122,8 +125,10 @@ const LAPTOP_MAIN_BTNS = [
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
 ];
 
-const MOBILE_MAIN_BTNS = [
-    { path: "/", icon: "fa-house", title: "Home Page" },
+const NAV_MENU_EXTRAS = [
+    { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
+    { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
+    { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
 ];
 </script>
 
@@ -200,7 +205,7 @@ const MOBILE_MAIN_BTNS = [
 
 .mohit-navMenu {
     width: 100%;
-    height: 427px;
+    height: 488px;
     overflow: hidden;
 }
 .mohit-navMenu-opt {
@@ -238,9 +243,9 @@ const MOBILE_MAIN_BTNS = [
 }
 
 .mohit-navMenu-extra {
-    height: 40px;
-    width: 40px;
-    font-size: 25px;
+    height: 35px;
+    width: 35px;
+    font-size: 21px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -259,10 +264,6 @@ const MOBILE_MAIN_BTNS = [
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame);
 }
-.mohit-navMenu-extra.icons {
-    color: var(--blue-zero);
-    border-color: var(--blue-zero);
-}
 .mohit-navMenu-extra.repo {
     color: white;
     border-color: white;
@@ -275,7 +276,7 @@ const MOBILE_MAIN_BTNS = [
     height: 0;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
-    height: 427px;
+    height: 488px;
 }
 
 @media (max-width: 825px) {

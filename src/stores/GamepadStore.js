@@ -1,12 +1,19 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
     const router = useRouter();
     const route = useRoute();
+    const gamepadConnected = ref(false);
 
+    var gamepadConnectedInterval = null;
     var cursorXInterval = null;
     var cursorYInterval = null;
     var scrollInterval = null;
 
+    /**
+     * @type {import('vue').Ref<HTMLButtonElement>} This is the element that the cursor is hovering over that can be clicked on.
+     */
+    const cursorClickElement = ref(null);
     const showCursor = ref(false);
+
     const cursorX = ref(0);
     const cursorY = ref(0);
 
@@ -16,6 +23,33 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             top: (String(cursorY.value) + "px")
         }
     });
+
+    const cursorIcon = computed(() => {
+        return (cursorClickElement.value != null ? 'fa-hand-pointer' : 'fa-arrow-pointer');
+    })
+
+    /**
+     * This function starts an interval for checking if any gamepad is connected or not.
+     */
+    function startGamepadConnectedInterval() {
+        if(gamepadConnectedInterval != null) { return; }
+        gamepadConnectedInterval = setInterval(() => {
+            const gamepads = navigator.getGamepads();
+            gamepadConnected.value = Array.from(gamepads).some(gp => gp && gp.connected);
+            if(!gamepadConnected.value) { stopGamepadConnectedInterval(); }
+        }, 10);
+    }
+
+    /**
+     * This function stops the interval for checking if any gamepad is connected or not.
+     */
+    function stopGamepadConnectedInterval() {
+        if(gamepadConnectedInterval == null) { return; }
+        clearInterval(gamepadConnectedInterval);
+
+        setCustomCursor(false);
+        gamepadConnectedInterval = null;
+    }
 
     /**
      * This function moves onto the next page.
@@ -38,15 +72,23 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
+     * This finds the element that the cursor is hovering over. If they hover over a button or a link, it returns that element.
+     */
+    function setCursorClickElement() {
+        const foundElement = document.elementFromPoint(cursorX.value, cursorY.value);
+        const usuableLink = foundElement?.closest('a');
+        const usuableButton = foundElement?.closest('button');
+
+        if(usuableLink) { cursorClickElement.value = usuableLink; }
+        else if(usuableButton) { cursorClickElement.value = usuableButton; }
+        else { cursorClickElement.value = null; }
+    }
+
+    /**
      * This function emits a click event at the cursor's location.
      */
     function emitClick() {
-        const foundElement = document.elementFromPoint(cursorX.value, cursorY.value);
-        const usuableElement = foundElement?.closest('a');
-        const usuableButton = foundElement?.closest('button');
-
-        if(usuableElement) { usuableElement.click(); }
-        if(usuableButton) { usuableButton.click(); }
+        if(cursorClickElement.value) { cursorClickElement.value.click(); }
     }
 
     /**
@@ -65,6 +107,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             if(cursorY.value < 30) { cursorY.value = 30; }
             if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
         }
+
+        setCursorClickElement();
     }
 
     /**
@@ -74,6 +118,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     function setCustomCursor(visible = false) {
         document.body.style.cursor = (visible ? "none" : "");
         showCursor.value = visible;
+        if(!visible) { cursorClickElement.value = null; }
     }
 
     /**
@@ -96,6 +141,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             cursorX.value += (5 * (negative ? -1 : 1));
             if(cursorX.value < 30) { cursorX.value = 30; }
             if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
+            setCursorClickElement();
         }, 20);
     }
 
@@ -111,6 +157,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             cursorY.value += (5 * (negative ? -1 : 1));
             if(cursorY.value < 30) { cursorY.value = 30; }
             if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
+            setCursorClickElement();
         }, 20);
     }
 
@@ -164,7 +211,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         scrollInterval = null;
     }
 
-    return { customCursor, showCursor, emitClick, navigatePages,
+    return { customCursor, showCursor, cursorIcon, gamepadConnected,
+        emitClick, navigatePages, startGamepadConnectedInterval, stopGamepadConnectedInterval,
         setCustomCursor, manageCustomCursor, initCustomCursorPosition,
         setCursorXInterval, setCursorYInterval, stopCursorInterval,
         initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval

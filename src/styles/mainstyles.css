@@ -51,6 +51,13 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+.mohit-custom-cursor {
+    font-size: 27px;
+    color: var(--vibrant-flame);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+}
 
 a, RouterLink {
     text-decoration: none;
@@ -85,12 +92,15 @@ button {
     min-width: 340px;
     background: var(--webpage-static-background);
 }
+.personal-web-body.transparent {
+    background: transparent;
+}
+
 .center-flex-display {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
 .gradient-text {
     background: var(--website-gradient-text);
     -webkit-background-clip: text;

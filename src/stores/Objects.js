@@ -22,6 +22,7 @@ import api_gateway_icon from "../assets/aws/AWS_API_Gateway_Icon.svg";
 
 export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/";
 export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/mohit-website";
+export const PERSONAL_RESUME_LINK = "https://www.mohit-jain.com/Mohit_Jain_Resume.pdf";
 
 export const MND_PROJECT_LINK = "https://mnd.mohit-jain.com/";
 export const PERSONAL_GLOBE_LINK = "https://mohitjain49.github.io/globe/";
@@ -41,6 +42,7 @@ export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 export const NUXT_WEBSITE_LINK = "https://nuxt.com/";
 export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/";
 
+export const FCS_CERTIFICATE_ROUTE = "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025";
 export const FCS_CERTIFICATE_LINK = "https://www.mohit-jain.com/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 export const FCS_CERTIFICATE_LINKEDIN_POST = "https://www.linkedin.com/posts/mohitjain49_sharing-my-certificate-of-appreciation-from-activity-7331780981911080960-W_aN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-tIy0BLb0spd_jNR2x-8zVBRSshOre_lI"
 

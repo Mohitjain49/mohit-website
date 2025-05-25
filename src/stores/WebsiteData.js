@@ -33,6 +33,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function removeEventListeners() {
         controller.abort();
+        gamepadStore.stopGamepadConnectedInterval();
     }
 
     /**
@@ -154,6 +155,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     async function toggleWakeLock() {
         if(!("wakeLock" in navigator)) { return; }
+        closeNavMenu();
 
         if(wakeLock.value != null) {
             await wakeLock.value.release();
@@ -163,6 +165,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 wakeLock.value = await navigator.wakeLock.request("screen");
             } catch(e) {
                 console.error(e);
+                wakeLock.value = null;
             }
         }
     }

@@ -60,9 +60,7 @@
 <script setup>
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const route = useRoute();
-
 onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain"); });
-const CERTIFICATE_PATH = "/certificates/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025";
 
 /**
  * This scrolls to the top of the webpage if the user won't change routes.
@@ -78,7 +76,7 @@ const MAIN_ROUTES = [
     { name: "My Experience", path: "/experience", icon: "fa-file-code", extraClass: "" },
     { name: "My Projects", path: "/projects", icon: "fa-cubes", extraClass: "projects" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", extraClass: "" },
-    { name: "FCS Certification", path: CERTIFICATE_PATH, icon: "fa-school-flag", extraClass: "fulton" },
+    { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", extraClass: "fulton" },
 ];
 
 const CONTACT_ROUTES = [

@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="qr-code-page" class="personal-web-body">
+<div id="qr-code-page" class="personal-web-body transparent">
     <div class="qr-page-grid">
         <div class="qr-element-container">
             <div class="qr-element" v-html="renderSVG(PERSONAL_WEBSITE_LINK)"></div>
@@ -44,10 +44,6 @@ useHead(getMeta("Mohit Jain | QR Codes", "qrcode", PAGE_DESC));
 </script>
 
 <style scoped>
-#qr-code-page {
-    background: transparent;
-}
-
 .qr-page-grid {
     width: 1000px;
     height: fit-content;

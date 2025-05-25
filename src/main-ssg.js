@@ -51,6 +51,7 @@ library.add(
     FaIcons.faPizzaSlice,
     FaIcons.faGamepad,
     FaIcons.faArrowPointer,
+    FaIcons.faHandPointer,
     FaIcons.faLock,
     FaIcons.faUnlock,
     FaIcons.faCodeBranch,
