@@ -13,6 +13,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      */
     const cursorClickElement = ref(null);
     const showCursor = ref(false);
+    const maxCursorSpeed = ref(10);
 
     const cursorX = ref(0);
     const cursorY = ref(0);
@@ -92,26 +93,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
-     * This function manages the custom cursor based on an event.
-     */
-    function manageCustomCursor(event) {
-        if(event.stickMoved !== "left_stick") { return; }
-        setCustomCursor(true);
-
-        if(event.axis == 0) {
-            cursorX.value += (5 * event.axisMovementValue);
-            if(cursorX.value < 30) { cursorX.value = 30; }
-            if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
-        } else {
-            cursorY.value += (5 * event.axisMovementValue);
-            if(cursorY.value < 30) { cursorY.value = 30; }
-            if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
-        }
-
-        setCursorClickElement();
-    }
-
-    /**
      * This function sets the visibility of the custom cursor.
      * @param {Boolean} reset If true, this function displays the cursor, else it hides the cursor.
      */
@@ -119,6 +100,14 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         document.body.style.cursor = (visible ? "none" : "");
         showCursor.value = visible;
         if(!visible) { cursorClickElement.value = null; }
+    }
+
+    /**
+     * This function sets the max number of pixels that the cursor can travel per millisecond.
+     * @param {Number} maxSpeed The max speed to set the cursor to. Default Value is 10.
+     */
+    function setMaxCursorSpeed(maxSpeed = 10) {
+        maxCursorSpeed.value = maxSpeed;
     }
 
     /**
@@ -130,6 +119,26 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
+     * This function manages the custom cursor based on an event.
+     */
+    function manageCustomCursor(event) {
+        if(event.stickMoved !== "left_stick") { return; }
+        setCustomCursor(true);
+
+        if(event.axis == 0) {
+            cursorX.value += (maxCursorSpeed.value * event.axisMovementValue);
+            if(cursorX.value < 30) { cursorX.value = 30; }
+            if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
+        } else {
+            cursorY.value += (maxCursorSpeed.value * event.axisMovementValue);
+            if(cursorY.value < 30) { cursorY.value = 30; }
+            if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
+        }
+
+        setCursorClickElement();
+    }
+
+    /**
      * This function sets the Cursor X Interval.
      * @param {Boolean} negative If true, multiplies the speed by -1.
      */
@@ -138,7 +147,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         setCustomCursor(true);
 
         cursorXInterval = setInterval(() => {
-            cursorX.value += (5 * (negative ? -1 : 1));
+            cursorX.value += (maxCursorSpeed.value * (negative ? -1 : 1));
             if(cursorX.value < 30) { cursorX.value = 30; }
             if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
             setCursorClickElement();
@@ -154,7 +163,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         setCustomCursor(true);
 
         cursorYInterval = setInterval(() => {
-            cursorY.value += (5 * (negative ? -1 : 1));
+            cursorY.value += (maxCursorSpeed.value * (negative ? -1 : 1));
             if(cursorY.value < 30) { cursorY.value = 30; }
             if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
             setCursorClickElement();
@@ -181,6 +190,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * @param {Number} speed The number of pixels to scroll.
      */
     function initScrollYBy(direction = 'top', speed = 10) {
+        if(disableScrollYBy()) { return; }
         window.scrollBy(window.scrollX, (speed * ((direction === "top") ? -1 : 1)));
     }
 
@@ -198,7 +208,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * @param {String} direction The direction to scroll.
      */
     function setScrollInterval(direction = 'top') {
-        if(scrollInterval != null || route.path.includes("resume")) { return; }
+        if(scrollInterval != null || disableScrollYBy()) { return; }
         scrollInterval = setInterval(() => { initScrollYBy(direction, 7); }, 1);
     }
 
@@ -211,9 +221,17 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         scrollInterval = null;
     }
 
+    /**
+     * This returns whether or not to disable vertical scrolling.
+     */
+    function disableScrollYBy() {
+        const path = route.path;
+        return (path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE));
+    }
+
     return { customCursor, showCursor, cursorIcon, gamepadConnected,
         emitClick, navigatePages, startGamepadConnectedInterval, stopGamepadConnectedInterval,
-        setCustomCursor, manageCustomCursor, initCustomCursorPosition,
+        setCustomCursor, setMaxCursorSpeed, manageCustomCursor, initCustomCursorPosition,
         setCursorXInterval, setCursorYInterval, stopCursorInterval,
         initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval
     }
