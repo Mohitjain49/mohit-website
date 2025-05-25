@@ -62,6 +62,7 @@ export const personalRoutes = [
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
 
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
+    { path: "/documents", redirect: { path: "/", hash: "#documents" } },
     { path: "/footer", redirect: { path: "/", hash: "#footer" } },
 
     { path: "/repo", alias: ['/repository'], name: "Website Repository", component: RepoRedirect },

@@ -156,6 +156,7 @@ function onIvueTabLeave(id = "main-tab") {
 
 .ivue-section-tab img {
     padding-left: 15px;
+    user-select: none;
 }
 .ivue-section-tab p {
     color: inherit;
