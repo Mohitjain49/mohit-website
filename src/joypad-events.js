@@ -10,6 +10,7 @@ joypad.on("connect", (e) => {
 
 joypad.on("button_press", (e) => {
     const buttonIndex = parseInt(e.detail.buttonName.split('_')[1], 10);
+    const gamepad = e.detail.gamepad;
     // console.log(buttonIndex);
 
     if(buttonIndex == 12 || buttonIndex == 13) {
@@ -20,7 +21,7 @@ joypad.on("button_press", (e) => {
     }
 
     if(buttonIndex == 0 || buttonIndex == 1) {
-        useGamepadStore().emitClick();
+        useGamepadStore().emitClick(gamepad);
     }
     if(buttonIndex == 2 || buttonIndex == 3) {
         useGamepadStore().setMaxCursorSpeed(5);
@@ -30,10 +31,10 @@ joypad.on("button_press", (e) => {
     }
 
     if(buttonIndex == 5 || buttonIndex == 7) {
-        useGamepadStore().navigatePages(true);
+        useGamepadStore().navigatePages(true, gamepad);
     }
     if(buttonIndex == 4 || buttonIndex == 6) {
-        useGamepadStore().navigatePages(false);
+        useGamepadStore().navigatePages(false, gamepad);
     }
 });
 

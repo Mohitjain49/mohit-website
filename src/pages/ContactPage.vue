@@ -278,9 +278,12 @@ function setAlertBox(text = "") {
  * @param {String} link The link to copy.
  */
 function copyLink(link = "") {
-    navigator.clipboard.writeText(link);
     const navLink = ((link === SOCIALS[0].displayLink) ? SOCIALS[0].link : link);
-    setAlertBox("Copied Link: " + getLinkString(navLink, link));
+    navigator.clipboard.writeText(link).then(() => {
+        setAlertBox("Copied Link: " + getLinkString(navLink, link));
+    }).catch(() => {
+        setAlertBox("Failed To Copy " + getLinkString(navLink, link));
+    });
 }
 
 /**
