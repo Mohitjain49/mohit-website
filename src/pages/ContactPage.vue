@@ -24,7 +24,14 @@
             </div>
             <div class="contact-input-tab" style="height: calc(100% - 70px);">
                 <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Your Message</div>
+                    <div class="contact-input-tab-header">
+                        <span> Your Message </span>
+                        <client-only>
+                            <button @click="manageTTS()" :title="documentStore.ttsTitle">
+                                <font-awesome-icon :icon="documentStore.ttsIcon" />
+                            </button>
+                        </client-only>
+                    </div>
                 </div>
                 <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
                     placeholder="Type your message here (minimum 50 characters)..."
@@ -118,6 +125,7 @@ import { useHead } from '@unhead/vue';
 import { ofetch } from 'ofetch';
 
 const webData = useWebsiteDataStore();
+const documentStore = useDocumentStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 
 const alertBoxText = ref("");
@@ -235,6 +243,17 @@ function getAPIErrorRedirect() {
  * These functions manage the alert box and some text strings.
  * -----------------------------------------------------------
  */
+
+/**
+ * This function manages TTS with the message.
+ */
+function manageTTS() {
+    if(documentStore.ttsPlaying) {
+        documentStore.cancelTTS();
+    } else {
+        documentStore.startTTS(msgMain.value);
+    }
+}
 
 /**
  * This sets the status of the alert box.
@@ -380,6 +399,9 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     font-weight: bold;
     font-size: 18px;
     text-align: left;
+}
+.contact-input-tab-header svg {
+    font-size: 14px;
 }
 
 .contact-input-tab-textbox {

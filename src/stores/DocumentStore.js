@@ -3,6 +3,26 @@ import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Ful
 
 export const useDocumentStore = defineStore("document-store", () => {
     const route = useRoute();
+    const ttsAvailable = ref(false);
+
+    /**
+     * @type {SpeechSynthesisUtterance} This is the utterance for the speech synthesis.
+     */
+    var ttsUtterance = null;
+    const ttsPlaying = ref(false);
+
+    const ttsIcon = computed(() => {
+        return ((ttsAvailable.value && !ttsPlaying.value) ? 'fa-volume-high' : 'fa-volume-xmark');
+    });
+    const ttsTitle = computed(() => {
+        if(!ttsAvailable.value) {
+            return "Text To Speech is Not Available.";
+        } else if(ttsPlaying.value) {
+            return "Stop Playing Message.";
+        } else {
+            return "Play Your Message!";
+        }
+    });
 
     /**
      * This function downloads a document for the visitor to see.
@@ -53,7 +73,42 @@ export const useDocumentStore = defineStore("document-store", () => {
         return route.path.includes('pdf');
     }
 
-    return { downloadDoc, hideVerticalOverflow, checkPDFRoute,
+    /**
+     * This sets whether or not speech synthesis is available for this browser.
+     */
+    function checkTTSAvailable() {
+        ttsAvailable.value = ('speechSynthesis' in window);
+    }
+
+    /**
+     * this function stops TTS from continuing.
+     */
+    function cancelTTS() {
+        if(!ttsAvailable.value) { return; }
+        window.speechSynthesis.cancel();
+        ttsUtterance = null;
+        ttsPlaying.value = false;
+    }
+
+    /**
+     * This function starts a utterance of the current text.
+     * @param {String} text The text for the utterance.
+     */
+    function startTTS(text = "") {
+        if(!ttsAvailable.value) { return; }
+        cancelTTS();
+        ttsUtterance = new SpeechSynthesisUtterance(text);
+
+        ttsUtterance.onend = function() { cancelTTS(); };
+        ttsUtterance.onerror = function() { cancelTTS(); };
+
+        window.speechSynthesis.speak(ttsUtterance);
+        ttsPlaying.value = true;
+    }
+
+    return { ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
+        checkTTSAvailable, cancelTTS, startTTS,
+        downloadDoc, hideVerticalOverflow, checkPDFRoute,
         mountDocumentPage, unmountDocumentPage
     }
 });

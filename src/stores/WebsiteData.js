@@ -1,6 +1,7 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const controller = new AbortController();
     const gamepadStore = useGamepadStore();
+    const documentStore = useDocumentStore();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -17,6 +18,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function setEventListeners() {
         const signal = controller.signal;
+        documentStore.checkTTSAvailable();
         resizePageComponents();
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
