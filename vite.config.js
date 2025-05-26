@@ -1,9 +1,11 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
 
+import { VitePWA } from 'vite-plugin-pwa';
+import { qrcode } from 'vite-plugin-qrcode';
+
 import vue from "@vitejs/plugin-vue";
 import swc from "unplugin-swc"
-import { VitePWA } from 'vite-plugin-pwa';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
@@ -11,15 +13,12 @@ import generateSitemap from 'vite-ssg-sitemap';
 
 export default defineConfig({
     base: "/",
-    server: {
-        port: 5000
-    },
-    preview: {
-        port: 4007
-    },
+    server: { port: 5000 },
+    preview: { port: 4007 },
     plugins: [
         vue(),
         swc.vite(),
+        qrcode(),
         Components({ dts: true }),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia'],
@@ -31,7 +30,7 @@ export default defineConfig({
             registerType: "autoUpdate",
             devOptions: { enabled: false },
             workbox: {
-                cacheId: "v2.6.3",
+                cacheId: "v2.6.4",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
