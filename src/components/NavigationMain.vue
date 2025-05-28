@@ -74,6 +74,12 @@
                 <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="webData.wakeLockStatement">
                     <font-awesome-icon :icon="webData.wakeLockIcon" />
                 </button>
+                <RouterLink to="/install" title="Install Website as PWA"
+                    class="mohit-navMenu-extra website-text"
+                    @click="(event) => { flashNavOpt(event, '/install') }">
+
+                    <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
+                </RouterLink>
             </div>
         </div>
     </Transition>
@@ -127,6 +133,7 @@ const NAV_MENU_EXTRAS = [
     { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
     { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
     { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
+    { path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)", title: "FCS Certificate" },
 ];
 </script>
 
@@ -258,6 +265,10 @@ const NAV_MENU_EXTRAS = [
     background-color: rgb(40, 40, 40);
 }
 
+.mohit-navMenu-extra.website-text {
+    color: var(--website-text);
+    border-color: var(--website-text);
+}
 .mohit-navMenu-extra.lock {
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame);

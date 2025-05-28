@@ -4,6 +4,7 @@ import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
 import ContactPage from "./pages/ContactPage.vue";
 
+import InstallPage from "./pages/InstallPage.vue";
 import MyIcon from "./pages/MyIcon.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
@@ -57,6 +58,7 @@ export const personalRoutes = [
         ]
     },
 
+    { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },

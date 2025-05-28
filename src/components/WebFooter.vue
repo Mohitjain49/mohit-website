@@ -77,6 +77,7 @@ const MAIN_ROUTES = [
     { name: "My Projects", path: "/projects", icon: "fa-cubes", extraClass: "projects" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", extraClass: "" },
     { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", extraClass: "fulton" },
+    { name: "Git Repository", path: "/repo", icon: "fa-code-branch", extraClass: "github" },
 ];
 
 const CONTACT_ROUTES = [
@@ -89,6 +90,7 @@ const CONTACT_ROUTES = [
 const EXTRA_ROUTES = [
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
     { name: "Copyright", path: "/copyright", icon: "fa-copyright", extraClass: "copyright" },
+    { name: "Install Website", path: "/install", icon: "fa-download", extraClass: "" },
 ];
 </script>
 
@@ -96,7 +98,7 @@ const EXTRA_ROUTES = [
 #footer {
     background-color: rgba(0, 0, 0, 0.95);
     width: 100%;
-    height: 325px;
+    height: 375px;
     border: none;
     padding-top: 25px;
 }
@@ -138,7 +140,7 @@ const EXTRA_ROUTES = [
 }
 
 .footer-routes-column {
-    height: 260px;
+    height: 300px;
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -253,7 +255,7 @@ const EXTRA_ROUTES = [
 
 @media (max-width: 825px) {
     #footer {
-        height: 475px;
+        height: 550px;
     }
     .footer-body {
         grid-template-columns: 1fr 1fr;
@@ -280,6 +282,10 @@ const EXTRA_ROUTES = [
     }
     .copyright-statement svg {
         font-size: 21px;
+    }
+
+    .footer-routes-column {
+        height: 260px;
     }
 
     .footer-routes-header {
