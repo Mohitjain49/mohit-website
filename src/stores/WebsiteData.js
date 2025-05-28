@@ -11,13 +11,30 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     const pageView = ref(0);
     const navMenuOpen = ref(false);
+
+    const wakeLockAvailable = ref(false);
     const wakeLock = ref(null);
+
+    const wakeLockIcon = computed(() => {
+        return (wakeLockAvailable.value ? ((wakeLock.value == null) ? 'fa-lock' : 'fa-unlock') : 'fa-ban');
+    });
+    const wakeLockStatement = computed(() => {
+        if(!wakeLockAvailable.value) {
+            return "Screen Wake Lock Is Not Available.";
+        } else if(wakeLock.value == null) {
+            return "Set Screen Wake Lock";
+        } else {
+            return "Release Screen Wake Lock";
+        }
+    });
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
     function setEventListeners() {
         const signal = controller.signal;
+        nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
+
         documentStore.checkTTSAvailable();
         resizePageComponents();
 
@@ -165,7 +182,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This function toggles the wake lock for the website.
      */
     async function toggleWakeLock() {
-        if(!("wakeLock" in navigator)) { return; }
+        if(!wakeLockAvailable.value) { return; }
         closeNavMenu();
 
         if(wakeLock.value != null) {
@@ -181,7 +198,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, navMenuOpen, wakeLock,
+    return { pageView, navMenuOpen, wakeLock, wakeLockIcon, wakeLockStatement,
         toggleNavMenu, closeNavMenu, toggleWakeLock,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,

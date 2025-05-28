@@ -61,9 +61,6 @@
             </div>
 
             <div class="mohit-navMenu-opt">
-                <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
-                    <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
-                </button>
                 <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
                     :title="extra.title"
                     class="mohit-navMenu-extra"
@@ -72,6 +69,11 @@
 
                     <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
                 </RouterLink>
+            </div>
+            <div class="mohit-navMenu-opt">
+                <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="webData.wakeLockStatement">
+                    <font-awesome-icon :icon="webData.wakeLockIcon" />
+                </button>
             </div>
         </div>
     </Transition>
@@ -82,10 +84,6 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const route = useRoute();
-
-const wakeLockStatement = computed(() => {
-    return (((webData.wakeLock == null) ? "Set" : "Release") + " Screen Wake Lock");
-});
 
 /**
  * This sets the color and border color of an icon.
@@ -205,7 +203,7 @@ const NAV_MENU_EXTRAS = [
 
 .mohit-navMenu {
     width: 100%;
-    height: 488px;
+    height: 540px;
     overflow: hidden;
 }
 .mohit-navMenu-opt {
@@ -276,7 +274,7 @@ const NAV_MENU_EXTRAS = [
     height: 0;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
-    height: 488px;
+    height: 540px;
 }
 
 @media (max-width: 825px) {
