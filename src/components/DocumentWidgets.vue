@@ -1,6 +1,6 @@
 <template>
 <button @click="docStore.downloadDoc()" :class="WIDGET_CLASSES" title="Download Document">
-    <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
+    <client-only> <font-awesome-icon icon="fa-file-download" /> </client-only>
 </button>
 <button @click="reloadPage()" :class="WIDGET_CLASSES" class="reload" title="Reload Page">
     <client-only> <font-awesome-icon icon="fa-rotate-right" /> </client-only>

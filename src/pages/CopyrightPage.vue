@@ -5,6 +5,7 @@
             <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
             <span> {{ COPYRIGHT_TEXT }} </span>
         </div>
+        <div class="copyright-body-date"> {{ RELEASE_DATE }} </div>
 
         <div class="copyright-body-desc">
             I'm glad you're here and hope you find inspiration in my work.
@@ -21,11 +22,20 @@
 
 <script setup>
 import { useHead } from "@unhead/vue";
+import now from '~build/time';
+
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
+const RELEASE_DATE = ref("Last Release: May 28th, 2025");
 
 onMounted(() => {
     initWebData();
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
+    
+    RELEASE_DATE.value = "Last Release: " + new Date(now).toLocaleDateString("en-US", {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
 });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website."
@@ -51,9 +61,17 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     font-weight: bold;
     color: var(--website-text)
 }
-
 .copyright-body-header svg {
     margin-right: 10px;
+}
+
+.copyright-body-date {
+    width: fit-content;
+    height: fit-content;
+    font-size: 20px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: bold;
+    color: var(--website-text);
 }
 .copyright-body-desc {
     padding-top: 20px;
@@ -67,10 +85,18 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
 
 @media (max-width: 600px) {
     .copyright-body-header {
-        font-size: 50px;
+        font-size: 40px;
+    }
+    .copyright-body-date {
+        font-size: 14px;
     }
     .copyright-body-desc {
-        font-size: 20px;
+        font-size: 18px;
+    }
+}
+@media (max-width: 450px) {
+    .copyright-body-header {
+        font-size: 32px;
     }
 }
 </style>

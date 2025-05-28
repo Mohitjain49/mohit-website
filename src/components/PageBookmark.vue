@@ -48,6 +48,7 @@ const BOOKMARK_ITEMS = [
     { path: "/qrcode", icon: "fa-qrcode" },
     { path: "/icon", icon: "fa-pen-fancy" },
     { path: "/copyright", icon: "fa-copyright" },
+    { path: "/install", icon: "fa-download" },
 ];
 </script>
 

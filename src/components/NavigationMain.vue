@@ -61,9 +61,6 @@
             </div>
 
             <div class="mohit-navMenu-opt">
-                <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="wakeLockStatement">
-                    <font-awesome-icon :icon="((webData.wakeLock == null) ? 'fa-lock' : 'fa-unlock')" />
-                </button>
                 <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
                     :title="extra.title"
                     class="mohit-navMenu-extra"
@@ -71,6 +68,17 @@
                     :style="getColorStyles(extra.color)">
 
                     <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
+                </RouterLink>
+            </div>
+            <div class="mohit-navMenu-opt">
+                <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="webData.wakeLockStatement">
+                    <font-awesome-icon :icon="webData.wakeLockIcon" />
+                </button>
+                <RouterLink to="/install" title="Install Website as PWA"
+                    class="mohit-navMenu-extra website-text"
+                    @click="(event) => { flashNavOpt(event, '/install') }">
+
+                    <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
                 </RouterLink>
             </div>
         </div>
@@ -82,10 +90,6 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const route = useRoute();
-
-const wakeLockStatement = computed(() => {
-    return (((webData.wakeLock == null) ? "Set" : "Release") + " Screen Wake Lock");
-});
 
 /**
  * This sets the color and border color of an icon.
@@ -129,6 +133,7 @@ const NAV_MENU_EXTRAS = [
     { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
     { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
     { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
+    { path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)", title: "FCS Certificate" },
 ];
 </script>
 
@@ -205,7 +210,7 @@ const NAV_MENU_EXTRAS = [
 
 .mohit-navMenu {
     width: 100%;
-    height: 488px;
+    height: 540px;
     overflow: hidden;
 }
 .mohit-navMenu-opt {
@@ -260,6 +265,10 @@ const NAV_MENU_EXTRAS = [
     background-color: rgb(40, 40, 40);
 }
 
+.mohit-navMenu-extra.website-text {
+    color: var(--website-text);
+    border-color: var(--website-text);
+}
 .mohit-navMenu-extra.lock {
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame);
@@ -276,7 +285,7 @@ const NAV_MENU_EXTRAS = [
     height: 0;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
-    height: 488px;
+    height: 540px;
 }
 
 @media (max-width: 825px) {

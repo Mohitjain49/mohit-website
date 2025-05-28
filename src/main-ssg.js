@@ -1,6 +1,7 @@
 import "@fontsource/lexend";
 import "@fontsource/roboto";
 import "@fontsource/montserrat";
+import '~build/console';
 
 import { ViteSSG } from "vite-ssg";
 import { createPinia } from "pinia";
@@ -28,6 +29,7 @@ library.add(
     FaIcons.faGear,
     FaIcons.faMagnifyingGlass,
     FaIcons.faX,
+    FaIcons.faBan,
     FaIcons.faArrowDown,
     FaIcons.faFileLines,
     FaIcons.faBars,
@@ -37,6 +39,7 @@ library.add(
     FaIcons.faFileCode,
     FaIcons.faCode,
     FaIcons.faFilePdf,
+    FaIcons.faFileDownload,
     FaIcons.faCopy,
     FaIcons.faEnvelope,
     FaIcons.faPhone,

@@ -18,9 +18,7 @@
 
 <script setup>
 import { useHead } from '@unhead/vue';
-const webData = useWebsiteDataStore();
-
-onMounted(() => { webData.mountWebData(); });
+onMounted(() => { initWebData(); });
 useHead(getMeta());
 </script>
 
