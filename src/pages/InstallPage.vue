@@ -6,7 +6,7 @@
 <div id="install-page" class="personal-web-body">
     <div class="install-body">
         <div class="install-box">
-            <button class="install-button">
+            <button class="install-button" @click="installStore.installApp()">
                 <client-only> <font-awesome-icon :icon="installStore.installIcon" /> </client-only>
                 <span> {{ installStore.installText }} </span>
             </button>
