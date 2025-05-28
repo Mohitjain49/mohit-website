@@ -2,6 +2,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const controller = new AbortController();
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
+    const installStore = useInstallStore();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -36,6 +37,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
 
         documentStore.checkTTSAvailable();
+        installStore.mountInstallStore();
         resizePageComponents();
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
