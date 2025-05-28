@@ -1,6 +1,7 @@
 import "@fontsource/lexend";
 import "@fontsource/roboto";
 import "@fontsource/montserrat";
+import '~build/console';
 
 import { ViteSSG } from "vite-ssg";
 import { createPinia } from "pinia";

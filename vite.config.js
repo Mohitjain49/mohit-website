@@ -5,11 +5,12 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { qrcode } from 'vite-plugin-qrcode';
 
 import vue from "@vitejs/plugin-vue";
-import swc from "unplugin-swc"
+import generateSitemap from 'vite-ssg-sitemap';
 
+import swc from "unplugin-swc";
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
-import generateSitemap from 'vite-ssg-sitemap';
+import Info from "unplugin-info/vite";
 
 export default defineConfig({
     base: "/",
@@ -19,6 +20,7 @@ export default defineConfig({
         vue(),
         swc.vite(),
         qrcode(),
+        Info(),
         Components({ dts: true }),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia'],
@@ -30,7 +32,7 @@ export default defineConfig({
             registerType: "autoUpdate",
             devOptions: { enabled: false },
             workbox: {
-                cacheId: "v2.6.4",
+                cacheId: "v2.6.6",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
