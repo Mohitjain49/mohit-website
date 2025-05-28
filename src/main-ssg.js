@@ -1,3 +1,7 @@
+import "@fontsource/lexend";
+import "@fontsource/roboto";
+import "@fontsource/montserrat";
+
 import { ViteSSG } from "vite-ssg";
 import { createPinia } from "pinia";
 import VueObserveVisibility from 'vue3-observe-visibility'

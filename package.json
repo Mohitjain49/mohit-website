@@ -1,6 +1,6 @@
 {
   "name": "mohit-website",
-  "version": "2.6.4",
+  "version": "2.6.5",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,6 +12,9 @@
     "open:build": "vite-ssg build & vite preview --open"
   },
   "dependencies": {
+    "@fontsource/lexend": "^5.2.7",
+    "@fontsource/montserrat": "^5.2.5",
+    "@fontsource/roboto": "^5.2.5",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

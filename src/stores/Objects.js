@@ -7,6 +7,7 @@ import nuxt_icon from "../assets/Nuxt_Icon.png";
 import pinia_icon from "../assets/Pinia_Icon.svg";
 import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
+import fontsource_icon from "../assets/FontSource_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -572,6 +573,19 @@ export const ICONS_SKILL_NOTES = [
             size: "160"
         }
     },
+    {
+        name: "FontSource",
+        link: "https://fontsource.org/",
+        color: "#625BF8",
+        desc: "FontSource is a collection of open-source fonts that are packaged into NPM Packages. " +
+            "I use them in my own website and other projects, and I just want to give credit to them here.",
+
+        icon: {
+            id: fontsource_icon,
+            faIcon: false,
+            size: "105"
+        }
+    }
 ];
 
 export const PROJECT_ENTITIES = [
@@ -613,5 +627,5 @@ export const PROJECT_ENTITIES = [
             faIcon: false,
             size: "105"
         }
-    },
+    }
 ];

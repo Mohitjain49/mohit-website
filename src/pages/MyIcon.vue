@@ -4,7 +4,7 @@
     <div class="icon-background blue-zero">
         <div class="icon-start-header"> My Icons </div>
         <div class="icon-start-desc">
-            Using a combination of gradients and the Lexend Google Font, I was able to create "icons" for myself,
+            Using a combination of gradients and the Lexend Font, I was able to create "icons" for myself,
             which works well as a stamp for my personal brand.
         </div>
 
@@ -152,7 +152,7 @@ const ICON_WIDGETS = [
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-weight: bold;
+    font-weight: 900;
     font-family: 'Lexend', sans-serif;
     text-align: center;
 }
@@ -164,7 +164,7 @@ const ICON_WIDGETS = [
 }
 
 .icon-start-header {
-    font-size: 100px;
+    font-size: 110px;
     width: fit-content;
     height: fit-content;
     color: var(--blue-cobalt);
@@ -182,7 +182,6 @@ const ICON_WIDGETS = [
     padding: 0px 15px;
     color: var(--blue-cobalt);
     font-family: 'Lexend', sans-serif;
-    font-weight: bold;
 }
 
 .icon-start-widgets {
