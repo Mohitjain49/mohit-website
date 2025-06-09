@@ -117,6 +117,10 @@ clip-path: polygon(
     .mohit-bookmark svg {
         font-size: 15px;
     }
+
+    .mohit-bookmark.gamepad svg {
+        font-size: 13px;
+    }
     .mohit-bookmark.gamepad.active svg {
         font-size: 11px;
     }
