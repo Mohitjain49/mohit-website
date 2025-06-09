@@ -278,11 +278,28 @@ function setAlertBox(text = "") {
  * @param {String} link The link to copy.
  */
 function copyLink(link = "") {
+    if(link === SOCIALS[2].displayLink) {
+        copyDiscordLink();
+        return;
+    }
+
     const navLink = ((link === SOCIALS[0].displayLink) ? SOCIALS[0].link : link);
     navigator.clipboard.writeText(link).then(() => {
         setAlertBox("Copied Link: " + getLinkString(navLink, link));
     }).catch(() => {
         setAlertBox("Failed To Copy " + getLinkString(navLink, link));
+    });
+}
+
+/**
+ * This function copies the discord link.
+ */
+function copyDiscordLink() {
+    const link = SOCIALS[2].link;
+    navigator.clipboard.writeText(link).then(() => {
+        setAlertBox("Copied Link: " + getLinkString(link, link));
+    }).catch(() => {
+        setAlertBox("Failed To Copy " + getLinkString(link, link));
     });
 }
 
@@ -556,6 +573,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow-wrap: break-word; 
 }
 .contact-alert-box-text {
     height: fit-content;
