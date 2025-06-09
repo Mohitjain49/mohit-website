@@ -74,8 +74,8 @@ export const SOCIALS = [
     {
         name: "Discord",
         id: "discord",
-        displayLink: "https://discord.com/users/mohitjainn",
-        link: "https://discord.com/users/mohitjainn",
+        displayLink: "ID: 605840082951208992",
+        link: "https://discordapp.com/users/605840082951208992",
         copyBtn: "Copy Discord Link",
         linkBtn: "Go To Discord",
         linkIcon: "fa-brands fa-discord",
