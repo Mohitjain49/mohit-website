@@ -24,11 +24,9 @@
 
 <script setup>
 import "@/styles/navpage.css";
-import { useHead } from '@unhead/vue';
-
 const webData = useWebsiteDataStore();
-onMounted(() => { webData.mountWebData(); });
 
+onMounted(() => { webData.mountWebData(); });
 useHead(getMeta("Mohit Jain | My Projects", "projects/",
     "On this page, I go into depth on the projects that I have made."
 ));

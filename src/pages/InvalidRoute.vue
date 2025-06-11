@@ -14,7 +14,6 @@
 
 <script setup>
 import "@/styles/navpage.css";
-import { useHead } from '@unhead/vue';
 
 const webData = useWebsiteDataStore();
 const router = useRouter()

@@ -21,9 +21,7 @@
 </template>
 
 <script setup>
-import { useHead } from "@unhead/vue";
 import now from '~build/time';
-
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const RELEASE_DATE = ref("Last Release: May 28th, 2025");
 

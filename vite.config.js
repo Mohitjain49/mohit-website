@@ -23,7 +23,7 @@ export default defineConfig({
         Info(),
         Components({ dts: true }),
         AutoImport({
-            imports: ['vue', 'vue-router', 'pinia'],
+            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
             dirs: ['./src/stores'],
             dts: true,
             vueTemplate: true

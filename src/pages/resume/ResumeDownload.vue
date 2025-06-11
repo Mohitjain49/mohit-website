@@ -4,9 +4,7 @@
 </template>
 
 <script setup>
-import { useHead } from '@unhead/vue';
 const router = useRouter();
-
 onMounted(() => {
     downloadResume();
     router.push("/resume");
