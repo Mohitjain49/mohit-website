@@ -4,8 +4,8 @@
 
 <script setup>
 import { useHead } from '@unhead/vue';
-useHead(getMetaWithLink("Mohit Jain - My Globe",
+useHead(getMetaWithLink("Mohit Jain | Website Repository",
     PERSONAL_WEBSITE_REPOSITORY_LINK,
-    "This link will direct you to my personal globe."
+    "This link will direct you to this website's GitHub Repository."
 ));
 </script>

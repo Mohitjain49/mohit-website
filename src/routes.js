@@ -15,6 +15,7 @@ import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
 import RepoRedirect from "./pages/redirects/RepoRedirect.vue";
+import CodeRedirect from "./pages/redirects/CodeRedirect.vue";
 import GlobeRedirect from "./pages/redirects/GlobeRedirect.vue";
 import MNDRedirect from "./pages/redirects/MNDRedirect.vue";
 import PizzaRedirect from "./pages/redirects/PizzaRedirect.vue";
@@ -68,6 +69,7 @@ export const personalRoutes = [
     { path: "/footer", redirect: { path: "/", hash: "#footer" } },
 
     { path: "/repo", alias: ['/repository'], name: "Website Repository", component: RepoRedirect },
+    { path: "/code", alias: ['/codesandbox', '/code-snadbox'], name: "Code Sandbox", component: CodeRedirect },
     { path: "/globe", name: "My Globe", component: GlobeRedirect },
     { path: "/mnd", name: "Mapping Neurodivergence", component: MNDRedirect },
     { path: "/pizza", name: "Pizza Project", component: PizzaRedirect },

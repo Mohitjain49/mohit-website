@@ -53,23 +53,7 @@
                     <span> {{ btn.title }} </span>
                 </RouterLink>
             </div>
-            <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
-                <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="mohit-repo" class="mohit-navMenu-mainOpt">
-                    <font-awesome-icon icon="fa-code-branch" />
-                    <span> Website Repository </span>
-                </a>
-            </div>
 
-            <div class="mohit-navMenu-opt">
-                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
-                    :title="extra.title"
-                    class="mohit-navMenu-extra"
-                    @click="(event) => { flashNavOpt(event, extra.path) }"
-                    :style="getColorStyles(extra.color)">
-
-                    <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
-                </RouterLink>
-            </div>
             <div class="mohit-navMenu-opt">
                 <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="webData.wakeLockStatement">
                     <font-awesome-icon :icon="webData.wakeLockIcon" />
@@ -79,6 +63,30 @@
                     @click="(event) => { flashNavOpt(event, '/install') }">
 
                     <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
+                </RouterLink>
+                <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="mohit-repo"
+                    class="mohit-navMenu-extra"
+                    :style="getColorStyles('white')"
+                    title="Website Repository">
+
+                    <font-awesome-icon icon="fa-code-branch" />
+                </a>
+                <a :href="PERSONAL_WEBSITE_CODE_SANDBOX" target="mohit-repo"
+                    class="mohit-navMenu-extra"
+                    :style="getColorStyles('var(--lightning-yellow)')"
+                    title="Code Sandbox">
+                    
+                    <font-awesome-icon icon="fa-square-pen" />
+                </a>
+            </div>
+            <div class="mohit-navMenu-opt">
+                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
+                    :title="extra.title"
+                    class="mohit-navMenu-extra"
+                    @click="(event) => { flashNavOpt(event, extra.path) }"
+                    :style="getColorStyles(extra.color)">
+
+                    <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
                 </RouterLink>
             </div>
         </div>
@@ -215,7 +223,7 @@ const NAV_MENU_EXTRAS = [
 
 .mohit-navMenu {
     width: 100%;
-    height: 540px;
+    height: 480px;
     max-height: calc(100vh - 70px);
     overflow-x: hidden;
     overflow-y: auto;
@@ -293,7 +301,7 @@ const NAV_MENU_EXTRAS = [
     overflow-y: hidden;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
-    height: 540px;
+    height: 480px;
     max-height: calc(100vh - 70px);
     overflow-y: hidden;
 }
