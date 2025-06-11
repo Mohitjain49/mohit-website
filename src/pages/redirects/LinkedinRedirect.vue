@@ -3,9 +3,7 @@
 </template>
 
 <script setup>
-import { useHead } from '@unhead/vue';
 const LINKEDIN_LINK = SOCIALS[1].link;
-
 useHead(getMetaWithLink("Mohit Jain | LinkedIn", LINKEDIN_LINK,
     "This link will redirect you to my LinkedIn Profile."
 ));

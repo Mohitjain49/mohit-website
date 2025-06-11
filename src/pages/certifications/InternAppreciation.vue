@@ -7,7 +7,6 @@
 </template>
 
 <script setup>
-import { useHead } from '@unhead/vue';
 const docStore = useDocumentStore();
 const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent(FCS_CERTIFICATE_LINK)}&embedded=true`;
 

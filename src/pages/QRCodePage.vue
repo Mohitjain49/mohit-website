@@ -28,8 +28,6 @@
 
 <script setup>
 import { renderSVG } from 'uqr';
-import { useHead } from '@unhead/vue';
-
 const qrcodePopupLink = ref("");
 const qrcodePopupDisplayText = ref("");
 

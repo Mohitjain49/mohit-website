@@ -121,9 +121,7 @@
 </template>
 
 <script setup>
-import { useHead } from '@unhead/vue';
 import { ofetch } from 'ofetch';
-
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";

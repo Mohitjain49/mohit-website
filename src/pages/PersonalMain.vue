@@ -17,7 +17,6 @@
 </template>
 
 <script setup>
-import { useHead } from '@unhead/vue';
 onMounted(() => { initWebData(); });
 useHead(getMeta());
 </script>

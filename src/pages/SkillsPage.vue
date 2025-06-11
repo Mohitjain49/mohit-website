@@ -150,7 +150,6 @@ import "@/styles/navpage.css";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
-import { useHead } from '@unhead/vue';
 const webData = useWebsiteDataStore();
 const route = useRoute();
 

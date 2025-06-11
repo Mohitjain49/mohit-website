@@ -48,7 +48,6 @@
 </template>
 
 <script setup>
-import { useHead } from '@unhead/vue';
 const ICON_IMPORT_START = "/static-icons/Personal_Icon";
 
 const alertText = ref("");

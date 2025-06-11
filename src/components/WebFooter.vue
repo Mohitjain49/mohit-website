@@ -91,6 +91,7 @@ const EXTRA_ROUTES = [
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
     { name: "Copyright", path: "/copyright", icon: "fa-copyright", extraClass: "copyright" },
     { name: "Install Website", path: "/install", icon: "fa-download", extraClass: "" },
+    { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", extraClass: "sandbox" },
 ];
 </script>
 
@@ -247,15 +248,22 @@ const EXTRA_ROUTES = [
 }
 
 .footer-routes-opt.fulton {
-    color: #005941;
+    color: var(--fulton-green);
 }
 .footer-routes-opt.fulton:hover {
-    border-color: #005941;
+    border-color: var(--fulton-green);
+}
+
+.footer-routes-opt.sandbox {
+    color: var(--lightning-yellow);
+}
+.footer-routes-opt.sandbox:hover {
+    border-color: var(--lightning-yellow);
 }
 
 @media (max-width: 825px) {
     #footer {
-        height: 550px;
+        height: 590px;
     }
     .footer-body {
         grid-template-columns: 1fr 1fr;
@@ -269,10 +277,10 @@ const EXTRA_ROUTES = [
 }
 @media (max-width: 525px) {
     #footer {
-        height: 450px;
+        height: 490px;
     }
     .footer-body {
-        height: 390px;
+        height: 425px;
     }
     .footer-bottom {
         padding-bottom: 10px;
