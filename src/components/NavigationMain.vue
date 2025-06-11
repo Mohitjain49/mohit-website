@@ -1,5 +1,5 @@
 <template>
-<div id="mohit-navBar" :class="(webData.navMenuOpen ? 'widen' : '')">
+<div id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
     <div class="mohit-navBar-top">
         <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
             <img :src="mkj_text" draggable="false" />
@@ -124,6 +124,7 @@ const MAIN_BTNS = [
 ];
 
 const LAPTOP_MAIN_BTNS = [
+    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
     { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
@@ -152,6 +153,10 @@ const NAV_MENU_EXTRAS = [
     overflow: hidden;
     transition: height 0.2s;
 }
+ #mohit-navBar.menu-open {
+    border-bottom-right-radius: 0px;
+}
+
 .mohit-navBar-top {
     height: 50px;
     width: 100%;
@@ -160,7 +165,6 @@ const NAV_MENU_EXTRAS = [
     align-items: center;
     flex-direction: row;
 }
-
 .mohit-navBar-banner {
     width: 100px;
     height: 46px;
@@ -172,6 +176,7 @@ const NAV_MENU_EXTRAS = [
     border: var(--empty-border);
     border-radius: 14px;
 }
+
 .mohit-navBar-banner img {
     user-select: none;
     width: 80px;
@@ -182,7 +187,7 @@ const NAV_MENU_EXTRAS = [
 }
 
 .mohit-navBar-icons {
-    width: 200px;
+    width: 250px;
     padding-right: 7px;
     height: 100%;
     display: flex;
@@ -211,7 +216,9 @@ const NAV_MENU_EXTRAS = [
 .mohit-navMenu {
     width: 100%;
     height: 540px;
-    overflow: hidden;
+    max-height: calc(100vh - 70px);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .mohit-navMenu-opt {
     width: 100%;
@@ -283,9 +290,12 @@ const NAV_MENU_EXTRAS = [
 }
 .navMenu-transition-enter-from, .navMenu-transition-leave-to {
     height: 0;
+    overflow-y: hidden;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
     height: 540px;
+    max-height: calc(100vh - 70px);
+    overflow-y: hidden;
 }
 
 @media (max-width: 825px) {
@@ -294,7 +304,10 @@ const NAV_MENU_EXTRAS = [
         left: 60px;
     }
 }
-@media (max-width: 600px) {
+@media (max-width: 600px) { #mohit-navBar.menu-open {
+        width: calc(100% - 30px);
+        left: 15px;
+    }
     .mohit-navBar-icons {
         width: 90px;
     }
@@ -305,14 +318,30 @@ const NAV_MENU_EXTRAS = [
         width: calc(100% - 80px);
         left: 40px;
     }
-    #mohit-navBar.widen {
-        width: calc(100% - 30px);
-        left: 15px;
-    }
+   
 }
 @media (max-width: 350px) {
     #mohit-navBar {
         position: absolute;
     }
+}
+
+.mohit-navMenu::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 30px;
+    background: transparent;
+}
+.mohit-navMenu::-webkit-scrollbar-thumb {
+    background-color: var(--blue-three);
+    border-radius: 30px;
+    transition: background-color 0.2s;
+}
+.mohit-navMenu::-webkit-scrollbar-thumb:hover {
+    background-color: var(--blue-cobalt);
+}
+.mohit-navMenu::-webkit-scrollbar-button {
+    display: none;
 }
 </style>
