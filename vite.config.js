@@ -31,9 +31,11 @@ export default defineConfig({
         VitePWA({
             registerType: "autoUpdate",
             devOptions: { enabled: false },
+            includeAssets: ['**/*.woff2', '**/*.woff'],
+
             workbox: {
-                cacheId: "v2.6.7",
-                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg}'],
+                cacheId: "v2.6.8",
+                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
 
