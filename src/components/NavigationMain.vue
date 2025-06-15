@@ -1,5 +1,5 @@
 <template>
-<div id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
+<nav id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
     <div class="mohit-navBar-top">
         <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
             <img :src="mkj_text" draggable="false" />
@@ -91,7 +91,7 @@
             </div>
         </div>
     </Transition>
-</div>
+</nav>
 </template>
 
 <script setup>
@@ -148,6 +148,7 @@ const NAV_MENU_EXTRAS = [
 
 <style scoped>
 #mohit-navBar {
+    all: unset;
     position: fixed;
     top: 8px;
     left: calc((100% - 695px) / 2);
