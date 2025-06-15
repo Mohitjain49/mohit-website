@@ -16,7 +16,7 @@
             </RouterLink>
         </div>
 
-        <div class="footer-routes-column">
+        <div class="footer-routes-column right">
             <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')">
                 <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
                 <span> Contact Me </span>
@@ -39,6 +39,21 @@
             </RouterLink>
 
             <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
+                :class="['footer-routes-opt', tab.extraClass]"
+                @click="scrollToTop(tab.path)">
+
+                <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                <span> {{ tab.name }} </span>
+            </RouterLink>
+        </div>
+
+        <div class="footer-routes-column extras right">
+            <RouterLink to="/repository" class="footer-routes-header white">
+                <client-only> <font-awesome-icon icon="fa-code-branch" /> </client-only>
+                <span> Repository </span>
+            </RouterLink>
+
+            <RouterLink v-for="tab in REPO_ROUTES" :to="tab.path"
                 :class="['footer-routes-opt', tab.extraClass]"
                 @click="scrollToTop(tab.path)">
 
@@ -77,7 +92,6 @@ const MAIN_ROUTES = [
     { name: "My Projects", path: "/projects", icon: "fa-cubes", extraClass: "projects" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", extraClass: "" },
     { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", extraClass: "fulton" },
-    { name: "Git Repository", path: "/repo", icon: "fa-code-branch", extraClass: "github" },
 ];
 
 const CONTACT_ROUTES = [
@@ -91,7 +105,11 @@ const EXTRA_ROUTES = [
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
     { name: "Copyright", path: "/copyright", icon: "fa-copyright", extraClass: "copyright" },
     { name: "Install Website", path: "/install", icon: "fa-download", extraClass: "" },
+];
+
+const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", extraClass: "sandbox" },
+    { name: "Commits", path: "/commits", icon: "fa-code-commit", extraClass: "github" },
 ];
 </script>
 
@@ -106,11 +124,11 @@ const EXTRA_ROUTES = [
 
 .footer-body {
     position: relative;
-    left: calc((100% - 750px) / 2);
-    width: 750px;
+    left: calc((100% - 1000px) / 2);
+    width: 1000px;
     height: fit-content;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 .footer-bottom {
     width: 100%;
@@ -177,6 +195,13 @@ const EXTRA_ROUTES = [
 }
 .footer-routes-header.light:hover {
     border-color: var(--website-light-text);
+}
+
+.footer-routes-header.white {
+    color: white;
+}
+.footer-routes-header.white:hover {
+    border-color: white;
 }
 
 
@@ -261,12 +286,23 @@ const EXTRA_ROUTES = [
     border-color: var(--lightning-yellow);
 }
 
-@media (max-width: 825px) {
+@media (max-width: 1050px) {
     #footer {
-        height: 590px;
+        height: 550px;
     }
     .footer-body {
         grid-template-columns: 1fr 1fr;
+        left: 0px;
+        width: 100%;
+    }
+
+    .footer-routes-column {
+        width: 230px;
+        position: relative;
+        left: calc(100% - 250px)
+    }
+    .footer-routes-column.right {
+        left: 20px;
     }
 }
 @media (max-width: 700px) {
@@ -281,6 +317,8 @@ const EXTRA_ROUTES = [
     }
     .footer-body {
         height: 425px;
+        left: 0px;
+        width: 100%;
     }
     .footer-bottom {
         padding-bottom: 10px;
@@ -294,6 +332,11 @@ const EXTRA_ROUTES = [
 
     .footer-routes-column {
         height: 260px;
+        left: 0px;
+        width: auto;
+    }
+    .footer-routes-column.right {
+        left: 0px;
     }
 
     .footer-routes-header {
