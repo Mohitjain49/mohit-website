@@ -62,6 +62,7 @@ library.add(
     FaIcons.faLock,
     FaIcons.faUnlock,
     FaIcons.faCodeBranch,
+    FaIcons.faCodeCommit,
     FaIcons.faSquarePen,
     FaIcons.faSchoolFlag,
     FaIcons.faVolumeHigh,

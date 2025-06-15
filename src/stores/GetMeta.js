@@ -16,7 +16,10 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
     
     return {
         title: pageTitle,
-        link: [{ rel: 'icon', href: doc_img }],
+        link: [
+            { rel: 'icon', href: doc_img },
+            { rel: 'canonical', href: WEBSITE_PATH }
+        ],
 
         meta: [
             { name: 'description', content: pageDesc },
@@ -53,6 +56,7 @@ export function getMetaWithLink(pageTitle = WEBSITE_TITLE, pageLink = PERSONAL_W
         meta: [
             { name: 'description', content: pageDesc },
             { name: 'author', content: "Mohit Jain" },
+            { "http-equiv": 'refresh', content: ("0; url=" + pageLink) },
 
             { property: 'og:site:name', content: "Mohit Jain" },
             { property: 'og:type', content: 'website' },
