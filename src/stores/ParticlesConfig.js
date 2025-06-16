@@ -1,6 +1,6 @@
 export const HOME_BACKGROUND = {
     background: {
-        color: "#232323",
+        color: "#000000",
     },
     fpsLimit: 40,
     particles: {
@@ -165,3 +165,34 @@ export const INSTALL_BACKGROUND = {
     detectRetina: true,
     tRetina: true,
 };
+
+export const NIGHT_BACKGROUND = {
+    background: {
+        color: "#000000", // Dark night sky background
+    },
+    particles: {
+        number: { value: 150 },
+        color: {  value: "#ffffff" },
+        shape: { type: "circle" },
+        opacity: {
+            value: { min: 0.3, max: 1 }, // Twinkling effect
+            animation: {
+                enable: true,
+                speed: 1.5,
+                minimumValue: 0.3,
+                sync: false,
+            },
+        },
+        size: {
+            value: { min: 1, max: 3 }, // Varying star sizes
+        },
+        move: {
+            enable: true,
+            speed: 0.2, // Very slow movement
+            direction: "none",
+            outModes: {
+                default: "bounce",
+            },
+        },
+    },
+}

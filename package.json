@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite-ssg build",
+    "build": "vite-ssg build & npx pagefind --site dist",
     "preview": "vite preview",
     "open": "vite --open --host",
     "open:preview": "vite preview --open",
-    "open:build": "vite-ssg build & vite preview --open",
+    "open:build": "vite-ssg build & npx pagefind --site dist & vite preview --open",
     "update": "npx npm-check-updates",
-    "update:start": "npx npm-check-updates -u"
+    "update:start": "npx npm-check-updates -u",
+    "pagefind": "npx pagefind --site dist"
   },
   "dependencies": {
     "@fontsource/lexend": "^5.2.9",

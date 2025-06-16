@@ -3,6 +3,7 @@ import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
 import ContactPage from "./pages/ContactPage.vue";
+import SearchPage from "./pages/SearchPage.vue";
 
 import InstallPage from "./pages/InstallPage.vue";
 import MyIcon from "./pages/MyIcon.vue";
@@ -41,6 +42,7 @@ export const personalRoutes = [
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
     { path: "/contact", name: "Contact Mohit", component: ContactPage },
+    { path: "/search", name: "Search Website", component:SearchPage },
 
     {
         path: "/resume",
