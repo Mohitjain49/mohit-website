@@ -1,7 +1,7 @@
 <template>
-<div id="invalid" class="personal-web-body">
-    <div class="gradient-text incomplete-title"> {{ PAGE_DESC }} </div>
-    <div class="incomplete-subtitle"> {{ '' }} </div>
+<main id="invalid" class="personal-web-body">
+    <h1 class="gradient-text incomplete-title"> {{ PAGE_DESC }} </h1>
+    <!-- <div class="incomplete-subtitle"> {{ '' }} </div> -->
     
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
         <RouterLink to="/" v-html="'Go to Home'"
@@ -9,7 +9,7 @@
             @mouseleave="webData.setHeartbeatAnimation"
         />
     </div>
-</div>
+</main>
 </template>
 
 <script setup>

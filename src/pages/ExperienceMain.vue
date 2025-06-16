@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="exp-page" class="personal-web-body transparent">
+<main id="exp-page" class="personal-web-body transparent">
     <div class="main-nav-page-container">
         <div class="nav-page-title">My Experience</div>
         <div class="main-nav-page">
@@ -19,7 +19,7 @@
         </div>
     </div>
     <WebFooter class="footer-nav-page" />
-</div>
+</main>
 </template>
 
 <script setup>

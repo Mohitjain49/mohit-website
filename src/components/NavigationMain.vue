@@ -1,5 +1,5 @@
 <template>
-<nav id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
+<nav aria-hidden="true" id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
     <div class="mohit-navBar-top">
         <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
             <img :src="mkj_text" draggable="false" />

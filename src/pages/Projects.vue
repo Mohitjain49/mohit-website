@@ -3,9 +3,9 @@
     <vue-particles id="particlests" :options="GREEN_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="project-page" class="personal-web-body transparent">
+<main id="project-page" class="personal-web-body transparent">
     <div class="main-nav-page-container">
-        <div class="nav-page-title project">My Projects</div>
+        <h1 class="nav-page-title project"> My Projects </h1>
         <div class="main-nav-page">
             <MNDCard />
             <PizzaProjectCard />
@@ -19,7 +19,7 @@
         </div>
     </div>
     <WebFooter class="footer-nav-page" />
-</div>
+</main>
 </template>
 
 <script setup>

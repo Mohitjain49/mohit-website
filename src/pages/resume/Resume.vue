@@ -1,9 +1,9 @@
 <template>
 <DocumentWidgets />
-<div id="resume-container">
+<main id="resume-container">
     <iframe v-if="!docStore.checkPDFRoute()" :src="VIEWER_URL" height="100%" width="100%"></iframe>
     <iframe v-if="docStore.checkPDFRoute()" :src="PERSONAL_RESUME_LINK" height="100%" width="100%"></iframe>
-</div>
+</main>
 </template>
 
 <script setup>

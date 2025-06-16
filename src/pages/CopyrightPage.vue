@@ -1,11 +1,11 @@
 <template>
-<div class="personal-web-body">
+<main class="personal-web-body">
     <div class="copyright-body">
-        <div class="copyright-body-header">
+        <h1 class="copyright-body-header">
             <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
             <span> {{ COPYRIGHT_TEXT }} </span>
-        </div>
-        <div class="copyright-body-date"> {{ RELEASE_DATE }} </div>
+        </h1>
+        <h2 class="copyright-body-date"> {{ RELEASE_DATE }} </h2>
 
         <div class="copyright-body-desc">
             I'm glad you're here and hope you find inspiration in my work.
@@ -17,7 +17,7 @@
         </div>
     </div>
     <WebFooter />
-</div>
+</main>
 </template>
 
 <script setup>

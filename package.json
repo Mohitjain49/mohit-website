@@ -1,6 +1,6 @@
 {
   "name": "mohit-website",
-  "version": "2.6.9",
+  "version": "2.7.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -21,6 +21,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@pagefind/default-ui": "^1.3.0",
     "@tsparticles/slim": "^3.8.1",
     "@tsparticles/vue3": "^3.0.1",
     "animate.css": "^4.1.1",

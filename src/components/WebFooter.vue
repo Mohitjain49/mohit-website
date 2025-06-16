@@ -1,5 +1,5 @@
 <template>
-<div id="footer">
+<nav aria-hidden="true" id="footer">
     <div class="footer-body">
         <div class="footer-routes-column">
             <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
@@ -69,7 +69,7 @@
             <span> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
     </div>
-</div>
+</nav>
 </template>
 
 <script setup>

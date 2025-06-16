@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="homepage" class="personal-web-body">
+<main id="homepage" class="personal-web-body">
     <client-only>
         <StartSection />
         <SkillsSection />
@@ -13,7 +13,7 @@
     </client-only>
     
     <WebFooter />
-</div>
+</main>
 </template>
 
 <script setup>

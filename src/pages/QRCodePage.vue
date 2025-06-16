@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="qr-code-page" class="personal-web-body transparent">
+<main id="qr-code-page" class="personal-web-body transparent">
     <div class="qr-page-grid">
         <div v-for="code in QR_CODES" class="qr-element-container">
             <button class="qr-element" v-html="renderSVG(code.qrLink)" @click="setQRCodePopup(code)"></button>
@@ -15,7 +15,7 @@
 
     <div class="qr-page-bottomSpace"></div>
     <WebFooter />
-</div>
+</main>
 
 <button v-if="qrcodePopupLink !== ''" id="qr-code-popup" class="webpage-cover"
     @click="setQRCodePopup({ qrLink: '', displayText: '' })"
