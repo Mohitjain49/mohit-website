@@ -1,6 +1,6 @@
 <template>
 <client-only>
-    <nav id="footer" :class="((route.path === '/') ? 'main-page' : '')">
+    <nav id="footer" :class="footerClass">
         <div class="footer-body">
             <div class="footer-routes-column">
                 <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
@@ -79,6 +79,13 @@ const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const route = useRoute();
 onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain"); });
 
+const footerClass = computed(() => {
+    const path = route.path;
+    return ((path === "/contact" || path === "/contact/") ? 'contact' :
+        ((path === '/' || path === '/search' || path === '/search/') ? 'main-page' : '')
+    );
+})
+
 /**
  * This scrolls to the top of the webpage if the user won't change routes.
  * @param {String} routeStr The route the button is attached to.
@@ -127,6 +134,9 @@ const REPO_ROUTES = [
 #footer.main-page {
     border-top: 2px dashed var(--website-light-text);
     background-color: rgb(10, 10, 10);
+}
+#footer.contact {
+    grid-column: span 2;
 }
 
 .footer-body {
@@ -304,6 +314,9 @@ const REPO_ROUTES = [
     #footer {
         height: 585px;
     }
+    #footer.contact {
+        grid-column: span 2;
+    }
     .footer-body {
         grid-template-columns: 1fr 1fr;
         left: 0px;
@@ -328,6 +341,9 @@ const REPO_ROUTES = [
 @media (max-width: 525px) {
     #footer {
         height: 490px;
+    }
+    #footer.contact {
+        z-index: 20;
     }
     .footer-body {
         height: 425px;

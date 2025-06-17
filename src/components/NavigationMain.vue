@@ -178,7 +178,7 @@ const NAV_MENU_EXTRAS = [
 }
 
 .mohit-navBar-icons {
-    width: 150px;
+    width: 135px;
     padding-right: 7px;
     height: 100%;
     display: flex;
@@ -295,12 +295,13 @@ const NAV_MENU_EXTRAS = [
         left: 60px;
     }
 }
-@media (max-width: 600px) { #mohit-navBar.menu-open {
+@media (max-width: 600px) {
+    #mohit-navBar.menu-open {
         width: calc(100% - 30px);
         left: 15px;
     }
     .mohit-navBar-icons {
-        width: 90px;
+        width: 135px;
     }
 }
 

@@ -110,7 +110,7 @@
             </div>
         </div>
     </div>
-    <WebFooter class="web-footer-contact" />
+    <WebFooter />
 </main>
 
 <Transition name="alertBoxTransition">
