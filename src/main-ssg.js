@@ -48,6 +48,7 @@ library.add(
     FaIcons.faCopyright,
     FaIcons.faArrowUp,
     FaIcons.faPenFancy,
+    FaIcons.faUsersRectangle,
     FaIcons.faStar,
     FaIcons.faQrcode,
     FaIcons.faGlobe,

@@ -34,7 +34,7 @@ export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
 export const KSU_LINK = "https://kennesaw.edu/"
 export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
 
-export const MAIN_IVUE_WEBSITE_LINK = "https://ivueworld.com/";
+export const MAIN_IVUE_WEBSITE_LINK = "https://www.ivueworld.com/";
 export const IVUE_NEWS_WEBSITE_LINK = "https://news.ivueworld.com/";
 export const IVUE_MEDIA_WEBSITE_LINK = "https://ivuemedia.com/";
 export const IVUE_ROBOTICS_WEBSITE_LINK = "https://ivuerobotics.com/";
