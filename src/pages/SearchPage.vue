@@ -5,13 +5,16 @@
 
 <main class="personal-web-body transparent">
     <div class="search-wrapper">
-        <h1 @click="performSearch()">Search the Site</h1>
-        <input v-model="query" type="text" placeholder="Search..." class="search-input" />
+        <h1> Search the Site </h1>
+        <div class="mohit-search-input">
+            <input v-model="query" type="text" placeholder="Search..." @input="performSearch()" />
+            <button @click="clearSearch()" title="Clear Search Bar"> <font-awesome-icon icon="fa-circle-xmark" /> </button>
+        </div>
 
         <div v-if="results.length > 0" class="results">
             <div v-for="result in results" :key="result.item.id" class="result">
-                <h2 class="title">{{ result.item.title }}</h2>
-                <p class="excerpt">{{ truncate(result.item.content, 160) }}</p>
+                <h2 class="title"> {{ result.item.title }} </h2>
+                <p class="excerpt"> {{ truncate(result.item.content, 160) }} </p>
                 <a :href="result.item.url" class="link">View Page</a>
             </div>
         </div>
@@ -32,34 +35,30 @@ onMounted(() => {
     performSearch();
 });
 
-
 useHead(getMeta('Mohit Jain | Search', '/search',
     "You can search through any page in my website here."
 ));
 
-const index = [
-    {
-        id: 1,
-        title: 'My Experience',
-        content: 'I work with Vue.js, Cesium, AWS, and drones.',
-        url: '/experience',
-    },
-    {
-        id: 2,
-        title: 'Projects',
-        content: 'Explore my recent work in drone mapping and web development.',
-        url: '/projects',
-    },
-]
-
-const fuse = new Fuse(index, {
+const fuse = new Fuse(SearchIndex, {
     keys: ['title', 'content'],
     threshold: 0.5,
 })
 
-const query = ref('')
-const results = ref([])
+const query = ref('');
+const results = ref([]);
 
+/**
+ * This clears the search bar.
+ */
+function clearSearch() {
+    query.value = "";
+    results.value = [];
+    router.push("/search");
+}
+
+/**
+ * This function performs a search based on what the user inputted in the search bar.
+ */
 function performSearch() {
     router.push({ query: { q: query.value } }).then(() => {
         results.value = ((query.value !== '') ? fuse.search(query.value) : [])
@@ -89,15 +88,46 @@ function truncate(text, length) {
     font-weight: bold;
 }
 
-.search-input {
-    width: calc(100% - 2rem);
-    padding: 0.8rem 1rem;
+.mohit-search-input {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 1.5rem;
+}
+.mohit-search-input input {
+    width: calc(100% - 2rem - 50px);
+    padding: 12px 16px;
     border: none;
     border-radius: 8px;
     background: #2a2a2a;
     color: #fff;
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+    font-size: 16px;
+    outline: none;
+    border: var(--thin-empty-border);
+}
+.mohit-search-input input:focus {
+    border-color: white;
+}
+
+.mohit-search-input button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 43px;
+    margin-left: 7px;
+    background: #2a2a2a;
+    color: #ab0f14;
+    font-size: 20px;
+    border-radius: 8px;
+    border: var(--thin-empty-border);
+    transition: var(--default-transition);
+}
+.mohit-search-input button:hover {
+    border-color: #ab0f14;
 }
 
 .results {

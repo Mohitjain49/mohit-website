@@ -68,6 +68,7 @@ library.add(
     FaIcons.faSchoolFlag,
     FaIcons.faVolumeHigh,
     FaIcons.faVolumeXmark,
+    FaIcons.faCircleXmark,
 
     FaBrands.faReact,
     FaBrands.faJs,
