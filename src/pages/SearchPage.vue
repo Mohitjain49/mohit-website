@@ -74,12 +74,12 @@ function truncate(text, length) {
 .search-wrapper {
     width: calc(100% - 40px);
     max-width: 800px;
-    min-height: calc(100vh - 90px);
+    min-height: calc(100vh - 120px);
     margin: auto;
     margin-top: 30px;
     font-family: 'Segoe UI', sans-serif;
     color: #f5f5f5;
-    padding: 0px 10px;
+    padding: 0px 10px 30px 10px;
     border-radius: 12px;
 }
 .search-wrapper h1 {
