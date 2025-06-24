@@ -48,6 +48,7 @@ library.add(
     FaIcons.faCopyright,
     FaIcons.faArrowUp,
     FaIcons.faPenFancy,
+    FaIcons.faUsersRectangle,
     FaIcons.faStar,
     FaIcons.faQrcode,
     FaIcons.faGlobe,
@@ -67,6 +68,7 @@ library.add(
     FaIcons.faSchoolFlag,
     FaIcons.faVolumeHigh,
     FaIcons.faVolumeXmark,
+    FaIcons.faCircleXmark,
 
     FaBrands.faReact,
     FaBrands.faJs,

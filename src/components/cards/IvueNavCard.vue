@@ -12,20 +12,23 @@
         </div>
 
         <div class="newCard-devStack">
-            <div class="newCard-devStack-title"> Dev Stack </div>
+            <div class="newCard-devStack-title"> My Duties </div>
             <div v-for="module in DEV_STACK" class="newCard-module">
                 <img :src="module.icon" draggable="false" />
                 <span> {{ module.title }} </span>
             </div>
             <div class="newCard-module">
-                <client-only> <font-awesome-icon icon="fa-brands fa-cloudflare" style="color: #F58A27" /> </client-only>
-                <span> Cloudflare </span>
+                <client-only> <font-awesome-icon icon="fa-laptop-code" class="web-dev" /> </client-only>
+                <span> Web Development </span>
+            </div>
+            <div class="newCard-module">
+                <client-only> <font-awesome-icon icon="fa-users-rectangle" style="color: #F58A27" /> </client-only>
+                <span> Mentoring Interns </span>
             </div>
         </div>
 
         <div class="nav-newCard-desc center-flex-display">
-            As iVue's lead software developer, I develop iVue's company websites 
-            and manage how they are hosted online.
+            As a lead software developer at iVue, I take charge of the company's full-stack application development.
         </div>
     </a>
 </div>
@@ -36,8 +39,7 @@ import "@/styles/navcards.css";
 import ivue_text from "@/assets/ivue/iVue_Black_Text_Cropped.png";
 import main_webpage from "@/assets/ivue/iVue_Main_Website_Home.png";
 
-import vuejs_icon from "@/assets/Vuejs_Icon.png";
-import nuxt_icon from "@/assets/Nuxt_Icon.png";
+import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
 onMounted(() => {
@@ -45,8 +47,7 @@ onMounted(() => {
 });
 
 const DEV_STACK = [
-    { title: "Vue.js", icon: vuejs_icon },
-    { title: "Nuxt", icon: nuxt_icon },
-    { title: "Amazon Web Services", icon: aws_icon },
+    { title: "Worlds iVue", icon: wiv_icon },
+    { title: "Use of AWS", icon: aws_icon },
 ];
 </script>

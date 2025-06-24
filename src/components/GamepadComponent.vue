@@ -1,0 +1,101 @@
+<template>
+<client-only>
+    <font-awesome-icon v-if="gamepadStore.showCursor"
+        id="mohit-custom-cursor"
+        :icon="gamepadStore.cursorIcon"
+        :class="gamepadStore.cursorAnimation"
+        :style="gamepadStore.customCursor"
+    />
+
+    <Transition name="cursorSense-transition" fade>
+        <div v-if="gamepadStore.showCursorSpeedMenu" class="custom-cursor-sensitivity">
+            <h1> Cursor Speed </h1>
+            <input type="range" v-model="gamepadStore.maxCursorSpeed" min="1" max="30" disabled />
+            <p> {{ (gamepadStore.maxCursorSpeed + 'px per frame') }} </p>
+        </div>
+    </Transition>
+</client-only>
+</template>
+
+<script setup>
+const gamepadStore = useGamepadStore();
+</script>
+
+<style scoped>
+#mohit-custom-cursor {
+    font-size: 27px;
+    color: var(--vibrant-flame);
+    padding: 5px;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border: var(--empty-border);
+    border-radius: 10px;
+    transition: var(--default-transition);
+}
+.custom-cursor-sensitivity {
+    position: fixed;
+    left: calc(50% - 225px);
+    top: calc(50% - 125px);
+    width: 450px;
+    height: 250px;
+    border: 2px solid white;
+    color: white;
+    border-radius: 25px;
+    z-index: 2000;
+    box-shadow: 0px 0px 20px 20px black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--blue-cobalt) 0,
+        var(--blue-cobalt) 30px,
+        black 30px,
+        black 60px
+    );
+}
+
+.custom-cursor-sensitivity input {
+    width: 175px;
+}
+.custom-cursor-sensitivity h1 {
+    color: white;
+    font-family: 'Lexend', sans-serif;
+    margin-bottom: 12px;
+    width: fit-content;
+    height: fit-content;
+    border-bottom: 3px dotted white;
+    border-radius: 10px;
+    padding-bottom: 2px;
+}
+.custom-cursor-sensitivity p {
+    color: white;
+    font-family: 'Lexend', sans-serif;
+    font-size: 17px;
+}
+
+.cursorSense-transition-enter-active, .cursorSense-transition-leave-active {
+    transition: opacity 1.25s;
+}
+.cursorSense-transition-leave-to {
+    opacity: 0
+}
+.cursorSense-transition-leave-from {
+    opacity: 1;
+}
+
+@media (max-width: 500px) {
+    .custom-cursor-sensitivity {
+        left: calc(50% - 150px);
+        top: calc(50% - 75px);
+        width: 300px;
+        height: 150px;
+    }
+    .custom-cursor-sensitivity h1 {
+        font-size: 22px;
+    }
+}
+</style>

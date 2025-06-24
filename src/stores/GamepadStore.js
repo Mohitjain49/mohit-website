@@ -1,10 +1,10 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
-    const router = useRouter();
     const route = useRoute();
     const gamepadConnected = ref(false);
+    const showCursorSpeedMenu = ref(false);
 
     var gamepadConnectedInterval = null;
-    var vibrateInterval = null;
+    var cursorSpeedInterval = null;
 
     var cursorXInterval = null;
     var cursorYInterval = null;
@@ -59,75 +59,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
-     * This function vibrates the gamepad. Does nothing if a gamepad is not reecived.
-     * @param {Gamepad} gamepad The gamepad to vibrate.
-     */
-    function vibrateGamepad(gamepad = null) {
-        if(!gamepad || !gamepad.vibrationActuator) { return; }
-        const VIBRATE_DURATION = 400;
-
-        gamepad.vibrationActuator.playEffect("dual-rumble", {
-            startDelay: 0,
-            duration: VIBRATE_DURATION,
-            weakMagnitude: 0.5,
-            strongMagnitude: 0.5,
-        });
-
-        if(vibrateInterval != null) { clearInterval(vibrateInterval); }
-        vibrateInterval = setTimeout(() => {
-            gamepad.vibrationActuator.playEffect("dual-rumble", {
-                startDelay: 0,
-                duration: 0,
-                weakMagnitude: 0,
-                strongMagnitude: 0,
-            });
-            vibrateInterval = null;
-        }, VIBRATE_DURATION);
-    }
-
-    /**
-     * This disables all vibrations on every gamepad.
-     */
-    function disableGamepadVibration() {
-        if(vibrateInterval != null) { clearInterval(vibrateInterval); }
-        const gamepads = navigator.getGamepads();
-        if(!gamepads) { return; }
-
-        for(let i = 0; i < gamepads.length; i++) {
-            if(gamepads[i] != null && gamepads[i].vibrationActuator) {
-                gamepads[i].vibrationActuator.playEffect("dual-rumble", {
-                    startDelay: 0,
-                    duration: 0,
-                    weakMagnitude: 0,
-                    strongMagnitude: 0,
-                });
-            }
-        }
-    }
-
-    /**
-     * This function moves onto the next page.
-     * @param {Boolean} forward If true, moves onto the next page.
-     * @param {Gamepad} gamepad The gamepad to vibrate.
-     */
-    function navigatePages(forward = true, gamepad = null) {
-        const NAV_PAGES = ["/", "/skills", "/experience", "/projects", "/resume", "/contact", "/qrcode"];
-        const currentPath = NAV_PAGES.findIndex((navPath) => (navPath === route.path || (navPath + "/") === route.path));
-        const lastIndex = (NAV_PAGES.length - 1);
-
-        var navIndex = 0;
-        if(forward) {
-            navIndex = ((currentPath == lastIndex) ? 0 : currentPath + 1);
-        } else {
-            navIndex = ((currentPath == 0) ? lastIndex : currentPath - 1);
-        }
-
-        if(currentPath == -1) { navIndex = 0; }
-        router.push(NAV_PAGES[navIndex]);
-        vibrateGamepad(gamepad);
-    }
-
-    /**
      * This finds the element that the cursor is hovering over. If they hover over a button or a link, it returns that element.
      */
     function setCursorClickElement() {
@@ -142,18 +73,14 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     /**
      * This function emits a click event at the cursor's location.
-     * @param {Gamepad} gamepad The gamepad to vibrate.
      */
-    function emitClick(gamepad = null) {
+    function emitClick() {
         const element = cursorClickElement.value;
         if(!element) { return; }
-        
-        if(element.matches('a') && !element.href.startsWith(window.location.origin)) {
-            disableGamepadVibration();
-        } else {
-            vibrateGamepad(gamepad);
-        }
+
         element.click();
+        triggerClickSound();
+        nextTick(() => { setCursorClickElement(); });
     }
 
     /**
@@ -163,11 +90,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     function setCustomCursor(visible = false) {
         document.body.style.cursor = (visible ? "none" : "");
         showCursor.value = visible;
-
-        if(!visible) {
-            cursorClickElement.value = null;
-            disableGamepadVibration();
-        }
+        if(!visible) { cursorClickElement.value = null; }
     }
 
     /**
@@ -298,9 +221,37 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         return (path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE));
     }
 
-    return { customCursor, showCursor, cursorIcon, cursorAnimation, gamepadConnected,
-        emitClick, navigatePages, vibrateGamepad, disableGamepadVibration,
-        startGamepadConnectedInterval, stopGamepadConnectedInterval,
+    /**
+     * This starts the interval for changing the cursor speed.
+     * @param {Boolean} up If true, interval increases speed, else it decreases speed.
+     */
+    function startCursorSpeedInterval(up = true) {
+        if(cursorSpeedInterval != null) { return; }
+        showCursorSpeedMenu.value = true;
+
+        cursorSpeedInterval = setInterval(() => {
+            const minReached = (!up && maxCursorSpeed.value < 2);
+            const maxReached = (up && maxCursorSpeed.value > 29);
+
+            if(minReached || maxReached) { return; }
+            maxCursorSpeed.value += (up ? 1 : -1);
+        }, 50);
+    }
+
+    /**
+     * This function stops the cursor speed interval.
+     */
+    function stopCursorSpeedInterval() {
+        if(cursorSpeedInterval == null) { return; }
+        clearInterval(cursorSpeedInterval);
+        cursorSpeedInterval = null;
+        showCursorSpeedMenu.value = false;
+    }
+
+    return { customCursor, showCursor, cursorIcon, cursorAnimation,
+        maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
+        emitClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
+        startCursorSpeedInterval, stopCursorSpeedInterval,
         setCustomCursor, setMaxCursorSpeed, setCursorClickElement, manageCustomCursor,
         initCustomCursorPosition, setCursorXInterval, setCursorYInterval, stopCursorInterval,
         initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval

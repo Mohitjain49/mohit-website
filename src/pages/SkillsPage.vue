@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="skills-page" class="personal-web-body">
+<main id="skills-page" class="personal-web-body">
     <client-only>
         <div class="skills-body">
             <div style="color: rgba(0, 0, 0, 0)">H</div>
@@ -141,8 +141,8 @@
             @mouseleave="webData.setHeartbeatAnimation"
         />
     </div>
-    <WebFooter class="footer-nav-page" />
-</div>
+    <WebFooter />
+</main>
 </template>
 
 <script setup>

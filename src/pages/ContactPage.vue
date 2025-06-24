@@ -3,13 +3,13 @@
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="contact-page" class="personal-web-body">
+<main id="contact-page" class="personal-web-body">
     <div class="contact-me-box web-service">
         <div class="contact-box-title-container center-flex-display">
-            <div class="gradient-text contact-box-title">Contact Me</div>
+            <h1 class="gradient-text contact-box-title"> Contact Me </h1>
         </div>
         <div class="contact-box-desc">
-            <span v-html="CONTACT_ME_DESC"></span>
+            <p v-html="CONTACT_ME_DESC"></p>
         </div>
 
         <div class="contact-box-content">
@@ -79,7 +79,7 @@
             <div class="gradient-text contact-box-title">My Socials</div>
         </div>
         <div class="contact-box-desc">
-            <span v-html="MY_SOCIALS_DESC"></span>
+            <p v-html="MY_SOCIALS_DESC"></p>
         </div>
 
         <div class="contact-box-content">
@@ -110,8 +110,8 @@
             </div>
         </div>
     </div>
-    <WebFooter class="web-footer-contact" />
-</div>
+    <WebFooter />
+</main>
 
 <Transition name="alertBoxTransition">
     <div class="contact-alert-box" v-if="(alertBoxText !== '')">
@@ -374,10 +374,13 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     width: 80%;
     left: 10%;
     margin: 15px 0px;
+}
+.contact-box-desc p {
     color: var(--website-text);
     font-size: 17px;
-    font-family: 'Lexend';
+    font-family: 'Lexend', sans-serif;
 }
+
 .contact-box-desc-link {
     cursor: pointer;
     margin-top: 2px;

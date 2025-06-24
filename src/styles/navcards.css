@@ -87,14 +87,20 @@
     user-select: none;
     margin-left: 10px;
 }
-.newCard-module svg {
-    height: 30px;
-    margin-left: 10px;
-}
 .newCard-module span {
     margin-left: 10px;
     font-size: 18px;
     font-family: 'Lexend', sans-serif;
+}
+
+.newCard-module svg {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+}
+.newCard-module svg.web-dev {
+    height: 20px;
+    color: #E34E26;
 }
 
 .nav-newCard-desc {

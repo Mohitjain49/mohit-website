@@ -1,8 +1,8 @@
 <template>
-<div id="icons-body" class="personal-web-body">
+<main id="icons-body" class="personal-web-body">
     <div id="start" class="icon-page-padding"></div>
     <div class="icon-background blue-zero">
-        <div class="icon-start-header"> My Icons </div>
+        <h1 class="icon-start-header"> My Icons </h1>
         <div class="icon-start-desc">
             Using a combination of gradients and the Lexend Font, I was able to create "icons" for myself,
             which works well as a stamp for my personal brand.
@@ -38,7 +38,7 @@
         <div class="icon-text"> MND </div>
     </div>
     <WebFooter />
-</div>
+</main>
 
 <Transition name="alertBoxTransition">
     <div class="icons-alert-box" v-if="(alertText !== '')">

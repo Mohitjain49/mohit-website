@@ -3,7 +3,7 @@
     <vue-particles id="particlests" :options="INSTALL_BACKGROUND"></vue-particles>
 </client-only>
 
-<div id="install-page" class="personal-web-body">
+<main id="install-page" class="personal-web-body">
     <div class="install-body">
         <div class="install-box">
             <button class="install-button" @click="installStore.installApp()">
@@ -16,7 +16,7 @@
         </div>
     </div>
     <WebFooter />
-</div>
+</main>
 </template>
 
 <script setup>

@@ -1,9 +1,9 @@
 <template>
-<div class="personal-web-body">
+<main class="personal-web-body">
     <div class="redirect-statement">
         {{ (emailPage ? EMAIL_REDIRECT_TEXT : REDIRECT_TEXT) }}
     </div>
-</div>
+</main>
 </template>
 
 <script setup>

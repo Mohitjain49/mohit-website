@@ -1,97 +1,73 @@
 <template>
-<nav id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
-    <div class="mohit-navBar-top">
-        <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
-            <img :src="mkj_text" draggable="false" />
-        </RouterLink>
-
-        <div v-if="webData.pageView != 2" class="mohit-navBar-icons">
-            <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
-                @click="(event) => { flashNavOpt(event, btn.path) }"
-                :title="btn.title"
-                class="mohit-navBar-icon"
-                :style="getColorStyles(btn.color)"
-                @mouseenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
-
-                <font-awesome-icon :icon="btn.icon" />
+<client-only>
+    <nav id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
+        <div class="mohit-navBar-top">
+            <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }">
+                <img :src="mkj_text" draggable="false" />
             </RouterLink>
-            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
-                :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
-                :style="getColorStyles('var(--website-light-text)')"
-                @mouseenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
 
-                <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
-            </button>
-        </div>
+            <div class="mohit-navBar-icons">
+                <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
+                    @click="(event) => { flashNavOpt(event, btn.path) }"
+                    :title="btn.title"
+                    class="mohit-navBar-icon"
+                    :style="getColorStyles(btn.color)"
+                    @mouseenter="setPulseLoopAnimation"
+                    @mouseleave="setPulseLoopAnimation">
 
-        <div v-if="webData.pageView == 2" class="mohit-navBar-icons">
-            <RouterLink to="/" class="mohit-navBar-icon" title="Home Page"
-                @click="(event) => { flashNavOpt(event, '/') }"
-                :style="getColorStyles('var(--website-light-text)')"
-                @mouseenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
-
-                <font-awesome-icon icon="fa-house" />
-            </RouterLink>
-            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
-                :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
-                @mouseenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
-
-                <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
-            </button>
-        </div>
-    </div>
-
-    <Transition name="navMenu-transition">
-        <div v-if="webData.navMenuOpen" class="mohit-navMenu">
-            <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-                <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
-                    <span> {{ btn.title }} </span>
                 </RouterLink>
-            </div>
+                <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+                    :title="(!webData.navMenuOpen ? 'Open Navigation Menu' : 'Close Navigation Menu')"
+                    :style="getColorStyles('var(--website-light-text)')"
+                    @mouseenter="setPulseLoopAnimation"
+                    @mouseleave="setPulseLoopAnimation">
 
-            <div class="mohit-navMenu-opt">
-                <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="webData.wakeLockStatement">
-                    <font-awesome-icon :icon="webData.wakeLockIcon" />
+                    <font-awesome-icon :icon="((webData.navMenuOpen) ? 'fa-square-xmark' : 'fa-bars')" />
                 </button>
-                <RouterLink to="/install" title="Install Website as PWA"
-                    class="mohit-navMenu-extra website-text"
-                    @click="(event) => { flashNavOpt(event, '/install') }">
-
-                    <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
-                </RouterLink>
-                <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="mohit-repo"
-                    class="mohit-navMenu-extra"
-                    :style="getColorStyles('white')"
-                    title="Website Repository">
-
-                    <font-awesome-icon icon="fa-code-branch" />
-                </a>
-                <a :href="PERSONAL_WEBSITE_CODE_SANDBOX" target="mohit-repo"
-                    class="mohit-navMenu-extra"
-                    :style="getColorStyles('var(--lightning-yellow)')"
-                    title="Code Sandbox">
-                    
-                    <font-awesome-icon icon="fa-square-pen" />
-                </a>
-            </div>
-            <div class="mohit-navMenu-opt">
-                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
-                    :title="extra.title"
-                    class="mohit-navMenu-extra"
-                    @click="(event) => { flashNavOpt(event, extra.path) }"
-                    :style="getColorStyles(extra.color)">
-
-                    <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
-                </RouterLink>
             </div>
         </div>
-    </Transition>
-</nav>
+
+        <Transition name="navMenu-transition">
+            <div v-if="webData.navMenuOpen" class="mohit-navMenu">
+                <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
+                    <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
+                        <font-awesome-icon :icon="btn.icon" />
+                        <span> {{ btn.title }} </span>
+                    </RouterLink>
+                </div>
+
+                <div class="mohit-navMenu-opt">
+                    <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
+                        :title="extra.title"
+                        class="mohit-navMenu-extra"
+                        @click="(event) => { flashNavOpt(event, extra.path) }"
+                        :style="getColorStyles(extra.color)">
+
+                        <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
+                    </RouterLink>
+                </div>
+                <div class="mohit-navMenu-opt">
+                    <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="webData.wakeLockStatement">
+                        <font-awesome-icon :icon="webData.wakeLockIcon" />
+                    </button>
+                    <RouterLink to="/install" title="Install Website as PWA"
+                        class="mohit-navMenu-extra website-text"
+                        @click="(event) => { flashNavOpt(event, '/install') }">
+
+                        <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
+                    </RouterLink>
+                    <RouterLink to="/gamepad" title="View Gamepad Controls"
+                        class="mohit-navMenu-extra"
+                        @click="(event) => { flashNavOpt(event, '/gamepad') }">
+
+                        <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
+                    </RouterLink>
+                </div>
+            </div>
+        </Transition>
+    </nav>
+</client-only>
 </template>
 
 <script setup>
@@ -132,10 +108,8 @@ const MAIN_BTNS = [
 ];
 
 const LAPTOP_MAIN_BTNS = [
-    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
-    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
-    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
-    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
+    { path: "/", icon: "fa-house", color: "var(--website-text)", title: "Home Page" },
+    { path: "/search", icon: "fa-magnifying-glass", color: "var(--website-text)", title: "Search Pages" },
 ];
 
 const NAV_MENU_EXTRAS = [
@@ -196,7 +170,7 @@ const NAV_MENU_EXTRAS = [
 }
 
 .mohit-navBar-icons {
-    width: 250px;
+    width: 135px;
     padding-right: 7px;
     height: 100%;
     display: flex;
@@ -313,12 +287,13 @@ const NAV_MENU_EXTRAS = [
         left: 60px;
     }
 }
-@media (max-width: 600px) { #mohit-navBar.menu-open {
+@media (max-width: 600px) {
+    #mohit-navBar.menu-open {
         width: calc(100% - 30px);
         left: 15px;
     }
     .mohit-navBar-icons {
-        width: 90px;
+        width: 135px;
     }
 }
 
