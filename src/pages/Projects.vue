@@ -18,7 +18,7 @@
             />
         </div>
     </div>
-    <WebFooter class="footer-nav-page" />
+    <WebFooter />
 </main>
 </template>
 

@@ -7,7 +7,7 @@
 
 <client-only>
     <font-awesome-icon v-if="gamepadStore.showCursor"
-        class="mohit-custom-cursor"
+        id="mohit-custom-cursor"
         :icon="gamepadStore.cursorIcon"
         :class="gamepadStore.cursorAnimation"
         :style="gamepadStore.customCursor"

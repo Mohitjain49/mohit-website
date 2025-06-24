@@ -53,7 +53,7 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
-.mohit-custom-cursor {
+#mohit-custom-cursor {
     font-size: 27px;
     color: var(--vibrant-flame);
     padding: 5px;
