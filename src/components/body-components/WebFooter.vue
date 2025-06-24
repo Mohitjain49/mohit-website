@@ -115,6 +115,7 @@ const EXTRA_ROUTES = [
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
     { name: "Copyright", path: "/copyright", icon: "fa-copyright", extraClass: "copyright" },
     { name: "Install Website", path: "/install", icon: "fa-download", extraClass: "" },
+    { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", extraClass: "light" }
 ];
 
 const REPO_ROUTES = [
@@ -312,7 +313,7 @@ const REPO_ROUTES = [
 
 @media (max-width: 1050px) {
     #footer {
-        height: 585px;
+        height: 625px;
     }
     #footer.contact {
         grid-column: span 2;
@@ -340,13 +341,13 @@ const REPO_ROUTES = [
 }
 @media (max-width: 525px) {
     #footer {
-        height: 490px;
+        height: 515px;
     }
     #footer.contact {
         z-index: 20;
     }
     .footer-body {
-        height: 425px;
+        height: 450px;
         left: 0px;
         width: 100%;
     }

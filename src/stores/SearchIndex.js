@@ -162,4 +162,10 @@ export const SearchIndex = [
         content: "Connect with me professionally on LinkedIn.",
         url: "/linkedin"
     },
+    {
+        id: 27,
+        title: "Gamepad Controls",
+        content: "View the gamepad controls for my website here.",
+        url: "/gamepad"
+    },
 ];

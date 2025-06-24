@@ -47,20 +47,12 @@
 
                         <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
                     </RouterLink>
-                    <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" target="mohit-repo"
+                    <RouterLink to="/gamepad" title="View Gamepad Controls"
                         class="mohit-navMenu-extra"
-                        :style="getColorStyles('white')"
-                        title="Website Repository">
+                        @click="(event) => { flashNavOpt(event, '/gamepad') }">
 
-                        <font-awesome-icon icon="fa-code-branch" />
-                    </a>
-                    <a :href="PERSONAL_WEBSITE_CODE_SANDBOX" target="mohit-repo"
-                        class="mohit-navMenu-extra"
-                        :style="getColorStyles('var(--lightning-yellow)')"
-                        title="Code Sandbox">
-                        
-                        <font-awesome-icon icon="fa-square-pen" />
-                    </a>
+                        <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
+                    </RouterLink>
                 </div>
                 <div class="mohit-navMenu-opt">
                     <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
