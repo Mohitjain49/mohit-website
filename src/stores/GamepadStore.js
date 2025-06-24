@@ -1,9 +1,11 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
-    const router = useRouter();
     const route = useRoute();
     const gamepadConnected = ref(false);
+    const showCursorSpeedMenu = ref(false);
 
     var gamepadConnectedInterval = null;
+    var cursorSpeedInterval = null;
+
     var cursorXInterval = null;
     var cursorYInterval = null;
     var scrollInterval = null;
@@ -57,26 +59,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
-     * This function moves onto the next page.
-     * @param {Boolean} forward If true, moves onto the next page.
-     */
-    function navigatePages(forward = true) {
-        const NAV_PAGES = ["/", "/skills", "/experience", "/projects", "/resume", "/contact", "/qrcode"];
-        const currentPath = NAV_PAGES.findIndex((navPath) => (navPath === route.path || (navPath + "/") === route.path));
-        const lastIndex = (NAV_PAGES.length - 1);
-
-        var navIndex = 0;
-        if(forward) {
-            navIndex = ((currentPath == lastIndex) ? 0 : currentPath + 1);
-        } else {
-            navIndex = ((currentPath == 0) ? lastIndex : currentPath - 1);
-        }
-
-        if(currentPath == -1) { navIndex = 0; }
-        router.push(NAV_PAGES[navIndex]);
-    }
-
-    /**
      * This finds the element that the cursor is hovering over. If they hover over a button or a link, it returns that element.
      */
     function setCursorClickElement() {
@@ -98,6 +80,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
         element.click();
         triggerClickSound();
+        nextTick(() => { setCursorClickElement(); });
     }
 
     /**
@@ -238,8 +221,37 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         return (path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE));
     }
 
-    return { customCursor, showCursor, cursorIcon, cursorAnimation, gamepadConnected,
-        emitClick, navigatePages, startGamepadConnectedInterval, stopGamepadConnectedInterval,
+    /**
+     * This starts the interval for changing the cursor speed.
+     * @param {Boolean} up If true, interval increases speed, else it decreases speed.
+     */
+    function startCursorSpeedInterval(up = true) {
+        if(cursorSpeedInterval != null) { return; }
+        showCursorSpeedMenu.value = true;
+
+        cursorSpeedInterval = setInterval(() => {
+            const minReached = (!up && maxCursorSpeed.value < 2);
+            const maxReached = (up && maxCursorSpeed.value > 29);
+
+            if(minReached || maxReached) { return; }
+            maxCursorSpeed.value += (up ? 1 : -1);
+        }, 50);
+    }
+
+    /**
+     * This function stops the cursor speed interval.
+     */
+    function stopCursorSpeedInterval() {
+        if(cursorSpeedInterval == null) { return; }
+        clearInterval(cursorSpeedInterval);
+        cursorSpeedInterval = null;
+        showCursorSpeedMenu.value = false;
+    }
+
+    return { customCursor, showCursor, cursorIcon, cursorAnimation,
+        maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
+        emitClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
+        startCursorSpeedInterval, stopCursorSpeedInterval,
         setCustomCursor, setMaxCursorSpeed, setCursorClickElement, manageCustomCursor,
         initCustomCursorPosition, setCursorXInterval, setCursorYInterval, stopCursorInterval,
         initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval

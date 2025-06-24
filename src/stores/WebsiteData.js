@@ -7,7 +7,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const installStore = useInstallStore();
 
     /**
-     * @type {import('vue').Ref<new Audio()>} This is an audio reference variable.
+     * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable.
      */
     const audioClip = ref(null);
 
@@ -41,8 +41,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function setEventListeners() {
         const signal = controller.signal;
-        audioClip.value = new Audio(click_sound);
-        audioClip.value.preload = "auto";
+        setupClickAudio();
         nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
 
         documentStore.checkTTSAvailable();
@@ -65,6 +64,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         controller.abort();
         gamepadStore.disableGamepadVibration();
         gamepadStore.stopGamepadConnectedInterval();
+    }
+
+    /**
+     * This function sets up the click audio for my website.
+     */
+    function setupClickAudio() {
+        audioClip.value = new Audio(click_sound);
+        audioClip.value.preload = "auto";
+        audioClip.value.volume = 0.5;
     }
 
     /**

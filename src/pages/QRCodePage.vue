@@ -127,7 +127,7 @@ const QR_CODES = [
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 9999;
+    z-index: 1000;
     background-color: rgba(0, 0, 0, 0.9);
 }
 
