@@ -611,19 +611,12 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     .contact-me-box {
         left: calc(50% - 237px) !important;
     }
-    .web-footer-contact {
-        grid-column: span 1;
-    }
 }
 
 @media (max-width: 525px) {
     #contact-page {
         padding-top: 70px;
         grid-template-columns: 1fr;
-    }
-    .web-footer-contact {
-        grid-column: span 1;
-        z-index: 20;
     }
 
     .contact-me-box {

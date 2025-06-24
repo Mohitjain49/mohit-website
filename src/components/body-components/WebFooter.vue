@@ -316,7 +316,7 @@ const REPO_ROUTES = [
         height: 625px;
     }
     #footer.contact {
-        grid-column: span 2;
+        grid-column: span 1;
     }
     .footer-body {
         grid-template-columns: 1fr 1fr;
