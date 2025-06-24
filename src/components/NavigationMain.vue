@@ -38,6 +38,16 @@
                 </div>
 
                 <div class="mohit-navMenu-opt">
+                    <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
+                        :title="extra.title"
+                        class="mohit-navMenu-extra"
+                        @click="(event) => { flashNavOpt(event, extra.path) }"
+                        :style="getColorStyles(extra.color)">
+
+                        <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
+                    </RouterLink>
+                </div>
+                <div class="mohit-navMenu-opt">
                     <button class="mohit-navMenu-extra lock" @click="webData.toggleWakeLock()" :title="webData.wakeLockStatement">
                         <font-awesome-icon :icon="webData.wakeLockIcon" />
                     </button>
@@ -52,16 +62,6 @@
                         @click="(event) => { flashNavOpt(event, '/gamepad') }">
 
                         <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
-                    </RouterLink>
-                </div>
-                <div class="mohit-navMenu-opt">
-                    <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
-                        :title="extra.title"
-                        class="mohit-navMenu-extra"
-                        @click="(event) => { flashNavOpt(event, extra.path) }"
-                        :style="getColorStyles(extra.color)">
-
-                        <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
                     </RouterLink>
                 </div>
             </div>
