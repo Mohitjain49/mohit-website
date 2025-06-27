@@ -10,8 +10,7 @@
     "open": "vite --open --host",
     "open:preview": "vite preview --open",
     "open:build": "vite-ssg build & vite preview --open",
-    "update": "npx npm-check-updates",
-    "update:start": "npx npm-check-updates -u"
+    "update": "npx npm-check-updates"
   },
   "dependencies": {
     "@fontsource/lexend": "^5.2.9",
