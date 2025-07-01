@@ -45,6 +45,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
+        if(route.path.includes("md") || route.path.includes("markdown")) { return; }
+
         nextTick(() => {
             hideVerticalOverflow();
             window.addEventListener("resize", hideVerticalOverflow);

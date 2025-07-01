@@ -13,6 +13,9 @@
     <RouterLink v-if="docStore.checkPDFRoute()" to="/resume" :class="WIDGET_CLASSES" class="nav" title="Use Google Doc Viewer">
         <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
     </RouterLink>
+    <RouterLink to="/resume/markdown" :class="WIDGET_CLASSES" class="post" title="Resume In Markdown Format">
+        <client-only> <font-awesome-icon icon="fa-brands fa-markdown" /> </client-only>
+    </RouterLink>
 </template>
 
 <template v-if="!route.path.includes('resume')">

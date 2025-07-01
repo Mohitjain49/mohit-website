@@ -116,6 +116,11 @@ button {
     min-width: 350px;
     background-color: rgb(31, 31, 31);
 }
+#resume-container.markdown {
+    min-height: calc(100% - 70px);
+    height: fit-content;
+}
+
 .webpage-cover {
     margin: 0;
     padding: 0;

@@ -13,6 +13,7 @@ import CopyrightPage from "./pages/CopyrightPage.vue";
 
 import Resume from "./pages/resume/Resume.vue";
 import ResumeDownload from "./pages/resume/ResumeDownload.vue";
+import ResumeMarkdown from "./pages/resume/ResumeMarkdown.vue";
 import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
 
 import InvalidRoute from "./pages/InvalidRoute.vue";
@@ -51,6 +52,7 @@ export const personalRoutes = [
             { path: "", name: "My Resume", component: Resume },
             { path: "pdf", name: "My Resume (Native)", component: Resume },
             { path: "download", name: "My Resume (Download)", component: ResumeDownload },
+            { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown },
             { path: "google", alias: ["googledoc", "google-doc"], redirect: "/resume" },
         ]
     },
