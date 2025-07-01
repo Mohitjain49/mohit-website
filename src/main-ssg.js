@@ -31,6 +31,7 @@ library.add(
     FaIcons.faX,
     FaIcons.faBan,
     FaIcons.faArrowDown,
+    FaIcons.faArrowLeft,
     FaIcons.faFileLines,
     FaIcons.faBars,
     FaIcons.faHouse,

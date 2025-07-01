@@ -57,12 +57,9 @@
 
                         <client-only> <font-awesome-icon icon="fa-download" /> </client-only>
                     </RouterLink>
-                    <RouterLink to="/gamepad" title="View Gamepad Controls"
-                        class="mohit-navMenu-extra"
-                        @click="(event) => { flashNavOpt(event, '/gamepad') }">
-
-                        <client-only> <font-awesome-icon icon="fa-gamepad" /> </client-only>
-                    </RouterLink>
+                    <button class="mohit-navMenu-extra" @click="openGamepadPopup()" title="View Gamepad Controls">
+                        <font-awesome-icon icon="fa-gamepad" />
+                    </button>
                 </div>
             </div>
         </Transition>
@@ -96,6 +93,13 @@ function flashNavOpt(event = new MouseEvent("click"), path = "/") {
 
     webData.addFlashAnimation(event);
     webData.closeNavMenu();
+}
+
+/**
+ * This function opens the popup that shows the gamepad controls.
+ */
+function openGamepadPopup() {
+    window.open((PERSONAL_WEBSITE_LINK + "gamepad"), "mohit-gamepad-popup", "width=520,height=600");
 }
 
 const MAIN_BTNS = [
