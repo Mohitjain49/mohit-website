@@ -1,5 +1,5 @@
 <template>
-<NavigationMain v-if="showNav" />
+<NavigationMain />
 <PageBookmark />
 <GamepadComponent />
 
@@ -14,8 +14,4 @@ const route = useRoute();
 
 onMounted(() => {webData.setEventListeners()})
 onBeforeUnmount(() => {webData.removeEventListeners()})
-
-const showNav = computed(() => {
-    return (route.path !== "/gamepad" && route.path !== "/gamepad/");
-})
 </script>

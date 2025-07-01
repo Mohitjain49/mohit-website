@@ -2,7 +2,7 @@
 <DocumentWidgets />
 <main id="resume-container">
     <iframe v-if="!docStore.checkPDFRoute()" :src="VIEWER_URL" height="100%" width="100%"></iframe>
-    <iframe v-if="docStore.checkPDFRoute()" :src="FCS_CERTIFICATE_LINK" height="100%" width="100%"></iframe>
+    <iframe v-if="docStore.checkPDFRoute()" src="/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf" height="100%" width="100%"></iframe>
 </main>
 </template>
 

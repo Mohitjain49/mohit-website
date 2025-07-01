@@ -86,7 +86,8 @@ library.add(
     FaBrands.faGolang,
     FaBrands.faGitlab,
     FaBrands.faPython,
-    FaBrands.faGoogleDrive
+    FaBrands.faGoogleDrive,
+    FaBrands.faMarkdown
 );
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },

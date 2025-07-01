@@ -10,6 +10,7 @@ import generateSitemap from 'vite-ssg-sitemap';
 import swc from "unplugin-swc";
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
+import Markdown from 'unplugin-vue-markdown/vite'
 import Info from "unplugin-info/vite";
 
 export default defineConfig({
@@ -17,11 +18,12 @@ export default defineConfig({
     server: { port: 5000 },
     preview: { port: 4007 },
     plugins: [
-        vue(),
+        vue({ include: [/\.vue$/, /\.md$/] }),
         swc.vite(),
         qrcode(),
         Info(),
-        Components({ dts: true }),
+        Components({ dts: true, extensions: ['vue', 'md'] }),
+        Markdown(),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
             dirs: ['./src/stores'],
@@ -34,8 +36,8 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.7.1",
-                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot}'],
+                cacheId: "v2.7.2",
+                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
 

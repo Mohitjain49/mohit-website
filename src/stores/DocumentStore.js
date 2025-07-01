@@ -45,6 +45,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
+        if(route.path.includes("md") || route.path.includes("markdown")) { return; }
+
         nextTick(() => {
             hideVerticalOverflow();
             window.addEventListener("resize", hideVerticalOverflow);
@@ -71,6 +73,13 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function checkPDFRoute() {
         return route.path.includes('pdf');
+    }
+
+    /**
+     * This function returns when the route is using a markdown file.
+     */
+    function checkMarkdownRoute() {
+        return (route.path.includes('markdown') || route.path.includes('md'));
     }
 
     /**
@@ -107,8 +116,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
-        checkTTSAvailable, cancelTTS, startTTS,
-        downloadDoc, hideVerticalOverflow, checkPDFRoute,
+        checkTTSAvailable, cancelTTS, startTTS, downloadDoc,
+        hideVerticalOverflow, checkPDFRoute, checkMarkdownRoute,
         mountDocumentPage, unmountDocumentPage
     }
 });

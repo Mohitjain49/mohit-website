@@ -1,5 +1,7 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
+    const docStore = useDocumentStore();
     const route = useRoute();
+
     const gamepadConnected = ref(false);
     const showCursorSpeedMenu = ref(false);
 
@@ -218,7 +220,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      */
     function disableScrollYBy() {
         const path = route.path;
-        return (path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE));
+        return ((path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE)) && !docStore.checkMarkdownRoute());
     }
 
     /**
