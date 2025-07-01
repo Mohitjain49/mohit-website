@@ -1,5 +1,5 @@
 <template>
-<main id="gamepad-page" class="personal-web-body">
+<main class="personal-web-body">
     <div class="gamepad-controls-body">
         <div class="gamepad-controls">
             <h2>
@@ -42,14 +42,9 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
 </script>
 
 <style scoped>
-#gamepad-page {
-    height: 100%;
-    padding-top: 0px;
-}
-
 .gamepad-controls-body {
     min-height: 540px;
-    height: 100%;
+    height: calc(100vh - 60px);
     width: 100%;
     display: flex;
     justify-content: center;
