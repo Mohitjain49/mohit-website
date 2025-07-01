@@ -7,8 +7,9 @@
     <div class="search-wrapper">
         <h1> Search the Site </h1>
         <div class="mohit-search-input">
-            <input v-model="query" type="text" placeholder="Search..." @input="performSearch()" />
-            <button @click="clearSearch()" title="Clear Search Bar"> <font-awesome-icon icon="fa-circle-xmark" /> </button>
+            <input v-model="query" type="text" placeholder="Search..." @input="setSearchBarTimeout()" @keypress.enter="performSearch()" />
+            <button @click="performSearch()" title="Start Search"> <font-awesome-icon icon="fa-magnifying-glass" /> </button>
+            <button class="close" @click="clearSearch()" title="Clear Search Bar"> <font-awesome-icon icon="fa-circle-xmark" /> </button>
         </div>
 
         <div v-if="results.length > 0" class="results">
@@ -28,6 +29,9 @@
 import Fuse from 'fuse.js';
 const router = useRouter();
 const route = useRoute();
+
+const SEARCH_TIME_WAIT = 2000;
+var searchBarTimeout = null;
 
 onMounted(() => {
     initWebData();
@@ -60,13 +64,37 @@ function clearSearch() {
  * This function performs a search based on what the user inputted in the search bar.
  */
 function performSearch() {
+    clearSearchBarTimeout();
     router.push({ query: { q: query.value } }).then(() => {
         results.value = ((query.value !== '') ? fuse.search(query.value) : [])
     });
 }
 
+/**
+ * This function truncates any serach result.
+ * This function truncates any serach result.
+ */
 function truncate(text, length) {
     return ((text.length > length) ? (text.slice(0, length) + '...') : text)
+}
+
+/**
+ * This function sets and manages the serach bar timeout.
+ */
+function setSearchBarTimeout() {
+    clearSearchBarTimeout();
+    searchBarTimeout = setTimeout(() => {
+        performSearch();
+    }, SEARCH_TIME_WAIT);
+}
+
+/**
+ * This function clears the search bar timeout.
+ */
+function clearSearchBarTimeout() {
+    if(searchBarTimeout == null) { return; }
+    clearTimeout(searchBarTimeout);
+    searchBarTimeout = null
 }
 </script>
 
@@ -98,7 +126,7 @@ function truncate(text, length) {
     margin-bottom: 1.5rem;
 }
 .mohit-search-input input {
-    width: calc(100% - 2rem - 50px);
+    width: calc(100% - 2rem - 100px);
     padding: 12px 16px;
     border: none;
     border-radius: 8px;
@@ -120,13 +148,20 @@ function truncate(text, length) {
     height: 43px;
     margin-left: 7px;
     background: #2a2a2a;
-    color: #ab0f14;
+    color: white;
     font-size: 20px;
     border-radius: 8px;
     border: var(--thin-empty-border);
     transition: var(--default-transition);
 }
 .mohit-search-input button:hover {
+    border-color: white;
+}
+
+.mohit-search-input button.close {
+    color: #ab0f14;
+}
+.mohit-search-input button.close:hover {
     border-color: #ab0f14;
 }
 

@@ -1,5 +1,5 @@
 <template>
-<main class="personal-web-body">
+<main id="gamepad-page" class="personal-web-body">
     <div class="gamepad-controls-body">
         <div class="gamepad-controls">
             <h2>
@@ -23,23 +23,33 @@
                     <tr><td>📖 Navigation Menu</td><td>+ / -</td></tr>
                 </tbody>
             </table>
+            <button class="gamepad-previous-btn" @click="router.back()">
+                <font-awesome-icon icon="fa-arrow-left" />
+                <span> Previous Page </span>
+            </button>
         </div>
     </div>
-    <WebFooter />
 </main>
 </template>
 
 <script setup>
+const router = useRouter();
 onMounted(() => { initWebData(); });
+
 useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     "These are the gamepad controls on my website."
 ))
 </script>
 
 <style scoped>
+#gamepad-page {
+    height: 100%;
+    padding-top: 0px;
+}
+
 .gamepad-controls-body {
-    min-height: 525px;
-    height: calc(100vh - 60px);
+    min-height: 540px;
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -67,6 +77,17 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     border: 1px solid #555;
     padding: 12px;
     text-align: left;
+}
+
+.gamepad-previous-btn {
+    margin-top: 10px;
+    padding: 7px;
+    border: 1px solid white;
+    border-radius: 10px;
+    transition: var(--default-transition);
+}
+.gamepad-previous-btn:hover {
+    background-color: #555;
 }
 
 @media (max-width: 500px) {
