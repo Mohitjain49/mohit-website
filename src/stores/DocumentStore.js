@@ -76,6 +76,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function returns when the route is using a markdown file.
+     */
+    function checkMarkdownRoute() {
+        return (route.path.includes('markdown') || route.path.includes('md'));
+    }
+
+    /**
      * This sets whether or not speech synthesis is available for this browser.
      */
     function checkTTSAvailable() {
@@ -109,8 +116,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
-        checkTTSAvailable, cancelTTS, startTTS,
-        downloadDoc, hideVerticalOverflow, checkPDFRoute,
+        checkTTSAvailable, cancelTTS, startTTS, downloadDoc,
+        hideVerticalOverflow, checkPDFRoute, checkMarkdownRoute,
         mountDocumentPage, unmountDocumentPage
     }
 });

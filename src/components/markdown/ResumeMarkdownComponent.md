@@ -34,8 +34,8 @@ Full-Stack Development
 **Kennesaw State University**  
 Bachelor Degree in Computer Science
 
-* GPA: 3.5  
-* Coursework: Programming Problem Solving, Intro To Database Systems, Intro To Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics
+* **GPA:** 3.5  
+* **Coursework:** Programming Problem Solving, Intro To Database Systems, Intro To Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics
 
 # SKILLS												
 
