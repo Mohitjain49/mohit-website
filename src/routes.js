@@ -5,6 +5,7 @@ import Projects from "./pages/Projects.vue";
 import ContactPage from "./pages/ContactPage.vue";
 import SearchPage from "./pages/SearchPage.vue";
 
+import GamepadControls from "./pages/GamepadControls.vue";
 import InstallPage from "./pages/InstallPage.vue";
 import MyIcon from "./pages/MyIcon.vue";
 import QRCodePage from "./pages/QRCodePage.vue";
@@ -63,6 +64,7 @@ export const personalRoutes = [
         ]
     },
 
+    { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", name: "Icon Page", component: MyIcon },

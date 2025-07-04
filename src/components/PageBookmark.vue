@@ -1,9 +1,9 @@
 <template>
 <client-only>
     <Transition name="mohit-bookmark-transition" appear>
-        <div v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" :title=GAMEPAD_BOOKMARK_TITLE>
+        <RouterLink to="/gamepad" v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" :title=GAMEPAD_BOOKMARK_TITLE>
             <font-awesome-icon icon="fa-gamepad" />
-        </div>
+        </RouterLink>
     </Transition>
 </client-only>
 

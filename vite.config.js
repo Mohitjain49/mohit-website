@@ -12,7 +12,15 @@ import Info from "unplugin-info/vite";
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
-import Markdown from 'unplugin-vue-markdown/vite'
+import Markdown from 'unplugin-vue-markdown/vite';
+
+const SITEMAP_EXCLUDED_ROUTES = [
+    "/gamepad", "/repo", "/repository",
+    "/code", "/codesandbox", "/code-sandbox", "/commits",
+    "/globe", "/mnd", "/pizza", "/ivue", "/sublo",
+    "/worldsivue", "/wiv", "/worlds-ivue",
+    "/email", "/github", "/gitlab", "/linkedin", "/discord"
+];
 
 export default defineConfig({
     base: "/",
@@ -69,6 +77,7 @@ export default defineConfig({
         onFinished() {
             generateSitemap({
                 hostname: "https://www.mohit-jain.com/",
+                exclude: SITEMAP_EXCLUDED_ROUTES,
                 readable: true
             })
         }
