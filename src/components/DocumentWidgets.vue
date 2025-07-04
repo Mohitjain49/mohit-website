@@ -8,11 +8,11 @@
     </button>
 
     <template v-if="route.path.includes('resume')">
-        <RouterLink v-if="!docStore.checkPDFRoute()" to="/resume/pdf" :class="WIDGET_CLASSES" title="Use Built-In PDF Viewer">
-            <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
-        </RouterLink>
-        <RouterLink v-if="docStore.checkPDFRoute()" to="/resume" :class="WIDGET_CLASSES" title="Use Google Doc Viewer">
+        <RouterLink to="/resume" :class="WIDGET_CLASSES" title="Use Google Doc Viewer">
             <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
+        </RouterLink>
+        <RouterLink to="/resume/pdf" :class="WIDGET_CLASSES" title="Use Built-In PDF Viewer">
+            <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
         </RouterLink>
         <RouterLink to="/resume/markdown" :class="WIDGET_CLASSES" title="Resume In Markdown Format">
             <client-only> <font-awesome-icon icon="fa-brands fa-markdown" /> </client-only>
@@ -67,8 +67,8 @@ function reloadPage() {
 .document-widgets-container.markdown {
     top: auto;
     bottom: 10px;
-    left: calc(50% - 100px);
-    width: 200px;
+    left: calc(50% - 125px);
+    width: 250px;
     display: flex;
     flex-direction: row;
     gap: 7px;
