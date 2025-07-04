@@ -1,31 +1,22 @@
 <template>
-<div class="mohit-bookmark" :title="bookmarkTitle">
-    <client-only> <font-awesome-icon :icon="bookmarkItem" /> </client-only>
-</div>
-<div v-if="webData.wakeLock != null" class="mohit-bookmark lock active" title="Screen Wake Lock Set">
-    <client-only> <font-awesome-icon icon="fa-lock" /> </client-only>
-</div>
-
 <client-only>
-    <div v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" title="Use Your Gamepad!">
-        <font-awesome-icon icon="fa-gamepad" />
-    </div>
+    <Transition name="mohit-bookmark-transition" appear>
+        <RouterLink to="/gamepad" v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" :title=GAMEPAD_BOOKMARK_TITLE>
+            <font-awesome-icon icon="fa-gamepad" />
+        </RouterLink>
+    </Transition>
 </client-only>
+
+<Transition name="mohit-bookmark-transition" appear>
+    <div v-if="webData.wakeLock != null" class="mohit-bookmark lock active" title="Screen Wake Lock Set">
+        <client-only> <font-awesome-icon icon="fa-lock" /> </client-only>
+    </div>
+</Transition>
 </template>
 
 <script setup>
 const webData = useWebsiteDataStore();
 const gamepadStore = useGamepadStore();
-const route = useRoute();
-
-const bookmarkItem = computed(() => {
-    const path = (route.path.endsWith("/") ? route.path.slice(0, -1) : route.path);
-    const pathIndex = BOOKMARK_ITEMS.findIndex(item => path.includes(item.path));
-    return ((pathIndex == -1) ? "fa-house" : BOOKMARK_ITEMS[pathIndex].icon);
-})
-const bookmarkTitle = computed(() => {
-    return PERSONAL_WEBSITE_LINK + route.path.substring(1);
-});
 
 function getGamepadBookmarkClasses() {
     return ['mohit-bookmark', 'gamepad', (gamepadStore.gamepadConnected ? 'active' : '')]
@@ -38,18 +29,7 @@ function showGamepadBookmark() {
     return Boolean(navigator.getGamepads());
 }
 
-const BOOKMARK_ITEMS = [
-    { path: "/skills", icon: "fa-code" },
-    { path: "/experience", icon: "fa-file-code" },
-    { path: "/projects", icon: "fa-cubes" },
-    { path: "/resume", icon: "fa-file-lines" },
-    { path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag" },
-    { path: "/contact", icon: "fa-paper-plane" },
-    { path: "/qrcode", icon: "fa-qrcode" },
-    { path: "/icon", icon: "fa-pen-fancy" },
-    { path: "/copyright", icon: "fa-copyright" },
-    { path: "/install", icon: "fa-download" },
-];
+const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!"
 </script>
 
 <style scoped>
@@ -84,29 +64,13 @@ const BOOKMARK_ITEMS = [
     background: linear-gradient(to right, black 0%, var(--vibrant-flame) 10%, var(--vibrant-flame) 90%, black 100%);
     color: white;
 }
-.mohit-bookmark.lock {
-    bottom: 0px;
-    top: auto;
-clip-path: polygon(
-        0 0,
-        40% 25%,
-        50% 30%,
-        100% 0,
-        100% 100%,
-        0 100%
-    );
-}
-.mohit-bookmark.lock svg {
-    margin-bottom: 0px;
-    margin-top: 15px;
-}
-
-.mohit-bookmark.gamepad {
-    left: auto;
-    right: 10px;
-}
 .mohit-bookmark.gamepad.active svg {
     font-size: 16px;
+}
+
+.mohit-bookmark.lock {
+    left: auto;
+    right: 10px;
 }
 
 @media (max-width: 450px) {
@@ -129,8 +93,15 @@ clip-path: polygon(
     .mohit-bookmark {
         position: absolute;
     }
-    .mohit-bookmark.lock {
-        position: fixed;
-    }
+}
+
+.mohit-bookmark-transition-enter-active, .mohit-bookmark-transition-leave-active {
+    transition: top 0.5s;
+}
+.mohit-bookmark-transition-enter-from, .mohit-bookmark-transition-leave-to {
+    top: -50px;
+}
+.mohit-bookmark-transition-enter-to, .mohit-bookmark-transition-leave-from {
+    top: 0px;
 }
 </style>

@@ -29,6 +29,7 @@
             </button>
         </div>
     </div>
+    <WebFooter />
 </main>
 </template>
 

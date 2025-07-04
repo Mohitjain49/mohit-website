@@ -44,7 +44,7 @@ export const personalRoutes = [
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
     { path: "/contact", name: "Contact Mohit", component: ContactPage },
-    { path: "/search", name: "Search Website", component:SearchPage },
+    { path: "/search", name: "Search Website", component: SearchPage },
 
     {
         path: "/resume",
@@ -52,8 +52,7 @@ export const personalRoutes = [
             { path: "", name: "My Resume", component: Resume },
             { path: "pdf", name: "My Resume (Native)", component: Resume },
             { path: "download", name: "My Resume (Download)", component: ResumeDownload },
-            { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown },
-            { path: "google", alias: ["googledoc", "google-doc"], redirect: "/resume" },
+            { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown }
         ]
     },
 
@@ -61,8 +60,7 @@ export const personalRoutes = [
         path: FCS_CERTIFICATE_ROUTE,
         children: [
             { path: "", component: InternAppreciation },
-            { path: "pdf", component: InternAppreciation },
-            { path: "google", alias: ["googledoc", "google-doc"], redirect: "" },
+            { path: "pdf", component: InternAppreciation }
         ]
     },
 
@@ -71,10 +69,7 @@ export const personalRoutes = [
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
-
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
-    { path: "/documents", redirect: { path: "/", hash: "#documents" } },
-    { path: "/footer", redirect: { path: "/", hash: "#footer" } },
 
     { path: "/repo", alias: ['/repository'], name: "Website Repository", component: RepoRedirect },
     { path: "/code", alias: ['/codesandbox', '/code-sandbox'], name: "Code Sandbox", component: CodeRedirect },

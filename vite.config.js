@@ -8,10 +8,19 @@ import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
 
 import swc from "unplugin-swc";
+import Info from "unplugin-info/vite";
+
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
-import Markdown from 'unplugin-vue-markdown/vite'
-import Info from "unplugin-info/vite";
+import Markdown from 'unplugin-vue-markdown/vite';
+
+const SITEMAP_EXCLUDED_ROUTES = [
+    "/gamepad", "/repo", "/repository",
+    "/code", "/codesandbox", "/code-sandbox", "/commits",
+    "/globe", "/mnd", "/pizza", "/ivue", "/sublo",
+    "/worldsivue", "/wiv", "/worlds-ivue",
+    "/email", "/github", "/gitlab", "/linkedin", "/discord"
+];
 
 export default defineConfig({
     base: "/",
@@ -36,7 +45,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.7.2",
+                cacheId: "v2.7.3",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
@@ -68,6 +77,7 @@ export default defineConfig({
         onFinished() {
             generateSitemap({
                 hostname: "https://www.mohit-jain.com/",
+                exclude: SITEMAP_EXCLUDED_ROUTES,
                 readable: true
             })
         }
