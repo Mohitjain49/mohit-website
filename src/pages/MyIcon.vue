@@ -86,6 +86,7 @@ async function copyImage(imageUrl = "") {
 
 const ICON_WIDGETS = [
     { name: "Base Icon", img: (ICON_IMPORT_START + ".png") },
+    { name: "Rounded Icon", img: (ICON_IMPORT_START + "_Expanded_Rounded.png") },
     { name: "Clear Icon", img: (ICON_IMPORT_START + "_Transparent.png") },
     { name: "Spaced Icon", img: (ICON_IMPORT_START + "_Expanded.png") },
     { name: "Spaced Clear Icon", img: (ICON_IMPORT_START + "_Expanded_Transparent.png") },
@@ -95,6 +96,7 @@ const ICON_WIDGETS = [
     { name: "Gold Clear Icon", img: (ICON_IMPORT_START + "_Gold_Transparent.png") },
     { name: "Gold Spaced Icon", img: (ICON_IMPORT_START + "_Gold_Expanded.png") },
     { name: "Gold Spaced Clear Icon", img: (ICON_IMPORT_START + "_Gold_Expanded_Transparent.png") },
+    { name: "MND Icon", img: "/static-icons/MND_Icon_Transparent.png" },
 ];
 </script>
 

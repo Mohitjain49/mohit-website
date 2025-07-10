@@ -70,6 +70,7 @@ library.add(
     FaIcons.faVolumeHigh,
     FaIcons.faVolumeXmark,
     FaIcons.faCircleXmark,
+    FaIcons.faEarthAmericas,
 
     FaBrands.faReact,
     FaBrands.faJs,
@@ -91,14 +92,14 @@ library.add(
 );
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
-    ({ app, router, isClient }) => {
+    ({ app, router }) => {
         const pinia = createPinia();
         app.component('font-awesome-icon', FontAwesomeIcon);
 
         app.use(VueObserveVisibility);
         app.use(pinia);
 
-        if(isClient) {
+        if(!import.meta.env.SSR) {
             app.use(VueParticles, { init: async engine => { await loadSlim(engine); } });
             if(navigator.getGamepads()) { import("./joypad-events.js"); }
         }

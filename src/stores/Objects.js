@@ -8,6 +8,7 @@ import pinia_icon from "../assets/Pinia_Icon.svg";
 import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
 import fontsource_icon from "../assets/FontSource_Icon.png";
+import tauri_icon from "../assets/Tauri_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -309,6 +310,19 @@ export const FRONTEND_SKILL_NOTES = [
 
         icon: {
             id: expo_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Tauri",
+        link: "https://tauri.app/",
+        color: "#24C8DB",
+        desc: "Tauri is a framework that can build tiny and fast binaries for desktop and mobile applications. " +
+            "In other words, It allows any web developer to bundle their application to become a native application.",
+
+        icon: {
+            id: tauri_icon,
             faIcon: false,
             size: "105"
         }
@@ -621,8 +635,9 @@ export const PROJECT_ENTITIES = [
         name: "My Globe UI",
         link: PERSONAL_GLOBE_LINK,
         color: "var(--blue-one)",
-        desc: "This is a simple Globe UI that I created with Cesium. " +
-            "It uses the built-in Cesium Geocoder to search locations across the world.",
+        desc: "I created a User Interface using CesiumJS as a \"Feature Lab\" for Worlds iVue. " +
+            "It uses the built-in Cesium Geocoder to search locations across the world. " +
+            "It can also be downloaded as a destop app via Tauri.",
 
         icon: {
             id: cesium_icon,
