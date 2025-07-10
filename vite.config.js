@@ -59,12 +59,12 @@ export default defineConfig({
                 theme_color: '#000000',
                 icons: [
                     {
-                        src: 'static-icons/Personal_Icon_Expanded.png',
+                        src: 'static-icons/Personal_Icon_Expanded_Rounded.png',
                         sizes: '192x192',
                         type: 'image/png',
                     },
                     {
-                        src: 'static-icons/Personal_Icon_Expanded.png',
+                        src: 'static-icons/Personal_Icon_Expanded_Rounded.png',
                         sizes: '512x512',
                         type: 'image/png',
                     },
