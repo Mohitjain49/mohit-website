@@ -5,7 +5,8 @@
             <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
             <span> {{ COPYRIGHT_TEXT }} </span>
         </h1>
-        <h2 class="copyright-body-date"> {{ RELEASE_DATE }} </h2>
+        <h2 class="copyright-body-subheader"> {{ PROJECT_VERSION }} </h2>
+        <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
 
         <div class="copyright-body-desc">
             I'm glad you're here and hope you find inspiration in my work.
@@ -22,8 +23,11 @@
 
 <script setup>
 import now from '~build/time';
+import { version } from "~build/package";
+
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
-const RELEASE_DATE = ref("Last Release: May 28th, 2025");
+const RELEASE_DATE = ref("Last Release: July 10, 2025");
+const PROJECT_VERSION = ref("Version " + version);
 
 onMounted(() => {
     initWebData();
@@ -63,7 +67,7 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     margin-right: 10px;
 }
 
-.copyright-body-date {
+.copyright-body-subheader {
     width: fit-content;
     height: fit-content;
     font-size: 20px;
@@ -85,7 +89,7 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     .copyright-body-header {
         font-size: 40px;
     }
-    .copyright-body-date {
+    .copyright-body-subheader {
         font-size: 14px;
     }
     .copyright-body-desc {

@@ -8,6 +8,7 @@ import pinia_icon from "../assets/Pinia_Icon.svg";
 import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
 import fontsource_icon from "../assets/FontSource_Icon.png";
+import tauri_icon from "../assets/Tauri_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -309,6 +310,19 @@ export const FRONTEND_SKILL_NOTES = [
 
         icon: {
             id: expo_icon,
+            faIcon: false,
+            size: "105"
+        }
+    },
+    {
+        name: "Tauri",
+        link: "https://tauri.app/",
+        color: "#24C8DB",
+        desc: "Tauri is a framework that can build tiny and fast binaries for desktop and mobile applications. " +
+            "In other words, It allows any web developer to bundle their application to become a native application.",
+
+        icon: {
+            id: tauri_icon,
             faIcon: false,
             size: "105"
         }
