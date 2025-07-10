@@ -1,9 +1,7 @@
-import doc_img from "/static-icons/Personal_Icon_Expanded_Transparent.png";
 import og_img from "/static-icons/Personal_Icon_Expanded_Rounded.png";
-
 const WEBSITE_TITLE = "Mohit Jain | My Portfolio";
-const WEBSITE_DESC = "My personal website extensively displays my skills as a software developer " +
-    "and the experience I have gathered through working with multiple companies. Made With Vue.js.";
+const WEBSITE_DESC = "Hello! My name is Mohit Jain, and I use my portfolio to showcase " +
+    "my skills and as a \"Feature Lab\" for other projects of mine. Made With Vue.js.";
 
 /**
  * This function returns the meta tags for the website for Search Engine Optimization.
@@ -17,7 +15,7 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
     return {
         title: pageTitle,
         link: [
-            { rel: 'icon', href: doc_img },
+            { rel: 'icon', href: og_img },
             { rel: 'canonical', href: WEBSITE_PATH }
         ],
 
@@ -52,7 +50,7 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
 export function getMetaWithLink(pageTitle = WEBSITE_TITLE, pageLink = PERSONAL_WEBSITE_LINK, pageDesc = WEBSITE_DESC) {
     return {
         title: pageTitle,
-        link: [{ rel: 'icon', href: doc_img }],
+        link: [{ rel: 'icon', href: og_img }],
 
         meta: [
             { name: 'description', content: pageDesc },

@@ -621,8 +621,9 @@ export const PROJECT_ENTITIES = [
         name: "My Globe UI",
         link: PERSONAL_GLOBE_LINK,
         color: "var(--blue-one)",
-        desc: "This is a simple Globe UI that I created with Cesium. " +
-            "It uses the built-in Cesium Geocoder to search locations across the world.",
+        desc: "I created a User Interface using CesiumJS as a \"Feature Lab\" for Worlds iVue. " +
+            "It uses the built-in Cesium Geocoder to search locations across the world. " +
+            "It can also be downloaded as a destop app via Tauri.",
 
         icon: {
             id: cesium_icon,

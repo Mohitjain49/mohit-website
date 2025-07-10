@@ -48,6 +48,6 @@ onMounted(() => {
 
 const DEV_STACK = [
     { title: "Worlds iVue", icon: wiv_icon },
-    { title: "Use of AWS", icon: aws_icon },
+    { title: "Cloud Architecture", icon: aws_icon },
 ];
 </script>
