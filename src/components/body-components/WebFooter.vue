@@ -82,7 +82,7 @@ onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jai
 const footerClass = computed(() => {
     const path = route.path;
     return ((path === "/contact" || path === "/contact/") ? 'contact' :
-        ((path === '/' || path === '/search' || path === '/search/') ? 'main-page' : '')
+        ((-1 == MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) ? '' : 'main-page')
     );
 })
 
@@ -113,7 +113,7 @@ const CONTACT_ROUTES = [
 const EXTRA_ROUTES = [
     { name: "QR Codes", path: "/qrcode", icon: "fa-qrcode", extraClass: "light" },
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
-    { name: "Copyright", path: "/copyright", icon: "fa-copyright", extraClass: "copyright" },
+    { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", extraClass: "wakelock" },
     { name: "Install Website", path: "/install", icon: "fa-download", extraClass: "" },
     { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", extraClass: "light" }
 ];
@@ -122,6 +122,8 @@ const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", extraClass: "sandbox" },
     { name: "Commits", path: "/commits", icon: "fa-code-commit", extraClass: "github" },
 ];
+
+const MAIN_PAGE_STYLE_ROUTES = ["/", "/search", "/search/", "/wakelock", "/wakelock/"];
 </script>
 
 <style scoped>
@@ -267,6 +269,13 @@ const REPO_ROUTES = [
 }
 .footer-routes-opt.copyright:hover {
     border-color: var(--blue-cobalt);
+}
+
+.footer-routes-opt.wakelock {
+    color: var(--vibrant-flame);
+}
+.footer-routes-opt.wakelock:hover {
+    border-color: var(--vibrant-flame);
 }
 
 .footer-routes-opt.linkedin {

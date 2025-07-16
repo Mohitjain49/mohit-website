@@ -64,6 +64,9 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
+.install-vite-pwa:hover {
+    text-decoration: underline;
+}
 
 .install-button {
     width: 60%;
