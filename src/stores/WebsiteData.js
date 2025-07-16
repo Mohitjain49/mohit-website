@@ -28,7 +28,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     });
     const wakeLockStatement = computed(() => {
         if(!wakeLockAvailable.value) {
-            return "Screen Wake Lock Is Not Available.";
+            return "Feature Unavailable.";
         } else if(wakeLock.value == null) {
             return "Set Screen Wake Lock";
         } else {

@@ -7,7 +7,7 @@
     <div class="search-wrapper">
         <h1> Search the Site </h1>
         <div class="mohit-search-input">
-            <input v-model="query" type="text" placeholder="Search..." @input="setSearchBarTimeout()" @keypress.enter="performSearch()" />
+            <input v-model="query" type="text" placeholder="Search..." @keypress.enter="performSearch()" />
             <button @click="performSearch()" title="Start Search"> <font-awesome-icon icon="fa-magnifying-glass" /> </button>
             <button class="close" @click="clearSearch()" title="Clear Search Bar"> <font-awesome-icon icon="fa-circle-xmark" /> </button>
         </div>
@@ -29,9 +29,6 @@
 import Fuse from 'fuse.js';
 const router = useRouter();
 const route = useRoute();
-
-const SEARCH_TIME_WAIT = 2000;
-var searchBarTimeout = null;
 
 onMounted(() => {
     initWebData();
@@ -64,7 +61,6 @@ function clearSearch() {
  * This function performs a search based on what the user inputted in the search bar.
  */
 function performSearch() {
-    clearSearchBarTimeout();
     router.push({ query: { q: query.value } }).then(() => {
         results.value = ((query.value !== '') ? fuse.search(query.value) : [])
     });
@@ -76,25 +72,6 @@ function performSearch() {
  */
 function truncate(text, length) {
     return ((text.length > length) ? (text.slice(0, length) + '...') : text)
-}
-
-/**
- * This function sets and manages the serach bar timeout.
- */
-function setSearchBarTimeout() {
-    clearSearchBarTimeout();
-    searchBarTimeout = setTimeout(() => {
-        performSearch();
-    }, SEARCH_TIME_WAIT);
-}
-
-/**
- * This function clears the search bar timeout.
- */
-function clearSearchBarTimeout() {
-    if(searchBarTimeout == null) { return; }
-    clearTimeout(searchBarTimeout);
-    searchBarTimeout = null
 }
 </script>
 

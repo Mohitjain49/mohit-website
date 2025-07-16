@@ -168,4 +168,10 @@ export const SearchIndex = [
         content: "View the gamepad controls for my website here.",
         url: "/gamepad"
     },
+    {
+        id: 28,
+        title: "Wake Lock",
+        content: "Use the wake lock web api to keep your device on naturally.",
+        url: "/wakelock"
+    },
 ];
