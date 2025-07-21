@@ -1,16 +1,14 @@
 <template>
-<client-only>
-    <Transition name="mohit-bookmark-transition" appear>
-        <RouterLink to="/gamepad" v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" :title=GAMEPAD_BOOKMARK_TITLE>
-            <font-awesome-icon icon="fa-gamepad" />
-        </RouterLink>
-    </Transition>
-</client-only>
+<Transition name="mohit-bookmark-transition" appear>
+    <RouterLink to="/gamepad" v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" :title=GAMEPAD_BOOKMARK_TITLE>
+        <font-awesome-icon icon="fa-gamepad" />
+    </RouterLink>
+</Transition>
 
 <Transition name="mohit-bookmark-transition" appear>
-    <div v-if="webData.wakeLock != null" class="mohit-bookmark lock active" title="Screen Wake Lock Set">
+    <button @click="webData.toggleWakeLock()" v-if="(webData.wakeLock != null)" class="mohit-bookmark lock active" :title="WAKE_LOCK_BOOKMARK_TITLE">
         <client-only> <font-awesome-icon icon="fa-lock" /> </client-only>
-    </div>
+    </button>
 </Transition>
 </template>
 
@@ -26,10 +24,11 @@ function getGamepadBookmarkClasses() {
  * This returns whether or not the Gamepad Icon is good to show or not.
  */
 function showGamepadBookmark() {
-    return Boolean(navigator.getGamepads());
+    return (!import.meta.env.SSR && Boolean(navigator.getGamepads()));
 }
 
-const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!"
+const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!";
+const WAKE_LOCK_BOOKMARK_TITLE = "Screen Wake Lock Set. Click here to remove it."
 </script>
 
 <style scoped>

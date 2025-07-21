@@ -42,8 +42,8 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.7.5",
-                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md}'],
+                cacheId: "v2.7.6",
+                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },
 
@@ -51,7 +51,7 @@ export default defineConfig({
                 name: 'Mohit Jain\'s Portfolio',
                 short_name: 'Mohit Jain',
                 start_url: '/',
-                display: 'standalone',
+                display: 'minimal-ui',
                 background_color: '#ffffff',
                 theme_color: '#000000',
                 icons: [
