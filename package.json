@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite-ssg build & npm run patch",
+    "build": "vite-ssg build && npm run patch",
     "preview": "vite preview",
     "open": "vite --open",
     "open:preview": "vite preview --open",
-    "open:build": "npm run build & npm run open:preview",
+    "open:build": "npm run build && npm run open:preview",
     "patch": "node scripts/postbuild.mjs",
     "update": "npx npm-check-updates"
   },
