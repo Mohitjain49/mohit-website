@@ -28,7 +28,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function downloads a document for the visitor to see.
      */
     function downloadDoc() {
-        const docIndex = (route.path.includes("resume") ? 0 : 1);
+        const docIndex = (checkResumeRoute() ? 0 : 1);
         const DOCUMENTS = [Mohit_Jain_Resume, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025];
         const DOCUMENT_NAMES = ["Mohit_Jain_Resume", "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025"];
     
@@ -45,7 +45,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
-        if(route.path.includes("md") || route.path.includes("markdown")) { return; }
+        if(checkMarkdownRoute()) { return; }
 
         nextTick(() => {
             hideVerticalOverflow();
@@ -66,6 +66,13 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function hideVerticalOverflow() {
         document.body.style.overflowY = "hidden";
+    }
+
+    /**
+     * This function returns true if the user is looking at any resume page on the website.
+     */
+    function checkResumeRoute() {
+        return route.path.includes("resume");
     }
 
     /**
@@ -117,7 +124,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
         checkTTSAvailable, cancelTTS, startTTS, downloadDoc,
-        hideVerticalOverflow, checkPDFRoute, checkMarkdownRoute,
-        mountDocumentPage, unmountDocumentPage
+        checkResumeRoute, checkPDFRoute, checkMarkdownRoute,
+        hideVerticalOverflow, mountDocumentPage, unmountDocumentPage
     }
 });

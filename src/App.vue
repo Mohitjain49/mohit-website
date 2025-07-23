@@ -10,7 +10,6 @@
 <script setup>
 import "./styles/mainstyles.css";
 const webData = useWebsiteDataStore();
-const route = useRoute();
 
 onMounted(() => {webData.setEventListeners()})
 onBeforeUnmount(() => {webData.removeEventListeners()})

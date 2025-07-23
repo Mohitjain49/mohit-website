@@ -1,6 +1,6 @@
 {
   "name": "mohit-website",
-  "version": "2.7.6",
+  "version": "2.7.7",
   "private": true,
   "type": "module",
   "scripts": {
@@ -16,10 +16,10 @@
     "@fontsource/lexend": "^5.2.9",
     "@fontsource/montserrat": "^5.2.6",
     "@fontsource/roboto": "^5.2.6",
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-brands-svg-icons": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-brands-svg-icons": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/vue-fontawesome": "^3.1.0",
     "@tsparticles/slim": "^3.8.1",
     "@tsparticles/vue3": "^3.0.1",
     "animate.css": "^4.1.1",
@@ -29,7 +29,7 @@
     "ofetch": "^1.4.1",
     "pinia": "^3.0.3",
     "uqr": "^0.1.2",
-    "vue": "^3.5.17",
+    "vue": "^3.5.18",
     "vue3-observe-visibility": "^1.0.3"
   },
   "devDependencies": {
@@ -43,7 +43,7 @@
     "vite": "^7.0.5",
     "vite-plugin-pwa": "^1.0.1",
     "vite-ssg": "^28.0.0",
-    "vite-ssg-sitemap": "^0.9.0",
+    "vite-ssg-sitemap": "^0.10.0",
     "vue-router": "^4.5.1"
   }
 }

@@ -14,7 +14,10 @@
             However, please don't directly copy my content, design, or code without my permission.
             <br> <br>
             If you would like to collaborate or discuss using any part of my work, 
-            I'd love to hear from you! You'll find some links to contact me on the footer below.
+            I'd love to hear from you! You'll find some links to contact me on the footer 
+            <span style="text-decoration: underline;">
+                <RouterLink to="/copyright#footer" @click="webData.goToPageSection('footer')">below.</RouterLink>
+            </span>
         </div>
     </div>
     <WebFooter />
@@ -25,6 +28,7 @@
 import now from '~build/time';
 import { version } from "~build/package";
 
+const webData = useWebsiteDataStore();
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const RELEASE_DATE = ref("Last Release: July 10, 2025");
 const PROJECT_VERSION = ref("Version " + version);

@@ -11,7 +11,7 @@ const docStore = useDocumentStore();
 const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent(FCS_CERTIFICATE_LINK)}&embedded=true`;
 
 useHead(getMeta("Mohit Jain | Fulton Internship Program Appreciation Certificate Spring 2025",
-    "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025",
+    ("Fulton_Internship_Program_Appreciation_Certificate_Spring_2025" + (docStore.checkPDFRoute() ? "/pdf" : "")),
     "This is my Fulton Internship Program Appreciation Certificate for Spring 2025."
 ));
 </script>
