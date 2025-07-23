@@ -10,7 +10,8 @@
 const docStore = useDocumentStore();
 const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent(PERSONAL_RESUME_LINK)}&embedded=true`;
 
-useHead(getMeta("Mohit Jain | My Resume", "resume",
+useHead(getMeta("Mohit Jain | My Resume", 
+    (docStore.checkPDFRoute() ? "resume/pdf" : "resume"),
     "Feel free to take a look at my resume."
 ));
 </script>
