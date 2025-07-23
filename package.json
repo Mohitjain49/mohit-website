@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite-ssg build",
+    "build": "vite-ssg build & npm run patch",
     "preview": "vite preview",
     "open": "vite --open",
     "open:preview": "vite preview --open",
-    "open:build": "vite-ssg build & vite preview --open",
+    "open:build": "npm run build & npm run open:preview",
+    "patch": "node scripts/postbuild.mjs",
     "update": "npx npm-check-updates"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@unhead/vue": "^2.0.12",
     "@vitejs/plugin-vue": "^6.0.0",
+    "replace-in-file": "^8.3.0",
     "unplugin-auto-import": "^19.3.0",
     "unplugin-info": "^1.2.2",
     "unplugin-swc": "^1.5.5",
