@@ -93,7 +93,7 @@ useHead(getMeta("Mohit Jain | Wake Lock", "wakelock",
     }
     .wakeLock-button {
         width: 80%;
-        font-size: 19px;
+        font-size: 14px;
     }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-<div :class="['document-widgets-container', (docStore.checkMarkdownRoute() ? 'markdown' : '')]">
+<div :class="['document-widgets-container', (confirmBottomWidgets() ? 'bottom' : '')]">
     <button @click="docStore.downloadDoc()" :class="WIDGET_CLASSES" title="Download Document">
         <client-only> <font-awesome-icon icon="fa-file-download" /> </client-only>
     </button>
@@ -7,7 +7,7 @@
         <client-only> <font-awesome-icon icon="fa-rotate-right" /> </client-only>
     </button>
 
-    <template v-if="route.path.includes('resume')">
+    <template v-if="docStore.checkResumeRoute()">
         <RouterLink to="/resume" :class="WIDGET_CLASSES" title="Use Google Doc Viewer">
             <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
         </RouterLink>
@@ -19,7 +19,7 @@
         </RouterLink>
     </template>
 
-    <template v-if="!route.path.includes('resume')">
+    <template v-if="!docStore.checkResumeRoute()">
         <RouterLink v-if="!docStore.checkPDFRoute()" :to="(FCS_CERTIFICATE_ROUTE + '/pdf')" :class="WIDGET_CLASSES" title="Use Built-In PDF Viewer">
             <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
         </RouterLink>
@@ -37,11 +37,9 @@
 </template>
 
 <script setup>
-const route = useRoute();
 const docStore = useDocumentStore();
-
 const WIDGET_CLASSES = computed(() => {
-    return ['document-widget', 'animate__animated', (docStore.checkMarkdownRoute() ? 'animate__fadeInUp' : 'animate__fadeInBottomRight')]
+    return ['document-widget', 'animate__animated', (confirmBottomWidgets() ? 'animate__fadeInUp' : 'animate__fadeInLeft')]
 });
 
 onMounted(() => { docStore.mountDocumentPage(); });
@@ -52,6 +50,13 @@ onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
  */
 function reloadPage() {
     window.location.reload();
+}
+
+/**
+ * This returns true if the document widgets should sit at the bottom of the page.
+ */
+function confirmBottomWidgets() {
+    return (docStore.checkPDFRoute() || docStore.checkMarkdownRoute());
 }
 </script>
 
@@ -64,7 +69,7 @@ function reloadPage() {
     width: fit-content;
     z-index: 5;
 }
-.document-widgets-container.markdown {
+.document-widgets-container.bottom {
     top: auto;
     bottom: 10px;
     left: calc(50% - 125px);
@@ -100,7 +105,7 @@ function reloadPage() {
         height: 32px;
         font-size: 17px;
     }
-    .document-widgets-container.markdown .document-widget {
+    .document-widgets-container.bottom .document-widget {
         width: 45px;
         height: 45px;
         font-size: 22px;
