@@ -1,7 +1,9 @@
 <template>
 <div id="ivue" class="ivue-section" v-observe-visibility="setInitTranstions">
     <div id="ivue-section-title">
-        <img :src="ivue_white_text" draggable="false" />
+        <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue">
+            <img :src="ivue_white_text" draggable="false" />
+        </a>
     </div>
     <div class="ivue-section-tabs-container">
         <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
@@ -121,7 +123,12 @@ function onIvueTabLeave(id = "main-tab") {
     align-items: center;
     --animate-duration: 1.2s;
 }
-#ivue-section-title img {
+#ivue-section-title > a {
+    cursor: pointer;
+    height: fit-content;
+    width: fit-content;
+}
+#ivue-section-title > a > img {
     height: 115px;
     user-select: none;
 }
@@ -206,7 +213,7 @@ function onIvueTabLeave(id = "main-tab") {
     }
 }
 @media (max-width: 600px) {
-    #ivue-section-title img {
+    #ivue-section-title > a > img {
         height: 80px;
     }
     .ivue-section-tabs-container {
