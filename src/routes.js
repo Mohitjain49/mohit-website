@@ -20,6 +20,7 @@ import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
 import InvalidRoute from "./pages/InvalidRoute.vue";
+import GoogleMockupAssigment from "./pages/GoogleMockupAssigment.vue";
 
 /**
  * This is a list of redirect pages for the website.
@@ -99,12 +100,14 @@ export const personalRoutes = [
         ]
     },
 
-    { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
+    { path: "/google-mockup-assignment", component: GoogleMockupAssigment },
+
+    { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
     getRedirectRouteRecord("/repo"),
