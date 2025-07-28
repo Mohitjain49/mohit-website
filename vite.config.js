@@ -28,7 +28,17 @@ export default defineConfig({
         vue({ include: [/\.vue$/, /\.md$/] }),
         swc.vite(),
         Info(),
-        Components({ dts: true, extensions: ['vue', 'md'] }),
+        Components({
+            dts: true,
+            extensions: ['vue', 'md'],
+            resolvers: [
+                (name) => {
+                    if(name === "FontAwesomeIcon") {
+                        return { name: "FontAwesomeIcon", from: '@fortawesome/vue-fontawesome' }
+                    }
+                }
+            ]
+        }),
         Markdown(),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
@@ -42,7 +52,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.7.8",
+                cacheId: "v2.7.9",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },

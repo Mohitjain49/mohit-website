@@ -14,8 +14,6 @@ import App from "./App.vue";
 import { personalRoutes } from "./routes";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
 import * as FaIcons from '@fortawesome/free-solid-svg-icons'
 import * as FaBrands from '@fortawesome/free-brands-svg-icons'
 
@@ -88,14 +86,13 @@ library.add(
     FaBrands.faGitlab,
     FaBrands.faPython,
     FaBrands.faGoogleDrive,
-    FaBrands.faMarkdown
+    FaBrands.faMarkdown,
+    FaBrands.faGoogle
 );
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
-    ({ app, router }) => {
+    ({ app }) => {
         const pinia = createPinia();
-        app.component('font-awesome-icon', FontAwesomeIcon);
-
         app.use(VueObserveVisibility);
         app.use(pinia);
 
