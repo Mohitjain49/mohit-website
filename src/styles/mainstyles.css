@@ -188,40 +188,27 @@ button {
 }
 
 /**
- * These are styles meant specifically for a more dynamic info sector page.
+ * These are styles meant specifically for redirect pages.
  */
 
- .info-sector-v2, .info-sector-v3 {
-    position: relative;
-    width: calc(100% - 40px) !important;
-    left: 40px;
-}
-.personal-web-body-v2, .personal-web-body-v3 {
-    top: 0px;
-    height: 100%;
-}
-
-@media (min-width: 2000px) {
-    .info-sector-v2 {
-        transform: scale(1.5, 1.5);
-    }
-    .personal-web-body-v2 {
-        overflow: hidden;
-        overflow-x: hidden;
-        overflow-y: hidden;
-    }
+.redirect-statement {
+    width: calc(100% - 24px);
+    height: fit-content;
+    padding: 25px 12px 0px 12px;
+    font-size: 25px;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    color: var(--website-text);
+    text-align: center;
 }
 
-@media (max-width: 600px) {
-    .info-sector-v2, .info-sector-v3 {
-        width: 100% !important;
-        left: 0;
-        top: 45px;
+@media (max-width: 700px) {
+    .redirect-statement {
+        font-size: 15px;
     }
 }
 
 /**
- * This is the universal custom scrollbar
+ * This is the universal custom scrollbar.
  */
 
 ::-webkit-scrollbar {
