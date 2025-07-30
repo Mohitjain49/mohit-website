@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import ksu_logo from "@/assets/Kennesaw_logo.png";
+import ksu_logo from "@/assets/Kennesaw_Logo.png";
 const KSU_CCSE_LINK = "https://www.kennesaw.edu/ccse/";
 const WIDGET_TITLE = "I'm a proud Computer Science Student of Kennesaw State University!";
 </script>
