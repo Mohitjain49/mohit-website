@@ -2,6 +2,7 @@
 <client-only>
     <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
 </client-only>
+<KennesawWidget />
 
 <main id="homepage" class="personal-web-body">
     <client-only>

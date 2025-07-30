@@ -2,7 +2,7 @@
 <main id="resume-container" class="markdown">
     <br>
     <GoogleMockupAssignmentComponent />
-    <div class="markdown-doc-bottom"></div>
+    <br>
 </main>
 </template>
 
