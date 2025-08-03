@@ -18,7 +18,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/globe", "/mnd", "/pizza", "/sublo",
     "/ivue", "/ivuemedia", "/ivuerobotics",
     "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
-    "/email", "/github", "/gitlab", "/linkedin", "/discord"
+    "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam"
 ];
 
 export default defineConfig({
@@ -53,7 +53,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.7.10",
+                cacheId: "v2.7.11",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },

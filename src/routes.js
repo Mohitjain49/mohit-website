@@ -30,6 +30,7 @@ const REDIRECT_PAGES = [
     { path: "/discord", link: SOCIALS[2].link, title: "Mohit Jain | Discord", desc: "This link will redirect you to my Discord Profile." },
     { path: "/github", link: SOCIALS[3].link, title: "Mohit Jain | GitHub", desc: "This link will redirect you to my GitHub Profile." },
     { path: "/gitlab", link: SOCIALS[4].link, title: "Mohit Jain | Gitlab", desc: "This link will redirect you to my Gitlab Profile." },
+    { path: "/steam", link: SOCIALS[5].link, title: "Mohit Jain | Steam", desc: "This link will redirect you to my Steam Profile." },
 
     {
         path: "/repo", alias: ['/repository'], link: PERSONAL_WEBSITE_REPOSITORY_LINK,
@@ -131,5 +132,6 @@ export const personalRoutes = [
     getRedirectRouteRecord("/github"),
     getRedirectRouteRecord("/gitlab"),
     getRedirectRouteRecord("/discord"),
-    getRedirectRouteRecord("/linkedin")
+    getRedirectRouteRecord("/linkedin"),
+    getRedirectRouteRecord("/steam")
 ];

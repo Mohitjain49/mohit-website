@@ -83,31 +83,29 @@
         </div>
 
         <div class="contact-box-content">
-            <div class="social-tab" v-for="social in SOCIALS" :style="{ color: social.altColor }">
-                <div class="social-tab-header"> {{ social.name }} </div>
-                <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
+            <template v-for="(social, index) in SOCIALS">
+                <div class="social-tab" v-if="(index != 4)" :style="{ color: social.altColor }">
+                    <div class="social-tab-header"> {{ social.name }} </div>
+                    <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
 
-                <div class="social-tab-btn-container">
-                    <button class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
-                        @mouseenter="setSocialBtnAnimation"
-                        @mouseleave="setSocialBtnAnimation">
+                    <div class="social-tab-btn-container">
+                        <button class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
+                            @mouseenter="setSocialBtnAnimation"
+                            @mouseleave="setSocialBtnAnimation">
 
-                        <span> {{ social.copyBtn }} </span>
-                        <client-only>
-                            <font-awesome-icon icon="fa-copy" />
-                        </client-only>
-                    </button>
-                    <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
-                        @mouseenter="setSocialBtnAnimation"
-                        @mouseleave="setSocialBtnAnimation">
+                            <span> {{ social.copyBtn }} </span>
+                            <client-only> <font-awesome-icon icon="fa-copy" /> </client-only>
+                        </button>
+                        <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
+                            @mouseenter="setSocialBtnAnimation"
+                            @mouseleave="setSocialBtnAnimation">
 
-                        <span> {{ social.linkBtn }} </span>
-                        <client-only>
-                            <font-awesome-icon :icon="social.linkIcon" />
-                        </client-only>
-                    </a>
+                            <span> {{ social.linkBtn }} </span>
+                            <client-only> <font-awesome-icon :icon="social.linkIcon" /> </client-only>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>
     <WebFooter />
@@ -293,11 +291,11 @@ function copyLink(link = "") {
  * This function copies the discord link.
  */
 function copyDiscordLink() {
-    const link = SOCIALS[2].link;
+    const link = "mohitjainn";
     navigator.clipboard.writeText(link).then(() => {
-        setAlertBox("Copied Link: " + getLinkString(link, link));
+        setAlertBox("Copied Username: " + link);
     }).catch(() => {
-        setAlertBox("Failed To Copy " + getLinkString(link, link));
+        setAlertBox("Failed To Copy Discord Username.");
     });
 }
 
@@ -632,7 +630,7 @@ const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach 
     }
 
     .social-tab-link {
-        font-size: 14px;
+        font-size: 13px;
     }
     .social-tab-btn {
         font-size: 14px;

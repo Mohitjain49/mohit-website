@@ -59,9 +59,9 @@ const QR_CODES = [
     { qrLink: PERSONAL_WEBSITE_LINK, textLink: PERSONAL_WEBSITE_LINK, displayText: PERSONAL_WEBSITE_LINK },
     { qrLink: SOCIALS[0].link, textLink: SOCIALS[0].link, displayText: SOCIALS[0].displayLink },
     { qrLink: SOCIALS[1].link, textLink: SOCIALS[1].link, displayText: SOCIALS[1].displayLink },
-    { qrLink: SOCIALS[2].link, textLink: SOCIALS[2].link, displayText: SOCIALS[2].link },
     { qrLink: SOCIALS[3].link, textLink: SOCIALS[3].link, displayText: SOCIALS[3].link },
-    { qrLink: SOCIALS[4].link, textLink: SOCIALS[4].link, displayText: SOCIALS[4].link }
+    { qrLink: SOCIALS[4].link, textLink: SOCIALS[4].link, displayText: SOCIALS[4].link },
+    { qrLink: SOCIALS[5].link, textLink: SOCIALS[5].link, displayText: SOCIALS[5].link }
 ];
 </script>
 

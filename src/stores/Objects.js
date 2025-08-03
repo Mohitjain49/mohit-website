@@ -69,7 +69,7 @@ export const SOCIALS = [
         id: "linkedin",
         displayLink: "https://www.linkedin.com/in/mohitjain49",
         link: "https://www.linkedin.com/in/mohitjain49",
-        copyBtn: "Copy LinkedIn Link",
+        copyBtn: "Copy Link",
         linkBtn: "Go To LinkedIn",
         linkIcon: "fa-brands fa-linkedin",
         color: "#0072B1",
@@ -78,9 +78,9 @@ export const SOCIALS = [
     {
         name: "Discord",
         id: "discord",
-        displayLink: "ID: 605840082951208992",
-        link: "https://discordapp.com/users/605840082951208992",
-        copyBtn: "Copy Discord Link",
+        displayLink: "Username: mohitjainn",
+        link: "https://discord.com/channels/@me/",
+        copyBtn: "Copy Username",
         linkBtn: "Go To Discord",
         linkIcon: "fa-brands fa-discord",
         color: "#5865F2",
@@ -91,7 +91,7 @@ export const SOCIALS = [
         id: "github",
         displayLink: "https://github.com/Mohitjain49",
         link: "https://github.com/Mohitjain49",
-        copyBtn: "Copy GitHub Link",
+        copyBtn: "Copy Link",
         linkBtn: "Go To Github",
         linkIcon: "fa-brands fa-github",
         color: "white",
@@ -102,11 +102,22 @@ export const SOCIALS = [
         id: "gitlab",
         displayLink: "https://gitlab.com/mohitkjain49",
         link: "https://gitlab.com/mohitkjain49",
-        copyBtn: "Copy GitLab Link",
+        copyBtn: "Copy Link",
         linkBtn: "Go To GitLab",
         linkIcon: "fa-brands fa-gitlab",
         color: "#E24329",
         altColor: "#E24329"
+    },
+    {
+        name: "Steam",
+        id: "steam",
+        link: "https://steamcommunity.com/id/mohit-jain/",
+        displayLink: "https://steamcommunity.com/id/mohit-jain/",
+        copyBtn: "Copy Link",
+        linkBtn: "Go To Steam",
+        linkIcon: "fa-brands fa-steam",
+        color: "#167EB1",
+        altColor: "#167EB1"
     }
 ];
 

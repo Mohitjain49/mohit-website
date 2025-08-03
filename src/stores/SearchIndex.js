@@ -174,4 +174,29 @@ export const SearchIndex = [
         content: "Use the wake lock web api to keep your device on naturally.",
         url: "/wakelock"
     },
+    {
+        id: 29,
+        title: "iVue Media",
+        content: "iVue Media produces location-based media content for consumers, businesses, and developers.",
+        url: "/ivuemedia"
+    },
+    {
+        id: 30,
+        title: "iVue Robotics",
+        content: "iVue Robotics produces modular \"flying computer\" drone hardware " +
+            "to make drones more useful and accessible for consumers, businesses, and developers.",
+        url: "/ivuerobotics"
+    },
+    {
+        id: 31,
+        title: "Florida Man",
+        content: "This is Florida Man.",
+        url: "/floridaman"
+    },
+    {
+        id: 32,
+        title: "Steam",
+        content: "Click Here to see my Steam Profile.",
+        url: "/steam"
+    },
 ];

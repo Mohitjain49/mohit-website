@@ -23,8 +23,9 @@
         </div>
         <div class="start-buttonRow contact-links">
             <template v-for="(contact, index) in SOCIALS">
-                <a v-if="index != 0" :href="contact.link"
+                <a v-if="(index != 2 && index != 4)" :href="contact.link"
                     class="start-buttonRow-btn"
+                    :title="contact.linkBtn"
                     :style="getSpecialBtnStyles(contact.color)"
                     @mouseenter="webData.setHeartbeatAnimation"
                     @mouseleave="webData.setHeartbeatAnimation">
