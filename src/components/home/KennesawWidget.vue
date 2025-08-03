@@ -1,5 +1,5 @@
 <template>
-<a :href="KSU_CCSE_LINK" target="mohit-ksu" class="ksu-widget" :title="WIDGET_TITLE">
+<a :href="KSU_CCSE_LINK" target="mohit-ksu" class="ksu-widget animate__animated animate__fadeInUp" :title="WIDGET_TITLE">
     <img :src="ksu_logo" draggable="false" />
 </a>
 </template>

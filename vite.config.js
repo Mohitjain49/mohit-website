@@ -15,8 +15,9 @@ import Markdown from 'unplugin-vue-markdown/vite';
 const SITEMAP_EXCLUDED_ROUTES = [
     "/gamepad", "/repo", "/repository",
     "/code", "/codesandbox", "/code-sandbox", "/commits",
-    "/globe", "/mnd", "/pizza", "/ivue", "/sublo",
-    "/worldsivue", "/wiv", "/worlds-ivue",
+    "/globe", "/mnd", "/pizza", "/sublo",
+    "/ivue", "/ivuemedia", "/ivuerobotics",
+    "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord"
 ];
 
@@ -52,7 +53,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.7.9",
+                cacheId: "v2.7.10",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },

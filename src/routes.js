@@ -51,6 +51,9 @@ const REDIRECT_PAGES = [
     { path: "/mnd", link: MND_PROJECT_LINK, title: "MND - Mapping Neurodivergence", desc: ("This link will direct you to " + MND_PROJECT_LINK + ".") },
     { path: "/pizza", link: PIZZA_WEBSITE_LINK, title: "Mohit Jain - Pizza Project", desc: "This link will direct you to my pizza project." },
     { path: "/ivue", link: MAIN_IVUE_WEBSITE_LINK, title: "iVue - iVue The World", desc: "This link will redirect you to the Main iVue Website." },
+    { path: "/ivuemedia", link: IVUE_MEDIA_WEBSITE_LINK, title: "iVue Media", desc: "This link will redirect you to the iVue Media Website." },
+    { path: "/ivuerobotics", link: IVUE_ROBOTICS_WEBSITE_LINK, title: "iVue Robotics", desc: "This link will redirect you to the iVue Robotics Website." },
+    { path: "/floridaman", link: FLORIDA_MAN_LINK, title: "Florida Man", desc: "This Is Florida Man." },
     { path: "/sublo", link: SUBLO_WEBSITE_LINK, title: "Mohit Jain | Sublo", desc: "This link will redirect you to Sublo's Website." },
 ];
 
@@ -117,10 +120,13 @@ export const personalRoutes = [
     getRedirectRouteRecord("/globe"),
     getRedirectRouteRecord("/mnd"),
     getRedirectRouteRecord("/pizza"),
-
-    getRedirectRouteRecord("/ivue"),
     getRedirectRouteRecord("/sublo"),
+
     getRedirectRouteRecord("/wiv"),
+    getRedirectRouteRecord("/ivue"),
+    getRedirectRouteRecord("/ivuemedia"),
+    getRedirectRouteRecord("/ivuerobotics"),
+    getRedirectRouteRecord("/floridaman"),
 
     getRedirectRouteRecord("/github"),
     getRedirectRouteRecord("/gitlab"),

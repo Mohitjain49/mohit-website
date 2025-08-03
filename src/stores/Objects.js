@@ -37,9 +37,10 @@ export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
 
 export const MAIN_IVUE_WEBSITE_LINK = "https://www.ivueworld.com/";
 export const IVUE_NEWS_WEBSITE_LINK = "https://news.ivueworld.com/";
-export const IVUE_MEDIA_WEBSITE_LINK = "https://ivuemedia.com/";
-export const IVUE_ROBOTICS_WEBSITE_LINK = "https://ivuerobotics.com/";
+export const IVUE_MEDIA_WEBSITE_LINK = "https://www.ivuemedia.com/";
+export const IVUE_ROBOTICS_WEBSITE_LINK = "https://www.ivuerobotics.com/";
 export const WORLDS_IVUE_LINK = "https://www.worldsivue.com/";
+export const FLORIDA_MAN_LINK = "https://www.floridamanonline.com/";
 
 export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";

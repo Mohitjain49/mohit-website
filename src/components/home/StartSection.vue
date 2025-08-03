@@ -3,10 +3,10 @@
     <div id="start-innerContainer">
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
-            Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK">iVue</a></span>
+            Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" style="color: white;">iVue</a></span>
         </div>
         <div class="start-section-subtitle">
-            Co-creator of <span><a :href="WORLDS_IVUE_LINK">Worlds iVue</a></span>
+            Co-creator of <span><a :href="WORLDS_IVUE_LINK" style="color: #48A548;">Worlds iVue</a></span>
         </div>
 
         <div class="start-buttonRow main">
