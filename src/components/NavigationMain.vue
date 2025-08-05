@@ -101,8 +101,8 @@ const MAIN_BTNS = [
 ];
 
 const LAPTOP_MAIN_BTNS = [
-    { path: "/", icon: "fa-house", color: "var(--website-text)", title: "Home Page" },
-    { path: "/search", icon: "fa-magnifying-glass", color: "var(--website-text)", title: "Search Pages" },
+    { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
+    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
 ];
 
 const NAV_MENU_EXTRAS = [
