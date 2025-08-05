@@ -1,6 +1,8 @@
 <template>
 <div id="projects" class="projects-section" v-observe-visibility="setProjectsTransitions">
-    <div class="projects-main-header">My Projects</div>
+    <div class="projects-main-header">
+        <RouterLink to="/projects/" title="Explore My Projects"> My Projects </RouterLink>
+    </div>
     <div class="projects-main-desc">
         While my best work is with iVue's websites and applications, 
         I made a few personal projects over the years for various events and classes at College.
@@ -70,6 +72,13 @@ function setProjectsTransitions(isVisible) {
     width: 100%;
     padding-top: 50px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.projects-main-header a {
+    height: fit-content;
+    width: fit-content;
     font-size: 100px;
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
@@ -80,6 +89,7 @@ function setProjectsTransitions(isVisible) {
         -1px 1px 0 var(--silver-light),  /* Bottom-left shadow */
         1px 1px 0 var(--silver-light);   /* Bottom-right shadow */
 }
+
 .projects-main-desc {
     font-size: 27px;
     font-family: 'Lexend', 'sans-serif';
@@ -129,7 +139,7 @@ function setProjectsTransitions(isVisible) {
         grid-column: span 1;
     }
 
-    .projects-main-header {
+    .projects-main-header a {
         font-size: 75px;
     }
     .projects-main-desc {
@@ -141,7 +151,7 @@ function setProjectsTransitions(isVisible) {
 }
 
 @media (max-width: 500px) {
-    .projects-main-header {
+    .projects-main-header a {
         font-size: 52px;
     }
 }

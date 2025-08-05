@@ -93,7 +93,6 @@ export const personalRoutes = [
             { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown }
         ]
     },
-
     {
         path: FCS_CERTIFICATE_ROUTE,
         children: [
@@ -101,6 +100,10 @@ export const personalRoutes = [
             { path: "pdf", component: InternAppreciation }
         ]
     },
+    { path: "/mohit-website", children: [
+        { path: "", redirect: "/" },
+        { path: ":catchAll(.*)*", redirect: "/" },
+    ]},
 
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
