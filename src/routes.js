@@ -100,10 +100,13 @@ export const personalRoutes = [
             { path: "pdf", component: InternAppreciation }
         ]
     },
-    { path: "/mohit-website", children: [
-        { path: "", redirect: "/" },
-        { path: ":catchAll(.*)*", redirect: "/" },
-    ]},
+    {
+        path: "/mohit-website",
+        children: [
+            { path: "", redirect: "/" },
+            { path: ":catchAll(.*)*", redirect: "/" },
+        ]
+    },
 
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
