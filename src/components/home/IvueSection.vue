@@ -49,6 +49,19 @@
                 Now, you can order a drone directly on the website.
             </p>
         </a>
+        <a :href="FLORIDA_MAN_LINK" id="florida-man-tab" class="ivue-section-tab"
+            @mouseenter="onIvueTabHover('florida-man-tab')"
+            @mouseleave="onIvueTabLeave('florida-man-tab')">
+
+            <div class="ivue-section-tab-header">
+                <img :src="fm_photo" width="45" />
+                <span>Florida Man</span>
+            </div>
+            <p>
+                Florida Man is a new production that is being made by iVue Media in collaboration with Olympus Entertainment. 
+                You can check out the production's social media profiles on this website I personally made for the series.
+            </p>
+        </a>
     </div>
 </div>
 </template>
@@ -58,6 +71,7 @@ import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
 import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
 import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
+import fm_photo from "@/assets/ivue/FM_Profile_Photo.png";
 const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds.
 
 /**
@@ -78,6 +92,7 @@ function setInitTranstions(isVisible) {
     document.getElementById('main-tab').classList.add("animate__animated", leftAnimation);
     document.getElementById('media-tab').classList.add("animate__animated", rightAnimation);
     document.getElementById('robotics-tab').classList.add("animate__animated", leftAnimation);
+    document.getElementById('florida-man-tab').classList.add("animate__animated", rightAnimation);
 
     setTimeout(() => {
         document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
@@ -85,6 +100,7 @@ function setInitTranstions(isVisible) {
         document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
         document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
         document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
+        document.getElementById('florida-man-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
     }, ANIMATE_DURATION)
 }
 
@@ -109,7 +125,7 @@ function onIvueTabLeave(id = "main-tab") {
 .ivue-section {
     background: transparent;
     height: fit-content;
-    min-height: 800px;
+    min-height: 1000px;
     width: 100%;
     padding: 100px 0px;
 }
@@ -135,7 +151,7 @@ function onIvueTabLeave(id = "main-tab") {
 
 .ivue-section-tabs-container {
     width: 100%;
-    height: 800px;
+    height: 950px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -159,6 +175,20 @@ function onIvueTabLeave(id = "main-tab") {
 }
 .ivue-section-tab:hover {
     box-shadow: 0px 0px 15px 15px rgba(255, 255, 255, 0.25);
+}
+
+.ivue-section-tab-header {
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-family: 'Lexend', sans-serif;
+    padding-left: 15px;
+}
+.ivue-section-tab-header img {
+    padding-left: 0px !important;
+    padding-right: 10px; 
 }
 
 .ivue-section-tab img {
@@ -199,6 +229,14 @@ function onIvueTabLeave(id = "main-tab") {
     box-shadow: 0px 0px 12px 12px rgba(171, 15, 20, 0.25);
 }
 
+.ivue-section-tab#florida-man-tab {
+    color: #D8829D;
+    border-color: #D8829D;
+}
+.ivue-section-tab#florida-man-tab:hover {
+    box-shadow: 0px 0px 12px 12px rgba(171, 15, 20, 0.25);
+}
+
 .ivue-section-tab#news-tab {
     color: #0071bc;
     border-color: #0071bc;
@@ -217,7 +255,7 @@ function onIvueTabLeave(id = "main-tab") {
         height: 80px;
     }
     .ivue-section-tabs-container {
-        height: 900px;
+        height: 1075px;
     }
     .ivue-section-tab {
         height: 175px;

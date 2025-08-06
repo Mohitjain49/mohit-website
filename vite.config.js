@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
+import EnvTypes from 'vite-plugin-env-types';
 
 import swc from "unplugin-swc";
 import Info from "unplugin-info/vite";
@@ -18,7 +19,8 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/globe", "/mnd", "/pizza", "/sublo",
     "/ivue", "/ivuemedia", "/ivuerobotics",
     "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
-    "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam"
+    "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
+    "/mohit-website/**", "/mohit-website"
 ];
 
 export default defineConfig({
@@ -29,6 +31,7 @@ export default defineConfig({
         vue({ include: [/\.vue$/, /\.md$/] }),
         swc.vite(),
         Info(),
+        EnvTypes({ dts: "./vite-env.d.ts" }),
         Components({
             dts: true,
             extensions: ['vue', 'md'],
@@ -53,7 +56,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.7.11",
+                cacheId: "v2.8.0",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },

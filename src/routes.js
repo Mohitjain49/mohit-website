@@ -3,7 +3,6 @@ import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
 import ContactPage from "./pages/ContactPage.vue";
-import SearchPage from "./pages/SearchPage.vue";
 import WakeLockPage from "./pages/WakeLockPage.vue";
 
 import GamepadControls from "./pages/GamepadControls.vue";
@@ -83,7 +82,6 @@ export const personalRoutes = [
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
     { path: "/contact", name: "Contact Mohit", component: ContactPage },
-    { path: "/search", name: "Search Website", component: SearchPage },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },
 
     {
@@ -95,12 +93,18 @@ export const personalRoutes = [
             { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown }
         ]
     },
-
     {
         path: FCS_CERTIFICATE_ROUTE,
         children: [
             { path: "", component: InternAppreciation },
             { path: "pdf", component: InternAppreciation }
+        ]
+    },
+    {
+        path: "/mohit-website",
+        children: [
+            { path: "", redirect: "/" },
+            { path: ":catchAll(.*)*", redirect: "/" },
         ]
     },
 

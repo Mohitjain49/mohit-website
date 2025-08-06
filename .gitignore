@@ -33,6 +33,7 @@ coverage
 *.tsbuildinfo
 *components.d.ts
 *auto-imports.d.ts
+*vite-env.d.ts
 
 # .env files
 .env.local

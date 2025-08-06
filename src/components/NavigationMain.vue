@@ -44,7 +44,7 @@
                         @click="(event) => { flashNavOpt(event, extra.path) }"
                         :style="getColorStyles(extra.color)">
 
-                        <client-only> <font-awesome-icon :icon="extra.icon" /> </client-only>
+                        <font-awesome-icon :icon="extra.icon" />
                     </RouterLink>
                 </div>
                 <div class="mohit-navMenu-opt">
@@ -54,8 +54,16 @@
                         @click="(event) => { flashNavOpt(event, feature.path) }"
                         :style="getColorStyles(feature.color)">
 
-                        <client-only> <font-awesome-icon :icon="feature.icon" /> </client-only>
+                        <font-awesome-icon :icon="feature.icon" />
                     </RouterLink>
+                </div>
+                <div class="mohit-navMenu-opt volume-meter">
+                    <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+                    <input type="range" min="0" max="100" title="Volume Meter for the click sound."
+                        v-model="audioStore.volumeInput"
+                        @input="audioStore.changeAudioVolume()"
+                    />
+                    <span> {{ (audioStore.volumeInput + '%') }} </span>
                 </div>
             </div>
         </Transition>
@@ -66,6 +74,7 @@
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
+const audioStore = useAudioStore();
 const route = useRoute();
 
 /**
@@ -101,8 +110,8 @@ const MAIN_BTNS = [
 ];
 
 const LAPTOP_MAIN_BTNS = [
-    { path: "/", icon: "fa-house", color: "var(--website-text)", title: "Home Page" },
-    { path: "/search", icon: "fa-magnifying-glass", color: "var(--website-text)", title: "Search Pages" },
+    { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
+    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
 ];
 
 const NAV_MENU_EXTRAS = [
@@ -197,7 +206,7 @@ const FEATURE_BTNS = [
 
 .mohit-navMenu {
     width: 100%;
-    height: 480px;
+    height: 520px;
     max-height: calc(100vh - 70px);
     overflow-x: hidden;
     overflow-y: auto;
@@ -211,6 +220,35 @@ const FEATURE_BTNS = [
     color: var(--website-text);
     font-family: 'Lexend', sans-serif;
     font-size: 18px;
+}
+
+.mohit-navMenu-opt.volume-meter {
+    height: 40px;
+    color: var(--lightning-yellow);
+}
+.mohit-navMenu-opt.volume-meter input {
+    width: 35%;
+}
+
+.mohit-navMenu-opt.volume-meter svg {
+    font-size: 15px;
+    width: 35px;
+    margin-left: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mohit-navMenu-opt.volume-meter span {
+    cursor: default;
+    user-select: none;
+    font-family: 'Lexend', sans-serif;
+    font-size: 15px;
+    width: 55px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mohit-navMenu-mainOpt {
@@ -275,7 +313,7 @@ const FEATURE_BTNS = [
     overflow-y: hidden;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
-    height: 480px;
+    height: 520px;
     max-height: calc(100vh - 70px);
     overflow-y: hidden;
 }

@@ -34,9 +34,9 @@
             </div>
 
             <div class="footer-routes-column extras">
-                <RouterLink to="/search" class="footer-routes-header" @click="scrollToTop('/search')">
-                    <client-only> <font-awesome-icon icon="fa-magnifying-glass" /> </client-only>
-                    <span> Search </span>
+                <RouterLink to="/qrcode" class="footer-routes-header light" @click="scrollToTop('/qrcode')">
+                    <client-only> <font-awesome-icon icon="fa-qrcode" /> </client-only>
+                    <span> QR Codes </span>
                 </RouterLink>
 
                 <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
@@ -107,21 +107,20 @@ const CONTACT_ROUTES = [
     { name: "LinkedIn", path: "/linkedin", icon: "fa-brands fa-linkedin", extraClass: "linkedin" },
     { name: "Discord", path: "/discord", icon: "fa-brands fa-discord", extraClass: "discord" },
     { name: "GitHub", path: "/github", icon: "fa-brands fa-github", extraClass: "github" },
-    { name: "GitLab", path: "/gitlab", icon: "fa-brands fa-gitlab", extraClass: "gitlab" },
+    { name: "Steam", path: "/steam", icon: "fa-brands fa-steam", extraClass: "steam" },
 ];
 
 const EXTRA_ROUTES = [
-    { name: "QR Codes", path: "/qrcode", icon: "fa-qrcode", extraClass: "light" },
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
     { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", extraClass: "wakelock" },
     { name: "Install Website", path: "/install", icon: "fa-download", extraClass: "" },
-    { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", extraClass: "light" }
+    { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", extraClass: "light" },
+    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", extraClass: "google" },
 ];
 
 const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", extraClass: "sandbox" },
-    { name: "Commits", path: "/commits", icon: "fa-code-commit", extraClass: "github" },
-    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", extraClass: "google" },
+    { name: "Commits", path: "/commits", icon: "fa-code-commit", extraClass: "github" }
 ];
 
 const MAIN_PAGE_STYLE_ROUTES = ["/", "/search", "/search/", "/wakelock", "/wakelock/"];
@@ -305,6 +304,13 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/search", "/search/", "/wakelock", "/wakel
 }
 .footer-routes-opt.gitlab:hover {
     border-color: #E24329;
+}
+
+.footer-routes-opt.steam {
+    color: #167eb1;
+}
+.footer-routes-opt.steam:hover {
+    border-color: #167eb1;
 }
 
 .footer-routes-opt.fulton {

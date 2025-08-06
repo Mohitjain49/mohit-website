@@ -5,11 +5,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
     const installStore = useInstallStore();
-
-    /**
-     * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable.
-     */
-    const audioClip = ref(null);
+    const audioStore = useAudioStore();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -41,7 +37,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function setEventListeners() {
         const signal = controller.signal;
-        setupClickAudio();
+        audioStore.setupClickAudio();
         nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
 
         documentStore.checkTTSAvailable();
@@ -64,15 +60,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         controller.abort();
         gamepadStore.disableGamepadVibration();
         gamepadStore.stopGamepadConnectedInterval();
-    }
-
-    /**
-     * This function sets up the click audio for my website.
-     */
-    function setupClickAudio() {
-        audioClip.value = new Audio(click_sound);
-        audioClip.value.preload = "auto";
-        audioClip.value.volume = 0.5;
     }
 
     /**
@@ -100,21 +87,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
         const srcElement = event.target;
 
-        confirmClickSound(event);
+        audioStore.confirmClickSound(event);
         if(navMenu !== srcElement && !navMenuElements.includes(srcElement)) { closeNavMenu(); }
-    }
-
-    /**
-     * This function confirms whether a click should trigger the click sound or not.
-     * @param {MouseEvent} event The click event
-     */
-    function confirmClickSound(event) {
-        if(event.type !== "click" && event.isTrusted) { return; }
-        const foundElement = event.target;
-
-        const usuableLink = foundElement?.closest('a');
-        const usuableButton = foundElement?.closest('button');
-        if(usuableLink || usuableButton) { triggerClickSound(); }
     }
 
     /**
@@ -230,22 +204,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, navMenuOpen, audioClip, wakeLock, wakeLockIcon, wakeLockStatement,
+    return { pageView, navMenuOpen, wakeLock, wakeLockIcon, wakeLockStatement,
         toggleNavMenu, closeNavMenu, toggleWakeLock,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation
     }
 });
-
-/**
- * This function triggers a click sound effect.
- */
-export function triggerClickSound() {
-    const audioClip = useWebsiteDataStore().audioClip;
-    audioClip.currentTime = 0;
-    audioClip.play();
-}
 
 /**
  * This function sets the initial transition for a Nav Card.

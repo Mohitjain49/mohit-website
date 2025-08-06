@@ -66,6 +66,8 @@ library.add(
     FaIcons.faSquarePen,
     FaIcons.faSchoolFlag,
     FaIcons.faVolumeHigh,
+    FaIcons.faVolumeLow,
+    FaIcons.faVolumeOff,
     FaIcons.faVolumeXmark,
     FaIcons.faCircleXmark,
     FaIcons.faEarthAmericas,

@@ -1,6 +1,8 @@
 <template>
 <div id="skills" class="skills-section" v-observe-visibility="setSkillsTransitions">
-    <div class="skills-main-header">My Skills</div>
+    <div class="skills-main-header">
+        <RouterLink to="/skills/" title="See My Skills"> My Skills </RouterLink>
+    </div>
     <div class="skills-main-desc">
         Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
         by utilizing multiple programming languages, frontend frameworks, web services, and modules.
@@ -70,6 +72,13 @@ function setSkillsTransitions(isVisible) {
     width: 100%;
     padding-top: 50px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.skills-main-header a {
+    height: fit-content;
+    width: fit-content;
     font-size: 100px;
     font-family: 'Lexend', 'sans-serif';
     font-weight: bold;
@@ -80,6 +89,7 @@ function setSkillsTransitions(isVisible) {
         -1px 1px 0 var(--blue-zero),  /* Bottom-left shadow */
         1px 1px 0 var(--blue-zero);   /* Bottom-right shadow */
 }
+
 .skills-main-desc {
     font-size: 27px;
     font-family: 'Lexend', 'sans-serif';
@@ -92,7 +102,6 @@ function setSkillsTransitions(isVisible) {
     text-align: center;
     line-height: 35px;
 }
-
 .skills-entity-container {
     height: 550px;
     width: 100%;
@@ -127,7 +136,7 @@ function setSkillsTransitions(isVisible) {
         grid-column: span 1;
     }
 
-    .skills-main-header {
+    .skills-main-header a {
         font-size: 75px;
     }
     .skills-main-desc {
@@ -139,7 +148,7 @@ function setSkillsTransitions(isVisible) {
 }
 
 @media (max-width: 370px) {
-    .skills-main-header {
+    .skills-main-header a {
         font-size: 68px;
     }
 }
