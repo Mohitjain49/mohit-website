@@ -10,6 +10,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable.
      */
     const audioClip = ref(null);
+    const volumeInput = ref("50");
+    const volumeInputIcon = computed(() => {
+        const volumeInt = parseInt(volumeInput.value);
+        return ((volumeInt == 0) ? 'fa-volume-off' : ((volumeInt < 50) ? "fa-volume-low" : "fa-volume-high"));
+    })
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -73,6 +78,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioClip.value = new Audio(click_sound);
         audioClip.value.preload = "auto";
         audioClip.value.volume = 0.5;
+    }
+
+    /**
+     * This function changes the audio volume based on the "volumeInput" variable.
+     */
+    function changeAudioVolume() {
+        audioClip.value.volume = (parseInt(volumeInput.value) / 100);
     }
 
     /**
@@ -230,8 +242,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, navMenuOpen, audioClip, wakeLock, wakeLockIcon, wakeLockStatement,
-        toggleNavMenu, closeNavMenu, toggleWakeLock,
+    return { pageView, navMenuOpen,
+        audioClip, volumeInput, volumeInputIcon,
+        wakeLock, wakeLockIcon, wakeLockStatement,
+        toggleNavMenu, closeNavMenu, toggleWakeLock, changeAudioVolume,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation
