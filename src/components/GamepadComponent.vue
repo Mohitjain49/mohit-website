@@ -1,3 +1,8 @@
+<script setup>
+const gamepadStore = useGamepadStore();
+const audioStore = useAudioStore();
+</script>
+
 <template>
 <client-only>
     <font-awesome-icon v-if="gamepadStore.showCursor"
@@ -14,12 +19,16 @@
             <p> {{ (gamepadStore.maxCursorSpeed + 'px per frame') }} </p>
         </div>
     </Transition>
+
+    <Transition name="cursorSense-transition" fade>
+        <div v-if="audioStore.showVolumeGamepadMenu" class="custom-cursor-sensitivity volume">
+            <h1> Volume </h1>
+            <input type="range" v-model="audioStore.volumeInput" min="1" max="100" disabled />
+            <p> {{ (audioStore.volumeInput + '%') }} </p>
+        </div>
+    </Transition>
 </client-only>
 </template>
-
-<script setup>
-const gamepadStore = useGamepadStore();
-</script>
 
 <style scoped>
 #mohit-custom-cursor {
@@ -33,6 +42,7 @@ const gamepadStore = useGamepadStore();
     border-radius: 10px;
     transition: var(--default-transition);
 }
+
 .custom-cursor-sensitivity {
     position: fixed;
     left: calc(50% - 225px);
@@ -57,6 +67,15 @@ const gamepadStore = useGamepadStore();
         black 60px
     );
 }
+.custom-cursor-sensitivity.volume {
+    background: repeating-linear-gradient(
+        45deg,
+        grey 0,
+        grey 30px,
+        black 30px,
+        black 60px
+    );
+}
 
 .custom-cursor-sensitivity input {
     width: 175px;
@@ -75,6 +94,14 @@ const gamepadStore = useGamepadStore();
     color: white;
     font-family: 'Lexend', sans-serif;
     font-size: 17px;
+}
+
+.custom-cursor-sensitivity.volume h1 {
+    color: var(--lightning-yellow) !important;
+    border-color: var(--lightning-yellow) !important;
+}
+.custom-cursor-sensitivity.volume p {
+    color: var(--lightning-yellow) !important;
 }
 
 .cursorSense-transition-enter-active, .cursorSense-transition-leave-active {

@@ -58,12 +58,12 @@
                     </RouterLink>
                 </div>
                 <div class="mohit-navMenu-opt volume-meter">
-                    <FontAwesomeIcon :icon="webData.volumeInputIcon" />
+                    <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
                     <input type="range" min="0" max="100" title="Volume Meter for the click sound."
-                        v-model="webData.volumeInput"
-                        @input="webData.changeAudioVolume()"
+                        v-model="audioStore.volumeInput"
+                        @input="audioStore.changeAudioVolume()"
                     />
-                    <span> {{ (webData.volumeInput + '%') }} </span>
+                    <span> {{ (audioStore.volumeInput + '%') }} </span>
                 </div>
             </div>
         </Transition>
@@ -74,6 +74,7 @@
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
+const audioStore = useAudioStore();
 const route = useRoute();
 
 /**

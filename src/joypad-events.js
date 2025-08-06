@@ -33,6 +33,13 @@ joypad.on("button_press", (e) => {
     if(buttonIndex == 4) {
         useGamepadStore().startCursorSpeedInterval(false);
     }
+
+    if(buttonIndex == 7) {
+        useAudioStore().setVolumeInterval(1)
+    }
+    if(buttonIndex == 6) {
+        useAudioStore().setVolumeInterval(-1)
+    }
 });
 
 joypad.on("button_release", (e) => {
@@ -48,6 +55,9 @@ joypad.on("button_release", (e) => {
 
     if(buttonIndex == 4 || buttonIndex == 5) {
         useGamepadStore().stopCursorSpeedInterval();
+    }
+    if(buttonIndex == 6 || buttonIndex == 7) {
+        useAudioStore().stopVolumeInterval();
     }
 });
 
