@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
+import EnvTypes from 'vite-plugin-env-types';
 
 import swc from "unplugin-swc";
 import Info from "unplugin-info/vite";
@@ -30,6 +31,7 @@ export default defineConfig({
         vue({ include: [/\.vue$/, /\.md$/] }),
         swc.vite(),
         Info(),
+        EnvTypes({ dts: "./vite-env.d.ts" }),
         Components({
             dts: true,
             extensions: ['vue', 'md'],
