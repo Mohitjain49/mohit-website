@@ -2,6 +2,8 @@ import click_sound from "@/assets/sounds/click_sound_effect.wav";
 
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
+    const webData = useWebsiteDataStore();
+
     const showVolumeGamepadMenu = ref(false);
     var volumeInterval = null;
 
@@ -61,7 +63,7 @@ export const useAudioStore = defineStore("audio-store", () => {
      */
     function setVolumeInterval(amount = 1) {
         if(volumeInterval != null) { return; }
-        showVolumeGamepadMenu.value = true;
+        showVolumeGamepadMenu.value = (!webData.navMenuOpen);
 
         volumeInterval = setInterval(() => {
             const volumeInt = parseInt(volumeInput.value);

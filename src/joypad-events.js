@@ -6,11 +6,12 @@ joypad.set({
 
 joypad.on("connect", (e) => {
     useGamepadStore().startGamepadConnectedInterval();
+    console.log(e);
 })
 
 joypad.on("button_press", (e) => {
     const buttonIndex = parseInt(e.detail.buttonName.split('_')[1], 10);
-    // console.log(buttonIndex);
+    // if(import.meta.env.DEV) { console.log(buttonIndex); }
 
     if(buttonIndex == 12 || buttonIndex == 13) {
         useGamepadStore().setCursorYInterval(buttonIndex == 12);
@@ -19,7 +20,7 @@ joypad.on("button_press", (e) => {
         useGamepadStore().setCursorXInterval(buttonIndex == 14);
     }
 
-    if(buttonIndex == 0 || buttonIndex == 1) {
+    if(buttonIndex >= 0 && buttonIndex <= 3) {
         useGamepadStore().emitClick();
     }
     if(buttonIndex == 8 || buttonIndex == 9) {
@@ -35,16 +36,16 @@ joypad.on("button_press", (e) => {
     }
 
     if(buttonIndex == 7) {
-        useAudioStore().setVolumeInterval(1)
+        useAudioStore().setVolumeInterval(1);
     }
     if(buttonIndex == 6) {
-        useAudioStore().setVolumeInterval(-1)
+        useAudioStore().setVolumeInterval(-1);
     }
 });
 
 joypad.on("button_release", (e) => {
     const buttonIndex = parseInt(e.detail.buttonName.split('_')[1], 10);
-    // console.log(buttonIndex);
+    // if(import.meta.env.DEV) { console.log(buttonIndex); }
 
     if(buttonIndex == 12 || buttonIndex == 13) {
         useGamepadStore().stopCursorInterval("y")
@@ -63,7 +64,7 @@ joypad.on("button_release", (e) => {
 
 joypad.on("axis_move", (e) => {
     const event = e.detail;
-    // console.log(event);
+    // if(import.meta.env.DEV) { console.log(event); }
 
     if(event.stickMoved === "left_stick") {
         useGamepadStore().manageCustomCursor(event);

@@ -59,6 +59,7 @@ library.add(
     FaIcons.faGamepad,
     FaIcons.faArrowPointer,
     FaIcons.faHandPointer,
+    FaIcons.faICursor,
     FaIcons.faLock,
     FaIcons.faUnlock,
     FaIcons.faCodeBranch,
