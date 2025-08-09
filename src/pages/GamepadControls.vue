@@ -17,7 +17,7 @@
                     <tr><td>🕹️ Move Cursor</td><td>Left Stick</td></tr>
                     <tr><td>🧭 Move Cursor</td><td>D-pad</td></tr>
                     <tr><td>📜 Scroll Vertically</td><td>Right Stick</td></tr>
-                    <tr><td>🅰️/🅱️ Select</td><td>A / B Buttons</td></tr>
+                    <tr><td>🅰️/🅱️ Select</td><td>Right Buttons</td></tr>
                     <tr><td>⬅️ Decrease Cursor Speed</td><td>Left Bumper</td></tr>
                     <tr><td>➡️ Increase Cursor Speed</td><td>Right Bumper</td></tr>
                     <tr><td>📖 Navigation Menu</td><td>+ / -</td></tr>

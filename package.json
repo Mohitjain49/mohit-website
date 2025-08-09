@@ -27,7 +27,6 @@
     "joypad.js": "^2.3.5",
     "ofetch": "^1.4.1",
     "pinia": "^3.0.3",
-    "simple-keyboard": "^3.8.76",
     "uqr": "^0.1.2",
     "vue": "^3.5.18",
     "vue3-observe-visibility": "^1.0.3"

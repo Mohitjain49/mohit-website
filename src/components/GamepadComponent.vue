@@ -1,6 +1,13 @@
 <script setup>
 const gamepadStore = useGamepadStore();
 const audioStore = useAudioStore();
+
+/**
+ * This function cuts a string to ensure it has only 80 characters.
+ */
+function truncate(str = "") {
+    return ((str.length > 80) ? (str.substring(0, 77) + '...') : str);
+}
 </script>
 
 <template>
@@ -11,6 +18,12 @@ const audioStore = useAudioStore();
         :class="gamepadStore.cursorAnimation"
         :style="gamepadStore.customCursor"
     />
+
+    <Transition name="cursorTitle-transition" fade>
+        <div v-if="gamepadStore.cursorElementTitle !== ''" class="custom-cursor-titlePopup">
+            {{ truncate(gamepadStore.cursorElementTitle) }}
+        </div>
+    </Transition>
 
     <Transition name="cursorSense-transition" fade>
         <div v-if="gamepadStore.showCursorSpeedMenu" class="custom-cursor-sensitivity">
@@ -104,6 +117,25 @@ const audioStore = useAudioStore();
     color: var(--lightning-yellow) !important;
 }
 
+.custom-cursor-titlePopup {
+    position: fixed;
+    z-index: 9999;
+    bottom: 0px;
+    left: 0px;
+    background-color: black;
+    color: white;
+    width: fit-content;
+    height: fit-content;
+    padding: 2px 5px;
+    font-size: 11px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 .cursorSense-transition-enter-active, .cursorSense-transition-leave-active {
     transition: opacity 1.25s;
 }
@@ -111,6 +143,16 @@ const audioStore = useAudioStore();
     opacity: 0
 }
 .cursorSense-transition-leave-from {
+    opacity: 1;
+}
+
+.cursorTitle-transition-enter-active, .cursorTitle-transition-leave-active {
+    transition: opacity 0.75s;
+}
+.cursorTitle-transition-enter-from, .cursorTitle-transition-leave-to {
+    opacity: 0
+}
+.cursorTitle-transition-enter-to, .cursorTitle-transition-leave-from {
     opacity: 1;
 }
 

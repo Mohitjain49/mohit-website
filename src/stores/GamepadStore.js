@@ -38,6 +38,12 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     const cursorAnimation = computed(() => {
         return ((cursorClickElement.value != null) ? ['animate__animated', 'animate__pulse', 'animate__infinite'] : []);
     });
+    const cursorElementTitle = computed(() => {
+        return ((cursorClickElement.value != null) ?
+            (cursorClickElement.value instanceof HTMLAnchorElement ? cursorClickElement.value.href : cursorClickElement.value.title)
+            : ''
+        );
+    })
 
     /**
      * This function starts an interval for checking if any gamepad is connected or not.
@@ -263,7 +269,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         showCursorSpeedMenu.value = false;
     }
 
-    return { customCursor, showCursor, cursorIcon, cursorAnimation,
+    return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,
         maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
         emitClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
         startCursorSpeedInterval, stopCursorSpeedInterval,
