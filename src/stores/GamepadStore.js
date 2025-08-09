@@ -13,9 +13,11 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     var scrollInterval = null;
 
     /**
-     * @type {import('vue').Ref<HTMLButtonElement>} This is the element that the cursor is hovering over that can be clicked on.
+     * @type {import('vue').Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on.
      */
     const cursorClickElement = ref(null);
+    const cursorOnInput = ref(false);
+
     const showCursor = ref(false);
     const maxCursorSpeed = ref(10);
 
@@ -31,7 +33,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     });
 
     const cursorIcon = computed(() => {
-        return ((cursorClickElement.value != null) ? 'fa-hand-pointer' : 'fa-arrow-pointer');
+        return ((cursorClickElement.value != null) ? (cursorOnInput.value ? 'fa-i-cursor' : 'fa-hand-pointer') : 'fa-arrow-pointer');
     });
     const cursorAnimation = computed(() => {
         return ((cursorClickElement.value != null) ? ['animate__animated', 'animate__pulse', 'animate__infinite'] : []);
@@ -64,12 +66,19 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * This finds the element that the cursor is hovering over. If they hover over a button or a link, it returns that element.
      */
     function setCursorClickElement() {
-        const foundElement = document.elementFromPoint((cursorX.value + 10), (cursorY.value + 10));
+        const foundElement = document.elementFromPoint((cursorX.value + 15), (cursorY.value + 15));
         const usuableLink = foundElement?.closest('a');
         const usuableButton = foundElement?.closest('button');
+        const usuableTextArea = foundElement?.closest('textarea');
+
+        var usuableInput = foundElement?.closest('input');
+        usuableInput = ((usuableInput && usuableInput.type !== "range") ? usuableInput : undefined);
+        cursorOnInput.value = Boolean(usuableInput || usuableTextArea);
 
         if(usuableLink) { cursorClickElement.value = usuableLink; }
         else if(usuableButton) { cursorClickElement.value = usuableButton; }
+        else if(usuableInput) { cursorClickElement.value = usuableInput; }
+        else if(usuableTextArea) { cursorClickElement.value = usuableTextArea; }
         else { cursorClickElement.value = null; }
     }
 
@@ -80,7 +89,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         const element = cursorClickElement.value;
         if(!element) { return; }
 
-        element.click();
+        (cursorOnInput.value ? element.focus() : element.click());
         triggerClickSound();
         nextTick(() => { setCursorClickElement(); });
     }
@@ -92,7 +101,11 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     function setCustomCursor(visible = false) {
         document.body.style.cursor = (visible ? "none" : "");
         showCursor.value = visible;
-        if(!visible) { cursorClickElement.value = null; }
+
+        if(!visible) {
+            cursorClickElement.value = null;
+            cursorOnInput.value = false;
+        }
     }
 
     /**

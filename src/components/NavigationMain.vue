@@ -228,6 +228,7 @@ const FEATURE_BTNS = [
 }
 .mohit-navMenu-opt.volume-meter input {
     width: 35%;
+    cursor: pointer;
 }
 
 .mohit-navMenu-opt.volume-meter svg {
