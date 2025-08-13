@@ -84,9 +84,7 @@ onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jai
 
 const footerClass = computed(() => {
     const path = route.path;
-    return ((path === "/contact" || path === "/contact/") ? 'contact' :
-        ((-1 == MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) ? '' : 'main-page')
-    );
+    return ((-1 == MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) ? '' : 'main-page');
 })
 
 /**
@@ -136,16 +134,11 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
     height: 375px;
     border: none;
     padding-top: 25px;
+    z-index: 20;
 }
 #footer.main-page {
     border-top: 2px dashed var(--website-light-text);
     background-color: rgb(10, 10, 10);
-}
-#footer.contact {
-    position: absolute;
-    top: 100vh;
-    left: 0;
-    grid-column: span 2;
 }
 
 .footer-body {
@@ -245,9 +238,6 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
     #footer {
         height: 625px;
     }
-    #footer.contact {
-        grid-column: span 1;
-    }
     .footer-body {
         grid-template-columns: 1fr 1fr;
         left: 0px;
@@ -272,9 +262,6 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
 @media (max-width: 525px) {
     #footer {
         height: 515px;
-    }
-    #footer.contact {
-        z-index: 20;
     }
     .footer-body {
         height: 450px;

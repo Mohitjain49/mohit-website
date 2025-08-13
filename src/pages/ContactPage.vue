@@ -1,111 +1,117 @@
+<style scoped>
+@import "@/styles/contactpage.css";
+</style>
+
 <template>
 <client-only>
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
 
 <main id="contact-page" class="personal-web-body">
-    <div class="contact-me-box web-service">
-        <div class="contact-box-title-container center-flex-display">
-            <h1 class="gradient-text contact-box-title"> Contact Me </h1>
-        </div>
-        <div class="contact-box-desc">
-            <p v-html="CONTACT_ME_DESC"></p>
-        </div>
-
-        <div class="contact-box-content">
-            <div class="contact-input-tab">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Title</div>
-                </div>
-                <input class="contact-input-tab-textbox"
-                    v-model="msgTitle"
-                    @click="setAlertBox('')"
-                >
+    <div class="contact-boxes-container">
+        <div class="contact-me-box web-service">
+            <div class="contact-box-title-container center-flex-display">
+                <h1 class="gradient-text contact-box-title"> Contact Me </h1>
             </div>
-            <div class="contact-input-tab" style="height: calc(100% - 70px);">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">
-                        <span> Your Message </span>
-                        <client-only>
-                            <button @click="manageTTS()" :title="documentStore.ttsTitle">
-                                <font-awesome-icon :icon="documentStore.ttsIcon" />
-                            </button>
-                        </client-only>
+            <div class="contact-box-desc">
+                <p v-html="CONTACT_ME_DESC"></p>
+            </div>
+
+            <div class="contact-box-content">
+                <div class="contact-input-tab">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">Title</div>
                     </div>
+                    <input class="contact-input-tab-textbox"
+                        v-model="msgTitle"
+                        @click="setAlertBox('')"
+                    >
                 </div>
-                <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
-                    placeholder="Type your message here (minimum 50 characters)..."
-                    v-model="msgMain"
-                    @click="setAlertBox('')"
-                ></textarea>
-            </div>
-            <div class="contact-box-line"></div>
-
-            <div class="contact-input-tab">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Your Name</div>
+                <div class="contact-input-tab" style="height: calc(100% - 70px);">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">
+                            <span> Your Message </span>
+                            <client-only>
+                                <button @click="manageTTS()" :title="documentStore.ttsTitle">
+                                    <font-awesome-icon :icon="documentStore.ttsIcon" />
+                                </button>
+                            </client-only>
+                        </div>
+                    </div>
+                    <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
+                        placeholder="Type your message here (minimum 50 characters)..."
+                        v-model="msgMain"
+                        @click="setAlertBox('')"
+                    ></textarea>
                 </div>
-                <input class="contact-input-tab-textbox"
-                    placeholder="Mohit Jain"
-                    v-model="senderName"
-                    @click="setAlertBox('')"
-                >
-            </div>
-            <div class="contact-input-tab">
-                <div class="contact-input-tab-header-container">
-                    <div class="contact-input-tab-header">Your Email</div>
+                <div class="contact-box-line"></div>
+
+                <div class="contact-input-tab">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">Your Name</div>
+                    </div>
+                    <input class="contact-input-tab-textbox"
+                        placeholder="Mohit Jain"
+                        v-model="senderName"
+                        @click="setAlertBox('')"
+                    >
                 </div>
-                <input class="contact-input-tab-textbox"
-                    type="email" placeholder="example@example.com"
-                    v-model="senderEmail"
-                    @click="setAlertBox('')"
-                >
-            </div>
-            <div class="contact-box-buttons-container center-flex-display">
-                <div class="contact-input-tab-btn-container center-flex-display">
-                    <button class="contact-input-tab-btn center-flex-display"
-                        @click="sendEmail()"
-                        @mouseenter="webData.setHeartbeatAnimation"
-                        @mouseleave="webData.setHeartbeatAnimation"
-                        v-html="'Send Message'">
-                    </button>
+                <div class="contact-input-tab">
+                    <div class="contact-input-tab-header-container">
+                        <div class="contact-input-tab-header">Your Email</div>
+                    </div>
+                    <input class="contact-input-tab-textbox"
+                        type="email" placeholder="example@example.com"
+                        v-model="senderEmail"
+                        @click="setAlertBox('')"
+                    >
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="contact-me-box socials">
-        <div class="contact-box-title-container center-flex-display">
-            <div class="gradient-text contact-box-title">My Socials</div>
-        </div>
-        <div class="contact-box-desc">
-            <p v-html="MY_SOCIALS_DESC"></p>
-        </div>
-
-        <div class="contact-box-content">
-            <template v-for="(social, index) in SOCIALS">
-                <div class="social-tab" v-if="(index != 4)" :style="{ color: social.altColor }">
-                    <div class="social-tab-header"> {{ social.name }} </div>
-                    <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
-
-                    <div class="social-tab-btn-container">
-                        <button class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
-                            @mouseenter="setSocialBtnAnimation"
-                            @mouseleave="setSocialBtnAnimation">
-
-                            <span> {{ social.copyBtn }} </span>
-                            <client-only> <font-awesome-icon icon="fa-copy" /> </client-only>
+                <div class="contact-box-buttons-container center-flex-display">
+                    <div class="contact-input-tab-btn-container center-flex-display">
+                        <button class="contact-input-tab-btn center-flex-display"
+                            @click="sendEmail()"
+                            @mouseenter="webData.setHeartbeatAnimation"
+                            @mouseleave="webData.setHeartbeatAnimation"
+                            v-html="'Send Message'">
                         </button>
-                        <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
-                            @mouseenter="setSocialBtnAnimation"
-                            @mouseleave="setSocialBtnAnimation">
-
-                            <span> {{ social.linkBtn }} </span>
-                            <client-only> <font-awesome-icon :icon="social.linkIcon" /> </client-only>
-                        </a>
                     </div>
                 </div>
-            </template>
+            </div>
+        </div>
+
+        <div class="contact-me-box socials">
+            <div class="contact-box-title-container center-flex-display">
+                <div class="gradient-text contact-box-title">My Socials</div>
+            </div>
+            <div class="contact-box-desc">
+                <p v-html="MY_SOCIALS_DESC"></p>
+            </div>
+
+            <div class="contact-box-content">
+                <template v-for="(social, index) in SOCIALS">
+                    <div class="social-tab" v-if="(index != 4)" :style="{ color: social.altColor }">
+                        <div class="social-tab-header"> {{ social.name }} </div>
+                        <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
+
+                        <div class="social-tab-btn-container">
+                            <button class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
+                                @mouseenter="setSocialBtnAnimation"
+                                @mouseleave="setSocialBtnAnimation">
+
+                                <span> {{ social.copyBtn }} </span>
+                                <client-only> <font-awesome-icon icon="fa-copy" /> </client-only>
+                            </button>
+                            <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
+                                @mouseenter="setSocialBtnAnimation"
+                                @mouseleave="setSocialBtnAnimation">
+
+                                <span> {{ social.linkBtn }} </span>
+                                <client-only> <font-awesome-icon :icon="social.linkIcon" /> </client-only>
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
     <WebFooter />
@@ -313,7 +319,3 @@ const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, 
     getLinkString("https://aws.amazon.com/ses/", "Amazon Simple Email Service (SES)") + " to send an automatic email to me.";
 const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, LinkedIn, Discord, and Github.";
 </script>
-
-<style scoped>
-@import "@/styles/contactpage.css";
-</style>

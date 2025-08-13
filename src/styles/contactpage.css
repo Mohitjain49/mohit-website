@@ -1,10 +1,12 @@
 #contact-page {
     background: transparent;
+}
+.contact-boxes-container {
+    width: 100%;
+    height: fit-content;
+    min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-}
-.web-footer-contact {
-    grid-column: span 2;
 }
 
 .contact-me-box {
@@ -286,7 +288,7 @@
 }
 
 @media (max-width: 1050px) and (min-width: 526px) {
-    #contact-page {
+    .contact-boxes-container {
         grid-template-columns: 1fr;
     }
     .contact-me-box {
@@ -297,6 +299,8 @@
 @media (max-width: 525px) {
     #contact-page {
         padding-top: 70px;
+    }
+    .contact-boxes-container {
         grid-template-columns: 1fr;
     }
 
