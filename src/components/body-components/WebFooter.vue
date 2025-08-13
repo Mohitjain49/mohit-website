@@ -9,7 +9,8 @@
                 </RouterLink>
 
                 <RouterLink v-for="tab in MAIN_ROUTES" :to="(tab.path + '/')"
-                    :class="['footer-routes-opt', tab.extraClass]"
+                    :style="{ 'color': tab.color }"
+                    class="footer-routes-opt"
                     @click="scrollToTop(tab.path)">
 
                     <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
@@ -27,7 +28,7 @@
                     <client-only> <font-awesome-icon icon="fa-envelope" /> </client-only>
                     <span> {{ 'Email' }} </span>
                 </a>
-                <RouterLink v-for="tab in CONTACT_ROUTES" :to="tab.path" :class="['footer-routes-opt', tab.extraClass]">
+                <RouterLink v-for="tab in CONTACT_ROUTES" :to="tab.path" class="footer-routes-opt" :style="{ 'color': tab.color }">
                     <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
                     <span> {{ tab.name }} </span>
                 </RouterLink>
@@ -40,7 +41,8 @@
                 </RouterLink>
 
                 <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
-                    :class="['footer-routes-opt', tab.extraClass]"
+                    :style="{ 'color': tab.color }"
+                    class="footer-routes-opt"
                     @click="scrollToTop(tab.path)">
 
                     <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
@@ -55,7 +57,8 @@
                 </RouterLink>
 
                 <RouterLink v-for="tab in REPO_ROUTES" :to="tab.path"
-                    :class="['footer-routes-opt', tab.extraClass]"
+                    :style="{ 'color': tab.color }"
+                    class="footer-routes-opt"
                     @click="scrollToTop(tab.path)">
 
                     <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
@@ -96,34 +99,34 @@ function scrollToTop(routeStr = "/") {
 }
 
 const MAIN_ROUTES = [
-    { name: "My Skills", path: "/skills", icon: "fa-code", extraClass: "skills" },
-    { name: "My Experience", path: "/experience", icon: "fa-file-code", extraClass: "" },
-    { name: "My Projects", path: "/projects", icon: "fa-cubes", extraClass: "projects" },
-    { name: "My Resume", path: "/resume", icon: "fa-file-lines", extraClass: "" },
-    { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", extraClass: "fulton" },
+    { name: "My Skills", path: "/skills", icon: "fa-code", color: "var(--blue-two)" },
+    { name: "My Experience", path: "/experience", icon: "fa-file-code", color: "var(--website-text)" },
+    { name: "My Projects", path: "/projects", icon: "fa-cubes", color: "var(--globe-green)" },
+    { name: "My Resume", path: "/resume", icon: "fa-file-lines", color: "var(--website-text)" },
+    { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)" },
 ];
 
 const CONTACT_ROUTES = [
-    { name: "LinkedIn", path: "/linkedin", icon: "fa-brands fa-linkedin", extraClass: "linkedin" },
-    { name: "Discord", path: "/discord", icon: "fa-brands fa-discord", extraClass: "discord" },
-    { name: "GitHub", path: "/github", icon: "fa-brands fa-github", extraClass: "github" },
-    { name: "Steam", path: "/steam", icon: "fa-brands fa-steam", extraClass: "steam" },
+    { name: "LinkedIn", path: "/linkedin", icon: "fa-brands fa-linkedin", color: "#0072B1" },
+    { name: "Discord", path: "/discord", icon: "fa-brands fa-discord", color: "#5865F2" },
+    { name: "GitHub", path: "/github", icon: "fa-brands fa-github", color: "white" },
+    { name: "Steam", path: "/steam", icon: "fa-brands fa-steam", color: "#167eb1" },
 ];
 
 const EXTRA_ROUTES = [
-    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", extraClass: "skills" },
-    { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", extraClass: "wakelock" },
-    { name: "Install Website", path: "/install", icon: "fa-download", extraClass: "" },
-    { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", extraClass: "light" },
-    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", extraClass: "google" },
+    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-two)" },
+    { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
+    { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
+    { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", color: "var(--website-light-text)" },
+    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", color: "#4286F5" },
 ];
 
 const REPO_ROUTES = [
-    { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", extraClass: "sandbox" },
-    { name: "Commits", path: "/commits", icon: "fa-code-commit", extraClass: "github" }
+    { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", color: "var(--lightning-yellow)" },
+    { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" }
 ];
 
-const MAIN_PAGE_STYLE_ROUTES = ["/", "/search", "/search/", "/wakelock", "/wakelock/"];
+const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
 </script>
 
 <style scoped>
@@ -139,6 +142,9 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/search", "/search/", "/wakelock", "/wakel
     background-color: rgb(10, 10, 10);
 }
 #footer.contact {
+    position: absolute;
+    top: 100vh;
+    left: 0;
     grid-column: span 2;
 }
 
@@ -207,23 +213,15 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/search", "/search/", "/wakelock", "/wakel
     margin-bottom: 2px;
 }
 .footer-routes-header:hover {
-    border-color: var(--website-text);
+    border-color: inherit;
 }
 
 .footer-routes-header.light {
     color: var(--website-light-text);
 }
-.footer-routes-header.light:hover {
-    border-color: var(--website-light-text);
-}
-
 .footer-routes-header.white {
     color: white;
 }
-.footer-routes-header.white:hover {
-    border-color: white;
-}
-
 
 .footer-routes-opt {
     color: var(--website-text);
@@ -236,102 +234,11 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/search", "/search/", "/wakelock", "/wakel
     margin-left: 40px;
 }
 .footer-routes-opt:hover {
-    border-color: var(--website-text);
+    border-color: inherit;
 }
 .footer-routes-opt svg {
     width: 25px;
     margin-right: 8px;
-}
-
-.footer-routes-opt.light {
-    color: var(--website-light-text);
-}
-.footer-routes-opt.light:hover {
-    border-color: var(--website-light-text);
-}
-
-.footer-routes-opt.skills {
-    color: var(--blue-two);
-}
-.footer-routes-opt.skills:hover {
-    border-color: var(--blue-two);
-}
-
-.footer-routes-opt.projects {
-    color: var(--globe-green);
-}
-.footer-routes-opt.projects:hover {
-    border-color: var(--globe-green);
-}
-
-.footer-routes-opt.copyright {
-    color: var(--blue-cobalt);
-}
-.footer-routes-opt.copyright:hover {
-    border-color: var(--blue-cobalt);
-}
-
-.footer-routes-opt.wakelock {
-    color: var(--vibrant-flame);
-}
-.footer-routes-opt.wakelock:hover {
-    border-color: var(--vibrant-flame);
-}
-
-.footer-routes-opt.linkedin {
-    color: #0072B1;
-}
-.footer-routes-opt.linkedin:hover {
-    border-color: #0072B1;
-}
-
-.footer-routes-opt.discord {
-    color: #5865F2;
-}
-.footer-routes-opt.discord:hover {
-    border-color: #5865F2;
-}
-
-.footer-routes-opt.github {
-    color: white;
-}
-.footer-routes-opt.github:hover {
-    border-color: white;
-}
-
-.footer-routes-opt.gitlab {
-    color: #E24329;
-}
-.footer-routes-opt.gitlab:hover {
-    border-color: #E24329;
-}
-
-.footer-routes-opt.steam {
-    color: #167eb1;
-}
-.footer-routes-opt.steam:hover {
-    border-color: #167eb1;
-}
-
-.footer-routes-opt.fulton {
-    color: var(--fulton-green);
-}
-.footer-routes-opt.fulton:hover {
-    border-color: var(--fulton-green);
-}
-
-.footer-routes-opt.sandbox {
-    color: var(--lightning-yellow);
-}
-.footer-routes-opt.sandbox:hover {
-    border-color: var(--lightning-yellow);
-}
-
-.footer-routes-opt.google {
-    color: #4286F5;
-}
-.footer-routes-opt.google:hover {
-    border-color: #4286F5;
 }
 
 @media (max-width: 1050px) {
