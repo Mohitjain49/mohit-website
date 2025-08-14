@@ -8,6 +8,7 @@ import EnvTypes from 'vite-plugin-env-types';
 
 import swc from "unplugin-swc";
 import Info from "unplugin-info/vite";
+import imagemin from 'unplugin-imagemin/vite';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
@@ -31,6 +32,7 @@ export default defineConfig({
         vue({ include: [/\.vue$/, /\.md$/] }),
         swc.vite(),
         Info(),
+        imagemin(),
         EnvTypes({ dts: "./dts/vite-env.d.ts" }),
         Components({
             dts: './dts/components.d.ts',
