@@ -2,7 +2,7 @@
 <main class="personal-web-body">
     <div class="copyright-body">
         <h1 class="copyright-body-header">
-            <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
+            <font-awesome-icon icon="fa-copyright" />
             <span> {{ COPYRIGHT_TEXT }} </span>
         </h1>
         <h2 class="copyright-body-subheader"> {{ PROJECT_VERSION }} </h2>

@@ -5,7 +5,7 @@
         @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">
-            <client-only> <font-awesome-icon icon="fa-earth-americas" style="font-size: 80px;" /> </client-only>
+            <font-awesome-icon icon="fa-earth-americas" style="font-size: 80px;" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="globe_page" width="77.5%" draggable="false" />
@@ -18,7 +18,7 @@
                 <span> {{ module.title }} </span>
             </div>
             <div class="newCard-module">
-                <client-only> <font-awesome-icon icon="fa-brands fa-github" style="color: black" /> </client-only>
+                <font-awesome-icon icon="fa-brands fa-github" style="color: black" />
                 <span> GitHub </span>
             </div>
         </div>

@@ -1,36 +1,36 @@
 <template>
 <div :class="['document-widgets-container', (confirmBottomWidgets() ? 'bottom' : '')]">
     <button @click="docStore.downloadDoc()" :class="WIDGET_CLASSES" title="Download Document">
-        <client-only> <font-awesome-icon icon="fa-file-download" /> </client-only>
+        <font-awesome-icon icon="fa-file-download" />
     </button>
     <button @click="reloadPage()" :class="WIDGET_CLASSES" title="Reload Page">
-        <client-only> <font-awesome-icon icon="fa-rotate-right" /> </client-only>
+        <font-awesome-icon icon="fa-rotate-right" />
     </button>
 
     <template v-if="docStore.checkResumeRoute()">
         <RouterLink to="/resume" :class="WIDGET_CLASSES" title="Use Google Doc Viewer">
-            <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
+            <font-awesome-icon icon="fa-brands fa-google-drive" />
         </RouterLink>
         <RouterLink to="/resume/pdf" :class="WIDGET_CLASSES" title="Use Built-In PDF Viewer">
-            <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
+            <font-awesome-icon icon="fa-file-pdf" />
         </RouterLink>
         <RouterLink to="/resume/markdown" :class="WIDGET_CLASSES" title="Resume In Markdown Format">
-            <client-only> <font-awesome-icon icon="fa-brands fa-markdown" /> </client-only>
+            <font-awesome-icon icon="fa-brands fa-markdown" />
         </RouterLink>
     </template>
 
     <template v-if="!docStore.checkResumeRoute()">
         <RouterLink v-if="!docStore.checkPDFRoute()" :to="(FCS_CERTIFICATE_ROUTE + '/pdf')" :class="WIDGET_CLASSES" title="Use Built-In PDF Viewer">
-            <client-only> <font-awesome-icon icon="fa-file-pdf" /> </client-only>
+            <font-awesome-icon icon="fa-file-pdf" />
         </RouterLink>
         <RouterLink v-if="docStore.checkPDFRoute()" :to="FCS_CERTIFICATE_ROUTE" :class="WIDGET_CLASSES" title="Use Google Doc Viewer">
-            <client-only> <font-awesome-icon icon="fa-brands fa-google-drive" /> </client-only>
+            <font-awesome-icon icon="fa-brands fa-google-drive" />
         </RouterLink>
         <a :href="FCS_CERTIFICATE_LINKEDIN_POST" target="_blank" :class="WIDGET_CLASSES" title="See LinkedIn Post">
-            <client-only> <font-awesome-icon icon="fa-brands fa-linkedin" /> </client-only>
+            <font-awesome-icon icon="fa-brands fa-linkedin" />
         </a>
         <a :href="FCS_CAREER_INTERNSHIP_LINK" target="_blank" :class="WIDGET_CLASSES" title="FCS Career Internship Program">
-            <client-only> <font-awesome-icon icon="fa-school-flag" /> </client-only>
+            <font-awesome-icon icon="fa-school-flag" />
         </a>
     </template>
 </div>

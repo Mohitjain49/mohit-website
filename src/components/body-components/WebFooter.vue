@@ -4,7 +4,7 @@
         <div class="footer-body">
             <div class="footer-routes-column">
                 <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
-                    <client-only> <font-awesome-icon icon="fa-house" /> </client-only>
+                    <font-awesome-icon icon="fa-house" />
                     <span> Home Page </span>
                 </RouterLink>
 
@@ -13,30 +13,30 @@
                     class="footer-routes-opt"
                     @click="scrollToTop(tab.path)">
 
-                    <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                    <font-awesome-icon :icon="tab.icon" />
                     <span> {{ tab.name }} </span>
                 </RouterLink>
             </div>
 
             <div class="footer-routes-column right">
                 <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')">
-                    <client-only> <font-awesome-icon icon="fa-paper-plane" /> </client-only>
+                    <font-awesome-icon icon="fa-paper-plane" />
                     <span> Contact Me </span>
                 </RouterLink>
 
                 <a :href="SOCIALS[0].link" class="footer-routes-opt">
-                    <client-only> <font-awesome-icon icon="fa-envelope" /> </client-only>
+                   <font-awesome-icon icon="fa-envelope" />
                     <span> {{ 'Email' }} </span>
                 </a>
                 <RouterLink v-for="tab in CONTACT_ROUTES" :to="tab.path" class="footer-routes-opt" :style="{ 'color': tab.color }">
-                    <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                    <font-awesome-icon :icon="tab.icon" />
                     <span> {{ tab.name }} </span>
                 </RouterLink>
             </div>
 
             <div class="footer-routes-column extras">
                 <RouterLink to="/qrcode" class="footer-routes-header light" @click="scrollToTop('/qrcode')">
-                    <client-only> <font-awesome-icon icon="fa-qrcode" /> </client-only>
+                    <font-awesome-icon icon="fa-qrcode" />
                     <span> QR Codes </span>
                 </RouterLink>
 
@@ -45,14 +45,14 @@
                     class="footer-routes-opt"
                     @click="scrollToTop(tab.path)">
 
-                    <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                    <font-awesome-icon :icon="tab.icon" />
                     <span> {{ tab.name }} </span>
                 </RouterLink>
             </div>
 
             <div class="footer-routes-column extras right">
                 <RouterLink to="/repository" class="footer-routes-header white">
-                    <client-only> <font-awesome-icon icon="fa-code-branch" /> </client-only>
+                    <font-awesome-icon icon="fa-code-branch" />
                     <span> Repository </span>
                 </RouterLink>
 
@@ -61,7 +61,7 @@
                     class="footer-routes-opt"
                     @click="scrollToTop(tab.path)">
 
-                    <client-only> <font-awesome-icon :icon="tab.icon" /> </client-only>
+                    <font-awesome-icon :icon="tab.icon" />
                     <span> {{ tab.name }} </span>
                 </RouterLink>
             </div>
@@ -69,7 +69,7 @@
 
         <div class="footer-bottom">
             <RouterLink to="/copyright" class="copyright-statement">
-                <client-only> <font-awesome-icon icon="fa-copyright" /> </client-only>
+                <font-awesome-icon icon="fa-copyright" />
                 <span> {{ COPYRIGHT_TEXT }} </span>
             </RouterLink>
         </div>

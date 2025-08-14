@@ -7,7 +7,7 @@
 
 <Transition name="mohit-bookmark-transition" appear>
     <button @click="webData.toggleWakeLock()" v-if="(webData.wakeLock != null)" class="mohit-bookmark lock active" :title="WAKE_LOCK_BOOKMARK_TITLE">
-        <client-only> <font-awesome-icon icon="fa-lock" /> </client-only>
+        <font-awesome-icon icon="fa-lock" />
     </button>
 </Transition>
 </template>

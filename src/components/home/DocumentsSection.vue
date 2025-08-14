@@ -7,7 +7,7 @@
             @mouseleave="onIvueTabLeave('resume-tab')">
 
             <div class="documents-section-tab-header">
-                <client-only> <font-awesome-icon icon="fa-file-lines" /> </client-only>
+                <font-awesome-icon icon="fa-file-lines" />
                 <span> My Resume </span>
             </div>
             <p>
