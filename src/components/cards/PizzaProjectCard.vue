@@ -5,7 +5,7 @@
         @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">
-            <client-only> <font-awesome-icon icon="fa-pizza-slice" style="font-size: 80px;" /> </client-only>
+            <font-awesome-icon icon="fa-pizza-slice" style="font-size: 80px;" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="main_app_page" width="77.5%" draggable="false" style="border: 2px solid #8B0000;" />
@@ -18,7 +18,7 @@
                 <span> {{ name }} </span>
             </div>
             <div class="newCard-module">
-                <client-only> <font-awesome-icon icon="fa-brands fa-github" style="color: black" /> </client-only>
+                <font-awesome-icon icon="fa-brands fa-github" style="color: black" />
                 <span> GitHub </span>
             </div>
             <div class="newCard-module">

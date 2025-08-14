@@ -8,6 +8,7 @@ import EnvTypes from 'vite-plugin-env-types';
 
 import swc from "unplugin-swc";
 import Info from "unplugin-info/vite";
+import imagemin from 'unplugin-imagemin/vite';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
@@ -31,9 +32,10 @@ export default defineConfig({
         vue({ include: [/\.vue$/, /\.md$/] }),
         swc.vite(),
         Info(),
-        EnvTypes({ dts: "./vite-env.d.ts" }),
+        imagemin(),
+        EnvTypes({ dts: "./dts/vite-env.d.ts" }),
         Components({
-            dts: true,
+            dts: './dts/components.d.ts',
             extensions: ['vue', 'md'],
             resolvers: [
                 (name) => {
@@ -47,7 +49,7 @@ export default defineConfig({
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
             dirs: ['./src/stores'],
-            dts: true,
+            dts: './dts/auto-imports.d.ts',
             vueTemplate: true
         }),
         VitePWA({
@@ -56,7 +58,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.8.1",
+                cacheId: "v2.8.2",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav}'],
                 maximumFileSizeToCacheInBytes: 3000000
             },

@@ -7,7 +7,7 @@
     <div class="install-body">
         <div class="install-box">
             <button class="install-button" @click="installStore.installApp()">
-                <client-only> <font-awesome-icon :icon="installStore.installIcon" /> </client-only>
+                <font-awesome-icon :icon="installStore.installIcon" />
                 <span> {{ installStore.installText }} </span>
             </button>
             <a :href="VITE_PWA_WEBSITE" class="install-vite-pwa">

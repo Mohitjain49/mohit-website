@@ -7,7 +7,7 @@
     <div class="wakeLock-body">
         <div class="wakeLock-box">
             <button class="wakeLock-button" @click="webData.toggleWakeLock()">
-                <client-only> <font-awesome-icon :icon="webData.wakeLockIcon" /> </client-only>
+                <font-awesome-icon :icon="webData.wakeLockIcon" />
                 <span> {{ webData.wakeLockStatement }} </span>
             </button>
             <a :href="WAKE_LOCK_MDN_DOCS" class="wakeLock-mdn-docs">

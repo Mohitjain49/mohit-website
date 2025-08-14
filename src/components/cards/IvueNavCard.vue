@@ -18,11 +18,11 @@
                 <span> {{ module.title }} </span>
             </div>
             <div class="newCard-module">
-                <client-only> <font-awesome-icon icon="fa-laptop-code" class="web-dev" /> </client-only>
+                <font-awesome-icon icon="fa-laptop-code" class="web-dev" />
                 <span> Web Development </span>
             </div>
             <div class="newCard-module">
-                <client-only> <font-awesome-icon icon="fa-users-rectangle" style="color: #F58A27" /> </client-only>
+                <font-awesome-icon icon="fa-users-rectangle" style="color: #F58A27" />
                 <span> Mentoring Interns </span>
             </div>
         </div>

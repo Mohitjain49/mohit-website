@@ -31,11 +31,9 @@
                     <div class="contact-input-tab-header-container">
                         <div class="contact-input-tab-header">
                             <span> Your Message </span>
-                            <client-only>
-                                <button @click="manageTTS()" :title="documentStore.ttsTitle">
-                                    <font-awesome-icon :icon="documentStore.ttsIcon" />
-                                </button>
-                            </client-only>
+                            <button @click="manageTTS()" :title="documentStore.ttsTitle">
+                                <font-awesome-icon :icon="documentStore.ttsIcon" />
+                            </button>
                         </div>
                     </div>
                     <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
@@ -99,14 +97,14 @@
                                 @mouseleave="setSocialBtnAnimation">
 
                                 <span> {{ social.copyBtn }} </span>
-                                <client-only> <font-awesome-icon icon="fa-copy" /> </client-only>
+                                <font-awesome-icon icon="fa-copy" />
                             </button>
                             <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
                                 @mouseenter="setSocialBtnAnimation"
                                 @mouseleave="setSocialBtnAnimation">
 
                                 <span> {{ social.linkBtn }} </span>
-                                <client-only> <font-awesome-icon :icon="social.linkIcon" /> </client-only>
+                                <font-awesome-icon :icon="social.linkIcon" />
                             </a>
                         </div>
                     </div>
