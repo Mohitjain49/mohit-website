@@ -1,6 +1,6 @@
 {
   "name": "mohit-website",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "private": true,
   "type": "module",
   "scripts": {
@@ -43,7 +43,7 @@
     "vite": "^7.1.2",
     "vite-plugin-env-types": "^0.1.4",
     "vite-plugin-pwa": "^1.0.2",
-    "vite-ssg": "^28.0.0",
+    "vite-ssg": "^28.1.0",
     "vite-ssg-sitemap": "^0.10.0",
     "vue-router": "^4.5.1"
   }
