@@ -22,6 +22,10 @@
     </div>
     <WebFooter />
 </main>
+
+<button class="copyright-reloadWidget animate__animated animate__fadeInUp" @click="reloadPage()" title="Reload Page">
+    <FontAwesomeIcon icon="fa-rotate-right" />
+</button>
 </template>
 
 <script setup>
@@ -87,6 +91,29 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     font-size: 25px;
     font-family: 'Montserrat', 'Roboto', sans-serif;
     color: var(--website-text);
+}
+
+.copyright-reloadWidget {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: var(--website-text);
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: var(--default-transition), height 0.2s, width 0.2s;
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 22px;
+    z-index: 50;
+}
+.copyright-reloadWidget:hover {
+    background-color: var(--website-light-text);
 }
 
 @media (max-width: 600px) {
