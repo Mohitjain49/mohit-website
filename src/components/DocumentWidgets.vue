@@ -46,13 +46,6 @@ onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
 
 /**
- * This function reloads the website.
- */
-function reloadPage() {
-    window.location.reload();
-}
-
-/**
  * This returns true if the document widgets should sit at the bottom of the page.
  */
 function confirmBottomWidgets() {

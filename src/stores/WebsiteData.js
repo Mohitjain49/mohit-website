@@ -1,5 +1,3 @@
-import click_sound from "@/assets/sounds/click_sound_effect.wav";
-
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const controller = new AbortController();
     const gamepadStore = useGamepadStore();
@@ -211,6 +209,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         addFlashAnimation, setPulseLoopAnimation
     }
 });
+
+/**
+ * This function reloads the website.
+ */
+export function reloadPage() {
+    window.location.reload();
+}
 
 /**
  * This function sets the initial transition for a Nav Card.
