@@ -59,8 +59,10 @@ export default defineConfig({
 
             workbox: {
                 cacheId: "v2.8.3",
-                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav}'],
-                maximumFileSizeToCacheInBytes: 3000000
+                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt}'],
+                maximumFileSizeToCacheInBytes: 3000000,
+                navigateFallback: "/index.html",
+                navigateFallbackDenylist: [/\.xml$/, /\.txt$/]
             },
 
             manifest: {
