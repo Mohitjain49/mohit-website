@@ -25,6 +25,19 @@
                 We teach website design and development skills to these interns via interactive learning. 
             </p>
         </RouterLink>
+        <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab"
+            @mouseenter="onIvueTabHover('sitemap-tab')"
+            @mouseleave="onIvueTabLeave('sitemap-tab')">
+
+            <div class="documents-section-tab-header">
+                <font-awesome-icon icon="fa-sitemap" />
+                <span> Sitemap.xml File </span>
+            </div>
+            <p>
+                This will direct you to the sitemap.xml file for this website. 
+                Feel Free to take a look at it!
+            </p>
+        </a>
     </div>
 </div>
 </template>
@@ -41,18 +54,20 @@ function setInitTranstions(isVisible) {
     var rightAnimation = "animate__lightSpeedInRight";
 
     if(window.innerWidth <= 450) {
-        leftAnimation = "animate__flipInX";
-        rightAnimation = "animate__flipInX";
+        leftAnimation = "animate__fadeIn";
+        rightAnimation = "animate__fadeIn";
     }
 
     document.getElementById('documents-section-title').classList.add("animate__animated", leftAnimation);
     document.getElementById('resume-tab').classList.add("animate__animated", rightAnimation);
     document.getElementById('fcs-certificate-tab').classList.add("animate__animated", leftAnimation);
+    document.getElementById('sitemap-tab').classList.add("animate__animated", rightAnimation);
 
     setTimeout(() => {
-        document.getElementById('documents-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
-        document.getElementById('resume-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
-        document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
+        document.getElementById('documents-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('resume-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('sitemap-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
     }, 800);
 }
 
@@ -100,7 +115,7 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
 
 .documents-section-tabs-container {
     width: 100%;
-    height: 400px;
+    height: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -164,6 +179,14 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
     box-shadow: 0px 0px 12px 12px rgba(126, 90, 0, 0.25);
 }
 
+.documents-section-tab#sitemap-tab {
+    color: lightgrey;
+    border-color: lightgray;
+}
+.documents-section-tab#sitemap-tab:hover {
+    box-shadow: 0px 0px 12px 12px rgba(211, 211, 211, 0.25);
+}
+
 @media (max-width: 975px) {
     .documents-section-tab p {
         font-size: 17px;
@@ -174,7 +197,7 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
         font-size: 80px;
     }
     .documents-section-tabs-container {
-        height: 400px;
+        height: 600px;
     }
     .documents-section-tab {
         height: 150px;

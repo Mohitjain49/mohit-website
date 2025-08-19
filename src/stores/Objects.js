@@ -27,6 +27,7 @@ export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/
 export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
 export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
 export const PERSONAL_RESUME_LINK = "https://www.mohit-jain.com/Mohit_Jain_Resume.pdf";
+export const PERSONAL_SITEMAP_LINK = "https://www.mohit-jain.com/sitemap.xml";
 
 export const MND_PROJECT_LINK = "https://mnd.mohit-jain.com/";
 export const PERSONAL_GLOBE_LINK = "https://mohitjain49.github.io/globe/";
