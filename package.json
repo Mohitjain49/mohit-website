@@ -1,16 +1,15 @@
 {
   "name": "mohit-website",
-  "version": "2.8.3",
+  "version": "2.8.4",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite-ssg build && npm run postbuild",
+    "build": "vite-ssg build && node scripts/postbuild.mjs",
     "preview": "vite preview",
     "open": "vite --open",
     "open:preview": "vite preview --open",
     "open:build": "npm run build && npm run open:preview",
-    "postbuild": "node scripts/postbuild.mjs",
     "update": "npx npm-check-updates"
   },
   "dependencies": {
@@ -37,7 +36,6 @@
     "unplugin-auto-import": "^20.0.0",
     "unplugin-imagemin": "^0.6.9",
     "unplugin-info": "^1.2.4",
-    "unplugin-swc": "^1.5.5",
     "unplugin-vue-components": "^29.0.0",
     "unplugin-vue-markdown": "^29.1.0",
     "vite": "^7.1.2",

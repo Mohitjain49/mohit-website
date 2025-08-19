@@ -83,8 +83,8 @@ function setInitTranstions(isVisible) {
     var rightAnimation = "animate__lightSpeedInRight";
 
     if(window.innerWidth <= 450) {
-        leftAnimation = "animate__flipInX";
-        rightAnimation = "animate__flipInX";
+        leftAnimation = "animate__fadeIn";
+        rightAnimation = "animate__fadeIn";
     }
 
     document.getElementById('ivue-section-title').classList.add("animate__animated", leftAnimation);
@@ -95,12 +95,12 @@ function setInitTranstions(isVisible) {
     document.getElementById('florida-man-tab').classList.add("animate__animated", rightAnimation);
 
     setTimeout(() => {
-        document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
-        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
-        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
-        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
-        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__flipInX");
-        document.getElementById('florida-man-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__flipInX");
+        document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('florida-man-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
     }, ANIMATE_DURATION)
 }
 

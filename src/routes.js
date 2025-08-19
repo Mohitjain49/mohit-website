@@ -46,10 +46,13 @@ const REDIRECT_PAGES = [
         title: "Mohit Jain | Worlds iVue", desc: "This link will redirect you to Worlds iVue."
     },
 
-    { path: "/commits", link: PERSONAL_WEBSITE_COMMITS_LINK, title: "Mohit Jain | Commits", desc: "This is the commit history for my website." },
+    { path: "/commits", link: PERSONAL_WEBSITE_COMMITS_LINK, title: "Mohit Jain | Commits", desc: "This link will direct you to my website's commit history." },
+    { path: "/sitemap", link: PERSONAL_SITEMAP_LINK, title: "Mohit Jain | Sitemap", desc: "This link will direct you to my website's sitemap." },
+
     { path: "/globe", link: PERSONAL_GLOBE_LINK, title: "Mohit Jain - My Globe", desc: "This link will direct you to my personal globe." },
     { path: "/mnd", link: MND_PROJECT_LINK, title: "MND - Mapping Neurodivergence", desc: ("This link will direct you to " + MND_PROJECT_LINK + ".") },
     { path: "/pizza", link: PIZZA_WEBSITE_LINK, title: "Mohit Jain - Pizza Project", desc: "This link will direct you to my pizza project." },
+
     { path: "/ivue", link: MAIN_IVUE_WEBSITE_LINK, title: "iVue - iVue The World", desc: "This link will redirect you to the Main iVue Website." },
     { path: "/ivuemedia", link: IVUE_MEDIA_WEBSITE_LINK, title: "iVue Media", desc: "This link will redirect you to the iVue Media Website." },
     { path: "/ivuerobotics", link: IVUE_ROBOTICS_WEBSITE_LINK, title: "iVue Robotics", desc: "This link will redirect you to the iVue Robotics Website." },
@@ -121,6 +124,7 @@ export const personalRoutes = [
     getRedirectRouteRecord("/repo"),
     getRedirectRouteRecord("/code"),
     getRedirectRouteRecord("/commits"),
+    getRedirectRouteRecord("/sitemap"),
 
     getRedirectRouteRecord("/globe"),
     getRedirectRouteRecord("/mnd"),

@@ -25,7 +25,7 @@
                 </RouterLink>
 
                 <a :href="SOCIALS[0].link" class="footer-routes-opt">
-                   <font-awesome-icon icon="fa-envelope" />
+                    <font-awesome-icon icon="fa-envelope" />
                     <span> {{ 'Email' }} </span>
                 </a>
                 <RouterLink v-for="tab in CONTACT_ROUTES" :to="tab.path" class="footer-routes-opt" :style="{ 'color': tab.color }">
@@ -121,7 +121,8 @@ const EXTRA_ROUTES = [
 
 const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", color: "var(--lightning-yellow)" },
-    { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" }
+    { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" },
+    { name: "Sitemap", path: "/sitemap", icon: "fa-sitemap", color: "lightgrey" }
 ];
 
 const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];

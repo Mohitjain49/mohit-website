@@ -72,6 +72,7 @@ library.add(
     FaIcons.faVolumeXmark,
     FaIcons.faCircleXmark,
     FaIcons.faEarthAmericas,
+    FaIcons.faSitemap,
 
     FaBrands.faReact,
     FaBrands.faJs,
