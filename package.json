@@ -5,12 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite-ssg build && npm run postbuild",
+    "build": "vite-ssg build && node scripts/postbuild.mjs",
     "preview": "vite preview",
     "open": "vite --open",
     "open:preview": "vite preview --open",
     "open:build": "npm run build && npm run open:preview",
-    "postbuild": "node scripts/postbuild.mjs",
     "update": "npx npm-check-updates"
   },
   "dependencies": {

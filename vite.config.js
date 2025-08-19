@@ -20,7 +20,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/ivue", "/ivuemedia", "/ivuerobotics",
     "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/mohit-website/**", "/mohit-website", "/resume/download"
+    "/mohit-website/**", "/mohit-website", "/resume/download", "/sitemap"
 ];
 
 export default defineConfig({
@@ -57,10 +57,10 @@ export default defineConfig({
 
             workbox: {
                 cacheId: "v2.8.4",
-                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt}'],
+                globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
-                navigateFallbackDenylist: [/\.xml$/, /\.txt$/]
+                navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/]
             },
 
             manifest: {
@@ -91,7 +91,7 @@ export default defineConfig({
             generateSitemap({
                 hostname: "https://www.mohit-jain.com/",
                 exclude: SITEMAP_EXCLUDED_ROUTES,
-                readable: true
+                readable: false
             })
         }
     },
