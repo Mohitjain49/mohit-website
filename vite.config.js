@@ -6,7 +6,6 @@ import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
 import EnvTypes from 'vite-plugin-env-types';
 
-import swc from "unplugin-swc";
 import Info from "unplugin-info/vite";
 import imagemin from 'unplugin-imagemin/vite';
 
@@ -21,7 +20,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/ivue", "/ivuemedia", "/ivuerobotics",
     "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/mohit-website/**", "/mohit-website"
+    "/mohit-website/**", "/mohit-website", "/resume/download"
 ];
 
 export default defineConfig({
@@ -30,7 +29,6 @@ export default defineConfig({
     preview: { port: 4007 },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
-        swc.vite(),
         Info(),
         imagemin(),
         EnvTypes({ dts: "./dts/vite-env.d.ts" }),
@@ -58,7 +56,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.8.3",
+                cacheId: "v2.8.4",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

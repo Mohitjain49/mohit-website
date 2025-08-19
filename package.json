@@ -1,6 +1,6 @@
 {
   "name": "mohit-website",
-  "version": "2.8.3",
+  "version": "2.8.4",
   "private": true,
   "type": "module",
   "scripts": {
@@ -37,7 +37,6 @@
     "unplugin-auto-import": "^20.0.0",
     "unplugin-imagemin": "^0.6.9",
     "unplugin-info": "^1.2.4",
-    "unplugin-swc": "^1.5.5",
     "unplugin-vue-components": "^29.0.0",
     "unplugin-vue-markdown": "^29.1.0",
     "vite": "^7.1.2",
