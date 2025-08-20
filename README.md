@@ -4,6 +4,6 @@ This repository hosts my personal website that I use to show my portfolio of ski
 
 ## Links
   
-Main Website - https://mohit-jain.com/  
+Main Website - https://www.mohit-jain.com/  
 Repository - https://github.com/Mohitjain49/mohit-website/  
 Code Sandbox - https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website/
