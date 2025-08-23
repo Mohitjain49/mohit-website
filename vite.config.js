@@ -20,7 +20,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/ivue", "/ivuemedia", "/ivuerobotics",
     "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/mohit-website/**", "/mohit-website", "/resume/download", "/sitemap"
+    "/mohit-website/**", "/mohit-website", "/sitemap"
 ];
 
 export default defineConfig({

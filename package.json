@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "2.8.4",
+    "version": "2.9.0",
     "private": true,
     "type": "module",
     "scripts": {
@@ -20,6 +20,7 @@
         "@fortawesome/free-brands-svg-icons": "^7.0.0",
         "@fortawesome/free-solid-svg-icons": "^7.0.0",
         "@fortawesome/vue-fontawesome": "^3.1.1",
+        "@tato30/vue-pdf": "^1.11.4",
         "@tsparticles/slim": "^3.9.1",
         "@tsparticles/vue3": "^3.0.1",
         "animate.css": "^4.1.1",
@@ -27,7 +28,7 @@
         "ofetch": "^1.4.1",
         "pinia": "^3.0.3",
         "uqr": "^0.1.2",
-        "vue": "^3.5.18",
+        "vue": "^3.5.19",
         "vue3-observe-visibility": "^1.0.3"
     },
     "devDependencies": {

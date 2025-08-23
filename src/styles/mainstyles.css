@@ -1,4 +1,5 @@
 @import "animate.css";
+@import "@tato30/vue-pdf/style.css";
 
 :root {
     --body-height: calc(100vh - 50px);
@@ -111,14 +112,15 @@ button {
     padding-top: 70px;
     top: 0;
     left: 0;
-    height: calc(100% - 70px);
+    min-height: calc(100% - 70px);
+    height: fit-content;
     width: 100%;
     min-width: 350px;
     background-color: rgb(31, 31, 31);
 }
-#resume-container.markdown {
-    min-height: calc(100% - 70px);
-    height: fit-content;
+#resume-container.iframe-page {
+    height: calc(100% - 70px);
+    min-height: 0px;
 }
 
 .webpage-cover {
@@ -188,8 +190,17 @@ button {
 }
 
 /**
- * These are the styles for markdown components.
+ * These are the styles for markdown components and the Tato PDF component.
  */
+
+.linkAnnotation {
+    cursor: pointer;
+}
+#tato-pdf-resume {
+    margin: 0 auto;
+    width: calc(var(--total-scale-factor) * 612px) !important;
+    height: calc(var(--total-scale-factor) * 792px) !important;
+}
 
 .markdown-body {
     width: 1000px;

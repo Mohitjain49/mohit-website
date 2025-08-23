@@ -1,17 +1,28 @@
 <template>
 <DocumentWidgets />
-<main id="resume-container">
-    <iframe v-if="!docStore.checkPDFRoute()" :src="VIEWER_URL" height="100%" width="100%"></iframe>
-    <iframe v-if="docStore.checkPDFRoute()" src="/Mohit_Jain_Resume.pdf" height="100%" width="100%"></iframe>
-</main>
+<client-only>
+    <main id="resume-container">
+        <br>
+        <VuePDF id="tato-pdf-resume" :pdf="pdf"
+            text-layer annotation-layer
+            @annotation="onAnnotation"
+            :width="800" :height="1100"
+        />
+        <div class="markdown-doc-bottom"></div>
+    </main> 
+</client-only>
 </template>
 
 <script setup>
-const docStore = useDocumentStore();
-const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent(PERSONAL_RESUME_LINK)}&embedded=true`;
+import { VuePDF, usePDF } from '@tato30/vue-pdf'
+const { pdf } = usePDF('/Mohit_Jain_Resume.pdf')
 
-useHead(getMeta("Mohit Jain | My Resume", 
-    (docStore.checkPDFRoute() ? "resume/pdf" : "resume"),
+function onAnnotation(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
+    console.log(event);
+    window.open(event.data.url, "_blank");
+}
+
+useHead(getMeta("Mohit Jain | My Resume", "resume",
     "Feel free to take a look at my resume."
 ));
 </script>
