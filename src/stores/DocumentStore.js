@@ -45,7 +45,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
-        if(checkMarkdownRoute()) { return; }
+        if(!checkGoogleDocRoute() && !checkPDFRoute()) { return; }
 
         nextTick(() => {
             hideVerticalOverflow();
@@ -80,6 +80,13 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function checkPDFRoute() {
         return route.path.includes('pdf');
+    }
+
+    /**
+     * This function returns true if the user is using a google doc route.
+     */
+    function checkGoogleDocRoute() {
+        return route.path.includes('google');
     }
 
     /**
@@ -124,7 +131,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
         checkTTSAvailable, cancelTTS, startTTS, downloadDoc,
-        checkResumeRoute, checkPDFRoute, checkMarkdownRoute,
+        checkResumeRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute,
         hideVerticalOverflow, mountDocumentPage, unmountDocumentPage
     }
 });

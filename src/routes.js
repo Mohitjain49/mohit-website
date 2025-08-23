@@ -14,12 +14,14 @@ import CopyrightPage from "./pages/CopyrightPage.vue";
 import Resume from "./pages/resume/Resume.vue";
 import ResumeIframes from "./pages/resume/ResumeIframes.vue";
 import ResumeMarkdown from "./pages/resume/ResumeMarkdown.vue";
+
 import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
+import InternAppreciationIframe from "./pages/certifications/InternAppreciationIframe.vue";
+import GoogleMockupAssigment from "./pages/GoogleMockupAssigment.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
 import InvalidRoute from "./pages/InvalidRoute.vue";
-import GoogleMockupAssigment from "./pages/GoogleMockupAssigment.vue";
 
 /**
  * This is a list of redirect pages for the website.
@@ -100,7 +102,8 @@ export const personalRoutes = [
         path: FCS_CERTIFICATE_ROUTE,
         children: [
             { path: "", component: InternAppreciation },
-            { path: "pdf", component: InternAppreciation }
+            { path: "google", component: InternAppreciationIframe },
+            { path: "pdf", component: InternAppreciationIframe }
         ]
     },
     {

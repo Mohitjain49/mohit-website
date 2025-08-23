@@ -1,9 +1,9 @@
 <template>
 <DocumentWidgets />
 <client-only>
-    <main id="resume-container">
+    <main id="resume-container" v-if="pdf != null">
         <br>
-        <VuePDF id="tato-pdf-resume" :pdf="pdf"
+        <component :is="pdfComponent" id="tato-pdf-resume" :pdf="pdf.value"
             text-layer annotation-layer
             @annotation="onAnnotation"
             :width="800" :height="1100"
@@ -14,8 +14,15 @@
 </template>
 
 <script setup>
-import { VuePDF, usePDF } from '@tato30/vue-pdf'
-const { pdf } = usePDF('/Mohit_Jain_Resume.pdf')
+const pdfComponent = ref(null);
+const pdf = ref(null);
+
+onMounted(() => { nextTick(() => {
+    import('@tato30/vue-pdf').then((h) => {
+        pdfComponent.value = h.VuePDF;
+        pdf.value = h.usePDF('/Mohit_Jain_Resume.pdf').pdf;
+    });
+})});
 
 function onAnnotation(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
     console.log(event);
