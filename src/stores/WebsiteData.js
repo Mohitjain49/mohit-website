@@ -86,15 +86,23 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function onDocumentBodyClick(event = new MouseEvent("click")) {
         const navMenu = document.getElementById("mohit-navBar");
         const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        const documentMenu = document.getElementById("mohit-documentBar");
-        const documentMenuElements = Array.from(documentMenu.querySelectorAll('*'));
-
         const srcElement = event.target;
-        audioStore.confirmClickSound(event);
 
+        audioStore.confirmClickSound(event);
         const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
-        const elementInDocumentMenu = (documentMenu === srcElement || documentMenuElements.includes(srcElement));
-        if(!elementInDocumentMenu && !elementInNavMenu) { closeNavMenu(); }
+
+        if(documentStore.checkResumeRoute() || documentStore.checkFCSCertificateRoute()) {
+            var elementInDocumentMenu = false;
+            nextTick(() => {
+                const documentMenu = document.getElementById("mohit-documentBar");
+                const documentMenuElements = Array.from(documentMenu.querySelectorAll('*'));
+                elementInDocumentMenu = (documentMenu === srcElement || documentMenuElements.includes(srcElement));
+                if(!elementInDocumentMenu && !elementInNavMenu) { closeNavMenu(); }
+            });
+        } else {
+            audioStore.confirmClickSound(event);
+            if(!elementInNavMenu) { closeNavMenu(); }
+        }
     }
 
     /**
