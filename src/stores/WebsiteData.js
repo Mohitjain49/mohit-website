@@ -38,7 +38,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.setupClickAudio();
         nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
 
-        documentStore.checkTTSAvailable();
+        documentStore.mountDocumentStore();
         installStore.mountInstallStore();
         resizePageComponents();
 

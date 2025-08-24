@@ -31,8 +31,8 @@
                     <div class="contact-input-tab-header-container">
                         <div class="contact-input-tab-header">
                             <span> Your Message </span>
-                            <button @click="manageTTS()" :title="documentStore.ttsTitle">
-                                <font-awesome-icon :icon="documentStore.ttsIcon" />
+                            <button @click="manageTTS()" :title="audioStore.ttsTitle">
+                                <font-awesome-icon :icon="audioStore.ttsIcon" />
                             </button>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
 <script setup>
 import { ofetch } from 'ofetch';
 const webData = useWebsiteDataStore();
-const documentStore = useDocumentStore();
+const audioStore = useAudioStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 
 const alertBoxText = ref("");
@@ -248,10 +248,10 @@ function getAPIErrorRedirect() {
  * This function manages TTS with the message.
  */
 function manageTTS() {
-    if(documentStore.ttsPlaying) {
-        documentStore.cancelTTS();
+    if(audioStore.ttsPlaying) {
+        audioStore.cancelTTS();
     } else {
-        documentStore.startTTS(msgMain.value);
+        audioStore.startTTS(msgMain.value);
     }
 }
 

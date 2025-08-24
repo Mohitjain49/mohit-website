@@ -3,26 +3,19 @@ import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Ful
 
 export const useDocumentStore = defineStore("document-store", () => {
     const route = useRoute();
-    const ttsAvailable = ref(false);
+    const customPdfWidth = ref(800);
+    const customPdfHeight = ref(1100);
+    const customPdfScaleFactor = ref(1.375);
+
+    const customPdfMaxWidth = ref(800);
+    const customPdfMinWidth = ref(320);
 
     /**
-     * @type {SpeechSynthesisUtterance} This is the utterance for the speech synthesis.
+     * @type {import('vue').ShallowRef<import('vue').Component>} The VuePDF component dynamically imported for the website.
      */
-    var ttsUtterance = null;
-    const ttsPlaying = ref(false);
-
-    const ttsIcon = computed(() => {
-        return ((ttsAvailable.value && !ttsPlaying.value) ? 'fa-volume-high' : 'fa-volume-xmark');
-    });
-    const ttsTitle = computed(() => {
-        if(!ttsAvailable.value) {
-            return "Text To Speech is Not Available.";
-        } else if(ttsPlaying.value) {
-            return "Stop Playing Message.";
-        } else {
-            return "Play Your Message!";
-        }
-    });
+    const pdfComponent = shallowRef(null);
+    const resumePdfObj = ref(null);
+    const fultonInternshipAppreciationPdfObj = ref(null);
 
     /**
      * This function downloads a document for the visitor to see.
@@ -41,16 +34,33 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function mounts the document store for the website.
+     */
+    function mountDocumentStore() {
+        nextTick(() => {
+            import('@tato30/vue-pdf').then((result) => {
+                pdfComponent.value = result.VuePDF;
+                resumePdfObj.value = result.usePDF("/Mohit_Jain_Resume.pdf").pdf;
+                fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025).pdf;
+            });
+        })
+    }
+
+    /**
      * This function mounts a page that hosts a document.
      */
     function mountDocumentPage() {
         initWebData();
-        if(!checkGoogleDocRoute() && !checkPDFRoute()) { return; }
-
-        nextTick(() => {
-            hideVerticalOverflow();
-            window.addEventListener("resize", hideVerticalOverflow);
-        });
+        if(checkGoogleDocRoute() || checkPDFRoute()) {
+            nextTick(() => {
+                hideVerticalOverflow();
+                window.addEventListener("resize", hideVerticalOverflow);
+            });
+        } else if(!checkMarkdownRoute()) {
+            nextTick(() => {
+                mountCustomDocumentPage(800, 320, (checkResumeRoute() ? 1.375 : 0.79875));
+            })
+        }
     }
 
     /**
@@ -59,6 +69,22 @@ export const useDocumentStore = defineStore("document-store", () => {
     function unmountDocumentPage() {
         document.body.style.overflowY = "";
         window.removeEventListener("resize", hideVerticalOverflow);
+        window.removeEventListener("resize", setPdfSize);
+    }
+
+    /**
+     * This mounts the custom document page for the 
+     * @param {Number} minWidth The Minimum width for the custom pdf.
+     * @param {Number} maxWidth The Maximum width for the custom pdf.
+     * @param {Number} scaleFactor the scale factor to get height pixels.
+     */
+    function mountCustomDocumentPage(maxWidth = 800, minWidth = 320, scaleFactor = 1.375) {
+        customPdfMaxWidth.value = maxWidth;
+        customPdfMinWidth.value = minWidth;
+        customPdfScaleFactor.value = scaleFactor;
+
+        setPdfSize();
+        window.addEventListener("resize", setPdfSize);
     }
 
     /**
@@ -66,6 +92,14 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function hideVerticalOverflow() {
         document.body.style.overflowY = "hidden";
+    }
+
+    /**
+     * Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf.
+     */
+    function setPdfSize() {
+        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (window.innerWidth - 30)));
+        customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
     }
 
     /**
@@ -96,42 +130,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         return (route.path.includes('markdown') || route.path.includes('md'));
     }
 
-    /**
-     * This sets whether or not speech synthesis is available for this browser.
-     */
-    function checkTTSAvailable() {
-        ttsAvailable.value = ('speechSynthesis' in window);
-    }
-
-    /**
-     * this function stops TTS from continuing.
-     */
-    function cancelTTS() {
-        if(!ttsAvailable.value) { return; }
-        window.speechSynthesis.cancel();
-        ttsUtterance = null;
-        ttsPlaying.value = false;
-    }
-
-    /**
-     * This function starts a utterance of the current text.
-     * @param {String} text The text for the utterance.
-     */
-    function startTTS(text = "") {
-        if(!ttsAvailable.value) { return; }
-        cancelTTS();
-        ttsUtterance = new SpeechSynthesisUtterance(text);
-
-        ttsUtterance.onend = function() { cancelTTS(); };
-        ttsUtterance.onerror = function() { cancelTTS(); };
-
-        window.speechSynthesis.speak(ttsUtterance);
-        ttsPlaying.value = true;
-    }
-
-    return { ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
-        checkTTSAvailable, cancelTTS, startTTS, downloadDoc,
-        checkResumeRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute,
-        hideVerticalOverflow, mountDocumentPage, unmountDocumentPage
+    return { customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
+        pdfComponent, resumePdfObj, fultonInternshipAppreciationPdfObj,
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage, hideVerticalOverflow, setPdfSize,
+        checkResumeRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute, downloadDoc
     }
 });

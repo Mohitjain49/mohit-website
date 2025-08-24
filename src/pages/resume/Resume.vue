@@ -1,12 +1,14 @@
 <template>
 <DocumentWidgets />
 <client-only>
-    <main id="resume-container" v-if="pdf != null">
+    <main id="resume-container" v-if="documentStore.resumePdfObj != null">
         <br>
-        <component :is="pdfComponent" id="tato-pdf-resume" :pdf="pdf.value"
+        <component :is="documentStore.pdfComponent" id="tato-pdf-resume"
+            :pdf="documentStore.resumePdfObj.value"
             text-layer annotation-layer
             @annotation="onAnnotation"
-            :width="800" :height="1100"
+            :width="documentStore.customPdfWidth"
+            :height="documentStore.customPdfHeight"
         />
         <div class="markdown-doc-bottom"></div>
     </main> 
@@ -14,18 +16,12 @@
 </template>
 
 <script setup>
-const pdfComponent = ref(null);
-const pdf = ref(null);
+const documentStore = useDocumentStore();
 
-onMounted(() => { nextTick(() => {
-    import('@tato30/vue-pdf').then((h) => {
-        pdfComponent.value = h.VuePDF;
-        pdf.value = h.usePDF('/Mohit_Jain_Resume.pdf').pdf;
-    });
-})});
-
+/**
+ * This function is triggered whenever someone clicks on a link on teh custom PDF.
+ */
 function onAnnotation(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
-    console.log(event);
     window.open(event.data.url, "_blank");
 }
 
