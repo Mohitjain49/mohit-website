@@ -48,6 +48,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("scroll", () => { onWindowScroll(); }, { signal });
         window.addEventListener("mousemove", () => { gamepadStore.setCustomCursor(false); }, { signal });
+        window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
@@ -111,6 +112,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function onWindowScroll() {
         closeNavMenu();
         gamepadStore.setCursorClickElement();
+    }
+
+    /**
+     * This function handles unhandled rejections.
+     */
+    function onUnhandledRejection(event) {
+        if(event.reason?.name === "AbortException") {
+            event.preventDefault();
+        }
     }
 
     /**
