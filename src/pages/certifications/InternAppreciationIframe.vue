@@ -1,5 +1,5 @@
 <template>
-<DocumentWidgets />
+<DocumentNavigation />
 <main id="resume-container" class="iframe-page">
     <iframe v-if="docStore.checkGoogleDocRoute()" :src="VIEWER_URL" height="100%" width="100%" style="height: calc(100% - 75px)"></iframe>
     <iframe v-if="docStore.checkPDFRoute()" src="/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf" height="100%" width="100%"></iframe>

@@ -39,6 +39,7 @@ library.add(
     FaIcons.faCode,
     FaIcons.faFilePdf,
     FaIcons.faFileDownload,
+    FaIcons.faPrint,
     FaIcons.faCopy,
     FaIcons.faEnvelope,
     FaIcons.faPhone,

@@ -34,6 +34,14 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function opens the browser's print doucment for the visitor.
+     */
+    function printDoc() {
+        const win = window.open(checkResumeRoute() ? Mohit_Jain_Resume : Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
+        win.addEventListener("load", () => { win.print(); });
+    }
+
+    /**
      * This function mounts the document store for the website.
      */
     function mountDocumentStore() {
@@ -110,6 +118,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function returns true if the user is looking at any certificate page on the website.
+     */
+    function checkFCSCertificateRoute() {
+        return route.path.includes(FCS_CERTIFICATE_ROUTE);
+    }
+
+    /**
      * This function returns true if the user is using a pdf route.
      */
     function checkPDFRoute() {
@@ -131,8 +146,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
-        pdfComponent, resumePdfObj, fultonInternshipAppreciationPdfObj,
+        pdfComponent, resumePdfObj, fultonInternshipAppreciationPdfObj, downloadDoc, printDoc,
         mountDocumentStore, mountDocumentPage, unmountDocumentPage, hideVerticalOverflow, setPdfSize,
-        checkResumeRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute, downloadDoc
+        checkResumeRoute, checkFCSCertificateRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute
     }
 });

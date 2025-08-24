@@ -1,5 +1,5 @@
 <template>
-<DocumentWidgets />
+<DocumentNavigation />
 <main id="resume-container">
     <br>
     <ResumeMarkdownComponent />

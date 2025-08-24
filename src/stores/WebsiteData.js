@@ -12,10 +12,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * If it equals 2, it is on phone mode, or the screen width is at most 600px.
      */
     const pageView = ref(0);
-    const navMenuOpen = ref(false);
+    const menuOpen = ref(-1);
 
     const wakeLockAvailable = ref(false);
     const wakeLock = ref(null);
+
+    const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
+    const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
 
     const wakeLockIcon = computed(() => {
         return (wakeLockAvailable.value ? ((wakeLock.value == null) ? 'fa-lock' : 'fa-unlock') : 'fa-ban');
@@ -83,10 +86,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function onDocumentBodyClick(event = new MouseEvent("click")) {
         const navMenu = document.getElementById("mohit-navBar");
         const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        const srcElement = event.target;
+        const documentMenu = document.getElementById("mohit-documentBar");
+        const documentMenuElements = Array.from(documentMenu.querySelectorAll('*'));
 
+        const srcElement = event.target;
         audioStore.confirmClickSound(event);
-        if(navMenu !== srcElement && !navMenuElements.includes(srcElement)) { closeNavMenu(); }
+
+        const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
+        const elementInDocumentMenu = (documentMenu === srcElement || documentMenuElements.includes(srcElement));
+        if(!elementInDocumentMenu && !elementInNavMenu) { closeNavMenu(); }
     }
 
     /**
@@ -118,14 +126,21 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * The toggles the status of the home navigation menu.
      */
     function toggleNavMenu() {
-        navMenuOpen.value = !navMenuOpen.value;
+        menuOpen.value = ((menuOpen.value == 0) ? -1 : 0);
+    }
+
+    /**
+     * The toggles the status of the document menu.
+     */
+    function toggleDocumentMenu() {
+        menuOpen.value = ((menuOpen.value == 1) ? -1 : 1);
     }
 
     /**
      * This function closes the Navigation Menu.
      */
     function closeNavMenu() {
-        navMenuOpen.value = false;
+        menuOpen.value = -1;
     }
 
     /**
@@ -202,8 +217,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, navMenuOpen, wakeLock, wakeLockIcon, wakeLockStatement,
-        toggleNavMenu, closeNavMenu, toggleWakeLock,
+    return { pageView, menuOpen, navMenuOpen, documentMenuOpen,
+        wakeLock, wakeLockIcon, wakeLockStatement,
+        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation

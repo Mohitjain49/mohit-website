@@ -1,5 +1,5 @@
 <template>
-<DocumentWidgets />
+<DocumentNavigation />
 <client-only>
     <main id="resume-container" v-if="documentStore.fultonInternshipAppreciationPdfObj != null">
         <br>
@@ -9,7 +9,10 @@
             :height="documentStore.customPdfHeight"
         />
         <div class="markdown-doc-bottom"></div>
-    </main> 
+    </main>
+    <div id="resume-container" class="center-flex-display" v-else>
+        <div class="loading-spinner"></div>
+    </div>
 </client-only>
 </template>
 
