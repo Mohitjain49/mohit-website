@@ -1,5 +1,5 @@
 <template>
-<main id="resume-container" class="markdown">
+<main id="resume-container">
     <br>
     <GoogleMockupAssignmentComponent />
     <br>
@@ -7,6 +7,7 @@
 </template>
 
 <script setup>
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Google Mockup Assignment", "google-mockup-assignment",
     "This is a simple guide I give to new frontend developers to introduce them to Vue.js development."
 ));

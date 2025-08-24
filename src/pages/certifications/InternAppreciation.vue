@@ -1,17 +1,25 @@
 <template>
-<DocumentWidgets />
-<main id="resume-container">
-    <iframe v-if="!docStore.checkPDFRoute()" :src="VIEWER_URL" height="100%" width="100%"></iframe>
-    <iframe v-if="docStore.checkPDFRoute()" src="/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf" height="100%" width="100%"></iframe>
-</main>
+<DocumentNavigation />
+<client-only>
+    <main id="resume-container" v-if="documentStore.fultonInternshipAppreciationPdfObj != null">
+        <br>
+        <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
+            :pdf="documentStore.fultonInternshipAppreciationPdfObj.value"
+            :width="documentStore.customPdfWidth"
+            :height="documentStore.customPdfHeight"
+        />
+        <div class="markdown-doc-bottom"></div>
+    </main>
+    <div id="resume-container" class="center-flex-display" v-else>
+        <div class="loading-spinner"></div>
+    </div>
+</client-only>
 </template>
 
 <script setup>
-const docStore = useDocumentStore();
-const VIEWER_URL = `https://docs.google.com/gview?url=${encodeURIComponent(FCS_CERTIFICATE_LINK)}&embedded=true`;
-
+const documentStore = useDocumentStore();
 useHead(getMeta("Mohit Jain | Fulton Internship Program Appreciation Certificate Spring 2025",
-    ("Fulton_Internship_Program_Appreciation_Certificate_Spring_2025" + (docStore.checkPDFRoute() ? "/pdf" : "")),
-    "This is my Fulton Internship Program Appreciation Certificate for Spring 2025."
+    ("Fulton_Internship_Program_Appreciation_Certificate_Spring_2025"),
+    "This is my Fulton Internship Program Appreciation Certificate from Spring 2025."
 ));
 </script>

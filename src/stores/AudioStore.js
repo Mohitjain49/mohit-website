@@ -18,9 +18,30 @@ export const useAudioStore = defineStore("audio-store", () => {
     })
 
     /**
+     * @type {SpeechSynthesisUtterance | null} This is the utterance for the speech synthesis.
+     */
+    var ttsUtterance = null;
+    const ttsAvailable = ref(false);
+    const ttsPlaying = ref(false);
+
+    const ttsIcon = computed(() => {
+        return ((ttsAvailable.value && !ttsPlaying.value) ? 'fa-volume-high' : 'fa-volume-xmark');
+    });
+    const ttsTitle = computed(() => {
+        if(!ttsAvailable.value) {
+            return "Text To Speech is Not Available.";
+        } else if(ttsPlaying.value) {
+            return "Stop Playing Message.";
+        } else {
+            return "Play Your Message!";
+        }
+    });
+
+    /**
      * This function sets up the click audio for my website.
      */
     function setupClickAudio() {
+        checkTTSAvailable();
         audioClip.value = new Audio(click_sound);
         audioClip.value.preload = "auto";
 
@@ -86,7 +107,42 @@ export const useAudioStore = defineStore("audio-store", () => {
         volumeInterval = null;
     }
 
+    /**
+     * This sets whether or not speech synthesis is available for this browser.
+     */
+    function checkTTSAvailable() {
+        ttsAvailable.value = ('speechSynthesis' in window);
+    }
+
+    /**
+     * this function stops TTS from continuing.
+     */
+    function cancelTTS() {
+        if(!ttsAvailable.value) { return; }
+        window.speechSynthesis.cancel();
+        ttsUtterance = null;
+        ttsPlaying.value = false;
+    }
+
+    /**
+     * This function starts a utterance of the current text.
+     * @param {String} text The text for the utterance.
+     */
+    function startTTS(text = "") {
+        if(!ttsAvailable.value) { return; }
+        cancelTTS();
+        ttsUtterance = new SpeechSynthesisUtterance(text);
+
+        ttsUtterance.onend = function() { cancelTTS(); };
+        ttsUtterance.onerror = function() { cancelTTS(); };
+
+        window.speechSynthesis.speak(ttsUtterance);
+        ttsPlaying.value = true;
+    }
+
     return { audioClip, volumeInput, volumeInputIcon, showVolumeGamepadMenu,
+        ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
+        checkTTSAvailable, cancelTTS, startTTS,
         setupClickAudio, changeAudioVolume, confirmClickSound,
         setVolumeInterval, stopVolumeInterval
     }

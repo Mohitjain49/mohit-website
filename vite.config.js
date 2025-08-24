@@ -20,7 +20,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/ivue", "/ivuemedia", "/ivuerobotics",
     "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/mohit-website/**", "/mohit-website", "/resume/download", "/sitemap"
+    "/mohit-website/**", "/mohit-website", "/sitemap"
 ];
 
 export default defineConfig({
@@ -97,7 +97,8 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            'pdfjs-dist/build/pdf': 'pdfjs-dist/legacy/build/pdf.js'
         }
     }
 });

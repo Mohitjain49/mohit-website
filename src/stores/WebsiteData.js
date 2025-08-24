@@ -12,10 +12,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * If it equals 2, it is on phone mode, or the screen width is at most 600px.
      */
     const pageView = ref(0);
-    const navMenuOpen = ref(false);
+    const menuOpen = ref(-1);
 
     const wakeLockAvailable = ref(false);
     const wakeLock = ref(null);
+
+    const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
+    const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
 
     const wakeLockIcon = computed(() => {
         return (wakeLockAvailable.value ? ((wakeLock.value == null) ? 'fa-lock' : 'fa-unlock') : 'fa-ban');
@@ -38,13 +41,14 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.setupClickAudio();
         nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
 
-        documentStore.checkTTSAvailable();
+        documentStore.mountDocumentStore();
         installStore.mountInstallStore();
         resizePageComponents();
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("scroll", () => { onWindowScroll(); }, { signal });
         window.addEventListener("mousemove", () => { gamepadStore.setCustomCursor(false); }, { signal });
+        window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
@@ -86,7 +90,20 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const srcElement = event.target;
 
         audioStore.confirmClickSound(event);
-        if(navMenu !== srcElement && !navMenuElements.includes(srcElement)) { closeNavMenu(); }
+        const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
+
+        if(documentStore.checkResumeRoute() || documentStore.checkFCSCertificateRoute()) {
+            var elementInDocumentMenu = false;
+            nextTick(() => {
+                const documentMenu = document.getElementById("mohit-documentBar");
+                const documentMenuElements = Array.from(documentMenu.querySelectorAll('*'));
+                elementInDocumentMenu = (documentMenu === srcElement || documentMenuElements.includes(srcElement));
+                if(!elementInDocumentMenu && !elementInNavMenu) { closeNavMenu(); }
+            });
+        } else {
+            audioStore.confirmClickSound(event);
+            if(!elementInNavMenu) { closeNavMenu(); }
+        }
     }
 
     /**
@@ -95,6 +112,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function onWindowScroll() {
         closeNavMenu();
         gamepadStore.setCursorClickElement();
+    }
+
+    /**
+     * This function handles unhandled rejections.
+     */
+    function onUnhandledRejection(event) {
+        if(event.reason?.name === "AbortException") {
+            event.preventDefault();
+        }
     }
 
     /**
@@ -118,14 +144,21 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * The toggles the status of the home navigation menu.
      */
     function toggleNavMenu() {
-        navMenuOpen.value = !navMenuOpen.value;
+        menuOpen.value = ((menuOpen.value == 0) ? -1 : 0);
+    }
+
+    /**
+     * The toggles the status of the document menu.
+     */
+    function toggleDocumentMenu() {
+        menuOpen.value = ((menuOpen.value == 1) ? -1 : 1);
     }
 
     /**
      * This function closes the Navigation Menu.
      */
     function closeNavMenu() {
-        navMenuOpen.value = false;
+        menuOpen.value = -1;
     }
 
     /**
@@ -202,8 +235,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, navMenuOpen, wakeLock, wakeLockIcon, wakeLockStatement,
-        toggleNavMenu, closeNavMenu, toggleWakeLock,
+    return { pageView, menuOpen, navMenuOpen, documentMenuOpen,
+        wakeLock, wakeLockIcon, wakeLockStatement,
+        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
         addFlashAnimation, setPulseLoopAnimation

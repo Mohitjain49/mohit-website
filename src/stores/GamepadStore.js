@@ -239,7 +239,9 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      */
     function disableScrollYBy() {
         const path = route.path;
-        return ((path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE)) && !docStore.checkMarkdownRoute());
+        return ((path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE)) &&
+            (docStore.checkGoogleDocRoute() || docStore.checkPDFRoute())
+        );
     }
 
     /**

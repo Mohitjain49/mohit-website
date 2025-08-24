@@ -1,6 +1,6 @@
 <template>
-<DocumentWidgets />
-<main id="resume-container" class="markdown">
+<DocumentNavigation />
+<main id="resume-container">
     <br>
     <ResumeMarkdownComponent />
     <div class="markdown-doc-bottom"></div>

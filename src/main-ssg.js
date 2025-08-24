@@ -39,6 +39,7 @@ library.add(
     FaIcons.faCode,
     FaIcons.faFilePdf,
     FaIcons.faFileDownload,
+    FaIcons.faPrint,
     FaIcons.faCopy,
     FaIcons.faEnvelope,
     FaIcons.faPhone,
@@ -97,11 +98,17 @@ library.add(
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
     ({ app }) => {
-        const pinia = createPinia();
         app.use(VueObserveVisibility);
-        app.use(pinia);
+        app.use(createPinia());
 
         if(!import.meta.env.SSR) {
+            import("pdfjs-dist").then((PDFJS) => {
+                PDFJS.GlobalWorkerOptions.workerSrc = new URL(
+                    "pdfjs-dist/legacy/build/pdf.worker.mjs",
+                    import.meta.url
+                ).toString();
+            });
+
             app.use(VueParticles, { init: async engine => { await loadSlim(engine); } });
             if(navigator.getGamepads()) { import("./joypad-events.js"); }
         }
