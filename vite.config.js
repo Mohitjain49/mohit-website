@@ -56,7 +56,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.8.4",
+                cacheId: "v2.9.0",
                 globPatterns: ['**/*.{js,css,html,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
