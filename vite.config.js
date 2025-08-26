@@ -8,6 +8,7 @@ import EnvTypes from 'vite-plugin-env-types';
 
 import Info from "unplugin-info/vite";
 import imagemin from 'unplugin-imagemin/vite';
+import attrs from 'markdown-it-attrs'
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
@@ -43,7 +44,9 @@ export default defineConfig({
                 }
             ]
         }),
-        Markdown(),
+        Markdown({
+            markdownItSetup(md) { md.use(attrs); }
+        }),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
             dirs: ['./src/stores'],
@@ -56,7 +59,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.9.0",
+                cacheId: "v2.9.1",
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
@@ -97,8 +100,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url)),
-            'pdfjs-dist/build/pdf': 'pdfjs-dist/legacy/build/pdf.js'
+            '@': fileURLToPath(new URL('./src', import.meta.url))
         }
     }
 });

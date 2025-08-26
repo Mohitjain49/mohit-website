@@ -1,7 +1,11 @@
+# **Mohit Jain** { .resume-markdown-title }
+
+Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@gmail.com) • [mohit-jain.com](https://mohit-jain.com/) • [LinkedIn](https://www.linkedin.com/in/mohitjain49/) • [GitHub](https://github.com/Mohitjain49) { .resume-markdown-mainLinks }
+
 # **EXPERIENCE**											
 
 **iVue | [Website](https://www.ivueworld.com/)**  
-Lead Software Developer  
+Lead Software Developer
 
 * Developed a full-stack single-page application called [Worlds iVue](https://www.worldsivue.com/), a geospatial platform that uses browser and web services to connect and operate advanced drones and other devices.  
 * Led the development of iVue’s company websites, overseeing and personally contributing to its overall design and marketability to potential consumers.  
@@ -27,17 +31,18 @@ Full-Stack Development
 **Portfolio Website | [Website](https://mohit-jain.com) | [GitHub](https://github.com/Mohitjain49/mohit-website)**  
 Full-Stack Development
 
-* Embedded [AWS](https://aws.amazon.com/) in my website to establish a platform where visitors can easily communicate with me and explore my professional career.
+* It’s built with Vue.js along with a wide range of frontend tools to craft engaging and visually appealing designs that showcase my entire skillset.  
+* I also embedded [AWS](https://aws.amazon.com/) on my contact page so that visitors can easily communicate with me.
 
 # **EDUCATION**											
 
 **Kennesaw State University**  
 Bachelor Degree in Computer Science
 
-* **GPA:** 3.5  
-* **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics
+* **GPA:** 3.6  
+* **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis
 
 # **SKILLS**												
 
-* **Languages/Frameworks:** Java, JavaScript, HTML, CSS, [Vue.js](https://vuejs.org/), Nuxt, React, React Native, Angular, Tauri, TypeScript, NodeJS, Python, [GoLang](https://go.dev/), SQL  
-* **Tools And Platforms:** Amazon Web Services, Git, GitHub, GitLab, NPM, Yarn, CesiumJS
+* **Languages And Frameworks:** Java, JavaScript, Node.js, HTML, CSS, [Vue.js](https://vuejs.org/), Nuxt, React, React Native, Angular, Tauri, TypeScript, NodeJS, Python, [GoLang](https://go.dev/), SQL, [R](https://www.r-project.org/)  
+* **Tools And Platforms:** Amazon Web Services, Git, GitHub, GitLab, NPM, Yarn, MAVLink Protocol, CesiumJS

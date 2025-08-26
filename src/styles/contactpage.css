@@ -4,7 +4,7 @@
 .contact-boxes-container {
     width: 100%;
     height: fit-content;
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
