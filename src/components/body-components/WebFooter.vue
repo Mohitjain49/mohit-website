@@ -24,14 +24,12 @@
                     <span> Contact Me </span>
                 </RouterLink>
 
-                <a :href="SOCIALS[0].link" class="footer-routes-opt">
-                    <font-awesome-icon icon="fa-envelope" />
-                    <span> {{ 'Email' }} </span>
-                </a>
-                <RouterLink v-for="tab in CONTACT_ROUTES" :to="tab.path" class="footer-routes-opt" :style="{ 'color': tab.color }">
-                    <font-awesome-icon :icon="tab.icon" />
-                    <span> {{ tab.name }} </span>
-                </RouterLink>
+                <template v-for="(social, index) in SOCIALS">
+                    <a v-if="(index != 2)" :href="social.link" class="footer-routes-opt" :style="{ 'color': social.color }">
+                        <font-awesome-icon :icon="social.linkIcon" />
+                        <span> {{ social.name }} </span>
+                    </a>
+                </template>
             </div>
 
             <div class="footer-routes-column extras">
@@ -102,13 +100,6 @@ const MAIN_ROUTES = [
     { name: "My Projects", path: "/projects", icon: "fa-cubes", color: "var(--globe-green)" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", color: "var(--website-text)" },
     { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)" },
-];
-
-const CONTACT_ROUTES = [
-    { name: "LinkedIn", path: "/linkedin", icon: "fa-brands fa-linkedin", color: "#0072B1" },
-    { name: "Discord", path: "/discord", icon: "fa-brands fa-discord", color: "#5865F2" },
-    { name: "GitHub", path: "/github", icon: "fa-brands fa-github", color: "white" },
-    { name: "Steam", path: "/steam", icon: "fa-brands fa-steam", color: "#167eb1" },
 ];
 
 const EXTRA_ROUTES = [

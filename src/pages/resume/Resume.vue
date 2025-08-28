@@ -32,19 +32,3 @@ useHead(getMeta("Mohit Jain | My Resume", "resume",
     "Feel free to take a look at my resume."
 ));
 </script>
-
-<style>
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #ccc;
-  border-top: 5px solid #4cafef;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-</style>

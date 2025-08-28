@@ -87,7 +87,7 @@
 
             <div class="contact-box-content">
                 <template v-for="(social, index) in SOCIALS">
-                    <div class="social-tab" v-if="(index != 4)" :style="{ color: social.altColor }">
+                    <div class="social-tab" v-if="(index != 2)" :style="{ color: social.altColor }">
                         <div class="social-tab-header"> {{ social.name }} </div>
                         <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
 
@@ -278,11 +278,6 @@ function setAlertBox(text = "") {
  * @param {String} link The link to copy.
  */
 function copyLink(link = "") {
-    if(link === SOCIALS[2].displayLink) {
-        copyDiscordLink();
-        return;
-    }
-
     const navLink = ((link === SOCIALS[0].displayLink) ? SOCIALS[0].link : link);
     navigator.clipboard.writeText(link).then(() => {
         setAlertBox("Copied Link: " + getLinkString(navLink, link));

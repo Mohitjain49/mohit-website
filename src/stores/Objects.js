@@ -55,7 +55,7 @@ export const FCS_CAREER_INTERNSHIP_LINK = "https://www.fultonschools.org/all-dep
 
 export const SOCIALS = [
     {
-        name: "Work Email",
+        name: "My Email",
         id: "work_email",
         displayLink: "mohitkjain49@gmail.com",
         link: "mailto:mohitkjain49@gmail.com",
