@@ -13,7 +13,7 @@
             Afterwards, I incorporate some these features into Worlds iVue and other websites I develop.
         </div>
 
-        <div  class="feature-notes">
+        <div v-if="!checkSSR()" class="feature-notes">
             <div v-for="entity in FEATURE_ENTITIES" class="features-note-container"
                 v-observe-visibility="setCardTransition">
 

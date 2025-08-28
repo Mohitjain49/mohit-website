@@ -3,16 +3,15 @@ import ContactPage from "./pages/ContactPage.vue";
 import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
-import Features from "./pages/Features.vue";
-import WakeLockPage from "./pages/WakeLockPage.vue";
-
-import GamepadControls from "./pages/GamepadControls.vue";
-import InstallPage from "./pages/InstallPage.vue";
-import MyIcon from "./pages/MyIcon.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
 
-import CodeScanner from "./pages/qrcode/CodeReader.vue";
-import QrcodePage from "./pages/qrcode/QrcodePage.vue";
+import Features from "./pages/features/FeaturesMain.vue";
+import WakeLockPage from "./pages/features/WakeLockPage.vue";
+import GamepadControls from "./pages/features/GamepadControls.vue";
+import InstallPage from "./pages/features/InstallPage.vue";
+import CodeScanner from "./pages/features/CodeReader.vue";
+import QrcodePage from "./pages/features/QrcodePage.vue";
+import MyIcon from "./pages/MyIcon.vue";
 
 import Resume from "./pages/resume/Resume.vue";
 import ResumeIframes from "./pages/resume/ResumeIframes.vue";
@@ -89,8 +88,15 @@ export const personalRoutes = [
     { path: "/skills", name: "Main Skills Page", component: SkillsPage },
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
+    { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
+
     { path: "/features", name: "Main Features Page", component: Features },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },
+    { path: "/code-reader", name: "Code Reader Page", component: CodeScanner },
+    { path: "/qrcode", name: "QR Code Page", component: QrcodePage },
+    { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
+    { path: "/install", name: "Install Website", component: InstallPage },
+    { path: "/icons", name: "Icon Page", component: MyIcon },
 
     {
         path: "/resume",
@@ -117,15 +123,7 @@ export const personalRoutes = [
         ]
     },
 
-    { path: "/code-reader", name: "Code Reader Page", component: CodeScanner },
-    { path: "/qrcode", name: "QR Code Page", component: QrcodePage },
-
-    { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
-    { path: "/install", name: "Install Website", component: InstallPage },
-    { path: "/icons", name: "Icon Page", component: MyIcon },
-    { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
     { path: "/google-mockup-assignment", component: GoogleMockupAssigment },
-
     { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 

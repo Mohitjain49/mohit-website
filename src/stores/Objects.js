@@ -726,18 +726,5 @@ export const FEATURE_ENTITIES = [
             faIcon: true,
             size: "100"
         }
-    },
-    {
-        name: "My Icons",
-        link: "/icons",
-        color: "var(--blue-one)",
-        desc: "This page simply showcases some of the Icons I have made for myself " +
-            "and allows anyone to copy them for their own use.",
-
-        icon: {
-            id: "fa-pen-fancy",
-            faIcon: true,
-            size: "100"
-        }
-    },
+    }
 ];

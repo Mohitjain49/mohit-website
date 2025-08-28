@@ -252,6 +252,13 @@ export function reloadPage() {
 }
 
 /**
+ * This function returns whether or not the app is rendering on the server or not.
+ */
+export function checkSSR() {
+    return import.meta.env.SSR;
+}
+
+/**
  * This function sets the initial transition for a Nav Card.
  * @param {String} cardId The element id for the card.
  */
