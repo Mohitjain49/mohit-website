@@ -199,14 +199,14 @@ export const WAKE_LOCK_BACKGROUND = {
     tRetina: true,
 };
 
-export const NIGHT_BACKGROUND = {
+export const FEATURES_BACKGROUND = {
     background: {
         color: "#000000", // Dark night sky background
     },
     particles: {
         number: { value: 150 },
-        color: {  value: "#ffffff" },
-        shape: { type: "circle" },
+        color: {  value: "#E8E163" },
+        shape: { type: "square" },
         opacity: {
             value: { min: 0.3, max: 1 }, // Twinkling effect
             animation: {
@@ -221,7 +221,7 @@ export const NIGHT_BACKGROUND = {
         },
         move: {
             enable: true,
-            speed: 0.2, // Very slow movement
+            speed: 1.5, // Very slow movement
             direction: "none",
             outModes: {
                 default: "bounce",

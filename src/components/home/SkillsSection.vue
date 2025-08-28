@@ -61,7 +61,7 @@ function setSkillsTransitions(isVisible) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     height: fit-content;
-    min-height: calc(100% - var(--top-bar-height));
+    min-height: var(--body-height);
     width: 1200px;
     padding: 80px calc(50% - 600px);
 }

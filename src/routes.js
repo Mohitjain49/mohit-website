@@ -1,8 +1,9 @@
 import PersonalMain from "./pages/PersonalMain.vue";
+import ContactPage from "./pages/ContactPage.vue";
 import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
-import ContactPage from "./pages/ContactPage.vue";
+import Features from "./pages/Features.vue";
 import WakeLockPage from "./pages/WakeLockPage.vue";
 
 import GamepadControls from "./pages/GamepadControls.vue";
@@ -10,8 +11,8 @@ import InstallPage from "./pages/InstallPage.vue";
 import MyIcon from "./pages/MyIcon.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
 
-import CodeScanner from "./pages/qrcode/CodeScanner.vue";
-import QRCodePage from "./pages/qrcode/QRCodePage.vue";
+import CodeScanner from "./pages/qrcode/CodeReader.vue";
+import QrcodePage from "./pages/qrcode/QrcodePage.vue";
 
 import Resume from "./pages/resume/Resume.vue";
 import ResumeIframes from "./pages/resume/ResumeIframes.vue";
@@ -84,10 +85,11 @@ function getRedirectRouteRecord(path = "") {
  */
 export const personalRoutes = [
     { path: "/", name: "Main Page", component: PersonalMain },
+    { path: "/contact", name: "Contact Mohit", component: ContactPage },
     { path: "/skills", name: "Main Skills Page", component: SkillsPage },
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
-    { path: "/contact", name: "Contact Mohit", component: ContactPage },
+    { path: "/features", name: "Main Features Page", component: Features },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },
 
     {
@@ -115,8 +117,8 @@ export const personalRoutes = [
         ]
     },
 
-    { path: "/code-scanner", name: "Code Scanner Page", component: CodeScanner },
-    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
+    { path: "/code-reader", name: "Code Reader Page", component: CodeScanner },
+    { path: "/qrcode", name: "QR Code Page", component: QrcodePage },
 
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },

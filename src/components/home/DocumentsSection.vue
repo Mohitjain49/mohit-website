@@ -12,7 +12,7 @@
             </div>
             <p>
                 I regularly update my resume as I learn more skills and gain more experience in software development. 
-                Feel Free to take a look at it!
+                I use PDF.js in my website to give my resume a custom display. Feel Free to take a look at it!
             </p>
         </RouterLink>
         <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab"

@@ -9,6 +9,7 @@ import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
 import fontsource_icon from "../assets/FontSource_Icon.png";
 import tauri_icon from "../assets/Tauri_Icon.png";
+import vite_pwa_icon from "../assets/Vite_PWA_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -658,4 +659,85 @@ export const PROJECT_ENTITIES = [
             size: "105"
         }
     }
+];
+
+export const FEATURE_ENTITIES = [
+    {
+        name: "Gamepads",
+        link: "/gamepad",
+        color: "var(--website-light-text)",
+        desc: "I integrated the Web Gamepad API into my website with joypad.js so that visitors can freely use a " +
+            "PS5, Xbox, Nintendo Switch, and other controllers with my website.",
+
+        icon: {
+            id: "fa-gamepad",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Barcode Reader",
+        link: "/code-reader",
+        color: "var(--blue-cobalt)",
+        desc: "This page is capable of reading values from Barcodes and Qr Codes. " +
+            "It uses the \"vue-qrocde-reader\" dependency to do so.",
+
+        icon: {
+            id: "fa-barcode",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "QR Codes",
+        link: "/qrcode",
+        color: "var(--website-light-text)",
+        desc: "This page uses the \"uqr\" dependency to create QR Codes for this website " +
+            "and my online profiles on different platforms.",
+
+        icon: {
+            id: "fa-qrcode",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Install Website",
+        link: "/install",
+        color: "var(--website-text)",
+        desc: "I used the \"Vite PWA\" dependency to build a service worker " +
+            "for my website so that I can install and fully utilize my website offline.",
+
+        icon: {
+            id: vite_pwa_icon,
+            faIcon: false,
+            size: "150"
+        }
+    },
+    {
+        name: "Wake Lock",
+        link: "/wakelock",
+        color: "var(--vibrant-flame)",
+        desc: "This website uses the Screen Wake Lock Web API which " +
+            "prevents the laptop from going to sleep naturally when enabled.",
+
+        icon: {
+            id: "fa-lock",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "My Icons",
+        link: "/icons",
+        color: "var(--blue-one)",
+        desc: "This page simply showcases some of the Icons I have made for myself " +
+            "and allows anyone to copy them for their own use.",
+
+        icon: {
+            id: "fa-pen-fancy",
+            faIcon: true,
+            size: "100"
+        }
+    },
 ];

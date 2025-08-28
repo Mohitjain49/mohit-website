@@ -51,16 +51,6 @@
                         <font-awesome-icon :icon="extra.icon" />
                     </RouterLink>
                 </div>
-                <div class="mohit-navMenu-opt">
-                    <RouterLink v-for="feature in FEATURE_BTNS" :to="feature.path"
-                        :title="feature.title"
-                        class="mohit-navMenu-extra"
-                        @click="(event) => { flashNavOpt(event, feature.path) }"
-                        :style="getColorStyles(feature.color)">
-
-                        <font-awesome-icon :icon="feature.icon" />
-                    </RouterLink>
-                </div>
                 <div class="mohit-navMenu-opt volume-meter">
                     <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
                     <input type="range" min="0" max="100" title="Volume Meter for the click sound."
@@ -110,7 +100,8 @@ const MAIN_BTNS = [
     { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
-    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
+    { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
+    { path: "/features", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
 ];
 
 const LAPTOP_MAIN_BTNS = [
@@ -119,16 +110,8 @@ const LAPTOP_MAIN_BTNS = [
 ];
 
 const NAV_MENU_EXTRAS = [
-    { path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)", title: "QR Codes" },
-    { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
+    { path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)", title: "Manage Wake Lock" },
     { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
     { path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)", title: "FCS Certificate" },
-];
-
-const FEATURE_BTNS = [
-    { path: "/code-scanner", icon: "fa-barcode", color: "var(--website-light-text)", title: "Code Scanner" },
-    { path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)", title: "Manage Wake Lock" },
-    { path: "/install", icon: "fa-download", color: "var(--website-text)", title: "Install Website as PWA" },
-    { path: "/gamepad", icon: "fa-gamepad", color: "var(--website-light-text)", title: "View Gamepad Controls" },
 ];
 </script>
