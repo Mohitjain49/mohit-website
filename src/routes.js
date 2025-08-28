@@ -8,8 +8,10 @@ import WakeLockPage from "./pages/WakeLockPage.vue";
 import GamepadControls from "./pages/GamepadControls.vue";
 import InstallPage from "./pages/InstallPage.vue";
 import MyIcon from "./pages/MyIcon.vue";
-import QRCodePage from "./pages/QRCodePage.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
+
+import CodeScanner from "./pages/qrcode/CodeScanner.vue";
+import QRCodePage from "./pages/qrcode/QRCodePage.vue";
 
 import Resume from "./pages/resume/Resume.vue";
 import ResumeIframes from "./pages/resume/ResumeIframes.vue";
@@ -113,9 +115,11 @@ export const personalRoutes = [
         ]
     },
 
+    { path: "/code-scanner", name: "Code Scanner Page", component: CodeScanner },
+    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
+
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
-    { path: "/qrcode", name: "QR Code Page", component: QRCodePage },
     { path: "/icons", name: "Icon Page", component: MyIcon },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
     { path: "/google-mockup-assignment", component: GoogleMockupAssigment },

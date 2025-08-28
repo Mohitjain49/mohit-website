@@ -74,6 +74,7 @@ library.add(
     FaIcons.faCircleXmark,
     FaIcons.faEarthAmericas,
     FaIcons.faSitemap,
+    FaIcons.faBarcode,
 
     FaBrands.faReact,
     FaBrands.faJs,

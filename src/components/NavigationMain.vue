@@ -126,6 +126,7 @@ const NAV_MENU_EXTRAS = [
 ];
 
 const FEATURE_BTNS = [
+    { path: "/code-scanner", icon: "fa-barcode", color: "var(--website-light-text)", title: "Code Scanner" },
     { path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)", title: "Manage Wake Lock" },
     { path: "/install", icon: "fa-download", color: "var(--website-text)", title: "Install Website as PWA" },
     { path: "/gamepad", icon: "fa-gamepad", color: "var(--website-light-text)", title: "View Gamepad Controls" },
