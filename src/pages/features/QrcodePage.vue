@@ -2,6 +2,7 @@
 <client-only>
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
+<FeaturesReturnWidget />
 
 <main id="qr-code-page" class="personal-web-body transparent">
     <div class="qr-page-grid">

@@ -2,6 +2,7 @@
 <client-only>
     <vue-particles id="particlests" :options="INSTALL_BACKGROUND"></vue-particles>
 </client-only>
+<FeaturesReturnWidget />
 
 <main id="install-page" class="personal-web-body">
     <div class="install-body">

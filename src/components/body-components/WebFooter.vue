@@ -105,6 +105,7 @@ const MAIN_ROUTES = [
     { name: "My Projects", path: "/projects", icon: "fa-cubes", color: "var(--globe-green)" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", color: "var(--website-text)" },
     { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)" },
+    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-two)" },
 ];
 
 const EXTRA_ROUTES = [
@@ -113,7 +114,6 @@ const EXTRA_ROUTES = [
     { name: "QR Codes", path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)" },
     { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
     { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
-    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-two)" },
 ];
 
 const REPO_ROUTES = [

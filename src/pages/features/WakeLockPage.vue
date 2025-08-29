@@ -2,6 +2,7 @@
 <client-only>
     <vue-particles id="particlests" :options="WAKE_LOCK_BACKGROUND"></vue-particles>
 </client-only>
+<FeaturesReturnWidget />
 
 <main id="wakeLock-page" class="personal-web-body">
     <div class="wakeLock-body">

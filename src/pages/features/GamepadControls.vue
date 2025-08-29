@@ -1,4 +1,5 @@
 <template>
+<FeaturesReturnWidget />
 <main class="personal-web-body">
     <div class="gamepad-controls-body">
         <div class="gamepad-controls">

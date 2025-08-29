@@ -110,7 +110,7 @@ const LAPTOP_MAIN_BTNS = [
 ];
 
 const NAV_MENU_EXTRAS = [
-    { path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)", title: "Manage Wake Lock" },
+    { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
     { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
     { path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)", title: "FCS Certificate" },
 ];
