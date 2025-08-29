@@ -21,7 +21,7 @@ const PAGE_DESC = "404 - Page Not Found.";
 
 useHead(getMeta("Mohit Jain | 404 Error", "404", PAGE_DESC));
 onMounted(() => {
-    webData.mountWebData();
+    webData.mountWebData(true);
     const path = router.currentRoute.value.path;
 
     if(path === "/contact-me" || path === "/contact-me/") { router.replace("/contact"); }

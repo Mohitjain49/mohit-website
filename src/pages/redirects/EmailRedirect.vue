@@ -9,7 +9,7 @@ const EMAIL_LINK = SOCIALS[0].link;
 const router = useRouter();
 
 onMounted(() => {
-    initWebData();
+    initWebData(true);
     window.location.replace(EMAIL_LINK);
     setTimeout(() => { router.push("/") }, 1500);
 });

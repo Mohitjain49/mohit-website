@@ -1,5 +1,7 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
+    const router = useRouter();
     const controller = new AbortController();
+
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
     const installStore = useInstallStore();
@@ -13,6 +15,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     const pageView = ref(0);
     const menuOpen = ref(-1);
+    const navFooterPresent = ref(false);
 
     const wakeLockAvailable = ref(false);
     const wakeLock = ref(null);
@@ -53,6 +56,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
         document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
+        document.body.addEventListener("keydown", onKeyDown, { signal })
     }
 
     /**
@@ -115,6 +119,29 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
+     * This function runs whenever the user hits a key.
+     * @param {KeyboardEvent} event The event given by the listener.
+     */
+    function onKeyDown(event) {
+        if(!event.altKey) { return; }
+        const key = event.key;
+
+        if(key === "m") {
+            toggleNavMenu();
+            triggerClickSound();
+        } else if(key === "w") {
+            router.push("/wakelock");
+            triggerClickSound();
+        } else if(key === "i") {
+            router.push("/install");
+            triggerClickSound();
+        } else if(key === "r" || key === "c") {
+            router.push("/code-reader");
+            triggerClickSound();
+        }
+    }
+
+    /**
      * This function handles unhandled rejections.
      */
     function onUnhandledRejection(event) {
@@ -125,10 +152,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /**
      * This runs whenever a page is opened.
+     * @param {Boolean} hideFooter If true, this function will set a variable that indicates the footer is hidden.
      */
-    function mountWebData() {
+    function mountWebData(hideFooter = false) {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         closeNavMenu();
+
+        navFooterPresent.value = !(hideFooter ||
+            documentStore.checkResumeRoute() ||
+            documentStore.checkFCSCertificateRoute()
+        );
     }
 
     /**
@@ -236,7 +269,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { pageView, menuOpen, navMenuOpen, documentMenuOpen,
-        wakeLock, wakeLockIcon, wakeLockStatement,
+        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent,
         toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
@@ -271,9 +304,10 @@ export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
 
 /**
  * This function mounts the website data pinia store on a page.
+ * @param {Boolean} hideFooter If true, this function will set a variable that indicates the footer is hidden.
  */
-export function initWebData() {
-    useWebsiteDataStore().mountWebData();
+export function initWebData(hideFooter) {
+    useWebsiteDataStore().mountWebData(hideFooter);
 }
 
 /**

@@ -12,9 +12,12 @@
                 <span> {{ webData.wakeLockStatement }} </span>
             </button>
             <a :href="WAKE_LOCK_MDN_DOCS" class="wakeLock-mdn-docs">
-                This page uses the Wake Lock Web API to keep the screen on when enabled, 
+                This page uses the Screen Wake Lock Web API to keep the screen on when enabled, 
                 preventing the screen from closing naturally.
             </a>
+            <p class="wakelock-keybind-msg">
+                P.S. You can also access this page with Alt + W
+            </p>
         </div>
     </div>
     <WebFooter />
@@ -73,7 +76,7 @@ useHead(getMeta("Mohit Jain | Wake Lock", "wakelock",
 
 .wakeLock-button {
     width: 65%;
-    height: 28%;
+    height: 25%;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     border: 2px dotted var(--vibrant-flame);
@@ -87,14 +90,27 @@ useHead(getMeta("Mohit Jain | Wake Lock", "wakelock",
     margin-right: 5px;
 }
 
+.wakelock-keybind-msg {
+    width: 80%;
+    height: fit-content;
+    margin-top: 10px;
+    text-align: center;
+    font-family: 'Lexend', sans-serif;
+    font-size: 14px;
+    color: var(--lightning-yellow);
+}
+
 @media (max-width: 600px) {
     .wakeLock-box {
         width: 300px;
-        height: 200px;
+        height: 250px;
     }
     .wakeLock-button {
         width: 80%;
         font-size: 14px;
+    }
+    .wakelock-keybind-msg {
+        font-size: 12px;
     }
 }
 </style>

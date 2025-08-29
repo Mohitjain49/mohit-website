@@ -50,6 +50,13 @@
 
                         <font-awesome-icon :icon="extra.icon" />
                     </RouterLink>
+                    <RouterLink v-if="webData.navFooterPresent" :to="{ 'hash': '#footer' }"
+                        class="mohit-navMenu-extra"
+                        @click="webData.goToPageSection('footer')"
+                        title="Scroll Down To Footer">
+
+                        <FontAwesomeIcon icon="fa-angles-down" />
+                    </RouterLink>
                 </div>
                 <div class="mohit-navMenu-opt volume-meter">
                     <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
