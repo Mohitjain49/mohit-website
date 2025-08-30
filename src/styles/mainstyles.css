@@ -261,6 +261,22 @@ button {
         width: calc(100% - 70px);
     }
 }
+@media (max-width: 850px) {
+    .markdown-body h1 {
+        font-size: 20px;
+    }
+    .markdown-body p, .markdown-body li {
+        font-size: 13px;
+    }
+}
+@media (max-width: 600px) {
+    .markdown-body h1 {
+        font-size: 17px;
+    }
+    .markdown-body p, .markdown-body li {
+        font-size: 11px;
+    }
+}
 
 /**
  * These are styles meant specifically for redirect pages.

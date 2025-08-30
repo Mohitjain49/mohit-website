@@ -41,6 +41,9 @@ onMounted(() => {
         qrCodes.item(i).classList.add("animate__animated", animation);
     }
 });
+onBeforeUnmount(() => {
+    setQRCodePopup();
+})
 
 useHead(getMeta("Mohit Jain | QR Codes", "qrcode",
     "This page hosts Quick Response Codes that lead to projects or pages that I work on."

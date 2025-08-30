@@ -718,11 +718,25 @@ export const FEATURE_ENTITIES = [
         name: "Wake Lock",
         link: "/wakelock",
         color: "var(--vibrant-flame)",
-        desc: "This website uses the Screen Wake Lock Web API which " +
-            "prevents the laptop from going to sleep naturally when enabled.",
+        desc: "This website can effectively use the Screen Wake Lock Web API so that " +
+            "the laptop does not go to sleep naturally when enabled.",
 
         icon: {
             id: "fa-lock",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Documents",
+        link: "/resume/",
+        color: "var(--website-text)",
+        desc: "I used multiple modules to display my resume and other documents on this website. " +
+            "This includes using PDF.js to natively display the PDF as a whole and the \"unplugin-vue-markdown\" " +
+            "plugin to display my resume in a markdown format.",
+
+        icon: {
+            id: "fa-file-lines",
             faIcon: true,
             size: "100"
         }
