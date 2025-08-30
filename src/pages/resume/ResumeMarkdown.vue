@@ -4,6 +4,7 @@
     <br>
     <ResumeMarkdownComponent />
     <div class="markdown-doc-bottom"></div>
+    <WebFooter />
 </main>
 </template>
 

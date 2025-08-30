@@ -9,6 +9,7 @@
             :height="documentStore.customPdfHeight"
         />
         <div class="markdown-doc-bottom"></div>
+        <WebFooter />
     </main>
     <div id="resume-container" class="center-flex-display" v-else>
         <div class="loading-spinner"></div>

@@ -152,16 +152,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /**
      * This runs whenever a page is opened.
-     * @param {Boolean} hideFooter If true, this function will set a variable that indicates the footer is hidden.
      */
-    function mountWebData(hideFooter = false) {
+    function mountWebData() {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         closeNavMenu();
-
-        navFooterPresent.value = !(hideFooter ||
-            documentStore.checkResumeRoute() ||
-            documentStore.checkFCSCertificateRoute()
-        );
     }
 
     /**
@@ -304,10 +298,9 @@ export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
 
 /**
  * This function mounts the website data pinia store on a page.
- * @param {Boolean} hideFooter If true, this function will set a variable that indicates the footer is hidden.
  */
-export function initWebData(hideFooter) {
-    useWebsiteDataStore().mountWebData(hideFooter);
+export function initWebData() {
+    useWebsiteDataStore().mountWebData();
 }
 
 /**

@@ -81,13 +81,26 @@
 <script setup>
 const route = useRoute();
 const webData = useWebsiteDataStore();
-
+const docStore = useDocumentStore();
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
-onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain"); });
+
+onMounted(() => {
+    COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
+    webData.navFooterPresent = true;
+});
+onBeforeUnmount(() => {
+    webData.navFooterPresent = false;
+})
 
 const footerClass = computed(() => {
     const path = route.path;
-    return ((-1 == MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) ? '' : 'main-page');
+    if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
+        return 'main-page';
+    } else if(docStore.checkResumeRoute() || docStore.checkFCSCertificateRoute()) {
+        return 'document-route';
+    } else {
+        return '';
+    }
 })
 
 /**
@@ -138,6 +151,9 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
 #footer.main-page {
     border-top: 2px dashed var(--website-light-text);
     background-color: rgb(10, 10, 10);
+}
+#footer.document-route {
+    padding-bottom: 40px;
 }
 
 .footer-body {
@@ -237,6 +253,9 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     #footer {
         height: 660px;
     }
+    #footer.document-route {
+        padding-bottom: 10px;
+    }
     .footer-body {
         grid-template-columns: 1fr 1fr;
         left: 0px;
@@ -261,6 +280,9 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
 @media (max-width: 525px) {
     #footer {
         height: 545px;
+    }
+    #footer.document-route {
+        padding-bottom: 50px;
     }
     .footer-body {
         height: 470px;

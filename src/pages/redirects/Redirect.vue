@@ -15,7 +15,7 @@ const props = defineProps({
 
 useHead(getMetaWithLink(props.title, props.link, props.desc));
 onMounted(() => {
-    initWebData(true);
+    initWebData();
     window.location.replace(props.link);
 });
 </script>

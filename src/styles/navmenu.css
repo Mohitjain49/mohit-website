@@ -69,12 +69,21 @@
     align-items: center;
     transition: var(--default-transition);
 }
+.mohit-navBar-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
 .mohit-navBar-icon.light {
     color: var(--website-light-text);
     border-color: var(--website-light-text);
 }
-.mohit-navBar-icon:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.mohit-navBar-icon.white {
+    color: white;
+    border-color: white;
+}
+.mohit-navBar-icon img {
+    user-select: none;
+    width: 23px
 }
 
 .mohit-navMenu {
@@ -230,7 +239,7 @@
     padding-left: 5px;
 }
 .mohit-documentBar-iconSection.right {
-    width: 55px;
+    width: 100px;
     padding-right: 5px;
 }
 
@@ -294,8 +303,11 @@
    
 }
 @media (max-width: 350px) {
-    #mohit-navBar, #mohit-documentBar {
+    #mohit-navBar {
         position: absolute;
+    }
+    #mohit-documentBar {
+        width: 270px;
     }
 }
 

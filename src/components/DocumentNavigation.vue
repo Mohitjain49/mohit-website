@@ -64,6 +64,9 @@
             </button>
         </div>
         <div class="mohit-documentBar-iconSection right">
+            <a class="mohit-navBar-icon white" :href="PDFJS_LINK" title="See More about PDF.js">
+                <img :src="pdfjs_logo" draggable="false" width="20" />
+            </a>
             <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
                 :title="(webData.documentMenuOpen ? 'Close Document Menu' : 'Open Document Menu')">
 
@@ -75,9 +78,12 @@
 </template>
 
 <script setup>
+import pdfjs_logo from "@/assets/PDFJS_logo.svg";
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
+
 const currentPath = computed(() => { return (docStore.checkResumeRoute() ? '/resume' : FCS_CERTIFICATE_ROUTE) });
+const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 /**
  * This sets the color and border color of an icon.
