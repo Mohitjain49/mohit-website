@@ -7,7 +7,7 @@
     <div class="code-scanner-main">
         <div class="scanner-component-container">
             <QrcodeStream @detect="onDetect" @camera-on="onCameraActive"
-                :formats="selectedBarcodeFormats"
+                :formats="BARCODE_FORMATS"
                 :style="{ 'display': (!cameraActive ? 'none' : '') }"
             />
             <div v-if="!cameraActive" class="scanner-component-inactive"> Waiting On Camera... </div>
@@ -21,7 +21,11 @@
                     </button>
                 </div>
             </div>
-            <div class="scanner-console-body"></div>
+            <div class="scanner-console-body">
+                <div v-for="item in scannedItemsArray">
+                    {{ item.value }}
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -32,45 +36,60 @@
 import { QrcodeStream } from 'vue-qrcode-reader';
 const cameraActive = ref(false);
 
+/**
+ * @type {import('vue').Ref<Array<{ value: String, format: String }>>}
+ * This is the array of codes scanned by the camera.
+ */
+const scannedItemsArray = ref([]);
+
+/**
+ * This function is run whenever a visior activates their camera for the webpage.
+ */
+function onCameraActive(event) {
+    if(import.meta.env.DEV) { console.log(event); }
+    cameraActive.value = true;
+}
+
+/**
+ * This is triggered every time a new code is scanned.
+ * @param {Array<{ rawValue: String, format: String }>} event The object made by the event.
+ */
+function onDetect(event) {
+    if(import.meta.env.DEV) { console.log(event); }
+    for(let i = 0; i < event.length; i++) {
+        const item = event[i];
+        scannedItemsArray.value.push({ value: item.rawValue, format: item.format });
+    }
+}
+
+const BARCODE_FORMATS = [
+    "aztec",
+    "code_128",
+    "code_39",
+    "code_93",
+    "codabar",
+    "databar",
+    "databar_expanded",
+    "data_matrix",
+    "dx_film_edge",
+    "ean_13",
+    "ean_8",
+    "itf",
+    "maxi_code",
+    "micro_qr_code",
+    "pdf417",
+    "qr_code",
+    "rm_qr_code",
+    "upc_a",
+    "upc_e",
+    "linear_codes",
+    "matrix_codes"
+];
+
 onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Barcode & Qrcode Reader", "code-reader",
     "This page is capable of reading the values of Barcodes and QR Codes."
 ));
-
-function onCameraActive(event) {
-    console.log(event);
-    cameraActive.value = true;
-}
-function onDetect(event) {
-    console.log(event);
-}
-
-const barcodeFormats = ref({
-    aztec: true,
-    code_128: true,
-    code_39: true,
-    code_93: true,
-    codabar: true,
-    databar: true,
-    databar_expanded: true,
-    data_matrix: true,
-    dx_film_edge: true,
-    ean_13: true,
-    ean_8: true,
-    itf: true,
-    maxi_code: true,
-    micro_qr_code: true,
-    pdf417: true,
-    qr_code: true,
-    rm_qr_code: true,
-    upc_a: true,
-    upc_e: true,
-    linear_codes: true,
-    matrix_codes: true
-})
-const selectedBarcodeFormats = computed(() => {
-    return Object.keys(barcodeFormats.value).filter((format) => barcodeFormats.value[format])
-})
 </script>
 
 <style scoped>
