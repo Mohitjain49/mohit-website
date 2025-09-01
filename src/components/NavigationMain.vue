@@ -50,9 +50,9 @@
 
                         <font-awesome-icon :icon="extra.icon" />
                     </RouterLink>
-                    <RouterLink v-if="webData.navFooterPresent" :to="{ 'hash': '#footer' }"
+                    <RouterLink v-if="webData.navFooterPresent" :to="footerRoute"
                         class="mohit-navMenu-extra"
-                        @click="webData.goToPageSection('footer')"
+                        @click="webData.scrollToFooter()"
                         title="Scroll Down To Footer">
 
                         <FontAwesomeIcon icon="fa-angles-down" />
@@ -76,7 +76,9 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
+
 const route = useRoute();
+const footerRoute = computed(() => { return { path: route.path, hash: '#footer' } });
 
 /**
  * This sets the color and border color of an icon.

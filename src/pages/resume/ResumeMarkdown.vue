@@ -1,9 +1,9 @@
 <template>
 <DocumentNavigation />
 <main id="resume-container">
-    <br>
-    <ResumeMarkdownComponent />
-    <div class="markdown-doc-bottom"></div>
+    <div class="pdf-doc-mohit-container">
+        <ResumeMarkdownComponent />
+    </div>
     <WebFooter />
 </main>
 </template>

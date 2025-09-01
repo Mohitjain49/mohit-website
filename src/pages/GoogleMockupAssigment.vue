@@ -1,8 +1,9 @@
 <template>
 <main id="resume-container">
-    <br>
-    <GoogleMockupAssignmentComponent />
-    <br>
+    <div class="pdf-doc-mohit-container">
+        <GoogleMockupAssignmentComponent />
+    </div>
+    <WebFooter />
 </main>
 </template>
 

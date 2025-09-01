@@ -168,6 +168,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
+     * This function scrolls to the footer of the webpage if it exists.
+     */
+    function scrollToFooter() {
+        if(!navFooterPresent.value) { return; }
+        goToPageSection('footer');
+        closeNavMenu();
+    }
+
+    /**
      * The toggles the status of the home navigation menu.
      */
     function toggleNavMenu() {
@@ -265,9 +274,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     return { pageView, menuOpen, navMenuOpen, documentMenuOpen,
         wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent,
         toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock,
-        setEventListeners, removeEventListeners, mountWebData, goToPageSection,
-        setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
-        addFlashAnimation, setPulseLoopAnimation
+        setEventListeners, removeEventListeners, mountWebData, goToPageSection, scrollToFooter,
+        setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }
 });
 

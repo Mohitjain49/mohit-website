@@ -228,8 +228,12 @@ button {
     background-color: white;
     font-family: 'Roboto', sans-serif;
 }
-.markdown-doc-bottom {
-    height: 75px;
+.pdf-doc-mohit-container {
+    height: fit-content;
+    width: 100%;
+    min-height: calc(var(--body-height) - 100px);
+    padding-top: 20px;
+    padding-bottom: 80px;
 }
 
 .markdown-body h1, .markdown-body p, .markdown-body li {
