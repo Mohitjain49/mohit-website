@@ -1,13 +1,6 @@
 <script setup>
 const gamepadStore = useGamepadStore();
 const audioStore = useAudioStore();
-
-/**
- * This function cuts a string to ensure it has only 80 characters.
- */
-function truncate(str = "") {
-    return ((str.length > 80) ? (str.substring(0, 77) + '...') : str);
-}
 </script>
 
 <template>
@@ -21,7 +14,7 @@ function truncate(str = "") {
 
     <Transition name="cursorTitle-transition" fade>
         <div v-if="gamepadStore.cursorElementTitle !== ''" class="custom-cursor-titlePopup">
-            {{ truncate(gamepadStore.cursorElementTitle) }}
+            {{ truncate(gamepadStore.cursorElementTitle, 70) }}
         </div>
     </Transition>
 

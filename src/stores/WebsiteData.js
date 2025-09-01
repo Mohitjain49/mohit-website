@@ -294,6 +294,13 @@ export function checkSSR() {
 }
 
 /**
+ * This function cuts a string to ensure it has the max length of characters.
+ */
+export function truncate(str = "", maxLength = 80) {
+    return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);
+}
+
+/**
  * This function sets the initial transition for a Nav Card.
  * @param {String} cardId The element id for the card.
  */

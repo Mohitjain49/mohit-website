@@ -16,14 +16,17 @@
             <div class="scanner-console-top">
                 <div class="scanner-console-header"> <FontAwesomeIcon icon="fa-terminal" /> Console </div>
                 <div class="scanner-console-utils">
-                    <button @click="() => {}" title="Delete All Scanned Items" style="color: red;">
+                    <button @click="clearAllScannedItems()" title="Delete All Scanned Items" style="color: red;">
                         <FontAwesomeIcon icon="fa-trash" />
                     </button>
                 </div>
             </div>
             <div class="scanner-console-body">
-                <div v-for="item in scannedItemsArray">
-                    {{ item.value }}
+                <div class="scanned-code-item" v-for="item in scannedItemsArray">
+                    <p> {{ truncate(item.value, 25) }} </p>
+                    <button title="Open Info For Scanned Item" @click="() => {}">
+                        <FontAwesomeIcon icon="fa-bars-staggered" />
+                    </button>
                 </div>
             </div>
         </div>
@@ -40,8 +43,7 @@ const cameraActive = ref(false);
  * @type {import('vue').Ref<Array<{ value: String, format: String }>>}
  * This is the array of codes scanned by the camera.
  */
-const scannedItemsArray = ref([]);
-
+const scannedItemsArray = ref([{ value: "https://www.mohit-jain.com/", format: "qr_code" }]);
 /**
  * This function is run whenever a visior activates their camera for the webpage.
  */
@@ -56,10 +58,18 @@ function onCameraActive(event) {
  */
 function onDetect(event) {
     if(import.meta.env.DEV) { console.log(event); }
+    triggerScanSound();
     for(let i = 0; i < event.length; i++) {
         const item = event[i];
         scannedItemsArray.value.push({ value: item.rawValue, format: item.format });
     }
+}
+
+/**
+ * This function clears all scanned items from the list.
+ */
+function clearAllScannedItems() {
+    scannedItemsArray.value = [];
 }
 
 const BARCODE_FORMATS = [
@@ -195,6 +205,38 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Reader", "code-reader",
     border: 1px solid;
     font-size: 14px;
     border-radius: 5px;
+}
+
+.scanned-code-item {
+    width: calc(100% - 20px);
+    height: fit-content;
+    margin-left: 4px;
+    margin-top: 5px;
+    padding: 5px;
+    color: var(--blue-zero);
+    border: 1px solid var(--blue-two);
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+.scanned-code-item p {
+    font-family: 'Montserrat', sans-serif;
+    color: inherit;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.scanned-code-item button {
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 4px;
 }
 
 @media (max-width: 1050px) {
