@@ -677,7 +677,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Barcode Reader",
-        link: "/code-reader",
+        link: "/code-scanner",
         color: "var(--blue-cobalt)",
         desc: "This page is capable of reading values from Barcodes and Qr Codes. " +
             "It uses the \"vue-qrocde-reader\" dependency to do so.",

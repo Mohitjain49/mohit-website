@@ -92,7 +92,7 @@ export const personalRoutes = [
 
     { path: "/features", name: "Main Features Page", component: Features },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },
-    { path: "/code-reader", name: "Code Reader Page", component: CodeScanner },
+    { path: "/code-scanner", alias: ["/code-reader"], name: "Code Reader Page", component: CodeScanner },
     { path: "/qrcode", name: "QR Code Page", component: QrcodePage },
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },

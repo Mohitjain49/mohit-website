@@ -5,8 +5,9 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      * @type {import('vue').Ref<Array<{ value: String, format: String, onlineLink: Boolean }>>}
      * This is the array of codes scanned by the camera.
      */
-    const scannedItems = ref([{ value: "https://www.mohit-jain.com/", format: "qr_code", onlineLink: true }]);
+    const scannedItems = ref([]);
     const cameraActive = ref(false);
+    const scannedItemMenu = ref(-1);
 
     /**
      * This function mounts the page hosting the code scanner.
@@ -18,11 +19,28 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     }
 
     /**
+     * This function unmounts the page hosting the code scanner.
+     */
+    function unmountCodeScanner() {
+        deactivateCamera();
+        setScannedItemMenu(-1);
+    }
+
+    /**
      * This function is run whenever a visior activates their camera for the webpage.
      */
-    function onCameraActive(event) {
+    function onCameraActive(event = {}) {
         if(import.meta.env.DEV) { console.log(event); }
         cameraActive.value = true;
+    }
+
+    /**
+     * This function sets the "cameraActive" boolean to false.
+     * Note that this doesn't actually deactivate the camera.
+     */
+    function deactivateCamera(event = {}) {
+        if(import.meta.env.DEV) { console.log(event); }
+        cameraActive.value = false;
     }
 
     /**
@@ -50,16 +68,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      */
     function clearAllScannedItems() {
         scannedItems.value = [];
-        setLocalStorageObj()
-    }
-
-    /**
-     * This function sets the "cameraActive" boolean to false.
-     * Note that this doesn't actually deactivate the camera.
-     */
-    function deactivateCamera(event) {
-        if(import.meta.env.DEV) { console.log(event); }
-        cameraActive.value = false;
+        setLocalStorageObj();
     }
 
     /**
@@ -67,6 +76,15 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      */
     function setLocalStorageObj() {
         localStorage.setItem(SCANNED_ITEMS_KEY, JSON.stringify(scannedItems.value));
+    }
+
+    /**
+     * This function sets which scanned item menu is open or not.
+     * @param {Number} index The new index for which scanned item should be displayed.
+     * @param {Boolean} toggle Sets the variable to -1 if true and if the variable equals the passed in index.
+     */
+    function setScannedItemMenu(index = -1, toggle = false) {
+        scannedItemMenu.value = ((toggle && index == scannedItemMenu.value) ? -1 : index);
     }
 
     const BARCODE_FORMATS = [
@@ -93,8 +111,8 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         "matrix_codes"
     ];
 
-    return { scannedItems, cameraActive, BARCODE_FORMATS,
-        mountCodeScanner, clearAllScannedItems,
-        onCameraActive, onDetectCode, deactivateCamera
+    return { scannedItems, cameraActive, scannedItemMenu, BARCODE_FORMATS,
+        mountCodeScanner, unmountCodeScanner, clearAllScannedItems, setScannedItemMenu,
+        onCameraActive, deactivateCamera, onDetectCode
     }
 });

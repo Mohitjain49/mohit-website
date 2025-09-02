@@ -4,8 +4,8 @@ const codeScanner = useCodeScannerStore();
 
 onMounted(() => { codeScanner.mountCodeScanner(); });
 onBeforeUnmount(() => { codeScanner.deactivateCamera(); });
-useHead(getMeta("Mohit Jain | Barcode & Qrcode Reader", "code-reader",
-    "This page is capable of reading the values of Barcodes and QR Codes."
+useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
+    "This page is capable of scanning and reading the values of Barcodes and QR Codes."
 ));
 </script>
 
@@ -13,6 +13,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Reader", "code-reader",
 <client-only>
     <vue-particles id="particlests" :options="FEATURES_BACKGROUND"></vue-particles>
 </client-only>
+<FeaturesReturnWidget />
 
 <main id="code-reader-page" class="personal-web-body">
     <div class="code-scanner-main">
@@ -35,11 +36,11 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Reader", "code-reader",
                 </div>
             </div>
             <div class="scanner-console-body">
-                <div class="scanned-code-item" v-for="item in codeScanner.scannedItems">
+                <div class="scanned-code-item" v-for="(item, index) in codeScanner.scannedItems">
                     <p v-if="!item.onlineLink"> {{ truncate(item.value, 25) }} </p>
                     <a v-else :href="item.value" :title="('Open: ' + item.value)"> {{ truncate(item.value, 25) }} </a>
 
-                    <button title="Open Info For Scanned Item" @click="() => {}">
+                    <button title="Open Info For Scanned Item" @click="codeScanner.setScannedItemMenu(index, true)">
                         <FontAwesomeIcon icon="fa-bars-staggered" />
                     </button>
                 </div>
@@ -47,7 +48,6 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Reader", "code-reader",
         </div>
     </div>
 </main>
-<FeaturesReturnWidget />
 </template>
 
 <style scoped>
@@ -75,16 +75,16 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Reader", "code-reader",
     align-items: center;
     border-radius: 20px;
     overflow: hidden;
+    border: 2px solid white;
 }
 .scanner-component-inactive {
-    height: calc(100% - 4px);
-    width: calc(100% - 4px);
+    height: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: white;
-    border: 2px dashed;
     font-family: 'Lexend', sans-serif;
     font-size: 28px;
     border-radius: 20px;

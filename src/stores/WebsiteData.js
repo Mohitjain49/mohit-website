@@ -136,7 +136,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             router.push("/install");
             triggerClickSound();
         } else if(key === "r" || key === "c") {
-            router.push("/code-reader");
+            router.push("/code-scanner");
             triggerClickSound();
         }
     }
