@@ -1,12 +1,18 @@
 <template>
 <Transition name="mohit-bookmark-transition" appear>
-    <RouterLink to="/gamepad" v-if="showGamepadBookmark()" :class="getGamepadBookmarkClasses()" :title=GAMEPAD_BOOKMARK_TITLE>
+    <RouterLink to="/gamepad" v-if="showGamepadBookmark()"
+        :class="getGamepadBookmarkClasses()"
+        :title=GAMEPAD_BOOKMARK_TITLE>
+
         <font-awesome-icon icon="fa-gamepad" />
     </RouterLink>
 </Transition>
 
 <Transition name="mohit-bookmark-transition" appear>
-    <button @click="webData.toggleWakeLock()" v-if="(webData.wakeLock != null)" class="mohit-bookmark lock active" :title="WAKE_LOCK_BOOKMARK_TITLE">
+    <button v-if="(webData.wakeLock != null)" @click="webData.toggleWakeLock()"
+        class="mohit-bookmark lock active"
+        :title="WAKE_LOCK_BOOKMARK_TITLE">
+
         <font-awesome-icon icon="fa-lock" />
     </button>
 </Transition>
