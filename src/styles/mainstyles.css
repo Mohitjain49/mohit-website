@@ -256,6 +256,9 @@ button {
 .resume-markdown-title {
     font-size: 40px !important;
 }
+.resume-markdown-mainLinks, .resume-markdown-mainSummary {
+    margin-bottom: 20px;
+}
 .resume-markdown-mainLinks {
     margin-bottom: 20px;
 }
