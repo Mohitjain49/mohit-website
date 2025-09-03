@@ -9,6 +9,10 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const cameraActive = ref(false);
     const scannedItemMenu = ref(-1);
 
+    const selectedItem = computed(() => {
+        return ((scannedItemMenu.value == -1) ? null : scannedItems.value[scannedItemMenu.value]);
+    })
+
     /**
      * This function mounts the page hosting the code scanner.
      */
@@ -111,7 +115,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         "matrix_codes"
     ];
 
-    return { scannedItems, cameraActive, scannedItemMenu, BARCODE_FORMATS,
+    return { scannedItems, cameraActive, scannedItemMenu, selectedItem, BARCODE_FORMATS,
         mountCodeScanner, unmountCodeScanner, clearAllScannedItems, setScannedItemMenu,
         onCameraActive, deactivateCamera, onDetectCode
     }

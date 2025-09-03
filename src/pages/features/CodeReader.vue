@@ -48,6 +48,15 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
         </div>
     </div>
 </main>
+
+<div v-if="(codeScanner.scannedItemMenu != -1)" id="code-scanner-popup" class="webpage-cover">
+    <div class="scanner-itemMenu">
+        <button @click="codeScanner.setScannedItemMenu(-1)" class="scanner-itemMenu-closeBtn" title="Close Menu">
+            <FontAwesomeIcon icon="fa-xmark" />
+        </button>
+        <input v-model="codeScanner.selectedItem.value" readonly />
+    </div>
+</div>
 </template>
 
 <style scoped>
@@ -194,6 +203,63 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
     background-color: black;
 }
 
+#code-scanner-popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+.scanner-itemMenu {
+    position: relative;
+    width: 500px;
+    height: 250px;
+    background-color: var(--dark-background);
+    border: 2px solid var(--blue-two);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.scanner-itemMenu-closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 6px;
+    color: red;
+    border: 2px solid;
+    border-radius: 50%;
+    transition: var(--default-transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.scanner-itemMenu-closeBtn svg {
+    width: 17px;
+    height: 17px;
+}
+.scanner-itemMenu-closeBtn:hover {
+    background-color: black;
+}
+
+.scanner-itemMenu input {
+    padding: 5px;
+    outline: none;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid;
+    color: var(--blue-two);
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    width: 80%;
+    max-width: 80%;
+    text-align: center;
+}
+
 @media (max-width: 1050px) {
     .code-scanner-main {
         flex-direction: column-reverse;
@@ -204,6 +270,15 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
     }
     .code-scanner-console {
         width: calc(90% - 4px);
+    }
+}
+@media (max-width: 600px) {
+    .scanner-itemMenu {
+        width: 300px;
+        height: 200px;
+    }
+    .scanner-itemMenu input {
+        font-size: 12px;
     }
 }
 </style>
