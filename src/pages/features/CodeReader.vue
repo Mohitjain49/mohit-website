@@ -1,6 +1,7 @@
 <script setup>
 import { QrcodeStream } from 'vue-qrcode-reader';
 const codeScanner = useCodeScannerStore();
+const VUE_QRCODE_READER_GITHUB = "https://github.com/gruhn/vue-qrcode-reader";
 
 onMounted(() => { codeScanner.mountCodeScanner(); });
 onBeforeUnmount(() => { codeScanner.deactivateCamera(); });
@@ -30,6 +31,9 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
             <div class="scanner-console-top">
                 <div class="scanner-console-header"> <FontAwesomeIcon icon="fa-terminal" /> Console </div>
                 <div class="scanner-console-utils">
+                    <a :href="VUE_QRCODE_READER_GITHUB" target="vue-qrcode-reader" title="See the dependency This page uses.">
+                        <FontAwesomeIcon icon="fa-brands fa-github-square" />
+                    </a>
                     <button @click="codeScanner.clearAllScannedItems()" title="Delete All Scanned Items" style="color: red;">
                         <FontAwesomeIcon icon="fa-trash" />
                     </button>
@@ -54,7 +58,25 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
         <button @click="codeScanner.setScannedItemMenu(-1)" class="scanner-itemMenu-closeBtn" title="Close Menu">
             <FontAwesomeIcon icon="fa-xmark" />
         </button>
+
         <input v-model="codeScanner.selectedItem.value" readonly />
+        <div class="scanner-itemMenu-options">
+            <button @click="codeScanner.removeSelectedItem()"
+                class="scanner-itemMenu-opt delete"
+                title="Remove Scanned Value From List">
+
+                <FontAwesomeIcon icon="fa-trash" />
+            </button>
+            <button class="scanner-itemMenu-opt" @click="codeScanner.copySelectedScannedValue()" title="Copy Scanned Value">
+                <FontAwesomeIcon :icon="codeScanner.copiedStatusIcon" />
+            </button>
+            <a v-if="codeScanner.selectedItem.onlineLink" title="Open Link"
+                :href="codeScanner.selectedItem.value" target="_blank"
+                class="scanner-itemMenu-opt link">
+
+                <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
+            </a>
+        </div>
     </div>
 </div>
 </template>
@@ -148,11 +170,11 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    gap: 15px;
+    gap: 7px;
     margin-right: 10px;
     margin-top: 2px;
 }
-.scanner-console-utils button {
+.scanner-console-utils button, .scanner-console-utils a {
     height: fit-content;
     width: fit-content;
     display: flex;
@@ -162,6 +184,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
     border: 1px solid;
     font-size: 14px;
     border-radius: 5px;
+    color: white;
 }
 
 .scanned-code-item {
@@ -258,7 +281,40 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
     width: 80%;
     max-width: 80%;
     text-align: center;
+    margin-bottom: 15px;
 }
+.scanner-itemMenu-options {
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.scanner-itemMenu-opt {
+    font-size: 16px;
+    color: var(--blue-three);
+    border: 2px dotted;
+    border-radius: 12px;
+    padding: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--default-transition);
+}
+.scanner-itemMenu-opt:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.scanner-itemMenu-opt.delete {
+    color: red;
+}
+.scanner-itemMenu-opt.link {
+    color: white;
+}
+
 
 @media (max-width: 1050px) {
     .code-scanner-main {

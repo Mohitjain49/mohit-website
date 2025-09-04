@@ -9,9 +9,15 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const cameraActive = ref(false);
     const scannedItemMenu = ref(-1);
 
+    const copiedTimeout = ref(null);
+    const copiedStatus = ref(0);
+
     const selectedItem = computed(() => {
         return ((scannedItemMenu.value == -1) ? null : scannedItems.value[scannedItemMenu.value]);
-    })
+    });
+    const copiedStatusIcon = computed(() => {
+        return ((copiedStatus.value == 0) ? 'fa-copy' : ((copiedStatus.value == 1) ? 'fa-check' : 'fa-ban'));
+    });
 
     /**
      * This function mounts the page hosting the code scanner.
@@ -68,6 +74,18 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     }
 
     /**
+     * This function removes the selected item from the list.
+     */
+    function removeSelectedItem() {
+        const index = (scannedItemMenu.value == -1 ? (scannedItems.value.length - 1) : scannedItemMenu.value);
+        if(index == -1) { return; }
+        setScannedItemMenu(-1);
+
+        scannedItems.value.splice(index, 1);
+        setLocalStorageObj();
+    }
+
+    /**
      * This function clears all scanned items from the list.
      */
     function clearAllScannedItems() {
@@ -89,6 +107,27 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      */
     function setScannedItemMenu(index = -1, toggle = false) {
         scannedItemMenu.value = ((toggle && index == scannedItemMenu.value) ? -1 : index);
+        document.body.style.overflow = ((scannedItemMenu.value == -1) ? "" : "hidden");
+    }
+
+    /**
+     * This function copies the value of the selected scanned value.
+     */
+    function copySelectedScannedValue() {
+        if(copiedTimeout.value != null) { clearTimeout(copiedTimeout.value); }
+        navigator.clipboard.writeText(selectedItem.value.value).then(() => {
+            copiedStatus.value = 1;
+            copiedTimeout.value = setTimeout(() => {
+                copiedStatus.value = 0;
+                copiedTimeout.value = null;
+            }, 3500);
+        }).catch(() => {
+            copiedStatus.value = 2;
+            copiedTimeout.value = setTimeout(() => {
+                copiedStatus.value = 0;
+                copiedTimeout.value = null;
+            }, 3500);
+        });
     }
 
     const BARCODE_FORMATS = [
@@ -115,8 +154,8 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         "matrix_codes"
     ];
 
-    return { scannedItems, cameraActive, scannedItemMenu, selectedItem, BARCODE_FORMATS,
+    return { scannedItems, cameraActive, scannedItemMenu, selectedItem, copiedStatusIcon, BARCODE_FORMATS,
         mountCodeScanner, unmountCodeScanner, clearAllScannedItems, setScannedItemMenu,
-        onCameraActive, deactivateCamera, onDetectCode
+        onCameraActive, deactivateCamera, onDetectCode, removeSelectedItem, copySelectedScannedValue
     }
 });
