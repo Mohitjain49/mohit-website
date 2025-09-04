@@ -11,6 +11,7 @@ import fontsource_icon from "../assets/FontSource_Icon.png";
 import tauri_icon from "../assets/Tauri_Icon.png";
 import vite_pwa_icon from "../assets/Vite_PWA_Icon.png";
 import arduino_icon from "../assets/Arduino_Icon.svg";
+import r_icon from "../assets/R_Project_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -547,6 +548,19 @@ export const LANGUAGES_SKILL_NOTES = [
         icon: {
             id: "fa-brands fa-golang",
             faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "R",
+        link: "https://www.r-project.org/",
+        color: "#2468BC",
+        desc: "The programming language \"R\" is specifically designed for statistical computing and graphics. " +
+            "I learned and used this coding language in my Probability and Data Analysis class at KSU.",
+
+        icon: {
+            id: r_icon,
+            faIcon: false,
             size: "110"
         }
     },
