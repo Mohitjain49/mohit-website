@@ -1,5 +1,7 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
+    const router = useRouter();
     const controller = new AbortController();
+
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
     const installStore = useInstallStore();
@@ -13,6 +15,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     const pageView = ref(0);
     const menuOpen = ref(-1);
+    const navFooterPresent = ref(false);
 
     const wakeLockAvailable = ref(false);
     const wakeLock = ref(null);
@@ -53,6 +56,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
         document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
+        document.body.addEventListener("keydown", onKeyDown, { signal })
     }
 
     /**
@@ -115,6 +119,29 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
+     * This function runs whenever the user hits a key.
+     * @param {KeyboardEvent} event The event given by the listener.
+     */
+    function onKeyDown(event) {
+        if(!event.altKey) { return; }
+        const key = event.key;
+
+        if(key === "m") {
+            toggleNavMenu();
+            triggerClickSound();
+        } else if(key === "w") {
+            router.push("/wakelock");
+            triggerClickSound();
+        } else if(key === "i") {
+            router.push("/install");
+            triggerClickSound();
+        } else if(key === "r" || key === "c") {
+            router.push("/code-scanner");
+            triggerClickSound();
+        }
+    }
+
+    /**
      * This function handles unhandled rejections.
      */
     function onUnhandledRejection(event) {
@@ -138,6 +165,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function goToPageSection(id = "start") {
         const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
         window.scrollTo({ top: top, left: 0, behavior: "smooth" });
+    }
+
+    /**
+     * This function scrolls to the footer of the webpage if it exists.
+     */
+    function scrollToFooter() {
+        if(!navFooterPresent.value) { return; }
+        goToPageSection('footer');
+        closeNavMenu();
     }
 
     /**
@@ -236,11 +272,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { pageView, menuOpen, navMenuOpen, documentMenuOpen,
-        wakeLock, wakeLockIcon, wakeLockStatement,
+        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent,
         toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock,
-        setEventListeners, removeEventListeners, mountWebData, goToPageSection,
-        setFlashAnimation, setHeartbeatAnimation, setBounceAnimation,
-        addFlashAnimation, setPulseLoopAnimation
+        setEventListeners, removeEventListeners, mountWebData, goToPageSection, scrollToFooter,
+        setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }
 });
 
@@ -249,6 +284,20 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
  */
 export function reloadPage() {
     window.location.reload();
+}
+
+/**
+ * This function returns whether or not the app is rendering on the server or not.
+ */
+export function checkSSR() {
+    return import.meta.env.SSR;
+}
+
+/**
+ * This function cuts a string to ensure it has the max length of characters.
+ */
+export function truncate(str = "", maxLength = 80) {
+    return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);
 }
 
 /**

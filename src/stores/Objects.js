@@ -9,6 +9,9 @@ import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
 import fontsource_icon from "../assets/FontSource_Icon.png";
 import tauri_icon from "../assets/Tauri_Icon.png";
+import vite_pwa_icon from "../assets/Vite_PWA_Icon.png";
+import arduino_icon from "../assets/Arduino_Icon.svg";
+import r_icon from "../assets/R_Project_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -512,12 +515,26 @@ export const LANGUAGES_SKILL_NOTES = [
         name: "Java",
         link: "https://www.java.com/en/",
         color: "#EC2025",
-        desc: "While I haven't developed any major projects with Java, this is the first language that I learned. " +
-            "I'll most likely use Kotlin to develop an Android App in the future if I have the time.",
+        desc: "Java is the first major programming language that I learned about. " +
+            "I primarily used it in college to complete assignments for my Data Structures class.",
 
         icon: {
             id: "fa-brands fa-java",
             faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Arduino",
+        link: "https://www.arduino.cc/",
+        color: "#25c2c7",
+        desc: "At iVue, we use arduino boards to create advanced modkits for our drones. " +
+            "This vastly improves the quality of the drones, making it less complicated for us " +
+            "to develop and for consumers to operate.",
+
+        icon: {
+            id: arduino_icon,
+            faIcon: false,
             size: "110"
         }
     },
@@ -531,6 +548,19 @@ export const LANGUAGES_SKILL_NOTES = [
         icon: {
             id: "fa-brands fa-golang",
             faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "R",
+        link: "https://www.r-project.org/",
+        color: "#2468BC",
+        desc: "The programming language \"R\" is specifically designed for statistical computing and graphics. " +
+            "I learned and used this coding language in my Probability and Data Analysis class at KSU.",
+
+        icon: {
+            id: r_icon,
+            faIcon: false,
             size: "110"
         }
     },
@@ -656,6 +686,88 @@ export const PROJECT_ENTITIES = [
             id: cesium_icon,
             faIcon: false,
             size: "105"
+        }
+    }
+];
+
+export const FEATURE_ENTITIES = [
+    {
+        name: "Gamepads",
+        link: "/gamepad",
+        color: "var(--website-light-text)",
+        desc: "I integrated the Web Gamepad API into my website with joypad.js so that visitors can freely use a " +
+            "PS5, Xbox, Nintendo Switch, and other controllers with my website.",
+
+        icon: {
+            id: "fa-gamepad",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Barcode Reader",
+        link: "/code-scanner",
+        color: "var(--blue-cobalt)",
+        desc: "This page is capable of reading values from Barcodes and Qr Codes. " +
+            "It uses the \"vue-qrocde-reader\" dependency to do so.",
+
+        icon: {
+            id: "fa-barcode",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "QR Codes",
+        link: "/qrcode",
+        color: "var(--website-light-text)",
+        desc: "This page uses the \"uqr\" dependency to create QR Codes for this website " +
+            "and my online profiles on different platforms.",
+
+        icon: {
+            id: "fa-qrcode",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Install Website",
+        link: "/install",
+        color: "var(--website-text)",
+        desc: "I used the \"Vite PWA\" dependency to build a service worker " +
+            "for my website so that I can install and fully utilize my website offline.",
+
+        icon: {
+            id: vite_pwa_icon,
+            faIcon: false,
+            size: "150"
+        }
+    },
+    {
+        name: "Wake Lock",
+        link: "/wakelock",
+        color: "var(--vibrant-flame)",
+        desc: "This website can effectively use the Screen Wake Lock Web API so that " +
+            "the laptop does not go to sleep naturally when enabled.",
+
+        icon: {
+            id: "fa-lock",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Documents",
+        link: "/resume/",
+        color: "var(--website-text)",
+        desc: "I used multiple modules to display my resume and other documents on this website. " +
+            "This includes using PDF.js to natively display the PDF as a whole and the \"unplugin-vue-markdown\" " +
+            "plugin to display my resume in a markdown format.",
+
+        icon: {
+            id: "fa-file-lines",
+            faIcon: true,
+            size: "100"
         }
     }
 ];

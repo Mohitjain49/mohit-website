@@ -13,88 +13,12 @@ import { loadSlim } from "@tsparticles/slim";
 import App from "./App.vue";
 import { personalRoutes } from "./routes";
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import * as FaIcons from '@fortawesome/free-solid-svg-icons'
-import * as FaBrands from '@fortawesome/free-brands-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 
-library.add(
-    FaIcons.faList,
-    FaIcons.faDatabase,
-    FaIcons.faPalette,
-    FaIcons.faPaperPlane,
-    FaIcons.faBuilding,
-    FaIcons.faMapPin,
-    FaIcons.faGear,
-    FaIcons.faMagnifyingGlass,
-    FaIcons.faX,
-    FaIcons.faBan,
-    FaIcons.faArrowDown,
-    FaIcons.faArrowLeft,
-    FaIcons.faFileLines,
-    FaIcons.faBars,
-    FaIcons.faHouse,
-    FaIcons.faMessage,
-    FaIcons.faLaptopCode,
-    FaIcons.faFileCode,
-    FaIcons.faCode,
-    FaIcons.faFilePdf,
-    FaIcons.faFileDownload,
-    FaIcons.faPrint,
-    FaIcons.faCopy,
-    FaIcons.faEnvelope,
-    FaIcons.faPhone,
-    FaIcons.faCircleDot,
-    FaIcons.faCircleInfo,
-    FaIcons.faCopyright,
-    FaIcons.faArrowUp,
-    FaIcons.faPenFancy,
-    FaIcons.faUsersRectangle,
-    FaIcons.faStar,
-    FaIcons.faQrcode,
-    FaIcons.faGlobe,
-    FaIcons.faCubes,
-    FaIcons.faDownload,
-    FaIcons.faRotateRight,
-    FaIcons.faSquareXmark,
-    FaIcons.faPizzaSlice,
-    FaIcons.faGamepad,
-    FaIcons.faArrowPointer,
-    FaIcons.faHandPointer,
-    FaIcons.faICursor,
-    FaIcons.faLock,
-    FaIcons.faUnlock,
-    FaIcons.faCodeBranch,
-    FaIcons.faCodeCommit,
-    FaIcons.faSquarePen,
-    FaIcons.faSchoolFlag,
-    FaIcons.faVolumeHigh,
-    FaIcons.faVolumeLow,
-    FaIcons.faVolumeOff,
-    FaIcons.faVolumeXmark,
-    FaIcons.faCircleXmark,
-    FaIcons.faEarthAmericas,
-    FaIcons.faSitemap,
-
-    FaBrands.faReact,
-    FaBrands.faJs,
-    FaBrands.faHtml5,
-    FaBrands.faCss3Alt,
-    FaBrands.faNodeJs,
-    FaBrands.faGithub,
-    FaBrands.faLinkedin,
-    FaBrands.faAws,
-    FaBrands.faDiscord,
-    FaBrands.faFontAwesome,
-    FaBrands.faCloudflare,
-    FaBrands.faJava,
-    FaBrands.faGolang,
-    FaBrands.faGitlab,
-    FaBrands.faPython,
-    FaBrands.faGoogleDrive,
-    FaBrands.faMarkdown,
-    FaBrands.faGoogle,
-    FaBrands.faSteam
-);
+library.add(fas, fab);
+const USE_LEGACY_PDFJS_WORKER = false;
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
     ({ app }) => {
@@ -102,12 +26,14 @@ export const createApp = ViteSSG(App, { routes: personalRoutes },
         app.use(createPinia());
 
         if(!import.meta.env.SSR) {
-            import("pdfjs-dist").then((PDFJS) => {
-                PDFJS.GlobalWorkerOptions.workerSrc = new URL(
-                    "pdfjs-dist/legacy/build/pdf.worker.mjs",
-                    import.meta.url
-                ).toString();
-            });
+            if(USE_LEGACY_PDFJS_WORKER) {
+                import("pdfjs-dist").then((PDFJS) => {
+                    PDFJS.GlobalWorkerOptions.workerSrc = new URL(
+                        "pdfjs-dist/legacy/build/pdf.worker.mjs",
+                        import.meta.url
+                    ).toString();
+                });
+            }
 
             app.use(VueParticles, { init: async engine => { await loadSlim(engine); } });
             if(navigator.getGamepads()) { import("./joypad-events.js"); }

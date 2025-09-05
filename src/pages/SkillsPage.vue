@@ -2,6 +2,7 @@
 <client-only>
     <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
 </client-only>
+<NavigationSkills />
 
 <main id="skills-page" class="personal-web-body">
     <client-only>

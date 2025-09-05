@@ -2,6 +2,7 @@
 <client-only>
     <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
 </client-only>
+<FeaturesReturnWidget />
 
 <main id="qr-code-page" class="personal-web-body transparent">
     <div class="qr-page-grid">
@@ -40,6 +41,9 @@ onMounted(() => {
         qrCodes.item(i).classList.add("animate__animated", animation);
     }
 });
+onBeforeUnmount(() => {
+    setQRCodePopup();
+})
 
 useHead(getMeta("Mohit Jain | QR Codes", "qrcode",
     "This page hosts Quick Response Codes that lead to projects or pages that I work on."

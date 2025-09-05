@@ -8,20 +8,18 @@ import EnvTypes from 'vite-plugin-env-types';
 
 import Info from "unplugin-info/vite";
 import imagemin from 'unplugin-imagemin/vite';
-import attrs from 'markdown-it-attrs'
+import attrs from 'markdown-it-attrs';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
 import Markdown from 'unplugin-vue-markdown/vite';
 
 const SITEMAP_EXCLUDED_ROUTES = [
-    "/gamepad", "/repo", "/repository",
-    "/code", "/codesandbox", "/code-sandbox", "/commits",
-    "/globe", "/mnd", "/pizza", "/sublo",
-    "/ivue", "/ivuemedia", "/ivuerobotics",
-    "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
+    "/gamepad", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
+    "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
+    "/ivue", "/ivuemedia", "/ivuerobotics", "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/mohit-website/**", "/mohit-website", "/sitemap"
+    "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
 ];
 
 export default defineConfig({
@@ -59,8 +57,8 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v2.9.2",
-                globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl}'],
+                cacheId: "v3.0.0",
+                globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
                 navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/]

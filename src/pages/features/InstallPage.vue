@@ -2,6 +2,7 @@
 <client-only>
     <vue-particles id="particlests" :options="INSTALL_BACKGROUND"></vue-particles>
 </client-only>
+<FeaturesReturnWidget />
 
 <main id="install-page" class="personal-web-body">
     <div class="install-body">
@@ -13,6 +14,9 @@
             <a :href="VITE_PWA_WEBSITE" class="install-vite-pwa">
                 This uses Vite PWA to create and download a Progressive Web Application on your device.
             </a>
+            <p class="install-keybind-msg">
+                P.S. You can also access this page with Alt + I
+            </p>
         </div>
     </div>
     <WebFooter />
@@ -84,14 +88,27 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
     margin-right: 5px;
 }
 
+.install-keybind-msg {
+    width: 80%;
+    height: fit-content;
+    margin-top: 10px;
+    text-align: center;
+    font-family: 'Lexend', sans-serif;
+    font-size: 14px;
+    color: var(--lightning-yellow);
+}
+
 @media (max-width: 600px) {
     .install-box {
         width: 300px;
-        height: 200px;
+        height: 250px;
     }
     .install-button {
         width: 80%;
         font-size: 19px;
+    }
+    .install-keybind-msg {
+        font-size: 12px;
     }
 }
 </style>

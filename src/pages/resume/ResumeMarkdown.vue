@@ -1,14 +1,15 @@
 <template>
 <DocumentNavigation />
 <main id="resume-container">
-    <br>
-    <ResumeMarkdownComponent />
-    <div class="markdown-doc-bottom"></div>
+    <div class="pdf-doc-mohit-container">
+        <ResumeMarkdownComponent />
+    </div>
+    <WebFooter />
 </main>
 </template>
 
 <script setup>
 useHead(getMeta("Mohit Jain | My Resume", "resume/markdown",
-    "Feel free to take a look at my resume."
+    "Feel free to take a look at my resume. This is in markdown format."
 ));
 </script>

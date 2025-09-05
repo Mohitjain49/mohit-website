@@ -33,9 +33,12 @@
             </div>
 
             <div class="footer-routes-column extras">
-                <RouterLink to="/qrcode" class="footer-routes-header light" @click="scrollToTop('/qrcode')">
-                    <font-awesome-icon icon="fa-qrcode" />
-                    <span> QR Codes </span>
+                <RouterLink to="/features" class="footer-routes-header"
+                    @click="scrollToTop('/features')"
+                    style="color: var(--lightning-yellow)">
+
+                    <font-awesome-icon icon="fa-bolt-lightning" />
+                    <span> Features </span>
                 </RouterLink>
 
                 <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
@@ -76,13 +79,28 @@
 </template>
 
 <script setup>
-const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const route = useRoute();
-onMounted(() => { COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain"); });
+const webData = useWebsiteDataStore();
+const docStore = useDocumentStore();
+const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
+
+onMounted(() => {
+    COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
+    webData.navFooterPresent = true;
+});
+onBeforeUnmount(() => {
+    webData.navFooterPresent = false;
+})
 
 const footerClass = computed(() => {
     const path = route.path;
-    return ((-1 == MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) ? '' : 'main-page');
+    if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
+        return 'main-page';
+    } else if(docStore.checkResumeRoute() || docStore.checkFCSCertificateRoute()) {
+        return 'document-route';
+    } else {
+        return '';
+    }
 })
 
 /**
@@ -100,23 +118,25 @@ const MAIN_ROUTES = [
     { name: "My Projects", path: "/projects", icon: "fa-cubes", color: "var(--globe-green)" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", color: "var(--website-text)" },
     { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)" },
+    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-two)" },
 ];
 
 const EXTRA_ROUTES = [
-    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-two)" },
-    { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
-    { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
     { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", color: "var(--website-light-text)" },
-    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", color: "#4286F5" },
+    { name: "Barcode Reader", path: "/code-reader", icon: "fa-barcode", color: "var(--blue-cobalt)" },
+    { name: "QR Codes", path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)" },
+    { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
+    { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
 ];
 
 const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", color: "var(--lightning-yellow)" },
     { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" },
-    { name: "Sitemap", path: "/sitemap", icon: "fa-sitemap", color: "lightgrey" }
+    { name: "Sitemap", path: "/sitemap", icon: "fa-sitemap", color: "lightgrey" },
+    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", color: "#4286F5" },
 ];
 
-const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
+const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/features/"];
 </script>
 
 <style scoped>
@@ -131,6 +151,9 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
 #footer.main-page {
     border-top: 2px dashed var(--website-light-text);
     background-color: rgb(10, 10, 10);
+}
+#footer.document-route {
+    padding-bottom: 40px;
 }
 
 .footer-body {
@@ -228,7 +251,10 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
 
 @media (max-width: 1050px) {
     #footer {
-        height: 625px;
+        height: 660px;
+    }
+    #footer.document-route {
+        padding-bottom: 10px;
     }
     .footer-body {
         grid-template-columns: 1fr 1fr;
@@ -253,15 +279,18 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/"];
 }
 @media (max-width: 525px) {
     #footer {
-        height: 515px;
+        height: 545px;
+    }
+    #footer.document-route {
+        padding-bottom: 50px;
     }
     .footer-body {
-        height: 450px;
+        height: 470px;
         left: 0px;
         width: 100%;
     }
     .footer-bottom {
-        padding-bottom: 10px;
+        padding: 10px 0px;
     }
     .copyright-statement {
         font-size: 23px;

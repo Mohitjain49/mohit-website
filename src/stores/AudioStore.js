@@ -1,4 +1,5 @@
 import click_sound from "@/assets/sounds/click_sound_effect.wav";
+import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
@@ -8,9 +9,15 @@ export const useAudioStore = defineStore("audio-store", () => {
     var volumeInterval = null;
 
     /**
-     * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable.
+     * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect.
      */
-    const audioClip = ref(null);
+    const audioClickClip = ref(null);
+
+    /**
+     * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable for the scan sound effect.
+     */
+    const audioScanClip = ref(null);
+
     const volumeInput = ref("50");
     const volumeInputIcon = computed(() => {
         const volumeInt = parseInt(volumeInput.value);
@@ -42,8 +49,11 @@ export const useAudioStore = defineStore("audio-store", () => {
      */
     function setupClickAudio() {
         checkTTSAvailable();
-        audioClip.value = new Audio(click_sound);
-        audioClip.value.preload = "auto";
+        audioClickClip.value = new Audio(click_sound);
+        audioClickClip.value.preload = "auto";
+
+        audioScanClip.value = new Audio(scan_sound);
+        audioScanClip.value.preload = "auto";
 
         const audioClipVolume = localStorage.getItem(CLICK_VOLUME_KEY);
         volumeInput.value = ((audioClipVolume === null) ? "50" : audioClipVolume);
@@ -55,7 +65,10 @@ export const useAudioStore = defineStore("audio-store", () => {
      */
     function changeAudioVolume() {
         localStorage.setItem(CLICK_VOLUME_KEY, volumeInput.value);
-        audioClip.value.volume = (parseInt(volumeInput.value) / 100);
+        const newVolume = (parseInt(volumeInput.value) / 100);
+
+        audioClickClip.value.volume = newVolume;
+        audioScanClip.value.volume = newVolume;
     }
 
     /**
@@ -75,7 +88,23 @@ export const useAudioStore = defineStore("audio-store", () => {
 
         const usuableLink = foundElement?.closest('a');
         const usuableButton = foundElement?.closest('button');
-        if(usuableLink || usuableButton) { triggerClickSound(); }
+        if(usuableLink || usuableButton) { playClickSound() }
+    }
+
+    /**
+     * This function plays the click sound effect.
+     */
+    function playClickSound() {
+        audioClickClip.value.currentTime = 0;
+        audioClickClip.value.play();
+    }
+
+    /**
+     * This function plays the scan sound effect.
+     */
+    function playScanSound() {
+        audioScanClip.value.currentTime = 0;
+        audioScanClip.value.play();
     }
 
     /**
@@ -140,19 +169,23 @@ export const useAudioStore = defineStore("audio-store", () => {
         ttsPlaying.value = true;
     }
 
-    return { audioClip, volumeInput, volumeInputIcon, showVolumeGamepadMenu,
-        ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
-        checkTTSAvailable, cancelTTS, startTTS,
-        setupClickAudio, changeAudioVolume, confirmClickSound,
-        setVolumeInterval, stopVolumeInterval
+    return { audioClickClip, audioScanClip, volumeInput, volumeInputIcon, showVolumeGamepadMenu,
+        ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, checkTTSAvailable, cancelTTS, startTTS,
+        setupClickAudio, changeAudioVolume, confirmClickSound, setVolumeInterval, stopVolumeInterval,
+        playClickSound, playScanSound
     }
 });
 
 /**
- * This function triggers a click sound effect.
+ * This function triggers the click sound effect.
  */
 export function triggerClickSound() {
-    const audioClip = useAudioStore().audioClip;
-    audioClip.currentTime = 0;
-    audioClip.play();
+    useAudioStore().playClickSound();
+}
+
+/**
+ * This function triggers the scan sound effect.
+ */
+export function triggerScanSound() {
+    useAudioStore().playScanSound();
 }

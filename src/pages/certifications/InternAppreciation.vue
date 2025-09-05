@@ -2,13 +2,14 @@
 <DocumentNavigation />
 <client-only>
     <main id="resume-container" v-if="documentStore.fultonInternshipAppreciationPdfObj != null">
-        <br>
-        <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
-            :pdf="documentStore.fultonInternshipAppreciationPdfObj.value"
-            :width="documentStore.customPdfWidth"
-            :height="documentStore.customPdfHeight"
-        />
-        <div class="markdown-doc-bottom"></div>
+        <div class="pdf-doc-mohit-container">
+            <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
+                :pdf="documentStore.fultonInternshipAppreciationPdfObj.value"
+                :width="documentStore.customPdfWidth"
+                :height="documentStore.customPdfHeight"
+            />
+        </div>
+        <WebFooter />
     </main>
     <div id="resume-container" class="center-flex-display" v-else>
         <div class="loading-spinner"></div>

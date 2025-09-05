@@ -7,6 +7,10 @@
         While my best work is with iVue's websites and applications, 
         I made a few personal projects over the years for various events and classes at College.
     </div>
+    <RouterLink class="projects-features-btn" to="/features" title="Explore this Website's Unique Capabilities">
+        <FontAwesomeIcon icon="fa-bolt-lightning" />
+        Website Features
+    </RouterLink>
 
     <div v-for="(entity, index) in PROJECT_ENTITIES" class="projects-note-container"
         v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
@@ -42,10 +46,12 @@ function setProjectsTransitions(isVisible) {
     if(isVisible && window.innerWidth > 450) {
         document.getElementsByClassName('projects-main-header').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('projects-main-desc').item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName('projects-features-btn').item(0).classList.add("animate__animated", "animate__zoomIn");
         return;
     } else if(!isVisible) {
         document.getElementsByClassName('projects-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('projects-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName('projects-features-btn').item(0).classList.remove("animate__animated", "animate__zoomIn");
 
         const skillCards = document.getElementsByClassName("projects-note-container");
         for(let i = 0; i < skillCards.length; i++) {
@@ -61,7 +67,6 @@ function setProjectsTransitions(isVisible) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     height: fit-content;
-    min-height: calc(100% - var(--top-bar-height));
     width: 1200px;
     padding: 80px calc(50% - 600px);
 }
@@ -96,13 +101,11 @@ function setProjectsTransitions(isVisible) {
     width: calc(100% - 30px);
     height: fit-content;
     padding: 20px 15px;
-    margin-bottom: 30px;
     grid-column: span 3;
     color: var(--globe-green-opaque);
     text-align: center;
     line-height: 35px;
 }
-
 .projects-note-container {
     height: 550px;
     width: 100%;
@@ -112,6 +115,29 @@ function setProjectsTransitions(isVisible) {
     align-items: center;
 }
 
+.projects-features-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 3px;
+    grid-column: span 3;
+    width: fit-content;
+    margin: 10px auto 0px;
+    padding: 10px 15px;
+    font-size: 25px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: bold;
+    border: 2px solid var(--lightning-yellow);
+    border-radius: 15px;
+    background-color: var(--dark-background);
+    color: var(--lightning-yellow);
+    transition: var(--default-transition);
+}
+.projects-features-btn:hover {
+    box-shadow: 0px 0px 20px var(--lightning-yellow);
+}
+
 @media (max-width: 1200px) {
     .projects-section {
         grid-template-columns: repeat(2, 1fr);
@@ -119,7 +145,7 @@ function setProjectsTransitions(isVisible) {
         padding: 0px calc(50% - 400px);
         padding-bottom: 50px;
     }
-    .projects-main-header, .projects-main-desc {
+    .projects-main-header, .projects-main-desc, .projects-features-btn {
         grid-column: span 2;
     }
 }
@@ -135,7 +161,7 @@ function setProjectsTransitions(isVisible) {
         min-width: 0px;
         height: 500px;
     }
-    .projects-main-header, .projects-main-desc {
+    .projects-main-header, .projects-main-desc, .projects-features-btn {
         grid-column: span 1;
     }
 
@@ -147,6 +173,9 @@ function setProjectsTransitions(isVisible) {
         line-height: 28px;
         margin-bottom: 0px;
         text-align: left;
+    }
+    .projects-features-btn {
+        font-size: 17px;
     }
 }
 
