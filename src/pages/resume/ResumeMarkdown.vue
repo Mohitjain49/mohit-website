@@ -10,6 +10,6 @@
 
 <script setup>
 useHead(getMeta("Mohit Jain | My Resume", "resume/markdown",
-    "Feel free to take a look at my resume."
+    "Feel free to take a look at my resume. This is in markdown format."
 ));
 </script>

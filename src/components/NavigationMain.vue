@@ -3,73 +3,71 @@
 </style>
 
 <template>
-<client-only>
-    <nav id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
-        <div class="mohit-navBar-top">
-            <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Back To Home Page">
-                <img :src="mkj_text" draggable="false" />
+<nav id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
+    <div class="mohit-navBar-top">
+        <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Back To Home Page">
+            <img :src="mkj_text" draggable="false" />
+        </RouterLink>
+
+        <div class="mohit-navBar-icons">
+            <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
+                @click="(event) => { flashNavOpt(event, btn.path) }"
+                :title="btn.title"
+                class="mohit-navBar-icon"
+                :style="getColorStyles(btn.color)"
+                @mouseenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
+            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
+                :title="(webData.navMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu')"
+                :style="getColorStyles('var(--website-light-text)')"
+                @mouseenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
 
-            <div class="mohit-navBar-icons">
-                <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
-                    @click="(event) => { flashNavOpt(event, btn.path) }"
-                    :title="btn.title"
-                    class="mohit-navBar-icon"
-                    :style="getColorStyles(btn.color)"
-                    @mouseenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
+                <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
+            </button>
+        </div>
+    </div>
 
+    <Transition name="navMenu-transition">
+        <div v-if="webData.navMenuOpen" class="mohit-navMenu">
+            <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
+                <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
+                    <span> {{ btn.title }} </span>
                 </RouterLink>
-                <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
-                    :title="(webData.navMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu')"
-                    :style="getColorStyles('var(--website-light-text)')"
-                    @mouseenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
+            </div>
 
-                    <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
-                </button>
+            <div class="mohit-navMenu-opt">
+                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
+                    :title="extra.title"
+                    class="mohit-navMenu-extra"
+                    @click="(event) => { flashNavOpt(event, extra.path) }"
+                    :style="getColorStyles(extra.color)">
+
+                    <font-awesome-icon :icon="extra.icon" />
+                </RouterLink>
+                <RouterLink v-if="webData.navFooterPresent" :to="footerRoute"
+                    class="mohit-navMenu-extra"
+                    @click="webData.scrollToFooter()"
+                    title="Scroll Down To Footer">
+
+                    <FontAwesomeIcon icon="fa-angles-down" />
+                </RouterLink>
+            </div>
+            <div class="mohit-navMenu-opt volume-meter">
+                <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+                <input type="range" min="0" max="100" title="Volume Meter for the click sound."
+                    v-model="audioStore.volumeInput"
+                    @input="audioStore.changeAudioVolume()"
+                />
+                <span> {{ (audioStore.volumeInput + '%') }} </span>
             </div>
         </div>
-
-        <Transition name="navMenu-transition">
-            <div v-if="webData.navMenuOpen" class="mohit-navMenu">
-                <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-                    <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
-                        <font-awesome-icon :icon="btn.icon" />
-                        <span> {{ btn.title }} </span>
-                    </RouterLink>
-                </div>
-
-                <div class="mohit-navMenu-opt">
-                    <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
-                        :title="extra.title"
-                        class="mohit-navMenu-extra"
-                        @click="(event) => { flashNavOpt(event, extra.path) }"
-                        :style="getColorStyles(extra.color)">
-
-                        <font-awesome-icon :icon="extra.icon" />
-                    </RouterLink>
-                    <RouterLink v-if="webData.navFooterPresent" :to="footerRoute"
-                        class="mohit-navMenu-extra"
-                        @click="webData.scrollToFooter()"
-                        title="Scroll Down To Footer">
-
-                        <FontAwesomeIcon icon="fa-angles-down" />
-                    </RouterLink>
-                </div>
-                <div class="mohit-navMenu-opt volume-meter">
-                    <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
-                    <input type="range" min="0" max="100" title="Volume Meter for the click sound."
-                        v-model="audioStore.volumeInput"
-                        @input="audioStore.changeAudioVolume()"
-                    />
-                    <span> {{ (audioStore.volumeInput + '%') }} </span>
-                </div>
-            </div>
-        </Transition>
-    </nav>
-</client-only>
+    </Transition>
+</nav>
 </template>
 
 <script setup>

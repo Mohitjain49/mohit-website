@@ -9,12 +9,18 @@
         </div>
 
         <div class="icon-start-widgets">
-            <button v-for="widget in ICON_WIDGETS" class="web-widget-container"
-                @click="copyImage(widget.img)" title="Copy Image">
-
-                <div class="web-widget"> <img :src="widget.img" /> </div>
+            <div v-for="widget in ICON_WIDGETS" class="web-widget-container" title="Navigate To Image">
+                <a :href="(ICON_IMPORT_START_LINK + widget.img)" target="_blank" class="web-widget">
+                    <img :src="(ICON_IMPORT_START + widget.img)" />
+                </a>
                 <div class="web-widget-label"> {{ widget.name }} </div>
-            </button>
+            </div>
+            <div class="web-widget-container" title="Copy Image">
+                <a :href="MND_LINK" target="_blank" class="web-widget">
+                    <img :src="('/static-icons/MND_Icon_Transparent.png')" />
+                </a>
+                <div class="web-widget-label"> {{ 'MND Icon' }} </div>
+            </div>
         </div>
     </div>
 
@@ -39,64 +45,30 @@
     </div>
     <WebFooter />
 </main>
-
-<Transition name="alertBoxTransition">
-    <div class="icons-alert-box" v-if="(alertText !== '')">
-        <div class="icons-alert-box-text" v-html="alertText"></div>
-    </div>
-</Transition>
 </template>
 
 <script setup>
 const ICON_IMPORT_START = "/static-icons/Personal_Icon";
-
-const alertText = ref("");
-var alertInterval = null;
+const ICON_IMPORT_START_LINK = (PERSONAL_WEBSITE_LINK + "static-icons/Personal_Icon");
+const MND_LINK = (PERSONAL_WEBSITE_LINK + 'static-icons/MND_Icon_Transparent.png');
 
 onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Icons", "icons",
     "I created my icons by using gradients and the Google Lexend Font. You can view them on this page."
 ));
 
-/**
- * This lets the visitor copy an image.
- * @param {String} imageUrl The URL of the image.
- */
-async function copyImage(imageUrl = "") {
-    if(imageUrl === "") { return; }
-    imageUrl = (window.location.origin + imageUrl);
-
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    const data = [new ClipboardItem({ [blob.type]: blob })];
-
-    try {
-        await navigator.clipboard.write(data);
-        alertText.value = "Copied Image!";
-    } catch {
-        alertText.value = "Failed To Copy Image.";
-    }
-
-    if(alertInterval != null) { clearInterval(alertInterval); }
-    alertInterval = setInterval(() => {
-        alertText.value = "";
-        alertInterval = null;
-    }, 5000);
-}
-
 const ICON_WIDGETS = [
-    { name: "Base Icon", img: (ICON_IMPORT_START + ".png") },
-    { name: "Rounded Icon", img: (ICON_IMPORT_START + "_Expanded_Rounded.png") },
-    { name: "Clear Icon", img: (ICON_IMPORT_START + "_Transparent.png") },
-    { name: "Spaced Icon", img: (ICON_IMPORT_START + "_Expanded.png") },
-    { name: "Spaced Clear Icon", img: (ICON_IMPORT_START + "_Expanded_Transparent.png") },
-    { name: "Green Icon", img: (ICON_IMPORT_START + "_Green.png") },
-    { name: "Spaced Green Icon", img: (ICON_IMPORT_START + "_Green_Expanded.png") },
-    { name: "Gold Icon", img: (ICON_IMPORT_START + "_Gold.png") },
-    { name: "Gold Clear Icon", img: (ICON_IMPORT_START + "_Gold_Transparent.png") },
-    { name: "Gold Spaced Icon", img: (ICON_IMPORT_START + "_Gold_Expanded.png") },
-    { name: "Gold Spaced Clear Icon", img: (ICON_IMPORT_START + "_Gold_Expanded_Transparent.png") },
-    { name: "MND Icon", img: "/static-icons/MND_Icon_Transparent.png" },
+    { name: "Base Icon", img: ".png" },
+    { name: "Rounded Icon", img: "_Expanded_Rounded.png" },
+    { name: "Clear Icon", img: "_Transparent.png" },
+    { name: "Spaced Icon", img: "_Expanded.png" },
+    { name: "Spaced Clear Icon", img: "_Expanded_Transparent.png" },
+    { name: "Green Icon", img: "_Green.png" },
+    { name: "Spaced Green Icon", img: "_Green_Expanded.png" },
+    { name: "Gold Icon", img: "_Gold.png" },
+    { name: "Gold Clear Icon", img: "_Gold_Transparent.png" },
+    { name: "Gold Spaced Icon", img: "_Gold_Expanded.png" },
+    { name: "Gold Spaced Clear Icon", img: "_Gold_Expanded_Transparent.png" }
 ];
 </script>
 
@@ -107,7 +79,7 @@ const ICON_WIDGETS = [
     min-height: 100%;
 }
 .icon-background {
-    height: calc(100vh - 50px);
+    height: var(--body-height);
     min-height: 700px;
     width: 100%;
     display: flex;
@@ -129,7 +101,7 @@ const ICON_WIDGETS = [
 
 .icon-page-padding {
     width: 100%;
-    height: 50px;
+    height: 60px;
     background-color: var(--blue-zero);
 }
 .icon-page-padding#main {
@@ -203,7 +175,6 @@ const ICON_WIDGETS = [
 }
 
 .web-widget {
-    cursor: copy;
     width: 70px;
     height: 70px;
     background-color: rgba(255, 255, 255, 0.25);
@@ -233,57 +204,11 @@ const ICON_WIDGETS = [
     box-shadow: 0px 0px 9px 1px var(--blue-cobalt);
 }
 
-.icons-alert-box {
-    position: fixed;
-    left: 10%;
-    bottom: 30px;
-    height: 100px;
-    width: 80%;
-    max-width: 600px;
-    border: 2px solid var(--blue-cobalt);
-    border-radius: 20px;
-    background-color: var(--blue-zero);
-    z-index: 100;
-    box-shadow: 0px 0px 10px 0px black;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.icons-alert-box-text {
-    height: fit-content;
-    width: calc(100% - 20px);
-    padding: 5px 10px;
-    color: var(--website-text);
-    text-align: center;
-    font-family: 'Lexend', sans-serif;
-    font-size: 18px;
-}
-
-.alertBoxTransition-enter-active, .alertBoxTransition-leave-active {
-    transition: bottom 0.5s, opacity 0.5s;
-}
-.alertBoxTransition-enter-from, .alertBoxTransition-leave-to {
-    opacity: 0;
-    bottom: -90px;
-}
-.alertBoxTransition-enter-to, .alertBoxTransition-leave-from {
-    opacity: 1;
-    bottom: 30px;
-}
-
-@media (min-width: 750px) {
-    .icons-alert-box {
-        left: calc(50% - 300px);
-    }
-}
 @media (max-width: 940px) {
     .icon-text {
         font-size: 200px;
     }
 }
-
 @media (max-width: 625px) {
     .icon-start-widgets {
         grid-template-columns: repeat(3, 1fr);

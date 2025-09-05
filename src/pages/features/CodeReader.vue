@@ -5,7 +5,7 @@ const VUE_QRCODE_READER_GITHUB = "https://github.com/gruhn/vue-qrcode-reader";
 
 onMounted(() => { codeScanner.mountCodeScanner(); });
 onBeforeUnmount(() => { codeScanner.deactivateCamera(); });
-useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-reader",
+useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner",
     "This page is capable of scanning and reading the values of Barcodes and QR Codes."
 ));
 </script>

@@ -8,20 +8,18 @@ import EnvTypes from 'vite-plugin-env-types';
 
 import Info from "unplugin-info/vite";
 import imagemin from 'unplugin-imagemin/vite';
-import attrs from 'markdown-it-attrs'
+import attrs from 'markdown-it-attrs';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
 import Markdown from 'unplugin-vue-markdown/vite';
 
 const SITEMAP_EXCLUDED_ROUTES = [
-    "/gamepad", "/repo", "/repository",
-    "/code", "/codesandbox", "/code-sandbox", "/commits",
-    "/globe", "/mnd", "/pizza", "/sublo",
-    "/ivue", "/ivuemedia", "/ivuerobotics",
-    "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
+    "/gamepad", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
+    "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
+    "/ivue", "/ivuemedia", "/ivuerobotics", "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/mohit-website/**", "/mohit-website", "/sitemap"
+    "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
 ];
 
 export default defineConfig({
