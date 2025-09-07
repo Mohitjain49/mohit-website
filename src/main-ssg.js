@@ -5,7 +5,6 @@ import '~build/console';
 
 import { ViteSSG } from "vite-ssg";
 import { createPinia } from "pinia";
-import VueObserveVisibility from 'vue3-observe-visibility'
 
 import VueParticles from "@tsparticles/vue3";
 import { loadSlim } from "@tsparticles/slim";
@@ -22,9 +21,7 @@ const USE_LEGACY_PDFJS_WORKER = false;
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
     ({ app }) => {
-        app.use(VueObserveVisibility);
         app.use(createPinia());
-
         if(!import.meta.env.SSR) {
             if(USE_LEGACY_PDFJS_WORKER) {
                 import("pdfjs-dist").then((PDFJS) => {

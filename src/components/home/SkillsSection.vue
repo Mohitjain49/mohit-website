@@ -1,5 +1,5 @@
 <template>
-<div id="skills" class="skills-section" v-observe-visibility="setSkillsTransitions">
+<motion.div id="skills" class="skills-section" @viewportEnter="setSkillsTransitions(true)" @viewportLeave="setSkillsTransitions(false)">
     <div class="skills-main-header">
         <RouterLink to="/skills/" title="See My Skills"> My Skills </RouterLink>
     </div>
@@ -8,8 +8,8 @@
         by utilizing multiple programming languages, frontend frameworks, web services, and modules.
     </div>
 
-    <div v-for="(entity, index) in NEW_SKILL_ENTITIES" class="skills-entity-container"
-        v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+    <motion.div v-for="(entity, index) in NEW_SKILL_ENTITIES" class="skills-entity-container"
+        @viewportEnter="addCardTransition(true, index)" @viewportLeave="addCardTransition(false, index)">
 
         <SkillNote :link="entity.link"
             :color="entity.color"
@@ -19,11 +19,13 @@
             :name="entity.name"
             :size="entity.icon.size"
         />
-    </div>
-</div>
+    </motion.div>
+</motion.div>
 </template>
 
 <script setup>
+import { motion } from 'motion-v';
+
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
  * @param {Number} index The index of the card.
@@ -38,7 +40,7 @@ function addCardTransition(isVisible, index = 0) {
  * This removes all transitions from all cards and widgets should visitors scroll away from the skills section.
  * It adds transitions to the description text upon entry.
  */
-function setSkillsTransitions(isVisible) {
+function setSkillsTransitions(isVisible = false) {
     if(isVisible && window.innerWidth > 450) {
         document.getElementsByClassName('skills-main-header').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('skills-main-desc').item(0).classList.add("animate__animated", "animate__lightSpeedInRight");

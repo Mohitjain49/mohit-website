@@ -1,5 +1,5 @@
 <template>
-<div id="projects" class="projects-section" v-observe-visibility="setProjectsTransitions">
+<motion.div id="projects" class="projects-section" @viewportEnter="setProjectsTransitions(true)" @viewportLeave="setProjectsTransitions(false)">
     <div class="projects-main-header">
         <RouterLink to="/projects/" title="Explore My Projects"> My Projects </RouterLink>
     </div>
@@ -12,8 +12,8 @@
         Website Features
     </RouterLink>
 
-    <div v-for="(entity, index) in PROJECT_ENTITIES" class="projects-note-container"
-        v-observe-visibility="(isVisible) => addCardTransition(isVisible, index)">
+    <motion.div v-for="(entity, index) in PROJECT_ENTITIES" class="projects-note-container"
+        @viewportEnter="addCardTransition(true, index)" @viewportLeave="addCardTransition(false, index)">
 
         <SkillNote :link="entity.link"
             :color="entity.color"
@@ -23,11 +23,13 @@
             :name="entity.name"
             :size="entity.icon.size"
         />
-    </div>
-</div>
+    </motion.div>
+</motion.div>
 </template>
 
 <script setup>
+import { motion } from 'motion-v';
+
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
  * @param {Number} index The index of the card.
