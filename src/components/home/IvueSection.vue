@@ -1,5 +1,5 @@
 <template>
-<div id="ivue" class="ivue-section" v-observe-visibility="setInitTranstions">
+<motion.div id="ivue" class="ivue-section" @viewportEnter="setInitTransitions(true)" @viewportLeave="setInitTransitions(false)">
     <div id="ivue-section-title">
         <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue">
             <img :src="ivue_white_text" draggable="false" />
@@ -63,10 +63,11 @@
             </p>
         </a>
     </div>
-</div>
+</motion.div>
 </template>
 
 <script setup>
+import { motion } from 'motion-v';
 import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
 import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
@@ -77,7 +78,7 @@ const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds
 /**
  * This functions sets initial transitions upon entering this section for iVue.
  */
-function setInitTranstions(isVisible) {
+function setInitTransitions(isVisible) {
     if(!isVisible) { return; }
     var leftAnimation = "animate__lightSpeedInLeft";
     var rightAnimation = "animate__lightSpeedInRight";

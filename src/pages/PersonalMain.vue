@@ -5,14 +5,11 @@
 <KennesawWidget />
 
 <main id="homepage" class="personal-web-body">
-    <client-only>
-        <StartSection />
-        <SkillsSection />
-        <IvueSection />
-        <ProjectsSection />
-        <DocumentsSection />
-    </client-only>
-    
+    <StartSection />
+    <SkillsSection />
+    <IvueSection />
+    <ProjectsSection />
+    <DocumentsSection />
     <WebFooter />
 </main>
 </template>

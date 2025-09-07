@@ -13,9 +13,10 @@
             Afterwards, I incorporate some these features into Worlds iVue and other websites I develop.
         </div>
 
-        <div v-if="!checkSSR()" class="feature-notes">
-            <div v-for="entity in FEATURE_ENTITIES" class="features-note-container"
-                v-observe-visibility="setCardTransition">
+        <div class="feature-notes">
+            <motion.div v-for="entity in FEATURE_ENTITIES"
+                class="features-note-container"
+                @viewportEnter="setCardTransition">
 
                 <SkillNote :link="entity.link"
                     :color="entity.color"
@@ -25,7 +26,7 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </div>
+            </motion.div>
         </div>
     </div>
     <WebFooter />
@@ -33,6 +34,8 @@
 </template>
 
 <script setup>
+import { motion } from 'motion-v';
+
 onMounted(() => {
     initWebData();
     nextTick(() => {
@@ -51,8 +54,7 @@ useHead(getMeta("Mohit Jain | Features", "features",
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
  */
-function setCardTransition(isVisible, entry) {
-    if(!isVisible) { return; }
+function setCardTransition(entry) {
     entry.target.classList.add("animate__animated", ((window.innerWidth > 825) ? "animate__zoomIn" : "animate__fadeIn"));
     setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
 }

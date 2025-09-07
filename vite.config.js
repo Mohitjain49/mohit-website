@@ -4,11 +4,12 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
-import EnvTypes from 'vite-plugin-env-types';
+import attrs from 'markdown-it-attrs';
+import MotionResolver from 'motion-v/resolver';
 
 import Info from "unplugin-info/vite";
 import imagemin from 'unplugin-imagemin/vite';
-import attrs from 'markdown-it-attrs';
+import EnvTypes from 'vite-plugin-env-types';
 
 import Components from "unplugin-vue-components/vite";
 import AutoImport from 'unplugin-auto-import/vite';
@@ -35,6 +36,7 @@ export default defineConfig({
             dts: './dts/components.d.ts',
             extensions: ['vue', 'md'],
             resolvers: [
+                MotionResolver(),
                 (name) => {
                     if(name === "FontAwesomeIcon") {
                         return { name: "FontAwesomeIcon", from: '@fortawesome/vue-fontawesome' }
@@ -57,7 +59,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v3.0.0",
+                cacheId: "v3.0.1",
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

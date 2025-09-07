@@ -1,5 +1,5 @@
 <template>
-<div id="start" class="start-section" v-observe-visibility="setNameTransitions">
+<motion.div id="start" class="start-section" @viewportEnter="setNameTransitions(true)" @viewportLeave="setNameTransitions(false)">
     <div id="start-innerContainer">
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
@@ -35,10 +35,11 @@
             </template>
         </div>
     </div>
-</div>
+</motion.div>
 </template>
 
 <script setup>
+import { motion } from 'motion-v';
 const webData = useWebsiteDataStore();
 
 /**

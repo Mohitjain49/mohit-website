@@ -5,136 +5,134 @@
 <NavigationSkills />
 
 <main id="skills-page" class="personal-web-body">
-    <client-only>
-        <div class="skills-body">
-            <div style="color: rgba(0, 0, 0, 0)">H</div>
-            <div id="vuejs" class="skills-category">
-                <div class="skills-category-header vue" v-observe-visibility="setTitleTransition">
-                    <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
-                    <span> ue.js </span>
-                </div>
+    <div class="skills-body">
+        <client-only> <div style="color: rgba(0, 0, 0, 0)">H</div> </client-only>
+        <div id="vuejs" class="skills-category">
+            <motion.div class="skills-category-header vue" @viewportEnter="setTitleTransition">
+                <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
+                <span> ue.js </span>
+            </motion.div>
 
-                <div v-for="entity in VUEJS_SKILL_NOTES"
-                    class="skills-entity-container"
-                    v-observe-visibility="setCardTransition">
+            <motion.div v-for="entity in VUEJS_SKILL_NOTES"
+                class="skills-entity-container"
+                @viewportEnter="setCardTransition">
 
-                    <SkillNote :link="entity.link"
-                        :color="entity.color"
-                        :desc="entity.desc"
-                        :faIcon="entity.icon.faIcon"
-                        :id="entity.icon.id"
-                        :name="entity.name"
-                        :size="entity.icon.size"
-                    />
-                </div>
-            </div>
-
-            <div id="frontend" class="skills-category">
-                <div class="skills-category-header frontend" v-observe-visibility="setTitleTransition">
-                    <font-awesome-icon icon="fa-brands fa-js" />
-                    <span> Frontend </span>
-                </div>
-
-                <div v-for="entity in FRONTEND_SKILL_NOTES"
-                    class="skills-entity-container"
-                    v-observe-visibility="setCardTransition">
-
-                    <SkillNote :link="entity.link"
-                        :color="entity.color"
-                        :desc="entity.desc"
-                        :faIcon="entity.icon.faIcon"
-                        :id="entity.icon.id"
-                        :name="entity.name"
-                        :size="entity.icon.size"
-                    />
-                </div>
-            </div>
-
-            <div id="aws" class="skills-category">
-                <div class="skills-category-header aws" v-observe-visibility="setTitleTransition">
-                    <img :src="aws_icon" draggable="false" />
-                    <span> AWS </span>
-                </div>
-
-                <div v-for="entity in AWS_SKILL_NOTES"
-                    class="skills-entity-container"
-                    v-observe-visibility="setCardTransition">
-
-                    <SkillNote :link="entity.link"
-                        :color="entity.color"
-                        :desc="entity.desc"
-                        :faIcon="entity.icon.faIcon"
-                        :id="entity.icon.id"
-                        :name="entity.name"
-                        :size="entity.icon.size"
-                    />
-                </div>
-            </div>
-
-            <div id="modules" class="skills-category">
-                <div class="skills-category-header modules" v-observe-visibility="setTitleTransition">
-                    <font-awesome-icon icon="fa-brands fa-node-js" />
-                    <span> Modules </span>
-                </div>
-
-                <div v-for="entity in MODULES_SKILL_NOTES"
-                    class="skills-entity-container"
-                    v-observe-visibility="setCardTransition">
-
-                    <SkillNote :link="entity.link"
-                        :color="entity.color"
-                        :desc="entity.desc"
-                        :faIcon="entity.icon.faIcon"
-                        :id="entity.icon.id"
-                        :name="entity.name"
-                        :size="entity.icon.size"
-                    />
-                </div>
-            </div>
-
-            <div id="languages" class="skills-category">
-                <div class="skills-category-header languages" v-observe-visibility="setTitleTransition">
-                    <font-awesome-icon icon="fa-laptop-code" />
-                    <span> Languages </span>
-                </div>
-
-                <div v-for="entity in LANGUAGES_SKILL_NOTES"
-                    class="skills-entity-container"
-                    v-observe-visibility="setCardTransition">
-
-                    <SkillNote :link="entity.link"
-                        :color="entity.color"
-                        :desc="entity.desc"
-                        :faIcon="entity.icon.faIcon"
-                        :id="entity.icon.id"
-                        :name="entity.name"
-                        :size="entity.icon.size"
-                    />
-                </div>
-            </div>
-
-            <div id="icons" class="skills-category">
-                <div class="skills-category-header icons" v-observe-visibility="setTitleTransition">
-                    <font-awesome-icon icon="fa-brands fa-font-awesome" />
-                    <span> Icons </span>
-                </div>
-
-                <div v-for="entity in ICONS_SKILL_NOTES"
-                    class="skills-entity-container"
-                    v-observe-visibility="setCardTransition">
-
-                    <SkillNote :link="entity.link"
-                        :color="entity.color"
-                        :desc="entity.desc"
-                        :faIcon="entity.icon.faIcon"
-                        :id="entity.icon.id"
-                        :name="entity.name"
-                        :size="entity.icon.size"
-                    />
-                </div>
-            </div>
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </motion.div>
         </div>
-    </client-only>
+
+        <div id="frontend" class="skills-category">
+            <motion.div class="skills-category-header frontend" @viewportEnter="setTitleTransition">
+                <font-awesome-icon icon="fa-brands fa-js" />
+                <span> Frontend </span>
+            </motion.div>
+
+            <motion.div v-for="entity in FRONTEND_SKILL_NOTES"
+                class="skills-entity-container"
+                @viewportEnter="setCardTransition">
+
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </motion.div>
+        </div>
+
+        <div id="aws" class="skills-category">
+            <motion.div class="skills-category-header aws" @viewportEnter="setTitleTransition">
+                <img :src="aws_icon" draggable="false" />
+                <span> AWS </span>
+            </motion.div>
+
+            <motion.div v-for="entity in AWS_SKILL_NOTES"
+                class="skills-entity-container"
+                @viewportEnter="setCardTransition">
+
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </motion.div>
+        </div>
+
+        <div id="modules" class="skills-category">
+            <motion.div class="skills-category-header modules" @viewportEnter="setTitleTransition">
+                <font-awesome-icon icon="fa-brands fa-node-js" />
+                <span> Modules </span>
+            </motion.div>
+
+            <motion.div v-for="entity in MODULES_SKILL_NOTES"
+                class="skills-entity-container"
+                @viewportEnter="setCardTransition">
+
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </motion.div>
+        </div>
+
+        <div id="languages" class="skills-category">
+            <motion.div class="skills-category-header languages" @viewportEnter="setTitleTransition">
+                <font-awesome-icon icon="fa-laptop-code" />
+                <span> Languages </span>
+            </motion.div>
+
+            <motion.div v-for="entity in LANGUAGES_SKILL_NOTES"
+                class="skills-entity-container"
+                @viewportEnter="setCardTransition">
+
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </motion.div>
+        </div>
+
+        <div id="icons" class="skills-category">
+            <motion.div class="skills-category-header icons" @viewportEnter="setTitleTransition">
+                <font-awesome-icon icon="fa-brands fa-font-awesome" />
+                <span> Icons </span>
+            </motion.div>
+
+            <motion.div v-for="entity in ICONS_SKILL_NOTES"
+                class="skills-entity-container"
+                @viewportEnter="setCardTransition">
+
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </motion.div>
+        </div>
+    </div>
 
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
         <RouterLink to="/" class="linkBtn-blue" v-html="'Back to Home'"
@@ -148,6 +146,7 @@
 
 <script setup>
 import "@/styles/navpage.css";
+import { motion } from "motion-v";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
@@ -169,8 +168,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
 /**
  * This adds a transition to a card/widget as visitors scroll to it.
  */
-function setCardTransition(isVisible, entry) {
-    if(!isVisible) { return; }
+function setCardTransition(entry) {
     entry.target.classList.add("animate__animated", ((window.innerWidth > 825) ? "animate__zoomIn" : "animate__fadeIn"));
     setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
 }
@@ -178,8 +176,7 @@ function setCardTransition(isVisible, entry) {
 /**
  * This adds a transition to a title as visitors scroll to it.
  */
- function setTitleTransition(isVisible, entry) {
-    if(!isVisible) { return; }
+ function setTitleTransition(entry) {
     entry.target.classList.add("animate__animated", "animate__flipInX");
     setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__flipInX"); }, 1000);
 }
