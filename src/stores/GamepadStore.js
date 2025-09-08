@@ -133,17 +133,18 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     /**
      * This function manages the custom cursor based on an event.
+     * @param {GamepadAxisMoveEvent} event The object returned by moving the axis.
      */
     function manageCustomCursor(event) {
-        if(event.stickMoved !== "left_stick") { return; }
+        if(event.stick !== "left_stick") { return; }
         setCustomCursor(true);
 
-        if(event.axis == 0) {
-            cursorX.value += (maxCursorSpeed.value * event.axisMovementValue);
+        if(event.axisIndex == 0) {
+            cursorX.value += (maxCursorSpeed.value * event.movement);
             if(cursorX.value < 0) { cursorX.value = 0; }
             if(cursorX.value > (window.innerWidth - 35)) { cursorX.value = (window.innerWidth - 35); }
         } else {
-            cursorY.value += (maxCursorSpeed.value * event.axisMovementValue);
+            cursorY.value += (maxCursorSpeed.value * event.movement);
             if(cursorY.value < 0) { cursorY.value = 0; }
             if(cursorY.value > (window.innerHeight - 35)) { cursorY.value = (window.innerHeight - 35); }
         }
@@ -280,3 +281,36 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval
     }
 });
+
+/**
+ * This class represents a event that indicates the current state of a button on a connected gamepad.
+ */
+export class GamepadButtonStatusEvent {
+    /**
+     * @param {Gamepad} gamepad The gamepad where the button originates from.
+     * @param {Number} buttonIndex The index of the button on the gamepad relative to other buttons.
+     * @param {String} status The string that represents the status of a button on a gamepad.
+     */
+    constructor(gamepad, buttonIndex = -1, status = "down") {
+        this.gamepad = gamepad;
+        this.button = buttonIndex;
+        this.status = status;
+    }
+}
+
+/**
+ * This class represents a event that indicates when a joystick is moving on a connected gamepad.
+ */
+export class GamepadAxisMoveEvent {
+    /**
+     * @param {Gamepad} gamepad The gamepad where the button originates from.
+     * @param {Number} index The index of the axis on the gamepad relative to the other axes.
+     * @param {Number} movement A number that represents the amount the joystick moved from its original position.
+     */
+    constructor(gamepad, index = -1, movement = 0) {
+        this.gamepad = gamepad;
+        this.axisIndex = index;
+        this.movement = movement;
+        this.stick = ((index < 2) ? 'left_stick' : 'right_stick')
+    }
+}

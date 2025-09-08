@@ -1,16 +1,67 @@
-import 'joypad.js';
+let prevButtons = [];
+const AXIS_MOVEMENT_THRESHOLD = 0.05;
 
-joypad.set({
-    axisMovementThreshold: 0.05,
-})
+/**
+ * This function polls the gamepad each frame to check for if any change occurred on the controller.
+ * If something did move, then it releases an event.
+ */
+function pollGamepad() {
+    const gamepads = navigator.getGamepads();
+    if(!gamepads) { return };
 
-joypad.on("connect", (e) => {
+    for (const gp of gamepads) {
+        if(!gp) { continue };
+        gp.buttons.forEach((btn, index) => {
+            const wasPressed = (prevButtons[gp.index]?.[index] || false);
+            const isPressed = btn.pressed;
+
+            // This releases an event for if a button was just pressed.
+            if(isPressed && !wasPressed) {
+                const event = new CustomEvent("gamepadbuttondown", {
+                    detail: new GamepadButtonStatusEvent(gp, index, "down")
+                });
+                window.dispatchEvent(event);
+            }
+
+            // This releases an event for if a button was just released.
+            if(!isPressed && wasPressed) {
+                const event = new CustomEvent("gamepadbuttonup", {
+                    detail: new GamepadButtonStatusEvent(gp, index, "up")
+                });
+                window.dispatchEvent(event);
+            }
+        });
+
+        // This releases an event every frame a joystick is moving passed the threshold.
+        gp.axes.forEach((axis, index) => {
+            if(axis <= AXIS_MOVEMENT_THRESHOLD && axis >= -AXIS_MOVEMENT_THRESHOLD) { return; }
+            const event = new CustomEvent("gamepadaxismove", {
+                detail: new GamepadAxisMoveEvent(gp, index, axis)
+            });
+            window.dispatchEvent(event);
+        });
+
+        // This sets the current frame button status as the previous buttons for the next frame.
+        prevButtons[gp.index] = gp.buttons.map(b => b.pressed);
+    }
+    requestAnimationFrame(pollGamepad);
+}
+
+/**
+ * This event runs whenever a new gamepad is connected.
+ */
+window.addEventListener("gamepadconnected", (e) => {
     useGamepadStore().startGamepadConnectedInterval();
     if(import.meta.env.DEV) { console.log(e); }
-})
+});
 
-joypad.on("button_press", (e) => {
-    const buttonIndex = parseInt(e.detail.buttonName.split('_')[1], 10);
+/**
+ * This event runs whenever a button is pressed down.
+ */
+window.addEventListener("gamepadbuttondown", (e) => {
+    /** @type {GamepadButtonStatusEvent} */
+    const event = e.detail;
+    const buttonIndex = event.button;
     // if(import.meta.env.DEV) { console.log(buttonIndex); }
 
     if(buttonIndex == 12 || buttonIndex == 13) {
@@ -43,8 +94,13 @@ joypad.on("button_press", (e) => {
     }
 });
 
-joypad.on("button_release", (e) => {
-    const buttonIndex = parseInt(e.detail.buttonName.split('_')[1], 10);
+/**
+ * This event runs whenever a button is released.
+ */
+window.addEventListener("gamepadbuttonup", (e) => {
+    /** @type {GamepadButtonStatusEvent} */
+    const event = e.detail;
+    const buttonIndex = event.button;
     // if(import.meta.env.DEV) { console.log(buttonIndex); }
 
     if(buttonIndex == 12 || buttonIndex == 13) {
@@ -62,15 +118,20 @@ joypad.on("button_release", (e) => {
     }
 });
 
-joypad.on("axis_move", (e) => {
+/**
+ * This event runs whenever a joystick is moved far enough from its initial position.
+ */
+window.addEventListener("gamepadaxismove", (e) => {
+    /** @type {GamepadAxisMoveEvent} */
     const event = e.detail;
     // if(import.meta.env.DEV) { console.log(event); }
 
-    if(event.stickMoved === "left_stick") {
+    if(event.stick === "left_stick") {
         useGamepadStore().manageCustomCursor(event);
-    } else if(event.axis == 3) {
-        useGamepadStore().initScrollYBy('bottom',
-            (30 * event.axisMovementValue)
-        );
+    } else if(event.axisIndex == 3) {
+        useGamepadStore().initScrollYBy('bottom', (30 * event.movement));
     }
-})
+});
+
+// Starts the process of sending events.
+requestAnimationFrame(pollGamepad);
