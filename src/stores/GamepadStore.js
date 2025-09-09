@@ -6,10 +6,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     const showCursorSpeedMenu = ref(false);
 
     var gamepadConnectedInterval = null;
-    var cursorSpeedInterval = null;
-
-    var cursorXInterval = null;
-    var cursorYInterval = null;
     var scrollInterval = null;
 
     /**
@@ -101,6 +97,23 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     /**
+     * This function sets the max number of pixels that the cursor can travel per millisecond.
+     * @param {Number} maxSpeed The max speed to set the cursor to. Default Value is 10.
+     */
+    function setMaxCursorSpeed(maxSpeed = 10) {
+        maxCursorSpeed.value = Math.min(30, Math.max(maxSpeed, 1));
+    }
+
+    /**
+     * This function adds a value to the total cursor max speed. Use only with Gamepad Event.
+     * @param {Number} amount The amount to add to the cursor speed.
+     */
+    function addToMaxCursorSpeed(amount = 1) {
+        showCursorSpeedMenu.value = true;
+        setMaxCursorSpeed(maxCursorSpeed.value + amount);
+    }
+
+    /**
      * This function sets the visibility of the custom cursor.
      * @param {Boolean} reset If true, this function displays the cursor, else it hides the cursor.
      */
@@ -112,14 +125,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             cursorClickElement.value = null;
             cursorOnInput.value = false;
         }
-    }
-
-    /**
-     * This function sets the max number of pixels that the cursor can travel per millisecond.
-     * @param {Number} maxSpeed The max speed to set the cursor to. Default Value is 10.
-     */
-    function setMaxCursorSpeed(maxSpeed = 10) {
-        maxCursorSpeed.value = maxSpeed;
     }
 
     /**
@@ -148,54 +153,25 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             if(cursorY.value < 0) { cursorY.value = 0; }
             if(cursorY.value > (window.innerHeight - 35)) { cursorY.value = (window.innerHeight - 35); }
         }
-
         setCursorClickElement();
     }
 
     /**
-     * This function sets the Cursor X Interval.
-     * @param {Boolean} negative If true, multiplies the speed by -1.
+     * This function manages the custom cursor based on what button the user pressed on their gamepad.
+     * @param {Number} directionIndex The direction to move the cursor based on a number. Up is 0, Down is 1, Left is 2, and Right is 3.
      */
-    function setCursorXInterval(negative = false) {
-        if(cursorXInterval != null) { return; }
+    function manageCustomCursorWithDpad(directionIndex = 0) {
         setCustomCursor(true);
-
-        cursorXInterval = setInterval(() => {
-            cursorX.value += (maxCursorSpeed.value * (negative ? -1 : 1));
-            if(cursorX.value < 30) { cursorX.value = 30; }
-            if(cursorX.value > (window.innerWidth - 30)) { cursorX.value = (window.innerWidth - 30); }
-            setCursorClickElement();
-        }, 20);
-    }
-
-    /**
-     * This function sets the Cursor Y Interval.
-     * @param {Boolean} negative If true, multiplies the speed by -1.
-     */
-    function setCursorYInterval(negative = false) {
-        if(cursorYInterval != null) { return; }
-        setCustomCursor(true);
-
-        cursorYInterval = setInterval(() => {
-            cursorY.value += (maxCursorSpeed.value * (negative ? -1 : 1));
-            if(cursorY.value < 30) { cursorY.value = 30; }
-            if(cursorY.value > (window.innerHeight - 30)) { cursorY.value = (window.innerHeight - 30); }
-            setCursorClickElement();
-        }, 20);
-    }
-
-    /**
-     * This function stops any of the cursor intervals.
-     * @param {String} direction If "x", stops the cursor x interval. If "y", stops the cursor y interval.
-     */
-    function stopCursorInterval(direction = "x") {
-        if(direction === "x" && cursorXInterval != null) {
-            clearInterval(cursorXInterval);
-            cursorXInterval = null;
-        } else if(direction === "y" && cursorYInterval != null) {
-            clearInterval(cursorYInterval);
-            cursorYInterval = null;
+        if(directionIndex > 1) {
+            cursorX.value += (maxCursorSpeed.value * ((directionIndex == 2) ? -0.75 : 0.75));
+            if(cursorX.value < 0) { cursorX.value = 0; }
+            if(cursorX.value > (window.innerWidth - 35)) { cursorX.value = (window.innerWidth - 35); }
+        } else {
+            cursorY.value += (maxCursorSpeed.value * ((directionIndex == 0) ? -0.75 : 0.75));
+            if(cursorY.value < 0) { cursorY.value = 0; }
+            if(cursorY.value > (window.innerHeight - 35)) { cursorY.value = (window.innerHeight - 35); }
         }
+        setCursorClickElement();
     }
 
     /**
@@ -245,39 +221,11 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         );
     }
 
-    /**
-     * This starts the interval for changing the cursor speed.
-     * @param {Boolean} up If true, interval increases speed, else it decreases speed.
-     */
-    function startCursorSpeedInterval(up = true) {
-        if(cursorSpeedInterval != null) { return; }
-        showCursorSpeedMenu.value = true;
-
-        cursorSpeedInterval = setInterval(() => {
-            const minReached = (!up && maxCursorSpeed.value < 2);
-            const maxReached = (up && maxCursorSpeed.value > 29);
-
-            if(minReached || maxReached) { return; }
-            maxCursorSpeed.value += (up ? 1 : -1);
-        }, 50);
-    }
-
-    /**
-     * This function stops the cursor speed interval.
-     */
-    function stopCursorSpeedInterval() {
-        if(cursorSpeedInterval == null) { return; }
-        clearInterval(cursorSpeedInterval);
-        cursorSpeedInterval = null;
-        showCursorSpeedMenu.value = false;
-    }
-
     return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,
         maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
         emitClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
-        startCursorSpeedInterval, stopCursorSpeedInterval,
-        setCustomCursor, setMaxCursorSpeed, setCursorClickElement, manageCustomCursor,
-        initCustomCursorPosition, setCursorXInterval, setCursorYInterval, stopCursorInterval,
+        setCustomCursor, setCursorClickElement, setMaxCursorSpeed, addToMaxCursorSpeed,
+        manageCustomCursor, manageCustomCursorWithDpad, initCustomCursorPosition,
         initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval
     }
 });
@@ -290,11 +238,13 @@ export class GamepadButtonStatusEvent {
      * @param {Gamepad} gamepad The gamepad where the button originates from.
      * @param {Number} buttonIndex The index of the button on the gamepad relative to other buttons.
      * @param {String} status The string that represents the status of a button on a gamepad.
+     * @param {Number} holdFrames The number of frames the button was held down. 
      */
-    constructor(gamepad, buttonIndex = -1, status = "down") {
+    constructor(gamepad, buttonIndex = -1, status = "down", holdFrames = 0) {
         this.gamepad = gamepad;
         this.button = buttonIndex;
         this.status = status;
+        this.holdFrames = holdFrames;
     }
 }
 

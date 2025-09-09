@@ -5,9 +5,6 @@ export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
     const webData = useWebsiteDataStore();
 
-    const showVolumeGamepadMenu = ref(false);
-    var volumeInterval = null;
-
     /**
      * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect.
      */
@@ -18,6 +15,7 @@ export const useAudioStore = defineStore("audio-store", () => {
      */
     const audioScanClip = ref(null);
 
+    const showVolumeGamepadMenu = ref(false);
     const volumeInput = ref("50");
     const volumeInputIcon = computed(() => {
         const volumeInt = parseInt(volumeInput.value);
@@ -108,32 +106,14 @@ export const useAudioStore = defineStore("audio-store", () => {
     }
 
     /**
-     * This function sets the Volume Interval, which can edit the volume of the click sound every second.
-     * @param {Number} amount The amount to add to the volume each interval.
+     * This function adds a passed in value to the total volume.
+     * @param {Number} amount the amount to add to the volume.
      */
-    function setVolumeInterval(amount = 1) {
-        if(volumeInterval != null) { return; }
+    function addToVolume(amount = 1) {
         showVolumeGamepadMenu.value = (!webData.navMenuOpen);
-
-        volumeInterval = setInterval(() => {
-            const volumeInt = parseInt(volumeInput.value);
-            const stopDecrease = (amount < 0 && volumeInt == 0);
-            const stopIncrease = (amount > 0 && volumeInt == 0);
-
-            if(stopDecrease || stopIncrease) { return; }
-            volumeInput.value = String(Math.max(0, Math.min(100, volumeInt + amount)));
-            changeAudioVolume();
-        }, 50);
-    }
-
-    /**
-     * This function stops the volume interval.
-     */
-    function stopVolumeInterval() {
-        if(volumeInterval == null) { return; }
-        showVolumeGamepadMenu.value = false;
-        clearInterval(volumeInterval);
-        volumeInterval = null;
+        const volumeInt = (parseInt(volumeInput.value) + amount);
+        volumeInput.value = String(Math.max(0, Math.min(100, volumeInt)));
+        changeAudioVolume();
     }
 
     /**
@@ -171,8 +151,7 @@ export const useAudioStore = defineStore("audio-store", () => {
 
     return { audioClickClip, audioScanClip, volumeInput, volumeInputIcon, showVolumeGamepadMenu,
         ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, checkTTSAvailable, cancelTTS, startTTS,
-        setupClickAudio, changeAudioVolume, confirmClickSound, setVolumeInterval, stopVolumeInterval,
-        playClickSound, playScanSound
+        setupClickAudio, changeAudioVolume, confirmClickSound, addToVolume, playClickSound, playScanSound
     }
 });
 
