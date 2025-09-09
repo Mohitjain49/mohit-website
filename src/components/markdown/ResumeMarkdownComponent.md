@@ -1,6 +1,6 @@
 # **Mohit Jain** { .resume-markdown-title }
 
-Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@gmail.com) • [www.mohit-jain.com](https://mohit-jain.com/) • [LinkedIn](https://www.linkedin.com/in/mohitjain49/) • [GitHub](https://github.com/Mohitjain49) { .resume-markdown-mainLinks }
+Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@gmail.com) • [www.mohit-jain.com](https://www.mohit-jain.com/) • [LinkedIn](https://www.linkedin.com/in/mohitjain49/) • [GitHub](https://github.com/Mohitjain49) { .resume-markdown-mainLinks }
 
 # **SUMMARY**													
 

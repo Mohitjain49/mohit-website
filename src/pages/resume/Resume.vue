@@ -21,12 +21,18 @@
 
 <script setup>
 const documentStore = useDocumentStore();
+const router = useRouter();
 
 /**
- * This function is triggered whenever someone clicks on a link on teh custom PDF.
+ * This function is triggered whenever someone clicks on a link on the custom PDF.
  */
 function onAnnotation(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
-    window.open(event.data.url, "_blank");
+    const url = event.data.url;
+    if(url === PERSONAL_WEBSITE_LINK) {
+        router.push("/");
+    } else {
+        window.open(url, "_blank");
+    }
 }
 
 useHead(getMeta("Mohit Jain | My Resume", "resume",
