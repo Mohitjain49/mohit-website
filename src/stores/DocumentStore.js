@@ -3,6 +3,8 @@ import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Ful
 
 export const useDocumentStore = defineStore("document-store", () => {
     const route = useRoute();
+    const fullScreenStore = useFullScreenStore();
+
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
     const customPdfScaleFactor = ref(1.375);
@@ -111,6 +113,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function sets the full screen for the "resume-container" element.
+     */
+    function toggleDocumentFullScreen() {
+        fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+    }
+
+    /**
      * This function returns true if the user is looking at any resume page on the website.
      */
     function checkResumeRoute() {
@@ -147,7 +156,8 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, fultonInternshipAppreciationPdfObj, downloadDoc, printDoc,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, hideVerticalOverflow, setPdfSize,
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage,
+        hideVerticalOverflow, setPdfSize, toggleDocumentFullScreen,
         checkResumeRoute, checkFCSCertificateRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute
     }
 });

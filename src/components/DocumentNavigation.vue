@@ -68,6 +68,9 @@
                 <a class="mohit-navBar-icon white" :href="PDFJS_LINK" title="See More about PDF.js">
                     <img :src="pdfjs_logo" draggable="false" width="20" />
                 </a>
+                <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light" :title="fullScreenStore.docElementTitle">
+                    <font-awesome-icon :icon="fullScreenStore.faIcon" />
+                </button>
                 <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
                     :title="(webData.documentMenuOpen ? 'Close Document Menu' : 'Open Document Menu')">
 
@@ -83,6 +86,7 @@
 import pdfjs_logo from "@/assets/PDFJS_logo.svg";
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
+const fullScreenStore = useFullScreenStore();
 const route = useRoute();
 
 const currentPath = computed(() => { return (docStore.checkResumeRoute() ? '/resume' : FCS_CERTIFICATE_ROUTE) });

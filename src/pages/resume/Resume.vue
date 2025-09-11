@@ -11,7 +11,9 @@
                 :height="documentStore.customPdfHeight"
             />
         </div>
+        
         <WebFooter />
+        <MinimizeScreenWidget />
     </main>
     <div id="resume-container" class="center-flex-display" v-else>
         <div class="loading-spinner"></div>

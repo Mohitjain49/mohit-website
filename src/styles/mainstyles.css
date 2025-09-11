@@ -122,6 +122,9 @@ button {
     height: calc(100% - 70px);
     min-height: 0px;
 }
+#resume-container:fullscreen {
+    overflow-y: auto;
+}
 
 .webpage-cover {
     margin: 0;
