@@ -300,7 +300,15 @@
         width: calc(100% - 80px);
         left: 40px;
     }
-   
+    .mohit-documentBar-iconSection {
+        width: 125px !important;
+    }
+    .mohit-documentBar-bottom .mohit-navBar-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        margin-left: 3px;
+    }
 }
 @media (max-width: 350px) {
     #mohit-navBar {

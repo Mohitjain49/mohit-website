@@ -12,7 +12,7 @@
             />
         </div>
         
-        <WebFooter />
+        <WebFooter v-if="!fullScreenStore.fullScreenSet" />
         <MinimizeScreenWidget />
     </main>
     <div id="resume-container" class="center-flex-display" v-else>
@@ -23,6 +23,7 @@
 
 <script setup>
 const documentStore = useDocumentStore();
+const fullScreenStore = useFullScreenStore();
 const router = useRouter();
 
 /**

@@ -38,7 +38,7 @@ export const useFullScreenStore = defineStore("screen-store", () => {
      * This function exits the full screen for any element.
      */
     async function exitFullScreen() {
-        return document.exitFullscreen();
+        if(fullScreenSet.value) { return document.exitFullscreen(); }
     }
 
     return { fullScreenSet, faIcon, elementTitle, docElementTitle,

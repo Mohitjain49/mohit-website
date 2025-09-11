@@ -78,6 +78,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function unmountDocumentPage() {
         document.body.style.overflowY = "";
+        fullScreenStore.exitFullScreen();
+
         window.removeEventListener("resize", hideVerticalOverflow);
         window.removeEventListener("resize", setPdfSize);
     }
@@ -117,6 +119,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function toggleDocumentFullScreen() {
         fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+        useWebsiteDataStore().closeNavMenu();
     }
 
     /**
