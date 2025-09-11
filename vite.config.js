@@ -48,7 +48,7 @@ export default defineConfig({
             markdownItSetup(md) { md.use(attrs); }
         }),
         AutoImport({
-            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
+            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, { 'uqr': ['renderSVG'] }],
             dirs: ['./src/stores'],
             dts: './dts/auto-imports.d.ts',
             vueTemplate: true

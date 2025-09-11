@@ -722,7 +722,8 @@ export const FEATURE_ENTITIES = [
         link: "/qrcode",
         color: "var(--website-light-text)",
         desc: "This page uses the \"uqr\" dependency to create QR Codes for this website " +
-            "and my online profiles on different platforms.",
+            "and my online profiles on different platforms. There is also a QR Code tool that popup " +
+            "with (CTRL + Q) or on the bottom left of the Navigation Menu.",
 
         icon: {
             id: "fa-qrcode",

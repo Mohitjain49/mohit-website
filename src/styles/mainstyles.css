@@ -1,4 +1,4 @@
-@import "animate.css";
+@import "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
 @import "@tato30/vue-pdf/style.css";
 
 :root {

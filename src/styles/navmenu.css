@@ -7,7 +7,7 @@
     height: fit-content;
     min-height: 50px;
     background-color: black;
-    z-index: 515;
+    z-index: 516;
     border: 2px solid var(--website-text);
     border-radius: 15px;
     overflow: hidden;
@@ -103,35 +103,9 @@
     font-family: 'Lexend', sans-serif;
     font-size: 18px;
 }
-
-.mohit-navMenu-opt.volume-meter {
+.mohit-navMenu-opt.small-features {
     height: 40px;
-    color: var(--lightning-yellow);
-}
-.mohit-navMenu-opt.volume-meter input {
-    width: 35%;
-    cursor: pointer;
-}
-
-.mohit-navMenu-opt.volume-meter svg {
-    font-size: 15px;
-    width: 35px;
-    margin-left: 20px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.mohit-navMenu-opt.volume-meter span {
-    cursor: default;
-    user-select: none;
-    font-family: 'Lexend', sans-serif;
-    font-size: 15px;
-    width: 55px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
 }
 
 .mohit-navMenu-mainOpt {
@@ -191,6 +165,60 @@
 .mohit-navMenu-extra.repo {
     color: white;
     border-color: white;
+}
+
+.mohit-navMenu-volume-meter {
+    width: 335px;
+    height: 100%;
+    color: var(--lightning-yellow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mohit-navMenu-volume-meter input {
+    width: 72.5%;
+    cursor: pointer;
+}
+
+.mohit-navMenu-volume-meter svg {
+    font-size: 15px;
+    width: 35px;
+    margin-left: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mohit-navMenu-volume-meter span {
+    cursor: default;
+    user-select: none;
+    font-family: 'Lexend', sans-serif;
+    font-size: 15px;
+    width: 55px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mohit-navMenu-smallFeatures-btn {
+    width: 38px;
+    height: calc(100% - 2px);
+    color: var(--website-light-text);
+    border-top: 2px dashed var(--website-text);
+    border-right: 2px dashed var(--website-text);
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+.mohit-navMenu-smallFeatures-btn:hover {
+    background-color: var(--dark-background);
+}
+
+.mohit-navMenu-smallFeatures-right {
+    width: 40px;
 }
 
 /**
@@ -292,6 +320,9 @@
     }
     .mohit-navBar-icons {
         width: 135px;
+    }
+    .mohit-navMenu-volume-meter {
+        width: 56%;
     }
 }
 

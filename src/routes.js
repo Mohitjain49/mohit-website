@@ -23,6 +23,7 @@ import GoogleMockupAssigment from "./pages/GoogleMockupAssigment.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
+import HomeRedirect from "./pages/redirects/HomeRedirect.vue";
 import InvalidRoute from "./pages/InvalidRoute.vue";
 
 /**
@@ -118,8 +119,8 @@ export const personalRoutes = [
     {
         path: "/mohit-website",
         children: [
-            { path: "", redirect: "/" },
-            { path: ":catchAll(.*)*", redirect: "/" },
+            { path: "", component: HomeRedirect },
+            { path: ":catchAll(.*)*", component: HomeRedirect },
         ]
     },
 

@@ -7,7 +7,7 @@
 <main id="qr-code-page" class="personal-web-body transparent">
     <div class="qr-page-grid">
         <div v-for="code in QR_CODES" class="qr-element-container">
-            <button class="qr-element" v-html="renderSVG(code.qrLink)" @click="setQRCodePopup(code)"></button>
+            <client-only> <div class="qr-element" v-html="renderSVG(code.qrLink)"></div> </client-only>
             <a :href="code.textLink" class="qr-element-link">
                 <span> {{ code.displayText }} </span>
             </a>
@@ -17,21 +17,9 @@
     <div class="qr-page-bottomSpace"></div>
     <WebFooter />
 </main>
-
-<button v-if="qrcodePopupLink !== ''" id="qr-code-popup" class="webpage-cover"
-    @click="setQRCodePopup({ qrLink: '', displayText: '' })"
-    title="Click Anywhere To Return">
-
-    <div class="popup-qr-text"> {{ qrcodePopupDisplayText }} </div>
-    <div class="popup-qr-element" v-html="renderSVG(qrcodePopupLink)"></div>
-</button>
 </template>
 
 <script setup>
-import { renderSVG } from 'uqr';
-const qrcodePopupLink = ref("");
-const qrcodePopupDisplayText = ref("");
-
 onMounted(() => {
     initWebData();
     const animation = (window.innerWidth > 1150 ? "animate__bounceInDown" : "animate__fadeIn");
@@ -48,16 +36,6 @@ onBeforeUnmount(() => {
 useHead(getMeta("Mohit Jain | QR Codes", "qrcode",
     "This page hosts Quick Response Codes that lead to projects or pages that I work on."
 ));
-
-/**
- * This function toggles whether the qr code popup is open or not.
- * @param qrObject The link for the QR Code Popup.
- */
-function setQRCodePopup(qrObject = { qrLink: "", displayText: "" }) {
-    qrcodePopupLink.value = qrObject.qrLink;
-    qrcodePopupDisplayText.value = qrObject.displayText;
-    document.body.style.overflow = ((qrObject.qrLink === "") ? "" : "hidden");
-}
 
 const QR_CODES = [
     { qrLink: PERSONAL_WEBSITE_LINK, textLink: PERSONAL_WEBSITE_LINK, displayText: PERSONAL_WEBSITE_LINK },
