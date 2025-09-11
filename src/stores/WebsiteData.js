@@ -6,6 +6,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentStore = useDocumentStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
+    const fullScreenStore = useFullScreenStore();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -56,7 +57,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
         document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
-        document.body.addEventListener("keydown", onKeyDown, { signal })
+        document.body.addEventListener("keydown", onKeyDown, { signal });
+        document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
     }
 
     /**
