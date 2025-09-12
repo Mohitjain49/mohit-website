@@ -10,7 +10,6 @@ import WakeLockPage from "./pages/features/WakeLockPage.vue";
 import GamepadControls from "./pages/features/GamepadControls.vue";
 import InstallPage from "./pages/features/InstallPage.vue";
 import CodeScanner from "./pages/features/CodeReader.vue";
-import QrcodePage from "./pages/features/QrcodePage.vue";
 import MyIcon from "./pages/MyIcon.vue";
 
 import Resume from "./pages/resume/Resume.vue";
@@ -95,7 +94,6 @@ export const personalRoutes = [
     { path: "/features", name: "Main Features Page", component: Features },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },
     { path: "/code-scanner", alias: ["/code-reader"], name: "Code Reader Page", component: CodeScanner },
-    { path: "/qrcode", name: "QR Code Page", component: QrcodePage },
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
 

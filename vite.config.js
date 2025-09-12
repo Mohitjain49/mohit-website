@@ -48,7 +48,7 @@ export default defineConfig({
             markdownItSetup(md) { md.use(attrs); }
         }),
         AutoImport({
-            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, { 'uqr': ['renderSVG'] }],
+            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
             dirs: ['./src/stores'],
             dts: './dts/auto-imports.d.ts',
             vueTemplate: true
@@ -59,7 +59,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v3.0.3",
+                cacheId: "v3.1.0",
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

@@ -2,7 +2,7 @@
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
         <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, webData.qrPopup.truncateValue) }} </button>
-        <client-only> <div class="popup-qr-element" v-html="renderSVG(qrCodeLink)"></div> </client-only>
+        <!-- <client-only> <div class="popup-qr-element" v-html="renderSVG(qrCodeLink)"></div> </client-only> -->
 
         <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-closeBtn" title="Close QR Code Popup">
             <FontAwesomeIcon icon="fa-xmark" />
