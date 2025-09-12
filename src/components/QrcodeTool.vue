@@ -2,7 +2,7 @@
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
         <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, webData.qrPopup.truncateValue) }} </button>
-        <!-- <client-only> <div class="popup-qr-element" v-html="renderSVG(qrCodeLink)"></div> </client-only> -->
+        <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
         <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-closeBtn" title="Close QR Code Popup">
             <FontAwesomeIcon icon="fa-xmark" />
@@ -12,18 +12,23 @@
 </template>
 
 <script setup>
+import QRCodeStyling from 'qr-code-styling';
+
 const route = useRoute();
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
+
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
+const qrCodeDisplay = ref({ display: "none" });
 
 onMounted(() => {
-    setQRCodeLink();
     hideQrcodePopupOverflow();
     window.addEventListener("resize", hideQrcodePopupOverflow);
+    nextTick(() => { setQRCodeLink(); });
 });
 
 onBeforeUnmount(() => {
+    qrCodeDisplay.value.display = "none";
     window.removeEventListener("resize", hideQrcodePopupOverflow);
     document.body.style.overflow = "";    
 
@@ -38,7 +43,43 @@ watch(() => route.fullPath, () => { setQRCodeLink(); });
  * This function sets the link for the QR Code Popup.
  */
 function setQRCodeLink() {
-    qrCodeLink.value = PERSONAL_WEBSITE_LINK + route.fullPath.substring(1);
+    qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.fullPath.substring(1));
+    const qrcode = new QRCodeStyling({
+        width: 450,
+        height: 450,
+        type: 'canvas',
+        data: qrCodeLink.value,
+        image: "/static-icons/Personal_Icon_Expanded_Rounded.png",
+        margin: 10,
+        dotsOptions: {
+            color: 'black',
+            type: 'extra-rounded'
+        },
+        cornersSquareOptions: {
+            color: 'black',
+            type: 'extra-rounded'
+        },
+        cornersDotOptions: {
+            color: 'black',
+            type: 'dot'
+        },
+        imageOptions: {
+            hideBackgroundDots: true,
+            imageSize: 0.4,
+            margin: 5,
+            crossOrigin: 'anonymous',
+        },
+        qrOptions: {
+            typeNumber: 0,
+            mode: 'Byte',
+            errorCorrectionLevel: 'Q',
+        },
+        dotsOptions: { color: 'black' },
+        backgroundOptions: { color: '#E5E5E5' },
+    });
+
+    qrcode.append(document.getElementById("mohit-qrcode"));
+    qrCodeDisplay.value.display = "block";
 }
 
 /**
@@ -56,7 +97,11 @@ function hideQrcodePopupOverflow() {
 }
 </script>
 
-<style scoped>
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 #qr-code-popup.webpage-cover {
     display: flex;
     justify-content: center;
@@ -83,13 +128,17 @@ function hideQrcodePopupOverflow() {
     );
 }
 
-.popup-qr-element, .popup-qr-element svg {
+#mohit-qrcode {
     width: 450px;
     height: 450px;
     border-radius: 15px;
-    overflow: hidden;
+    overflow: clip;
     border: 2px dashed black;
 }
+#mohit-qrcode canvas {
+    width: 100%;
+}
+
 .popup-qr-text {
     cursor: copy;
     color: black;
@@ -134,9 +183,13 @@ function hideQrcodePopupOverflow() {
         width: 325px;
         height: 325px;
     }
-    .popup-qr-element, .popup-qr-element svg {
-        width: 225px;
-        height: 225px;
+    #mohit-qrcode {
+        width: 225px !important;
+        height: 225px !important;
+    }
+
+    #mohit-qrcode {
+        width: 100%;
     }
     .popup-qr-text {
         font-size: 9px;

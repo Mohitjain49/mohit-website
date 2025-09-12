@@ -163,6 +163,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function mountWebData() {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        setQRCodePopup(false);
         closeNavMenu();
     }
 
