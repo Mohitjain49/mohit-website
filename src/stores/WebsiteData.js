@@ -7,6 +7,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
+    const notificationStore = useNotificationsStore();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -45,6 +46,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const signal = controller.signal;
         audioStore.setupClickAudio();
         nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
+        nextTick(() => { notificationStore.requestPermission(); }); // This function get permissions set for the Notifications to work properly.
 
         documentStore.mountDocumentStore();
         installStore.mountInstallStore();
