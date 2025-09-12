@@ -1,5 +1,5 @@
 <script setup>
-import { QrcodeStream } from 'vue-qrcode-reader';
+import { QrcodeStream, QrcodeDropZone } from 'vue-qrcode-reader';
 const codeScanner = useCodeScannerStore();
 const VUE_QRCODE_READER_GITHUB = "https://github.com/gruhn/vue-qrcode-reader";
 
@@ -19,13 +19,24 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 <main id="code-reader-page" class="personal-web-body">
     <div class="code-scanner-main">
         <div class="scanner-component-container">
-            <QrcodeStream @detect="(event) => {codeScanner.onDetectCode(event)}"
+            <QrcodeStream v-if="codeScanner.scanMode == 0"
+                @detect="(event) => {codeScanner.onDetectCode(event)}"
                 @camera-on="(event) => {codeScanner.onCameraActive(event)}"
                 @camera-off="(event) => {codeScanner.deactivateCamera(event)}"
                 :formats="codeScanner.BARCODE_FORMATS"
                 :style="{ 'display': (!codeScanner.cameraActive ? 'none' : '') }"
             />
-            <div v-if="!codeScanner.cameraActive" class="scanner-component-inactive"> Waiting On Camera... </div>
+            <div class="scanner-component-inactive"
+                v-html="'Waiting On Camera...'"
+                v-if="!codeScanner.cameraActive && codeScanner.scanMode == 0">
+            </div>
+            <QrcodeDropZone v-if="codeScanner.scanMode == 1" class="scanner-component-dropZone"
+                @dragover="(e) => { codeScanner.setDraggingImage(e); }"
+                @detect="(event) => {codeScanner.onDetectCode(event)}"
+                :formats="codeScanner.BARCODE_FORMATS">
+                
+                {{ codeScanner.draggingImageText }}
+            </QrcodeDropZone>
         </div>
         <div class="code-scanner-console">
             <div class="scanner-console-top">
@@ -34,6 +45,9 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
                     <a :href="VUE_QRCODE_READER_GITHUB" target="vue-qrcode-reader" title="See the dependency This page uses.">
                         <FontAwesomeIcon icon="fa-brands fa-github-square" />
                     </a>
+                    <button @click="codeScanner.setScanMode('toggle')" :title="codeScanner.scanModeBtnTitle">
+                        <FontAwesomeIcon :icon="codeScanner.scanModeIcon" />
+                    </button>
                     <button @click="codeScanner.clearAllScannedItems()" title="Delete All Scanned Items" style="color: red;">
                         <FontAwesomeIcon icon="fa-trash" />
                     </button>
@@ -120,6 +134,22 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
     font-size: 28px;
     border-radius: 20px;
     background-color: var(--dark-background);
+}
+
+.scanner-component-dropZone {
+    position: relative;
+    cursor: default;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-background);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+    font-family: 'Lexend', sans-serif;
+    font-size: 28px;
 }
 
 .code-scanner-console {

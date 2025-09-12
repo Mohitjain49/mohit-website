@@ -7,6 +7,9 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      */
     const scannedItems = ref([]);
     const cameraActive = ref(false);
+    const draggingImage = ref(false);
+
+    const scanMode = ref(0);
     const scannedItemMenu = ref(-1);
 
     const copiedTimeout = ref(null);
@@ -18,6 +21,10 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const copiedStatusIcon = computed(() => {
         return ((copiedStatus.value == 0) ? 'fa-copy' : ((copiedStatus.value == 1) ? 'fa-check' : 'fa-ban'));
     });
+
+    const scanModeIcon = computed(() => { return ((scanMode.value == 0) ? "fa-file-arrow-up" : "fa-video"); });
+    const scanModeBtnTitle = computed(() => { return ((scanMode.value == 0) ? "Switch To Drag and Drop" : "Switch to Video"); });
+    const draggingImageText = computed(() => { return (!draggingImage.value ? "Drag Your Image Here..." : "Drop Your Image."); });
 
     /**
      * This function mounts the page hosting the code scanner.
@@ -34,6 +41,15 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     function unmountCodeScanner() {
         deactivateCamera();
         setScannedItemMenu(-1);
+        setDraggingImage(false);
+    }
+
+    /**
+     * This function sets which Scan component should be used.
+     * @param {Number | String} index If equal to "toggle", toggles the value between 0 and 1, otherwise just a number.
+     */
+    function setScanMode(index = "toggle") {
+        scanMode.value = ((index === "toggle") ? ((scanMode.value != 0) ? 0 : 1) : index);
     }
 
     /**
@@ -61,16 +77,26 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         if(import.meta.env.DEV) { console.log(event); }
         for(let i = 0; i < event.length; i++) {
             const item = event[i];
-            const onlineLink = (item.rawValue.startsWith("https://") ||
-                item.rawValue.startsWith("http://") ||
-                item.rawValue.startsWith("mailto:") ||
-                item.rawValue.startsWith("tel:")
+            const rawValue = item.rawValue;
+
+            const onlineLink = (rawValue.startsWith("https://") ||
+                rawValue.startsWith("http://") ||
+                rawValue.startsWith("mailto:") ||
+                rawValue.startsWith("tel:")
             );
-            scannedItems.value.push({ value: item.rawValue, format: item.format, onlineLink });
+            scannedItems.value.push({ value: rawValue, format: item.format, onlineLink });
         }
 
         triggerScanSound();
         setLocalStorageObj();
+    }
+
+    /**
+     * This function sets whether an image is being dragged onto the scanner drop component.
+     * @param {Boolean} event The event returned by the scanner component.
+     */
+    function setDraggingImage(event = false) {
+        draggingImage.value = event;
     }
 
     /**
@@ -154,8 +180,9 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         "matrix_codes"
     ];
 
-    return { scannedItems, cameraActive, scannedItemMenu, selectedItem, copiedStatusIcon, BARCODE_FORMATS,
-        mountCodeScanner, unmountCodeScanner, clearAllScannedItems, setScannedItemMenu,
-        onCameraActive, deactivateCamera, onDetectCode, removeSelectedItem, copySelectedScannedValue
+    return { scannedItems, cameraActive, scannedItemMenu, scanMode, draggingImage,
+        selectedItem, copiedStatusIcon, scanModeIcon, scanModeBtnTitle, draggingImageText, BARCODE_FORMATS,
+        mountCodeScanner, unmountCodeScanner, clearAllScannedItems, setScannedItemMenu, setScanMode,
+        onCameraActive, deactivateCamera, onDetectCode, setDraggingImage, removeSelectedItem, copySelectedScannedValue
     }
 });
