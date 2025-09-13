@@ -719,10 +719,10 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "QR Codes",
-        link: "/qrcode",
+        link: "mohit-qrcode-button",
         color: "var(--website-light-text)",
-        desc: "This page uses the \"uqr\" dependency to create QR Codes for this website " +
-            "and my online profiles on different platforms. There is also a QR Code tool that popup " +
+        desc: "This page uses the \"qr-code-styling\" dependency to create QR Codes for this website. " +
+            "There is a QR Code tool that pops up " +
             "with (CTRL + Q) or on the bottom left of the Navigation Menu.",
 
         icon: {

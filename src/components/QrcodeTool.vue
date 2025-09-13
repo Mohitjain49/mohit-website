@@ -4,8 +4,11 @@
         <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, webData.qrPopup.truncateValue) }} </button>
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
-        <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-closeBtn" title="Close QR Code Popup">
+        <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-btn close" title="Close QR Code Popup">
             <FontAwesomeIcon icon="fa-xmark" />
+        </button>
+        <button @click="downloadQRCode()" class="qrcode-mainPopup-btn download" title="Download QR Code.">
+            <FontAwesomeIcon icon="fa-download" />
         </button>
     </div>
 </div>
@@ -18,6 +21,10 @@ const route = useRoute();
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
 
+/**
+ * @type {import('vue').Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup.
+ */
+const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref({ display: "none" });
 
@@ -44,7 +51,7 @@ watch(() => route.fullPath, () => { setQRCodeLink(); });
  */
 function setQRCodeLink() {
     qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.fullPath.substring(1));
-    const qrcode = new QRCodeStyling({
+    qrcode.value = new QRCodeStyling({
         width: 450,
         height: 450,
         type: 'canvas',
@@ -78,7 +85,7 @@ function setQRCodeLink() {
         backgroundOptions: { color: '#E5E5E5' },
     });
 
-    qrcode.append(document.getElementById("mohit-qrcode"));
+    qrcode.value.append(document.getElementById("mohit-qrcode"));
     qrCodeDisplay.value.display = "block";
 }
 
@@ -90,6 +97,13 @@ function copyQRCodeLink() {
 }
 
 /**
+ * This function lets the user download the QR Code as a .png file.
+ */
+function downloadQRCode() {
+    qrcode.value.download({ extension: "png" });
+}
+
+/**
  * This function hides the overflow while the popup is in effect.
  */
 function hideQrcodePopupOverflow() {
@@ -98,10 +112,6 @@ function hideQrcodePopupOverflow() {
 </script>
 
 <style>
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
 #qr-code-popup.webpage-cover {
     display: flex;
     justify-content: center;
@@ -155,12 +165,10 @@ function hideQrcodePopupOverflow() {
     text-decoration: underline;
 }
 
-.qrcode-mainPopup-closeBtn {
+.qrcode-mainPopup-btn {
     position: absolute;
-    top: 10px;
     right: 10px;
     padding: 6px;
-    color: red;
     border: 2px solid;
     border-radius: 50%;
     transition: var(--default-transition);
@@ -169,11 +177,20 @@ function hideQrcodePopupOverflow() {
     align-items: center;
     background: var(--dark-background);
 }
-.qrcode-mainPopup-closeBtn svg {
+.qrcode-mainPopup-btn svg {
     width: 17px;
     height: 17px;
 }
-.qrcode-mainPopup-closeBtn:hover {
+
+.qrcode-mainPopup-btn.close {
+    color: red;
+    top: 10px;
+}
+.qrcode-mainPopup-btn.download {
+    color: var(--website-text);
+    bottom: 10px;
+}
+.qrcode-mainPopup-btn:hover {
     background-color: black;
     box-shadow: 0px 0px 10px black;
 }

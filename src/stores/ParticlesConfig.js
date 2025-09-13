@@ -4,7 +4,7 @@ export const HOME_BACKGROUND = {
     },
     fpsLimit: 40,
     particles: {
-        color: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163"] },
+        color: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163", "#E92A60"] },
         move: {
             direction: "bottom",
             enable: true,

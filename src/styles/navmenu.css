@@ -212,9 +212,11 @@
     justify-content: center;
     align-items: center;
     font-size: 22px;
+    transition: var(--default-transition), font-size 0.2s;
 }
 .mohit-navMenu-smallFeatures-btn:hover {
     background-color: var(--dark-background);
+    font-size: 24px;
 }
 
 .mohit-navMenu-smallFeatures-right {
