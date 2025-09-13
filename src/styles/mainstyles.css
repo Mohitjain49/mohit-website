@@ -1,4 +1,4 @@
-@import "animate.css";
+@import "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
 @import "@tato30/vue-pdf/style.css";
 
 :root {
@@ -123,6 +123,29 @@ button {
     min-height: 0px;
 }
 
+#resume-container:fullscreen {
+    padding-top: 20px;
+    min-height: calc(100% - 20px);
+    overflow-y: auto;
+}
+#resume-container.iframe-page:fullscreen {
+    padding-top: 0px;
+    min-height: 0px;
+    height: 100%;
+    overflow-y: hidden !important;
+}
+
+#resume-container.iframe-page.google iframe {
+    height: calc(100% - 75px);
+}
+#resume-container.iframe-page.google:fullscreen {
+    padding-top: 20px;
+    height: calc(100% - 20px) !important;
+}
+#resume-container.iframe-page.google:fullscreen iframe {
+    height: 100% !important;
+}
+
 .webpage-cover {
     margin: 0;
     padding: 0;
@@ -234,6 +257,10 @@ button {
     min-height: calc(var(--body-height) - 100px);
     padding-top: 20px;
     padding-bottom: 80px;
+}
+
+#resume-container:fullscreen .pdf-doc-mohit-container {
+    min-height: calc(100% - 100px);
 }
 
 .markdown-body h1, .markdown-body p, .markdown-body li {

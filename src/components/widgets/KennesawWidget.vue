@@ -13,15 +13,15 @@ const WIDGET_TITLE = "I'm A Proud Computer Science Student Of Kennesaw State Uni
 <style scoped>
 .ksu-widget {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 15px;
+    right: 15px;
     background-color: var(--dark-background);
     border: 2px solid var(--website-text);
     height: 60px;
     width: 60px;
     border-radius: 50%;
     overflow: hidden;
-    z-index: 9900;
+    z-index: 5;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -33,5 +33,15 @@ const WIDGET_TITLE = "I'm A Proud Computer Science Student Of Kennesaw State Uni
 .ksu-widget img {
     height: 37px;
     user-select: none;
+}
+
+@media (max-width: 525px) {
+    .ksu-widget {
+        height: 50px;
+        width: 50px;
+    }
+    .ksu-widget img {
+        height: 27px;
+    }
 }
 </style>

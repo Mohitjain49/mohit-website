@@ -2,6 +2,7 @@
 <NavigationMain />
 <PageBookmark />
 <GamepadComponent />
+<QrcodeTool v-if="webData.qrPopup.open" />
 
 <RouterView :key="$route.path" />
 <div v-if="webData.menuOpen != -1" class="webpage-cover"></div>

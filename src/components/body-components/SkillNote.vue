@@ -27,20 +27,20 @@
     </div>
 </a>
 
-<RouterLink v-else-if="link === '/skills'" to="/skills" class="skills-note"
+<button v-else-if="link === 'mohit-qrcode-button'" class="skills-note"
+    title="Create a QR Code for this page."
+    @click="webData.setQRCodePopup(true)"
     @mouseenter="setPulseLoopAnimation"
     @mouseleave="setPulseLoopAnimation">
 
     <div class="skills-note-image">
-        <font-awesome-icon icon="fa-circle-info" class="skills-note-moreInfo-icon" />
+        <font-awesome-icon :icon="id" :style="getFAIconStyle()" />
     </div>
-    <div class="skills-note-body more-info">
-        <div class="skills-note-header"> More Info </div>
-        <div class="skills-note-desc">
-            Click on this card or the "Skills" link at the top for a detailed description on all my skills.
-        </div>
+    <div class="skills-note-body" :style="{ color: color }">
+        <div class="skills-note-header"> {{ name }} </div>
+        <div class="skills-note-desc"> {{ desc }} </div>
     </div>
-</RouterLink>
+</button>
 
 <RouterLink v-else :to="link" class="skills-note"
     @mouseenter="setPulseLoopAnimation"
@@ -58,6 +58,7 @@
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const props = defineProps({
     link: { type: String, default: "#" },
     faIcon: { type: Boolean, default: true },

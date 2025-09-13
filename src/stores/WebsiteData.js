@@ -6,6 +6,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentStore = useDocumentStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
+    const fullScreenStore = useFullScreenStore();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -22,6 +23,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
+    const qrPopup = ref({ open: false, truncateValue: 54 });
 
     const wakeLockIcon = computed(() => {
         return (wakeLockAvailable.value ? ((wakeLock.value == null) ? 'fa-lock' : 'fa-unlock') : 'fa-ban');
@@ -56,7 +58,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
         document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
         document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
-        document.body.addEventListener("keydown", onKeyDown, { signal })
+        document.body.addEventListener("keydown", onKeyDown, { signal });
+        document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
     }
 
     /**
@@ -74,6 +77,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
         gamepadStore.initCustomCursorPosition();
+        qrPopup.value.truncateValue = ((windowWidth > 625) ? 54 : 48);
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -123,9 +127,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {KeyboardEvent} event The event given by the listener.
      */
     function onKeyDown(event) {
-        if(!event.altKey) { return; }
         const key = event.key;
+        if(event.ctrlKey && (key === "q" || key === "Q")) {
+            setQRCodePopup("toggle");
+            triggerClickSound();
+        }
 
+        if(!event.altKey) { return; }
         if(key === "m") {
             toggleNavMenu();
             triggerClickSound();
@@ -155,6 +163,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function mountWebData() {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        setQRCodePopup(false);
         closeNavMenu();
     }
 
@@ -195,6 +204,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function closeNavMenu() {
         menuOpen.value = -1;
+    }
+
+    /**
+     * This function sets a new status for the QR Code Popup.
+     * @param {String | Boolean} status The new status. If it equals "toggle", the new status is the opposite of the current status.
+     */
+    function setQRCodePopup(status = "toggle") {
+        qrPopup.value.open = ((status === "toggle") ? !qrPopup.value.open : status);
+        closeNavMenu();
     }
 
     /**
@@ -272,8 +290,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { pageView, menuOpen, navMenuOpen, documentMenuOpen,
-        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent,
-        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock,
+        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, qrPopup,
+        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection, scrollToFooter,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }

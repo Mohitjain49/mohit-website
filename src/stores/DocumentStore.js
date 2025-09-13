@@ -3,6 +3,8 @@ import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Ful
 
 export const useDocumentStore = defineStore("document-store", () => {
     const route = useRoute();
+    const fullScreenStore = useFullScreenStore();
+
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
     const customPdfScaleFactor = ref(1.375);
@@ -76,6 +78,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function unmountDocumentPage() {
         document.body.style.overflowY = "";
+        fullScreenStore.exitFullScreen();
+
         window.removeEventListener("resize", hideVerticalOverflow);
         window.removeEventListener("resize", setPdfSize);
     }
@@ -108,6 +112,14 @@ export const useDocumentStore = defineStore("document-store", () => {
     function setPdfSize() {
         customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (window.innerWidth - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
+    }
+
+    /**
+     * This function sets the full screen for the "resume-container" element.
+     */
+    function toggleDocumentFullScreen() {
+        fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+        useWebsiteDataStore().closeNavMenu();
     }
 
     /**
@@ -147,7 +159,8 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, fultonInternshipAppreciationPdfObj, downloadDoc, printDoc,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, hideVerticalOverflow, setPdfSize,
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage,
+        hideVerticalOverflow, setPdfSize, toggleDocumentFullScreen,
         checkResumeRoute, checkFCSCertificateRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute
     }
 });

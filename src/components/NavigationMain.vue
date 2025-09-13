@@ -57,13 +57,19 @@
                     <FontAwesomeIcon icon="fa-angles-down" />
                 </RouterLink>
             </div>
-            <div class="mohit-navMenu-opt volume-meter">
-                <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
-                <input type="range" min="0" max="100" title="Volume Meter for the click sound."
-                    v-model="audioStore.volumeInput"
-                    @input="audioStore.changeAudioVolume()"
-                />
-                <span> {{ (audioStore.volumeInput + '%') }} </span>
+            <div class="mohit-navMenu-opt small-features">
+                <button @click="webData.setQRCodePopup(true)" class="mohit-navMenu-smallFeatures-btn" title="Create a QR Code for this page.">
+                    <font-awesome-icon icon="fa-qrcode" />
+                </button>
+                <div class="mohit-navMenu-volume-meter">
+                    <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+                    <input type="range" min="0" max="100" title="Volume Meter for the click sound."
+                        v-model="audioStore.volumeInput"
+                        @input="audioStore.changeAudioVolume()"
+                    />
+                    <span> {{ (audioStore.volumeInput + '%') }} </span>
+                </div>
+                <div class="mohit-navMenu-smallFeatures-right"></div>
             </div>
         </div>
     </Transition>

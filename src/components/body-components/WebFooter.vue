@@ -74,6 +74,10 @@
                 <span> {{ COPYRIGHT_TEXT }} </span>
             </RouterLink>
         </div>
+
+        <button @click="webData.setQRCodePopup(true)" class="qr-popup-open-section" title="Open QR Code For Page">
+            <FontAwesomeIcon icon="fa-qrcode" />
+        </button>
     </nav>
 </client-only>
 </template>
@@ -82,6 +86,7 @@
 const route = useRoute();
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
+const fullScreenStore = useFullScreenStore();
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 
 onMounted(() => {
@@ -96,7 +101,7 @@ const footerClass = computed(() => {
     const path = route.path;
     if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
         return 'main-page';
-    } else if(docStore.checkResumeRoute() || docStore.checkFCSCertificateRoute()) {
+    } else if(!fullScreenStore.fullScreenSet && (docStore.checkResumeRoute() || docStore.checkFCSCertificateRoute())) {
         return 'document-route';
     } else {
         return '';
@@ -124,9 +129,9 @@ const MAIN_ROUTES = [
 const EXTRA_ROUTES = [
     { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", color: "var(--website-light-text)" },
     { name: "Barcode Reader", path: "/code-reader", icon: "fa-barcode", color: "var(--blue-cobalt)" },
-    { name: "QR Codes", path: "/qrcode", icon: "fa-qrcode", color: "var(--website-light-text)" },
     { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
     { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
+    { name: "Documents", path: "/resume", icon: "fa-file-lines", color: "var(--website-light-text)" },
 ];
 
 const REPO_ROUTES = [
@@ -141,6 +146,7 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
 
 <style scoped>
 #footer {
+    position: relative;
     background-color: rgba(0, 0, 0, 0.95);
     width: 100%;
     height: 375px;
@@ -249,12 +255,36 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     margin-right: 8px;
 }
 
+.qr-popup-open-section {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    width: fit-content;
+    color: var(--website-light-text);
+    padding: 7px;
+    border: 1px solid;
+    border-radius: 10px;
+    transition: var(--default-transition), scale 0.2s;
+}
+.qr-popup-open-section svg {
+    width: 35px;
+    height: 35px;
+}
+.qr-popup-open-section:hover {
+    background-color: rgb(43, 43, 43);
+    scale: 1.1;
+}
+
 @media (max-width: 1050px) {
     #footer {
-        height: 660px;
+        height: 640px;
     }
     #footer.document-route {
-        padding-bottom: 10px;
+        padding-bottom: 30px;
     }
     .footer-body {
         grid-template-columns: 1fr 1fr;
@@ -324,6 +354,9 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     .footer-routes-opt svg {
         width: 15px;
         margin-right: 5px;
+    }
+    .qr-popup-open-section img {
+        height: 35px;
     }
 }
 </style>
