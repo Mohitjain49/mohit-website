@@ -13,7 +13,7 @@
     </div>
 </div>
 
-<a v-else-if="checkExternalLink(link)" :href="link" target="_blank" class="skills-note"
+<a v-else-if="isExternalLink" :href="link" target="_blank" class="skills-note"
     @mouseenter="setPulseLoopAnimation"
     @mouseleave="setPulseLoopAnimation">
 
@@ -58,7 +58,6 @@
 </template>
 
 <script setup>
-const webData = useWebsiteDataStore();
 const props = defineProps({
     link: { type: String, default: "#" },
     faIcon: { type: Boolean, default: true },
@@ -69,19 +68,17 @@ const props = defineProps({
     id: { type: String, default: "fa-circle-info" }
 });
 
+const webData = useWebsiteDataStore();
+const isExternalLink = computed(() => {
+    const link = props.link;
+    return (link.includes("https://") || link.includes("http://"));
+});
+
 /**
  * This function returns a style object for an Font Awesome icon on here.
  */
 function getFAIconStyle() {
     return { color: props.color, fontSize: (props.size + "px") }
-}
-
-/**
- * This function returns a boolean determined by if the link passed in is an external link or not.
- * @param link The link in question.
- */
-function checkExternalLink(link = "https://www.mohit-jain.com/") {
-    return (link.includes("https://") || link.includes("http://"));
 }
 </script>
 

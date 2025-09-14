@@ -8,6 +8,7 @@ import { createPinia } from "pinia";
 
 import VueParticles from "@tsparticles/vue3";
 import { loadSlim } from "@tsparticles/slim";
+import { loadFireworksPreset } from "@tsparticles/preset-fireworks";
 
 import App from "./App.vue";
 import { personalRoutes } from "./routes";
@@ -32,8 +33,11 @@ export const createApp = ViteSSG(App, { routes: personalRoutes },
                 });
             }
 
-            app.use(VueParticles, { init: async engine => { await loadSlim(engine); } });
             if(navigator.getGamepads()) { import("./joypad-events.js"); }
+            app.use(VueParticles, { init: async engine => {
+                await loadSlim(engine);
+                await loadFireworksPreset(engine);
+            }});
         }
     }
 )

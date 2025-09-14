@@ -12,7 +12,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 
 <template>
 <client-only>
-    <vue-particles id="particlests" :options="FEATURES_BACKGROUND"></vue-particles>
+    <vue-particles id="particlests" :options="CODE_SCANNER_BACKGROUND"></vue-particles>
 </client-only>
 <FeaturesReturnWidget />
 

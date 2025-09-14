@@ -62,7 +62,7 @@ function setCardTransition(entry) {
 
 <style scoped>
 .personal-web-body#features-page {
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 .features-section {
     background: transparent;
