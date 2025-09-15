@@ -1,5 +1,26 @@
+<template>
+<div id="google-mockup-page" :class="['personal-web-body', (isDarkMode ? 'dark-mode' : '')]">
+    <div class="gMockup-center">
+        <template v-if="!directionsOpen">
+            <h1 class="gMockup-title"> Google </h1>
+            <input type="text" id="search" class="gMockup-search-bar" placeholder="Search Google or type a URL" />
+        </template>
+        <template v-if="directionsOpen">
+            <GoogleMockupAssignmentComponent class="gMockup-directions" />
+            <button @click="toggleDirections()" class="gMockup-directions-btn"> Close Directions </button>
+        </template>
+    </div>
+
+    <footer class="gMockup-bottom-bar">
+        <button @click="toggleDirections()"> Directions </button>
+        <button @click="toggleDarkMode()"> Settings </button>
+    </footer>
+</div>
+</template>
+
 <script setup>
 const isDarkMode = ref(false);
+const directionsOpen = ref(false);
 onMounted(() => { initWebData(); });
 
 /**
@@ -9,32 +30,20 @@ function toggleDarkMode() {
     isDarkMode.value = !isDarkMode.value
 }
 
+function toggleDirections() {
+    directionsOpen.value = !directionsOpen.value;
+}
+
 useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     "This is a simple project I give to new frontend developers to introduce them to Vue.js development."
 ));
 </script>
 
-<template>
-<div id="google-mockup-page" :class="['personal-web-body', (isDarkMode ? 'dark-mode' : '')]">
-    <div class="gMockup-center">
-        <h1 class="gMockup-title"> Google </h1>
-        <input type="text" id="search" class="gMockup-search-bar" placeholder="Search Google or type a URL" />
-    </div>
-
-    <footer class="bottom-bar">
-        <div class="bottom-content">
-            <button> Directions </button>
-            <button @click="toggleDarkMode()">Settings</button>
-        </div>
-    </footer>
-</div>
-</template>
-
 <style scoped>
 #google-mockup-page {
     background-color: white;
     color: #121212;
-    height: calc(100% - 60px);
+    height: fit-content;
     min-height: calc(100% - 60px);
 }
 #google-mockup-page.dark-mode {
@@ -43,7 +52,8 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 }
 
 .gMockup-center {
-    height: calc(100% - 50px);
+    height: fit-content;
+    min-height: calc(100vh - 110px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -78,101 +88,63 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     color: #e0e0e0;
 }
 
-.dark-mode .search-bar {
-  background: #222;
-  color: #e0e0e0;
-  border-color: #444;
-}
-
-.subheadings {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.subheadingsLeft {
-  display: flex;
-  gap: 20px;
-  padding: 24px;
-}
-
-.subheadingsRight {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  padding-right: 24px;
-}
-
-/* Bottom Bar styles */
-.bottom-bar {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 40px;
-  border-top: none;
-  box-shadow: none;
-  background-color: #e0e0e0;
-  z-index: 100;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.bottom-content {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+.gMockup-bottom-bar {
+    position: relative;
     width: 100%;
     height: 50px;
     background-color: #e0e0e0;
-    border-top: none;
-    box-shadow: none;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-
-.bottom-bar,
-.bottom-content {
-  border-top: none !important;
-  box-shadow: none !important;
-  background-color: #e0e0e0;
-  margin: 0;
-  padding: 0;
+.dark-mode .gMockup-bottom-bar {
+    background-color: #222 !important;
+    color: #e7d9d9 !important;
+    border-top: none !important;
+    box-shadow: none !important;
 }
 
-
-.dark-mode .bottom-bar,
-.dark-mode .bottom-content {
-  background-color: #222 !important;
-  color: #e7d9d9 !important;
-  border-top: none !important;
-  box-shadow: none !important;
-}
-
-.bottom-bar button {
-    margin: 0px 10px;
-    font-size: 14px;
+.gMockup-bottom-bar button {
+    margin: 0px 20px;
+    font-size: 19px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
     color: #333;
+    user-select: none;
+}
+.dark-mode .gMockup-bottom-bar button {
+    color: #ebebeb;
 }
 
-.dark-mode .bottom-bar button {
-  color: #ebebeb; /*WHERE PROBLEM WAS I HATE THIS STUPID LINE OF CODE, IT MADE ME LOSE 2 HOURS OF MY LIFE*/
+.gMockup-directions {
+    margin: 0px;
+    margin-top: 30px;
+    border: 2px solid #3d3d3d;
+    background-color: lightgray;
 }
-footer {
-  border-top: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.dark-mode footer {
-  border-top: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  margin: 0 !important;
-  padding: 0 !important;
+.dark-mode .gMockup-directions {
+    border-color: transparent;
+    background-color: white;
 }
 
+.gMockup-directions-btn {
+    height: fit-content;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    padding: 10px;
+    color: red;
+    background-color: lightgray;
+    border: 2px solid;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    transition: var(--default-transition);
+}
+.gMockup-directions-btn:hover {
+    background-color: #fad8d8;
+    box-shadow: 0px 0px 10px red;
+}
 </style>

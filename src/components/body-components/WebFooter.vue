@@ -136,7 +136,7 @@ const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", color: "var(--lightning-yellow)" },
     { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" },
     { name: "Sitemap", path: "/sitemap", icon: "fa-sitemap", color: "lightgrey" },
-    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", color: "#4286F5" },
+    { name: "Google Mockup", path: "/google-mockup", icon: "fa-brands fa-google", color: "#4286F5" },
 ];
 
 const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/features/"];
