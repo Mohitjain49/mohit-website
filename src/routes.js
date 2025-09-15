@@ -19,6 +19,7 @@ import ResumeMarkdown from "./pages/resume/ResumeMarkdown.vue";
 import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
 import InternAppreciationIframe from "./pages/certifications/InternAppreciationIframe.vue";
 import GoogleMockupAssigment from "./pages/GoogleMockupAssigment.vue";
+import GoogleMockup from "./pages/GoogleMockup.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
@@ -122,6 +123,7 @@ export const personalRoutes = [
         ]
     },
 
+    { path: "/google-mockup", component: GoogleMockup },
     { path: "/google-mockup-assignment", component: GoogleMockupAssigment },
     { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },

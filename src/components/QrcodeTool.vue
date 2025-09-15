@@ -167,7 +167,7 @@ function hideQrcodePopupOverflow() {
 
 .qrcode-mainPopup-btn {
     position: absolute;
-    right: 10px;
+    top: 10px;
     padding: 6px;
     border: 2px solid;
     border-radius: 50%;
@@ -184,11 +184,11 @@ function hideQrcodePopupOverflow() {
 
 .qrcode-mainPopup-btn.close {
     color: red;
-    top: 10px;
+    right: 10px;
 }
 .qrcode-mainPopup-btn.download {
     color: var(--website-text);
-    bottom: 10px;
+    left: 10px;
 }
 .qrcode-mainPopup-btn:hover {
     background-color: black;
