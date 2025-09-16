@@ -35,7 +35,7 @@ const REDIRECT_PAGES = [
     { path: "/steam", link: SOCIALS[5].link, title: "Mohit Jain | Steam", desc: "This link will redirect you to my Steam Profile." },
 
     {
-        path: "/repo", alias: ['/repository'], link: PERSONAL_WEBSITE_REPOSITORY_LINK,
+        path: "/repository", alias: ['/repo'], link: PERSONAL_WEBSITE_REPOSITORY_LINK,
         title: "Mohit Jain | Website Repository",
         desc: "This link will redirect you to this website's github repository."
     },
@@ -126,7 +126,7 @@ export const personalRoutes = [
     { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
-    getRedirectRouteRecord("/repo"),
+    getRedirectRouteRecord("/repository"),
     getRedirectRouteRecord("/code"),
     getRedirectRouteRecord("/commits"),
     getRedirectRouteRecord("/sitemap"),

@@ -129,14 +129,13 @@ const EXTRA_ROUTES = [
     { name: "Barcode Reader", path: "/code-reader", icon: "fa-barcode", color: "var(--blue-cobalt)" },
     { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
     { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
-    { name: "Documents", path: "/resume", icon: "fa-file-lines", color: "var(--website-light-text)" },
+    { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" },
 ];
 
 const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", color: "var(--lightning-yellow)" },
     { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" },
     { name: "Sitemap", path: "/sitemap", icon: "fa-sitemap", color: "lightgrey" },
-    { name: "Google Mockup", path: "/google-mockup", icon: "fa-brands fa-google", color: "#4286F5" },
 ];
 
 const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/features/"];
