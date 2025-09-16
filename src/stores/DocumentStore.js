@@ -147,7 +147,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function returns true if the user is using a google doc route.
      */
     function checkGoogleDocRoute() {
-        return route.path.includes('google');
+        return (route.path.includes('google') && !route.path.includes('google-mockup'));
     }
 
     /**
