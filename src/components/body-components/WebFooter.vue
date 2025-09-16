@@ -1,85 +1,83 @@
 <template>
-<client-only>
-    <nav id="footer" :class="footerClass">
-        <div class="footer-body">
-            <div class="footer-routes-column">
-                <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
-                    <font-awesome-icon icon="fa-house" />
-                    <span> Home Page </span>
-                </RouterLink>
+<footer id="footer" :class="footerClass">
+    <div class="footer-body">
+        <div class="footer-routes-column">
+            <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
+                <font-awesome-icon icon="fa-house" />
+                <span> Home Page </span>
+            </RouterLink>
 
-                <RouterLink v-for="tab in MAIN_ROUTES" :to="(tab.path + '/')"
-                    :style="{ 'color': tab.color }"
-                    class="footer-routes-opt"
-                    @click="scrollToTop(tab.path)">
+            <RouterLink v-for="tab in MAIN_ROUTES" :to="(tab.path + '/')"
+                :style="{ 'color': tab.color }"
+                class="footer-routes-opt"
+                @click="scrollToTop(tab.path)">
 
-                    <font-awesome-icon :icon="tab.icon" />
-                    <span> {{ tab.name }} </span>
-                </RouterLink>
-            </div>
-
-            <div class="footer-routes-column right">
-                <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')">
-                    <font-awesome-icon icon="fa-paper-plane" />
-                    <span> Contact Me </span>
-                </RouterLink>
-
-                <template v-for="(social, index) in SOCIALS">
-                    <a v-if="(index != 2)" :href="social.link" class="footer-routes-opt" :style="{ 'color': social.color }">
-                        <font-awesome-icon :icon="social.linkIcon" />
-                        <span> {{ social.name }} </span>
-                    </a>
-                </template>
-            </div>
-
-            <div class="footer-routes-column extras">
-                <RouterLink to="/features" class="footer-routes-header"
-                    @click="scrollToTop('/features')"
-                    style="color: var(--lightning-yellow)">
-
-                    <font-awesome-icon icon="fa-bolt-lightning" />
-                    <span> Features </span>
-                </RouterLink>
-
-                <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
-                    :style="{ 'color': tab.color }"
-                    class="footer-routes-opt"
-                    @click="scrollToTop(tab.path)">
-
-                    <font-awesome-icon :icon="tab.icon" />
-                    <span> {{ tab.name }} </span>
-                </RouterLink>
-            </div>
-
-            <div class="footer-routes-column extras right">
-                <RouterLink to="/repository" class="footer-routes-header white">
-                    <font-awesome-icon icon="fa-code-branch" />
-                    <span> Repository </span>
-                </RouterLink>
-
-                <RouterLink v-for="tab in REPO_ROUTES" :to="tab.path"
-                    :style="{ 'color': tab.color }"
-                    class="footer-routes-opt"
-                    @click="scrollToTop(tab.path)">
-
-                    <font-awesome-icon :icon="tab.icon" />
-                    <span> {{ tab.name }} </span>
-                </RouterLink>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <RouterLink to="/copyright" class="copyright-statement">
-                <font-awesome-icon icon="fa-copyright" />
-                <span> {{ COPYRIGHT_TEXT }} </span>
+                <font-awesome-icon :icon="tab.icon" />
+                <span> {{ tab.name }} </span>
             </RouterLink>
         </div>
 
-        <button @click="webData.setQRCodePopup(true)" class="qr-popup-open-section" title="Open QR Code For Page">
-            <FontAwesomeIcon icon="fa-qrcode" />
-        </button>
-    </nav>
-</client-only>
+        <div class="footer-routes-column right">
+            <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')">
+                <font-awesome-icon icon="fa-paper-plane" />
+                <span> Contact Me </span>
+            </RouterLink>
+
+            <template v-for="(social, index) in SOCIALS">
+                <a v-if="(index != 2)" :href="social.link" class="footer-routes-opt" :style="{ 'color': social.color }">
+                    <font-awesome-icon :icon="social.linkIcon" />
+                    <span> {{ social.name }} </span>
+                </a>
+            </template>
+        </div>
+
+        <div class="footer-routes-column extras">
+            <RouterLink to="/features" class="footer-routes-header"
+                @click="scrollToTop('/features')"
+                style="color: var(--lightning-yellow)">
+
+                <font-awesome-icon icon="fa-bolt-lightning" />
+                <span> Features </span>
+            </RouterLink>
+
+            <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
+                :style="{ 'color': tab.color }"
+                class="footer-routes-opt"
+                @click="scrollToTop(tab.path)">
+
+                <font-awesome-icon :icon="tab.icon" />
+                <span> {{ tab.name }} </span>
+            </RouterLink>
+        </div>
+
+        <div class="footer-routes-column extras right">
+            <RouterLink to="/repository" class="footer-routes-header white">
+                <font-awesome-icon icon="fa-code-branch" />
+                <span> Repository </span>
+            </RouterLink>
+
+            <RouterLink v-for="tab in REPO_ROUTES" :to="tab.path"
+                :style="{ 'color': tab.color }"
+                class="footer-routes-opt"
+                @click="scrollToTop(tab.path)">
+
+                <font-awesome-icon :icon="tab.icon" />
+                <span> {{ tab.name }} </span>
+            </RouterLink>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <RouterLink to="/copyright" class="copyright-statement">
+            <font-awesome-icon icon="fa-copyright" />
+            <span> {{ COPYRIGHT_TEXT }} </span>
+        </RouterLink>
+    </div>
+
+    <button @click="webData.setQRCodePopup(true)" class="qr-popup-open-section" title="Open QR Code For Page">
+        <FontAwesomeIcon icon="fa-qrcode" />
+    </button>
+</footer>
 </template>
 
 <script setup>
@@ -131,14 +129,13 @@ const EXTRA_ROUTES = [
     { name: "Barcode Reader", path: "/code-reader", icon: "fa-barcode", color: "var(--blue-cobalt)" },
     { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
     { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
-    { name: "Documents", path: "/resume", icon: "fa-file-lines", color: "var(--website-light-text)" },
+    { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" },
 ];
 
 const REPO_ROUTES = [
     { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", color: "var(--lightning-yellow)" },
     { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" },
     { name: "Sitemap", path: "/sitemap", icon: "fa-sitemap", color: "lightgrey" },
-    { name: "Google Mockup", path: "/google-mockup-assignment", icon: "fa-brands fa-google", color: "#4286F5" },
 ];
 
 const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/features/"];

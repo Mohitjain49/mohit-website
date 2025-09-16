@@ -17,6 +17,7 @@ import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text_Cropped.png";
 import mnd_text from "/static-icons/MND_Icon_Transparent.png";
+import tsparticles from "../assets/TS_Particles_Banner.png";
 
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
 import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
@@ -767,6 +768,32 @@ export const FEATURE_ENTITIES = [
 
         icon: {
             id: "fa-file-lines",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "tsParticles",
+        link: "https://particles.js.org/",
+        color: "black",
+        desc: "The background that you see behind many of the pages was generated with this module. " +
+            "It can make all sorts of backgrounds for a website with MANY customization options.",
+
+        icon: {
+            id: tsparticles,
+            faIcon: false,
+            size: "200"
+        }
+    },
+    {
+        name: "Google Mockup",
+        link: "/google-mockup/",
+        color: "#4286F5",
+        desc: "This is a simple project I give to new frontend developers to introduce them to Vue.js development. " +
+            "This page helps me out a lot.",
+
+        icon: {
+            id: "fa-brands fa-google",
             faIcon: true,
             size: "100"
         }

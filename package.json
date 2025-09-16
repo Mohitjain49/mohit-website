@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "private": true,
     "type": "module",
     "scripts": {
@@ -13,9 +13,9 @@
         "update": "npx npm-check-updates"
     },
     "dependencies": {
-        "@fontsource/lexend": "^5.2.9",
+        "@fontsource/lexend": "^5.2.10",
         "@fontsource/montserrat": "^5.2.7",
-        "@fontsource/roboto": "^5.2.6",
+        "@fontsource/roboto": "^5.2.7",
         "@fortawesome/fontawesome-svg-core": "^7.0.1",
         "@fortawesome/free-brands-svg-icons": "^7.0.1",
         "@fortawesome/free-solid-svg-icons": "^7.0.1",

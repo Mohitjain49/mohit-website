@@ -18,7 +18,7 @@ import ResumeMarkdown from "./pages/resume/ResumeMarkdown.vue";
 
 import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
 import InternAppreciationIframe from "./pages/certifications/InternAppreciationIframe.vue";
-import GoogleMockupAssigment from "./pages/GoogleMockupAssigment.vue";
+import GoogleMockup from "./pages/GoogleMockup.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
@@ -35,7 +35,7 @@ const REDIRECT_PAGES = [
     { path: "/steam", link: SOCIALS[5].link, title: "Mohit Jain | Steam", desc: "This link will redirect you to my Steam Profile." },
 
     {
-        path: "/repo", alias: ['/repository'], link: PERSONAL_WEBSITE_REPOSITORY_LINK,
+        path: "/repository", alias: ['/repo'], link: PERSONAL_WEBSITE_REPOSITORY_LINK,
         title: "Mohit Jain | Website Repository",
         desc: "This link will redirect you to this website's github repository."
     },
@@ -122,11 +122,11 @@ export const personalRoutes = [
         ]
     },
 
-    { path: "/google-mockup-assignment", component: GoogleMockupAssigment },
+    { path: "/google-mockup", component: GoogleMockup },
     { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 
-    getRedirectRouteRecord("/repo"),
+    getRedirectRouteRecord("/repository"),
     getRedirectRouteRecord("/code"),
     getRedirectRouteRecord("/commits"),
     getRedirectRouteRecord("/sitemap"),
