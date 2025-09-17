@@ -77,7 +77,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
         gamepadStore.initCustomCursorPosition();
-        qrPopup.value.truncateValue = ((windowWidth > 625) ? 54 : 48);
+        qrPopup.value.truncateValue = ((windowWidth > 625) ? 54 : 47);
         
         if(windowWidth <= 600) {
             pageView.value = 2;
