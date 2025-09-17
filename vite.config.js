@@ -49,7 +49,7 @@ export default defineConfig({
         }),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
-            dirs: ['./src/stores'],
+            dirs: ['./src/stores/**', './src/joypad-classes.js'],
             dts: './dts/auto-imports.d.ts',
             vueTemplate: true
         }),

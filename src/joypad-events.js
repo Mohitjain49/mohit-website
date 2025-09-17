@@ -1,6 +1,5 @@
 let prevButtons = [];
 let holdTimes = [];
-const AXIS_MOVEMENT_THRESHOLD = 0.05;
 
 /**
  * This function polls the gamepad each frame to check for if any change occurred on the controller.
@@ -45,10 +44,10 @@ function pollGamepad() {
 
         // This releases an event every frame a joystick is moving passed the threshold.
         gp.axes.forEach((axis, index) => {
-            if(axis <= AXIS_MOVEMENT_THRESHOLD && axis >= -AXIS_MOVEMENT_THRESHOLD) { return; }
-            const event = new CustomEvent("gamepadaxismove", {
-                detail: new GamepadAxisMoveEvent(gp, index, axis)
-            });
+            const eventDetails = new GamepadAxisMoveEvent(gp, index, axis);
+            if(!eventDetails.validEvent) { return; }
+
+            const event = new CustomEvent("gamepadaxismove", { detail: eventDetails });
             window.dispatchEvent(event);
         });
 
