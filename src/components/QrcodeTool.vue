@@ -4,12 +4,17 @@
         <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, webData.qrPopup.truncateValue) }} </button>
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
-        <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-btn close" title="Close QR Code Popup">
-            <FontAwesomeIcon icon="fa-xmark" />
-        </button>
-        <button @click="downloadQRCode()" class="qrcode-mainPopup-btn download" title="Download QR Code.">
-            <FontAwesomeIcon icon="fa-download" />
-        </button>
+        <div class="qrcode-mainPopup-options">
+            <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-btn close" title="Close QR Code Popup">
+                <FontAwesomeIcon icon="fa-xmark" />
+            </button>
+            <button v-if="!linkExtrasRemoved" @click="setQRCodeLink(true)" class="qrcode-mainPopup-btn filter" title="Remove All Hashes">
+                <FontAwesomeIcon icon="fa-filter" />
+            </button>
+            <button @click="downloadQRCode()" class="qrcode-mainPopup-btn download" title="Download QR Code.">
+                <FontAwesomeIcon icon="fa-download" />
+            </button>
+        </div>
     </div>
 </div>
 </template>
@@ -22,16 +27,17 @@ const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
 
 /**
- * @type {import('vue').Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup.
+ * @type {import('vue').Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
  */
 const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref({ display: "none" });
+const linkExtrasRemoved = ref(false);
 
 onMounted(() => {
     hideQrcodePopupOverflow();
     window.addEventListener("resize", hideQrcodePopupOverflow);
-    nextTick(() => { setQRCodeLink(); });
+    nextTick(() => { setQRCodeLink(false); });
 });
 
 onBeforeUnmount(() => {
@@ -48,45 +54,52 @@ watch(() => route.fullPath, () => { setQRCodeLink(); });
 
 /**
  * This function sets the link for the QR Code Popup.
+ * @param {Boolean} filterLink If true, this function filters the link to not include hashes.
  */
-function setQRCodeLink() {
-    qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.fullPath.substring(1));
-    qrcode.value = new QRCodeStyling({
-        width: 450,
-        height: 450,
-        type: 'canvas',
-        data: qrCodeLink.value,
-        image: "/static-icons/Personal_Icon_Expanded_Rounded.png",
-        margin: 10,
-        dotsOptions: {
-            color: 'black',
-            type: 'extra-rounded'
-        },
-        cornersSquareOptions: {
-            color: 'black',
-            type: 'extra-rounded'
-        },
-        cornersDotOptions: {
-            color: 'black',
-            type: 'dot'
-        },
-        imageOptions: {
-            hideBackgroundDots: true,
-            imageSize: 0.4,
-            margin: 5,
-            crossOrigin: 'anonymous',
-        },
-        qrOptions: {
-            typeNumber: 0,
-            mode: 'Byte',
-            errorCorrectionLevel: 'Q',
-        },
-        dotsOptions: { color: 'black' },
-        backgroundOptions: { color: '#E5E5E5' },
-    });
+function setQRCodeLink(filterLink = false) {
+    qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (filterLink ? route.path.substring(1) : route.fullPath.substring(1)));
+    linkExtrasRemoved.value = (filterLink || route.hash === "");
 
-    qrcode.value.append(document.getElementById("mohit-qrcode"));
-    qrCodeDisplay.value.display = "block";
+    if(qrcode.value != null) {
+        qrcode.value.update({ data: qrCodeLink.value });
+    } else {
+        qrcode.value = new QRCodeStyling({
+            width: 450,
+            height: 450,
+            type: 'canvas',
+            data: qrCodeLink.value,
+            image: "/static-icons/Personal_Icon_Expanded_Rounded.png",
+            margin: 10,
+            dotsOptions: {
+                color: 'black',
+                type: 'extra-rounded'
+            },
+            cornersSquareOptions: {
+                color: 'black',
+                type: 'extra-rounded'
+            },
+            cornersDotOptions: {
+                color: 'black',
+                type: 'dot'
+            },
+            imageOptions: {
+                hideBackgroundDots: true,
+                imageSize: 0.4,
+                margin: 5,
+                crossOrigin: 'anonymous',
+            },
+            qrOptions: {
+                typeNumber: 0,
+                mode: 'Byte',
+                errorCorrectionLevel: 'Q',
+            },
+            dotsOptions: { color: 'black' },
+            backgroundOptions: { color: '#E5E5E5' },
+        });
+
+        qrcode.value.append(document.getElementById("mohit-qrcode"));
+        qrCodeDisplay.value.display = "block";
+    }
 }
 
 /**
@@ -165,9 +178,18 @@ function hideQrcodePopupOverflow() {
     text-decoration: underline;
 }
 
-.qrcode-mainPopup-btn {
+.qrcode-mainPopup-options {
     position: absolute;
     top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    gap: 7px;
+}
+.qrcode-mainPopup-btn {
     padding: 6px;
     border: 2px solid;
     border-radius: 50%;
@@ -184,11 +206,12 @@ function hideQrcodePopupOverflow() {
 
 .qrcode-mainPopup-btn.close {
     color: red;
-    right: 10px;
+}
+.qrcode-mainPopup-btn.filter {
+    color: var(--website-light-text);
 }
 .qrcode-mainPopup-btn.download {
     color: var(--website-text);
-    left: 10px;
 }
 .qrcode-mainPopup-btn:hover {
     background-color: black;
@@ -213,12 +236,10 @@ function hideQrcodePopupOverflow() {
         padding: 5px;
     }
 
-    .qrcode-mainPopup-closeBtn {
-        top: 7px;
-        right: 7px;
+    .qrcode-mainPopup-btn {
         padding: 4.5px;
     }
-    .qrcode-mainPopup-closeBtn svg {
+    .qrcode-mainPopup-btn svg {
         width: 14px;
         height: 14px;
     }

@@ -29,6 +29,19 @@
                 <span> Previous Page </span>
             </button>
         </div>
+
+        <div class="gamepad-desc">
+            <p>
+                This file simply shows the controls for using a gamepad here. 
+                The files below are the 4 main files in my code that give functionality to the Gamepad on this website.
+            </p>
+            <ul>
+                <li> <a :href="JOYPAD_EVENTS_FILE" target="mohit-gamepad"> Joypad Events </a> </li>
+                <li> <a :href="JOYPAD_CLASSES_FILE" target="mohit-gamepad"> Joypad Classes </a> </li>
+                <li> <a :href="GAMEPAD_STORE_FILE" target="mohit-gamepad"> Gamepad Pinia Store </a> </li>
+                <li> <a :href="GAMEPAD_COMPONENT_FILE" target="mohit-gamepad"> Gamepad Vue.js Component </a> </li>
+            </ul>
+        </div>
     </div>
     <WebFooter />
 </main>
@@ -36,8 +49,12 @@
 
 <script setup>
 const router = useRouter();
-onMounted(() => { initWebData(); });
+const JOYPAD_EVENTS_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/joypad-events.js");
+const JOYPAD_CLASSES_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/joypad-classes.js");
+const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/stores/GamepadStore.js");
+const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.vue");
 
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     "These are the gamepad controls on my website."
 ))
@@ -45,12 +62,13 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
 
 <style scoped>
 .gamepad-controls-body {
-    min-height: 540px;
+    min-height: 740px;
     height: calc(100vh - 60px);
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 .gamepad-controls {
     padding: 24px;
@@ -87,15 +105,39 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     background-color: #555;
 }
 
+.gamepad-desc {
+    margin-top: 20px;
+    height: 180px;
+    width: fit-content;
+    max-width: 400px;
+    padding: 17px;
+    background-color: var(--dark-background);
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+.gamepad-desc p {
+    color: var(--website-light-text);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.gamepad-desc li {
+    color: var(--website-text);
+}
+.gamepad-desc a:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 500px) {
-    .gamepad-controls {
+    .gamepad-controls, .gamepad-desc {
         width: 300px;
         padding: 20px;
+    }
+    .gamepad-desc {
+        padding-bottom: 25px;
     }
     .gamepad-controls h2 {
         font-size: 26px;
     }
-
     .gamepad-controls th, .gamepad-controls td {
         font-size: 12px;
     }
