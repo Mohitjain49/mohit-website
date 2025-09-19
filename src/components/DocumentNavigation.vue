@@ -14,7 +14,7 @@
                     <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-three)')">
                         <font-awesome-icon icon="fa-print" />
                     </button>
-                    <button @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
+                    <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
                         <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />
                     </button>
                 </div>
@@ -40,24 +40,34 @@
                 <template v-if="docStore.checkFCSCertificateRoute()">
                     <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
                         title="See LinkedIn Post" class="mohit-navBar-icon"
-                        :style="getColorStyles('#0072B1')">
+                        :style="getColorStyles('#0072B1')"
+                        @mouseenter="setPulseLoopAnimation"
+                        @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-brands fa-linkedin" />
                     </a>
                     <a :href="FCS_CAREER_INTERNSHIP_LINK"  target="_blank"
                         title="FCS Career Internship Program" class="mohit-navBar-icon"
-                        :style="getColorStyles('var(--fulton-green)')">
+                        :style="getColorStyles('var(--fulton-green)')"
+                        @mouseenter="setPulseLoopAnimation"
+                        @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-school-flag" />
                     </a>
                 </template>
                 <RouterLink v-else :to="resumeNavPath" class="mohit-navBar-icon light"
-                    :title="(docStore.checkMarkdownRoute() ? 'Use Website Viewer' : 'Use Markdown Format')">
+                    :title="(docStore.checkMarkdownRoute() ? 'Use Website Viewer' : 'Use Markdown Format')"
+                    @mouseenter="setPulseLoopAnimation"
+                    @mouseleave="setPulseLoopAnimation">
 
                     <font-awesome-icon :icon="(docStore.checkMarkdownRoute() ? 'fa-file-lines' : 'fa-brands fa-markdown')" />
                 </RouterLink>
 
-                <a class="mohit-navBar-icon white" :href="PDFJS_LINK" title="See More about PDF.js">
+                <a class="mohit-navBar-icon white" :href="PDFJS_LINK"
+                    title="See More about PDF.js"
+                    @mouseenter="setPulseLoopAnimation"
+                    @mouseleave="setPulseLoopAnimation">
+
                     <img :src="pdfjs_logo" draggable="false" width="20" />
                 </a>
                 <!-- <button @click="docStore.downloadDoc()" class="mohit-navBar-icon light" title="Download Document">
@@ -71,11 +81,17 @@
                 </button> -->
             </div>
             <div class="mohit-documentBar-iconSection right">
-                <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light" :title="fullScreenStore.docElementTitle">
+                <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light"
+                    :title="fullScreenStore.docElementTitle"
+                    @mouseenter="setPulseLoopAnimation"
+                    @mouseleave="setPulseLoopAnimation">
+
                     <font-awesome-icon :icon="fullScreenStore.faIcon" />
                 </button>
                 <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
-                    :title="(webData.documentMenuOpen ? 'Close Document Options' : 'Open Document Options')">
+                    :title="(webData.documentMenuOpen ? 'Close Document Options' : 'Open Document Options')"
+                    @mouseenter="setPulseLoopAnimation"
+                    @mouseleave="setPulseLoopAnimation">
 
                     <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-square-caret-down' : 'fa-arrow-up-from-bracket')" />
                 </button>
