@@ -71,11 +71,12 @@ const REDIRECT_PAGES = [
 function getRedirectRouteRecord(path = "") {
     const index = REDIRECT_PAGES.findIndex(item => item.path === path);
     const page = REDIRECT_PAGES[index];
+    const name = ("Redirect Page - " + page.title);
 
     if(page.alias) {
-        return { path, alias: page.alias, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
+        return { path, name, alias: page.alias, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
     } else {
-        return { path, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
+        return { path, name, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
     }
 }
 
@@ -96,6 +97,7 @@ export const personalRoutes = [
     { path: "/code-scanner", alias: ["/code-reader"], name: "Code Reader Page", component: CodeScanner },
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
+    { path: "/google-mockup", name: "Google Mockup Page", component: GoogleMockup },
 
     {
         path: "/resume",
@@ -109,20 +111,19 @@ export const personalRoutes = [
     {
         path: FCS_CERTIFICATE_ROUTE,
         children: [
-            { path: "", component: InternAppreciation },
-            { path: "google", component: InternAppreciationIframe },
-            { path: "pdf", component: InternAppreciationIframe }
+            { path: "", name: "Intern Appreciation Certificate", component: InternAppreciation },
+            { path: "google", name: "Intern Appreciation Certificate (Google)", component: InternAppreciationIframe },
+            { path: "pdf", name: "Intern Appreciation Certificate (Native)", component: InternAppreciationIframe }
         ]
     },
     {
         path: "/mohit-website",
         children: [
-            { path: "", component: HomeRedirect },
-            { path: ":catchAll(.*)*", component: HomeRedirect },
+            { path: "", name: "Main Page Redirect Page", component: HomeRedirect },
+            { path: ":catchAll(.*)*", name: "Main Page Redirect Page All", component: HomeRedirect },
         ]
     },
 
-    { path: "/google-mockup", component: GoogleMockup },
     { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 

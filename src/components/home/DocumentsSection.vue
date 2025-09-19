@@ -1,5 +1,5 @@
 <template>
-<motion.div id="documents" class="documents-section" @viewportEnter="setInitTransitions(true)" @viewportLeave="setInitTransitions(false)">
+<div id="documents" class="documents-section" ref="documents">
     <div id="documents-section-title"> My Docs </div>
     <div class="documents-section-tabs-container">
         <RouterLink to="/resume" id="resume-tab" class="documents-section-tab"
@@ -39,15 +39,20 @@
             </p>
         </a>
     </div>
-</motion.div>
+</div>
 </template>
 
 <script setup>
-import { motion } from 'motion-v';
 import fcs_logo from "@/assets/Fulton_County_Schools_Logo.png";
+const documents = ref(null);
+const ANIMATE_DURATION = 800;
+
+useIntersectionObserver(documents, ([{ isIntersecting }]) => {
+    setInitTransitions(isIntersecting);
+});
 
 /**
- * This functions sets initial transitions upon entering this section for iVue.
+ * This functions sets initial transitions upon entering this section for the documents.
  */
 function setInitTransitions(isVisible) {
     if(!isVisible) { return; }
@@ -69,7 +74,7 @@ function setInitTransitions(isVisible) {
         document.getElementById('resume-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
         document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
         document.getElementById('sitemap-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-    }, 800);
+    }, ANIMATE_DURATION);
 }
 
 /**

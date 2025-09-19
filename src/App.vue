@@ -5,13 +5,13 @@
 <QrcodeTool v-if="webData.qrPopup.open" />
 
 <RouterView :key="$route.path" />
-<div v-if="webData.menuOpen != -1" class="webpage-cover"></div>
+<div v-if="(webData.menuOpen != -1)" class="webpage-cover"></div>
 </template>
 
 <script setup>
 import "./styles/mainstyles.css";
 const webData = useWebsiteDataStore();
 
-onMounted(() => {webData.setEventListeners()})
-onBeforeUnmount(() => {webData.removeEventListeners()})
+onMounted(() => { webData.setEventListeners(); });
+onBeforeUnmount(() => { webData.removeEventListeners(); });
 </script>

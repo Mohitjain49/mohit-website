@@ -1,5 +1,5 @@
 <template>
-<motion.div id="start" class="start-section" @viewportEnter="setNameTransitions(true)" @viewportLeave="setNameTransitions(false)">
+<div id="start" class="start-section" ref="start">
     <div id="start-innerContainer">
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
@@ -35,12 +35,16 @@
             </template>
         </div>
     </div>
-</motion.div>
+</div>
 </template>
 
 <script setup>
-import { motion } from 'motion-v';
 const webData = useWebsiteDataStore();
+const start = ref(null);
+
+useIntersectionObserver(start, ([{ isIntersecting }]) => {
+    setNameTransitions(isIntersecting);
+})
 
 /**
  * This function sets the transitions for the left half of the start section.

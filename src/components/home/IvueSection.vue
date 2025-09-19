@@ -1,5 +1,5 @@
 <template>
-<motion.div id="ivue" class="ivue-section" @viewportEnter="setInitTransitions(true)" @viewportLeave="setInitTransitions(false)">
+<div id="ivue" class="ivue-section" ref="ivue">
     <div id="ivue-section-title">
         <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue">
             <img :src="ivue_white_text" draggable="false" />
@@ -63,17 +63,22 @@
             </p>
         </a>
     </div>
-</motion.div>
+</div>
 </template>
 
 <script setup>
-import { motion } from 'motion-v';
 import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
 import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
 import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
 import fm_photo from "@/assets/ivue/FM_Profile_Photo.png";
-const ANIMATE_DURATION = 800; // The time spent for the duration in milliseconds.
+
+const ivue = ref(null);
+const ANIMATE_DURATION = 800;
+
+useIntersectionObserver(ivue, ([{ isIntersecting }]) => {
+    setInitTransitions(isIntersecting);
+});
 
 /**
  * This functions sets initial transitions upon entering this section for iVue.

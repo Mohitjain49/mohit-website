@@ -14,10 +14,7 @@
         </div>
 
         <div class="feature-notes">
-            <motion.div v-for="entity in FEATURE_ENTITIES"
-                class="features-note-container"
-                @viewportEnter="setCardTransition">
-
+            <div v-for="entity in FEATURE_ENTITIES" class="features-note-container" ref="cardRefs">
                 <SkillNote :link="entity.link"
                     :color="entity.color"
                     :desc="entity.desc"
@@ -26,7 +23,7 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </motion.div>
+            </div>
         </div>
     </div>
     <WebFooter />
@@ -34,7 +31,13 @@
 </template>
 
 <script setup>
-import { motion } from 'motion-v';
+const cardRefs = ref([]);
+useIntersectionObserver(cardRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        addCardTransition(observed.target, observed.isIntersecting);
+    }
+})
 
 onMounted(() => {
     initWebData();
@@ -50,14 +53,6 @@ useHead(getMeta("Mohit Jain | Features", "features",
     "My website utilizes multiple code libraries and Web APIs to make unique features " +
         "such as gamepad support and compatibility, a barcode and qrcode reader, and a screen wake lock."
 ));
-
-/**
- * This adds a transition to a card/widget as visitors scroll to it.
- */
-function setCardTransition(entry) {
-    entry.target.classList.add("animate__animated", ((window.innerWidth > 825) ? "animate__zoomIn" : "animate__fadeIn"));
-    setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
-}
 </script>
 
 <style scoped>
