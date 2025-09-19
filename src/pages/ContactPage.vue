@@ -88,23 +88,33 @@
             <div class="contact-box-content">
                 <template v-for="(social, index) in SOCIALS">
                     <div class="social-tab" v-if="(index != 2)" :style="{ color: social.altColor }">
-                        <div class="social-tab-header"> {{ social.name }} </div>
+                        <div class="social-tab-top">
+                            <h3 class="social-tab-header">
+                                {{ social.name }}
+                                <font-awesome-icon :icon="social.linkIcon" />
+                            </h3>
+                        </div>
                         <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
 
-                        <div class="social-tab-btn-container">
-                            <button class="social-tab-btn animate__animated" @click="copyLink(social.displayLink)"
+                        <div class="social-tab-options">
+                            <button @click="copyLink(social.displayLink)" :title="social.copyBtn"
                                 @mouseenter="setSocialBtnAnimation"
                                 @mouseleave="setSocialBtnAnimation">
 
-                                <span> {{ social.copyBtn }} </span>
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
-                            <a :href="social.link" target="_blank" class="social-tab-btn send animate__animated"
+                            <button v-if="webData.shareSupported" :title="social.shareBtn"
+                                @click="shareLink(social.displayLink)"
                                 @mouseenter="setSocialBtnAnimation"
                                 @mouseleave="setSocialBtnAnimation">
 
-                                <span> {{ social.linkBtn }} </span>
-                                <font-awesome-icon :icon="social.linkIcon" />
+                                <font-awesome-icon icon="fa-share" />
+                            </button>
+                            <a :href="social.link" target="_blank" :title="social.linkBtn"
+                                @mouseenter="setSocialBtnAnimation"
+                                @mouseleave="setSocialBtnAnimation">
+
+                                <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
                         </div>
                     </div>
@@ -162,9 +172,9 @@ onMounted(() => {
  */
 function setSocialBtnAnimation(event = new MouseEvent("mouseenter")) {
     if(event.type === "mouseenter") {
-        event.target.classList.add("animate__headShake");
+        event.target.classList.add("animate__animated", "animate__headShake");
     } else {
-        event.target.classList.remove("animate__headShake");
+        event.target.classList.remove("animate__animated", "animate__headShake");
     }
 }
 
@@ -284,6 +294,14 @@ function copyLink(link = "") {
     }).catch(() => {
         setAlertBox("Failed To Copy " + getLinkString(navLink, link));
     });
+}
+
+/**
+ * This function lets the user share a link with someone else.
+ * @param {String} link The link to share.
+ */
+function shareLink(link = "") {
+    webData.shareLink((link === SOCIALS[0].displayLink) ? (PERSONAL_WEBSITE_LINK + "email") : link);
 }
 
 /**

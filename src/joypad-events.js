@@ -136,14 +136,14 @@ window.addEventListener("gamepadbuttonhold", (e) => {
     /** @type {GamepadButtonStatusEvent} */
     const event = e.detail;
     const buttonIndex = event.button;
-    const holdFrames = event.holdFrames;
+    const holdFrames = event.framesHeld;
     // if(import.meta.env.DEV) { console.log(event); }
 
     if(buttonIndex >= 12 && buttonIndex <= 15) {
         useGamepadStore().manageCustomCursorWithDpad(buttonIndex - 12);
     }
 
-    if(holdFrames < 50) { return; }
+    if(event.secondsHeld < 0.8) { return; }
     if(buttonIndex == 5 && holdFrames % 5 == 0) {
         useGamepadStore().addToMaxCursorSpeed(1);
     }

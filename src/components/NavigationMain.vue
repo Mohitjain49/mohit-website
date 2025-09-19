@@ -58,8 +58,8 @@
                 </RouterLink>
             </div>
             <div class="mohit-navMenu-opt small-features">
-                <button @click="webData.setQRCodePopup(true)" class="mohit-navMenu-smallFeatures-btn" title="Create a QR Code for this page.">
-                    <font-awesome-icon icon="fa-qrcode" />
+                <button @click="webData.setQRCodePopup(true)" class="mohit-navMenu-smallFeatures-btn" title="Share This Page With Someone Else!">
+                    <font-awesome-icon icon="fa-share-from-square" />
                 </button>
                 <div class="mohit-navMenu-volume-meter">
                     <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />

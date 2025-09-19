@@ -23,7 +23,9 @@ const SITEMAP_EXCLUDED_ROUTES = [
 ];
 const VUEUSE_AUTO_IMPORTS = {
     '@vueuse/core': [
-        'useIntersectionObserver'
+        'useIntersectionObserver',
+        'useShare',
+        'useFps'
     ]
 }
 
