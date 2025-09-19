@@ -7,46 +7,29 @@
     <div id="mohit-documentBar" :class="[(webData.documentMenuOpen ? 'menu-open' : '')]">
         <Transition name="documentMenu-transition">
             <div v-if="webData.documentMenuOpen" class="mohit-documentMenu">
-                <div class="mohit-navMenu-opt">
-                    <RouterLink class="mohit-navMenu-mainOpt" :to="currentPath" @click="scrollToTop(currentPath)">
-                        <font-awesome-icon icon="fa-file-lines" />
-                        <span> {{ 'Use Main Viewer' }} </span>
-                    </RouterLink>
+                <div class="mohit-documentMenu-tools">
+                    <button @click="docStore.downloadDoc()" title="Download Document" :style="getColorStyles('var(--blue-one)')">
+                        <font-awesome-icon icon="fa-file-download" />
+                    </button>
+                    <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-three)')">
+                        <font-awesome-icon icon="fa-print" />
+                    </button>
+                    <button @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
+                        <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />
+                    </button>
                 </div>
-                <div class="mohit-navMenu-opt">
-                    <RouterLink class="mohit-navMenu-mainOpt" :to="(currentPath + '/google')" @click="scrollToTop(currentPath + '/google')">
-                        <font-awesome-icon icon="fa-brands fa-google-drive" />
-                        <span> {{ 'Google Doc Viewer' }} </span>
-                    </RouterLink>
-                </div>
-                <div class="mohit-navMenu-opt">
-                    <RouterLink class="mohit-navMenu-mainOpt" :to="(currentPath + '/pdf')" @click="scrollToTop(currentPath + '/pdf')">
-                        <font-awesome-icon icon="fa-file-pdf" />
-                        <span> {{ 'Web PDF Viewer' }} </span>
-                    </RouterLink>
-                </div>
-
-                <div v-if="docStore.checkResumeRoute()" class="mohit-navMenu-opt">
-                    <RouterLink class="mohit-navMenu-mainOpt" :to="(currentPath + '/markdown')"
-                        @click="scrollToTop(currentPath + '/markdown')"
+                <div class="mohit-documentMenu-tools">
+                    <button @click="webData.setQRCodePopup(true)" title="Share Webpage" :style="getColorStyles('var(--website-light-text)')">
+                        <font-awesome-icon icon="fa-share-from-square" />
+                    </button>
+                    <button @click="reloadPage()" title="Reload Page">
+                        <font-awesome-icon icon="fa-rotate-right" />
+                    </button>
+                    <a target="mohit-document" title="Open Document in New Tab"
+                        :href="(docStore.checkFCSCertificateRoute() ? FCS_CERTIFICATE_LINK : PERSONAL_RESUME_LINK)"
                         :style="getColorStyles('var(--website-light-text)')">
 
-                        <font-awesome-icon icon="fa-brands fa-markdown" />
-                        <span> {{ 'Use Markdown Format' }} </span>
-                    </RouterLink>
-                </div>
-                <div v-if="docStore.checkFCSCertificateRoute()" class="mohit-navMenu-opt">
-                    <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
-                        title="See LinkedIn Post" class="mohit-navMenu-extra large"
-                        :style="getColorStyles('#0072B1')">
-
-                        <font-awesome-icon icon="fa-brands fa-linkedin" />
-                    </a>
-                    <a :href="FCS_CAREER_INTERNSHIP_LINK"  target="_blank"
-                        title="FCS Career Internship Program" class="mohit-navMenu-extra large"
-                        :style="getColorStyles('var(--fulton-green)')">
-
-                        <font-awesome-icon icon="fa-school-flag" />
+                        <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                     </a>
                 </div>
             </div>
@@ -54,7 +37,30 @@
 
         <div class="mohit-documentBar-bottom">
             <div class="mohit-documentBar-iconSection left">
-                <button @click="docStore.downloadDoc()" class="mohit-navBar-icon light" title="Download Document">
+                <template v-if="docStore.checkFCSCertificateRoute()">
+                    <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
+                        title="See LinkedIn Post" class="mohit-navBar-icon"
+                        :style="getColorStyles('#0072B1')">
+
+                        <font-awesome-icon icon="fa-brands fa-linkedin" />
+                    </a>
+                    <a :href="FCS_CAREER_INTERNSHIP_LINK"  target="_blank"
+                        title="FCS Career Internship Program" class="mohit-navBar-icon"
+                        :style="getColorStyles('var(--fulton-green)')">
+
+                        <font-awesome-icon icon="fa-school-flag" />
+                    </a>
+                </template>
+                <RouterLink v-else :to="resumeNavPath" class="mohit-navBar-icon light"
+                    :title="(docStore.checkMarkdownRoute() ? 'Use Website Viewer' : 'Use Markdown Format')">
+
+                    <font-awesome-icon :icon="(docStore.checkMarkdownRoute() ? 'fa-file-lines' : 'fa-brands fa-markdown')" />
+                </RouterLink>
+
+                <a class="mohit-navBar-icon white" :href="PDFJS_LINK" title="See More about PDF.js">
+                    <img :src="pdfjs_logo" draggable="false" width="20" />
+                </a>
+                <!-- <button @click="docStore.downloadDoc()" class="mohit-navBar-icon light" title="Download Document">
                     <font-awesome-icon icon="fa-file-download" />
                 </button>
                 <button @click="docStore.printDoc()" class="mohit-navBar-icon light" title="Print Document">
@@ -62,19 +68,16 @@
                 </button>
                 <button @click="reloadPage()" class="mohit-navBar-icon" title="Reload Page">
                     <font-awesome-icon icon="fa-rotate-right" />
-                </button>
+                </button> -->
             </div>
             <div class="mohit-documentBar-iconSection right">
-                <a class="mohit-navBar-icon white" :href="PDFJS_LINK" title="See More about PDF.js">
-                    <img :src="pdfjs_logo" draggable="false" width="20" />
-                </a>
                 <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light" :title="fullScreenStore.docElementTitle">
                     <font-awesome-icon :icon="fullScreenStore.faIcon" />
                 </button>
                 <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
-                    :title="(webData.documentMenuOpen ? 'Close Document Menu' : 'Open Document Menu')">
+                    :title="(webData.documentMenuOpen ? 'Close Document Options' : 'Open Document Options')">
 
-                    <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
+                    <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-square-caret-down' : 'fa-arrow-up-from-bracket')" />
                 </button>
             </div>
         </div>
@@ -89,7 +92,7 @@ const docStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
 const route = useRoute();
 
-const currentPath = computed(() => { return (docStore.checkResumeRoute() ? '/resume' : FCS_CERTIFICATE_ROUTE) });
+const resumeNavPath = computed(() => { return (docStore.checkMarkdownRoute() ? '/resume' : '/resume/markdown'); });
 const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 /**

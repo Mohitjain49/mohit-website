@@ -18,6 +18,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const pdfComponent = shallowRef(null);
     const resumePdfObj = ref(null);
     const fultonInternshipAppreciationPdfObj = ref(null);
+    const sharingDocument = ref(false);
 
     /**
      * This function downloads a document for the visitor to see.
@@ -44,13 +45,30 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function shares the document with someone using the OS's built in share popup.
+     */
+    async function shareDoc() {
+        sharingDocument.value = true;
+        const docIndex = (checkResumeRoute() ? 0 : 1);
+
+        const DOCUMENTS = [Mohit_Jain_Resume, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025];
+        const DOCUMENT_NAMES = ["Mohit_Jain_Resume", "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025"];
+
+        const foundDoc = await fetch(DOCUMENTS[docIndex]);
+        const blob = await foundDoc.blob();
+
+        useWebsiteDataStore().shareFile(new File([blob], (DOCUMENT_NAMES[docIndex] + '.pdf'), { type: 'application/pdf' }));
+        sharingDocument.value = false;
+    }
+
+    /**
      * This function mounts the document store for the website.
      */
     function mountDocumentStore() {
         nextTick(() => {
             import('@tato30/vue-pdf').then((result) => {
                 pdfComponent.value = result.VuePDF;
-                resumePdfObj.value = result.usePDF("/Mohit_Jain_Resume.pdf").pdf;
+                resumePdfObj.value = result.usePDF(Mohit_Jain_Resume).pdf;
                 fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025).pdf;
             });
         })
@@ -61,16 +79,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
-        if(checkGoogleDocRoute() || checkPDFRoute()) {
-            nextTick(() => {
-                hideVerticalOverflow();
-                window.addEventListener("resize", hideVerticalOverflow);
-            });
-        } else if(!checkMarkdownRoute()) {
-            nextTick(() => {
-                mountCustomDocumentPage(800, 320, (checkResumeRoute() ? 1.375 : 0.79875));
-            })
-        }
+        if(checkMarkdownRoute()) { return; }
+        nextTick(() => { mountCustomDocumentPage(800, 320, (checkResumeRoute() ? 1.375 : 0.79875)); })
     }
 
     /**
@@ -79,8 +89,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     function unmountDocumentPage() {
         document.body.style.overflowY = "";
         fullScreenStore.exitFullScreen();
-
-        window.removeEventListener("resize", hideVerticalOverflow);
         window.removeEventListener("resize", setPdfSize);
     }
 
@@ -98,14 +106,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         setPdfSize();
         window.addEventListener("resize", setPdfSize);
     }
-
-    /**
-     * This function hides the body's vertical overflow.
-     */
-    function hideVerticalOverflow() {
-        document.body.style.overflowY = "hidden";
-    }
-
     /**
      * Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf.
      */
@@ -135,21 +135,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     function checkFCSCertificateRoute() {
         return route.path.includes(FCS_CERTIFICATE_ROUTE);
     }
-
-    /**
-     * This function returns true if the user is using a pdf route.
-     */
-    function checkPDFRoute() {
-        return route.path.includes('pdf');
-    }
-
-    /**
-     * This function returns true if the user is using a google doc route.
-     */
-    function checkGoogleDocRoute() {
-        return (route.path.includes('google') && !route.path.includes('google-mockup'));
-    }
-
     /**
      * This function returns when the route is using a markdown file.
      */
@@ -158,9 +143,9 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
-        pdfComponent, resumePdfObj, fultonInternshipAppreciationPdfObj, downloadDoc, printDoc,
+        pdfComponent, resumePdfObj, fultonInternshipAppreciationPdfObj, sharingDocument,
+        downloadDoc, printDoc, shareDoc, toggleDocumentFullScreen, setPdfSize,
         mountDocumentStore, mountDocumentPage, unmountDocumentPage,
-        hideVerticalOverflow, setPdfSize, toggleDocumentFullScreen,
-        checkResumeRoute, checkFCSCertificateRoute, checkPDFRoute, checkGoogleDocRoute, checkMarkdownRoute
+        checkResumeRoute, checkFCSCertificateRoute, checkMarkdownRoute
     }
 });

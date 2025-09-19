@@ -15,7 +15,7 @@ const fullScreenStore = useFullScreenStore();
 .minimizeScreen-widget {
     position: fixed;
     bottom: 15px;
-    right: 15px;
+    left: 15px;
     background-color: var(--dark-background);
     border: 2px solid var(--lightning-yellow);
     color: var(--lightning-yellow);

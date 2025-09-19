@@ -4,21 +4,18 @@ import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
+import MyIcon from "./pages/MyIcon.vue";
 
 import Features from "./pages/features/FeaturesMain.vue";
 import WakeLockPage from "./pages/features/WakeLockPage.vue";
 import GamepadControls from "./pages/features/GamepadControls.vue";
 import InstallPage from "./pages/features/InstallPage.vue";
 import CodeScanner from "./pages/features/CodeReader.vue";
-import MyIcon from "./pages/MyIcon.vue";
-
-import Resume from "./pages/resume/Resume.vue";
-import ResumeIframes from "./pages/resume/ResumeIframes.vue";
-import ResumeMarkdown from "./pages/resume/ResumeMarkdown.vue";
-
-import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
-import InternAppreciationIframe from "./pages/certifications/InternAppreciationIframe.vue";
 import GoogleMockup from "./pages/GoogleMockup.vue";
+
+import Resume from "./pages/documents/Resume.vue";
+import ResumeMarkdown from "./pages/documents/ResumeMarkdown.vue";
+import InternAppreciation from "./pages/documents/InternAppreciation.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
@@ -98,22 +95,13 @@ export const personalRoutes = [
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/google-mockup", name: "Google Mockup Page", component: GoogleMockup },
+    { path: FCS_CERTIFICATE_ROUTE, name: "Intern Appreciation Certificate", component: InternAppreciation },
 
     {
         path: "/resume",
         children: [
             { path: "", name: "My Resume", component: Resume },
-            { path: "google", name: "My Resume (Google)", component: ResumeIframes },
-            { path: "pdf", name: "My Resume (Native)", component: ResumeIframes },
             { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown }
-        ]
-    },
-    {
-        path: FCS_CERTIFICATE_ROUTE,
-        children: [
-            { path: "", name: "Intern Appreciation Certificate", component: InternAppreciation },
-            { path: "google", name: "Intern Appreciation Certificate (Google)", component: InternAppreciationIframe },
-            { path: "pdf", name: "Intern Appreciation Certificate (Native)", component: InternAppreciationIframe }
         ]
     },
     {

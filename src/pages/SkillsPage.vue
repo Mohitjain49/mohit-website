@@ -138,7 +138,6 @@ const titleRefs = ref([]);
 const cardRefs = ref([]);
 
 useIntersectionObserver(titleRefs, (entry) => {
-    console.log(entry)
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
         setTitleTransition(observed.target, observed.isIntersecting);

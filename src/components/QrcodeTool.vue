@@ -45,15 +45,10 @@ onMounted(() => {
     window.addEventListener("resize", hideQrcodePopupOverflow);
     nextTick(() => { setQRCodeLink(false); });
 });
-
 onBeforeUnmount(() => {
     qrCodeDisplay.value.display = "none";
     window.removeEventListener("resize", hideQrcodePopupOverflow);
-    document.body.style.overflow = "";    
-
-    if(docStore.checkGoogleDocRoute() || docStore.checkPDFRoute()) {
-        docStore.hideVerticalOverflow();
-    }
+    document.body.style.overflow = "";
 })
 watch(() => route.fullPath, () => { setQRCodeLink(); });
 
