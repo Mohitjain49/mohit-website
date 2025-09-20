@@ -127,7 +127,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
-        if(onMarkdownRoute) { return; }
+        if(onMarkdownRoute.value) { return; }
         nextTick(() => { mountCustomDocumentPage(800, 320, (onResumeRoute ? 1.375 : 0.79875)); })
     }
 
