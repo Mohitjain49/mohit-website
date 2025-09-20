@@ -182,14 +182,55 @@
     margin-bottom: 13px;
     background-color: var(--silver-light);
 }
-.social-tab-header {
+
+.social-tab-top {
+    height: 30px;
+    width: calc(100% - 10px);
     margin-left: 5px;
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    color: inherit;
+}
+.social-tab-header {
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 22px;
     text-align: left;
-    margin-bottom: 3px;
     color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.social-tab-options {
+    margin-top: 7px;
+    margin-left: 5px;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 7px;
+}
+.social-tab-options button, .social-tab-options a {
+    font-size: 18px;
+    color: inherit;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--default-transition);
+}
+.social-tab-options button:hover, .social-tab-options a:hover {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .social-tab-link {

@@ -7,6 +7,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
+    const { share, isSupported: shareSupported } = useShare();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -100,7 +101,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.confirmClickSound(event);
         const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
 
-        if(documentStore.checkResumeRoute() || documentStore.checkFCSCertificateRoute()) {
+        if(documentStore.onResumeRoute || documentStore.onFCSCertificateRoute) {
             var elementInDocumentMenu = false;
             nextTick(() => {
                 const documentMenu = document.getElementById("mohit-documentBar");
@@ -216,6 +217,24 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
+     * This function triggers the browser to share a link.
+     * @param {String} link The link to share.
+     */
+    function shareLink(link = PERSONAL_WEBSITE_LINK) {
+        if(!shareSupported) { return; }
+        share({ url: link, text: ("Sharing Link From " + PERSONAL_WEBSITE_LINK), title: "Sharing Link..." })
+    }
+
+    /**
+     * This function triggers the browser to share a file
+     * @param {File} file The file to share.
+     */
+    function shareFile(file) {
+        if(!shareSupported) { return; }
+        share({ files: [file], text: ("Sharing File From " + PERSONAL_WEBSITE_LINK), title: "Sharing File..." })
+    }
+
+    /**
      * This adds and removes a flash animation for any element.
      */
     function setFlashAnimation(event = new MouseEvent("mouseenter")) {
@@ -289,9 +308,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, menuOpen, navMenuOpen, documentMenuOpen,
+    return { pageView, menuOpen, navMenuOpen, documentMenuOpen, shareSupported,
         wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, qrPopup,
-        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup,
+        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, shareLink, shareFile,
         setEventListeners, removeEventListeners, mountWebData, goToPageSection, scrollToFooter,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }
@@ -328,6 +347,16 @@ export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
     setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
 }
 
+/**
+ * This adds a transition to a card/widget as visitors scroll to it.
+ * @param {Boolean} isVisible This must be true for the function to run.
+ * @param {Element} target The element gotten from the event.
+ */
+export function addCardTransition(target, isVisible = true) {
+    if(!isVisible) { return; }
+    target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
+    setTimeout(() => { target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
+}
 
 /**
  * This function mounts the website data pinia store on a page.

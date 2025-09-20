@@ -1,5 +1,5 @@
 <template>
-<motion.div id="skills" class="skills-section" @viewportEnter="setSkillsTransitions(true)" @viewportLeave="setSkillsTransitions(false)">
+<div id="skills" class="skills-section" ref="skills">
     <div class="skills-main-header">
         <RouterLink to="/skills/" title="See My Skills"> My Skills </RouterLink>
     </div>
@@ -8,9 +8,7 @@
         by utilizing multiple programming languages, frontend frameworks, web services, and modules.
     </div>
 
-    <motion.div v-for="(entity, index) in NEW_SKILL_ENTITIES" class="skills-entity-container"
-        @viewportEnter="addCardTransition(true, index)" @viewportLeave="addCardTransition(false, index)">
-
+    <div v-for="entity in NEW_SKILL_ENTITIES" class="skills-entity-container" ref="cardRefs">
         <SkillNote :link="entity.link"
             :color="entity.color"
             :desc="entity.desc"
@@ -19,22 +17,23 @@
             :name="entity.name"
             :size="entity.icon.size"
         />
-    </motion.div>
-</motion.div>
+    </div>
+</div>
 </template>
 
 <script setup>
-import { motion } from 'motion-v';
+const skills = ref(null);
+const cardRefs = ref([]);
 
-/**
- * This adds a transition to a card/widget as visitors scroll to it.
- * @param {Number} index The index of the card.
- */
-function addCardTransition(isVisible, index = 0) {
-    if(!isVisible) { return; }
-    let skillCard = document.getElementsByClassName("skills-entity-container").item(index);
-    skillCard.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
-}
+useIntersectionObserver(skills, ([{ isIntersecting }]) => {
+    setSkillsTransitions(isIntersecting);
+});
+useIntersectionObserver(cardRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        addCardTransition(observed.target, observed.isIntersecting);
+    }
+})
 
 /**
  * This removes all transitions from all cards and widgets should visitors scroll away from the skills section.
@@ -48,11 +47,6 @@ function setSkillsTransitions(isVisible = false) {
     } else if(!isVisible) {
         document.getElementsByClassName('skills-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('skills-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
-
-        const skillCards = document.getElementsByClassName("skills-entity-container");
-        for(let i = 0; i < skillCards.length; i++) {
-            skillCards.item(i).classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn");
-        }
     }
 }
 </script>

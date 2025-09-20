@@ -4,21 +4,18 @@ import SkillsPage from "./pages/SkillsPage.vue";
 import ExperienceMain from "./pages/ExperienceMain.vue";
 import Projects from "./pages/Projects.vue";
 import CopyrightPage from "./pages/CopyrightPage.vue";
+import MyIcon from "./pages/MyIcon.vue";
 
 import Features from "./pages/features/FeaturesMain.vue";
 import WakeLockPage from "./pages/features/WakeLockPage.vue";
 import GamepadControls from "./pages/features/GamepadControls.vue";
 import InstallPage from "./pages/features/InstallPage.vue";
 import CodeScanner from "./pages/features/CodeReader.vue";
-import MyIcon from "./pages/MyIcon.vue";
-
-import Resume from "./pages/resume/Resume.vue";
-import ResumeIframes from "./pages/resume/ResumeIframes.vue";
-import ResumeMarkdown from "./pages/resume/ResumeMarkdown.vue";
-
-import InternAppreciation from "./pages/certifications/InternAppreciation.vue";
-import InternAppreciationIframe from "./pages/certifications/InternAppreciationIframe.vue";
 import GoogleMockup from "./pages/GoogleMockup.vue";
+
+import Resume from "./pages/documents/Resume.vue";
+import ResumeMarkdown from "./pages/documents/ResumeMarkdown.vue";
+import InternAppreciation from "./pages/documents/InternAppreciation.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
@@ -71,11 +68,12 @@ const REDIRECT_PAGES = [
 function getRedirectRouteRecord(path = "") {
     const index = REDIRECT_PAGES.findIndex(item => item.path === path);
     const page = REDIRECT_PAGES[index];
+    const name = ("Redirect Page - " + page.title);
 
     if(page.alias) {
-        return { path, alias: page.alias, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
+        return { path, name, alias: page.alias, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
     } else {
-        return { path, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
+        return { path, name, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
     }
 }
 
@@ -96,33 +94,24 @@ export const personalRoutes = [
     { path: "/code-scanner", alias: ["/code-reader"], name: "Code Reader Page", component: CodeScanner },
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
+    { path: "/google-mockup", name: "Google Mockup Page", component: GoogleMockup },
+    { path: FCS_CERTIFICATE_ROUTE, name: "Intern Appreciation Certificate", component: InternAppreciation },
 
     {
         path: "/resume",
         children: [
             { path: "", name: "My Resume", component: Resume },
-            { path: "google", name: "My Resume (Google)", component: ResumeIframes },
-            { path: "pdf", name: "My Resume (Native)", component: ResumeIframes },
             { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown }
-        ]
-    },
-    {
-        path: FCS_CERTIFICATE_ROUTE,
-        children: [
-            { path: "", component: InternAppreciation },
-            { path: "google", component: InternAppreciationIframe },
-            { path: "pdf", component: InternAppreciationIframe }
         ]
     },
     {
         path: "/mohit-website",
         children: [
-            { path: "", component: HomeRedirect },
-            { path: ":catchAll(.*)*", component: HomeRedirect },
+            { path: "", name: "Main Page Redirect Page", component: HomeRedirect },
+            { path: ":catchAll(.*)*", name: "Main Page Redirect Page All", component: HomeRedirect },
         ]
     },
 
-    { path: "/google-mockup", component: GoogleMockup },
     { path: "/email",  main: "Main Email Redirect Page", component: EmailRedirect },
     { path: '/:catchAll(.*)', name: 'NotFound', component: InvalidRoute },
 

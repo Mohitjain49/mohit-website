@@ -65,6 +65,7 @@ export const SOCIALS = [
         link: "mailto:mohitkjain49@gmail.com",
         copyBtn: "Copy Email",
         linkBtn: "Send Email",
+        shareBtn: "Share Email",
         linkIcon: "fa-envelope",
         color: "var(--website-text)",
         altColor: "var(--website-text)"
@@ -76,6 +77,7 @@ export const SOCIALS = [
         link: "https://www.linkedin.com/in/mohitjain49",
         copyBtn: "Copy Link",
         linkBtn: "Go To LinkedIn",
+        shareBtn: "Share My LinkedIn Profile",
         linkIcon: "fa-brands fa-linkedin",
         color: "#0072B1",
         altColor: "#0072B1"
@@ -87,6 +89,7 @@ export const SOCIALS = [
         link: "https://discord.com/channels/@me/",
         copyBtn: "Copy Username",
         linkBtn: "Go To Discord",
+        shareBtn: "Share My Discord Username",
         linkIcon: "fa-brands fa-discord",
         color: "#5865F2",
         altColor: "#5865F2"
@@ -98,6 +101,7 @@ export const SOCIALS = [
         link: "https://github.com/Mohitjain49",
         copyBtn: "Copy Link",
         linkBtn: "Go To Github",
+        shareBtn: "Share My GitHub Profile",
         linkIcon: "fa-brands fa-github",
         color: "white",
         altColor: "black"
@@ -109,6 +113,7 @@ export const SOCIALS = [
         link: "https://gitlab.com/mohitkjain49",
         copyBtn: "Copy Link",
         linkBtn: "Go To GitLab",
+        shareBtn: "Share My GitLab Profile",
         linkIcon: "fa-brands fa-gitlab",
         color: "#E24329",
         altColor: "#E24329"
@@ -120,6 +125,7 @@ export const SOCIALS = [
         displayLink: "https://steamcommunity.com/id/mohit-jain/",
         copyBtn: "Copy Link",
         linkBtn: "Go To Steam",
+        shareBtn: "Share My Steam Profile",
         linkIcon: "fa-brands fa-steam",
         color: "#167EB1",
         altColor: "#167EB1"
@@ -723,8 +729,7 @@ export const FEATURE_ENTITIES = [
         link: "mohit-qrcode-button",
         color: "var(--website-light-text)",
         desc: "This page uses the \"qr-code-styling\" dependency to create QR Codes for this website. " +
-            "There is a QR Code tool that pops up " +
-            "with (CTRL + Q) or on the bottom left of the Navigation Menu.",
+            "There is a Share tool that pops up with (CTRL + Q) and a button on the bottom left of the Footer.",
 
         icon: {
             id: "fa-qrcode",

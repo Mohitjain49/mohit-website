@@ -5,7 +5,6 @@ import { VitePWA } from 'vite-plugin-pwa';
 import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
 import attrs from 'markdown-it-attrs';
-import MotionResolver from 'motion-v/resolver';
 
 import Info from "unplugin-info/vite";
 import imagemin from 'unplugin-imagemin/vite';
@@ -22,6 +21,13 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
     "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
 ];
+const VUEUSE_AUTO_IMPORTS = {
+    '@vueuse/core': [
+        'useIntersectionObserver',
+        'useShare',
+        'useFps'
+    ]
+}
 
 export default defineConfig({
     base: "/",
@@ -36,7 +42,6 @@ export default defineConfig({
             dts: './dts/components.d.ts',
             extensions: ['vue', 'md'],
             resolvers: [
-                MotionResolver(),
                 (name) => {
                     if(name === "FontAwesomeIcon") {
                         return { name: "FontAwesomeIcon", from: '@fortawesome/vue-fontawesome' }
@@ -48,7 +53,7 @@ export default defineConfig({
             markdownItSetup(md) { md.use(attrs); }
         }),
         AutoImport({
-            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }],
+            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, VUEUSE_AUTO_IMPORTS],
             dirs: ['./src/stores/**', './src/joypad-classes.js'],
             dts: './dts/auto-imports.d.ts',
             vueTemplate: true
@@ -59,7 +64,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v3.1.3",
+                cacheId: "v3.2.0",
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
@@ -100,7 +105,8 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '@types': fileURLToPath(new URL('./types', import.meta.url)),
         }
     }
 });

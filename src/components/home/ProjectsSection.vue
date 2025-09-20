@@ -1,5 +1,5 @@
 <template>
-<motion.div id="projects" class="projects-section" @viewportEnter="setProjectsTransitions(true)" @viewportLeave="setProjectsTransitions(false)">
+<div id="projects" class="projects-section" ref="projects">
     <div class="projects-main-header">
         <RouterLink to="/projects/" title="Explore My Projects"> My Projects </RouterLink>
     </div>
@@ -12,9 +12,7 @@
         Website Features
     </RouterLink>
 
-    <motion.div v-for="(entity, index) in PROJECT_ENTITIES" class="projects-note-container"
-        @viewportEnter="addCardTransition(true, index)" @viewportLeave="addCardTransition(false, index)">
-
+    <div v-for="entity in PROJECT_ENTITIES" class="projects-note-container" ref="cardRefs">
         <SkillNote :link="entity.link"
             :color="entity.color"
             :desc="entity.desc"
@@ -23,22 +21,23 @@
             :name="entity.name"
             :size="entity.icon.size"
         />
-    </motion.div>
-</motion.div>
+    </div>
+</div>
 </template>
 
 <script setup>
-import { motion } from 'motion-v';
+const projects = ref(null);
+const cardRefs = ref([]);
 
-/**
- * This adds a transition to a card/widget as visitors scroll to it.
- * @param {Number} index The index of the card.
- */
-function addCardTransition(isVisible, index = 0) {
-    if(!isVisible) { return; }
-    let skillCard = document.getElementsByClassName("projects-note-container").item(index);
-    skillCard.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
-}
+useIntersectionObserver(projects, ([{ isIntersecting }]) => {
+    setProjectsTransitions(isIntersecting);
+});
+useIntersectionObserver(cardRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        addCardTransition(observed.target, observed.isIntersecting);
+    }
+})
 
 /**
  * This removes all transitions from all cards and widgets should visitors scroll away from the projects section.
@@ -54,11 +53,6 @@ function setProjectsTransitions(isVisible) {
         document.getElementsByClassName('projects-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('projects-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName('projects-features-btn').item(0).classList.remove("animate__animated", "animate__zoomIn");
-
-        const skillCards = document.getElementsByClassName("projects-note-container");
-        for(let i = 0; i < skillCards.length; i++) {
-            skillCards.item(i).classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn");
-        }
     }
 }
 </script>

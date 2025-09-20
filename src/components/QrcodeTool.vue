@@ -5,26 +5,30 @@
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
         <div class="qrcode-mainPopup-options">
-            <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-btn close" title="Close QR Code Popup">
-                <FontAwesomeIcon icon="fa-xmark" />
-            </button>
-            <button v-if="!linkExtrasRemoved" @click="setQRCodeLink(true)" class="qrcode-mainPopup-btn filter" title="Remove All Hashes">
+            <button v-if="!linkExtrasRemoved" @click="setQRCodeLink(true)" class="qrcode-mainPopup-btn light" title="Remove All Hashes">
                 <FontAwesomeIcon icon="fa-filter" />
             </button>
-            <button @click="downloadQRCode()" class="qrcode-mainPopup-btn download" title="Download QR Code.">
+            <button v-if="webData.shareSupported" @click="webData.shareLink(qrCodeLink)" class="qrcode-mainPopup-btn light" title="Share Webpage Link">
+                <FontAwesomeIcon icon="fa-share-nodes" />
+            </button>
+            <button v-if="webData.shareSupported" @click="shareQRCode()" class="qrcode-mainPopup-btn" title="Share QR Code">
+                <FontAwesomeIcon icon="fa-share" />
+            </button>
+            <button @click="downloadQRCode()" class="qrcode-mainPopup-btn" title="Download QR Code.">
                 <FontAwesomeIcon icon="fa-download" />
             </button>
         </div>
+        <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-btn close" title="Close Popup">
+            <FontAwesomeIcon icon="fa-xmark" />
+        </button>
     </div>
 </div>
 </template>
 
 <script setup>
 import QRCodeStyling from 'qr-code-styling';
-
 const route = useRoute();
 const webData = useWebsiteDataStore();
-const docStore = useDocumentStore();
 
 /**
  * @type {import('vue').Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
@@ -39,15 +43,10 @@ onMounted(() => {
     window.addEventListener("resize", hideQrcodePopupOverflow);
     nextTick(() => { setQRCodeLink(false); });
 });
-
 onBeforeUnmount(() => {
     qrCodeDisplay.value.display = "none";
     window.removeEventListener("resize", hideQrcodePopupOverflow);
-    document.body.style.overflow = "";    
-
-    if(docStore.checkGoogleDocRoute() || docStore.checkPDFRoute()) {
-        docStore.hideVerticalOverflow();
-    }
+    document.body.style.overflow = "";
 })
 watch(() => route.fullPath, () => { setQRCodeLink(); });
 
@@ -72,7 +71,7 @@ function setQRCodeLink(filterLink = false) {
             margin: 10,
             dotsOptions: {
                 color: 'black',
-                type: 'extra-rounded'
+                type: 'rounded'
             },
             cornersSquareOptions: {
                 color: 'black',
@@ -93,7 +92,6 @@ function setQRCodeLink(filterLink = false) {
                 mode: 'Byte',
                 errorCorrectionLevel: 'Q',
             },
-            dotsOptions: { color: 'black' },
             backgroundOptions: { color: '#E5E5E5' },
         });
 
@@ -107,6 +105,16 @@ function setQRCodeLink(filterLink = false) {
  */
 function copyQRCodeLink() {
     navigator.clipboard.writeText(qrCodeLink.value);
+}
+
+/**
+ * This function shares the actual QR Code image.
+ */
+function shareQRCode() {
+    const canvas = document.getElementById("mohit-qrcode").querySelector("canvas");
+    canvas.toBlob((blob) => {
+        webData.shareFile(new File([blob], 'Mohit_Website_QRCode.png', { type: blob.type }));
+    }, 'image/png');
 }
 
 /**
@@ -152,6 +160,7 @@ function hideQrcodePopupOverflow() {
 }
 
 #mohit-qrcode {
+    margin: 10px 0px 7px 0px;
     width: 450px;
     height: 450px;
     border-radius: 15px;
@@ -167,9 +176,9 @@ function hideQrcodePopupOverflow() {
     color: black;
     font-family: 'Lexend', sans-serif;
     font-size: 16px;
-    margin-bottom: 10px;
     background-color: white;
     padding: 7px;
+    margin-top: 10px;
     border-radius: 5px;
     border: 1px solid;
     overflow-wrap: break-word;
@@ -179,12 +188,9 @@ function hideQrcodePopupOverflow() {
 }
 
 .qrcode-mainPopup-options {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
     height: fit-content;
     width: fit-content;
     gap: 7px;
@@ -198,6 +204,7 @@ function hideQrcodePopupOverflow() {
     justify-content: center;
     align-items: center;
     background: var(--dark-background);
+    color: var(--website-text);
 }
 .qrcode-mainPopup-btn svg {
     width: 17px;
@@ -206,12 +213,12 @@ function hideQrcodePopupOverflow() {
 
 .qrcode-mainPopup-btn.close {
     color: red;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
-.qrcode-mainPopup-btn.filter {
+.qrcode-mainPopup-btn.light {
     color: var(--website-light-text);
-}
-.qrcode-mainPopup-btn.download {
-    color: var(--website-text);
 }
 .qrcode-mainPopup-btn:hover {
     background-color: black;

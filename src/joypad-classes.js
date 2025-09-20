@@ -1,10 +1,11 @@
 export const leftAxisMovementThreshold = ref(0.05);
 export const rightAxisMovementThreshold = ref(0.05);
+export const fps = useFps();
 
 /**
  * This function changes a specified threshold where joystick movements are recorded.
  * @param {Number} newValue The new value. It must be between 0 and 1, and setting this to 1 disables the Gamepad Joysticks.
- * @param {Boolean} left If true, changes 
+ * @param {Boolean} left If true, changes the left axis threshold,otherwise it changes the right axis threshold.
  */
 export function changeAxisMovementThreshold(newValue = 0.05, left = true) {
     newValue = Math.min(1, Math.max(0, newValue));
@@ -30,7 +31,8 @@ export class GamepadButtonStatusEvent {
         this.gamepad = gamepad;
         this.button = buttonIndex;
         this.status = status;
-        this.holdFrames = holdFrames;
+        this.framesHeld = holdFrames;
+        this.secondsHeld = ((holdFrames < 1) ? 0 :  Number((this.framesHeld / fps.value).toFixed(4)));
     }
 }
 

@@ -8,15 +8,12 @@
     <div class="skills-body">
         <client-only> <div style="color: rgba(0, 0, 0, 0)">H</div> </client-only>
         <div id="vuejs" class="skills-category">
-            <motion.div class="skills-category-header vue" @viewportEnter="setTitleTransition">
+            <div class="skills-category-header vue" :ref="(el) => {titleRefs[0] = el}">
                 <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
                 <span> ue.js </span>
-            </motion.div>
+            </div>
 
-            <motion.div v-for="entity in VUEJS_SKILL_NOTES"
-                class="skills-entity-container"
-                @viewportEnter="setCardTransition">
-
+            <div v-for="entity in VUEJS_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
                 <SkillNote :link="entity.link"
                     :color="entity.color"
                     :desc="entity.desc"
@@ -25,19 +22,16 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </motion.div>
+            </div>
         </div>
 
         <div id="frontend" class="skills-category">
-            <motion.div class="skills-category-header frontend" @viewportEnter="setTitleTransition">
+            <div class="skills-category-header frontend" :ref="(el) => {titleRefs[1] = el}">
                 <font-awesome-icon icon="fa-brands fa-js" />
                 <span> Frontend </span>
-            </motion.div>
+            </div>
 
-            <motion.div v-for="entity in FRONTEND_SKILL_NOTES"
-                class="skills-entity-container"
-                @viewportEnter="setCardTransition">
-
+            <div v-for="entity in FRONTEND_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
                 <SkillNote :link="entity.link"
                     :color="entity.color"
                     :desc="entity.desc"
@@ -46,19 +40,16 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </motion.div>
+            </div>
         </div>
 
         <div id="aws" class="skills-category">
-            <motion.div class="skills-category-header aws" @viewportEnter="setTitleTransition">
+            <div class="skills-category-header aws" :ref="(el) => {titleRefs[2] = el}">
                 <img :src="aws_icon" draggable="false" />
                 <span> AWS </span>
-            </motion.div>
+            </div>
 
-            <motion.div v-for="entity in AWS_SKILL_NOTES"
-                class="skills-entity-container"
-                @viewportEnter="setCardTransition">
-
+            <div v-for="entity in AWS_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
                 <SkillNote :link="entity.link"
                     :color="entity.color"
                     :desc="entity.desc"
@@ -67,19 +58,16 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </motion.div>
+            </div>
         </div>
 
         <div id="modules" class="skills-category">
-            <motion.div class="skills-category-header modules" @viewportEnter="setTitleTransition">
+            <div class="skills-category-header modules" :ref="(el) => {titleRefs[3] = el}">
                 <font-awesome-icon icon="fa-brands fa-node-js" />
                 <span> Modules </span>
-            </motion.div>
+            </div>
 
-            <motion.div v-for="entity in MODULES_SKILL_NOTES"
-                class="skills-entity-container"
-                @viewportEnter="setCardTransition">
-
+            <div v-for="entity in MODULES_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
                 <SkillNote :link="entity.link"
                     :color="entity.color"
                     :desc="entity.desc"
@@ -88,19 +76,16 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </motion.div>
+            </div>
         </div>
 
         <div id="languages" class="skills-category">
-            <motion.div class="skills-category-header languages" @viewportEnter="setTitleTransition">
+            <div class="skills-category-header languages" :ref="(el) => {titleRefs[4] = el}">
                 <font-awesome-icon icon="fa-laptop-code" />
                 <span> Languages </span>
-            </motion.div>
+            </div>
 
-            <motion.div v-for="entity in LANGUAGES_SKILL_NOTES"
-                class="skills-entity-container"
-                @viewportEnter="setCardTransition">
-
+            <div v-for="entity in LANGUAGES_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
                 <SkillNote :link="entity.link"
                     :color="entity.color"
                     :desc="entity.desc"
@@ -109,19 +94,16 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </motion.div>
+            </div>
         </div>
 
         <div id="icons" class="skills-category">
-            <motion.div class="skills-category-header icons" @viewportEnter="setTitleTransition">
+            <div class="skills-category-header icons" :ref="(el) => {titleRefs[5] = el}">
                 <font-awesome-icon icon="fa-brands fa-font-awesome" />
                 <span> Icons </span>
-            </motion.div>
+            </div>
 
-            <motion.div v-for="entity in ICONS_SKILL_NOTES"
-                class="skills-entity-container"
-                @viewportEnter="setCardTransition">
-
+            <div v-for="entity in ICONS_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
                 <SkillNote :link="entity.link"
                     :color="entity.color"
                     :desc="entity.desc"
@@ -130,7 +112,7 @@
                     :name="entity.name"
                     :size="entity.icon.size"
                 />
-            </motion.div>
+            </div>
         </div>
     </div>
 
@@ -146,12 +128,27 @@
 
 <script setup>
 import "@/styles/navpage.css";
-import { motion } from "motion-v";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
 const webData = useWebsiteDataStore();
 const route = useRoute();
+
+const titleRefs = ref([]);
+const cardRefs = ref([]);
+
+useIntersectionObserver(titleRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        setTitleTransition(observed.target, observed.isIntersecting);
+    }
+})
+useIntersectionObserver(cardRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        addCardTransition(observed.target, observed.isIntersecting);
+    }
+})
 
 onMounted(() => {
     webData.mountWebData();
@@ -166,19 +163,14 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
 ));
 
 /**
- * This adds a transition to a card/widget as visitors scroll to it.
- */
-function setCardTransition(entry) {
-    entry.target.classList.add("animate__animated", ((window.innerWidth > 825) ? "animate__zoomIn" : "animate__fadeIn"));
-    setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
-}
-
-/**
  * This adds a transition to a title as visitors scroll to it.
+ * @param {Boolean} isVisible This must be true for the function to run.
+ * @param {Element} target The element gotten from the event.
  */
- function setTitleTransition(entry) {
-    entry.target.classList.add("animate__animated", "animate__flipInX");
-    setTimeout(() => { entry.target.classList.remove("animate__animated", "animate__flipInX"); }, 1000);
+ function setTitleTransition(target, isVisible) {
+    if(!isVisible) { return; }
+    target.classList.add("animate__animated", "animate__flipInX");
+    setTimeout(() => { target.classList.remove("animate__animated", "animate__flipInX"); }, 1000);
 }
 </script>
 
