@@ -1,10 +1,10 @@
 <template>
 <DocumentNavigation />
 <client-only>
-    <main id="resume-container" v-if="documentStore.resumePdfObj != null">
+    <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
             <component :is="documentStore.pdfComponent" id="tato-pdf-resume"
-                :pdf="documentStore.resumePdfObj.value"
+                :pdf="(documentStore.onResumeQrcodeRoute ? documentStore.resumePdfWithQrcodeObj.pdf : documentStore.resumePdfObj.pdf)"
                 text-layer annotation-layer
                 @annotation="onAnnotation"
                 :width="documentStore.customPdfWidth"

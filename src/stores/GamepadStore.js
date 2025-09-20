@@ -180,7 +180,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * @param {Number} speed The number of pixels to scroll.
      */
     function initScrollYBy(direction = 'top', speed = 10) {
-        if(disableScrollYBy()) { return; }
         window.scrollBy(window.scrollX, (speed * ((direction === "top") ? -1 : 1)));
     }
 
@@ -198,7 +197,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * @param {String} direction The direction to scroll.
      */
     function setScrollInterval(direction = 'top') {
-        if(scrollInterval != null || disableScrollYBy()) { return; }
+        if(scrollInterval != null) { return; }
         scrollInterval = setInterval(() => { initScrollYBy(direction, 7); }, 1);
     }
 
@@ -209,16 +208,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         if(scrollInterval == null) { return; }
         clearInterval(scrollInterval);
         scrollInterval = null;
-    }
-
-    /**
-     * This returns whether or not to disable vertical scrolling.
-     */
-    function disableScrollYBy() {
-        const path = route.path;
-        return ((path.includes("resume") || path.includes(FCS_CERTIFICATE_ROUTE)) &&
-            (docStore.checkGoogleDocRoute() || docStore.checkPDFRoute())
-        );
     }
 
     return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,

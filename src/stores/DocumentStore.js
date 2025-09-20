@@ -1,10 +1,12 @@
 import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
 import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+
+import { error, PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
 export const useDocumentStore = defineStore("document-store", () => {
-    const route = useRoute();
+    const router = useRouter();
+    const mounted = ref(false);
     const fullScreenStore = useFullScreenStore();
 
     const customPdfWidth = ref(800);
@@ -13,6 +15,9 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const customPdfMaxWidth = ref(800);
     const customPdfMinWidth = ref(320);
+
+    const downloadingDocument = ref(false);
+    const sharingDocument = ref(false);
 
     /**
      * @type {import('vue').ShallowRef<import('vue').Component>} The VuePDF component dynamically imported for the website.
@@ -24,44 +29,50 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     const qrcodeResume = ref(null);
 
+    /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
     const resumePdfObj = ref(null);
-    const resumePDFWithQrcodeObj = ref(null);
+
+    /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
+    const resumePdfWithQrcodeObj = ref(null);
+
+    /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
     const fultonInternshipAppreciationPdfObj = ref(null);
-    const sharingDocument = ref(false);
+
+    const routePath = computed(() => { return router.currentRoute.value.path; });
+    const onResumeRoute = computed(() => { return routePath.value.includes("/resume"); });
+    const onFCSCertificateRoute = computed(() => { return routePath.value.includes(FCS_CERTIFICATE_ROUTE); });
+
+    const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown") || routePath.value.includes("md")); });
+    const onResumeQrcodeRoute = computed(() => {
+        const fullRoute = router.currentRoute.value.fullPath;
+        return (fullRoute === "/resume#qrcode" || fullRoute === "/resume/#qrcode");
+    });
 
     /**
      * This function downloads a document for the visitor to see.
      */
-    function downloadDoc() {
-        const docIndex = (checkResumeRoute() ? 0 : 1);
-        const DOCUMENTS = [Mohit_Jain_Resume, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025];
-        const DOCUMENT_NAMES = ["Mohit_Jain_Resume", "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025"];
-    
+    async function downloadDoc() {
+        downloadingDocument.value = true;
+        const documentPdf = getCurrentPDFObject();
+
+        const docData = await documentPdf.obj.pdf.getData()
+        const blob = new Blob([docData], { type: 'application/pdf' });
+
         const link = document.createElement('a');
-        link.href = DOCUMENTS[docIndex];
-        link.download = (DOCUMENT_NAMES[docIndex] + '.pdf');
+        link.href = URL.createObjectURL(blob);
+        link.download = (documentPdf.name + ".pdf");
     
         link.click();
         link.remove();
-    }
-
-    /**
-     * This function downloads the resume with the QR Code.
-     */
-    function downloadQrcodeResume() {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(qrcodeResume.value);
-        link.download = "Mohit_Jain_Resume_With_QR_Code.pdf";
-        link.click();
-        URL.revokeObjectURL(link.href);
+        downloadingDocument.value = false;
     }
 
     /**
      * This function opens the browser's print doucment for the visitor.
      */
     function printDoc() {
-        const win = window.open(checkResumeRoute() ? Mohit_Jain_Resume : Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
-        win.addEventListener("load", () => { win.print(); });
+        const documentPdf = getCurrentPDFObject();
+        documentPdf.obj.print(250, (documentPdf.name + ".pdf"));
     }
 
     /**
@@ -69,16 +80,28 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function shareDoc() {
         sharingDocument.value = true;
-        const docIndex = (checkResumeRoute() ? 0 : 1);
+        const documentPdf = getCurrentPDFObject();
 
-        const DOCUMENTS = [Mohit_Jain_Resume, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025];
-        const DOCUMENT_NAMES = ["Mohit_Jain_Resume", "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025"];
+        const docData = await documentPdf.obj.pdf.getData();
+        const blob = new Blob([docData], { type: 'application/pdf' });
 
-        const foundDoc = await fetch(DOCUMENTS[docIndex]);
-        const blob = await foundDoc.blob();
-
-        useWebsiteDataStore().shareFile(new File([blob], (DOCUMENT_NAMES[docIndex] + '.pdf'), { type: 'application/pdf' }));
+        useWebsiteDataStore().shareFile(new File([blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
         sharingDocument.value = false;
+    }
+
+    /**
+     * This function returns the PDF Object the website is currently using.
+     */
+    function getCurrentPDFObject() {
+        if(onResumeQrcodeRoute.value) {
+            return { obj: resumePdfWithQrcodeObj.value, name: "Mohit_Jain_Resume_With_QR_Code" }
+        } else if(onResumeRoute.value) {
+            return { obj: resumePdfObj.value, name: "Mohit_Jain_Resume" }
+        } else if(onFCSCertificateRoute.value) {
+            return { obj: fultonInternshipAppreciationPdfObj.value, name: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025" }
+        } else {
+            throw new Error("No document is currently in use.");
+        }
     }
 
     /**
@@ -88,11 +111,13 @@ export const useDocumentStore = defineStore("document-store", () => {
         nextTick(() => {
             import('@tato30/vue-pdf').then(async (result) => {
                 qrcodeResume.value = await createQrcodeResume();
+                const arrayBuffer = await qrcodeResume.value.arrayBuffer();
                 pdfComponent.value = result.VuePDF;
 
-                resumePdfObj.value = result.usePDF(Mohit_Jain_Resume).pdf;
-                resumePDFWithQrcodeObj.value = result.usePDF(qrcodeResume.value).pdf;
-                fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025).pdf;
+                resumePdfObj.value = result.usePDF(Mohit_Jain_Resume);
+                resumePdfWithQrcodeObj.value = result.usePDF(arrayBuffer);
+                fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
+                mounted.value = true;
             });
         })
     }
@@ -102,8 +127,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
-        if(checkMarkdownRoute()) { return; }
-        nextTick(() => { mountCustomDocumentPage(800, 320, (checkResumeRoute() ? 1.375 : 0.79875)); })
+        if(onMarkdownRoute) { return; }
+        nextTick(() => { mountCustomDocumentPage(800, 320, (onResumeRoute ? 1.375 : 0.79875)); })
     }
 
     /**
@@ -145,31 +170,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         useWebsiteDataStore().closeNavMenu();
     }
 
-    /**
-     * This function returns true if the user is looking at any resume page on the website.
-     */
-    function checkResumeRoute() {
-        return route.path.includes("resume");
-    }
-
-    /**
-     * This function returns true if the user is looking at any certificate page on the website.
-     */
-    function checkFCSCertificateRoute() {
-        return route.path.includes(FCS_CERTIFICATE_ROUTE);
-    }
-    /**
-     * This function returns when the route is using a markdown file.
-     */
-    function checkMarkdownRoute() {
-        return (route.path.includes('markdown') || route.path.includes('md'));
-    }
-
-    return { customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, sharingDocument,
-        pdfComponent, resumePdfObj, resumePDFWithQrcodeObj, fultonInternshipAppreciationPdfObj,
-        downloadDoc, printDoc, shareDoc, toggleDocumentFullScreen, setPdfSize, downloadQrcodeResume,
+    return { mounted, sharingDocument, downloadingDocument,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
+        pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj,
+        onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onFCSCertificateRoute,
+        downloadDoc, printDoc, shareDoc, toggleDocumentFullScreen, setPdfSize,
         mountDocumentStore, mountDocumentPage, unmountDocumentPage,
-        checkResumeRoute, checkFCSCertificateRoute, checkMarkdownRoute
     }
 });
 

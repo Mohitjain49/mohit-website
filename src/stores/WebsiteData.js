@@ -101,7 +101,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.confirmClickSound(event);
         const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
 
-        if(documentStore.checkResumeRoute() || documentStore.checkFCSCertificateRoute()) {
+        if(documentStore.onResumeRoute || documentStore.onFCSCertificateRoute) {
             var elementInDocumentMenu = false;
             nextTick(() => {
                 const documentMenu = document.getElementById("mohit-documentBar");

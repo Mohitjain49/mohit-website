@@ -99,7 +99,7 @@ const footerClass = computed(() => {
     const path = route.path;
     if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
         return 'main-page';
-    } else if(!fullScreenStore.fullScreenSet && (docStore.checkResumeRoute() || docStore.checkFCSCertificateRoute())) {
+    } else if(!fullScreenStore.fullScreenSet && (docStore.onResumeRoute || docStore.onFCSCertificateRoute)) {
         return 'document-route';
     } else {
         return '';
