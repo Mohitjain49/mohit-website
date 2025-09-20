@@ -27,10 +27,8 @@
 
 <script setup>
 import QRCodeStyling from 'qr-code-styling';
-
 const route = useRoute();
 const webData = useWebsiteDataStore();
-const docStore = useDocumentStore();
 
 /**
  * @type {import('vue').Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
@@ -73,7 +71,7 @@ function setQRCodeLink(filterLink = false) {
             margin: 10,
             dotsOptions: {
                 color: 'black',
-                type: 'extra-rounded'
+                type: 'rounded'
             },
             cornersSquareOptions: {
                 color: 'black',
@@ -94,7 +92,6 @@ function setQRCodeLink(filterLink = false) {
                 mode: 'Byte',
                 errorCorrectionLevel: 'Q',
             },
-            dotsOptions: { color: 'black' },
             backgroundOptions: { color: '#E5E5E5' },
         });
 

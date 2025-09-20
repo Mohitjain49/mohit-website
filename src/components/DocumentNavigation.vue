@@ -17,6 +17,9 @@
                     <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
                         <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />
                     </button>
+                    <button v-if="docStore.checkResumeRoute()" @click="docStore.downloadQrcodeResume()" title="Create QR Code Document" :style="getColorStyles('var(--blue-three)')">
+                        <font-awesome-icon icon="fa-qrcode" />
+                    </button>
                 </div>
                 <div class="mohit-documentMenu-tools">
                     <button @click="webData.setQRCodePopup(true)" title="Share Webpage" :style="getColorStyles('var(--website-light-text)')">
