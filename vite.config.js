@@ -27,7 +27,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useWakeLock',
         'useObjectUrl',
         'useShare',
-        'useFps'
+        'useFps',
+        'onStartTyping'
     ]
 }
 
