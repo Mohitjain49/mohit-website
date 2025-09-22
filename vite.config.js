@@ -25,6 +25,7 @@ const VUEUSE_AUTO_IMPORTS = {
     '@vueuse/core': [
         'useIntersectionObserver',
         'useWakeLock',
+        'useObjectUrl',
         'useShare',
         'useFps'
     ]

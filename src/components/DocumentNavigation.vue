@@ -25,10 +25,7 @@
                     <button @click="reloadPage()" title="Reload Page">
                         <font-awesome-icon icon="fa-rotate-right" />
                     </button>
-                    <a target="mohit-document" title="Open Document in New Tab"
-                        :href="(docStore.onResumeRoute ? PERSONAL_RESUME_LINK : FCS_CERTIFICATE_LINK)"
-                        :style="getColorStyles('var(--website-light-text)')">
-
+                    <a :href="documentLink" target="mohit-document" title="Open Document in New Tab" :style="getColorStyles('var(--website-light-text)')">
                         <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                     </a>
                 </div>
@@ -126,6 +123,16 @@ const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
+
+const documentLink = computed(() => {
+    if(docStore.onResumeQrcodeRoute) {
+        return docStore.qrcodeResumeUrl;
+    } else if(docStore.onResumeRoute) {
+        return PERSONAL_RESUME_LINK;
+    } else if(docStore.onFCSCertificateRoute) {
+        return FCS_CERTIFICATE_LINK;
+    }
+});
 
 /**
  * This sets the color and border color of an icon.

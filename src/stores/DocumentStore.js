@@ -25,9 +25,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     const pdfComponent = shallowRef(null);
 
     /**
-     * @type {import('vue').Ref<ArrayBuffer>} My resume with a Qr Code at the top right.
+     * @type {import('vue').Ref<Blob>} My resume with a Qr Code at the top right.
      */
     const qrcodeResume = ref(null);
+    const qrcodeResumeUrl = useObjectUrl(qrcodeResume);
 
     /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
     const resumePdfObj = ref(null);
@@ -111,10 +112,11 @@ export const useDocumentStore = defineStore("document-store", () => {
         nextTick(() => {
             import('@tato30/vue-pdf').then(async (result) => {
                 qrcodeResume.value = await createQrcodeResume();
+                const qrcodeResumeArrayBuffer = await qrcodeResume.value.arrayBuffer();
                 pdfComponent.value = result.VuePDF;
 
                 resumePdfObj.value = result.usePDF(Mohit_Jain_Resume);
-                resumePdfWithQrcodeObj.value = result.usePDF(qrcodeResume.value);
+                resumePdfWithQrcodeObj.value = result.usePDF(qrcodeResumeArrayBuffer);
                 fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
                 mounted.value = true;
             });
@@ -169,7 +171,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         useWebsiteDataStore().closeNavMenu();
     }
 
-    return { mounted, sharingDocument, downloadingDocument,
+    return { mounted, sharingDocument, downloadingDocument, qrcodeResumeUrl,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj,
         onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onFCSCertificateRoute,
@@ -241,6 +243,5 @@ async function createQrcodeResume() {
 
     // This saves the PDF and returns a blob representing the new PDF.
     const modifiedPdfBytes = await pdfDoc.save();
-    const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
-    return await blob.arrayBuffer();
+    return new Blob([modifiedPdfBytes], { type: "application/pdf" });
 }
