@@ -25,10 +25,7 @@
                     <button @click="reloadPage()" title="Reload Page">
                         <font-awesome-icon icon="fa-rotate-right" />
                     </button>
-                    <a target="mohit-document" title="Open Document in New Tab"
-                        :href="(docStore.onResumeRoute ? PERSONAL_RESUME_LINK : FCS_CERTIFICATE_LINK)"
-                        :style="getColorStyles('var(--website-light-text)')">
-
+                    <a :href="documentLink" target="mohit-document" title="Open Document in New Tab" :style="getColorStyles('var(--website-light-text)')">
                         <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                     </a>
                 </div>
@@ -40,6 +37,7 @@
                 <template v-if="docStore.onResumeRoute">
                     <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/" class="mohit-navBar-icon light"
                         title="Use Website Viewer"
+                        @click="scrollToTop()"
                         @mouseenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
@@ -54,6 +52,7 @@
                     </RouterLink>
                     <RouterLink v-if="!docStore.onResumeQrcodeRoute" :to="{ path: '/resume/', hash: '#qrcode' }" class="mohit-navBar-icon light"
                         title="See My Resume With A QR Code."
+                        @click="scrollToTop()"
                         @mouseenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
@@ -125,12 +124,29 @@ const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
 
+const documentLink = computed(() => {
+    if(docStore.onResumeQrcodeRoute) {
+        return docStore.qrcodeResumeUrl;
+    } else if(docStore.onResumeRoute) {
+        return PERSONAL_RESUME_LINK;
+    } else if(docStore.onFCSCertificateRoute) {
+        return FCS_CERTIFICATE_LINK;
+    }
+});
+
 /**
  * This sets the color and border color of an icon.
  * @param {String} color The color to use.
  */
 function getColorStyles(color = "var(--website-text)") {
     return { color, borderColor: color }
+}
+
+/**
+ * This function takes the user to the top of the page.
+ */
+function scrollToTop() {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 }
 
 onMounted(() => { docStore.mountDocumentPage(); });

@@ -7,7 +7,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
+
     const { share, isSupported: shareSupported } = useShare();
+    const wakeLock = useWakeLock();
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -19,23 +21,20 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const menuOpen = ref(-1);
     const navFooterPresent = ref(false);
 
-    const wakeLockAvailable = ref(false);
-    const wakeLock = ref(null);
-
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
     const qrPopup = ref({ open: false, truncateValue: 54 });
 
     const wakeLockIcon = computed(() => {
-        return (wakeLockAvailable.value ? ((wakeLock.value == null) ? 'fa-lock' : 'fa-unlock') : 'fa-ban');
+        return (wakeLock.isSupported.value ? (wakeLock.isActive.value ? 'fa-unlock' : 'fa-lock') : 'fa-ban');
     });
     const wakeLockStatement = computed(() => {
-        if(!wakeLockAvailable.value) {
+        if(!wakeLock.isSupported.value) {
             return "Feature Unavailable.";
-        } else if(wakeLock.value == null) {
-            return "Set Screen Wake Lock";
-        } else {
+        } else if(wakeLock.isActive.value) {
             return "Release Screen Wake Lock";
+        } else {
+            return "Set Screen Wake Lock";
         }
     });
 
@@ -45,7 +44,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function setEventListeners() {
         const signal = controller.signal;
         audioStore.setupClickAudio();
-        nextTick(() => { wakeLockAvailable.value = ('wakeLock' in navigator); }); // This checks whether the wakelock is avaliable or not.
 
         documentStore.mountDocumentStore();
         installStore.mountInstallStore();
@@ -292,18 +290,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This function toggles the wake lock for the website.
      */
     async function toggleWakeLock() {
-        if(!wakeLockAvailable.value) { return; }
+        if(!wakeLock.isSupported.value) { return; }
         closeNavMenu();
 
-        if(wakeLock.value != null) {
-            await wakeLock.value.release();
-            wakeLock.value = null;
+        if(wakeLock.isActive.value) {
+            await wakeLock.release();
         } else {
             try {
-                wakeLock.value = await navigator.wakeLock.request("screen");
+                await wakeLock.request("screen");
             } catch(e) {
                 console.error(e);
-                wakeLock.value = null;
             }
         }
     }

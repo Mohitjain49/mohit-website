@@ -1,7 +1,7 @@
 import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
 import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 
-import { error, PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
 export const useDocumentStore = defineStore("document-store", () => {
@@ -28,6 +28,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @type {import('vue').Ref<Blob>} My resume with a Qr Code at the top right.
      */
     const qrcodeResume = ref(null);
+    const qrcodeResumeUrl = useObjectUrl(qrcodeResume);
 
     /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
     const resumePdfObj = ref(null);
@@ -111,11 +112,11 @@ export const useDocumentStore = defineStore("document-store", () => {
         nextTick(() => {
             import('@tato30/vue-pdf').then(async (result) => {
                 qrcodeResume.value = await createQrcodeResume();
-                const arrayBuffer = await qrcodeResume.value.arrayBuffer();
+                const qrcodeResumeArrayBuffer = await qrcodeResume.value.arrayBuffer();
                 pdfComponent.value = result.VuePDF;
 
                 resumePdfObj.value = result.usePDF(Mohit_Jain_Resume);
-                resumePdfWithQrcodeObj.value = result.usePDF(arrayBuffer);
+                resumePdfWithQrcodeObj.value = result.usePDF(qrcodeResumeArrayBuffer);
                 fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
                 mounted.value = true;
             });
@@ -170,7 +171,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         useWebsiteDataStore().closeNavMenu();
     }
 
-    return { mounted, sharingDocument, downloadingDocument,
+    return { mounted, sharingDocument, downloadingDocument, qrcodeResumeUrl,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj,
         onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onFCSCertificateRoute,
@@ -180,7 +181,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 });
 
 /**
- * This function creates a document using pdf-lib where my resume has a QR Code embedded on its top right.
+ * This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right.
  */
 async function createQrcodeResume() {
     // This fetches and loads the PDF file.

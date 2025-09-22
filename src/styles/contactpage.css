@@ -38,6 +38,31 @@
     margin: 20px 0px;
     background-color: var(--website-text);
 }
+.contact-share-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    width: fit-content;
+    color: var(--website-dark-text);
+    padding: 7px;
+    border: 2px solid;
+    border-radius: 10px;
+    transition: var(--default-transition), scale 0.2s;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.contact-share-btn svg {
+    width: 20px;
+    height: 20px;
+}
+.contact-share-btn:hover {
+    box-shadow: 0px 0px 10px var(--website-text);
+    scale: 1.1;
+}
 
 .contact-box-title-container {
     height: 75px;
@@ -103,9 +128,28 @@
     font-weight: bold;
     font-size: 18px;
     text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
 }
-.contact-input-tab-header svg {
+
+.contact-input-tab-header button {
+    margin-top: 1px;
     font-size: 14px;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    border: 1px dashed rgba(0, 0, 0, 0);
+    border-radius: 5px;
+}
+.contact-input-tab-header button:focus {
+    margin-left: 2px;
+    border-color: var(--website-text);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .contact-input-tab-textbox {
@@ -167,7 +211,11 @@
     background-color: var(--website-light-text);
     transition: var(--default-transition);
 }
+
 .contact-input-tab-btn:hover {
+    border-color: var(--website-text);
+}
+.contact-input-tab-btn:focus {
     border-color: var(--website-text);
 }
 

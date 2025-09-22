@@ -10,6 +10,10 @@
 <main id="contact-page" class="personal-web-body">
     <div class="contact-boxes-container">
         <div class="contact-me-box web-service">
+            <button @click="webData.setQRCodePopup(true)" class="contact-share-btn" title="Share This Page With Someone Else!">
+                <FontAwesomeIcon icon="fa-share-from-square" />
+            </button>
+
             <div class="contact-box-title-container center-flex-display">
                 <h1 class="gradient-text contact-box-title"> Contact Me </h1>
             </div>
@@ -23,6 +27,7 @@
                         <div class="contact-input-tab-header">Title</div>
                     </div>
                     <input class="contact-input-tab-textbox"
+                        ref="titleInput"
                         v-model="msgTitle"
                         @click="setAlertBox('')"
                     >
@@ -138,6 +143,7 @@ const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
 
+const titleInput = ref();
 const alertBoxText = ref("");
 var alertBoxTimeout = null;
 
@@ -165,7 +171,16 @@ onMounted(() => {
 
     document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
     document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
-})
+});
+
+/**
+ * This starts typing on the title input when the user is focused on the page but not on any input element.
+ */
+onStartTyping(() => {
+    if(!titleInput.value.active) {
+        titleInput.value.focus();
+    }
+});
 
 /**
  * This function adds or removes a transition to a social media link button.

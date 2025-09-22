@@ -9,7 +9,7 @@
 </Transition>
 
 <Transition name="mohit-bookmark-transition" appear>
-    <button v-if="(webData.wakeLock != null)" @click="webData.toggleWakeLock()"
+    <button v-if="webData.wakeLock.isActive" @click="webData.toggleWakeLock()"
         class="mohit-bookmark lock active"
         :title="WAKE_LOCK_BOOKMARK_TITLE">
 
