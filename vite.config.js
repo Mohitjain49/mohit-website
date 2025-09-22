@@ -24,6 +24,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
 const VUEUSE_AUTO_IMPORTS = {
     '@vueuse/core': [
         'useIntersectionObserver',
+        'useWakeLock',
         'useShare',
         'useFps'
     ]
@@ -64,7 +65,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v3.2.0",
+                cacheId: "v3.2.1",
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

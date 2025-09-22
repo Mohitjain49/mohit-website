@@ -40,6 +40,7 @@
                 <template v-if="docStore.onResumeRoute">
                     <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/" class="mohit-navBar-icon light"
                         title="Use Website Viewer"
+                        @click="scrollToTop()"
                         @mouseenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
@@ -54,6 +55,7 @@
                     </RouterLink>
                     <RouterLink v-if="!docStore.onResumeQrcodeRoute" :to="{ path: '/resume/', hash: '#qrcode' }" class="mohit-navBar-icon light"
                         title="See My Resume With A QR Code."
+                        @click="scrollToTop()"
                         @mouseenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
@@ -131,6 +133,13 @@ const fullScreenStore = useFullScreenStore();
  */
 function getColorStyles(color = "var(--website-text)") {
     return { color, borderColor: color }
+}
+
+/**
+ * This function takes the user to the top of the page.
+ */
+function scrollToTop() {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 }
 
 onMounted(() => { docStore.mountDocumentPage(); });
