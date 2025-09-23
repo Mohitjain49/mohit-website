@@ -28,7 +28,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useObjectUrl',
         'useShare',
         'useFps',
-        'onStartTyping'
+        'onStartTyping',
+        'useDocumentVisibility'
     ]
 }
 
