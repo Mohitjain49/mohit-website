@@ -56,7 +56,7 @@ watch(() => route.fullPath, () => { setQRCodeLink(); });
  * @param {Boolean} filterLink If true, this function filters the link to not include hashes.
  */
 function setQRCodeLink(filterLink = false) {
-    qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (filterLink ? route.path.substring(1) : route.fullPath.substring(1)));
+    qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (filterLink ? route.fullPath.substring(1).replace(route.hash, "") : route.fullPath.substring(1)));
     linkExtrasRemoved.value = (filterLink || route.hash === "");
 
     if(qrcode.value != null) {
