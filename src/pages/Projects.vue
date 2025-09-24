@@ -1,8 +1,5 @@
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="GREEN_BACKGROUND"></vue-particles>
-</client-only>
-
+<ParticlesBackground :particlesOptions="GREEN_BACKGROUND" />
 <main id="project-page" class="personal-web-body transparent">
     <div class="main-nav-page-container">
         <h1 class="nav-page-title project"> My Projects </h1>

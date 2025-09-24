@@ -1,7 +1,5 @@
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="INSTALL_BACKGROUND"></vue-particles>
-</client-only>
+<ParticlesBackground :particlesOptions="INSTALL_BACKGROUND" />
 <FeaturesReturnWidget />
 
 <main id="install-page" class="personal-web-body">

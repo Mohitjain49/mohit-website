@@ -1,8 +1,5 @@
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
-</client-only>
-
+<ParticlesBackground :particlesOptions="ORANGE_BACKGROUND" />
 <main id="exp-page" class="personal-web-body transparent">
     <div class="main-nav-page-container">
         <div class="nav-page-title">My Experience</div>
