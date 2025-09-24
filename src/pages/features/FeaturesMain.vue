@@ -1,7 +1,5 @@
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="FEATURES_BACKGROUND"></vue-particles>
-</client-only>
+<ParticlesBackground :particlesOptions="FEATURES_BACKGROUND" />
 
 <main id="features-page" class="personal-web-body">
     <div class="features-section">

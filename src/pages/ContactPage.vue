@@ -3,10 +3,7 @@
 </style>
 
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="ORANGE_BACKGROUND"></vue-particles>
-</client-only>
-
+<ParticlesBackground :particlesOptions="ORANGE_BACKGROUND" />
 <main id="contact-page" class="personal-web-body">
     <div class="contact-boxes-container">
         <div class="contact-me-box web-service">

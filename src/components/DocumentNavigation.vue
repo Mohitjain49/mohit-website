@@ -35,7 +35,7 @@
         <div class="mohit-documentBar-bottom">
             <div class="mohit-documentBar-iconSection left">
                 <template v-if="docStore.onResumeRoute">
-                    <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/" class="mohit-navBar-icon light"
+                    <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/?qrcode=off" class="mohit-navBar-icon light"
                         title="Use Website Viewer"
                         @click="scrollToTop()"
                         @mouseenter="setPulseLoopAnimation"
@@ -43,20 +43,20 @@
 
                         <font-awesome-icon icon="fa-file-lines" />
                     </RouterLink>
-                    <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown" class="mohit-navBar-icon light"
-                        title="Use Markdown Format"
-                        @mouseenter="setPulseLoopAnimation"
-                        @mouseleave="setPulseLoopAnimation">
-
-                        <font-awesome-icon icon="fa-brands fa-markdown" />
-                    </RouterLink>
-                    <RouterLink v-if="!docStore.onResumeQrcodeRoute" :to="{ path: '/resume/', hash: '#qrcode' }" class="mohit-navBar-icon light"
+                    <RouterLink v-if="!docStore.onResumeQrcodeRoute" :to="QRCODE_RESUME_PATH" class="mohit-navBar-icon light"
                         title="See My Resume With A QR Code."
                         @click="scrollToTop()"
                         @mouseenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-qrcode" />
+                    </RouterLink>
+                    <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown" class="mohit-navBar-icon light"
+                        title="Use Markdown Format"
+                        @mouseenter="setPulseLoopAnimation"
+                        @mouseleave="setPulseLoopAnimation">
+
+                        <font-awesome-icon icon="fa-brands fa-markdown" />
                     </RouterLink>
                 </template>
                 <template v-else>

@@ -127,24 +127,30 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function onKeyDown(event) {
         const key = event.key;
-        if(event.ctrlKey && (key === "q" || key === "Q")) {
-            setQRCodePopup("toggle");
-            triggerClickSound();
-        }
-
-        if(!event.altKey) { return; }
-        if(key === "m") {
-            toggleNavMenu();
-            triggerClickSound();
-        } else if(key === "w") {
-            router.push("/wakelock");
-            triggerClickSound();
-        } else if(key === "i") {
-            router.push("/install");
-            triggerClickSound();
-        } else if(key === "r" || key === "c") {
-            router.push("/code-scanner");
-            triggerClickSound();
+        if(event.ctrlKey && event.altKey) {
+            if(key === "w" || key === "W") {
+                toggleWakeLock();
+                triggerClickSound();
+            }
+        } else if(event.ctrlKey) {
+            if(key === "q" || key === "Q") {
+                setQRCodePopup("toggle");
+                triggerClickSound();
+            }
+        } else if(event.altKey) {
+            if(key === "m") {
+                toggleNavMenu();
+                triggerClickSound();
+            } else if(key === "w") {
+                router.push("/wakelock");
+                triggerClickSound();
+            } else if(key === "i") {
+                router.push("/install");
+                triggerClickSound();
+            } else if(key === "r" || key === "c") {
+                router.push("/code-scanner");
+                triggerClickSound();
+            }
         }
     }
 

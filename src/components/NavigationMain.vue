@@ -82,7 +82,10 @@ const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 
 const route = useRoute();
-const footerRoute = computed(() => { return { path: route.path, hash: '#footer' } });
+const router = useRouter();
+
+const routePath = computed(() => { return router.currentRoute.value.path; });
+const footerRoute = computed(() => { return { path: routePath.value, hash: '#footer', query: router.currentRoute.value.query } });
 
 /**
  * This sets the color and border color of an icon.
@@ -100,7 +103,7 @@ function getColorStyles(color = "var(--website-text)") {
 function flashNavOpt(event = new MouseEvent("click"), path = "/") {
     path = (path.endsWith("/") ? path.slice(0, -1) : path);
     
-    if(route.path !== path && route.path !== (path + "/")) { return; }
+    if(routePath.value !== path && routePath.value !== (path + "/")) { return; }
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     webData.addFlashAnimation(event);

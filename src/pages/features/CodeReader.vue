@@ -11,9 +11,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 </script>
 
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="CODE_SCANNER_BACKGROUND"></vue-particles>
-</client-only>
+<ParticlesBackground :particlesOptions="CODE_SCANNER_BACKGROUND" />
 <FeaturesReturnWidget />
 
 <main id="code-reader-page" class="personal-web-body">

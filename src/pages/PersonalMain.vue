@@ -1,7 +1,5 @@
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="HOME_BACKGROUND"></vue-particles>
-</client-only>
+<ParticlesBackground :particlesOptions="HOME_BACKGROUND" />
 <KennesawWidget />
 
 <main id="homepage" class="personal-web-body">

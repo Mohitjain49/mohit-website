@@ -28,7 +28,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useObjectUrl',
         'useShare',
         'useFps',
-        'onStartTyping'
+        'onStartTyping',
+        'useDocumentVisibility'
     ]
 }
 
@@ -67,7 +68,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v3.2.1",
+                cacheId: "v3.2.2",
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

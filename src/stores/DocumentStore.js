@@ -4,6 +4,7 @@ import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Ful
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
+export const QRCODE_RESUME_PATH = { path: "/resume/", query: { qrcode: "on" } }
 export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
     const mounted = ref(false);
@@ -44,10 +45,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onFCSCertificateRoute = computed(() => { return routePath.value.includes(FCS_CERTIFICATE_ROUTE); });
 
     const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown") || routePath.value.includes("md")); });
-    const onResumeQrcodeRoute = computed(() => {
-        const fullRoute = router.currentRoute.value.fullPath;
-        return (fullRoute === "/resume#qrcode" || fullRoute === "/resume/#qrcode");
-    });
+    const onResumeQrcodeRoute = computed(() => { return (onResumeRoute.value && router.currentRoute.value.query?.qrcode === "on"); });
 
     /**
      * This function downloads a document for the visitor to see.

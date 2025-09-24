@@ -1,7 +1,5 @@
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="BLUE_BACKGROUND"></vue-particles>
-</client-only>
+<ParticlesBackground :particlesOptions="BLUE_BACKGROUND" />
 <NavigationSkills />
 
 <main id="skills-page" class="personal-web-body">
@@ -142,13 +140,13 @@ useIntersectionObserver(titleRefs, (entry) => {
         const observed = entry[i];
         setTitleTransition(observed.target, observed.isIntersecting);
     }
-})
+});
 useIntersectionObserver(cardRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
         addCardTransition(observed.target, observed.isIntersecting);
     }
-})
+});
 
 onMounted(() => {
     webData.mountWebData();
