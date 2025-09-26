@@ -5,6 +5,8 @@
 </template>
 
 <script setup>
+// Refer to the tsParticles docs: https://particles.js.org/docs/
+
 /**
  * @type {import('vue').Ref<import('@tsparticles/engine').Container>}
  * The container representing the background.

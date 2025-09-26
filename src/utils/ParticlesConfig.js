@@ -1,10 +1,15 @@
-export const HOME_BACKGROUND = {
+// Refer to the tsParticles docs: https://particles.js.org/docs/
+// Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
+import { faCopyright, faStar, faCertificate } from '@fortawesome/free-solid-svg-icons';
+
+/** @type {import('@tsparticles/engine').IOptions} */
+export const HOME_BACKGROUND = ref({
     background: {
         color: "#000000",
     },
     fpsLimit: 40,
     particles: {
-        color: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163", "#E92A60"] },
+        // color: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163", "#E92A60"] },
         move: {
             direction: "bottom",
             enable: true,
@@ -14,24 +19,32 @@ export const HOME_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 500
+            value: 400
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "star"
+            type: "image",
+            options: {
+                image: [
+                    { src: getFontAwesomeSvg(faStar, "rgba(126, 90, 0, 0.9)"), width: 100, height: 100 },
+                    { src: getFontAwesomeSvg(faStar, "#E8E163"), width: 100, height: 100 },
+                    { src: getFontAwesomeSvg(faStar, "#E92A60"), width: 100, height: 100 },
+                ]
+            }
         },
         size: {
-            value: { min: 2, max: 3 },
+            value: { min: 5, max: 6 },
         },
     },
     detectRetina: true,
     tRetina: true,
-};
+});
 
-export const BLUE_BACKGROUND = {
+/** @type {import('@tsparticles/engine').IOptions} */
+export const BLUE_BACKGROUND = ref({
     background: {
         color: "#0047AB"
     },
@@ -48,24 +61,28 @@ export const BLUE_BACKGROUND = {
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 750
+            value: 500
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "circle"
+            type: "image",
+            options: {
+                image: { src: getFontAwesomeSvg(faCertificate, "rgb(187, 210, 255)"), width: 100, height: 100 }
+            }
         },
         size: {
-            value: { min: 2, max: 3 },
+            value: { min: 5, max: 7 },
         },
     },
     detectRetina: true,
     tRetina: true,
-};
+});
 
-export const ORANGE_BACKGROUND = {
+/** @type {import('@tsparticles/engine').IOptions} */
+export const ORANGE_BACKGROUND = ref({
     background: {
         color: "rgb(248, 206, 171)",
     },
@@ -97,9 +114,10 @@ export const ORANGE_BACKGROUND = {
     },
     detectRetina: true,
     tRetina: true,
-};
+});
 
-export const GREEN_BACKGROUND = {
+/** @type {import('@tsparticles/engine').IOptions} */
+export const GREEN_BACKGROUND = ref({
     background: {
         color: "rgb(0, 100, 0)",
     },
@@ -131,9 +149,10 @@ export const GREEN_BACKGROUND = {
     },
     detectRetina: true,
     tRetina: true,
-};
+});
 
-export const INSTALL_BACKGROUND = {
+/** @type {import('@tsparticles/engine').IOptions} */
+export const INSTALL_BACKGROUND = ref({
     background: {
         color: "#232323",
     },
@@ -164,9 +183,10 @@ export const INSTALL_BACKGROUND = {
     },
     detectRetina: true,
     tRetina: true,
-};
+});
 
-export const WAKE_LOCK_BACKGROUND = {
+/** @type {import('@tsparticles/engine').IOptions} */
+export const WAKE_LOCK_BACKGROUND = ref({
     background: {
         color: "#000000",
     },
@@ -197,9 +217,10 @@ export const WAKE_LOCK_BACKGROUND = {
     },
     detectRetina: true,
     tRetina: true,
-};
+});
 
-export const FEATURES_BACKGROUND = {
+/** @type {import('@tsparticles/engine').IOptions} */
+export const FEATURES_BACKGROUND = ref({
     background: {
         color: "#000000", // Dark night sky background
     },
@@ -234,9 +255,10 @@ export const FEATURES_BACKGROUND = {
             x: 50
         }
     }
-}
+});
 
-export const CODE_SCANNER_BACKGROUND = {
+/** @type {import('@tsparticles/engine').IOptions} */
+export const CODE_SCANNER_BACKGROUND = ref({
     background: {
         color: "#000000", // Dark night sky background
     },
@@ -265,4 +287,44 @@ export const CODE_SCANNER_BACKGROUND = {
             },
         },
     },
-}
+});
+
+/** @type {import('@tsparticles/engine').IOptions} */
+export const COPYRIGHT_BACKGROUND = ref({
+    background: {
+        color: "rgb(248, 206, 171)",
+    },
+    fpsLimit: 40,
+    particles: {
+        move: {
+            direction: "none",
+            enable: true,
+            outModes: { default: "out" },
+            random: true,
+            speed: 0.75,
+            straight: false,
+        },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 200
+        },
+        opacity: {
+            value: { min: 0.1, max: 0.5 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "image",
+            options: {
+                image: {
+                    src: getFontAwesomeSvg(faCopyright, "rgb(126, 90, 0)"),
+                    width: 30, 
+                    height: 30
+                }
+            }
+        },
+        size: {
+            value: 10,
+        },
+    },
+    detectRetina: true,
+});

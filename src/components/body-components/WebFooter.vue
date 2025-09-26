@@ -68,7 +68,7 @@
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright" class="copyright-statement">
+        <RouterLink to="/copyright" class="copyright-statement" @click="scrollToTop('/copyright')">
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
