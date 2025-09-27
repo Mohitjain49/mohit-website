@@ -24,7 +24,6 @@ onMounted(() => {
     webData.mountWebData();
     const path = router.currentRoute.value.path;
 
-    if(path.includes("/resume/qr")) { router.replace(QRCODE_RESUME_PATH); }
     if(path === "/contact-me" || path === "/contact-me/") { router.replace("/contact"); }
     if(path === "/exp" || path === "/exp/") { router.replace("/experience/"); }
     if(path === "/icon" || path === "/icon/") { router.replace("/icons"); }

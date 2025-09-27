@@ -16,7 +16,7 @@ import Markdown from 'unplugin-vue-markdown/vite';
 
 const SITEMAP_EXCLUDED_ROUTES = [
     "/gamepad", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
-    "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
+    "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner", "/resume/qrcode",
     "/ivue", "/ivuemedia", "/ivuerobotics", "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
     "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
@@ -29,7 +29,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useShare',
         'useFps',
         'onStartTyping',
-        'useDocumentVisibility'
+        'useDocumentVisibility',
+        'useBattery'
     ]
 }
 

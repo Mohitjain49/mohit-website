@@ -35,7 +35,7 @@
         <div class="mohit-documentBar-bottom">
             <div class="mohit-documentBar-iconSection left">
                 <template v-if="docStore.onResumeRoute">
-                    <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/?qrcode=off" class="mohit-navBar-icon light"
+                    <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/" class="mohit-navBar-icon light"
                         title="Use Website Viewer"
                         @click="scrollToTop()"
                         @mouseenter="setPulseLoopAnimation"

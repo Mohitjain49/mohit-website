@@ -38,7 +38,9 @@ function onAnnotation(event = { type: "link", data: { url: "", unsafeUrl: "" } }
     }
 }
 
-useHead(getMeta("Mohit Jain | My Resume", "resume",
-    "Feel free to take a look at my resume."
+useHead(getMeta(
+    ("Mohit Jain | My Resume" + (documentStore.onResumeQrcodeRoute ? " (With Qrcode)" : "")),
+    (documentStore.onResumeQrcodeRoute ? "resume/qrcode" : "resume"),
+    ("Feel free to take a look at my resume." + (documentStore.onResumeQrcodeRoute ? " This version has a QR Code at the top right." : ""))
 ));
 </script>

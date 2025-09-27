@@ -2,7 +2,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const SCANNED_ITEMS_KEY = "mohit-codeScanner-items";
 
     /**
-     * @type {import('vue').Ref<Array<{ value: String, format: String, onlineLink: Boolean }>>}
+     * @type {Ref<Array<{ value: String, format: String, onlineLink: Boolean }>>}
      * This is the array of codes scanned by the camera.
      */
     const scannedItems = ref([]);

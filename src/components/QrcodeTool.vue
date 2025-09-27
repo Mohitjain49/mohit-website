@@ -31,7 +31,7 @@ const route = useRoute();
 const webData = useWebsiteDataStore();
 
 /**
- * @type {import('vue').Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
+ * @type {Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
  */
 const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);

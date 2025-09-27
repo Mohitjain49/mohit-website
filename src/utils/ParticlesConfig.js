@@ -2,7 +2,7 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
 import { faCopyright, faStar, faCertificate } from '@fortawesome/free-solid-svg-icons';
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const HOME_BACKGROUND = ref({
     background: {
         color: "#000000",
@@ -43,7 +43,7 @@ export const HOME_BACKGROUND = ref({
     tRetina: true,
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const BLUE_BACKGROUND = ref({
     background: {
         color: "#0047AB"
@@ -81,7 +81,7 @@ export const BLUE_BACKGROUND = ref({
     tRetina: true,
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const ORANGE_BACKGROUND = ref({
     background: {
         color: "rgb(248, 206, 171)",
@@ -116,7 +116,7 @@ export const ORANGE_BACKGROUND = ref({
     tRetina: true,
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const GREEN_BACKGROUND = ref({
     background: {
         color: "rgb(0, 100, 0)",
@@ -151,7 +151,7 @@ export const GREEN_BACKGROUND = ref({
     tRetina: true,
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const INSTALL_BACKGROUND = ref({
     background: {
         color: "#232323",
@@ -185,7 +185,7 @@ export const INSTALL_BACKGROUND = ref({
     tRetina: true,
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const WAKE_LOCK_BACKGROUND = ref({
     background: {
         color: "#000000",
@@ -219,7 +219,7 @@ export const WAKE_LOCK_BACKGROUND = ref({
     tRetina: true,
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const FEATURES_BACKGROUND = ref({
     background: {
         color: "#000000", // Dark night sky background
@@ -230,12 +230,8 @@ export const FEATURES_BACKGROUND = ref({
         color: { value: ["#E8E163", "rgb(159, 191, 255)", "#E92A60"] },
         shape: { type: "star" },
         size: { value: { min: 0.001, max: 20 }, },
-        move: {
-            speed: { min: 1, max: 1 }, // much faster launch
-        },
-        life: {
-            count: 50,
-        },
+        move: { speed: { min: 1, max: 1 }, },
+        life: { count: 50, },
     },
     emitters: {
         direction: "top",
@@ -257,7 +253,7 @@ export const FEATURES_BACKGROUND = ref({
     }
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const CODE_SCANNER_BACKGROUND = ref({
     background: {
         color: "#000000", // Dark night sky background
@@ -289,7 +285,7 @@ export const CODE_SCANNER_BACKGROUND = ref({
     },
 });
 
-/** @type {import('@tsparticles/engine').IOptions} */
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const COPYRIGHT_BACKGROUND = ref({
     background: {
         color: "rgb(248, 206, 171)",
