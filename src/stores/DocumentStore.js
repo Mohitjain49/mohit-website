@@ -4,7 +4,7 @@ import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Ful
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
-export const QRCODE_RESUME_PATH = { path: "/resume/", query: { qrcode: "on" } }
+export const QRCODE_RESUME_PATH = { path: "/resume/qrcode" }
 export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
     const mounted = ref(false);
@@ -21,23 +21,23 @@ export const useDocumentStore = defineStore("document-store", () => {
     const sharingDocument = ref(false);
 
     /**
-     * @type {import('vue').ShallowRef<import('vue').Component>} The VuePDF component dynamically imported for the website.
+     * @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website.
      */
     const pdfComponent = shallowRef(null);
 
     /**
-     * @type {import('vue').Ref<Blob>} My resume with a Qr Code at the top right.
+     * @type {Ref<Blob>} My resume with a Qr Code at the top right.
      */
     const qrcodeResume = ref(null);
     const qrcodeResumeUrl = useObjectUrl(qrcodeResume);
 
-    /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
+    /** @type {Ref<import('@types/PDFObject').usePDFObject>} } */
     const resumePdfObj = ref(null);
 
-    /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
+    /** @type {Ref<import('@types/PDFObject').usePDFObject>} } */
     const resumePdfWithQrcodeObj = ref(null);
 
-    /** @type {import('vue').Ref<import('@types/PDFObject').usePDFObject>} } */
+    /** @type {Ref<import('@types/PDFObject').usePDFObject>} } */
     const fultonInternshipAppreciationPdfObj = ref(null);
 
     const routePath = computed(() => { return router.currentRoute.value.path; });
@@ -45,7 +45,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onFCSCertificateRoute = computed(() => { return routePath.value.includes(FCS_CERTIFICATE_ROUTE); });
 
     const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown") || routePath.value.includes("md")); });
-    const onResumeQrcodeRoute = computed(() => { return (onResumeRoute.value && router.currentRoute.value.query?.qrcode === "on"); });
+    const onResumeQrcodeRoute = computed(() => {
+        return (routePath.value === "/resume/qr" ||
+            routePath.value === "/resume/qrcode" ||
+            routePath.value === "/resume/qrcode/" ||
+            routePath.value === "/resume/qr/"
+        );
+    });
 
     /**
      * This function downloads a document for the visitor to see.

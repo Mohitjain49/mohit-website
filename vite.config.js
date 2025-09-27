@@ -16,7 +16,7 @@ import Markdown from 'unplugin-vue-markdown/vite';
 
 const SITEMAP_EXCLUDED_ROUTES = [
     "/gamepad", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
-    "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
+    "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner", "/resume/qrcode",
     "/ivue", "/ivuemedia", "/ivuerobotics", "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
     "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
@@ -29,7 +29,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useShare',
         'useFps',
         'onStartTyping',
-        'useDocumentVisibility'
+        'useDocumentVisibility',
+        'useBattery'
     ]
 }
 
@@ -58,7 +59,7 @@ export default defineConfig({
         }),
         AutoImport({
             imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, VUEUSE_AUTO_IMPORTS],
-            dirs: ['./src/stores/**', './src/joypad-classes.js'],
+            dirs: ['./src/stores/**', './src/utils/**', './src/joypad-classes.js'],
             dts: './dts/auto-imports.d.ts',
             vueTemplate: true
         }),
@@ -68,7 +69,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: "v3.2.2",
+                cacheId: "v3.2.3",
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

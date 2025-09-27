@@ -51,24 +51,20 @@
         </div>
 
         <div class="footer-routes-column extras right">
-            <RouterLink to="/repository" class="footer-routes-header white">
+            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-header white">
                 <font-awesome-icon icon="fa-code-branch" />
                 <span> Repository </span>
-            </RouterLink>
+            </a>
 
-            <RouterLink v-for="tab in REPO_ROUTES" :to="tab.path"
-                :style="{ 'color': tab.color }"
-                class="footer-routes-opt"
-                @click="scrollToTop(tab.path)">
-
+            <a v-for="tab in REPO_ROUTES" :href="tab.link" :style="{ 'color': tab.color }" class="footer-routes-opt">
                 <font-awesome-icon :icon="tab.icon" />
                 <span> {{ tab.name }} </span>
-            </RouterLink>
+            </a>
         </div>
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright" class="copyright-statement">
+        <RouterLink to="/copyright" class="copyright-statement" @click="scrollToTop('/copyright')">
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
@@ -133,9 +129,9 @@ const EXTRA_ROUTES = [
 ];
 
 const REPO_ROUTES = [
-    { name: "Code Sandbox", path: "/code", icon: "fa-square-pen", color: "var(--lightning-yellow)" },
-    { name: "Commits", path: "/commits", icon: "fa-code-commit", color: "white" },
-    { name: "Sitemap", path: "/sitemap", icon: "fa-sitemap", color: "lightgrey" },
+    { name: "Code Sandbox", link: PERSONAL_WEBSITE_CODE_SANDBOX, icon: "fa-square-pen", color: "var(--lightning-yellow)" },
+    { name: "Commits", link: PERSONAL_WEBSITE_COMMITS_LINK, icon: "fa-code-commit", color: "white" },
+    { name: "Sitemap", link: PERSONAL_SITEMAP_LINK, icon: "fa-sitemap", color: "lightgrey" },
 ];
 
 const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/features/"];

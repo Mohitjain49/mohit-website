@@ -6,12 +6,12 @@ export const useAudioStore = defineStore("audio-store", () => {
     const webData = useWebsiteDataStore();
 
     /**
-     * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect.
+     * @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect.
      */
     const audioClickClip = ref(null);
 
     /**
-     * @type {import('vue').Ref<HTMLAudioElement>} This is an audio reference variable for the scan sound effect.
+     * @type {Ref<HTMLAudioElement>} This is an audio reference variable for the scan sound effect.
      */
     const audioScanClip = ref(null);
 

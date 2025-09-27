@@ -9,7 +9,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     var scrollInterval = null;
 
     /**
-     * @type {import('vue').Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on.
+     * @type {Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on.
      */
     const cursorClickElement = ref(null);
     const cursorOnInput = ref(false);
