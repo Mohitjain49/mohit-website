@@ -27,6 +27,15 @@ export function checkSSR() {
 }
 
 /**
+ * This scrolls to the section the visitor requested.
+ * @param {String} id The element ID of the section.
+ */
+export function goToPageSection(id = "start") {
+    const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
+    window.scrollTo({ top: top, left: 0, behavior: "smooth" });
+}
+
+/**
  * This function cuts a string to ensure it has the max length of characters.
  */
 export function truncate(str = "", maxLength = 80) {

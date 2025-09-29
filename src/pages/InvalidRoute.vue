@@ -5,8 +5,8 @@
     
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
         <RouterLink to="/" v-html="'Go to Home'"
-            @mouseenter="webData.setHeartbeatAnimation"
-            @mouseleave="webData.setHeartbeatAnimation"
+            @mouseenter="setHeartbeatAnimation"
+            @mouseleave="setHeartbeatAnimation"
         />
     </div>
 </main>
@@ -14,14 +14,12 @@
 
 <script setup>
 import "@/styles/navpage.css";
-
-const webData = useWebsiteDataStore();
-const router = useRouter()
+const router = useRouter();
 const PAGE_DESC = "404 - Page Not Found.";
 
 useHead(getMeta("Mohit Jain | 404 Error", "404", PAGE_DESC));
 onMounted(() => {
-    webData.mountWebData();
+    initWebData();
     const path = router.currentRoute.value.path;
 
     if(path === "/contact-me" || path === "/contact-me/") { router.replace("/contact"); }

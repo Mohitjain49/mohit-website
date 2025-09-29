@@ -70,8 +70,8 @@
                     <div class="contact-input-tab-btn-container center-flex-display">
                         <button class="contact-input-tab-btn center-flex-display"
                             @click="sendEmail()"
-                            @mouseenter="webData.setHeartbeatAnimation"
-                            @mouseleave="webData.setHeartbeatAnimation"
+                            @mouseenter="setHeartbeatAnimation"
+                            @mouseleave="setHeartbeatAnimation"
                             v-html="'Send Message'">
                         </button>
                     </div>
@@ -163,7 +163,7 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
  * This adds a transition to the contact boxes if the screen width is large enough.
  */
 onMounted(() => {
-    webData.mountWebData();
+    initWebData();
     if(window.innerWidth <= 525) { return; }
 
     document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");

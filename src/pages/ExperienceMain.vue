@@ -10,8 +10,8 @@
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
             <RouterLink to="/" v-html="'Back to Home'"
-                @mouseenter="webData.setHeartbeatAnimation"
-                @mouseleave="webData.setHeartbeatAnimation"
+                @mouseenter="setHeartbeatAnimation"
+                @mouseleave="setHeartbeatAnimation"
             />
         </div>
     </div>
@@ -21,9 +21,7 @@
 
 <script setup>
 import "@/styles/navpage.css";
-const webData = useWebsiteDataStore();
-
-onMounted(() => { webData.mountWebData(); });
+onMounted(() => { mountWebData(); });
 useHead(getMeta("Mohit Jain | My Experience", "experience/",
     "On this page, I go into depth about my work experience."
 ));

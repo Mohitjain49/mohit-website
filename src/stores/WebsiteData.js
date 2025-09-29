@@ -167,18 +167,20 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This runs whenever a page is opened.
      */
     function mountWebData() {
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         setQRCodePopup(false);
         closeNavMenu();
-    }
 
-    /**
-     * This scrolls to the section the visitor requested.
-     * @param {String} id The element ID of the section.
-     */
-    function goToPageSection(id = "start") {
-        const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
-        window.scrollTo({ top: top, left: 0, behavior: "smooth" });
+        nextTick(() => {
+            const hashStr = router.currentRoute.value.hash.substring(1);
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            if(hashStr === "") { return; }
+
+            try {
+                goToPageSection(hashStr);
+            } catch(e) {
+                window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            }
+        });
     }
 
     /**
@@ -236,60 +238,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function shareFile(file) {
         if(!shareSupported) { return; }
         share({ files: [file], text: ("Sharing File From " + PERSONAL_WEBSITE_LINK), title: "Sharing File..." })
-    }
-
-    /**
-     * This adds and removes a flash animation for any element.
-     */
-    function setFlashAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add("animate__animated", "animate__flash");
-        } else {
-            event.target.classList.remove("animate__animated", "animate__flash");
-        }
-    }
-
-    /**
-     * This function adds or removes a heartbeat animation to any element.
-     */
-    function setHeartbeatAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add('animate__animated', 'animate__heartBeat');
-        } else {
-            event.target.classList.remove('animate__animated', 'animate__heartBeat');
-        }
-    }
-
-    /**
-     * This function sets a bounce animation for any element.
-     */
-    function setBounceAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add('animate__animated', 'animate__bounce');
-        } else {
-            event.target.classList.remove('animate__animated', 'animate__bounce');
-        }
-    }
-
-    /**
-     * This function sets a pulse animation for any element for an infinite amount of time.
-     */
-    function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
-        } else {
-            event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
-        }
-    }
-
-    /**
-     * This function adds the flash animation, then removes it after 0.8s.
-     */
-    function addFlashAnimation(event = new MouseEvent("click")) {
-        event.target.classList.add('animate__animated', 'animate__flash');
-        setTimeout(() => {
-            event.target.classList.remove('animate__animated', 'animate__flash');
-        }, 800)
     }
 
     /**

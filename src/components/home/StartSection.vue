@@ -14,8 +14,8 @@
                 class="start-buttonRow-btn inner-path"
                 :style="getSpecialBtnStyles(link.color)"
                 :title="link.title"
-                @mouseenter="webData.setHeartbeatAnimation"
-                @mouseleave="webData.setHeartbeatAnimation">
+                @mouseenter="setHeartbeatAnimation"
+                @mouseleave="setHeartbeatAnimation">
 
                 <font-awesome-icon :icon="link.icon" />
                 <div class="start-btn-caption"> {{ link.shortTitle }} </div>
@@ -27,8 +27,8 @@
                     class="start-buttonRow-btn"
                     :title="contact.linkBtn"
                     :style="getSpecialBtnStyles(contact.color)"
-                    @mouseenter="webData.setHeartbeatAnimation"
-                    @mouseleave="webData.setHeartbeatAnimation">
+                    @mouseenter="setHeartbeatAnimation"
+                    @mouseleave="setHeartbeatAnimation">
 
                     <font-awesome-icon :icon="contact.linkIcon" />
                 </a>
