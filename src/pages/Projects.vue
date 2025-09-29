@@ -28,7 +28,7 @@
 const webData = useWebsiteDataStore();
 onMounted(() => {
     webData.mountWebData();
-    setNavCardTransition("main-projects-features-btn");
+    setNavCardAnimation("main-projects-features-btn");
 });
 useHead(getMeta("Mohit Jain | My Projects", "projects/",
     "On this page, I go into depth on the projects that I have made."

@@ -100,21 +100,21 @@
 
                         <div class="social-tab-options">
                             <button @click="copyLink(social.displayLink)" :title="social.copyBtn"
-                                @mouseenter="setSocialBtnAnimation"
-                                @mouseleave="setSocialBtnAnimation">
+                                @mouseenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
                             <button v-if="webData.shareSupported" :title="social.shareBtn"
                                 @click="shareLink(social.displayLink)"
-                                @mouseenter="setSocialBtnAnimation"
-                                @mouseleave="setSocialBtnAnimation">
+                                @mouseenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-share" />
                             </button>
                             <a :href="social.link" target="_blank" :title="social.linkBtn"
-                                @mouseenter="setSocialBtnAnimation"
-                                @mouseleave="setSocialBtnAnimation">
+                                @mouseenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
@@ -178,17 +178,6 @@ onStartTyping(() => {
         titleInput.value.focus();
     }
 });
-
-/**
- * This function adds or removes a transition to a social media link button.
- */
-function setSocialBtnAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
-        event.target.classList.add("animate__animated", "animate__headShake");
-    } else {
-        event.target.classList.remove("animate__animated", "animate__headShake");
-    }
-}
 
 /**
  * ----------------------------------------------

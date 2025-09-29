@@ -39,7 +39,7 @@ import cognito_icon from "@/assets/aws/AWS_Cognito_Icon.svg";
 import amplify_icon from "@/assets/aws/AWS_Amplify_Icon.svg";
 
 onMounted(() => {
-    setNavCardTransition("sublo-nav-newCard");
+    setNavCardAnimation("sublo-nav-newCard");
 });
 
 const DEV_STACK = [

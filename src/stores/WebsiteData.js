@@ -324,24 +324,3 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 export function initWebData() {
     useWebsiteDataStore().mountWebData();
 }
-
-/**
- * This function sets the initial transition for a Nav Card.
- * @param {String} cardId The element id for the card.
- */
-export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
-    const navCard = document.getElementById(cardId).classList;
-    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
-    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
-}
-
-/**
- * This adds a transition to a card/widget as visitors scroll to it.
- * @param {Boolean} isVisible This must be true for the function to run.
- * @param {Element} target The element gotten from the event.
- */
-export function addCardTransition(target, isVisible = true) {
-    if(!isVisible) { return; }
-    target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
-    setTimeout(() => { target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
-}

@@ -43,7 +43,7 @@ import wiv_icon from "@/assets/ivue/Worlds_iVue_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
 onMounted(() => {
-    setNavCardTransition("ivue-nav-newCard");
+    setNavCardAnimation("ivue-nav-newCard");
 });
 
 const DEV_STACK = [

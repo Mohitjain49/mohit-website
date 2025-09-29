@@ -64,6 +64,17 @@ export function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
 }
 
 /**
+ * This function adds or removes a transition to a social media link button.
+ */
+export function setHeadShakeAnimation(event = new MouseEvent("mouseenter")) {
+    if(event.type === "mouseenter") {
+        event.target.classList.add("animate__animated", "animate__headShake");
+    } else {
+        event.target.classList.remove("animate__animated", "animate__headShake");
+    }
+}
+
+/**
  * This function adds the flash animation, then removes it after 0.8s.
  */
 export function addFlashAnimation(event = new MouseEvent("click")) {

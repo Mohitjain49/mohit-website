@@ -38,7 +38,7 @@ import dynamodb_icon from "@/assets/aws/AWS_DynamoDB_Icon.svg";
 import api_gateway_icon from "@/assets/aws/AWS_API_Gateway_Icon.svg";
 
 onMounted(() => {
-    setNavCardTransition("mnd-nav-newCard");
+    setNavCardAnimation("mnd-nav-newCard");
 });
 
 const DEV_STACK = [

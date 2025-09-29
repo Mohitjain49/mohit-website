@@ -33,7 +33,7 @@ const cardRefs = ref([]);
 useIntersectionObserver(cardRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
-        addCardTransition(observed.target, observed.isIntersecting);
+        addNoteCardAnimation(observed.target, observed.isIntersecting);
     }
 })
 
