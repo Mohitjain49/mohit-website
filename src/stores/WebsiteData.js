@@ -319,24 +319,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 });
 
 /**
- * This function reloads the website.
+ * This function mounts the website data pinia store on a page.
  */
-export function reloadPage() {
-    window.location.reload();
-}
-
-/**
- * This function returns whether or not the app is rendering on the server or not.
- */
-export function checkSSR() {
-    return import.meta.env.SSR;
-}
-
-/**
- * This function cuts a string to ensure it has the max length of characters.
- */
-export function truncate(str = "", maxLength = 80) {
-    return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);
+export function initWebData() {
+    useWebsiteDataStore().mountWebData();
 }
 
 /**
@@ -358,25 +344,4 @@ export function addCardTransition(target, isVisible = true) {
     if(!isVisible) { return; }
     target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
     setTimeout(() => { target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
-}
-
-/**
- * This function mounts the website data pinia store on a page.
- */
-export function initWebData() {
-    useWebsiteDataStore().mountWebData();
-}
-
-/**
- * This function sets a bounce animation for any element.
- */
-export function setBounceAnimation(event = new MouseEvent("mouseenter")) {
-    useWebsiteDataStore().setBounceAnimation(event);
-}
-
-/**
- * This function sets a pulse animation for any element for an infinite number of time.
- */
-export function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
-    useWebsiteDataStore().setPulseLoopAnimation(event);
 }
