@@ -1,12 +1,7 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
-    const docStore = useDocumentStore();
-    const route = useRoute();
-
     const gamepadConnected = ref(false);
     const showCursorSpeedMenu = ref(false);
-
     var gamepadConnectedInterval = null;
-    var scrollInterval = null;
 
     /**
      * @type {Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on.
@@ -39,7 +34,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             (cursorClickElement.value instanceof HTMLAnchorElement ? cursorClickElement.value.href : cursorClickElement.value.title)
             : ''
         );
-    })
+    });
 
     /**
      * This function starts an interval for checking if any gamepad is connected or not.
@@ -183,38 +178,11 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         window.scrollBy(window.scrollX, (speed * ((direction === "top") ? -1 : 1)));
     }
 
-    /**
-     * This function will scroll on the page horizontally depending on which button is held down.
-     * @param {String} direction The direction to scroll.
-     * @param {Number} speed The number of pixels to scroll.
-     */
-    function initScrollXBy(direction = 'left', speed = 10) {
-        window.scrollBy((speed * ((direction === "left") ? -1 : 1)), window.scrollY);
-    }
-
-    /**
-     * Using the directional pad on a controller, this function will create an interval for scrolling on the page.
-     * @param {String} direction The direction to scroll.
-     */
-    function setScrollInterval(direction = 'top') {
-        if(scrollInterval != null) { return; }
-        scrollInterval = setInterval(() => { initScrollYBy(direction, 7); }, 1);
-    }
-
-    /**
-     * This function stops the scroll interval.
-     */
-    function stopScrollInterval() {
-        if(scrollInterval == null) { return; }
-        clearInterval(scrollInterval);
-        scrollInterval = null;
-    }
-
     return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,
         maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
         emitClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
         setCustomCursor, setCursorClickElement, setMaxCursorSpeed, addToMaxCursorSpeed,
         manageCustomCursor, manageCustomCursorWithDpad, initCustomCursorPosition,
-        initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval
+        initScrollYBy
     }
 });

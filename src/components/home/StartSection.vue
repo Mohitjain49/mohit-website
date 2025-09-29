@@ -39,9 +39,7 @@
 </template>
 
 <script setup>
-const webData = useWebsiteDataStore();
 const start = ref(null);
-
 useIntersectionObserver(start, ([{ isIntersecting }]) => {
     setNameTransitions(isIntersecting);
 })

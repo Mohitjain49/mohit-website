@@ -21,7 +21,7 @@
 
 <script setup>
 import "@/styles/navpage.css";
-onMounted(() => { mountWebData(); });
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Experience", "experience/",
     "On this page, I go into depth about my work experience."
 ));
