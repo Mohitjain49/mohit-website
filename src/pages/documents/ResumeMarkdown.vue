@@ -6,6 +6,7 @@
     </div>
 
     <WebFooter v-if="!fullScreenStore.fullScreenSet" />
+    <GamepadComponent v-else />
     <MinimizeScreenWidget />
 </main>
 </template>

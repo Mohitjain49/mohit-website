@@ -1,4 +1,6 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
+    const webData = useWebsiteDataStore();
+
     const gamepadConnected = ref(false);
     const showCursorSpeedMenu = ref(false);
     var gamepadConnectedInterval = null;
@@ -15,13 +17,11 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     const cursorX = ref(0);
     const cursorY = ref(0);
 
-    const customCursor = computed(() => {
-        return {
-            left: (String(cursorX.value) + "px"),
-            top: (String(cursorY.value) + "px"),
-            fontSize: ((cursorClickElement.value != null) ? '32px' : ''),
-        }
-    });
+    const customCursor = computed(() => { return {
+        left: (String(cursorX.value) + "px"),
+        top: (String(cursorY.value) + "px"),
+        fontSize: ((cursorClickElement.value != null) ? '32px' : ''),
+    }});
 
     const cursorIcon = computed(() => {
         return ((cursorClickElement.value != null) ? (cursorOnInput.value ? 'fa-i-cursor' : 'fa-hand-pointer') : 'fa-arrow-pointer');
@@ -89,6 +89,15 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         (cursorOnInput.value ? element.focus() : element.click());
         triggerClickSound();
         nextTick(() => { setCursorClickElement(); });
+    }
+
+    /**
+     * This function runs whenever the visitor clicks on a typical gamepad menu button.
+     */
+    function onGamepadMenuClick() {
+        if(useFullScreenStore().fullScreenSet && document.fullscreenElement !== document.body) { return; }
+        useWebsiteDataStore().toggleNavMenu();
+        triggerClickSound();
     }
 
     /**
@@ -175,12 +184,39 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * @param {Number} speed The number of pixels to scroll.
      */
     function initScrollYBy(direction = 'top', speed = 10) {
-        window.scrollBy(window.scrollX, (speed * ((direction === "top") ? -1 : 1)));
+        const scrollElement = getScrollElement();
+        const scrollValue = (speed * ((direction === "top") ? -1 : 1));
+
+        if(scrollElement == undefined) {
+            window.scrollBy(window.scrollX, scrollValue);
+        } else {
+            scrollElement.scrollBy(0, scrollValue);
+        }
+    }
+
+    /**
+     * This function checks whether the cursor is in the main navigation menu or not.
+     */
+    function getScrollElement() {
+        if(document.fullscreenElement.id === "resume-container") {
+            return document.fullscreenElement;
+        }
+
+        const navMenu = document.getElementById("mohit-navMenu");
+        if(!webData.navMenuOpen || navMenu == null) { return undefined; }
+
+        const rect = navMenu.getBoundingClientRect();
+        const scrollable = (navMenu.scrollHeight > rect.height);
+        if(!scrollable) { return undefined; }
+
+        const x = cursorX.value;
+        const y = cursorY.value;
+        return ((x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) ? navMenu : undefined);
     }
 
     return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,
         maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
-        emitClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
+        emitClick, onGamepadMenuClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
         setCustomCursor, setCursorClickElement, setMaxCursorSpeed, addToMaxCursorSpeed,
         manageCustomCursor, manageCustomCursorWithDpad, initCustomCursorPosition,
         initScrollYBy

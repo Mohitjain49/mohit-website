@@ -32,7 +32,7 @@
     </div>
 
     <Transition name="navMenu-transition">
-        <div v-if="webData.navMenuOpen" class="mohit-navMenu">
+        <div v-if="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu">
             <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
                 <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
@@ -81,11 +81,9 @@ import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 
-const route = useRoute();
 const router = useRouter();
-
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const footerRoute = computed(() => { return { path: routePath.value, hash: '#footer', query: router.currentRoute.value.query } });
+const footerRoute = computed(() => { return { path: routePath.value, hash: '#footer' } });
 
 /**
  * This sets the color and border color of an icon.

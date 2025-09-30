@@ -18,7 +18,7 @@
                 If you would like to collaborate or discuss using any part of my work, 
                 I'd love to hear from you! You'll find some links to contact me on the footer 
                 <span style="text-decoration: underline;">
-                    <RouterLink :to="{ path: route.path, hash: '#footer' }" @click="webData.scrollToFooter()">below.</RouterLink>
+                    <RouterLink :to="{ path: route.path, hash: '#footer' }" @click="goToPageSection('footer')">below.</RouterLink>
                 </span>
             </div>
         </div>

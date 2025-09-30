@@ -25,5 +25,6 @@ onMounted(() => {
     if(path === "/contact-me" || path === "/contact-me/") { router.replace("/contact"); }
     if(path === "/exp" || path === "/exp/") { router.replace("/experience/"); }
     if(path === "/icon" || path === "/icon/") { router.replace("/icons"); }
+    if(path === "/documents" || path === "/documents/") { router.replace("/#documents") }
 });
 </script>

@@ -93,8 +93,7 @@ window.addEventListener("gamepadbuttondown", (e) => {
         useGamepadStore().emitClick();
     }
     if(buttonIndex == 8 || buttonIndex == 9) {
-        useWebsiteDataStore().toggleNavMenu();
-        triggerClickSound();
+        useGamepadStore().onGamepadMenuClick();
     }
 
     if(buttonIndex == 5) {
