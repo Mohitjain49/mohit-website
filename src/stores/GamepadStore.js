@@ -1,9 +1,10 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
     const webData = useWebsiteDataStore();
+    const fullScreenStore = useFullScreenStore();
 
     const gamepadConnected = ref(false);
     const showCursorSpeedMenu = ref(false);
-    var gamepadConnectedInterval = null;
+    var gamepadConnectedFrameId = null;
 
     /**
      * @type {Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on.
@@ -39,24 +40,32 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     /**
      * This function starts an interval for checking if any gamepad is connected or not.
      */
-    function startGamepadConnectedInterval() {
-        if(gamepadConnectedInterval != null) { return; }
-        gamepadConnectedInterval = setInterval(() => {
+    function startGamepadConnectedPolling() {
+        if(gamepadConnectedFrameId != null) { return; }
+        const checkGamepadConnected = () => {
             const gamepads = navigator.getGamepads();
             gamepadConnected.value = Array.from(gamepads).some(gp => gp && gp.connected);
-            if(!gamepadConnected.value) { stopGamepadConnectedInterval(); }
-        }, 10);
+
+            if(gamepadConnected.value) {
+                if(showCursor.value) { setCursorClickElement(); }
+                gamepadConnectedFrameId = requestAnimationFrame(checkGamepadConnected);
+            } else {
+                stopGamepadConnectedPolling();
+            }
+        }
+
+        gamepadConnectedFrameId = requestAnimationFrame(checkGamepadConnected);
     }
 
     /**
      * This function stops the interval for checking if any gamepad is connected or not.
      */
-    function stopGamepadConnectedInterval() {
-        if(gamepadConnectedInterval == null) { return; }
-        clearInterval(gamepadConnectedInterval);
+    function stopGamepadConnectedPolling() {
+        if(gamepadConnectedFrameId == null) { return; }
+        cancelAnimationFrame(gamepadConnectedFrameId);
 
         setCustomCursor(false);
-        gamepadConnectedInterval = null;
+        gamepadConnectedFrameId = null;
     }
 
     /**
@@ -95,7 +104,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * This function runs whenever the visitor clicks on a typical gamepad menu button.
      */
     function onGamepadMenuClick() {
-        if(useFullScreenStore().fullScreenSet && document.fullscreenElement !== document.body) { return; }
+        if(fullScreenStore.fullScreenSet && document.fullscreenElement !== document.body) { return; }
         useWebsiteDataStore().toggleNavMenu();
         triggerClickSound();
     }
@@ -198,7 +207,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * This function checks whether the cursor is in the main navigation menu or not.
      */
     function getScrollElement() {
-        if(document.fullscreenElement.id === "resume-container") {
+        if(fullScreenStore.fullScreenSet && document.fullscreenElement.id === "resume-container") {
             return document.fullscreenElement;
         }
 
@@ -216,7 +225,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,
         maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
-        emitClick, onGamepadMenuClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
+        emitClick, onGamepadMenuClick, startGamepadConnectedPolling, stopGamepadConnectedPolling,
         setCustomCursor, setCursorClickElement, setMaxCursorSpeed, addToMaxCursorSpeed,
         manageCustomCursor, manageCustomCursorWithDpad, initCustomCursorPosition,
         initScrollYBy
