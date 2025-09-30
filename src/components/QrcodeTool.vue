@@ -29,6 +29,7 @@
 import QRCodeStyling from 'qr-code-styling';
 const route = useRoute();
 const webData = useWebsiteDataStore();
+const windowIsLocked = useScrollLock(window);
 
 /**
  * @type {Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
@@ -39,14 +40,12 @@ const qrCodeDisplay = ref({ display: "none" });
 const linkExtrasRemoved = ref(false);
 
 onMounted(() => {
-    hideQrcodePopupOverflow();
-    window.addEventListener("resize", hideQrcodePopupOverflow);
+    windowIsLocked.value = true;
     nextTick(() => { setQRCodeLink(false); });
 });
 onBeforeUnmount(() => {
     qrCodeDisplay.value.display = "none";
-    window.removeEventListener("resize", hideQrcodePopupOverflow);
-    document.body.style.overflow = "";
+    windowIsLocked.value = false;
 })
 watch(() => route.fullPath, () => { setQRCodeLink(); });
 
@@ -122,13 +121,6 @@ function shareQRCode() {
  */
 function downloadQRCode() {
     qrcode.value.download({ extension: "png" });
-}
-
-/**
- * This function hides the overflow while the popup is in effect.
- */
-function hideQrcodePopupOverflow() {
-    document.body.style.overflow = "hidden";
 }
 </script>
 
