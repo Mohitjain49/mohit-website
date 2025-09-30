@@ -18,7 +18,7 @@
                 If you would like to collaborate or discuss using any part of my work, 
                 I'd love to hear from you! You'll find some links to contact me on the footer 
                 <span style="text-decoration: underline;">
-                    <RouterLink to="/copyright#footer" @click="webData.goToPageSection('footer')">below.</RouterLink>
+                    <RouterLink :to="{ path: route.path, hash: '#footer' }" @click="goToPageSection('footer')">below.</RouterLink>
                 </span>
             </div>
         </div>
@@ -36,6 +36,8 @@ import now from '~build/time';
 import { version } from "~build/package";
 
 const webData = useWebsiteDataStore();
+const route = useRoute();
+
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const RELEASE_DATE = ref("Last Release: July 10, 2025");
 const PROJECT_VERSION = ref("Version " + version);

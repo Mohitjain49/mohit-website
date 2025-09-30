@@ -39,7 +39,7 @@ import cesium_icon from "@/assets/Cesium_Globe_Icon.svg";
 import tauri_icon from "@/assets/Tauri_Icon.png";
 
 onMounted(() => {
-    setNavCardTransition("globe-nav-newCard");
+    setNavCardAnimation("globe-nav-newCard");
 });
 
 const DEV_STACK = [

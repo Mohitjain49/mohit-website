@@ -11,6 +11,7 @@
         </div>
 
         <WebFooter v-if="!fullScreenStore.fullScreenSet" />
+        <GamepadComponent v-else />
         <MinimizeScreenWidget />
     </main>
     <div id="resume-container" class="center-flex-display" v-else>

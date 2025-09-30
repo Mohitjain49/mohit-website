@@ -15,8 +15,8 @@
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
             <RouterLink to="/" class="linkBtn-green" v-html="'Back to Home'"
-                @mouseenter="webData.setHeartbeatAnimation"
-                @mouseleave="webData.setHeartbeatAnimation"
+                @mouseenter="setHeartbeatAnimation"
+                @mouseleave="setHeartbeatAnimation"
             />
         </div>
     </div>
@@ -25,10 +25,9 @@
 </template>
 
 <script setup>
-const webData = useWebsiteDataStore();
 onMounted(() => {
-    webData.mountWebData();
-    setNavCardTransition("main-projects-features-btn");
+    initWebData();
+    setNavCardAnimation("main-projects-features-btn");
 });
 useHead(getMeta("Mohit Jain | My Projects", "projects/",
     "On this page, I go into depth on the projects that I have made."

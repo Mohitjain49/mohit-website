@@ -70,8 +70,8 @@
                     <div class="contact-input-tab-btn-container center-flex-display">
                         <button class="contact-input-tab-btn center-flex-display"
                             @click="sendEmail()"
-                            @mouseenter="webData.setHeartbeatAnimation"
-                            @mouseleave="webData.setHeartbeatAnimation"
+                            @mouseenter="setHeartbeatAnimation"
+                            @mouseleave="setHeartbeatAnimation"
                             v-html="'Send Message'">
                         </button>
                     </div>
@@ -100,21 +100,21 @@
 
                         <div class="social-tab-options">
                             <button @click="copyLink(social.displayLink)" :title="social.copyBtn"
-                                @mouseenter="setSocialBtnAnimation"
-                                @mouseleave="setSocialBtnAnimation">
+                                @mouseenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
                             <button v-if="webData.shareSupported" :title="social.shareBtn"
                                 @click="shareLink(social.displayLink)"
-                                @mouseenter="setSocialBtnAnimation"
-                                @mouseleave="setSocialBtnAnimation">
+                                @mouseenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-share" />
                             </button>
                             <a :href="social.link" target="_blank" :title="social.linkBtn"
-                                @mouseenter="setSocialBtnAnimation"
-                                @mouseleave="setSocialBtnAnimation">
+                                @mouseenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
@@ -163,7 +163,7 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
  * This adds a transition to the contact boxes if the screen width is large enough.
  */
 onMounted(() => {
-    webData.mountWebData();
+    initWebData();
     if(window.innerWidth <= 525) { return; }
 
     document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
@@ -178,17 +178,6 @@ onStartTyping(() => {
         titleInput.value.focus();
     }
 });
-
-/**
- * This function adds or removes a transition to a social media link button.
- */
-function setSocialBtnAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
-        event.target.classList.add("animate__animated", "animate__headShake");
-    } else {
-        event.target.classList.remove("animate__animated", "animate__headShake");
-    }
-}
 
 /**
  * ----------------------------------------------

@@ -67,7 +67,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function removeEventListeners() {
         controller.abort();
         gamepadStore.disableGamepadVibration();
-        gamepadStore.stopGamepadConnectedInterval();
+        gamepadStore.stopGamepadConnectedPolling();
     }
 
     /**
@@ -167,18 +167,20 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This runs whenever a page is opened.
      */
     function mountWebData() {
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         setQRCodePopup(false);
         closeNavMenu();
-    }
 
-    /**
-     * This scrolls to the section the visitor requested.
-     * @param {String} id The element ID of the section.
-     */
-    function goToPageSection(id = "start") {
-        const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY);
-        window.scrollTo({ top: top, left: 0, behavior: "smooth" });
+        nextTick(() => {
+            const hashStr = router.currentRoute.value.hash.substring(1);
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            if(hashStr === "") { return; }
+
+            try {
+                goToPageSection(hashStr);
+            } catch(e) {
+                window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            }
+        });
     }
 
     /**
@@ -239,60 +241,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
-     * This adds and removes a flash animation for any element.
-     */
-    function setFlashAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add("animate__animated", "animate__flash");
-        } else {
-            event.target.classList.remove("animate__animated", "animate__flash");
-        }
-    }
-
-    /**
-     * This function adds or removes a heartbeat animation to any element.
-     */
-    function setHeartbeatAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add('animate__animated', 'animate__heartBeat');
-        } else {
-            event.target.classList.remove('animate__animated', 'animate__heartBeat');
-        }
-    }
-
-    /**
-     * This function sets a bounce animation for any element.
-     */
-    function setBounceAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add('animate__animated', 'animate__bounce');
-        } else {
-            event.target.classList.remove('animate__animated', 'animate__bounce');
-        }
-    }
-
-    /**
-     * This function sets a pulse animation for any element for an infinite amount of time.
-     */
-    function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
-        if(event.type === "mouseenter") {
-            event.target.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
-        } else {
-            event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
-        }
-    }
-
-    /**
-     * This function adds the flash animation, then removes it after 0.8s.
-     */
-    function addFlashAnimation(event = new MouseEvent("click")) {
-        event.target.classList.add('animate__animated', 'animate__flash');
-        setTimeout(() => {
-            event.target.classList.remove('animate__animated', 'animate__flash');
-        }, 800)
-    }
-
-    /**
      * This function toggles the wake lock for the website.
      */
     async function toggleWakeLock() {
@@ -319,64 +267,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 });
 
 /**
- * This function reloads the website.
- */
-export function reloadPage() {
-    window.location.reload();
-}
-
-/**
- * This function returns whether or not the app is rendering on the server or not.
- */
-export function checkSSR() {
-    return import.meta.env.SSR;
-}
-
-/**
- * This function cuts a string to ensure it has the max length of characters.
- */
-export function truncate(str = "", maxLength = 80) {
-    return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);
-}
-
-/**
- * This function sets the initial transition for a Nav Card.
- * @param {String} cardId The element id for the card.
- */
-export function setNavCardTransition(cardId = "#ivue-nav-newCard") {
-    const navCard = document.getElementById(cardId).classList;
-    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
-    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
-}
-
-/**
- * This adds a transition to a card/widget as visitors scroll to it.
- * @param {Boolean} isVisible This must be true for the function to run.
- * @param {Element} target The element gotten from the event.
- */
-export function addCardTransition(target, isVisible = true) {
-    if(!isVisible) { return; }
-    target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
-    setTimeout(() => { target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
-}
-
-/**
  * This function mounts the website data pinia store on a page.
  */
 export function initWebData() {
     useWebsiteDataStore().mountWebData();
-}
-
-/**
- * This function sets a bounce animation for any element.
- */
-export function setBounceAnimation(event = new MouseEvent("mouseenter")) {
-    useWebsiteDataStore().setBounceAnimation(event);
-}
-
-/**
- * This function sets a pulse animation for any element for an infinite number of time.
- */
-export function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
-    useWebsiteDataStore().setPulseLoopAnimation(event);
 }

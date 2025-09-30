@@ -116,8 +116,8 @@
 
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
         <RouterLink to="/" class="linkBtn-blue" v-html="'Back to Home'"
-            @mouseenter="webData.setHeartbeatAnimation"
-            @mouseleave="webData.setHeartbeatAnimation"
+            @mouseenter="setHeartbeatAnimation"
+            @mouseleave="setHeartbeatAnimation"
         />
     </div>
     <WebFooter />
@@ -128,9 +128,6 @@
 import "@/styles/navpage.css";
 import vuejs_icon from "@/assets/Vuejs_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
-
-const webData = useWebsiteDataStore();
-const route = useRoute();
 
 const titleRefs = ref([]);
 const cardRefs = ref([]);
@@ -144,16 +141,11 @@ useIntersectionObserver(titleRefs, (entry) => {
 useIntersectionObserver(cardRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
-        addCardTransition(observed.target, observed.isIntersecting);
+        addNoteCardAnimation(observed.target, observed.isIntersecting);
     }
 });
 
-onMounted(() => {
-    webData.mountWebData();
-    if(route.hash.substring(1) == "") { return; }
-    nextTick(() => { webData.goToPageSection(route.hash.substring(1)); });
-});
-
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Skills", "skills/",
     "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
     "web applications, and projects by utilizing multiple programming languages, " +

@@ -72,7 +72,7 @@ function pollGamepad() {
  * This event runs whenever a new gamepad is connected.
  */
 window.addEventListener("gamepadconnected", (e) => {
-    useGamepadStore().startGamepadConnectedInterval();
+    useGamepadStore().startGamepadConnectedPolling();
     if(import.meta.env.DEV) { console.log(e); }
 });
 
@@ -93,8 +93,7 @@ window.addEventListener("gamepadbuttondown", (e) => {
         useGamepadStore().emitClick();
     }
     if(buttonIndex == 8 || buttonIndex == 9) {
-        useWebsiteDataStore().toggleNavMenu();
-        triggerClickSound();
+        useGamepadStore().onGamepadMenuClick();
     }
 
     if(buttonIndex == 5) {

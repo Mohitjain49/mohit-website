@@ -1,12 +1,10 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
-    const docStore = useDocumentStore();
-    const route = useRoute();
+    const webData = useWebsiteDataStore();
+    const fullScreenStore = useFullScreenStore();
 
     const gamepadConnected = ref(false);
     const showCursorSpeedMenu = ref(false);
-
-    var gamepadConnectedInterval = null;
-    var scrollInterval = null;
+    var gamepadConnectedFrameId = null;
 
     /**
      * @type {Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on.
@@ -20,13 +18,11 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     const cursorX = ref(0);
     const cursorY = ref(0);
 
-    const customCursor = computed(() => {
-        return {
-            left: (String(cursorX.value) + "px"),
-            top: (String(cursorY.value) + "px"),
-            fontSize: ((cursorClickElement.value != null) ? '32px' : ''),
-        }
-    });
+    const customCursor = computed(() => { return {
+        left: (String(cursorX.value) + "px"),
+        top: (String(cursorY.value) + "px"),
+        fontSize: ((cursorClickElement.value != null) ? '32px' : ''),
+    }});
 
     const cursorIcon = computed(() => {
         return ((cursorClickElement.value != null) ? (cursorOnInput.value ? 'fa-i-cursor' : 'fa-hand-pointer') : 'fa-arrow-pointer');
@@ -39,29 +35,37 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
             (cursorClickElement.value instanceof HTMLAnchorElement ? cursorClickElement.value.href : cursorClickElement.value.title)
             : ''
         );
-    })
+    });
 
     /**
      * This function starts an interval for checking if any gamepad is connected or not.
      */
-    function startGamepadConnectedInterval() {
-        if(gamepadConnectedInterval != null) { return; }
-        gamepadConnectedInterval = setInterval(() => {
+    function startGamepadConnectedPolling() {
+        if(gamepadConnectedFrameId != null) { return; }
+        const checkGamepadConnected = () => {
             const gamepads = navigator.getGamepads();
             gamepadConnected.value = Array.from(gamepads).some(gp => gp && gp.connected);
-            if(!gamepadConnected.value) { stopGamepadConnectedInterval(); }
-        }, 10);
+
+            if(gamepadConnected.value) {
+                if(showCursor.value) { setCursorClickElement(); }
+                gamepadConnectedFrameId = requestAnimationFrame(checkGamepadConnected);
+            } else {
+                stopGamepadConnectedPolling();
+            }
+        }
+
+        gamepadConnectedFrameId = requestAnimationFrame(checkGamepadConnected);
     }
 
     /**
      * This function stops the interval for checking if any gamepad is connected or not.
      */
-    function stopGamepadConnectedInterval() {
-        if(gamepadConnectedInterval == null) { return; }
-        clearInterval(gamepadConnectedInterval);
+    function stopGamepadConnectedPolling() {
+        if(gamepadConnectedFrameId == null) { return; }
+        cancelAnimationFrame(gamepadConnectedFrameId);
 
         setCustomCursor(false);
-        gamepadConnectedInterval = null;
+        gamepadConnectedFrameId = null;
     }
 
     /**
@@ -94,6 +98,15 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         (cursorOnInput.value ? element.focus() : element.click());
         triggerClickSound();
         nextTick(() => { setCursorClickElement(); });
+    }
+
+    /**
+     * This function runs whenever the visitor clicks on a typical gamepad menu button.
+     */
+    function onGamepadMenuClick() {
+        if(fullScreenStore.fullScreenSet && document.fullscreenElement !== document.body) { return; }
+        useWebsiteDataStore().toggleNavMenu();
+        triggerClickSound();
     }
 
     /**
@@ -180,41 +193,41 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      * @param {Number} speed The number of pixels to scroll.
      */
     function initScrollYBy(direction = 'top', speed = 10) {
-        window.scrollBy(window.scrollX, (speed * ((direction === "top") ? -1 : 1)));
+        const scrollElement = getScrollElement();
+        const scrollValue = (speed * ((direction === "top") ? -1 : 1));
+
+        if(scrollElement == undefined) {
+            window.scrollBy(window.scrollX, scrollValue);
+        } else {
+            scrollElement.scrollBy(0, scrollValue);
+        }
     }
 
     /**
-     * This function will scroll on the page horizontally depending on which button is held down.
-     * @param {String} direction The direction to scroll.
-     * @param {Number} speed The number of pixels to scroll.
+     * This function checks whether the cursor is in the main navigation menu or not.
      */
-    function initScrollXBy(direction = 'left', speed = 10) {
-        window.scrollBy((speed * ((direction === "left") ? -1 : 1)), window.scrollY);
-    }
+    function getScrollElement() {
+        if(fullScreenStore.fullScreenSet && document.fullscreenElement.id === "resume-container") {
+            return document.fullscreenElement;
+        }
 
-    /**
-     * Using the directional pad on a controller, this function will create an interval for scrolling on the page.
-     * @param {String} direction The direction to scroll.
-     */
-    function setScrollInterval(direction = 'top') {
-        if(scrollInterval != null) { return; }
-        scrollInterval = setInterval(() => { initScrollYBy(direction, 7); }, 1);
-    }
+        const navMenu = document.getElementById("mohit-navMenu");
+        if(!webData.navMenuOpen || navMenu == null) { return undefined; }
 
-    /**
-     * This function stops the scroll interval.
-     */
-    function stopScrollInterval() {
-        if(scrollInterval == null) { return; }
-        clearInterval(scrollInterval);
-        scrollInterval = null;
+        const rect = navMenu.getBoundingClientRect();
+        const scrollable = (navMenu.scrollHeight > rect.height);
+        if(!scrollable) { return undefined; }
+
+        const x = cursorX.value;
+        const y = cursorY.value;
+        return ((x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) ? navMenu : undefined);
     }
 
     return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,
         maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
-        emitClick, startGamepadConnectedInterval, stopGamepadConnectedInterval,
+        emitClick, onGamepadMenuClick, startGamepadConnectedPolling, stopGamepadConnectedPolling,
         setCustomCursor, setCursorClickElement, setMaxCursorSpeed, addToMaxCursorSpeed,
         manageCustomCursor, manageCustomCursorWithDpad, initCustomCursorPosition,
-        initScrollYBy, initScrollXBy, setScrollInterval, stopScrollInterval
+        initScrollYBy
     }
 });

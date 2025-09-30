@@ -38,7 +38,7 @@ import mavlink_icon from "@/assets/ivue/Mavlink_Icon.png";
 import aws_icon from "@/assets/aws/AWS_Icon.png";
 
 onMounted(() => {
-    setNavCardTransition("wiv-nav-newCard");
+    setNavCardAnimation("wiv-nav-newCard");
 });
 
 const DEV_STACK = [

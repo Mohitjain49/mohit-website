@@ -42,6 +42,6 @@ import angular_icon from "@/assets/Angular_Icon.webp";
 import ts_icon from "@/assets/TypeScript_Icon.png";
 
 onMounted(() => {
-    setNavCardTransition("pizza-nav-newCard");
+    setNavCardAnimation("pizza-nav-newCard");
 });
 </script>

@@ -8,7 +8,7 @@
         <RouterLink v-for="section in SKILLS_SECTIONS" :class="circleOptClasses"
             :title="('Scroll To The ' + section.title + ' Section')"
             :to="('/skills/#' + section.id)"
-            @click="webData.goToPageSection(section.id)"
+            @click="goToPageSection(section.id)"
             :style="{ 'color': section.color }"
             v-html="section.title">
         </RouterLink>
@@ -18,7 +18,6 @@
 </template>
 
 <script setup>
-const webData = useWebsiteDataStore();
 const menuExpanded = ref(false);
 const iconBeating = ref(true);
 
