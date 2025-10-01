@@ -23,15 +23,15 @@
         </div>
         <div class="start-buttonRow contact-links">
             <template v-for="(contact, index) in SOCIALS">
-                <a v-if="(index != 2 && index != 4)" :href="contact.link"
-                    class="start-buttonRow-btn"
-                    :title="contact.linkBtn"
+                <button v-if="(index != 2 && index != 4)" class="start-buttonRow-btn"
+                    :title="('See Options For ' + ((index == 0) ? '' : 'My ') + contact.name + ((index == 0) ? '' : ' Profile'))"
                     :style="getSpecialBtnStyles(contact.color)"
+                    @click="openSocialQrcode(contact.link)"
                     @mouseenter="setHeartbeatAnimation"
                     @mouseleave="setHeartbeatAnimation">
 
                     <font-awesome-icon :icon="contact.linkIcon" />
-                </a>
+                </button>
             </template>
         </div>
     </div>
@@ -39,10 +39,19 @@
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const start = ref(null);
+
 useIntersectionObserver(start, ([{ isIntersecting }]) => {
     setNameTransitions(isIntersecting);
-})
+});
+
+/**
+ * This simply calls the "openQRCodePopupWithData" function.
+ */
+function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
+    webData.openQRCodePopupWithData(link);
+}
 
 /**
  * This function sets the transitions for the left half of the start section.

@@ -5,8 +5,8 @@
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
         <div class="qrcode-mainPopup-options">
-            <button v-if="!linkExtrasRemoved" @click="setQRCodeLink('filter')" class="qrcode-mainPopup-btn light" title="Remove All Hashes">
-                <FontAwesomeIcon icon="fa-filter" />
+            <button v-if="webData.shareSupported" @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="(linkCopied ? 'Copied Link!' : 'Copy Link')">
+                <FontAwesomeIcon :icon="(linkCopied ? 'fa-check' : 'fa-copy')" :flip="linkCopied" />
             </button>
             <button v-if="webData.shareSupported" @click="webData.shareLink(qrCodeLink)" class="qrcode-mainPopup-btn light" title="Share Webpage Link">
                 <FontAwesomeIcon icon="fa-share-nodes" />
@@ -18,9 +18,16 @@
                 <FontAwesomeIcon icon="fa-download" />
             </button>
         </div>
+
         <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-btn close" title="Close Popup">
             <FontAwesomeIcon icon="fa-xmark" />
         </button>
+        <button v-if="(sharePopupMode == 0)" @click="setQRCodeLink('filter')" class="qrcode-mainPopup-btn topLeft light" title="Remove All Hashes">
+            <FontAwesomeIcon icon="fa-filter" />
+        </button>
+        <a v-if="(sharePopupMode == 2)" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn topLeft white" title="Open Link In New Tab">
+            <FontAwesomeIcon icon="fa-up-right-from-square" />
+        </a>
     </div>
 </div>
 </template>
@@ -37,7 +44,10 @@ const overflowLocked = useScrollLock(document.body);
 const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref({ display: "none" });
-const linkExtrasRemoved = ref(false);
+const sharePopupMode = ref(0);
+
+const linkCopied = ref(false);
+var copiedTimeout = null;
 
 onMounted(() => {
     overflowLocked.value = true;
@@ -57,13 +67,13 @@ watch(() => route.fullPath, () => { setQRCodeLink(); });
 function setQRCodeLink(newLink = 'main') {
     if(route.query.qrdata && typeof route.query.qrdata === "string") {
         qrCodeLink.value = route.query.qrdata;
-        linkExtrasRemoved.value = true;
+        sharePopupMode.value = 2;
     } else if(newLink === "main") {
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (route.path.substring(1) + route.hash));
-        linkExtrasRemoved.value = (route.hash === "");
+        sharePopupMode.value = ((route.hash === "") ? 1 : 0);
     } else if(newLink === "filter") {
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.path.substring(1));
-        linkExtrasRemoved.value = true;
+        sharePopupMode.value = 1;
     }
 
     if(qrcode.value != null) {
@@ -111,7 +121,15 @@ function setQRCodeLink(newLink = 'main') {
  * This function copies the QR Code Link currently visible.
  */
 function copyQRCodeLink() {
-    navigator.clipboard.writeText(qrCodeLink.value);
+    navigator.clipboard.writeText(qrCodeLink.value).then(() => {
+        if(copiedTimeout != null) { clearTimeout(copiedTimeout); }
+        linkCopied.value = true;
+
+        copiedTimeout = setTimeout(() => {
+            linkCopied.value = false;
+            copiedTimeout = null;
+        }, 3000);
+    });
 }
 
 /**
@@ -217,8 +235,17 @@ function downloadQRCode() {
     top: 10px;
     right: 10px;
 }
+.qrcode-mainPopup-btn.topLeft {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
 .qrcode-mainPopup-btn.light {
     color: var(--website-light-text);
+}
+.qrcode-mainPopup-btn.white {
+    color: white;
 }
 .qrcode-mainPopup-btn:hover {
     background-color: black;
