@@ -119,6 +119,10 @@
                                 <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
                         </div>
+
+                        <button @click="openSocialQrcode(social.link)" class="social-tab-qrcodeBtn" title="Get QR Code">
+                            <font-awesome-icon icon="fa-qrcode" />
+                        </button>
                     </div>
                 </template>
             </div>
@@ -303,6 +307,13 @@ function copyLink(link = "") {
  */
 function shareLink(link = "") {
     webData.shareLink((link === SOCIALS[0].displayLink) ? (PERSONAL_WEBSITE_LINK + "email") : link);
+}
+
+/**
+ * This simply calls the "openQRCodePopupWithData" function.
+ */
+function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
+    webData.openQRCodePopupWithData(link);
 }
 
 /**

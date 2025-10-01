@@ -31,10 +31,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         return ((cursorClickElement.value != null) ? ['animate__animated', 'animate__pulse', 'animate__infinite'] : []);
     });
     const cursorElementTitle = computed(() => {
-        return ((cursorClickElement.value != null) ?
-            (cursorClickElement.value instanceof HTMLAnchorElement ? cursorClickElement.value.href : cursorClickElement.value.title)
-            : ''
-        );
+        const element = cursorClickElement.value;
+        return ((element != null) ? (element instanceof HTMLAnchorElement ? element.href : element.title) : '');
     });
 
     /**

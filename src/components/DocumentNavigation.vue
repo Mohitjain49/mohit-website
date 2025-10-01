@@ -12,7 +12,7 @@
                         <font-awesome-icon :icon="(docStore.downloadingDocument ? 'fa-spinner' : 'fa-file-download')" :spin-pulse="docStore.downloadingDocument" />
                     </button>
                     <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-three)')">
-                        <font-awesome-icon icon="fa-print" />
+                        <font-awesome-icon :icon="(docStore.printingDocument ? 'fa-spinner' : 'fa-print')" :spin-pulse="docStore.printingDocument" />
                     </button>
                     <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
                         <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />

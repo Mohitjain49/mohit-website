@@ -220,6 +220,22 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function setQRCodePopup(status = "toggle") {
         qrPopup.value.open = ((status === "toggle") ? !qrPopup.value.open : status);
         closeNavMenu();
+
+        // Removes any set query upon closing the popup.
+        if(!qrPopup.value.open) {
+            const route = router.currentRoute.value;
+            router.push({ path: route.path, hash: route.hash })
+        }
+    }
+
+    /**
+     * This function opens the QR Code Popup and uses a custom URL.
+     * @param {String} qrdata The URL to pass into the QR Code Popup.
+     */
+    function openQRCodePopupWithData(qrdata = PERSONAL_WEBSITE_LINK) {
+        const route = router.currentRoute.value;
+        router.push({ path: route.path, hash: route.hash, query: { qrdata } })
+        setQRCodePopup(true);
     }
 
     /**
@@ -260,8 +276,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     return { pageView, menuOpen, navMenuOpen, documentMenuOpen, shareSupported,
         wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, qrPopup,
-        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, shareLink, shareFile,
-        setEventListeners, removeEventListeners, mountWebData, goToPageSection, scrollToFooter,
+        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopupWithData,
+        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToFooter,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }
 });
