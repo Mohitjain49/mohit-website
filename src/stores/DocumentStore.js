@@ -17,7 +17,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     const customPdfMaxWidth = ref(800);
     const customPdfMinWidth = ref(320);
 
+    /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing a document. */
+    var printIframe = null;
     const downloadingDocument = ref(false);
+    const printingDocument = ref(false);
     const sharingDocument = ref(false);
 
     /**
@@ -58,13 +61,10 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function downloadDoc() {
         downloadingDocument.value = true;
-        const documentPdf = getCurrentPDFObject();
-
-        const docData = await documentPdf.obj.pdf.getData()
-        const blob = new Blob([docData], { type: 'application/pdf' });
+        const documentPdf = await getCurrentPDFObject();
 
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
+        link.href = URL.createObjectURL(documentPdf.blob);
         link.download = (documentPdf.name + ".pdf");
     
         link.click();
@@ -73,11 +73,31 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
-     * This function opens the browser's print doucment for the visitor.
+     * This function opens the browser's print doucment so the user can print a document.
      */
-    function printDoc() {
-        const documentPdf = getCurrentPDFObject();
-        documentPdf.obj.print(250, (documentPdf.name + ".pdf"));
+    async function printDoc() {
+        if(printIframe != null) { document.body.removeChild(printIframe); }
+        printIframe = null;
+
+        printingDocument.value = true;
+        const documentPdf = await getCurrentPDFObject();
+
+        printIframe = document.createElement("iframe");
+        const url = URL.createObjectURL(documentPdf.blob);
+
+        printIframe.style.position = "absolute";
+        printIframe.style.width = "0";
+        printIframe.style.height = "0";
+        printIframe.style.border = "none";
+        printIframe.src = url;
+
+        document.body.append(printIframe);
+        printIframe.onload = () => {
+            const win = printIframe.contentWindow;
+            win.focus();
+            win.print();
+            printingDocument.value = false;
+        }
     }
 
     /**
@@ -85,25 +105,30 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function shareDoc() {
         sharingDocument.value = true;
-        const documentPdf = getCurrentPDFObject();
+        const documentPdf = await getCurrentPDFObject();
 
-        const docData = await documentPdf.obj.pdf.getData();
-        const blob = new Blob([docData], { type: 'application/pdf' });
-
-        useWebsiteDataStore().shareFile(new File([blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
+        useWebsiteDataStore().shareFile(new File([documentPdf.blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
         sharingDocument.value = false;
     }
 
     /**
      * This function returns the PDF Object the website is currently using.
      */
-    function getCurrentPDFObject() {
+    async function getCurrentPDFObject() {
         if(onResumeQrcodeRoute.value) {
-            return { obj: resumePdfWithQrcodeObj.value, name: "Mohit_Jain_Resume_With_QR_Code" }
+            return { obj: resumePdfWithQrcodeObj.value, blob: qrcodeResume.value, name: "Mohit_Jain_Resume_With_QR_Code" }
         } else if(onResumeRoute.value) {
-            return { obj: resumePdfObj.value, name: "Mohit_Jain_Resume" }
+            const obj = resumePdfObj.value;
+            const docData = await obj.pdf.getData();
+            const blob = new Blob([docData], { type: 'application/pdf' });
+
+            return { obj, blob, name: "Mohit_Jain_Resume" }
         } else if(onFCSCertificateRoute.value) {
-            return { obj: fultonInternshipAppreciationPdfObj.value, name: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025" }
+            const obj = fultonInternshipAppreciationPdfObj.value;
+            const docData = await obj.pdf.getData();
+            const blob = new Blob([docData], { type: 'application/pdf' });
+
+            return { obj, blob, name: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025" }
         } else {
             throw new Error("No document is currently in use.");
         }
@@ -175,7 +200,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         useWebsiteDataStore().closeNavMenu();
     }
 
-    return { mounted, sharingDocument, downloadingDocument, qrcodeResumeUrl,
+    return { mounted, sharingDocument, downloadingDocument, printingDocument, qrcodeResumeUrl,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj,
         onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onFCSCertificateRoute,
