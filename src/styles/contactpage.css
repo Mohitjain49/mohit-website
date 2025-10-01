@@ -221,6 +221,7 @@
 
 .social-tab {
     position: relative;
+    overflow: hidden;
     padding: 5px;
     height: 90px;
     width: 80%;
@@ -229,6 +230,26 @@
     border-radius: 7px;
     margin-bottom: 13px;
     background-color: var(--silver-light);
+}
+.social-tab-qrcodeBtn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 30px;
+    width: 30px;
+    font-size: 17px;
+    color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 2px dashed;
+    border-bottom: 2px dashed;
+    border-bottom-left-radius: 10px;
+    transition: var(--default-transition), font-size 0.2s;
+}
+.social-tab-qrcodeBtn:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+    font-size: 19px;
 }
 
 .social-tab-top {

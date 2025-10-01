@@ -5,7 +5,7 @@
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
         <div class="qrcode-mainPopup-options">
-            <button v-if="!linkExtrasRemoved" @click="setQRCodeLink(true)" class="qrcode-mainPopup-btn light" title="Remove All Hashes">
+            <button v-if="!linkExtrasRemoved" @click="setQRCodeLink('filter')" class="qrcode-mainPopup-btn light" title="Remove All Hashes">
                 <FontAwesomeIcon icon="fa-filter" />
             </button>
             <button v-if="webData.shareSupported" @click="webData.shareLink(qrCodeLink)" class="qrcode-mainPopup-btn light" title="Share Webpage Link">
@@ -29,7 +29,7 @@
 import QRCodeStyling from 'qr-code-styling';
 const route = useRoute();
 const webData = useWebsiteDataStore();
-const windowIsLocked = useScrollLock(window);
+const overflowLocked = useScrollLock(document.body);
 
 /**
  * @type {Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
@@ -40,23 +40,31 @@ const qrCodeDisplay = ref({ display: "none" });
 const linkExtrasRemoved = ref(false);
 
 onMounted(() => {
-    windowIsLocked.value = true;
-    nextTick(() => { setQRCodeLink(false); });
+    overflowLocked.value = true;
+    nextTick(() => { setQRCodeLink('main'); });
 });
 onBeforeUnmount(() => {
     qrCodeDisplay.value.display = "none";
-    windowIsLocked.value = false;
+    overflowLocked.value = false;
 })
 watch(() => route.fullPath, () => { setQRCodeLink(); });
 
 
 /**
  * This function sets the link for the QR Code Popup.
- * @param {Boolean} filterLink If true, this function filters the link to not include hashes.
+ * @param { 'main' | 'filter' } newLink Either main or filter to use the path with or without the hash. Ignored if there is a query
  */
-function setQRCodeLink(filterLink = false) {
-    qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (filterLink ? route.fullPath.substring(1).replace(route.hash, "") : route.fullPath.substring(1)));
-    linkExtrasRemoved.value = (filterLink || route.hash === "");
+function setQRCodeLink(newLink = 'main') {
+    if(route.query.qrdata && typeof route.query.qrdata === "string") {
+        qrCodeLink.value = route.query.qrdata;
+        linkExtrasRemoved.value = true;
+    } else if(newLink === "main") {
+        qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (route.path.substring(1) + route.hash));
+        linkExtrasRemoved.value = (route.hash === "");
+    } else if(newLink === "filter") {
+        qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.path.substring(1));
+        linkExtrasRemoved.value = true;
+    }
 
     if(qrcode.value != null) {
         qrcode.value.update({ data: qrCodeLink.value });
