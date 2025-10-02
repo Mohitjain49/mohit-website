@@ -51,10 +51,10 @@
                 </RouterLink>
                 <RouterLink v-if="webData.navFooterPresent" :to="footerRoute"
                     class="mohit-navMenu-extra"
-                    @click="webData.scrollToFooter()"
-                    title="Scroll Down To Footer">
+                    @click="webData.scrollToAndFromFooter()"
+                    :title="(webData.webFooterVisibility ? 'Scroll To The Top' : 'Scroll Down To Footer')">
 
-                    <FontAwesomeIcon icon="fa-angles-down" />
+                    <FontAwesomeIcon :icon="(webData.webFooterVisibility ? 'fa-angles-up' : 'fa-angles-down')" />
                 </RouterLink>
             </div>
             <div class="mohit-navMenu-opt small-features">
@@ -83,7 +83,9 @@ const audioStore = useAudioStore();
 
 const router = useRouter();
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const footerRoute = computed(() => { return { path: routePath.value, hash: '#footer' } });
+const footerRoute = computed(() => {
+    return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') }
+});
 
 /**
  * This sets the color and border color of an icon.

@@ -11,6 +11,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const { share, isSupported: shareSupported } = useShare();
     const wakeLock = useWakeLock();
 
+    /** @type {Ref<HTMLElement>} This represents the website footer. */
+    const webFooter = ref(null);
+    const webFooterVisibility = useElementVisibility(webFooter);
+
     /**
      * An reference integer that determines the Mode of the Nav Bar.
      * If it equals 0, it is on laptop mode, or the screen width is above 825px.
@@ -186,10 +190,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /**
      * This function scrolls to the footer of the webpage if it exists.
      */
-    function scrollToFooter() {
+    function scrollToAndFromFooter() {
         if(!navFooterPresent.value) { return; }
-        goToPageSection('footer');
         closeNavMenu();
+
+        if(webFooterVisibility.value) {
+            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        } else {
+            goToPageSection('footer');
+        }
     }
 
     /**
@@ -275,9 +284,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { pageView, menuOpen, navMenuOpen, documentMenuOpen, shareSupported,
-        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, qrPopup,
+        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility, qrPopup, 
         toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopupWithData,
-        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToFooter,
+        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }
 });

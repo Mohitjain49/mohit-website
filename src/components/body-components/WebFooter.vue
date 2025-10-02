@@ -1,5 +1,5 @@
 <template>
-<footer id="footer" :class="footerClass">
+<footer id="footer" :class="footerClass" ref="mohit-footer">
     <div class="footer-body">
         <div class="footer-routes-column">
             <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
@@ -86,9 +86,11 @@ const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 onMounted(() => {
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
     webData.navFooterPresent = true;
+    webData.webFooter = document.getElementById("footer");
 });
 onBeforeUnmount(() => {
     webData.navFooterPresent = false;
+    webData.webFooter = null;
 })
 
 const footerClass = computed(() => {
