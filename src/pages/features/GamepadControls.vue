@@ -62,8 +62,8 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
 
 <style scoped>
 .gamepad-controls-body {
-    min-height: 740px;
-    height: calc(100vh - 60px);
+    height: 740px;
+    min-height: var(--body-height);
     width: 100%;
     display: flex;
     justify-content: center;
