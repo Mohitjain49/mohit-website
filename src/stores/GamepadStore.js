@@ -2,13 +2,11 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
 
-    const gamepadConnected = ref(false);
+    const gamepadConnected = ref(-1);
     const showCursorSpeedMenu = ref(false);
     var gamepadConnectedFrameId = null;
 
-    /**
-     * @type {Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on.
-     */
+    /** @type {Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on. */
     const cursorClickElement = ref(null);
     const cursorOnInput = ref(false);
 
@@ -36,15 +34,23 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     });
 
     /**
+     * This function returns whether the index of a gamepad is equal to the gamepad that this pinia store currently has.
+     * @param {Number} index The index acquired from the event.
+     */
+    function checkGamepadIndex(index = -1) {
+        return (gamepadConnected.value == index);
+    }
+
+    /**
      * This function starts an interval for checking if any gamepad is connected or not.
      */
     function startGamepadConnectedPolling() {
         if(gamepadConnectedFrameId != null) { return; }
         const checkGamepadConnected = () => {
             const gamepads = navigator.getGamepads();
-            gamepadConnected.value = Array.from(gamepads).some(gp => gp && gp.connected);
+            gamepadConnected.value = Array.from(gamepads).findIndex(gp => (gp && gp.connected));
 
-            if(gamepadConnected.value) {
+            if(gamepadConnected.value != -1) {
                 if(showCursor.value) { setCursorClickElement(); }
                 gamepadConnectedFrameId = requestAnimationFrame(checkGamepadConnected);
             } else {
@@ -222,7 +228,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     return { customCursor, showCursor, cursorIcon, cursorAnimation, cursorElementTitle,
-        maxCursorSpeed, showCursorSpeedMenu, gamepadConnected,
+        maxCursorSpeed, showCursorSpeedMenu, gamepadConnected, checkGamepadIndex,
         emitClick, onGamepadMenuClick, startGamepadConnectedPolling, stopGamepadConnectedPolling,
         setCustomCursor, setCursorClickElement, setMaxCursorSpeed, addToMaxCursorSpeed,
         manageCustomCursor, manageCustomCursorWithDpad, initCustomCursorPosition,

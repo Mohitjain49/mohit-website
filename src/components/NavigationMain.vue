@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" :class="(webData.navMenuOpen ? 'menu-open' : '')">
+<nav id="mohit-navBar" :class="[noNavMenuOverflow]">
     <div class="mohit-navBar-top">
         <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Back To Home Page">
             <img :src="mkj_text" draggable="false" />
@@ -32,7 +32,7 @@
     </div>
 
     <Transition name="navMenu-transition">
-        <div v-if="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu">
+        <div v-if="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="mohit-navMenu">
             <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
                 <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
@@ -51,10 +51,10 @@
                 </RouterLink>
                 <RouterLink v-if="webData.navFooterPresent" :to="footerRoute"
                     class="mohit-navMenu-extra"
-                    @click="webData.scrollToFooter()"
-                    title="Scroll Down To Footer">
+                    @click="webData.scrollToAndFromFooter()"
+                    :title="(webData.webFooterVisibility ? 'Scroll To The Top' : 'Scroll Down To Footer')">
 
-                    <FontAwesomeIcon icon="fa-angles-down" />
+                    <FontAwesomeIcon :icon="(webData.webFooterVisibility ? 'fa-angles-up' : 'fa-angles-down')" />
                 </RouterLink>
             </div>
             <div class="mohit-navMenu-opt small-features">
@@ -80,10 +80,18 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
+const { height: windowHeight } = useWindowSize();
 
 const router = useRouter();
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const footerRoute = computed(() => { return { path: routePath.value, hash: '#footer' } });
+const footerRoute = computed(() => {
+    return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') }
+});
+
+// This changes the style of the Navigation Bar if its menu is open and has to overflow its content.
+const noNavMenuOverflow = computed(() => {
+    return ((!webData.navMenuOpen || windowHeight.value >= 590) ? '' : 'menu-overflowing');
+});
 
 /**
  * This sets the color and border color of an icon.

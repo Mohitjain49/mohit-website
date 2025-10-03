@@ -70,6 +70,7 @@
     width: calc(100% - 40px);
     padding: 0px 20px;
     padding-top: 60px;
+    background: transparent !important;
 }
 .incomplete-title {
     font-size: 60px;
@@ -77,6 +78,10 @@
     height: fit-content;
     margin-bottom: 5px;
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-shadow: 0px 0px 5px var(--website-dark-text);
+    background-color: rgba(248, 206, 171, 0.75);
 }
 .incomplete-subtitle {
     font-size: 20px;

@@ -13,7 +13,7 @@
     overflow: hidden;
     transition: height 0.2s;
 }
-#mohit-navBar.menu-open {
+#mohit-navBar.menu-overflowing {
     border-bottom-right-radius: 0px;
 }
 

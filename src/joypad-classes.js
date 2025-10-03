@@ -50,15 +50,9 @@ export class GamepadAxisMoveEvent {
         this.axisIndex = index;
         this.movement = movement;
         this.stick = ((index < 2) ? 'left_stick' : 'right_stick');
-        this.validEvent = this.getValidEvent();
-    }
 
-    /**
-     * This function returns whether the event should be sent or not.
-     */
-    getValidEvent() {
-        if(this.stick === "left_stick" && (this.movement <= leftAxisMovementThreshold.value && this.movement >= -leftAxisMovementThreshold.value)) { return false; }
-        if(this.stick === "right_stick" && (this.movement <= rightAxisMovementThreshold.value && this.movement >= -rightAxisMovementThreshold.value)) { return false; }
-        return true;
+        const leftStickInvalid = (this.stick === "left_stick" && (this.movement <= leftAxisMovementThreshold.value && this.movement >= -leftAxisMovementThreshold.value));
+        const rightStickInvalid = (this.stick === "right_stick" && (this.movement <= rightAxisMovementThreshold.value && this.movement >= -rightAxisMovementThreshold.value));
+        this.validEvent = !(leftStickInvalid || rightStickInvalid);
     }
 }

@@ -34,13 +34,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     const qrcodeResume = ref(null);
     const qrcodeResumeUrl = useObjectUrl(qrcodeResume);
 
-    /** @type {Ref<import('@types/PDFObject').usePDFObject>} } */
+    /** @type {Ref<usePDFObject>} } */
     const resumePdfObj = ref(null);
 
-    /** @type {Ref<import('@types/PDFObject').usePDFObject>} } */
+    /** @type {Ref<usePDFObject>} } */
     const resumePdfWithQrcodeObj = ref(null);
 
-    /** @type {Ref<import('@types/PDFObject').usePDFObject>} } */
+    /** @type {Ref<usePDFObject>} } */
     const fultonInternshipAppreciationPdfObj = ref(null);
 
     const routePath = computed(() => { return router.currentRoute.value.path; });

@@ -5,11 +5,15 @@ import type { ShallowRef } from 'vue';
 import type { PDFDocumentLoadingTask } from 'pdfjs-dist';
 import { PDFInfo } from '@tato30/vue-pdf';
 
-export interface usePDFObject {
-    pdf: PDFDocumentLoadingTask | undefined,
-    pages: ShallowRef<Number | undefined>
-    info: ShallowRef<PDFInfo | undefined>
-    getPDFDestination(dest: any): Promise<number> | number;
-    print(options?: { dpi?: number; filename?: string }): void;
-    download(options?: { filename?: string }): void;
+export {}
+
+declare global {
+    interface usePDFObject {
+        pdf: (PDFDocumentLoadingTask | undefined)
+        pages: ShallowRef<Number | undefined>
+        info: ShallowRef<PDFInfo | undefined>
+        getPDFDestination(dest: any): Promise<number> | number
+        print(options?: { dpi?: number; filename?: string }): void
+        download(options?: { filename?: string }): void
+    }
 }

@@ -2,7 +2,7 @@
 @import "@tato30/vue-pdf/style.css";
 
 :root {
-    --body-height: calc(100vh - 60px);
+    --body-height: calc(100vh - 50px);
 
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
