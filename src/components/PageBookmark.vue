@@ -23,7 +23,7 @@ const webData = useWebsiteDataStore();
 const gamepadStore = useGamepadStore();
 
 function getGamepadBookmarkClasses() {
-    return ['mohit-bookmark', 'gamepad', (gamepadStore.gamepadConnected ? 'active' : '')]
+    return ['mohit-bookmark', 'gamepad', ((gamepadStore.gamepadConnected != -1) ? 'active' : '')]
 };
 
 /**
