@@ -30,9 +30,10 @@ const VUEUSE_AUTO_IMPORTS = {
         'useFps',
         'onStartTyping',
         'useDocumentVisibility',
+        'useElementVisibility',
         'useBattery',
-        'useScrollLock',
-        'useElementVisibility'
+        'useWindowSize',
+        'useScrollLock'
     ]
 }
 

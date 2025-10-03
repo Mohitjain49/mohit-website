@@ -1,6 +1,7 @@
 <template>
+<ParticlesBackground :particlesOptions="INVALID_BACKGROUND" />
 <main id="invalid" class="personal-web-body">
-    <h1 class="gradient-text incomplete-title"> {{ PAGE_DESC }} </h1>
+    <h1 class="incomplete-title"> {{ PAGE_DESC }} </h1>
     <!-- <div class="incomplete-subtitle"> {{ '' }} </div> -->
     
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
@@ -15,7 +16,7 @@
 <script setup>
 import "@/styles/navpage.css";
 const router = useRouter();
-const PAGE_DESC = "404 - Page Not Found.";
+const PAGE_DESC = "404 - Page Not Found";
 
 useHead(getMeta("Mohit Jain | 404 Error", "404", PAGE_DESC));
 onMounted(() => {
