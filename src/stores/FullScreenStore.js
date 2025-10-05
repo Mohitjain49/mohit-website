@@ -23,7 +23,7 @@ export const useFullScreenStore = defineStore("screen-store", () => {
                 exitFullScreen();
             }
         } catch(e) {
-            console.log(e);
+            console.error(e);
         }
     }
 
