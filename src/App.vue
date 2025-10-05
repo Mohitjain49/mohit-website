@@ -1,7 +1,7 @@
 <template>
 <NavigationMain />
-<PageBookmark />
 <GamepadComponent />
+<PageBookmark v-if="!checkSSR()" />
 <QrcodeTool v-if="!checkSSR() && webData.qrPopup.open" />
 
 <RouterView :key="$route.path" />

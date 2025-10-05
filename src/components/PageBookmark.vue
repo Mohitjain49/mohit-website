@@ -45,7 +45,7 @@ const visitorMouse = useMouse({ touch: false, initialValue: { x: 200, y: 200 } }
 const showSideRoutes = computed(() => {
     if(visitorLeftPage.value || routeIndex.value == -1) { return false; }
     const x = visitorMouse.x.value;
-    return (x < 75 || (!checkSSR() && (x > window.innerWidth - 75)));
+    return (x < 75 || x > (window.innerWidth - 75));
 });
 
 // This tracks what main route the user is currently on.
@@ -84,7 +84,7 @@ function getGamepadBookmarkClasses() {
  * This returns whether or not the Gamepad Icon is good to show or not.
  */
 function showGamepadBookmark() {
-    return (!import.meta.env.SSR && Boolean(navigator.getGamepads()));
+    return Boolean(navigator.getGamepads());
 }
 
 const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!";
