@@ -33,7 +33,10 @@ const VUEUSE_AUTO_IMPORTS = {
         'useElementVisibility',
         'useBattery',
         'useWindowSize',
-        'useScrollLock'
+        'useScrollLock',
+        'useMouse',
+        'usePageLeave',
+        'useSwipe'
     ]
 }
 
