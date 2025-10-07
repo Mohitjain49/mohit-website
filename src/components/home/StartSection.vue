@@ -50,7 +50,7 @@ useIntersectionObserver(start, ([{ isIntersecting }]) => {
  * This simply calls the "openQRCodePopupWithData" function.
  */
 function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
-    webData.openQRCodePopupWithData(link);
+    webData.setQRCodePopup(link);
 }
 
 /**

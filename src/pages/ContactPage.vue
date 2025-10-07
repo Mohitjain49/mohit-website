@@ -7,7 +7,7 @@
 <main id="contact-page" class="personal-web-body">
     <div class="contact-boxes-container">
         <div class="contact-me-box web-service">
-            <button @click="webData.setQRCodePopup(true)" class="contact-share-btn" title="Share This Page With Someone Else!">
+            <button @click="webData.openQRCodePopup()" class="contact-share-btn" title="Share This Page With Someone Else!">
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
 
@@ -313,7 +313,7 @@ function shareLink(link = "") {
  * This simply calls the "openQRCodePopupWithData" function.
  */
 function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
-    webData.openQRCodePopupWithData(link);
+    webData.setQRCodePopup(link);
 }
 
 /**

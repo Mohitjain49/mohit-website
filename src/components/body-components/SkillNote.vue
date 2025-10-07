@@ -29,7 +29,7 @@
 
 <button v-else-if="link === 'mohit-qrcode-button'" class="skills-note"
     title="Create a QR Code for this page."
-    @click="webData.setQRCodePopup(true)"
+    @click="webData.openQRCodePopup()"
     @mouseenter="setPulseLoopAnimation"
     @mouseleave="setPulseLoopAnimation">
 
