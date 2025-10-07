@@ -340,5 +340,5 @@ function getLinkString(link = "/", text = "") {
 
 const CONTACT_ME_DESC = "If you wish to contact me for any professional reason, you can do so below. It uses " +
     getLinkString("https://aws.amazon.com/ses/", "Amazon Simple Email Service (SES)") + " to send an automatic email to me.";
-const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, LinkedIn, Discord, and Github.";
+const MY_SOCIALS_DESC = "If you prefer to contact me another way, you can reach me via email, LinkedIn, Github, and more.";
 </script>

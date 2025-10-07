@@ -1,7 +1,7 @@
 <template>
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
-        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, ((windowWidth > 625) ? 54 : 47)) }} </button>
+        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeFormattedLink, ((windowWidth > 625) ? 54 : 47)) }} </button>
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
         <div class="qrcode-mainPopup-options">
@@ -47,8 +47,14 @@ const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref({ display: "none" });
 
-const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
 const sharePopupMode = ref(0);
+const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
+const qrCodeFormattedLink = computed(() => {
+    if(typeof qrCodeLink.value !== "string") { return qrCodeLink.value; }
+    if(qrCodeLink.value.startsWith("mailto:")) { return qrCodeLink.value.substring(7); }
+    if(qrCodeLink.value.startsWith("tel:")) { return qrCodeLink.value.substring(4); }
+    return qrCodeLink.value;
+});
 
 const linkCopied = ref(false);
 var copiedTimeout = null;
@@ -66,7 +72,7 @@ onBeforeUnmount(() => {
 watch(qrdata, () => { setQRCodeLink(); });
 
 /**
- * This function sets the link for the QR Code Popup.
+ * This function sets the link for the Share Popup.
  */
 function setQRCodeLink() {
     const data = qrdata.value;
@@ -128,7 +134,7 @@ function setQRCodeLink() {
  * This function copies the QR Code Link currently visible.
  */
 function copyQRCodeLink() {
-    navigator.clipboard.writeText(qrCodeLink.value).then(() => {
+    navigator.clipboard.writeText(qrCodeFormattedLink.value).then(() => {
         if(copiedTimeout != null) { clearTimeout(copiedTimeout); }
         linkCopied.value = true;
 
