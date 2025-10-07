@@ -87,7 +87,7 @@ export const personalRoutes = [
     { path: "/experience", name: "Main Experience Page", component: ExperienceMain },
     { path: "/projects", name: "Main Projects Page", component: Projects },
     { path: "/copyright", name: "Copyright Page", component: CopyrightPage },
-    { path: "/icons", alias: ['/static-icons'], name: "Icon Page", component: MyIcon },
+    { path: "/icons", name: "Icon Page", component: MyIcon },
 
     { path: "/features", name: "Main Features Page", component: Features },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },

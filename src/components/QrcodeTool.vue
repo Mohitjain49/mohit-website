@@ -1,7 +1,7 @@
 <template>
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
-        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, webData.qrPopup.truncateValue) }} </button>
+        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, ((windowWidth > 625) ? 54 : 47)) }} </button>
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
         <div class="qrcode-mainPopup-options">
@@ -36,6 +36,8 @@
 import QRCodeStyling from 'qr-code-styling';
 const router = useRouter();
 const webData = useWebsiteDataStore();
+
+const { width: windowWidth } = useWindowSize();
 const overflowLocked = useScrollLock(document.body);
 
 /**
@@ -60,6 +62,7 @@ onBeforeUnmount(() => {
     overflowLocked.value = false;
 });
 
+// This watches for changes to the QR Code Data so the popup changes reactively.
 watch(qrdata, () => { setQRCodeLink(); });
 
 /**

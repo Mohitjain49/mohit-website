@@ -14,6 +14,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** @type {Ref<HTMLElement>} This represents the website footer. */
     const webFooter = ref(null);
     const webFooterVisibility = useElementVisibility(webFooter);
+    const onFirstMount = ref(true);
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -30,8 +31,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const showSharePopup = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
         return (!checkSSR() && data != null && typeof data === "string");
-    })
-    const qrPopup = ref({ open: false, truncateValue: 54 });
+    });
 
     const wakeLockIcon = computed(() => {
         return (wakeLock.isSupported.value ? (wakeLock.isActive.value ? 'fa-unlock' : 'fa-lock') : 'fa-ban');
@@ -84,7 +84,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
         gamepadStore.initCustomCursorPosition();
-        qrPopup.value.truncateValue = ((windowWidth > 625) ? 54 : 47);
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -176,8 +175,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This runs whenever a page is opened.
      */
     function mountWebData() {
-        setQRCodePopup("quit");
         closeNavMenu();
+        if(onFirstMount.value) {
+            onFirstMount.value = false;
+        } else {
+            setQRCodePopup("quit");
+        }
 
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
@@ -288,7 +291,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { pageView, menuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
-        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility, qrPopup, 
+        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
         toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
