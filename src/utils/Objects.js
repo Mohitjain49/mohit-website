@@ -729,7 +729,7 @@ export const FEATURE_ENTITIES = [
         link: "mohit-qrcode-button",
         color: "var(--website-light-text)",
         desc: "This page uses the \"qr-code-styling\" dependency to create QR Codes for this website. " +
-            "There is a Share tool that pops up with (CTRL + Q) and a button on the bottom left of the Footer.",
+            "There is a Share tool that pops up with (CTRL + ALT + Q) and a button on the bottom left of the Footer.",
 
         icon: {
             id: "fa-qrcode",

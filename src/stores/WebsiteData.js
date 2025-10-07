@@ -136,13 +136,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 toggleWakeLock();
                 triggerClickSound();
             }
-        } else if(event.ctrlKey) {
+        } else if(event.altKey) {
             if(key === "q" || key === "Q") {
                 setQRCodePopup("toggle");
                 triggerClickSound();
-            }
-        } else if(event.altKey) {
-            if(key === "m") {
+            } else if(key === "m") {
                 toggleNavMenu();
                 triggerClickSound();
             } else if(key === "w") {
