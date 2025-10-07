@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <div class="mohit-documentMenu-tools">
-                    <button @click="webData.setQRCodePopup(true)" title="Share Webpage" :style="getColorStyles('var(--website-light-text)')">
+                    <button @click="webData.openQRCodePopup()" title="Share Webpage" :style="getColorStyles('var(--website-light-text)')">
                         <font-awesome-icon icon="fa-share-from-square" />
                     </button>
                     <button @click="reloadPage()" title="Reload Page">

@@ -95,7 +95,7 @@ const ROUTES = [
     { path: "/skills/", faIcon: "fa-code", title: "Skills", style: { color: "var(--blue-zero)", backgroundColor: "var(--blue-cobalt)" } },
     { path: "/experience/", faIcon: "fa-file-code", title: "Experience", style: { color: "var(--website-text)", backgroundColor: "black", fontSize: "8px" } },
     { path: "/projects/", faIcon: "fa-cubes", title: "Projects", style: { color: "var(--globe-green-light)", backgroundColor: "var(--globe-green-opaque)" } },
-    { path: "/resume/", faIcon: "fa-file-lines", title: "Resume", style: { color: "var(--website-light-text)", backgroundColor: "black" } },
+    { path: "/resume/", faIcon: "fa-file-lines", title: "Resume", style: { color: "var(--blue-two)", backgroundColor: "black" } },
     { path: "/features/", faIcon: "fa-bolt-lightning", title: "Features", style: { color: "var(--lightning-yellow)", backgroundColor: "black" } },
     { path: "/contact/", faIcon: "fa-paper-plane", title: "Contact", style: { color: "var(--website-dark-text)", backgroundColor: "var(--webpage-static-background)" } }
 ];

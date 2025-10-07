@@ -58,7 +58,7 @@
                 </RouterLink>
             </div>
             <div class="mohit-navMenu-opt small-features">
-                <button @click="webData.setQRCodePopup(true)" class="mohit-navMenu-smallFeatures-btn" title="Share This Page With Someone Else!">
+                <button @click="webData.openQRCodePopup()" class="mohit-navMenu-smallFeatures-btn" title="Share This Page With Someone Else!">
                     <font-awesome-icon icon="fa-share-from-square" />
                 </button>
                 <div class="mohit-navMenu-volume-meter">

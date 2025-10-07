@@ -70,7 +70,7 @@
         </RouterLink>
     </div>
 
-    <button @click="webData.setQRCodePopup(true)" class="qr-popup-open-section" title="Share This Page With Someone Else!">
+    <button @click="webData.openQRCodePopup()" class="qr-popup-open-section" title="Share This Page With Someone Else!">
         <FontAwesomeIcon icon="fa-share-from-square" />
     </button>
 </footer>

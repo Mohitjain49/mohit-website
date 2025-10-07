@@ -45,6 +45,11 @@ function onBatteryStatusChange() {
     // if(import.meta.env.DEV) { console.log(props.particlesOptions.particles.number) };
 }
 
+onBeforeUnmount(() => {
+    if(tsparticlesContainer.value == null) { return; }
+    tsparticlesContainer.value.destroy(true);
+});
+
 watch(visibility, () => {
     if(tsparticlesContainer.value == null) { return; }
     if(visibility.value === "hidden") {

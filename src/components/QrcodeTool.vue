@@ -1,7 +1,7 @@
 <template>
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
-        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeLink, webData.qrPopup.truncateValue) }} </button>
+        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeFormattedLink, ((windowWidth > 625) ? 54 : 47)) }} </button>
         <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
 
         <div class="qrcode-mainPopup-options">
@@ -19,10 +19,10 @@
             </button>
         </div>
 
-        <button @click="webData.setQRCodePopup(false)" class="qrcode-mainPopup-btn close" title="Close Popup">
+        <button @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-btn close" title="Close Popup">
             <FontAwesomeIcon icon="fa-xmark" />
         </button>
-        <button v-if="(sharePopupMode == 0)" @click="setQRCodeLink('filter')" class="qrcode-mainPopup-btn topLeft light" title="Remove All Hashes">
+        <button v-if="(sharePopupMode == 0)" @click="webData.setQRCodePopup('filter')" class="qrcode-mainPopup-btn topLeft light" title="Remove All Hashes">
             <FontAwesomeIcon icon="fa-filter" />
         </button>
         <a v-if="(sharePopupMode == 2)" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn topLeft white" title="Open Link In New Tab">
@@ -34,8 +34,10 @@
 
 <script setup>
 import QRCodeStyling from 'qr-code-styling';
-const route = useRoute();
+const router = useRouter();
 const webData = useWebsiteDataStore();
+
+const { width: windowWidth } = useWindowSize();
 const overflowLocked = useScrollLock(document.body);
 
 /**
@@ -44,36 +46,47 @@ const overflowLocked = useScrollLock(document.body);
 const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref({ display: "none" });
+
 const sharePopupMode = ref(0);
+const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
+const qrCodeFormattedLink = computed(() => {
+    if(typeof qrCodeLink.value !== "string") { return qrCodeLink.value; }
+    if(qrCodeLink.value.startsWith("mailto:")) { return qrCodeLink.value.substring(7); }
+    if(qrCodeLink.value.startsWith("tel:")) { return qrCodeLink.value.substring(4); }
+    return qrCodeLink.value;
+});
 
 const linkCopied = ref(false);
 var copiedTimeout = null;
 
 onMounted(() => {
     overflowLocked.value = true;
-    nextTick(() => { setQRCodeLink('main'); });
+    nextTick(() => { setQRCodeLink(); });
 });
 onBeforeUnmount(() => {
     qrCodeDisplay.value.display = "none";
     overflowLocked.value = false;
-})
-watch(() => route.fullPath, () => { setQRCodeLink(); });
+});
 
+// This watches for changes to the QR Code Data so the popup changes reactively.
+watch(qrdata, () => { setQRCodeLink(); });
 
 /**
- * This function sets the link for the QR Code Popup.
- * @param { 'main' | 'filter' } newLink Either main or filter to use the path with or without the hash. Ignored if there is a query
+ * This function sets the link for the Share Popup.
  */
-function setQRCodeLink(newLink = 'main') {
-    if(route.query.qrdata && typeof route.query.qrdata === "string") {
-        qrCodeLink.value = route.query.qrdata;
-        sharePopupMode.value = 2;
-    } else if(newLink === "main") {
+function setQRCodeLink() {
+    const data = qrdata.value;
+    const route = router.currentRoute.value;
+
+    if(data === "main") {
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (route.path.substring(1) + route.hash));
         sharePopupMode.value = ((route.hash === "") ? 1 : 0);
-    } else if(newLink === "filter") {
+    } else if(data === "filter") {
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.path.substring(1));
         sharePopupMode.value = 1;
+    } else {
+        qrCodeLink.value = route.query.qrdata;
+        sharePopupMode.value = 2;
     }
 
     if(qrcode.value != null) {
@@ -121,7 +134,7 @@ function setQRCodeLink(newLink = 'main') {
  * This function copies the QR Code Link currently visible.
  */
 function copyQRCodeLink() {
-    navigator.clipboard.writeText(qrCodeLink.value).then(() => {
+    navigator.clipboard.writeText(qrCodeFormattedLink.value).then(() => {
         if(copiedTimeout != null) { clearTimeout(copiedTimeout); }
         linkCopied.value = true;
 

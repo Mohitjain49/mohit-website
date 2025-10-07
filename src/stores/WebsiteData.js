@@ -14,6 +14,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** @type {Ref<HTMLElement>} This represents the website footer. */
     const webFooter = ref(null);
     const webFooterVisibility = useElementVisibility(webFooter);
+    const onFirstMount = ref(true);
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -27,7 +28,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
-    const qrPopup = ref({ open: false, truncateValue: 54 });
+    const showSharePopup = computed(() => {
+        const data = (router.currentRoute.value.query.qrdata ?? null);
+        return (!checkSSR() && data != null && typeof data === "string");
+    });
 
     const wakeLockIcon = computed(() => {
         return (wakeLock.isSupported.value ? (wakeLock.isActive.value ? 'fa-unlock' : 'fa-lock') : 'fa-ban');
@@ -80,7 +84,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
         gamepadStore.initCustomCursorPosition();
-        qrPopup.value.truncateValue = ((windowWidth > 625) ? 54 : 47);
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -135,14 +138,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             if(key === "w" || key === "W") {
                 toggleWakeLock();
                 triggerClickSound();
-            }
-        } else if(event.ctrlKey) {
-            if(key === "q" || key === "Q") {
+            } else if(key === "q" || key === "Q") {
                 setQRCodePopup("toggle");
                 triggerClickSound();
             }
         } else if(event.altKey) {
-            if(key === "m") {
+            if(key === "q" || key === "Q") {
+                setQRCodePopup("toggle");
+                triggerClickSound();
+            } else if(key === "m") {
                 toggleNavMenu();
                 triggerClickSound();
             } else if(key === "w") {
@@ -171,8 +175,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This runs whenever a page is opened.
      */
     function mountWebData() {
-        setQRCodePopup(false);
         closeNavMenu();
+        if(onFirstMount.value) {
+            onFirstMount.value = false;
+        } else {
+            setQRCodePopup("quit");
+        }
 
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
@@ -224,27 +232,26 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /**
      * This function sets a new status for the QR Code Popup.
-     * @param {String | Boolean} status The new status. If it equals "toggle", the new status is the opposite of the current status.
+     * @param {String} qrdata The URL or mode to pass into the QR Code Popup.
      */
-    function setQRCodePopup(status = "toggle") {
-        qrPopup.value.open = ((status === "toggle") ? !qrPopup.value.open : status);
+    function setQRCodePopup(qrdata = "") {
+        const route = router.currentRoute.value;
         closeNavMenu();
 
-        // Removes any set query upon closing the popup.
-        if(!qrPopup.value.open) {
-            const route = router.currentRoute.value;
-            router.push({ path: route.path, hash: route.hash })
+        if(qrdata === "quit" || qrdata === "") {
+            router.push({ path: route.path, hash: route.hash });
+        } else if(qrdata === "toggle") {
+            setQRCodePopup(showSharePopup.value ? "quit" : "main");
+        } else {
+            router.push({ path: route.path, hash: route.hash, query: { qrdata } })
         }
     }
 
     /**
-     * This function opens the QR Code Popup and uses a custom URL.
-     * @param {String} qrdata The URL to pass into the QR Code Popup.
+     * This function opens the QR Code popup.
      */
-    function openQRCodePopupWithData(qrdata = PERSONAL_WEBSITE_LINK) {
-        const route = router.currentRoute.value;
-        router.push({ path: route.path, hash: route.hash, query: { qrdata } })
-        setQRCodePopup(true);
+    function openQRCodePopup() {
+        setQRCodePopup('main');
     }
 
     /**
@@ -283,9 +290,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, menuOpen, navMenuOpen, documentMenuOpen, shareSupported,
-        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility, qrPopup, 
-        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopupWithData,
+    return { pageView, menuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
+        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
+        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }
