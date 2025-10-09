@@ -16,7 +16,9 @@ const props = defineProps({ particlesOptions: { type: Object, required: true } }
 
 const visibility = useDocumentVisibility();
 const battery = useBattery();
+
 const batteryLow = ref(false);
+const particlesHalved = ref(false);
 
 /**
  * This function runs when the particles are fully loaded on the webpage.
@@ -36,20 +38,24 @@ function onBatteryStatusChange() {
     batteryLow.value = (battery.level.value <= 0.3 && !battery.charging.value);
 
     if(batteryLow.value && !prevStatus) {
-        props.particlesOptions.particles.number.value = props.particlesOptions.particles.number.value * 0.5;
+        props.particlesOptions.particles.number.value *= 0.5;
+        particlesHalved.value = true;
         if(tsparticlesContainer.value != null) { tsparticlesContainer.value.reset(props.particlesOptions); }
     } else if(!batteryLow.value && prevStatus) {
-        props.particlesOptions.particles.number.value = props.particlesOptions.particles.number.value * 2;
+        props.particlesOptions.particles.number.value *= 2;
+        particlesHalved.value = false;
         if(tsparticlesContainer.value != null) { tsparticlesContainer.value.reset(props.particlesOptions); }
     }
     // if(import.meta.env.DEV) { console.log(props.particlesOptions.particles.number) };
 }
 
+// This resets the number of particles and destroys the container before unmounting the page.
 onBeforeUnmount(() => {
-    if(tsparticlesContainer.value == null) { return; }
-    tsparticlesContainer.value.destroy(true);
+    if(particlesHalved.value) { (props.particlesOptions.particles.number.value *= 2); }
+    if(tsparticlesContainer.value != null) { tsparticlesContainer.value.destroy(true); }
 });
 
+// This pauses the animations when the website is not visible on the visitor's device.
 watch(visibility, () => {
     if(tsparticlesContainer.value == null) { return; }
     if(visibility.value === "hidden") {
