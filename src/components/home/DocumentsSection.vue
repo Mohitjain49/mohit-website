@@ -15,6 +15,19 @@
                 I use PDF.js in my website to give my resume a custom display. Feel Free to take a look at it!
             </p>
         </RouterLink>
+        <RouterLink to="/create-github-repo" id="github-tab" class="documents-section-tab"
+            @mouseenter="onIvueTabHover('github-tab')"
+            @mouseleave="onIvueTabLeave('github-tab')">
+
+            <div class="documents-section-tab-header">
+                <font-awesome-icon icon="fa-brands fa-github" />
+                <span> Create A GitHub Repo </span>
+            </div>
+            <p>
+                This is an instructions guide to how to create and clone a Repository with GitHub. 
+                It'll walk anyone through creating an account with GitHub as well.
+            </p>
+        </RouterLink>
         <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab"
             @mouseenter="onIvueTabHover('fcs-certificate-tab')"
             @mouseleave="onIvueTabLeave('fcs-certificate-tab')">
@@ -66,14 +79,16 @@ function setInitTransitions(isVisible) {
 
     document.getElementById('documents-section-title').classList.add("animate__animated", leftAnimation);
     document.getElementById('resume-tab').classList.add("animate__animated", rightAnimation);
-    document.getElementById('fcs-certificate-tab').classList.add("animate__animated", leftAnimation);
-    document.getElementById('sitemap-tab').classList.add("animate__animated", rightAnimation);
+    document.getElementById('github-tab').classList.add("animate__animated", leftAnimation);
+    document.getElementById('fcs-certificate-tab').classList.add("animate__animated", rightAnimation);
+    document.getElementById('sitemap-tab').classList.add("animate__animated", leftAnimation);
 
     setTimeout(() => {
         document.getElementById('documents-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
         document.getElementById('resume-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('sitemap-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('github-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('sitemap-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
     }, ANIMATE_DURATION);
 }
 
@@ -121,7 +136,7 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
 
 .documents-section-tabs-container {
     width: 100%;
-    height: 600px;
+    height: 800px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -193,6 +208,14 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
     box-shadow: 0px 0px 12px 12px rgba(211, 211, 211, 0.25);
 }
 
+.documents-section-tab#github-tab {
+    color: white;
+    border-color: white;
+}
+.documents-section-tab#github-tab:hover {
+    box-shadow: 0px 0px 12px 12px rgba(211, 211, 211, 0.25);
+}
+
 @media (max-width: 975px) {
     .documents-section-tab p {
         font-size: 17px;
@@ -203,7 +226,7 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
         font-size: 80px;
     }
     .documents-section-tabs-container {
-        height: 600px;
+        height: 800px;
     }
     .documents-section-tab {
         height: 150px;

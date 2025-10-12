@@ -97,7 +97,7 @@ const footerClass = computed(() => {
     const path = route.path;
     if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
         return 'main-page';
-    } else if(!fullScreenStore.fullScreenSet && (docStore.onResumeRoute || docStore.onFCSCertificateRoute)) {
+    } else if(!fullScreenStore.fullScreenSet && docStore.onDocumentRoute) {
         return 'document-route';
     } else {
         return '';
@@ -118,7 +118,7 @@ const MAIN_ROUTES = [
     { name: "My Experience", path: "/experience", icon: "fa-file-code", color: "var(--website-text)" },
     { name: "My Projects", path: "/projects", icon: "fa-cubes", color: "var(--globe-green)" },
     { name: "My Resume", path: "/resume", icon: "fa-file-lines", color: "var(--website-text)" },
-    { name: "FCS Certification", path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)" },
+    { name: "My Documents", path: "/documents", icon: "fa-folder-open", color: "var(--website-light-text)" },
     { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-two)" },
 ];
 

@@ -232,7 +232,13 @@ button {
     cursor: pointer;
 }
 #tato-pdf-resume {
-    margin: 0 auto;
+    margin: 0px auto;
+    width: calc(var(--total-scale-factor) * 612px) !important;
+    height: calc(var(--total-scale-factor) * 792px) !important;
+}
+.tato-pdf-github-instructions {
+    margin: 0px auto;
+    margin-bottom: 20px;
     width: calc(var(--total-scale-factor) * 612px) !important;
     height: calc(var(--total-scale-factor) * 792px) !important;
 }

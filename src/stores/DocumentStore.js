@@ -1,5 +1,6 @@
 import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
 import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
+import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
@@ -43,9 +44,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** @type {Ref<usePDFObject>} } */
     const fultonInternshipAppreciationPdfObj = ref(null);
 
+    /** @type {Ref<usePDFObject>} } */
+    const createGithubRepoPdfObj = ref(null);
+
     const routePath = computed(() => { return router.currentRoute.value.path; });
     const onResumeRoute = computed(() => { return routePath.value.includes("/resume"); });
     const onFCSCertificateRoute = computed(() => { return routePath.value.includes(FCS_CERTIFICATE_ROUTE); });
+    const onCreateGithubRepoRoute = computed(() => { return (routePath.value === "/create-github-repo" || routePath.value === "/create-github-repo/"); });
 
     const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown") || routePath.value.includes("md")); });
     const onResumeQrcodeRoute = computed(() => {
@@ -55,6 +60,13 @@ export const useDocumentStore = defineStore("document-store", () => {
             routePath.value === "/resume/qr/"
         );
     });
+
+    const onDocumentRoute = computed(() => {
+        return (onFCSCertificateRoute.value || onCreateGithubRepoRoute.value ||
+            onResumeQrcodeRoute.value || onMarkdownRoute.value ||
+            (routePath.value === "/resume") || (routePath.value === "/resume/")
+        );
+    })
 
     /**
      * This function downloads a document for the visitor to see.
@@ -129,6 +141,12 @@ export const useDocumentStore = defineStore("document-store", () => {
             const blob = new Blob([docData], { type: 'application/pdf' });
 
             return { obj, blob, name: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025" }
+        } else if(onCreateGithubRepoRoute.value) {
+            const obj = createGithubRepoPdfObj.value;
+            const docData = await obj.pdf.getData();
+            const blob = new Blob([docData], { type: 'application/pdf' });
+
+            return { obj, blob, name: "Create_Github_Repo" }
         } else {
             throw new Error("No document is currently in use.");
         }
@@ -146,10 +164,11 @@ export const useDocumentStore = defineStore("document-store", () => {
 
                 resumePdfObj.value = result.usePDF(Mohit_Jain_Resume);
                 resumePdfWithQrcodeObj.value = result.usePDF(qrcodeResumeArrayBuffer);
+                createGithubRepoPdfObj.value = result.usePDF(Create_Github_Repo);
                 fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
                 mounted.value = true;
             });
-        })
+        });
     }
 
     /**
@@ -158,7 +177,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     function mountDocumentPage() {
         initWebData();
         if(onMarkdownRoute.value) { return; }
-        nextTick(() => { mountCustomDocumentPage(800, 320, (onResumeRoute ? 1.375 : 0.79875)); })
+        nextTick(() => { mountCustomDocumentPage(800, 320, (onFCSCertificateRoute ? 0.79875 : 1.375)); })
     }
 
     /**
@@ -200,12 +219,24 @@ export const useDocumentStore = defineStore("document-store", () => {
         useWebsiteDataStore().closeNavMenu();
     }
 
+    /**
+     * This function is triggered whenever someone clicks on a link on the custom PDF.
+     */
+    function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
+        const url = event.data.url;
+        if(url === PERSONAL_WEBSITE_LINK) {
+            router.push("/");
+        } else {
+            window.open(url, "_blank");
+        }
+    }
+
     return { mounted, sharingDocument, downloadingDocument, printingDocument, qrcodeResumeUrl,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
-        pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj,
-        onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onFCSCertificateRoute,
+        pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
+        onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, printDoc, shareDoc, toggleDocumentFullScreen, setPdfSize,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage,
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage, onAnnotationClick
     }
 });
 

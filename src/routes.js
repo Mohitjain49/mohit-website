@@ -15,6 +15,7 @@ import GoogleMockup from "./pages/GoogleMockup.vue";
 
 import Resume from "./pages/documents/Resume.vue";
 import ResumeMarkdown from "./pages/documents/ResumeMarkdown.vue";
+import CreateGitHubRepo from "./pages/documents/CreateGitHubRepo.vue";
 import InternAppreciation from "./pages/documents/InternAppreciation.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
@@ -72,7 +73,9 @@ export const personalRoutes = [
     { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/google-mockup", name: "Google Mockup Page", component: GoogleMockup },
+
     { path: FCS_CERTIFICATE_ROUTE, name: "Intern Appreciation Certificate", component: InternAppreciation },
+    { path: "/create-github-repo", name: "create GitHub Repository Instructions", component: CreateGitHubRepo },
 
     {
         path: "/resume",
