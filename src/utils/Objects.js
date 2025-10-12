@@ -765,14 +765,14 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Documents",
-        link: "/resume/",
+        link: "/documents",
         color: "var(--website-text)",
         desc: "I used multiple modules to display my resume and other documents on this website. " +
             "This includes using PDF.js to natively display the PDF as a whole and the \"unplugin-vue-markdown\" " +
             "plugin to display my resume in a markdown format.",
 
         icon: {
-            id: "fa-file-lines",
+            id: "fa-folder-open",
             faIcon: true,
             size: "100"
         }

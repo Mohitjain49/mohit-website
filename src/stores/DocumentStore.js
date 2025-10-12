@@ -168,7 +168,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                 fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
                 mounted.value = true;
             });
-        })
+        });
     }
 
     /**
@@ -177,7 +177,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     function mountDocumentPage() {
         initWebData();
         if(onMarkdownRoute.value) { return; }
-        nextTick(() => { mountCustomDocumentPage(800, 320, (onResumeRoute ? 1.375 : 0.79875)); })
+        nextTick(() => { mountCustomDocumentPage(800, 320, (onFCSCertificateRoute ? 0.79875 : 1.375)); })
     }
 
     /**

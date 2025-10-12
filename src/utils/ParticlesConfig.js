@@ -231,12 +231,12 @@ export const FEATURES_BACKGROUND = ref({
         shape: { type: "star" },
         size: { value: { min: 0.001, max: 20 }, },
         move: { speed: { min: 1, max: 1 }, },
-        life: { count: 50, },
+        life: { count: 0, },
     },
     emitters: {
         direction: "top",
         rate: {
-            delay: 0.1,
+            delay: 0.2,
             quantity: 1
         },
         life: {
