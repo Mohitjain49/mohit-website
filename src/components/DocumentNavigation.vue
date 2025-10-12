@@ -57,6 +57,16 @@
                         <font-awesome-icon icon="fa-brands fa-markdown" />
                     </RouterLink>
                 </template>
+                <template v-else-if="docStore.onCreateGithubRepoRoute">
+                    <a href="https://github.com/" to="/create-github-repo" class="mohit-navBar-icon"
+                        title="Go To GitHub"
+                        :style="getColorStyles('#FFFFFF')"
+                        @mouseenter="setPulseLoopAnimation"
+                        @mouseleave="setPulseLoopAnimation">
+
+                        <font-awesome-icon icon="fa-brands fa-github" />
+                    </a>
+                </template>
                 <template v-else>
                     <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
                         title="See LinkedIn Post" class="mohit-navBar-icon"
@@ -129,6 +139,8 @@ const documentLink = computed(() => {
         return PERSONAL_RESUME_LINK;
     } else if(docStore.onFCSCertificateRoute) {
         return FCS_CERTIFICATE_LINK;
+    } else if(docStore.onCreateGithubRepoRoute) {
+        return "https://www.mohit-jain.com/Create_Github_Repo.pdf";
     }
 });
 

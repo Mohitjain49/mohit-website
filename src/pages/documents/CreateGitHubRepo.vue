@@ -3,12 +3,14 @@
 <client-only>
     <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
-            <component :is="documentStore.pdfComponent" id="tato-pdf-resume"
-                :pdf="(documentStore.onResumeQrcodeRoute ? documentStore.resumePdfWithQrcodeObj.pdf : documentStore.resumePdfObj.pdf)"
+            <component v-for="page in pageNumbers"
+                :is="documentStore.pdfComponent" class="tato-pdf-github-instructions"
+                :pdf="documentStore.createGithubRepoPdfObj.pdf"
                 text-layer annotation-layer
                 @annotation="(event) => {documentStore.onAnnotationClick(event)}"
                 :width="documentStore.customPdfWidth"
                 :height="documentStore.customPdfHeight"
+                :page="page"
             />
         </div>
         
@@ -25,10 +27,12 @@
 <script setup>
 const documentStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
+const pageNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
 
 useHead(getMeta(
-    ("Mohit Jain | My Resume" + (documentStore.onResumeQrcodeRoute ? " (With Qrcode)" : "")),
-    (documentStore.onResumeQrcodeRoute ? "resume/qrcode" : "resume"),
-    ("Feel free to take a look at my resume." + (documentStore.onResumeQrcodeRoute ? " This version has a QR Code at the top right." : ""))
+    "Mohit Jain | Create A GitHub Repository",
+    "create-github-repo",
+    ("This is an instructions guide to how to create and clone a Repository with GitHub. " +
+        "It'll walk anyone through creating an account with GitHub as well.")
 ));
 </script>

@@ -52,6 +52,7 @@
                 <RouterLink v-if="webData.navFooterPresent" :to="footerRoute"
                     class="mohit-navMenu-extra"
                     @click="webData.scrollToAndFromFooter()"
+                    :style="getColorStyles('var(--website-text)')"
                     :title="(webData.webFooterVisibility ? 'Scroll To The Top' : 'Scroll Down To Footer')">
 
                     <FontAwesomeIcon :icon="(webData.webFooterVisibility ? 'fa-angles-up' : 'fa-angles-down')" />
@@ -134,6 +135,6 @@ const LAPTOP_MAIN_BTNS = [
 const NAV_MENU_EXTRAS = [
     { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
     { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
-    { path: FCS_CERTIFICATE_ROUTE, icon: "fa-school-flag", color: "var(--fulton-green)", title: "FCS Certificate" },
+    { path: "/documents", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
 ];
 </script>
