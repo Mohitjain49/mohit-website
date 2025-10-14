@@ -184,7 +184,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
             if(hashStr === "") { return; }
 
             try {
