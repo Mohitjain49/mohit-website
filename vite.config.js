@@ -36,7 +36,9 @@ const VUEUSE_AUTO_IMPORTS = {
         'useScrollLock',
         'useMouse',
         'usePageLeave',
-        'useSwipe'
+        'useSwipe',
+        'useElementBounding',
+        'onClickOutside'
     ]
 }
 
