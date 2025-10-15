@@ -4,9 +4,7 @@
     <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
             <div id="resume" class="pdf-page-innerContainer">
-                <button v-if="showResumeLinkButton" @click="webData.setQRCodePopup('main')" class="pdf-doc-linkBtn" :title="'Get A Link For My Resume!'">
-                    <FontAwesomeIcon icon="fa-link" />
-                </button>
+                <DocumentViewerAddons :linkButtonMinWidth="500" titleEnd="My Resume!" />
                 <component :is="documentStore.pdfComponent" id="tato-pdf-resume"
                     :pdf="(documentStore.onResumeQrcodeRoute ? documentStore.resumePdfWithQrcodeObj.pdf : documentStore.resumePdfObj.pdf)"
                     text-layer annotation-layer

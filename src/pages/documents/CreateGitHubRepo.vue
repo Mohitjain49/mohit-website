@@ -4,9 +4,7 @@
     <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
             <div class="pdf-page-innerContainer" v-for="(page, index) in pageNumbers" :id="('page_' + page)">
-                <button v-if="documentStore.docLoaded" @click="openShareForLink(page)" class="pdf-doc-linkBtn" :title="('Get Link for Page ' + page)">
-                    <FontAwesomeIcon icon="fa-link" />
-                </button>
+                <DocumentViewerAddons :shareLink="getShareLink(page)" :titleEnd="('Page '+ page)" />
                 <component :is="documentStore.pdfComponent" class="tato-pdf-github-instructions"
                     :pdf="documentStore.createGithubRepoPdfObj.pdf"
                     text-layer annotation-layer
@@ -46,10 +44,10 @@ function setSingleDocLoaded(index) {
 }
 
 /**
- * This function opens a share popup for any particular page given its index.
+ * This function returns a link that can be used by the share popup.
  */
-function openShareForLink(index = 0) {
-    useWebsiteDataStore().setQRCodePopup(PERSONAL_WEBSITE_LINK + "create-github-repo/#page_" + index);
+function getShareLink(index = 0) {
+    return (PERSONAL_WEBSITE_LINK + "create-github-repo/#page_" + index);
 }
 
 useHead(getMeta(

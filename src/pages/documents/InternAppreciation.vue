@@ -4,6 +4,7 @@
     <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
             <div id="certificate" class="pdf-page-innerContainer">
+                <DocumentViewerAddons :hideLinkButton="true" />
                 <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
                     @loaded="() => {documentStore.setDocLoaded()}"
                     :pdf="documentStore.fultonInternshipAppreciationPdfObj.pdf"
