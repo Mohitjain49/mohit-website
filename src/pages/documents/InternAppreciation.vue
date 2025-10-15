@@ -3,11 +3,14 @@
 <client-only>
     <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
-            <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
-                :pdf="documentStore.fultonInternshipAppreciationPdfObj.pdf"
-                :width="documentStore.customPdfWidth"
-                :height="documentStore.customPdfHeight"
-            />
+            <div id="certificate" class="pdf-page-innerContainer">
+                <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
+                    @loaded="() => {documentStore.setDocLoaded()}"
+                    :pdf="documentStore.fultonInternshipAppreciationPdfObj.pdf"
+                    :width="documentStore.customPdfWidth"
+                    :height="documentStore.customPdfHeight"
+                />
+            </div>
         </div>
 
         <WebFooter v-if="!fullScreenStore.fullScreenSet" />

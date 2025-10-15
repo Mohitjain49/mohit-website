@@ -3,15 +3,20 @@
 <client-only>
     <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
-            <component v-for="page in pageNumbers"
-                :is="documentStore.pdfComponent" class="tato-pdf-github-instructions"
-                :pdf="documentStore.createGithubRepoPdfObj.pdf"
-                text-layer annotation-layer
-                @annotation="(event) => {documentStore.onAnnotationClick(event)}"
-                :width="documentStore.customPdfWidth"
-                :height="documentStore.customPdfHeight"
-                :page="page"
-            />
+            <div class="pdf-page-innerContainer" v-for="(page, index) in pageNumbers" :id="('page_' + page)">
+                <button v-if="documentStore.docLoaded" @click="openShareForLink(page)" class="pdf-doc-linkBtn" :title="('Get Link for Page ' + page)">
+                    <FontAwesomeIcon icon="fa-link" />
+                </button>
+                <component :is="documentStore.pdfComponent" class="tato-pdf-github-instructions"
+                    :pdf="documentStore.createGithubRepoPdfObj.pdf"
+                    text-layer annotation-layer
+                    @loaded="() => {setSingleDocLoaded(index)}"
+                    @annotation="(event) => {documentStore.onAnnotationClick(event)}"
+                    :width="documentStore.customPdfWidth"
+                    :height="documentStore.customPdfHeight"
+                    :page="page"
+                />
+            </div>>
         </div>
         
         <WebFooter v-if="!fullScreenStore.fullScreenSet" />
@@ -27,7 +32,25 @@
 <script setup>
 const documentStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
+
 const pageNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+const docsLoaded = ref([false, false, false, false, false, false, false, false]);
+
+/**
+ * This function sets a particular document component as loaded and only runs the main function once every doc is loaded.
+ */
+function setSingleDocLoaded(index) {
+    docsLoaded.value[index] = true;
+    const notLoaded = docsLoaded.value.findIndex(item => !item);
+    if(notLoaded == -1) { documentStore.setDocLoaded(); }
+}
+
+/**
+ * This function opens a share popup for any particular page given its index.
+ */
+function openShareForLink(index = 0) {
+    useWebsiteDataStore().setQRCodePopup(PERSONAL_WEBSITE_LINK + "create-github-repo/#page_" + index);
+}
 
 useHead(getMeta(
     "Mohit Jain | Create A GitHub Repository",

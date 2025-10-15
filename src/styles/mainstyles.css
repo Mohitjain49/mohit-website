@@ -228,9 +228,6 @@ button {
  * These are the styles for markdown components and the tato pdf viewer.
  */
 
-.linkAnnotation {
-    cursor: pointer;
-}
 #tato-pdf-resume {
     margin: 0px auto;
     width: calc(var(--total-scale-factor) * 612px) !important;
@@ -265,8 +262,42 @@ button {
     padding-bottom: 80px;
 }
 
+.pdf-page-innerContainer {
+    scroll-margin-top: 67px;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    margin: 0px auto;
+}
+.linkAnnotation {
+    cursor: pointer;
+}
+
 #resume-container:fullscreen .pdf-doc-mohit-container {
     min-height: calc(100% - 100px);
+}
+
+.pdf-doc-linkBtn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgb(225, 225, 225);
+    height: 40px;
+    width: 40px;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--website-light-text);
+    border: 2px solid;
+    border-radius: 15px;
+    font-size: 22px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, scale 0.2s;
+}
+.pdf-doc-linkBtn:hover {
+    box-shadow: 0px 0px 10px 1px;
+    scale: 1.1;
 }
 
 .markdown-body h1, .markdown-body p, .markdown-body li {
@@ -315,6 +346,12 @@ button {
     }
     .markdown-body p, .markdown-body li {
         font-size: 11px;
+    }
+    .pdf-doc-linkBtn {
+        width: 25px;
+        height: 25px;
+        font-size: 16px;
+        border-radius: 8px;
     }
 }
 

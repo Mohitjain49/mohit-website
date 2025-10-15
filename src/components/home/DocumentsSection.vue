@@ -15,7 +15,7 @@
                 I use PDF.js in my website to give my resume a custom display. Feel Free to take a look at it!
             </p>
         </RouterLink>
-        <RouterLink to="/create-github-repo" id="github-tab" class="documents-section-tab"
+        <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab"
             @mouseenter="onIvueTabHover('github-tab')"
             @mouseleave="onIvueTabLeave('github-tab')">
 
