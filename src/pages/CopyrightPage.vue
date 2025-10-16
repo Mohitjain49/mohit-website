@@ -7,8 +7,10 @@
                 <font-awesome-icon icon="fa-copyright" />
                 <span> {{ COPYRIGHT_TEXT }} </span>
             </h1>
-            <h2 class="copyright-body-subheader"> {{ PROJECT_VERSION }} </h2>
+
+            <h2 class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
             <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
+            <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
 
             <div class="copyright-body-desc">
                 I'm glad you're here and hope you find inspiration in my work.
@@ -21,6 +23,10 @@
                     <RouterLink :to="{ path: route.path, hash: '#footer' }" @click="goToPageSection('footer')">below.</RouterLink>
                 </span>
             </div>
+
+            <button @click="checkForUpdates()" class="copyright-reload-btn" title="Check For Updates">
+                <FontAwesomeIcon icon="fa-rotate" :spin="buttonClicked" />
+            </button>
         </div>
     </div>
     <WebFooter />
@@ -30,25 +36,33 @@
 <script setup>
 import now from '~build/time';
 import { version } from "~build/package";
+
 const route = useRoute();
+const buttonClicked = ref(false);
 
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
 const RELEASE_DATE = ref("Last Release: July 10, 2025");
+const RELEASE_TIME = ref("(11:59 PM)");
 const PROJECT_VERSION = ref("Version " + version);
 
 onMounted(() => {
     initWebData();
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
-    
-    RELEASE_DATE.value = "Last Release: " + new Date(now).toLocaleDateString("en-US", {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-    });
+    RELEASE_DATE.value = ("Last Release: " + useDateFormat(now, "MMMM Do, YYYY").value);
+    RELEASE_TIME.value = ("(" + useDateFormat(now, "h:m A").value + ")");
 });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website."
 ));
+
+/**
+ * This function checks for updates and reloads the website.
+ */
+function checkForUpdates() {
+    if(buttonClicked.value) { return; }
+    window.location.href = window.location.href;
+    buttonClicked.value = true;
+}
 </script>
 
 <style scoped>
@@ -62,6 +76,7 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     align-items: center;
 }
 .copyright-body {
+    position: relative;
     height: fit-content;
     width: fit-content;
     margin: 0px auto;
@@ -96,7 +111,13 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     font-family: 'Lexend', sans-serif;
     font-weight: bold;
     color: inherit;
+    margin-top: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }
+
 .copyright-body-desc {
     padding-top: 20px;
     width: 100%;
@@ -105,6 +126,37 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     font-size: 25px;
     font-family: 'Montserrat', 'Roboto', sans-serif;
     color: inherit;
+}
+
+.copyright-body-subheader.small {
+    font-size: 14px;
+    margin-top: 0px;
+}
+.copyright-body-subheader.version {
+    color: var(--lightning-yellow);
+    text-decoration: underline;
+}
+
+.copyright-reload-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--dark-background);
+    border: 2px solid var(--website-text);
+    color: var(--website-text);
+    height: 40px;
+    width: 40px;
+    font-size: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--default-transition);
+}
+.copyright-reload-btn:hover {
+    box-shadow: 0px 0px 10px 1px var(--website-light-text);
 }
 
 @media (max-width: 680px) {
@@ -121,6 +173,17 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     }
     .copyright-body-desc {
         font-size: 16px;
+    }
+
+    .copyright-body-subheader.small {
+        font-size: 9px;
+    }
+    .copyright-reload-btn {
+        top: 10px;
+        left: 10px;
+        font-size: 14px;
+        width: 30px;
+        height: 30px;
     }
 }
 @media (max-width: 450px) {

@@ -38,7 +38,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'usePageLeave',
         'useSwipe',
         'useElementBounding',
-        'onClickOutside'
+        'onClickOutside',
+        'useDateFormat'
     ]
 }
 
