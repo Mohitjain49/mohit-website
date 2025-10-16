@@ -72,7 +72,7 @@ export default defineConfig({
             vueTemplate: true
         }),
         VitePWA({
-            registerType: "autoUpdate",
+            registerType: "prompt",
             devOptions: { enabled: false },
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
@@ -81,7 +81,8 @@ export default defineConfig({
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
-                navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/]
+                navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/],
+                cleanupOutdatedCaches: true
             },
 
             manifest: {

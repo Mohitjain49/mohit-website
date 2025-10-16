@@ -8,7 +8,7 @@
 .features-return-widget {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     background-color: var(--dark-background);
     border: 2px solid var(--lightning-yellow);
     color: var(--lightning-yellow);

@@ -14,7 +14,7 @@ const WIDGET_TITLE = "I'm A Proud Computer Science Student Of Kennesaw State Uni
 .ksu-widget {
     position: fixed;
     bottom: 15px;
-    right: 15px;
+    left: 15px;
     background-color: var(--dark-background);
     border: 2px solid var(--website-text);
     height: 60px;
