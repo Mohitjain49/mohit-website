@@ -75,7 +75,6 @@ export default defineConfig({
             registerType: "prompt",
             devOptions: { enabled: false },
             includeAssets: ['**/*.woff2', '**/*.woff'],
-            filename: `sw-${Date.now()}.js`,
 
             workbox: {
                 cacheId: `v3.3.0-${Date.now()}`,
@@ -83,7 +82,7 @@ export default defineConfig({
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
                 navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/],
-                cleanupOutdatedCaches: true
+                cleanupOutdatedCaches: true,
             },
 
             manifest: {

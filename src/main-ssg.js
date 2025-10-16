@@ -17,8 +17,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 
-library.add(fas, fab);
-const USE_LEGACY_PDFJS_WORKER = false; // If necessary, this can be enabled to let the app use a legacy version of Pdf.js
+library.add(fas, fab); // Adds ALL the solid and brand font awesome icons.
+const USE_LEGACY_PDFJS_WORKER = false; // If necessary, this can be enabled to let the app use a legacy version of Pdf.js.
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
     ({ app }) => {
