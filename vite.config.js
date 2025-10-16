@@ -78,7 +78,7 @@ export default defineConfig({
             filename: `sw-${Date.now()}.js`,
 
             workbox: {
-                cacheId: "v3.3.0",
+                cacheId: `v3.3.0-${Date.now()}`,
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
