@@ -83,6 +83,8 @@ export default defineConfig({
                 navigateFallback: "/index.html",
                 navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/],
                 cleanupOutdatedCaches: true,
+                clientsClaim: false,
+                skipWaiting: false
             },
 
             manifest: {
