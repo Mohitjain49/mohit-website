@@ -98,7 +98,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     function emitClick() {
         const element = cursorClickElement.value;
         if(element == null) {
-            document.body.click();
+            document.body.click(); // Clicks on the document body if there is no button detected.
         } else {
             (cursorOnInput.value ? element.focus() : element.click());
             triggerClickSound();
