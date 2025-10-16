@@ -18,7 +18,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 
 library.add(fas, fab);
-const USE_LEGACY_PDFJS_WORKER = false;
+const USE_LEGACY_PDFJS_WORKER = false; // If necessary, this can be enabled to let the app use a legacy version of Pdf.js
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
     ({ app }) => {
