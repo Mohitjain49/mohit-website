@@ -97,11 +97,13 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
      */
     function emitClick() {
         const element = cursorClickElement.value;
-        if(!element) { return; }
-
-        (cursorOnInput.value ? element.focus() : element.click());
-        triggerClickSound();
-        nextTick(() => { setCursorClickElement(); });
+        if(element == null) {
+            document.body.click(); // Clicks on the document body if there is no button detected.
+        } else {
+            (cursorOnInput.value ? element.focus() : element.click());
+            triggerClickSound();
+            nextTick(() => { setCursorClickElement(); });
+        }
     }
 
     /**

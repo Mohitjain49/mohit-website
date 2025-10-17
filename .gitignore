@@ -38,5 +38,7 @@ coverage
 *vite-env.d.ts
 
 # .env files
+.env
+.env.*
 .env.local
 .env.production

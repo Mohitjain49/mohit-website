@@ -23,7 +23,7 @@ const iconBeating = ref(true);
 
 const circleOptClasses = computed(() => { return ['skills-nav-opt', (menuExpanded.value ? '' : 'hidden')]; });
 const mainCircleClasses = computed(() => {
-    return ['skills-nav', (menuExpanded.value ? 'skills-nav-expanded' : ''), 'animate__animated', 'animate__fadeInBottomRight'];
+    return ['skills-nav', (menuExpanded.value ? 'skills-nav-expanded' : ''), 'animate__animated', 'animate__fadeInBottomLeft'];
 });
 
 /**
@@ -57,7 +57,7 @@ const SKILLS_SECTIONS = [
     cursor: pointer;
     overflow: hidden;
     bottom: 10px;
-    right: 10px;
+    left: 10px;
     background-color: black;
     border: 2px solid var(--blue-one);
     height: 50px;

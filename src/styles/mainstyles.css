@@ -22,6 +22,8 @@
     --vibrant-flame: #E92A60;
     --lightning-yellow: #FFD700;
     --fulton-green: #005941;
+    
+    --vuejs-green: #41B883;
 
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
@@ -228,9 +230,6 @@ button {
  * These are the styles for markdown components and the tato pdf viewer.
  */
 
-.linkAnnotation {
-    cursor: pointer;
-}
 #tato-pdf-resume {
     margin: 0px auto;
     width: calc(var(--total-scale-factor) * 612px) !important;
@@ -263,6 +262,17 @@ button {
     min-height: calc(var(--body-height) - 100px);
     padding-top: 20px;
     padding-bottom: 80px;
+}
+
+.pdf-page-innerContainer {
+    scroll-margin-top: 67px;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    margin: 0px auto;
+}
+.linkAnnotation {
+    cursor: pointer;
 }
 
 #resume-container:fullscreen .pdf-doc-mohit-container {
@@ -357,4 +367,14 @@ button {
 }
 ::-webkit-scrollbar-button {
     display: none;
+}
+
+.fade-transition-enter-active, .fade-transition-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-transition-enter-from, .fade-transition-leave-to {
+    opacity: 0;
+}   
+.fade-transition-enter-to, .fade-transition-leave-from {
+    opacity: 1;
 }

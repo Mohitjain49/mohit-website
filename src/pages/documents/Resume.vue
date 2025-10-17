@@ -3,13 +3,17 @@
 <client-only>
     <main id="resume-container" v-if="documentStore.mounted">
         <div class="pdf-doc-mohit-container">
-            <component :is="documentStore.pdfComponent" id="tato-pdf-resume"
-                :pdf="(documentStore.onResumeQrcodeRoute ? documentStore.resumePdfWithQrcodeObj.pdf : documentStore.resumePdfObj.pdf)"
-                text-layer annotation-layer
-                @annotation="(event) => {documentStore.onAnnotationClick(event)}"
-                :width="documentStore.customPdfWidth"
-                :height="documentStore.customPdfHeight"
-            />
+            <div id="resume" class="pdf-page-innerContainer">
+                <DocumentViewerAddons :linkButtonMinWidth="500" titleEnd="My Resume!" />
+                <component :is="documentStore.pdfComponent" id="tato-pdf-resume"
+                    :pdf="(documentStore.onResumeQrcodeRoute ? documentStore.resumePdfWithQrcodeObj.pdf : documentStore.resumePdfObj.pdf)"
+                    text-layer annotation-layer
+                    @loaded="() => {documentStore.setDocLoaded()}"
+                    @annotation="(event) => {documentStore.onAnnotationClick(event)}"
+                    :width="documentStore.customPdfWidth"
+                    :height="documentStore.customPdfHeight"
+                />
+            </div>
         </div>
         
         <WebFooter v-if="!fullScreenStore.fullScreenSet" />
@@ -23,8 +27,14 @@
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
+const { width: windowWidth } = useWindowSize();
+
+const showResumeLinkButton = computed(() => {
+    return (!checkSSR() && documentStore.docLoaded && windowWidth.value >= 500);
+})
 
 useHead(getMeta(
     ("Mohit Jain | My Resume" + (documentStore.onResumeQrcodeRoute ? " (With Qrcode)" : "")),

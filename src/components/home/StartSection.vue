@@ -21,12 +21,13 @@
                 <div class="start-btn-caption"> {{ link.shortTitle }} </div>
             </RouterLink>
         </div>
-        <div class="start-buttonRow contact-links">
+        <div class="start-buttonRow contact-links" ref="startSocialsContainer">
             <template v-for="(contact, index) in SOCIALS">
                 <button v-if="(index != 2 && index != 4)" class="start-buttonRow-btn"
-                    :title="('See Options For ' + ((index == 0) ? '' : 'My ') + contact.name + ((index == 0) ? '' : ' Profile'))"
+                    :ref="(el) => {startSocialBtns[index] = ref(el)}"
+                    :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                     :style="getSpecialBtnStyles(contact.color)"
-                    @click="openSocialQrcode(contact.link)"
+                    @click="(event) => onContactBtnClick(event, contact)"
                     @mouseenter="setHeartbeatAnimation"
                     @mouseleave="setHeartbeatAnimation">
 
@@ -35,22 +36,96 @@
             </template>
         </div>
     </div>
+
+    <Transition name="fade-transition">
+        <div v-if="(startContactObj != null)" class="start-contactBtn-dropdown" :style="dropdownCoords">
+            <button class="top" @click="webData.setQRCodePopup(startContactObj.link)" :title="startContactObj.shareBtn">
+                Share <FontAwesomeIcon icon="fa-share-from-square" />
+            </button>
+            <button class="bottom" @click="openContactLink(startContactObj.link)" :title="startContactObj.linkBtn">
+                {{ ((startContactObj.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + startContactObj.name)) }}
+            </button>
+        </div>
+    </Transition>
 </div>
 </template>
 
 <script setup>
 const webData = useWebsiteDataStore();
+const visitorLeftPage = usePageLeave();
+const startContactObj = ref(null);
+
 const start = ref(null);
+const startSocialsContainer = ref(null);
+const startSocialBtns = ref([]);
+const boxes = ref([]);
 
 useIntersectionObserver(start, ([{ isIntersecting }]) => {
     setNameTransitions(isIntersecting);
 });
 
+watch(visitorLeftPage, () => {
+    if(visitorLeftPage.value) { hideStartContactDropdown(); }
+});
+
+onMounted(() => {
+    const emailRect = useElementBounding(startSocialBtns.value[0]);
+    const linkedinRect = useElementBounding(startSocialBtns.value[1]);
+    const githubRect = useElementBounding(startSocialBtns.value[3]);
+    const steamRect = useElementBounding(startSocialBtns.value[5]);
+    boxes.value.push(emailRect, linkedinRect, githubRect, steamRect);
+
+    onClickOutside(startSocialsContainer.value, (event) => {
+        if(event.target?.closest(".start-contactBtn-dropdown") == null) { hideStartContactDropdown(); }
+    });
+})
+
+// This returns custom styles for the contact button dropdown so that it looks unique.
+const dropdownCoords = computed(() => {
+    if(checkSSR() || startContactObj.value === null) {
+        return { left: "0px", top: "0px", color: "white", "--filter-drop-shadow": "drop-shadow(0 -2px 0 white)" }
+    }
+
+    const id = startContactObj.value.id;
+    const color = startContactObj.value.color;
+    let box = null;
+
+    if(id === "work_email") {
+        box = boxes.value[0];
+    } else if(id === "linkedin") {
+        box = boxes.value[1];
+    } else if(id === "github") {
+        box = boxes.value[2];
+    } else if(id === "steam") {
+        box = boxes.value[3];
+    }
+
+    const left = (String(box.left - box.width + ((box.width == 60) ? 12 : 0) + window.scrollX) + "px");
+    const top = (String(box.top + box.height + 15 + window.scrollY) + "px");
+    return { left, top, color, "--filter-drop-shadow": ("drop-shadow(0 -2px 0 " + color + ")") };
+});
+
 /**
- * This simply calls the "openQRCodePopupWithData" function.
+ * This function triggers whenever the a button for a social media link is clicked.
+ * @param {PointerEvent} event The pointer event from the contact button.
+ * @param { { link: String } } obj The custom object sent by the contact button.
  */
-function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
-    webData.setQRCodePopup(link);
+function onContactBtnClick(event = new PointerEvent('click'), obj) {
+    if(event.altKey) {
+        webData.setQRCodePopup(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
+    } else if(event.ctrlKey) {
+        openContactLink(obj.link); // If the Ctrl key is pressed, the webpage itself is automatically opened.
+    } else {
+        startContactObj.value = ((startContactObj.value?.id === obj.id) ? null : obj); // Sets the Start Contact Dropdown.
+    }
+}
+
+/**
+ * This function opens a contact link onto a new page.
+ * @param {String} link The link to open.
+ */
+function openContactLink(link = "") {
+    window.open(link, (link.startsWith("mailto:") ? "_blank" : "_self"));
 }
 
 /**
@@ -58,6 +133,7 @@ function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
  */
 function setNameTransitions(isVisible) {
     if(!isVisible) {
+        hideStartContactDropdown();
         document.getElementById("start-innerContainer").classList.remove("animate__animated", "animate__fadeIn");
         document.getElementsByClassName("start-section-title").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
@@ -79,6 +155,13 @@ function setNameTransitions(isVisible) {
 }
 
 /**
+ * This function hides the contact dropdown on this section.
+ */
+function hideStartContactDropdown() {
+    startContactObj.value = null;
+}
+
+/**
  * This function returns the styles for a special button.
  */
 function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
@@ -96,6 +179,7 @@ const MAIN_BTNS = [
 
 <style scoped>
 .start-section {
+    position: relative;
     height: 600px;
     min-height: 100vh;
     width: 1200px;
@@ -197,6 +281,60 @@ const MAIN_BTNS = [
     position: relative;
     top: 4px;
     font-size: 10.5px;
+    user-select: none;
+}
+
+.start-contactBtn-dropdown {
+    position: absolute;
+    height: 70px;
+    width: 150px;
+    background-color: #000000;
+    top: 0;
+    left: 0;
+    color: white;
+    border: 2px solid;
+    border-radius: 20px;
+    transition: left 0.2s, opacity 0.5s, color 0.2s;
+    --filter-drop-shadow: drop-shadow(0 -2px 0 white);
+}
+.start-contactBtn-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -17px;
+    left: calc(50% - 7.5px);
+    border-width: 9px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+    filter: var(--filter-drop-shadow);
+}
+
+.start-contactBtn-dropdown button {
+    height: calc(50% - 1px);
+    width: 100%;
+    font-size: 16px;
+    color: inherit;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+    border-bottom: 1px dotted;
+    transition: var(--default-transition);
+}
+.start-contactBtn-dropdown button:hover {
+    background-color: var(--dark-background);
+    text-shadow: 0px 0px 8px;
+}
+
+.start-contactBtn-dropdown button.top {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+.start-contactBtn-dropdown button.bottom {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    font-size: 14px;
 }
 
 @media (max-width: 1225px) {

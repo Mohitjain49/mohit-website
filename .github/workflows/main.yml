@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Set this to your Node.js version
+          node-version: '20.11.0' # Set this to your Node.js version
 
       - name: Install dependencies
         run: npm install
@@ -24,22 +24,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to AWS S3 and CloudFront
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --follow-symlinks --delete
+      - name: Deploy to AWS S3 and CloudFront with custom script
         env:
-          AWS_S3_BUCKET: mohit-website
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1'  # Your AWS Region
-          SOURCE_DIR: 'dist'       # Your build directory
+          AWS_CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_WEBSITE_ID }}
+          AWS_BUCKET: ${{ 'mohit-website' }}
+          AWS_REGION: ${{ 'us-east-1' }}
+        run: npm run deploy
 
-      - name: Invalidate CloudFront Cache
-        uses: chetan/invalidate-cloudfront-action@v2
-        env:
-          DISTRIBUTION: ${{ secrets.CLOUDFRONT_DISTRIBUTION_WEBSITE_ID }}
-          PATHS: '/*'
-          AWS_REGION: 'us-east-1'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

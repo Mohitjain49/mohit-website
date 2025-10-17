@@ -24,7 +24,7 @@ export const useInstallStore = defineStore("install-store", () => {
             deferredPrompt.value = e;
         });
         window.addEventListener('appinstalled', () => {
-            pwaCreated.value = true;
+            setPwaCreated();
         });
     }
 
@@ -39,7 +39,14 @@ export const useInstallStore = defineStore("install-store", () => {
         });
     }
 
+    /**
+     * This function sets that the website is cached and ready to be used offline.
+     */
+    function setPwaCreated() {
+        pwaCreated.value = true;
+    }
+
     return { installIcon, installText,
-        mountInstallStore, installApp
+        mountInstallStore, installApp, setPwaCreated
     }
 });

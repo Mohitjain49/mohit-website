@@ -8,8 +8,10 @@ import QRCodeStyling from "qr-code-styling";
 export const QRCODE_RESUME_PATH = { path: "/resume/qrcode" }
 export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
-    const mounted = ref(false);
     const fullScreenStore = useFullScreenStore();
+
+    const mounted = ref(false);
+    const docLoaded = ref(false);
 
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
@@ -185,6 +187,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function unmountDocumentPage() {
         document.body.style.overflowY = "";
+        docLoaded.value = false;
         fullScreenStore.exitFullScreen();
         window.removeEventListener("resize", setPdfSize);
     }
@@ -220,6 +223,21 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This sets a boolean to indicate that the document is loaded on the screen. Also handles the automatic scroll to a page.
+     */
+    function setDocLoaded() {
+        docLoaded.value = true;
+        const hashStr = router.currentRoute.value.hash.substring(1);
+        if(hashStr === "") { return; }
+
+        try {
+            goToPageSection(hashStr, ((hashStr === "footer") ? 0 : -70));
+        } catch(e) {
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+    }
+
+    /**
      * This function is triggered whenever someone clicks on a link on the custom PDF.
      */
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
@@ -231,12 +249,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    return { mounted, sharingDocument, downloadingDocument, printingDocument, qrcodeResumeUrl,
+    return { mounted, docLoaded, sharingDocument, downloadingDocument, printingDocument, qrcodeResumeUrl,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
         onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, printDoc, shareDoc, toggleDocumentFullScreen, setPdfSize,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, onAnnotationClick
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, onAnnotationClick
     }
 });
 

@@ -71,6 +71,7 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/mnd"], replacement: MND_PROJECT_LINK },
     { routes: ["/pizza"], replacement: PIZZA_WEBSITE_LINK },
     { routes: ["/repo"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
+    { routes: ["/deploy-script"], replacement: (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs") },
 
     { routes: ['/wiv', '/worlds-ivue'], replacement: WORLDS_IVUE_LINK },
     { routes: ["/ivuemedia"], replacement: IVUE_MEDIA_WEBSITE_LINK },
