@@ -1,17 +1,17 @@
-import 'dotenv/config';
-import * as fs from "fs";
-import * as path from 'path';
-import { lookup } from 'mime-types';
+import 'dotenv/config'; // Used To import .env variables independent from Vite.
+import * as fs from "fs"; // The File System Module. Used to find and get data from files in the build output.
+import * as path from 'path'; // The Path Module. Used to create path names and file names.
+import { lookup } from 'mime-types'; // The lookup function here can generate the MIME type for every file we fetch.
 
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"; // This module allows us to send files to an Amazon S3 bucket.
+import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront'; // This module allows us invalidate a CloudFront Cache.
 
-const AWS_REGION = process.env.AWS_REGION;
-const AWS_BUCKET = process.env.AWS_BUCKET;
-const AWS_CLOUDFRONT_DIST_ID = process.env.AWS_CLOUDFRONT_DIST_ID;
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
-const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
-const outDir = path.resolve('dist') // The path that leads to the build output.
+const AWS_REGION = process.env.AWS_REGION; // This is the region where both the S3 bucket and CloudFront Distribution should be located (e.g. "us-east-1").
+const AWS_BUCKET = process.env.AWS_BUCKET; // This is the name of the AWS bucket to send messages to. (e.g. "mohit-website").
+const AWS_CLOUDFRONT_DIST_ID = process.env.AWS_CLOUDFRONT_DIST_ID; // This is the ID of your CloudFront Distribution (e.g. "EDFDVBD632BHDS5").
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID; // This serves as the access key for your IAM account (e.g. AKIAIOSFODNN7EXAMPLE).
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY; // This serves as the access key for your IAM account (e.g. wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY).
+const outDir = path.resolve('dist'); // The path that leads to the build output.
 
 // console.log(AWS_REGION);
 // console.log(AWS_BUCKET);
@@ -19,6 +19,7 @@ const outDir = path.resolve('dist') // The path that leads to the build output.
 // console.log(AWS_ACCESS_KEY_ID);
 // console.log(AWS_SECRET_ACCESS_KEY);
 
+// If any of the 5 environment variables are not defined, this will throw an error before the script starts.
 if(!AWS_REGION || !AWS_BUCKET || !AWS_CLOUDFRONT_DIST_ID || !AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
     throw new Error("The environment variables are not properly configured.");
 }
@@ -56,7 +57,6 @@ function getPutObjectCommands() {
     for(let i = 0; i < allFiles.length; i++) {
         const filename = allFiles[i].replaceAll("\\", "/");
         const mimeType = lookup(filename);
-        if(filename === "")
 
         if(mimeType && mimeType !== "application/x-install-instructions") {
             commands.push(new PutObjectCommand({
@@ -121,4 +121,4 @@ async function main() {
     console.log("All Files Uploaded");
 }
 
-main();
+await main();
