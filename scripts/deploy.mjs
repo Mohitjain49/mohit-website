@@ -150,8 +150,8 @@ async function sendCloudfrontInvalidation() {
 async function main() {
     // Unless an argument is passed in, this deletes all current files in the bucket.
     if(!NO_DELETION) {
-        const deleteCommands = getDeleteObjectCommands();
-        for(let j = 0; j < length; j++) { await sendS3Command(deleteCommands[j]); }
+        const deleteCommands = await getDeleteObjectCommands();
+        for(let j = 0; j < deleteCommands.length; j++) { await sendS3Command(deleteCommands[j]); }
         console.log(`✅ Deleted All Files From Bucket!\n`);
     }
 
