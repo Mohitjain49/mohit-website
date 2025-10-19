@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.3.0",
+    "version": "3.3.1",
     "private": true,
     "type": "module",
     "scripts": {
@@ -36,8 +36,8 @@
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.911.0",
-        "@aws-sdk/client-s3": "^3.911.0",
+        "@aws-sdk/client-cloudfront": "^3.913.0",
+        "@aws-sdk/client-s3": "^3.913.0",
         "@unhead/vue": "^2.0.19",
         "@vitejs/plugin-vue": "^6.0.1",
         "dotenv": "^17.2.3",

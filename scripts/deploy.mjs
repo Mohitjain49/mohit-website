@@ -6,6 +6,8 @@ import { lookup } from 'mime-types'; // The lookup function here can generate th
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"; // This module allows us to send files to an Amazon S3 bucket.
 import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront'; // This module allows us invalidate a CloudFront Cache.
 
+// NPM Install Command: "npm install -D @aws-sdk/client-s3 @aws-sdk/client-cloudfront dotenv mime-types"
+
 const AWS_REGION = process.env.AWS_REGION; // This is the region where both the S3 bucket and CloudFront Distribution should be located (e.g. "us-east-1").
 const AWS_BUCKET = process.env.AWS_BUCKET; // This is the name of the AWS bucket to send messages to. (e.g. "mohit-website").
 const AWS_CLOUDFRONT_DIST_ID = process.env.AWS_CLOUDFRONT_DIST_ID; // This is the ID of your CloudFront Distribution (e.g. "EDFDVBD632BHDS5").
