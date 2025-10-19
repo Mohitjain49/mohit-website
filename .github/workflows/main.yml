@@ -31,5 +31,6 @@ jobs:
           AWS_CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_WEBSITE_ID }}
           AWS_BUCKET: ${{ 'mohit-website' }}
           AWS_REGION: ${{ 'us-east-1' }}
+          BUILD_OUTPUT: ${{ 'dist' }}
         run: npm run deploy
 
