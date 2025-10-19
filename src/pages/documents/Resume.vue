@@ -27,14 +27,8 @@
 </template>
 
 <script setup>
-const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
-const { width: windowWidth } = useWindowSize();
-
-const showResumeLinkButton = computed(() => {
-    return (!checkSSR() && documentStore.docLoaded && windowWidth.value >= 500);
-})
 
 useHead(getMeta(
     ("Mohit Jain | My Resume" + (documentStore.onResumeQrcodeRoute ? " (With Qrcode)" : "")),

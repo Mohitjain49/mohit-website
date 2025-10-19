@@ -15,6 +15,19 @@
                 I use PDF.js in my website to give my resume a custom display. Feel Free to take a look at it!
             </p>
         </RouterLink>
+        <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab"
+            @mouseenter="onIvueTabHover('deploy-script-tab')"
+            @mouseleave="onIvueTabLeave('deploy-script-tab')">
+
+            <div class="documents-section-tab-header">
+                <font-awesome-icon icon="fa-upload" />
+                <span> Deploy Script </span>
+            </div>
+            <p>
+                I made a custom script for deploying my website and other projects of mine to Amazon Web Services. 
+                It's made with Node.js and uses a few dependencies, but it is highly customizable.
+            </p>
+        </a>
         <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab"
             @mouseenter="onIvueTabHover('github-tab')"
             @mouseleave="onIvueTabLeave('github-tab')">
@@ -79,16 +92,18 @@ function setInitTransitions(isVisible) {
 
     document.getElementById('documents-section-title').classList.add("animate__animated", leftAnimation);
     document.getElementById('resume-tab').classList.add("animate__animated", rightAnimation);
-    document.getElementById('github-tab').classList.add("animate__animated", leftAnimation);
-    document.getElementById('fcs-certificate-tab').classList.add("animate__animated", rightAnimation);
-    document.getElementById('sitemap-tab').classList.add("animate__animated", leftAnimation);
+    document.getElementById('deploy-script-tab').classList.add("animate__animated", leftAnimation);
+    document.getElementById('github-tab').classList.add("animate__animated", rightAnimation);
+    document.getElementById('fcs-certificate-tab').classList.add("animate__animated", leftAnimation);
+    document.getElementById('sitemap-tab').classList.add("animate__animated", rightAnimation);
 
     setTimeout(() => {
         document.getElementById('documents-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
         document.getElementById('resume-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('github-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('sitemap-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('deploy-script-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('github-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('sitemap-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
     }, ANIMATE_DURATION);
 }
 
@@ -136,7 +151,7 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
 
 .documents-section-tabs-container {
     width: 100%;
-    height: 800px;
+    height: 1000px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -200,6 +215,14 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
     box-shadow: 0px 0px 12px 12px rgba(126, 90, 0, 0.25);
 }
 
+.documents-section-tab#deploy-script-tab {
+    color: rgb(161, 100, 255);
+    border-color: rgb(161, 100, 255);
+}
+.documents-section-tab#deploy-script-tab:hover {
+    box-shadow: 0px 0px 12px 12px rgba(161, 100, 255, 0.5);
+}
+
 .documents-section-tab#sitemap-tab {
     color: lightgrey;
     border-color: lightgray;
@@ -226,7 +249,7 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
         font-size: 80px;
     }
     .documents-section-tabs-container {
-        height: 800px;
+        height: 1000px;
     }
     .documents-section-tab {
         height: 150px;
@@ -236,6 +259,10 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
     #documents-section-title {
         font-size: 70px;
     }
+    #github-tab .documents-section-tab-header {
+        font-size: 22px;
+    }
+
     .documents-section-tab {
         width: 87.5%;
     }
