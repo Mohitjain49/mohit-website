@@ -26,8 +26,8 @@ const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY; // This serves 
 const outDir = path.resolve(BUILD_OUTPUT); // The path that leads to the build output.
 const args = process.argv.slice(2); // These are the arguments for altering how the script works.
 
-const NO_DELETION = (args.findIndex(item => item === "--no-delete") == -1);
-const NO_INVALIDATION = (args.findIndex(item => item === "--no-invalidation") == -1);
+const NO_DELETION = (args.findIndex(item => item === "--no-delete") != -1);
+const NO_INVALIDATION = (args.findIndex(item => item === "--no-invalidation") != -1);
 
 // If any of the 4 required environment variables are not defined, this will throw an error before the script starts.
 if(!AWS_REGION || !AWS_BUCKET || !AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
