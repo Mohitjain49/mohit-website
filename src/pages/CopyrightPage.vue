@@ -56,12 +56,21 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
 ));
 
 /**
- * This function checks for updates and reloads the website.
+ * This function checks for updates and deletes the cache and unregisters service workers.
  */
-function checkForUpdates() {
+async function checkForUpdates() {
     if(buttonClicked.value) { return; }
-    window.location.href = window.location.href;
     buttonClicked.value = true;
+
+    if('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for(const reg of regs) { await reg.unregister(); }
+    }
+    if('caches' in window) {
+        const keys = await caches.keys();
+        for(const key of keys) { await caches.delete(key); }
+    }
+    window.location.reload(true);
 }
 </script>
 

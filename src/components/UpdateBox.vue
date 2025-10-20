@@ -1,5 +1,5 @@
 <template>
-<div v-if="showUpdateBox" class="update-box animate__animated animate__zoomIn">
+<div v-if="showUpdateBox" class="update-box animate__animated animate__fadeInRight">
     <div class="update-box-desc">
         <FontAwesomeIcon :icon="(buttonClicked ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="buttonClicked" />
         <p v-html="UPDATE_WIDGET_TITLE"></p>
@@ -15,7 +15,7 @@
 <script setup>
 import { registerSW } from 'virtual:pwa-register';
 import { version } from "~build/package";
-const UPDATE_WIDGET_TITLE = "My website has a new update!<br>Click below to update to Version " + version + ".";
+const UPDATE_WIDGET_TITLE = ("My website has a new update!<br>You are currently on Version " + version + ".");
 
 const installStore = useInstallStore();
 const showUpdateBox = ref(false);
@@ -23,7 +23,7 @@ const buttonClicked = ref(false);
 
 const updateSW = registerSW({
     onNeedRefresh() { showUpdateBox.value = true; },
-    onOfflineReady() { installStore.setPwaCreated(); },
+    onOfflineReady() { installStore.setPwaCreated(); }
 });
 
 /**
