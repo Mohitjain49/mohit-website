@@ -5,7 +5,6 @@ import Create_Github_Repo from "/Create_Github_Repo.pdf";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
-export const QRCODE_RESUME_PATH = { path: "/resume/qrcode" }
 export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
     const fullScreenStore = useFullScreenStore();

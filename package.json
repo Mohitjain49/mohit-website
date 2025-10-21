@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.3.1",
+    "version": "3.3.2",
     "private": true,
     "type": "module",
     "scripts": {
@@ -45,12 +45,12 @@
         "unplugin-auto-import": "^20.2.0",
         "unplugin-imagemin": "^0.6.9",
         "unplugin-info": "^1.2.4",
-        "unplugin-vue-components": "^29.1.0",
+        "unplugin-vue-components": "^30.0.0",
         "unplugin-vue-markdown": "^29.2.0",
-        "vite": "^7.1.10",
+        "vite": "^7.1.11",
         "vite-plugin-env-types": "^0.1.4",
         "vite-plugin-pwa": "^1.1.0",
-        "vite-ssg": "^28.2.1",
+        "vite-ssg": "^28.2.2",
         "vite-ssg-sitemap": "^0.10.0",
         "vue-router": "^4.6.3"
     }
