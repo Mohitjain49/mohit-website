@@ -11,6 +11,7 @@
 <script setup>
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
+const fullScreenStore = useFullScreenStore();
 const { width: windowWidth } = useWindowSize();
 
 const props = defineProps({
@@ -21,7 +22,11 @@ const props = defineProps({
 });
 
 const showLinkButton = computed(() => {
-    return (!props.hideLinkButton && documentStore.docLoaded && windowWidth.value >= props.linkButtonMinWidth);
+    return (!props.hideLinkButton &&
+        documentStore.docLoaded &&
+        (windowWidth.value >= props.linkButtonMinWidth) &&
+        !fullScreenStore.fullScreenSet
+    );
 });
 
 /**

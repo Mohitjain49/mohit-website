@@ -42,7 +42,7 @@
 
                         <font-awesome-icon icon="fa-file-lines" />
                     </RouterLink>
-                    <RouterLink v-if="!docStore.onResumeQrcodeRoute" :to="QRCODE_RESUME_PATH" class="mohit-navBar-icon light"
+                    <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode" class="mohit-navBar-icon light"
                         title="See My Resume With A QR Code."
                         @mouseenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">

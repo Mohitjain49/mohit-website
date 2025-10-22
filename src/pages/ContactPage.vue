@@ -170,8 +170,17 @@ onMounted(() => {
     initWebData();
     if(window.innerWidth <= 525) { return; }
 
-    document.getElementsByClassName("contact-me-box").item(0).classList.add("animate__animated", "animate__fadeInDown");
-    document.getElementsByClassName("contact-me-box").item(1).classList.add("animate__animated", "animate__fadeInDown");
+    const contactBoxes = [
+        document.getElementsByClassName("contact-me-box").item(0),
+        document.getElementsByClassName("contact-me-box").item(1)
+    ];
+
+    for(let i = 0; i < contactBoxes.length; i++) {
+        const box = contactBoxes[i];
+        if(box && (typeof box.classList !== "undefined") && (box.classList instanceof DOMTokenList)) {
+            box.classList.add("animate__animated", "animate__fadeInDown")
+        }
+    }
 });
 
 /**

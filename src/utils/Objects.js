@@ -3,6 +3,7 @@ import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_Icon.png";
 import expo_icon from "../assets/sublo/Expo_Icon.svg";
 import vite_icon from "../assets/Vite_Icon.svg";
+import vitest_icon from "../assets/Vitest_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
 import pinia_icon from "../assets/Pinia_Icon.svg";
 import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
@@ -349,6 +350,19 @@ export const FRONTEND_SKILL_NOTES = [
             id: tauri_icon,
             faIcon: false,
             size: "105"
+        }
+    },
+    {
+        name: "Vitest",
+        link: "https://vitest.dev/",
+        color: "#749b24",
+        desc: "Vitest is Vite's main testing module. This module is designed for Vite as it has support for glob imports, " +
+            "its Server Side Rendering primitives, and more.",
+
+        icon: {
+            id: vitest_icon,
+            faIcon: false,
+            size: "115"
         }
     },
 ];

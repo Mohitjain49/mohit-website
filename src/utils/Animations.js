@@ -3,9 +3,11 @@
  * @param {String} cardId The element id for the card.
  */
 export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
-    const navCard = document.getElementById(cardId).classList;
-    navCard.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
-    setTimeout(() => { navCard.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+    const navCard = document.getElementById(cardId);
+    if(!navCard || (typeof navCard.classList === "undefined") || !(navCard.classList instanceof DOMTokenList)) { return; }
+
+    navCard.classList.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
+    setTimeout(() => { navCard.classList.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
 }
 
 /**

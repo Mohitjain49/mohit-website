@@ -5,7 +5,6 @@ import Create_Github_Repo from "/Create_Github_Repo.pdf";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
-export const QRCODE_RESUME_PATH = { path: "/resume/qrcode" }
 export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
     const fullScreenStore = useFullScreenStore();
@@ -242,8 +241,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
         const url = event.data.url;
-        if(url === PERSONAL_WEBSITE_LINK) {
-            router.push("/");
+        if(url.includes(PERSONAL_WEBSITE_LINK)) {
+            router.push("/" + url.replace(PERSONAL_WEBSITE_LINK, ""));
         } else {
             window.open(url, "_blank");
         }
@@ -262,64 +261,68 @@ export const useDocumentStore = defineStore("document-store", () => {
  * This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right.
  */
 async function createQrcodeResume() {
-    // This fetches and loads the PDF file.
-    const existingPdfBytes = await fetch(Mohit_Jain_Resume).then(res => res.arrayBuffer());
-    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+    try {
+        // This fetches and loads the PDF file.
+        const existingPdfBytes = await fetch(Mohit_Jain_Resume).then(res => res.arrayBuffer());
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
-    // This generates the QR Code and makes into a usuable image for pdf-lib.
-    const qrCode = new QRCodeStyling({
-        width: 300,
-        height: 300,
-        margin: 5,
-        data: PERSONAL_WEBSITE_LINK,
-        type: "canvas",
-        dotsOptions: {
-            color: 'black',
-            type: "rounded"
-        },
-        cornersSquareOptions: {
-            color: 'black',
-            type: 'extra-rounded'
-        },
-        cornersDotOptions: {
-            color: 'black',
-            type: 'dot'
-        },
-        qrOptions: {
-            typeNumber: 0,
-            mode: 'Byte',
-            errorCorrectionLevel: 'Q',
-        },
-        backgroundOptions: { color: '#FFFFFF' },
-    });
-    const qrData = await qrCode.getRawData("png");
-    const arrayBuffer = await qrData.arrayBuffer();
+        // This generates the QR Code and makes into a usuable image for pdf-lib.
+        const qrCode = new QRCodeStyling({
+            width: 300,
+            height: 300,
+            margin: 5,
+            data: PERSONAL_WEBSITE_LINK,
+            type: "canvas",
+            dotsOptions: {
+                color: 'black',
+                type: "rounded"
+            },
+            cornersSquareOptions: {
+                color: 'black',
+                type: 'extra-rounded'
+            },
+            cornersDotOptions: {
+                color: 'black',
+                type: 'dot'
+            },
+            qrOptions: {
+                typeNumber: 0,
+                mode: 'Byte',
+                errorCorrectionLevel: 'Q',
+            },
+            backgroundOptions: { color: '#FFFFFF' },
+        });
+        const qrData = await qrCode.getRawData("png");
+        const arrayBuffer = await qrData.arrayBuffer();
 
-    // This embeds the Qrcode as an image into the PDF file and places it accordingly.
-    const qrImage = await pdfDoc.embedPng(arrayBuffer);
-    const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-    const page = pdfDoc.getPage(0);
+        // This embeds the Qrcode as an image into the PDF file and places it accordingly.
+        const qrImage = await pdfDoc.embedPng(arrayBuffer);
+        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        const page = pdfDoc.getPage(0);
 
-    const NULL_COLOR = rgb(0.2665, 0.3143, 0.4191);
-    const BLUE_COLOR = rgb(0.184, 0.325, 0.792);
+        const NULL_COLOR = rgb(0.2665, 0.3143, 0.4191);
+        const BLUE_COLOR = rgb(0.184, 0.325, 0.792);
 
-    const { width, height } = page.getSize();
-    page.drawImage(qrImage, {
-        x: (width - 70),
-        y: (height - 70),
-        width: 60,
-        height: 60,
-    });
+        const { width, height } = page.getSize();
+        page.drawImage(qrImage, {
+            x: (width - 70),
+            y: (height - 70),
+            width: 60,
+            height: 60,
+        });
 
-    page.drawText("My Website!", {
-        x: (width - 70),
-        y: (height - 82),
-        size: 10,
-        color: NULL_COLOR,
-        font
-    });
+        page.drawText("My Website!", {
+            x: (width - 70),
+            y: (height - 82),
+            size: 10,
+            color: NULL_COLOR,
+            font
+        });
 
-    // This saves the PDF and returns a blob representing the new PDF.
-    const modifiedPdfBytes = await pdfDoc.save();
-    return new Blob([modifiedPdfBytes], { type: "application/pdf" });
+        // This saves the PDF and returns a blob representing the new PDF.
+        const modifiedPdfBytes = await pdfDoc.save();
+        return new Blob([modifiedPdfBytes], { type: "application/pdf" });
+    } catch(e) {
+        return new Blob([new Uint8Array(), { type: "application/pdf" }]);
+    }
 }

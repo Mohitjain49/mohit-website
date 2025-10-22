@@ -47,6 +47,12 @@ export default defineConfig({
     base: "/",
     server: { port: 5000 },
     preview: { port: 4007 },
+    test: {
+        watch: false,
+        environment: "node",
+        server: { deps: { inline: true } },
+        setupFiles: ['./vitest.setup.js']
+    },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
         Info(),
@@ -78,7 +84,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: `v3.3.1-${Date.now()}`,
+                cacheId: `v3.3.2-${Date.now()}`,
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",
