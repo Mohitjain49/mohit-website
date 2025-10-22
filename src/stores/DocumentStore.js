@@ -241,8 +241,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
         const url = event.data.url;
-        if(url === PERSONAL_WEBSITE_LINK) {
-            router.push("/");
+        if(url.includes(PERSONAL_WEBSITE_LINK)) {
+            router.push("/" + url.replace(PERSONAL_WEBSITE_LINK, ""));
         } else {
             window.open(url, "_blank");
         }

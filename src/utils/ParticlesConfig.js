@@ -61,7 +61,7 @@ export const BLUE_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 500
+            value: 375
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
