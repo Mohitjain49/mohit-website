@@ -11,7 +11,8 @@
         "open:preview": "vite preview --open",
         "open:build": "npm run build && npm run open:preview",
         "deploy": "node scripts/deploy.mjs",
-        "update": "npx npm-check-updates"
+        "update": "npx npm-check-updates",
+        "test": "vitest run"
     },
     "dependencies": {
         "@fontsource/lexend": "^5.2.11",
@@ -52,6 +53,7 @@
         "vite-plugin-pwa": "^1.1.0",
         "vite-ssg": "^28.2.2",
         "vite-ssg-sitemap": "^0.10.0",
+        "vitest": "^3.2.4",
         "vue-router": "^4.6.3"
     }
 }

@@ -84,7 +84,7 @@ function getGamepadBookmarkClasses() {
  * This returns whether or not the Gamepad Icon is good to show or not.
  */
 function showGamepadBookmark() {
-    return Boolean(navigator.getGamepads());
+    return Boolean((typeof navigator !== 'undefined') && (typeof navigator.getGamepads === 'function'));
 }
 
 const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!";

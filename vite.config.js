@@ -47,6 +47,12 @@ export default defineConfig({
     base: "/",
     server: { port: 5000 },
     preview: { port: 4007 },
+    test: {
+        watch: false,
+        environment: "node",
+        server: { deps: { inline: true } },
+        setupFiles: ['./vitest.setup.js']
+    },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
         Info(),

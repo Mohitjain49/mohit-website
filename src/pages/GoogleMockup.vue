@@ -36,8 +36,9 @@ watch(() => route.hash, () => { setDirectionsComp(); });
 onMounted(() => {
     initWebData();
     setDirectionsComp();
-    if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        toggleDarkMode();
+
+    if((typeof window !== 'undefined') && (typeof window.matchMedia === 'function')) {
+        if(window.matchMedia('(prefers-color-scheme: dark)').matches) { toggleDarkMode(); }
     }
 });
 
