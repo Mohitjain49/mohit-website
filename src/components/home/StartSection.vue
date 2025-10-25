@@ -134,23 +134,23 @@ function openContactLink(link = "") {
 function setNameTransitions(isVisible) {
     if(!isVisible) {
         hideStartContactDropdown();
-        document.getElementById("start-innerContainer").classList.remove("animate__animated", "animate__fadeIn");
-        document.getElementsByClassName("start-section-title").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-section-subtitle").item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-section-subtitle").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-buttonRow").item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-buttonRow").item(1).classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementById("start-innerContainer")?.classList.remove("animate__animated", "animate__fadeIn");
+        document.getElementsByClassName("start-section-title").item(0)?.classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(0)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-section-subtitle").item(1)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-buttonRow").item(0)?.classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-buttonRow").item(1)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
         return;
     }
 
     if(window.innerWidth <= 450) {
-        document.getElementById("start-innerContainer").classList.add("animate__animated", "animate__fadeIn");
+        document.getElementById("start-innerContainer")?.classList.add("animate__animated", "animate__fadeIn");
     } else {
-        document.getElementsByClassName("start-section-title").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-section-subtitle").item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-section-subtitle").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName("start-buttonRow").item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName("start-buttonRow").item(1).classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-section-title").item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-section-subtitle").item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-section-subtitle").item(1)?.classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName("start-buttonRow").item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName("start-buttonRow").item(1)?.classList.add("animate__animated", "animate__lightSpeedInRight");
     }
 }
 

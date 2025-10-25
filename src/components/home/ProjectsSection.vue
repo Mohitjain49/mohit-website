@@ -45,14 +45,14 @@ useIntersectionObserver(cardRefs, (entry) => {
  */
 function setProjectsTransitions(isVisible) {
     if(isVisible && window.innerWidth > 450) {
-        document.getElementsByClassName('projects-main-header').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName('projects-main-desc').item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName('projects-features-btn').item(0).classList.add("animate__animated", "animate__zoomIn");
+        document.getElementsByClassName('projects-main-header').item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName('projects-main-desc').item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName('projects-features-btn').item(0)?.classList.add("animate__animated", "animate__zoomIn");
         return;
     } else if(!isVisible) {
-        document.getElementsByClassName('projects-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName('projects-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName('projects-features-btn').item(0).classList.remove("animate__animated", "animate__zoomIn");
+        document.getElementsByClassName('projects-main-header').item(0)?.classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName('projects-main-desc').item(0)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName('projects-features-btn').item(0)?.classList.remove("animate__animated", "animate__zoomIn");
     }
 }
 </script>
