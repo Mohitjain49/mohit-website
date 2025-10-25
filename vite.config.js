@@ -1,6 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
-import { playwright } from '@vitest/browser-playwright';
 
 import { VitePWA } from 'vite-plugin-pwa';
 import { qrcode } from 'vite-plugin-qrcode';
@@ -54,12 +53,7 @@ export default defineConfig({
         watch: false,
         environment: "node",
         server: { deps: { inline: true } },
-        setupFiles: ['./vitest.setup.js'],
-        // browser: {
-        //     enabled: true,
-        //     provider: playwright(),
-        //     instances: [{ browser: 'chromium' }],
-        // }
+        setupFiles: ['./vitest.setup.js']
     },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
