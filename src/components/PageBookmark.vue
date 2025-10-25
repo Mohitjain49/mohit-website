@@ -16,62 +16,11 @@
         <font-awesome-icon icon="fa-lock" />
     </button>
 </Transition>
-
-<Transition name="mohit-sideRoute-left-transition" appear>
-    <RouterLink v-if="showSideRoutes" class="mohit-sideRoute left" :to="prevRoute.path" :style="prevRoute.style">
-        <FontAwesomeIcon :icon="prevRoute.faIcon" />
-        <span v-html="prevRoute.title"></span>
-    </RouterLink>
-</Transition>
-
-<Transition name="mohit-sideRoute-right-transition" appear>
-    <RouterLink v-if="showSideRoutes" class="mohit-sideRoute right" :to="nextRoute.path" :style="nextRoute.style">
-        <FontAwesomeIcon :icon="nextRoute.faIcon" />
-        <span v-html="nextRoute.title"></span>
-    </RouterLink>
-</Transition>
 </template>
 
 <script setup>
 const webData = useWebsiteDataStore();
 const gamepadStore = useGamepadStore();
-const router = useRouter();
-
-const windowSwipe = useSwipe(window);
-const visitorLeftPage = usePageLeave();
-const visitorMouse = useMouse({ touch: false, initialValue: { x: 200, y: 200 } });
-
-// This is a boolean that determines whether the route side buttons should be shown or not.
-const showSideRoutes = computed(() => {
-    if(visitorLeftPage.value || routeIndex.value == -1) { return false; }
-    const x = visitorMouse.x.value;
-    return (x < 75 || x > (window.innerWidth - 75));
-});
-
-// This tracks what main route the user is currently on.
-const routeIndex = computed(() => {
-    const routePath = router.currentRoute.value.path;
-    return ROUTES.findIndex(item => (routePath === item.path || routePath + "/" === item.path));
-});
-
-// This gets the objects for the route side buttons.
-const prevRoute = computed(() => { return ROUTES[(routeIndex.value < 1) ? (ROUTES.length - 1) : (routeIndex.value - 1)]; });
-const nextRoute = computed(() => { return ROUTES[(routeIndex.value == (ROUTES.length - 1)) ? 0 : (routeIndex.value + 1)]; });
-
-// This tracks touch "swipe" eventsso that the user can change the page if the swipe left or right.
-watch(windowSwipe.isSwiping, () => {
-    if(routeIndex.value == -1) { return; }
-    const direction = windowSwipe.direction.value;
-    const x = windowSwipe.coordsStart.x;
-
-    if(direction === "left" && x > window.innerWidth - 75) {
-        router.push(nextRoute.value.path);
-        triggerClickSound();
-    } else if(direction === "right" && x < 75) {
-        router.push(prevRoute.value.path);
-        triggerClickSound();
-    }
-});
 
 /**
  * This returns the classes for the gamepad bookmark.
@@ -89,16 +38,6 @@ function showGamepadBookmark() {
 
 const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!";
 const WAKE_LOCK_BOOKMARK_TITLE = "Screen Wake Lock Set. Click here to remove it.";
-
-const ROUTES = [
-    { path: "/", faIcon: "fa-house", title: "Home<br>Page", style: { color: "var(--website-text)", backgroundColor: "#000000", fontSize: "8px", lineHeight: "9px" } },
-    { path: "/skills/", faIcon: "fa-code", title: "Skills", style: { color: "var(--blue-zero)", backgroundColor: "var(--blue-cobalt)" } },
-    { path: "/experience/", faIcon: "fa-file-code", title: "Experience", style: { color: "var(--website-text)", backgroundColor: "black", fontSize: "8px" } },
-    { path: "/projects/", faIcon: "fa-cubes", title: "Projects", style: { color: "var(--globe-green-light)", backgroundColor: "var(--globe-green-opaque)" } },
-    { path: "/resume/", faIcon: "fa-file-lines", title: "Resume", style: { color: "var(--blue-two)", backgroundColor: "black" } },
-    { path: "/features/", faIcon: "fa-bolt-lightning", title: "Features", style: { color: "var(--lightning-yellow)", backgroundColor: "black" } },
-    { path: "/contact/", faIcon: "fa-paper-plane", title: "Contact", style: { color: "var(--website-dark-text)", backgroundColor: "var(--webpage-static-background)" } }
-];
 </script>
 
 <style scoped>

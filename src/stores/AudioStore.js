@@ -3,24 +3,27 @@ import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
+    const CLICK_VOLUME_MUTED_KEY = "mohit-audio-clickVolume-muted";
     const webData = useWebsiteDataStore();
 
-    /**
-     * @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect.
-     */
+    /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect. */
     const audioClickClip = ref(null);
 
-    /**
-     * @type {Ref<HTMLAudioElement>} This is an audio reference variable for the scan sound effect.
-     */
+    /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the scan sound effect. */
     const audioScanClip = ref(null);
 
     const showVolumeGamepadMenu = ref(false);
     const volumeInput = ref("50");
+    const audioMuted = ref(false);
+
     const volumeInputIcon = computed(() => {
         const volumeInt = parseInt(volumeInput.value);
+        if(audioMuted.value) { return "fa-volume-xmark"; }
         return ((volumeInt == 0) ? 'fa-volume-off' : ((volumeInt < 50) ? "fa-volume-low" : "fa-volume-high"));
-    })
+    });
+    const volumeInputTitle = computed(() => {
+        return (audioMuted.value ? 'Unmute Volume' : "Mute Volume");
+    });
 
     /**
      * @type {SpeechSynthesisUtterance | null} This is the utterance for the speech synthesis.
@@ -54,7 +57,10 @@ export const useAudioStore = defineStore("audio-store", () => {
         audioScanClip.value.preload = "auto";
 
         const audioClipVolume = localStorage.getItem(CLICK_VOLUME_KEY);
+        const audioVolumeMuted = localStorage.getItem(CLICK_VOLUME_MUTED_KEY);
+
         volumeInput.value = ((audioClipVolume === null) ? "50" : audioClipVolume);
+        audioMuted.value = ((audioVolumeMuted === null) ? false : JSON.parse(audioVolumeMuted));
         changeAudioVolume();
     }
 
@@ -70,10 +76,12 @@ export const useAudioStore = defineStore("audio-store", () => {
     }
 
     /**
-     * This function removes the saved volume in local storage.
+     * This function sets the new status of whether click sounds should be muted or not for the website.
+     * @param {"toggle" | Boolean} status The new status of whether to mute the audio or not.
      */
-    function removeLocalStorageVolume() {
-        localStorage.removeItem(CLICK_VOLUME_KEY);
+    function setAudioMuted(status = "toggle") {
+        audioMuted.value = ((status === "toggle") ? !audioMuted.value : status);
+        localStorage.setItem(CLICK_VOLUME_MUTED_KEY, JSON.stringify(audioMuted.value));
     }
 
     /**
@@ -86,23 +94,29 @@ export const useAudioStore = defineStore("audio-store", () => {
 
         const usuableLink = foundElement?.closest('a');
         const usuableButton = foundElement?.closest('button');
-        if(usuableLink || usuableButton) { playClickSound() }
+        if(usuableLink || usuableButton) { playClickSound(); }
     }
 
     /**
      * This function plays the click sound effect.
      */
     function playClickSound() {
-        audioClickClip.value.currentTime = 0;
-        audioClickClip.value.play();
+        if(audioMuted.value) { return; }
+        try {
+            audioClickClip.value.currentTime = 0;
+            audioClickClip.value.play();
+        } catch(e) {}
     }
 
     /**
      * This function plays the scan sound effect.
      */
     function playScanSound() {
-        audioScanClip.value.currentTime = 0;
-        audioScanClip.value.play();
+        if(audioMuted.value) { return; }
+        try {
+            audioScanClip.value.currentTime = 0;
+            audioScanClip.value.play();
+        } catch(e) {}
     }
 
     /**
@@ -149,9 +163,9 @@ export const useAudioStore = defineStore("audio-store", () => {
         ttsPlaying.value = true;
     }
 
-    return { audioClickClip, audioScanClip, volumeInput, volumeInputIcon, showVolumeGamepadMenu,
+    return { audioClickClip, audioScanClip, audioMuted, volumeInput, volumeInputIcon, volumeInputTitle, showVolumeGamepadMenu,
         ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, checkTTSAvailable, cancelTTS, startTTS,
-        setupClickAudio, changeAudioVolume, confirmClickSound, addToVolume, playClickSound, playScanSound
+        setupClickAudio, changeAudioVolume, confirmClickSound, addToVolume, setAudioMuted, playClickSound, playScanSound
     }
 });
 
