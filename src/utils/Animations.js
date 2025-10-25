@@ -24,8 +24,8 @@ export function addNoteCardAnimation(target, isVisible = true) {
 /**
  * This adds and removes a flash animation for any element.
  */
-export function setFlashAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
+export function setFlashAnimation(event = new PointerEvent("pointerenter")) {
+    if(event.type === "pointerenter" && event.pointerType === "mouse") {
         event.target.classList.add("animate__animated", "animate__flash");
     } else {
         event.target.classList.remove("animate__animated", "animate__flash");
@@ -35,8 +35,8 @@ export function setFlashAnimation(event = new MouseEvent("mouseenter")) {
 /**
  * This function adds or removes a heartbeat animation to any element.
  */
-export function setHeartbeatAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
+export function setHeartbeatAnimation(event = new PointerEvent("pointerenter")) {
+    if(event.type === "pointerenter" && event.pointerType === "mouse") {
         event.target.classList.add('animate__animated', 'animate__heartBeat');
     } else {
         event.target.classList.remove('animate__animated', 'animate__heartBeat');
@@ -46,8 +46,8 @@ export function setHeartbeatAnimation(event = new MouseEvent("mouseenter")) {
 /**
  * This function sets a bounce animation for any element.
  */
-export function setBounceAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
+export function setBounceAnimation(event = new PointerEvent("pointerenter")) {
+    if(event.type === "pointerenter" && event.pointerType === "mouse") {
         event.target.classList.add('animate__animated', 'animate__bounce');
     } else {
         event.target.classList.remove('animate__animated', 'animate__bounce');
@@ -57,8 +57,8 @@ export function setBounceAnimation(event = new MouseEvent("mouseenter")) {
 /**
  * This function sets a pulse animation for any element for an infinite amount of time.
  */
-export function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
+export function setPulseLoopAnimation(event = new PointerEvent("pointerenter")) {
+    if(event.type === "pointerenter" && event.pointerType === "mouse") {
         event.target.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
     } else {
         event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
@@ -66,10 +66,21 @@ export function setPulseLoopAnimation(event = new MouseEvent("mouseenter")) {
 }
 
 /**
+ * This function sets a pulse animation for any element and repeats it twice.
+ */
+export function setPulseTwiceAnimation(event = new PointerEvent("pointerenter")) {
+    if(event.type === "pointerenter" && event.pointerType === "mouse") {
+        event.target.classList.add('animate__animated', 'animate__pulse', 'animate__repeat-2');
+    } else {
+        event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__repeat-2');
+    }
+}
+
+/**
  * This function adds or removes a transition to a social media link button.
  */
-export function setHeadShakeAnimation(event = new MouseEvent("mouseenter")) {
-    if(event.type === "mouseenter") {
+export function setHeadShakeAnimation(event = new PointerEvent("pointerenter")) {
+    if(event.type === "pointerenter" && event.pointerType === "mouse") {
         event.target.classList.add("animate__animated", "animate__headShake");
     } else {
         event.target.classList.remove("animate__animated", "animate__headShake");
@@ -81,7 +92,5 @@ export function setHeadShakeAnimation(event = new MouseEvent("mouseenter")) {
  */
 export function addFlashAnimation(event = new MouseEvent("click")) {
     event.target.classList.add('animate__animated', 'animate__flash');
-    setTimeout(() => {
-        event.target.classList.remove('animate__animated', 'animate__flash');
-    }, 800)
+    setTimeout(() => { event.target.classList.remove('animate__animated', 'animate__flash'); }, 800)
 }

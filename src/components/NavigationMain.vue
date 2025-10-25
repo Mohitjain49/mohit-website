@@ -15,7 +15,7 @@
                 :title="btn.title"
                 class="mohit-navBar-icon"
                 :style="getColorStyles(btn.color)"
-                @mouseenter="setPulseLoopAnimation"
+                @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
                 <font-awesome-icon :icon="btn.icon" />
@@ -23,7 +23,7 @@
             <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
                 :title="(webData.navMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu')"
                 :style="getColorStyles('var(--website-light-text)')"
-                @mouseenter="setPulseLoopAnimation"
+                @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
                 <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />

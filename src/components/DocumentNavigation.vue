@@ -37,21 +37,21 @@
                 <template v-if="docStore.onResumeRoute">
                     <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/" class="mohit-navBar-icon light"
                         title="Use Website Viewer"
-                        @mouseenter="setPulseLoopAnimation"
+                        @pointerenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-file-lines" />
                     </RouterLink>
                     <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode" class="mohit-navBar-icon light"
                         title="See My Resume With A QR Code."
-                        @mouseenter="setPulseLoopAnimation"
+                        @pointerenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-qrcode" />
                     </RouterLink>
                     <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown" class="mohit-navBar-icon light"
                         title="Use Markdown Format"
-                        @mouseenter="setPulseLoopAnimation"
+                        @pointerenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-brands fa-markdown" />
@@ -61,7 +61,7 @@
                     <a href="https://github.com/" to="/create-github-repo" class="mohit-navBar-icon"
                         title="Go To GitHub"
                         :style="getColorStyles('#FFFFFF')"
-                        @mouseenter="setPulseLoopAnimation"
+                        @pointerenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-brands fa-github" />
@@ -71,7 +71,7 @@
                     <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
                         title="See LinkedIn Post" class="mohit-navBar-icon"
                         :style="getColorStyles('#0072B1')"
-                        @mouseenter="setPulseLoopAnimation"
+                        @pointerenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-brands fa-linkedin" />
@@ -79,7 +79,7 @@
                     <a :href="FCS_CAREER_INTERNSHIP_LINK"  target="_blank"
                         title="FCS Career Internship Program" class="mohit-navBar-icon"
                         :style="getColorStyles('var(--fulton-green)')"
-                        @mouseenter="setPulseLoopAnimation"
+                        @pointerenter="setPulseLoopAnimation"
                         @mouseleave="setPulseLoopAnimation">
 
                         <font-awesome-icon icon="fa-school-flag" />
@@ -88,7 +88,7 @@
 
                 <a class="mohit-navBar-icon white" :href="PDFJS_LINK"
                     title="See More about PDF.js"
-                    @mouseenter="setPulseLoopAnimation"
+                    @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
 
                     <img :src="pdfjs_logo" draggable="false" width="20" />
@@ -106,14 +106,14 @@
             <div class="mohit-documentBar-iconSection right">
                 <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light"
                     :title="fullScreenStore.docElementTitle"
-                    @mouseenter="setPulseLoopAnimation"
+                    @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
 
                     <font-awesome-icon :icon="fullScreenStore.faIcon" />
                 </button>
                 <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
                     :title="(webData.documentMenuOpen ? 'Close Document Options' : 'Open Document Options')"
-                    @mouseenter="setPulseLoopAnimation"
+                    @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
 
                     <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-square-caret-down' : 'fa-arrow-up-from-bracket')" />

@@ -14,7 +14,7 @@
                 class="start-buttonRow-btn inner-path"
                 :style="getSpecialBtnStyles(link.color)"
                 :title="link.title"
-                @mouseenter="setHeartbeatAnimation"
+                @pointerenter="setHeartbeatAnimation"
                 @mouseleave="setHeartbeatAnimation">
 
                 <font-awesome-icon :icon="link.icon" />
@@ -28,7 +28,7 @@
                     :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                     :style="getSpecialBtnStyles(contact.color)"
                     @click="(event) => onContactBtnClick(event, contact)"
-                    @mouseenter="setHeartbeatAnimation"
+                    @pointerenter="setHeartbeatAnimation"
                     @mouseleave="setHeartbeatAnimation">
 
                     <font-awesome-icon :icon="contact.linkIcon" />

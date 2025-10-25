@@ -4,11 +4,11 @@
         <FontAwesomeIcon :icon="(buttonClicked ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="buttonClicked" />
         <p class="update-box-desc-text">
             <span v-html="UPDATE_WIDGET_TITLE"></span>
-            <span class="version-num" v-html="UPDATE_VERSION"></span>.
+            <span class="version-num" v-html="UPDATE_DATE"></span>.
         </p>
     </div>
 
-    <div class="update-box-buttons">
+    <div :class="['update-box-buttons', (buttonClicked ? 'updating' : '')]">
         <button class="updateBtn" @click="updateWebsite()"> {{ (buttonClicked ? 'Updating...' : 'Update') }} </button>
         <button class="closeBtn" @click="showUpdateBox = false"> Close </button>
         <RouterLink to="/copyright" class="copyrightBtn"> Current Version </RouterLink>
@@ -18,14 +18,25 @@
 
 <script setup>
 import { registerSW } from 'virtual:pwa-register';
-import { version } from "~build/package";
+import now from '~build/time';
 
-const UPDATE_WIDGET_TITLE = ("My website has a new update!<br>You are currently on Version ");
-const UPDATE_VERSION = (version);
+const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website version was from ");
+const UPDATE_DATE = ref("10/24/2025");
 
 const installStore = useInstallStore();
 const showUpdateBox = ref(false);
 const buttonClicked = ref(false);
+
+onMounted(() => {
+    nextTick(() => {
+        const currentDate = new Date();
+        UPDATE_DATE.value = useDateFormat(now, "M/D/YYYY").value;
+
+        if(useDateFormat(currentDate, "M/D/YYYY").value === UPDATE_DATE.value) {
+            UPDATE_DATE.value = (useDateFormat(now, "h:mm A").value + " today");
+        }
+    });
+});
 
 const updateSW = registerSW({
     onNeedRefresh() { showUpdateBox.value = true; },
@@ -78,17 +89,23 @@ function updateWebsite() {
     align-items: flex-start;
     flex-direction: row;
 }
+.update-box-buttons.updating {
+    width: 95%;
+    gap: 12px;
+    justify-content: center;
+}
 
 .update-box-desc-text {
-    width: 90%;
-    margin: 5px;
-    font-size: 14px;
+    width: 100%;
+    margin-left: 5px;
+    font-size: 13px;
     font-family: 'Roboto', sans-serif;
     color: inherit;
 }
 .update-box-desc-text > span.version-num {
-    font-weight: bold;
     text-decoration: underline;
+    color: var(--vibrant-flame);
+    font-weight: bold;
 }
 
 .update-box button, .update-box a {
@@ -113,5 +130,6 @@ function updateWebsite() {
 }
 .update-box a.copyrightBtn {
     color: var(--blue-two);
+    text-wrap: nowrap;
 }
 </style>

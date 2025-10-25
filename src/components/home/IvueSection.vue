@@ -7,8 +7,8 @@
     </div>
     <div class="ivue-section-tabs-container">
         <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
-            @mouseenter="onIvueTabHover('wiv-tab')"
-            @mouseleave="onIvueTabLeave('wiv-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <img :src="wiv_banner" width="225" />
             <p>
@@ -17,8 +17,8 @@
             </p>
         </a>
         <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab"
-            @mouseenter="onIvueTabHover('main-tab')"
-            @mouseleave="onIvueTabLeave('main-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <img :src="ivue_white_text" width="68" />
             <p>
@@ -28,8 +28,8 @@
             </p>
         </a>
         <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab"
-            @mouseenter="onIvueTabHover('media-tab')"
-            @mouseleave="onIvueTabLeave('media-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <img :src="ivue_media_banner" width="175" />
             <p>
@@ -39,8 +39,8 @@
             </p>
         </a>
         <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab"
-            @mouseenter="onIvueTabHover('robotics-tab')"
-            @mouseleave="onIvueTabLeave('robotics-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <img :src="ivue_robotics_banner" width="190" />
             <p>
@@ -50,8 +50,8 @@
             </p>
         </a>
         <a :href="FLORIDA_MAN_LINK" id="florida-man-tab" class="ivue-section-tab"
-            @mouseenter="onIvueTabHover('florida-man-tab')"
-            @mouseleave="onIvueTabLeave('florida-man-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <div class="ivue-section-tab-header">
                 <img :src="fm_photo" width="45" />
@@ -108,22 +108,6 @@ function setInitTransitions(isVisible) {
         document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
         document.getElementById('florida-man-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
     }, ANIMATE_DURATION)
-}
-
-/**
- * This function adds an animation when the visitor hovers over a tab.
- * @param {Number} index The index of the tab.
- */
-function onIvueTabHover(id = "main-tab") {
-    document.getElementById(id).classList.add('animate__animated', 'animate__pulse', "animate__repeat-2");
-}
-
-/**
- * This function removes an animation when the visitor leaves a tab.
- * @param {Number} index The index of the tab.
- */
-function onIvueTabLeave(id = "main-tab") {
-    document.getElementById(id).classList.remove('animate__animated', 'animate__pulse', "animate__repeat-2");
 }
 </script>
 

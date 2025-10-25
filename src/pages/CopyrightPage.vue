@@ -49,7 +49,7 @@ onMounted(() => {
     initWebData();
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + useDateFormat(now, "MMMM Do, YYYY").value);
-    RELEASE_TIME.value = ("(" + useDateFormat(now, "h:m A").value + ")");
+    RELEASE_TIME.value = ("(" + useDateFormat(now, "h:mm A").value + ")");
 });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website."
