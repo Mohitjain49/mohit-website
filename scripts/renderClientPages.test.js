@@ -1,8 +1,8 @@
-// @vitest-environment playwright
+// @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import { createPinia } from 'pinia';
-import { createUnhead } from "@unhead/vue";
+import { createHead } from "@unhead/vue/client";
 
 import { createRouter, createMemoryHistory } from "vue-router";
 import { personalRoutes } from "@/routes";
@@ -24,8 +24,8 @@ export async function testClientComponent(component, name) {
     try {
         const result = mount(component, {
             global: {
-                plugins: [createPinia(), router, createUnhead()],
-                provide: { usehead: {push: () => {}} },
+                plugins: [createPinia(), router, createHead()],
+                stubs: { FontAwesomeIcon: true, ClientOnly: true, VueParticles: true }
             },
         });
 

@@ -55,11 +55,11 @@ export default defineConfig({
         environment: "node",
         server: { deps: { inline: true } },
         setupFiles: ['./vitest.setup.js'],
-        browser: {
-            enabled: true,
-            provider: playwright(),
-            instances: [{ browser: 'chromium' }],
-        }
+        // browser: {
+        //     enabled: true,
+        //     provider: playwright(),
+        //     instances: [{ browser: 'chromium' }],
+        // }
     },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
