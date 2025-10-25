@@ -2,12 +2,16 @@
 <div v-if="showUpdateBox" class="update-box animate__animated animate__fadeInRight">
     <div class="update-box-desc">
         <FontAwesomeIcon :icon="(buttonClicked ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="buttonClicked" />
-        <p v-html="UPDATE_WIDGET_TITLE"></p>
+        <p class="update-box-desc-text">
+            <span v-html="UPDATE_WIDGET_TITLE"></span>
+            <span class="version-num" v-html="UPDATE_VERSION"></span>.
+        </p>
     </div>
 
     <div class="update-box-buttons">
         <button class="updateBtn" @click="updateWebsite()"> {{ (buttonClicked ? 'Updating...' : 'Update') }} </button>
         <button class="closeBtn" @click="showUpdateBox = false"> Close </button>
+        <RouterLink to="/copyright" class="copyrightBtn"> Current Version </RouterLink>
     </div>
 </div>
 </template>
@@ -15,7 +19,9 @@
 <script setup>
 import { registerSW } from 'virtual:pwa-register';
 import { version } from "~build/package";
-const UPDATE_WIDGET_TITLE = ("My website has a new update!<br>You are currently on Version " + version + ".");
+
+const UPDATE_WIDGET_TITLE = ("My website has a new update!<br>You are currently on Version ");
+const UPDATE_VERSION = (version);
 
 const installStore = useInstallStore();
 const showUpdateBox = ref(false);
@@ -73,14 +79,19 @@ function updateWebsite() {
     flex-direction: row;
 }
 
-.update-box p {
+.update-box-desc-text {
     width: 90%;
     margin: 5px;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     color: inherit;
 }
-.update-box button {
+.update-box-desc-text > span.version-num {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.update-box button, .update-box a {
     margin-top: 3px;
     font-size: 14px;
     font-family: 'Monserrat', sans-serif;
@@ -90,7 +101,7 @@ function updateWebsite() {
     border-radius: 5px;
     transition: var(--default-transition);
 }
-.update-box button:hover {
+.update-box button:hover, .update-box a:hover {
     box-shadow: 0px 0px 12px 1px;
 }
 
@@ -99,5 +110,8 @@ function updateWebsite() {
 }
 .update-box button.closeBtn {
     color: red;
+}
+.update-box a.copyrightBtn {
+    color: var(--blue-two);
 }
 </style>

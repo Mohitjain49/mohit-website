@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.3.2",
+    "version": "3.3.3",
     "private": true,
     "type": "module",
     "scripts": {
@@ -26,7 +26,7 @@
         "@tsparticles/preset-fireworks": "^3.2.0",
         "@tsparticles/slim": "^3.9.1",
         "@tsparticles/vue3": "^3.0.1",
-        "@vueuse/core": "^13.9.0",
+        "@vueuse/core": "^14.0.0",
         "animate.css": "^4.1.1",
         "markdown-it-attrs": "^4.3.1",
         "ofetch": "^1.4.1",
@@ -37,8 +37,8 @@
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.913.0",
-        "@aws-sdk/client-s3": "^3.913.0",
+        "@aws-sdk/client-cloudfront": "^3.917.0",
+        "@aws-sdk/client-s3": "^3.917.0",
         "@unhead/vue": "^2.0.19",
         "@vitejs/plugin-vue": "^6.0.1",
         "dotenv": "^17.2.3",
@@ -48,12 +48,12 @@
         "unplugin-info": "^1.2.4",
         "unplugin-vue-components": "^30.0.0",
         "unplugin-vue-markdown": "^29.2.0",
-        "vite": "^7.1.11",
+        "vite": "^7.1.12",
         "vite-plugin-env-types": "^0.1.4",
         "vite-plugin-pwa": "^1.1.0",
         "vite-ssg": "^28.2.2",
         "vite-ssg-sitemap": "^0.10.0",
-        "vitest": "^3.2.4",
+        "vitest": "^4.0.3",
         "vue-router": "^4.6.3"
     }
 }
