@@ -11,6 +11,7 @@
         "open:host": "vite --open --host",
         "open:preview": "vite preview --open",
         "open:build": "npm run build && npm run open:preview",
+        "build:test": "npm run test && npm run build",
         "deploy": "node scripts/deploy.mjs",
         "update": "npx npm-check-updates",
         "test": "vitest run"
