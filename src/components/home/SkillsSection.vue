@@ -41,12 +41,12 @@ useIntersectionObserver(cardRefs, (entry) => {
  */
 function setSkillsTransitions(isVisible = false) {
     if(isVisible && window.innerWidth > 450) {
-        document.getElementsByClassName('skills-main-header').item(0).classList.add("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName('skills-main-desc').item(0).classList.add("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName('skills-main-header').item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName('skills-main-desc').item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
         return;
     } else if(!isVisible) {
-        document.getElementsByClassName('skills-main-header').item(0).classList.remove("animate__animated", "animate__lightSpeedInLeft");
-        document.getElementsByClassName('skills-main-desc').item(0).classList.remove("animate__animated", "animate__lightSpeedInRight");
+        document.getElementsByClassName('skills-main-header').item(0)?.classList.remove("animate__animated", "animate__lightSpeedInLeft");
+        document.getElementsByClassName('skills-main-desc').item(0)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
     }
 }
 </script>

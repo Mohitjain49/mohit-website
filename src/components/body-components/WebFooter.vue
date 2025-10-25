@@ -350,8 +350,13 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
         width: 15px;
         margin-right: 5px;
     }
-    .qr-popup-open-section img {
-        height: 35px;
+
+    .qr-popup-open-section {
+        bottom: 20px;
+    }
+    .qr-popup-open-section svg {
+        width: 25px;
+        height: 25px;
     }
 }
 </style>

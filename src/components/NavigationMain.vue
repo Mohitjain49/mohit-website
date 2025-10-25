@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" :class="[noNavMenuOverflow]">
+<nav id="mohit-navBar" :class="navBarClasses" ref="navBar">
     <div class="mohit-navBar-top">
         <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Back To Home Page">
             <img :src="mkj_text" draggable="false" />
@@ -15,7 +15,7 @@
                 :title="btn.title"
                 class="mohit-navBar-icon"
                 :style="getColorStyles(btn.color)"
-                @mouseenter="setPulseLoopAnimation"
+                @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
                 <font-awesome-icon :icon="btn.icon" />
@@ -23,7 +23,7 @@
             <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
                 :title="(webData.navMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu')"
                 :style="getColorStyles('var(--website-light-text)')"
-                @mouseenter="setPulseLoopAnimation"
+                @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
                 <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
@@ -63,7 +63,9 @@
                     <font-awesome-icon icon="fa-share-from-square" />
                 </button>
                 <div class="mohit-navMenu-volume-meter">
-                    <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+                    <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle">
+                        <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+                    </button>
                     <input type="range" min="0" max="100" title="Volume Meter for the click sound."
                         v-model="audioStore.volumeInput"
                         @input="audioStore.changeAudioVolume()"
@@ -81,17 +83,47 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
-const { height: windowHeight } = useWindowSize();
+
+const navBar = ref(null);
+const oldSwipeDirection = ref("none");
 
 const router = useRouter();
+const { height: windowHeight } = useWindowSize();
+const navBarSwipe = useSwipe(navBar, { passive: true });
+
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const footerRoute = computed(() => {
-    return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') }
+const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
+
+// These are extra classes for the main navigation bar.
+const navBarClasses = computed(() => {
+    const notOpen = !webData.navMenuOpen;
+    return [(notOpen ? '' : 'menu-open'), ((notOpen || windowHeight.value >= 590) ? '' : 'menu-overflowing')];
 });
 
-// This changes the style of the Navigation Bar if its menu is open and has to overflow its content.
-const noNavMenuOverflow = computed(() => {
-    return ((!webData.navMenuOpen || windowHeight.value >= 590) ? '' : 'menu-overflowing');
+// This makes sure that the website doesn't scroll with the swipe events.
+onMounted(() => {
+    const element = document.getElementById("mohit-navBar");
+    if(element == null) { return; }
+
+    element.addEventListener("touchmove", (e) => {
+        const target = e.target;
+        if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
+    }, { passive: false });
+});
+
+// This tracks touch "swipe" eventsso that the user can change the page if the swipe left or right.
+watch(navBarSwipe.isSwiping, () => {
+    const direction = navBarSwipe.direction.value;
+    const oldSwipe = oldSwipeDirection.value;
+    oldSwipeDirection.value = direction;
+
+    if(direction === "up" && oldSwipe !== direction) {
+        webData.menuOpen = -1;
+        triggerClickSound();
+    } else if(direction === "down" && oldSwipe !== direction) {
+        webData.menuOpen = 0;
+        triggerClickSound();
+    }
 });
 
 /**

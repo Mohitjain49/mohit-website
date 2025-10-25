@@ -16,7 +16,6 @@ export function changeAxisMovementThreshold(newValue = 0.05, left = true) {
     }
 }
 
-
 /**
  * This class represents a event that indicates the current state of a button on a connected gamepad.
  */

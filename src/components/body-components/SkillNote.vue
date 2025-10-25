@@ -1,6 +1,6 @@
 <template>
 <div v-if="link === '#'" class="skills-note no-link"
-    @mouseenter="setPulseLoopAnimation"
+    @pointerenter="setPulseLoopAnimation"
     @mouseleave="setPulseLoopAnimation">
 
     <div class="skills-note-image">
@@ -14,7 +14,7 @@
 </div>
 
 <a v-else-if="isExternalLink" :href="link" target="_blank" class="skills-note"
-    @mouseenter="setPulseLoopAnimation"
+    @pointerenter="setPulseLoopAnimation"
     @mouseleave="setPulseLoopAnimation">
 
     <div class="skills-note-image">
@@ -30,7 +30,7 @@
 <button v-else-if="link === 'mohit-qrcode-button'" class="skills-note"
     title="Create a QR Code for this page."
     @click="webData.openQRCodePopup()"
-    @mouseenter="setPulseLoopAnimation"
+    @pointerenter="setPulseLoopAnimation"
     @mouseleave="setPulseLoopAnimation">
 
     <div class="skills-note-image">
@@ -43,7 +43,7 @@
 </button>
 
 <RouterLink v-else :to="link" class="skills-note"
-    @mouseenter="setPulseLoopAnimation"
+    @pointerenter="setPulseLoopAnimation"
     @mouseleave="setPulseLoopAnimation">
 
     <div class="skills-note-image">

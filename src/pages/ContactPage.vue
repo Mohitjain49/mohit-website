@@ -70,7 +70,7 @@
                     <div class="contact-input-tab-btn-container center-flex-display">
                         <button class="contact-input-tab-btn center-flex-display"
                             @click="sendEmail()"
-                            @mouseenter="setHeartbeatAnimation"
+                            @pointerenter="setHeartbeatAnimation"
                             @mouseleave="setHeartbeatAnimation"
                             v-html="'Send Message'">
                         </button>
@@ -100,20 +100,20 @@
 
                         <div class="social-tab-options">
                             <button @click="copyLink(social.displayLink)" :title="social.copyBtn"
-                                @mouseenter="setHeadShakeAnimation"
+                                @pointerenter="setHeadShakeAnimation"
                                 @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
                             <button v-if="webData.shareSupported" :title="social.shareBtn"
                                 @click="shareLink(social.displayLink)"
-                                @mouseenter="setHeadShakeAnimation"
+                                @pointerenter="setHeadShakeAnimation"
                                 @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-share" />
                             </button>
                             <a :href="social.link" target="_blank" :title="social.linkBtn"
-                                @mouseenter="setHeadShakeAnimation"
+                                @pointerenter="setHeadShakeAnimation"
                                 @mouseleave="setHeadShakeAnimation">
 
                                 <font-awesome-icon icon="fa-up-right-from-square" />

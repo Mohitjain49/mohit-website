@@ -159,6 +159,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 router.push("/code-scanner");
                 triggerClickSound();
             }
+        } else if(key === "Escape") {
+            if(fullScreenStore.fullScreenSet) { triggerClickSound(); }
+            else if(showSharePopup.value) { setQRCodePopup("quit"); triggerClickSound(); }
+            else { toggleNavMenu(); triggerClickSound(); }
         }
     }
 

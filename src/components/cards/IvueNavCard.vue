@@ -1,7 +1,7 @@
 <template>
 <div class="newCard-container">
     <a :href="MAIN_IVUE_WEBSITE_LINK" id="ivue-nav-newCard" class="nav-newCard"
-        @mouseenter="setPulseLoopAnimation"
+        @pointerenter="setPulseLoopAnimation"
         @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">

@@ -1,7 +1,7 @@
 <template>
 <div class="newCard-container">
     <a :href="WORLDS_IVUE_LINK" id="wiv-nav-newCard" class="nav-newCard"
-        @mouseenter="setPulseLoopAnimation"
+        @pointerenter="setPulseLoopAnimation"
         @mouseleave="setPulseLoopAnimation">
 
         <div class="nav-newCard-header">

@@ -6,7 +6,7 @@
     
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
         <RouterLink to="/" v-html="'Go to Home'"
-            @mouseenter="setHeartbeatAnimation"
+            @pointerenter="setHeartbeatAnimation"
             @mouseleave="setHeartbeatAnimation"
         />
     </div>

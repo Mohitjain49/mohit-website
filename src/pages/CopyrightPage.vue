@@ -41,15 +41,15 @@ const route = useRoute();
 const buttonClicked = ref(false);
 
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
-const RELEASE_DATE = ref("Last Release: July 10, 2025");
+const RELEASE_DATE = ref("Released On: July 10, 2025");
 const RELEASE_TIME = ref("(11:59 PM)");
 const PROJECT_VERSION = ref("Version " + version);
 
 onMounted(() => {
     initWebData();
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
-    RELEASE_DATE.value = ("Last Release: " + useDateFormat(now, "MMMM Do, YYYY").value);
-    RELEASE_TIME.value = ("(" + useDateFormat(now, "h:m A").value + ")");
+    RELEASE_DATE.value = ("Released On: " + useDateFormat(now, "MMMM Do, YYYY").value);
+    RELEASE_TIME.value = ("(" + useDateFormat(now, "h:mm A").value + ")");
 });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website."

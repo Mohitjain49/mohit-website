@@ -1,6 +1,8 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
+
 import { VitePWA } from 'vite-plugin-pwa';
+import { qrcode } from 'vite-plugin-qrcode';
 
 import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
@@ -55,6 +57,7 @@ export default defineConfig({
     },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
+        qrcode(),
         Info(),
         imagemin(),
         EnvTypes({ dts: "./dts/vite-env.d.ts" }),
@@ -84,7 +87,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: `v3.3.2-${Date.now()}`,
+                cacheId: `v3.3.3-${Date.now()}`,
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

@@ -3,8 +3,8 @@
     <div id="documents-section-title"> My Docs </div>
     <div class="documents-section-tabs-container">
         <RouterLink to="/resume" id="resume-tab" class="documents-section-tab"
-            @mouseenter="onIvueTabHover('resume-tab')"
-            @mouseleave="onIvueTabLeave('resume-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <div class="documents-section-tab-header">
                 <font-awesome-icon icon="fa-file-lines" />
@@ -16,8 +16,8 @@
             </p>
         </RouterLink>
         <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab"
-            @mouseenter="onIvueTabHover('deploy-script-tab')"
-            @mouseleave="onIvueTabLeave('deploy-script-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <div class="documents-section-tab-header">
                 <font-awesome-icon icon="fa-upload" />
@@ -29,8 +29,8 @@
             </p>
         </a>
         <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab"
-            @mouseenter="onIvueTabHover('github-tab')"
-            @mouseleave="onIvueTabLeave('github-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <div class="documents-section-tab-header">
                 <font-awesome-icon icon="fa-brands fa-github" />
@@ -42,8 +42,8 @@
             </p>
         </RouterLink>
         <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab"
-            @mouseenter="onIvueTabHover('fcs-certificate-tab')"
-            @mouseleave="onIvueTabLeave('fcs-certificate-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <img :src="fcs_logo" width="110" draggable="false" />
             <p>
@@ -52,8 +52,8 @@
             </p>
         </RouterLink>
         <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab"
-            @mouseenter="onIvueTabHover('sitemap-tab')"
-            @mouseleave="onIvueTabLeave('sitemap-tab')">
+            @pointerenter="setPulseTwiceAnimation"
+            @mouseleave="setPulseTwiceAnimation">
 
             <div class="documents-section-tab-header">
                 <font-awesome-icon icon="fa-sitemap" />
@@ -90,37 +90,21 @@ function setInitTransitions(isVisible) {
         rightAnimation = "animate__fadeIn";
     }
 
-    document.getElementById('documents-section-title').classList.add("animate__animated", leftAnimation);
-    document.getElementById('resume-tab').classList.add("animate__animated", rightAnimation);
-    document.getElementById('deploy-script-tab').classList.add("animate__animated", leftAnimation);
-    document.getElementById('github-tab').classList.add("animate__animated", rightAnimation);
-    document.getElementById('fcs-certificate-tab').classList.add("animate__animated", leftAnimation);
-    document.getElementById('sitemap-tab').classList.add("animate__animated", rightAnimation);
+    document.getElementById('documents-section-title')?.classList.add("animate__animated", leftAnimation);
+    document.getElementById('resume-tab')?.classList.add("animate__animated", rightAnimation);
+    document.getElementById('deploy-script-tab')?.classList.add("animate__animated", leftAnimation);
+    document.getElementById('github-tab')?.classList.add("animate__animated", rightAnimation);
+    document.getElementById('fcs-certificate-tab')?.classList.add("animate__animated", leftAnimation);
+    document.getElementById('sitemap-tab')?.classList.add("animate__animated", rightAnimation);
 
     setTimeout(() => {
-        document.getElementById('documents-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('resume-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('deploy-script-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('github-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('fcs-certificate-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('sitemap-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('documents-section-title')?.classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('resume-tab')?.classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('deploy-script-tab')?.classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('github-tab')?.classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
+        document.getElementById('fcs-certificate-tab')?.classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('sitemap-tab')?.classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
     }, ANIMATE_DURATION);
-}
-
-/**
- * This function adds an animation when the visitor hovers over a tab.
- * @param {Number} index The index of the tab.
- */
-function onIvueTabHover(id = "fcs-certificate-tab") {
-    document.getElementById(id).classList.add('animate__animated', 'animate__pulse', "animate__repeat-2");
-}
-
-/**
- * This function removes an animation when the visitor leaves a tab.
- * @param {Number} index The index of the tab.
- */
-function onIvueTabLeave(id = "fcs-certificate-tab") {
-    document.getElementById(id).classList.remove('animate__animated', 'animate__pulse', "animate__repeat-2");
 }
 </script>
 
@@ -132,7 +116,6 @@ function onIvueTabLeave(id = "fcs-certificate-tab") {
     width: 100%;
     padding: 100px 0px;
 }
-
 #documents-section-title {
     width: 100%;
     height: 125px;

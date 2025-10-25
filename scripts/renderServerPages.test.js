@@ -2,7 +2,7 @@
 import { describe, it, expect } from "vitest";
 import { renderToString } from "vue/server-renderer";
 import { createSSRApp } from "vue";
-import { createUnhead } from "@unhead/vue";
+import { createHead } from "@unhead/vue/server";
 
 import { createRouter, createMemoryHistory } from "vue-router";
 import { personalRoutes } from "@/routes";
@@ -23,9 +23,10 @@ export async function testSSRComponent(component, name) {
     app.config.errorHandler = () => {}
 
     app.use(createPinia());
-    app.use(createUnhead());
+    app.use(createHead());
     app.use(router);
-    app.provide("usehead", { push: () => {} });
+
+    app.component("FontAwesomeIcon");
 
     try {
         const html = await renderToString(app);

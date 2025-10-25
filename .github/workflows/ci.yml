@@ -14,11 +14,11 @@ jobs:
         with:
           node-version: "20.x"
 
-      - run: npm ci
+      - name: Install Dependencies
+        run: npm install
 
       - name: Testing...
         run: npm run test
 
-      - run: npm ci
       - name: Building...
         run: npm run build
