@@ -83,12 +83,10 @@
 import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
-
-const navBar = ref(null);
-const oldSwipeDirection = ref("none");
-
 const router = useRouter();
+
 const { height: windowHeight } = useWindowSize();
+const navBar = ref(null);
 const navBarSwipe = useSwipe(navBar, { passive: true });
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
@@ -100,27 +98,15 @@ const navBarClasses = computed(() => {
     return [(notOpen ? '' : 'menu-open'), ((notOpen || windowHeight.value >= 590) ? '' : 'menu-overflowing')];
 });
 
-// This makes sure that the website doesn't scroll with the swipe events.
-onMounted(() => {
-    const element = document.getElementById("mohit-navBar");
-    if(element == null) { return; }
-
-    element.addEventListener("touchmove", (e) => {
-        const target = e.target;
-        if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
-    }, { passive: false });
-});
-
-// This tracks touch "swipe" eventsso that the user can change the page if the swipe left or right.
+// This tracks touch "swipe" events so that the user can change the page if the swipe left or right.
 watch(navBarSwipe.isSwiping, () => {
+    if(!navBarSwipe.isSwiping.value) { return; }
     const direction = navBarSwipe.direction.value;
-    const oldSwipe = oldSwipeDirection.value;
-    oldSwipeDirection.value = direction;
 
-    if(direction === "up" && oldSwipe !== direction) {
+    if(direction === "up" && webData.navMenuOpen) {
         webData.menuOpen = -1;
         triggerClickSound();
-    } else if(direction === "down" && oldSwipe !== direction) {
+    } else if(direction === "down" && !webData.navMenuOpen) {
         webData.menuOpen = 0;
         triggerClickSound();
     }

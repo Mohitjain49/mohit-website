@@ -67,6 +67,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
         document.body.addEventListener("keydown", onKeyDown, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
+
+        // This makes sure that the website doesn't scroll with the swipe events made for the navigation bar.
+        const mohitNavBar = document.getElementById("mohit-navBar");
+        if(mohitNavBar == null) { return; }
+
+        mohitNavBar.addEventListener("touchmove", (e) => {
+            const target = e.target;
+            if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
+        }, { passive: false, signal });
     }
 
     /**

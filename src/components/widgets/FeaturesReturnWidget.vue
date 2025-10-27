@@ -16,7 +16,7 @@
     width: 50px;
     border-radius: 50%;
     overflow: hidden;
-    z-index: 1100;
+    z-index: 5;
     display: flex;
     justify-content: center;
     align-items: center;

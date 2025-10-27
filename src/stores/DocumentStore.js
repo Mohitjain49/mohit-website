@@ -9,6 +9,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
     const fullScreenStore = useFullScreenStore();
 
+    var docAbortController = new AbortController();
     const mounted = ref(false);
     const docLoaded = ref(false);
 
@@ -177,8 +178,21 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function mountDocumentPage() {
         initWebData();
-        if(onMarkdownRoute.value) { return; }
-        nextTick(() => { mountCustomDocumentPage(800, 320, (onFCSCertificateRoute ? 0.79875 : 1.375)); })
+        nextTick(() => {
+            if(onMarkdownRoute.value) { return; }
+            mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
+        });
+
+        // This makes sure that the website doesn't scroll with the swipe events made for the document navigation bar.
+        nextTick(() => {
+            const mohitDocNavBar = document.getElementById("mohit-documentBar");
+            if(mohitDocNavBar == null) { return; }
+
+            mohitDocNavBar.addEventListener("touchmove", (e) => {
+                const target = e.target;
+                if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
+            }, { passive: false, signal: docAbortController.signal });
+        })
     }
 
     /**
@@ -188,7 +202,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         document.body.style.overflowY = "";
         docLoaded.value = false;
         fullScreenStore.exitFullScreen();
-        window.removeEventListener("resize", setPdfSize);
+        
+        docAbortController.abort();
+        docAbortController = new AbortController();
     }
 
     /**
@@ -203,13 +219,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfScaleFactor.value = scaleFactor;
 
         setPdfSize();
-        window.addEventListener("resize", setPdfSize);
+        window.addEventListener("resize", setPdfSize, { signal: docAbortController.signal });
     }
     /**
      * Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf.
      */
     function setPdfSize() {
-        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (window.innerWidth - 30)));
+        const innerWidth = (document.getElementById("footer")?.getBoundingClientRect().width ?? window.innerWidth)
+        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (innerWidth - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
     }
 

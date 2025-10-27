@@ -169,11 +169,11 @@ function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
 }
 
 const MAIN_BTNS = [
-    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me", shortTitle: "Contact" },
-    { path: "/skills", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills", shortTitle: "Skills" },
-    { path: "/experience", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience", shortTitle: "Exp" },
-    { path: "/projects", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects", shortTitle: "Projects" },
-    { path: "/resume", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume", shortTitle: "Resume" },
+    { path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me", shortTitle: "Contact" },
+    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills", shortTitle: "Skills" },
+    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience", shortTitle: "Exp" },
+    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects", shortTitle: "Projects" },
+    { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume", shortTitle: "Resume" },
 ]
 </script>
 

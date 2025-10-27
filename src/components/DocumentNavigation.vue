@@ -4,7 +4,7 @@
 
 <template>
 <client-only>
-    <div id="mohit-documentBar" :class="[(webData.documentMenuOpen ? 'menu-open' : '')]">
+    <div id="mohit-documentBar" :class="[(webData.documentMenuOpen ? 'menu-open' : '')]" ref="docNavBar">
         <Transition name="documentMenu-transition">
             <div v-if="webData.documentMenuOpen" class="mohit-documentMenu">
                 <div class="mohit-documentMenu-tools">
@@ -93,15 +93,6 @@
 
                     <img :src="pdfjs_logo" draggable="false" width="20" />
                 </a>
-                <!-- <button @click="docStore.downloadDoc()" class="mohit-navBar-icon light" title="Download Document">
-                    <font-awesome-icon icon="fa-file-download" />
-                </button>
-                <button @click="docStore.printDoc()" class="mohit-navBar-icon light" title="Print Document">
-                    <font-awesome-icon icon="fa-print" />
-                </button>
-                <button @click="reloadPage()" class="mohit-navBar-icon" title="Reload Page">
-                    <font-awesome-icon icon="fa-rotate-right" />
-                </button> -->
             </div>
             <div class="mohit-documentBar-iconSection right">
                 <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light"
@@ -127,6 +118,9 @@
 <script setup>
 import pdfjs_logo from "@/assets/PDFJS_logo.svg";
 const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
+
+const docNavBar = ref(null);
+const docNavBarSwipe = useSwipe(docNavBar, { passive: true });
 
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
@@ -154,4 +148,18 @@ function getColorStyles(color = "var(--website-text)") {
 
 onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
+
+// This tracks touch "swipe" events so that the user can open or close the document navigation bar with a swipe.
+watch(docNavBarSwipe.isSwiping, () => {
+    if(!docNavBarSwipe.isSwiping.value) { return; }
+    const direction = docNavBarSwipe.direction.value;
+
+    if(direction === "down" && webData.documentMenuOpen) {
+        webData.menuOpen = -1;
+        triggerClickSound();
+    } else if(direction === "up" && !webData.documentMenuOpen) {
+        webData.menuOpen = 1;
+        triggerClickSound();
+    }
+});
 </script>
