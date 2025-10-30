@@ -29,10 +29,10 @@ export function checkSSR() {
 /**
  * This scrolls to the section the visitor requested.
  * @param {String} id The element ID of the section.
- * @param {Number} offset The offset from where the element exists.
+ * @param {Number} offset The offset from where the element exists. (Works like "scroll-padding-top").
  */
 export function goToPageSection(id = "start", offset = 0) {
-    const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY + offset);
+    const top = (document.getElementById(id).getBoundingClientRect().y + window.scrollY - offset);
     window.scrollTo({ top: top, left: 0, behavior: "smooth" });
 }
 

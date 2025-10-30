@@ -39,15 +39,16 @@
 
     <Transition name="fade-transition">
         <div v-if="(startContactObj != null)" class="start-contactBtn-dropdown" :style="dropdownCoords">
-            <button class="top" @click="webData.setQRCodePopup(startContactObj.link)" :title="startContactObj.shareBtn">
+            <button class="start-contactBtn-dropdown-button top" @click="webData.setQRCodePopup(startContactObj.link)" :title="startContactObj.shareBtn">
                 Share <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
-            <button :class="(showCopyUsernameBtn ? '' : 'bottom')" @click="openContactLink(startContactObj.link)">
+            <RouterLink class="start-contactBtn-dropdown-button" :to="('/contact/#' + startContactObj.id)" title="Go To Contact Page">
+                Go To Contact Page <FontAwesomeIcon icon="fa-link" />
+            </RouterLink>
+            <a :href="startContactObj.link" :target="dropdownLinkTarget" class="start-contactBtn-dropdown-button bottom":title="startContactObj.linkBtn">
                 {{ ((startContactObj.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + startContactObj.name)) }}
-            </button>
-            <button v-if="showCopyUsernameBtn" class="bottom" @click="copyUsername(startContactObj.username)">
-                {{ (copiedUsername ? "Copied Username!" : "Copy Username") }}
-            </button>
+                <FontAwesomeIcon icon="fa-up-right-from-square" />
+            </a>
         </div>
     </Transition>
 </div>
@@ -56,10 +57,7 @@
 <script setup>
 const webData = useWebsiteDataStore();
 const visitorLeftPage = usePageLeave();
-
 const startContactObj = ref(null);
-const copiedUsername = ref(false);
-var copiedTimeout = null;
 
 const start = ref(null);
 const startSocialsContainer = ref(null);
@@ -73,9 +71,6 @@ useIntersectionObserver(start, ([{ isIntersecting }]) => {
 watch(visitorLeftPage, () => {
     if(visitorLeftPage.value) { hideStartContactDropdown(); }
 });
-watch(startContactObj, () => {
-    copiedUsername.value = false;
-})
 
 onMounted(() => {
     const emailRect = useElementBounding(startSocialBtns.value[0]);
@@ -89,9 +84,10 @@ onMounted(() => {
     });
 })
 
-// This returns whether the socials dropdown should show the copy username or not.
-const showCopyUsernameBtn = computed(() => {
-    return ((startContactObj.value === null) ? false : startContactObj.value.showCopyUsername);
+// This states the target for the dropdown link button
+const dropdownLinkTarget = computed(() => {
+    if(startContactObj.value == null) { return "_blank"; }
+    return (startContactObj.value.link.startsWith('mailto:') ? '_blank' : '_self');
 });
 
 // This returns custom styles for the contact button dropdown so that it looks unique.
@@ -114,7 +110,7 @@ const dropdownCoords = computed(() => {
         box = boxes.value[3];
     }
 
-    const left = (String(box.left - box.width + ((box.width > 55) ? 12 : 0) + window.scrollX) + "px");
+    const left = (String(box.left - box.width + ((box.width == 60) ? 12 : 0) + window.scrollX) + "px");
     const top = (String(box.top + box.height + 15 + window.scrollY) + "px");
     return { left, top, color, "--filter-drop-shadow": ("drop-shadow(0 -2px 0 " + color + ")") };
 });
@@ -128,34 +124,10 @@ function onContactBtnClick(event = new PointerEvent('click'), obj) {
     if(event.altKey) {
         webData.setQRCodePopup(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
     } else if(event.ctrlKey) {
-        openContactLink(obj.link); // If the Ctrl key is pressed, the webpage itself is automatically opened.
+        (obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self")) // If the Ctrl key is pressed, the webpage itself is automatically opened.
     } else {
         startContactObj.value = ((startContactObj.value?.id === obj.id) ? null : obj); // Sets the Start Contact Dropdown.
     }
-}
-
-/**
- * This function opens a contact link onto a new page.
- * @param {String} link The link to open.
- */
-function openContactLink(link = "") {
-    window.open(link, (link.startsWith("mailto:") ? "_blank" : "_self"));
-}
-
-/**
- * This function copies a username for the visitor.
- * @param name The username to copy.
- */
-function copyUsername(name = "") {
-    navigator.clipboard.writeText(name).then(() => {
-        if(copiedTimeout != null) { clearTimeout(copiedTimeout); }
-        copiedUsername.value = true;
-
-        copiedTimeout = setTimeout(() => {
-            copiedUsername.value = false;
-            copiedTimeout = null;
-        }, 3000);
-    });
 }
 
 /**
@@ -330,7 +302,7 @@ const MAIN_BTNS = [
 .start-contactBtn-dropdown::before {
     content: '';
     position: absolute;
-    top: -16px;
+    top: -17px;
     left: calc(50% - 7.5px);
     border-width: 9px;
     border-style: solid;
@@ -338,34 +310,35 @@ const MAIN_BTNS = [
     filter: var(--filter-drop-shadow);
 }
 
-.start-contactBtn-dropdown button {
+.start-contactBtn-dropdown-button {
     height: 34px;
     width: 100%;
-    font-size: 14px;
+    font-size: 12.5px;
     color: inherit;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    gap: 4px;
-    border-top: 1px dotted;
-    transition: var(--default-transition);
+    gap: 2.5px;
+    border-bottom: 1px dotted;
+    transition: background-color 0.2s, text-shadow 0.2s;
 }
-.start-contactBtn-dropdown button:hover {
+.start-contactBtn-dropdown-button:hover {
     background-color: var(--dark-background);
     text-shadow: 0px 0px 8px;
 }
 
-.start-contactBtn-dropdown button.top {
+.start-contactBtn-dropdown-button.top {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    border-top: none;
     font-size: 16px;
+    gap: 4px;
 }
-.start-contactBtn-dropdown button.bottom {
+.start-contactBtn-dropdown-button.bottom {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+    border-bottom: none;
 }
 
 @media (max-width: 1225px) {

@@ -186,8 +186,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /**
      * This runs whenever a page is opened.
+     * @param {Number} pixelOffset The offset for scrolling to a particular section.
      */
-    function mountWebData() {
+    function mountWebData(pixelOffset = 0) {
         closeNavMenu();
         if(onFirstMount.value) {
             onFirstMount.value = false;
@@ -201,7 +202,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             if(hashStr === "" || documentStore.onDocumentRoute) { return; }
 
             try {
-                goToPageSection(hashStr);
+                goToPageSection(hashStr, pixelOffset);
             } catch(e) {
                 window.scrollTo({ top: 0, left: 0, behavior: "instant" });
             }
@@ -313,7 +314,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
 /**
  * This function mounts the website data pinia store on a page.
+ * @param {Number} pixelOffset The offset for scrolling to a particular section.
  */
-export function initWebData() {
-    useWebsiteDataStore().mountWebData();
+export function initWebData(pixelOffset = 0) {
+    useWebsiteDataStore().mountWebData(pixelOffset);
 }
