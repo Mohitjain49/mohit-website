@@ -42,8 +42,11 @@
             <button class="top" @click="webData.setQRCodePopup(startContactObj.link)" :title="startContactObj.shareBtn">
                 Share <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
-            <button class="bottom" @click="openContactLink(startContactObj.link)" :title="startContactObj.linkBtn">
+            <button :class="(showCopyUsernameBtn ? '' : 'bottom')" @click="openContactLink(startContactObj.link)">
                 {{ ((startContactObj.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + startContactObj.name)) }}
+            </button>
+            <button v-if="showCopyUsernameBtn" class="bottom" @click="copyUsername(startContactObj.username)">
+                {{ (copiedUsername ? "Copied Username!" : "Copy Username") }}
             </button>
         </div>
     </Transition>
@@ -53,7 +56,10 @@
 <script setup>
 const webData = useWebsiteDataStore();
 const visitorLeftPage = usePageLeave();
+
 const startContactObj = ref(null);
+const copiedUsername = ref(false);
+var copiedTimeout = null;
 
 const start = ref(null);
 const startSocialsContainer = ref(null);
@@ -67,6 +73,9 @@ useIntersectionObserver(start, ([{ isIntersecting }]) => {
 watch(visitorLeftPage, () => {
     if(visitorLeftPage.value) { hideStartContactDropdown(); }
 });
+watch(startContactObj, () => {
+    copiedUsername.value = false;
+})
 
 onMounted(() => {
     const emailRect = useElementBounding(startSocialBtns.value[0]);
@@ -79,6 +88,11 @@ onMounted(() => {
         if(event.target?.closest(".start-contactBtn-dropdown") == null) { hideStartContactDropdown(); }
     });
 })
+
+// This returns whether the socials dropdown should show the copy username or not.
+const showCopyUsernameBtn = computed(() => {
+    return ((startContactObj.value === null) ? false : startContactObj.value.showCopyUsername);
+});
 
 // This returns custom styles for the contact button dropdown so that it looks unique.
 const dropdownCoords = computed(() => {
@@ -100,7 +114,7 @@ const dropdownCoords = computed(() => {
         box = boxes.value[3];
     }
 
-    const left = (String(box.left - box.width + ((box.width == 60) ? 12 : 0) + window.scrollX) + "px");
+    const left = (String(box.left - box.width + ((box.width > 55) ? 12 : 0) + window.scrollX) + "px");
     const top = (String(box.top + box.height + 15 + window.scrollY) + "px");
     return { left, top, color, "--filter-drop-shadow": ("drop-shadow(0 -2px 0 " + color + ")") };
 });
@@ -126,6 +140,22 @@ function onContactBtnClick(event = new PointerEvent('click'), obj) {
  */
 function openContactLink(link = "") {
     window.open(link, (link.startsWith("mailto:") ? "_blank" : "_self"));
+}
+
+/**
+ * This function copies a username for the visitor.
+ * @param name The username to copy.
+ */
+function copyUsername(name = "") {
+    navigator.clipboard.writeText(name).then(() => {
+        if(copiedTimeout != null) { clearTimeout(copiedTimeout); }
+        copiedUsername.value = true;
+
+        copiedTimeout = setTimeout(() => {
+            copiedUsername.value = false;
+            copiedTimeout = null;
+        }, 3000);
+    });
 }
 
 /**
@@ -286,7 +316,7 @@ const MAIN_BTNS = [
 
 .start-contactBtn-dropdown {
     position: absolute;
-    height: 70px;
+    height: fit-content;
     width: 150px;
     background-color: #000000;
     top: 0;
@@ -300,7 +330,7 @@ const MAIN_BTNS = [
 .start-contactBtn-dropdown::before {
     content: '';
     position: absolute;
-    top: -17px;
+    top: -16px;
     left: calc(50% - 7.5px);
     border-width: 9px;
     border-style: solid;
@@ -309,9 +339,9 @@ const MAIN_BTNS = [
 }
 
 .start-contactBtn-dropdown button {
-    height: calc(50% - 1px);
+    height: 34px;
     width: 100%;
-    font-size: 16px;
+    font-size: 14px;
     color: inherit;
     text-align: center;
     display: flex;
@@ -319,7 +349,7 @@ const MAIN_BTNS = [
     align-items: center;
     flex-direction: row;
     gap: 4px;
-    border-bottom: 1px dotted;
+    border-top: 1px dotted;
     transition: var(--default-transition);
 }
 .start-contactBtn-dropdown button:hover {
@@ -330,11 +360,12 @@ const MAIN_BTNS = [
 .start-contactBtn-dropdown button.top {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+    border-top: none;
+    font-size: 16px;
 }
 .start-contactBtn-dropdown button.bottom {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    font-size: 14px;
 }
 
 @media (max-width: 1225px) {

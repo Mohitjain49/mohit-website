@@ -118,6 +118,13 @@
 
                                 <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
+                            <button v-if="social.showCopyUsername" title="Copy Username"
+                                @click="copyUsername(social.username)"
+                                @pointerenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
+
+                                <font-awesome-icon icon="fa-signature" />
+                            </button>
                         </div>
 
                         <button @click="openSocialQrcode(social.link)" class="social-tab-qrcodeBtn" title="Get QR Code">
@@ -307,6 +314,18 @@ function copyLink(link = "") {
         setAlertBox("Copied Link: " + getLinkString(navLink, link));
     }).catch(() => {
         setAlertBox("Failed To Copy " + getLinkString(navLink, link));
+    });
+}
+
+/**
+ * This function copies a username for the visitor.
+ * @param name The username to copy.
+ */
+function copyUsername(name = "") {
+    navigator.clipboard.writeText(name).then(() => {
+        setAlertBox("Copied Username: <u>" + name + "</u>");
+    }).catch(() => {
+        setAlertBox("Failed To Copy <u>" + name + "</u>");
     });
 }
 
