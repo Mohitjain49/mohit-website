@@ -24,7 +24,7 @@
                 </span>
             </div>
 
-            <button @click="checkForUpdates()" class="copyright-reload-btn" title="Check For Updates">
+            <button @click="checkForUpdates()" class="copyright-reload-btn" title="Update Website">
                 <FontAwesomeIcon icon="fa-rotate" :spin="buttonClicked" />
             </button>
         </div>

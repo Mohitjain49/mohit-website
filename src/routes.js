@@ -33,7 +33,6 @@ const REDIRECT_PAGES = [
     { path: "/commits", link: PERSONAL_WEBSITE_COMMITS_LINK, title: "Mohit Jain | Commits", desc: "This link will direct you to my website's commit history." },
     { path: "/sitemap", link: PERSONAL_SITEMAP_LINK, title: "Mohit Jain | Sitemap", desc: "This link will direct you to my website's sitemap." },
 
-    { path: "/globe", link: PERSONAL_GLOBE_LINK, title: "Mohit Jain - My Globe", desc: "This link will direct you to my personal globe." },
     { path: "/ivue", link: MAIN_IVUE_WEBSITE_LINK, title: "iVue - iVue The World", desc: "This link will redirect you to the Main iVue Website." },
     { path: "/worldsivue", link: WORLDS_IVUE_LINK, title: "Mohit Jain | Worlds iVue", desc: "This link will redirect you to Worlds iVue." },
 ];
@@ -93,7 +92,6 @@ export const personalRoutes = [
     getRedirectRouteRecord("/commits"),
     getRedirectRouteRecord("/sitemap"),
 
-    getRedirectRouteRecord("/globe"),
     getRedirectRouteRecord("/worldsivue"),
     getRedirectRouteRecord("/ivue"),
 

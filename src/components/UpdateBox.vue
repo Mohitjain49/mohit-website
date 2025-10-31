@@ -1,5 +1,5 @@
 <template>
-<div v-if="showUpdateBox" class="update-box animate__animated animate__fadeInRight">
+<div v-if="installStore.showUpdateBox" class="update-box animate__animated animate__fadeInRight">
     <div class="update-box-desc">
         <FontAwesomeIcon :icon="(buttonClicked ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="buttonClicked" />
         <p class="update-box-desc-text">
@@ -10,7 +10,7 @@
 
     <div :class="['update-box-buttons', (buttonClicked ? 'updating' : '')]">
         <button class="updateBtn" @click="updateWebsite()"> {{ (buttonClicked ? 'Updating...' : 'Update') }} </button>
-        <button class="closeBtn" @click="showUpdateBox = false"> Close </button>
+        <button class="closeBtn" @click="installStore.setUpdateBox(false)"> Close </button>
         <RouterLink to="/copyright" class="copyrightBtn"> Current Version </RouterLink>
     </div>
 </div>
@@ -24,7 +24,6 @@ const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website 
 const UPDATE_DATE = ref("10/24/2025");
 
 const installStore = useInstallStore();
-const showUpdateBox = ref(false);
 const buttonClicked = ref(false);
 
 onMounted(() => {
@@ -39,7 +38,7 @@ onMounted(() => {
 });
 
 const updateSW = registerSW({
-    onNeedRefresh() { showUpdateBox.value = true; },
+    onNeedRefresh() { installStore.setUpdateBox(true); },
     onOfflineReady() { installStore.setPwaCreated(); }
 });
 

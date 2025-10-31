@@ -89,7 +89,7 @@
 
             <div class="contact-box-content">
                 <template v-for="(social, index) in SOCIALS">
-                    <div class="social-tab" v-if="(index != 2)" :style="{ color: social.altColor }">
+                    <div :id="social.id" class="social-tab" v-if="(index != 2)" :style="{ color: social.altColor }">
                         <div class="social-tab-top">
                             <h3 class="social-tab-header">
                                 {{ social.name }}
@@ -118,6 +118,13 @@
 
                                 <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
+                            <button v-if="social.showCopyUsername" title="Copy Username"
+                                @click="copyUsername(social.username)"
+                                @pointerenter="setHeadShakeAnimation"
+                                @mouseleave="setHeadShakeAnimation">
+
+                                <font-awesome-icon icon="fa-signature" />
+                            </button>
                         </div>
 
                         <button @click="openSocialQrcode(social.link)" class="social-tab-qrcodeBtn" title="Get QR Code">
@@ -140,9 +147,11 @@
 
 <script setup>
 import { ofetch } from 'ofetch';
+const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
+
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
-const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
+const route = useRoute();
 
 const titleInput = ref();
 const alertBoxText = ref("");
@@ -167,8 +176,8 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
  * This adds a transition to the contact boxes if the screen width is large enough.
  */
 onMounted(() => {
-    initWebData();
-    if(window.innerWidth <= 525) { return; }
+    initWebData(70);
+    if(window.innerWidth <= 525 || route.hash !== "") { return; }
 
     const contactBoxes = [
         document.getElementsByClassName("contact-me-box").item(0),
@@ -311,6 +320,18 @@ function copyLink(link = "") {
 }
 
 /**
+ * This function copies a username for the visitor.
+ * @param name The username to copy.
+ */
+function copyUsername(name = "") {
+    navigator.clipboard.writeText(name).then(() => {
+        setAlertBox("Copied Username: <u>" + name + "</u>");
+    }).catch(() => {
+        setAlertBox("Failed To Copy <u>" + name + "</u>");
+    });
+}
+
+/**
  * This function lets the user share a link with someone else.
  * @param {String} link The link to share.
  */
@@ -323,18 +344,6 @@ function shareLink(link = "") {
  */
 function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
     webData.setQRCodePopup(link);
-}
-
-/**
- * This function copies the discord link.
- */
-function copyDiscordLink() {
-    const link = "mohitjainn";
-    navigator.clipboard.writeText(link).then(() => {
-        setAlertBox("Copied Username: " + link);
-    }).catch(() => {
-        setAlertBox("Failed To Copy Discord Username.");
-    });
 }
 
 /**

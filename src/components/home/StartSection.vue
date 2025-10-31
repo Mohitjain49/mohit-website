@@ -39,12 +39,16 @@
 
     <Transition name="fade-transition">
         <div v-if="(startContactObj != null)" class="start-contactBtn-dropdown" :style="dropdownCoords">
-            <button class="top" @click="webData.setQRCodePopup(startContactObj.link)" :title="startContactObj.shareBtn">
+            <button class="start-contactBtn-dropdown-button top" @click="webData.setQRCodePopup(startContactObj.link)" :title="startContactObj.shareBtn">
                 Share <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
-            <button class="bottom" @click="openContactLink(startContactObj.link)" :title="startContactObj.linkBtn">
+            <RouterLink class="start-contactBtn-dropdown-button" :to="('/contact/#' + startContactObj.id)" title="Go To Contact Page">
+                Go To Contact Page <FontAwesomeIcon icon="fa-link" />
+            </RouterLink>
+            <a :href="startContactObj.link" :target="dropdownLinkTarget" class="start-contactBtn-dropdown-button bottom":title="startContactObj.linkBtn">
                 {{ ((startContactObj.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + startContactObj.name)) }}
-            </button>
+                <FontAwesomeIcon icon="fa-up-right-from-square" />
+            </a>
         </div>
     </Transition>
 </div>
@@ -80,6 +84,12 @@ onMounted(() => {
     });
 })
 
+// This states the target for the dropdown link button
+const dropdownLinkTarget = computed(() => {
+    if(startContactObj.value == null) { return "_blank"; }
+    return (startContactObj.value.link.startsWith('mailto:') ? '_blank' : '_self');
+});
+
 // This returns custom styles for the contact button dropdown so that it looks unique.
 const dropdownCoords = computed(() => {
     if(checkSSR() || startContactObj.value === null) {
@@ -114,18 +124,10 @@ function onContactBtnClick(event = new PointerEvent('click'), obj) {
     if(event.altKey) {
         webData.setQRCodePopup(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
     } else if(event.ctrlKey) {
-        openContactLink(obj.link); // If the Ctrl key is pressed, the webpage itself is automatically opened.
+        (obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self")) // If the Ctrl key is pressed, the webpage itself is automatically opened.
     } else {
         startContactObj.value = ((startContactObj.value?.id === obj.id) ? null : obj); // Sets the Start Contact Dropdown.
     }
-}
-
-/**
- * This function opens a contact link onto a new page.
- * @param {String} link The link to open.
- */
-function openContactLink(link = "") {
-    window.open(link, (link.startsWith("mailto:") ? "_blank" : "_self"));
 }
 
 /**
@@ -286,7 +288,7 @@ const MAIN_BTNS = [
 
 .start-contactBtn-dropdown {
     position: absolute;
-    height: 70px;
+    height: fit-content;
     width: 150px;
     background-color: #000000;
     top: 0;
@@ -308,33 +310,35 @@ const MAIN_BTNS = [
     filter: var(--filter-drop-shadow);
 }
 
-.start-contactBtn-dropdown button {
-    height: calc(50% - 1px);
+.start-contactBtn-dropdown-button {
+    height: 34px;
     width: 100%;
-    font-size: 16px;
+    font-size: 12.5px;
     color: inherit;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    gap: 4px;
+    gap: 2.5px;
     border-bottom: 1px dotted;
-    transition: var(--default-transition);
+    transition: background-color 0.2s, text-shadow 0.2s;
 }
-.start-contactBtn-dropdown button:hover {
+.start-contactBtn-dropdown-button:hover {
     background-color: var(--dark-background);
     text-shadow: 0px 0px 8px;
 }
 
-.start-contactBtn-dropdown button.top {
+.start-contactBtn-dropdown-button.top {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+    font-size: 16px;
+    gap: 4px;
 }
-.start-contactBtn-dropdown button.bottom {
+.start-contactBtn-dropdown-button.bottom {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    font-size: 14px;
+    border-bottom: none;
 }
 
 @media (max-width: 1225px) {
