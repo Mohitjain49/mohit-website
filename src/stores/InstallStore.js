@@ -1,6 +1,7 @@
 export const useInstallStore = defineStore("install-store", () => {
     const pwaCreated = ref(false);
     const deferredPrompt = ref(null);
+    const showUpdateBox = ref(false);
 
     const installIcon = computed(() => {
         return ((deferredPrompt.value == null || pwaCreated.value) ? 'fa-ban' : 'fa-download');
@@ -46,7 +47,15 @@ export const useInstallStore = defineStore("install-store", () => {
         pwaCreated.value = true;
     }
 
-    return { installIcon, installText,
-        mountInstallStore, installApp, setPwaCreated
+    /**
+     * This function sets the status of the update box given a boolean.
+     * @param {Boolean} status THe new status of the update box.
+     */
+    function setUpdateBox(status = false) {
+        showUpdateBox.value = status
+    }
+
+    return { installIcon, installText, showUpdateBox,
+        mountInstallStore, installApp, setPwaCreated, setUpdateBox
     }
 });
