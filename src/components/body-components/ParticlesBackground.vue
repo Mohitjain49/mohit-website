@@ -6,7 +6,7 @@
         <div v-if="batteryLow && showLowBattery" class="batteryLow-box" :style="batteryLowStyle">
             <div class="batteryLow-box-desc">
                 <font-awesome-icon icon="fa-battery-quarter" />
-                <span> Battery Below 30% and Not Charging. Reducing Particles... </span>
+                <span> {{ "Battery Below " + (BATTERY_LOW_THRESHOLD * 100) +"% and Not Charging. Reducing Particles..."}} </span>
             </div>
 
             <button @click="showLowBattery = false" class="batteryLow-box-closeBtn" title="Close Popup">
@@ -20,12 +20,12 @@
 <script setup>
 // Refer to the tsParticles docs: https://particles.js.org/docs/
 
-/**
- * @type {Ref<import('@tsparticles/engine').Container>}
- * The container representing the background.
- */
+/** @type {Ref<import('@tsparticles/engine').Container>} The container representing the background. */
 const tsparticlesContainer = ref(null);
 const props = defineProps({ particlesOptions: { type: Object, required: true } });
+
+const BATTERY_LOW_THRESHOLD = 0.3 // This is a value between 0 and 1 that represents the user having "low battery".
+var popupTimeout = null;
 
 const visibility = useDocumentVisibility();
 const battery = useBattery();
@@ -54,13 +54,20 @@ function onParticlesLoaded(container) {
 function onBatteryStatusChange() {
     if(!battery.isSupported.value || (props.particlesOptions === FEATURES_BACKGROUND.value)) { return; }
     const prevStatus = batteryLow.value;
-    batteryLow.value = (battery.level.value <= 0.3 && !battery.charging.value);
+    batteryLow.value = (battery.level.value <= BATTERY_LOW_THRESHOLD && !battery.charging.value);
 
     if(batteryLow.value && !prevStatus) {
         props.particlesOptions.particles.number.value *= 0.5;
         particlesHalved.value = true;
         showLowBattery.value = true;
+
         if(tsparticlesContainer.value != null) { tsparticlesContainer.value.reset(props.particlesOptions); }
+        if(popupTimeout != null) { clearTimeout(popupTimeout); }
+
+        popupTimeout = setTimeout(() => {
+            showLowBattery.value = false;
+            popupTimeout = null;
+        }, 10000);
     } else if(!batteryLow.value && prevStatus) {
         props.particlesOptions.particles.number.value *= 2;
         particlesHalved.value = false;
