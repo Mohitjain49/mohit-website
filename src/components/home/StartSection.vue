@@ -96,9 +96,10 @@ const dropdownCoords = computed(() => {
         return { left: "0px", top: "0px", color: "white", "--filter-drop-shadow": "drop-shadow(0 -2px 0 white)" }
     }
 
+    /** @type {DOMRectReadOnly} */
+    let box = null;
     const id = startContactObj.value.id;
     const color = startContactObj.value.color;
-    let box = null;
 
     if(id === "work_email") {
         box = boxes.value[0];
@@ -110,7 +111,7 @@ const dropdownCoords = computed(() => {
         box = boxes.value[3];
     }
 
-    const left = (String(box.left - box.width + ((box.width == 60) ? 12 : 0) + window.scrollX) + "px");
+    const left = (String(((box.right + box.left) / 2) - 77 + window.scrollX) + "px");
     const top = (String(box.top + box.height + 15 + window.scrollY) + "px");
     return { left, top, color, "--filter-drop-shadow": ("drop-shadow(0 -2px 0 " + color + ")") };
 });
@@ -302,7 +303,7 @@ const MAIN_BTNS = [
 .start-contactBtn-dropdown::before {
     content: '';
     position: absolute;
-    top: -17px;
+    top: -16px;
     left: calc(50% - 7.5px);
     border-width: 9px;
     border-style: solid;
