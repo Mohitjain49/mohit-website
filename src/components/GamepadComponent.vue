@@ -5,12 +5,14 @@ const audioStore = useAudioStore();
 
 <template>
 <client-only>
-    <font-awesome-icon v-if="gamepadStore.showCursor"
-        id="mohit-custom-cursor"
-        :icon="gamepadStore.cursorIcon"
-        :class="gamepadStore.cursorAnimation"
-        :style="gamepadStore.customCursor"
-    />
+    <template v-for="cursor in gamepadStore.gamepadCursors">
+        <font-awesome-icon v-if="cursor.showCursor"
+            class="mohit-custom-cursor"
+            :icon="cursor.icon"
+            :class="cursor.animation"
+            :style="cursor.style"
+        />
+    </template>
 
     <Transition name="cursorTitle-transition" fade>
         <div v-if="gamepadStore.cursorElementTitle !== ''" class="custom-cursor-titlePopup">
@@ -18,13 +20,13 @@ const audioStore = useAudioStore();
         </div>
     </Transition>
 
-    <Transition name="cursorSense-transition" fade>
+    <!-- <Transition name="cursorSense-transition" fade>
         <div v-if="gamepadStore.showCursorSpeedMenu" class="custom-cursor-sensitivity">
             <h1> Cursor Speed </h1>
             <input type="range" v-model="gamepadStore.maxCursorSpeed" min="1" max="30" disabled />
             <p> {{ (gamepadStore.maxCursorSpeed + 'px per frame') }} </p>
         </div>
-    </Transition>
+    </Transition> -->
 
     <Transition name="cursorSense-transition" fade>
         <div v-if="audioStore.showVolumeGamepadMenu" class="custom-cursor-sensitivity volume">
@@ -37,7 +39,7 @@ const audioStore = useAudioStore();
 </template>
 
 <style scoped>
-#mohit-custom-cursor {
+.mohit-custom-cursor {
     font-size: 27px;
     color: var(--vibrant-flame);
     padding: 5px;

@@ -26,7 +26,7 @@ const gamepadStore = useGamepadStore();
  * This returns the classes for the gamepad bookmark.
  */
 function getGamepadBookmarkClasses() {
-    return ['mohit-bookmark', 'gamepad', ((gamepadStore.gamepadConnected != -1) ? 'active' : '')]
+    return ['mohit-bookmark', 'gamepad', (gamepadStore.gamepadConnected ? 'active' : '')]
 }
 
 const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!";
