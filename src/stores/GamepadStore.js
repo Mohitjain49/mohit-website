@@ -237,3 +237,45 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         initScrollYBy
     }
 });
+
+/**
+ * This function creates a Gamepad Cursor object for the Gamepad Store to use.
+ * @param {Number} index The index of the gamepad object.
+ */
+function useGamepadCursor(index = 0) {
+    const connected = ref(false);
+    const showCursor = ref(false);
+    
+    const maxSpeed = ref(10);
+    const x = ref(0);
+    const y = ref(0);
+
+    /** @type {Ref<HTMLElement>} This is the element that the cursor is hovering over that can be clicked on. */
+    const clickElement = ref(null);
+    const onElement = computed(() => { return (clickElement.value != null); });
+
+    // This detects whether the custom cursor is on an input or text area element.
+    const onInputElement = computed(() => {
+        const element = clickElement.value;
+        return (onElement.value && (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement));
+    });
+
+    const style = computed(() => { return {
+        left: (String(x.value) + "px"),
+        top: (String(y.value) + "px"),
+        fontSize: (onElement.value ? '32px' : ''),
+    }});
+
+    const icon = computed(() => {
+        return (onElement.value ? (onInputElement.value ? 'fa-i-cursor' : 'fa-hand-pointer') : 'fa-arrow-pointer');
+    });
+    const animation = computed(() => {
+        return (onElement.value ? ['animate__animated', 'animate__pulse', 'animate__infinite'] : []);
+    });
+    const elementTitle = computed(() => {
+        const element = clickElement.value;
+        return (onElement.value ? (element instanceof HTMLAnchorElement ? element.href : element.title) : '');
+    });
+
+    return { index, connected, showCursor, maxSpeed, x, y, clickElement, onElement, onInputElement, style, icon, animation, elementTitle }
+}

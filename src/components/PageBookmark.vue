@@ -1,6 +1,6 @@
 <template>
 <Transition name="mohit-bookmark-transition" appear>
-    <RouterLink to="/gamepad" v-if="showGamepadBookmark()"
+    <RouterLink to="/gamepad" v-if="checkGamepadsSupported()"
         :class="getGamepadBookmarkClasses()"
         :title="GAMEPAD_BOOKMARK_TITLE">
 
@@ -27,13 +27,6 @@ const gamepadStore = useGamepadStore();
  */
 function getGamepadBookmarkClasses() {
     return ['mohit-bookmark', 'gamepad', ((gamepadStore.gamepadConnected != -1) ? 'active' : '')]
-}
-
-/**
- * This returns whether or not the Gamepad Icon is good to show or not.
- */
-function showGamepadBookmark() {
-    return Boolean((typeof navigator !== 'undefined') && (typeof navigator.getGamepads === 'function'));
 }
 
 const GAMEPAD_BOOKMARK_TITLE = "Use your gamepad/video game controller on my website!";

@@ -1,3 +1,8 @@
+/** This function returns whether the Web Gamepad API is supported or not. */
+export function checkGamepadsSupported() {
+    return Boolean((typeof navigator !== 'undefined') && (typeof navigator.getGamepads === 'function'));
+}
+
 export const leftAxisMovementThreshold = ref(0.05);
 export const rightAxisMovementThreshold = ref(0.05);
 export const fps = useFps();
