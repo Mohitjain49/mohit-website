@@ -53,7 +53,9 @@ export default defineConfig({
         watch: false,
         environment: "node",
         server: { deps: { inline: true } },
-        setupFiles: ['./vitest.setup.js']
+        setupFiles: ['./vitest.setup.js'],
+        pool: "threads",
+        isolate: true
     },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
