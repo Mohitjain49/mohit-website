@@ -54,8 +54,9 @@ export default defineConfig({
         environment: "node",
         server: { deps: { inline: true } },
         setupFiles: ['./vitest.setup.js'],
-        pool: "threads",
-        isolate: true
+        pool: "forks",
+        isolate: true,
+        fileParallelism: false
     },
     plugins: [
         vue({ include: [/\.vue$/, /\.md$/] }),
