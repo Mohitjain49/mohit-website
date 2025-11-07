@@ -1,6 +1,8 @@
 <template>
+<ParticlesBackground :particlesOptions="GAMEPAD_CONTROLS_BACKGROUND" />
 <FeaturesReturnWidget />
-<main class="personal-web-body">
+
+<main class="personal-web-body transparent">
     <div class="gamepad-controls-body">
         <div class="gamepad-controls">
             <h2>
@@ -43,7 +45,6 @@
             </ul>
         </div>
     </div>
-    <WebFooter />
 </main>
 </template>
 

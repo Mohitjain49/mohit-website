@@ -20,13 +20,13 @@ const audioStore = useAudioStore();
         </div>
     </Transition>
 
-    <!-- <Transition name="cursorSense-transition" fade>
+    <Transition name="cursorSense-transition" fade>
         <div v-if="gamepadStore.showCursorSpeedMenu" class="custom-cursor-sensitivity">
             <h1> Cursor Speed </h1>
             <input type="range" v-model="gamepadStore.maxCursorSpeed" min="1" max="30" disabled />
             <p> {{ (gamepadStore.maxCursorSpeed + 'px per frame') }} </p>
         </div>
-    </Transition> -->
+    </Transition>
 
     <Transition name="cursorSense-transition" fade>
         <div v-if="audioStore.showVolumeGamepadMenu" class="custom-cursor-sensitivity volume">

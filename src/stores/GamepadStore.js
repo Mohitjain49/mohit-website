@@ -1,6 +1,7 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
     const fullScreenStore = useFullScreenStore();
     const showCursorSpeedMenu = ref(false);
+    const maxCursorSpeed = ref(10);
 
     /** These are the gamepad cursors that can be used with the website. */
     const gamepadCursors = [useGamepadCursor(0), useGamepadCursor(1), useGamepadCursor(2), useGamepadCursor(3)];
@@ -16,6 +17,28 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         if(checkSSR() || !document) { return; }
         document.body.style.cursor = (cursorVisible.value ? "none" : "");
     });
+    watch(maxCursorSpeed, () => {
+        for(let i = 0; i < gamepadCursors.length; i++) {
+            gamepadCursors[i].setMaxCursorSpeed(maxCursorSpeed.value);
+        }
+    });
+
+    /**
+     * This function sets the max number of pixels that the cursor can travel per millisecond.
+     * @param {Number} newMax The max speed to set the cursor to. Default Value is 10.
+     */
+    function setMaxCursorSpeed(newMax = 10) {
+        maxCursorSpeed.value = Math.min(30, Math.max(newMax, 1));
+    }
+
+    /**
+     * This function adds a value to the total cursor max speed. Use only with Gamepad Event.
+     * @param {Number} amount The amount to add to the cursor speed.
+     */
+    function addToMaxCursorSpeed(amount = 1) {
+        showCursorSpeedMenu.value = true;
+        setMaxCursorSpeed(maxCursorSpeed.value + amount);
+    }
 
     /** This returns an object representing a gamepad cursor. */
     function getCursor(index) {
@@ -57,8 +80,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         }
     }
 
-    return { gamepadCursors, gamepadConnected, cursorElementTitle, getCursor,
-        onGamepadMenuClick, resetCursorPositions, hideAllCursors, stopAllCursors
+    return { gamepadCursors, gamepadConnected, cursorElementTitle, maxCursorSpeed, showCursorSpeedMenu,
+        getCursor, onGamepadMenuClick, resetCursorPositions, hideAllCursors, stopAllCursors, addToMaxCursorSpeed
     }
 });
 
