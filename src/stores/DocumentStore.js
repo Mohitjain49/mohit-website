@@ -254,14 +254,21 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
-     * This function is triggered whenever someone clicks on a link on the custom PDF.
+     * This function is triggered whenever someone clicks on an annotation on the custom PDF.
+     * @param event The object returned from clicking on an annotation. Go to the following link for more:
+     * https://tato30.github.io/vue-pdf/guide/events.html#annotation
      */
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
-        const url = event.data.url;
-        if(url.includes(PERSONAL_WEBSITE_LINK)) {
-            router.push("/" + url.replace(PERSONAL_WEBSITE_LINK, ""));
-        } else {
-            window.open(url, "_blank");
+        const type = event.type;
+        if(type === "link") {
+            const url = event.data.url;
+            if(url.includes(PERSONAL_WEBSITE_LINK)) {
+                router.push("/" + url.replace(PERSONAL_WEBSITE_LINK, ""));
+            } else {
+                window.open(url, "_blank");
+            }
+        } else if(type === "internal-link") {
+            goToPageSection(("page_" + event.data.referencedPage), ((event.data.offset.bottom < 500) ? -150 : 70));
         }
     }
 
