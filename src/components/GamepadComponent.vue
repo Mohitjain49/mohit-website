@@ -60,7 +60,7 @@ const audioStore = useAudioStore();
     border: 2px solid white;
     color: white;
     border-radius: 25px;
-    z-index: 2000;
+    z-index: 9000;
     box-shadow: 0px 0px 20px 20px black;
     display: flex;
     justify-content: center;
@@ -114,7 +114,7 @@ const audioStore = useAudioStore();
 
 .custom-cursor-titlePopup {
     position: fixed;
-    z-index: 9999;
+    z-index: 9998;
     bottom: 0px;
     left: 0px;
     background-color: black;

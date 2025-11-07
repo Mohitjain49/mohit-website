@@ -255,7 +255,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         } else if(qrdata === "toggle") {
             setQRCodePopup(showSharePopup.value ? "quit" : "main");
         } else {
-            router.push({ path: route.path, hash: route.hash, query: { qrdata } })
+            router.push({ path: route.path, hash: route.hash, query: { qrdata } });
         }
     }
 

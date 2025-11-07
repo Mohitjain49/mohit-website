@@ -1,10 +1,11 @@
 <script setup>
 import { QrcodeStream, QrcodeDropZone } from 'vue-qrcode-reader';
-const codeScanner = useCodeScannerStore();
 const VUE_QRCODE_READER_GITHUB = "https://github.com/gruhn/vue-qrcode-reader";
 
+const codeScanner = useCodeScannerStore();
 onMounted(() => { codeScanner.mountCodeScanner(); });
 onBeforeUnmount(() => { codeScanner.deactivateCamera(); });
+
 useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner",
     "This page is capable of scanning and reading the values of Barcodes and QR Codes."
 ));
@@ -66,7 +67,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 </main>
 
 <div v-if="(codeScanner.scannedItemMenu != -1)" id="code-scanner-popup" class="webpage-cover">
-    <div class="scanner-itemMenu">
+    <div class="scanner-itemMenu animate__animated animate__bounceIn">
         <button @click="codeScanner.setScannedItemMenu(-1)" class="scanner-itemMenu-closeBtn" title="Close Menu">
             <FontAwesomeIcon icon="fa-xmark" />
         </button>
@@ -99,7 +100,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 }
 .code-scanner-main {
     width: 100%;
-    height: var(--body-height);
+    height: calc(100vh - 60px);
     min-height: 600px;
     display: flex;
     justify-content: center;

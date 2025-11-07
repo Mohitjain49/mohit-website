@@ -36,6 +36,7 @@
 import QRCodeStyling from 'qr-code-styling';
 const router = useRouter();
 const webData = useWebsiteDataStore();
+const codeScannerStore = useCodeScannerStore();
 
 const { width: windowWidth } = useWindowSize();
 const overflowLocked = useScrollLock(document.body);
@@ -65,7 +66,7 @@ onMounted(() => {
 });
 onBeforeUnmount(() => {
     qrCodeDisplay.value.display = "none";
-    overflowLocked.value = false;
+    overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
 });
 
 // This watches for changes to the QR Code Data so the popup changes reactively.
@@ -169,7 +170,7 @@ function downloadQRCode() {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 2000;
+    z-index: 1500;
     background-color: rgba(0, 0, 0, 0.9);
 }
 .qrcode-mainPopup {
