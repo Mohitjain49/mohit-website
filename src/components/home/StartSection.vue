@@ -57,10 +57,12 @@
 <script setup>
 const webData = useWebsiteDataStore();
 const visitorLeftPage = usePageLeave();
-const startContactObj = ref(null);
+const router = useRouter();
 
 const start = ref(null);
 const startSocialsContainer = ref(null);
+const startContactObj = ref(null);
+
 const startSocialBtns = ref([]);
 const boxes = ref([]);
 
@@ -112,7 +114,7 @@ const dropdownCoords = computed(() => {
     }
 
     const left = (String(((box.right + box.left) / 2) - 77 + window.scrollX) + "px");
-    const top = (String(box.top + box.height + 15 + window.scrollY) + "px");
+    const top = (String(box.bottom + ((window.innerWidth > 600) ? 15 : 0) + window.scrollY) + "px");
     return { left, top, color, "--filter-drop-shadow": ("drop-shadow(0 -2px 0 " + color + ")") };
 });
 
@@ -125,9 +127,11 @@ function onContactBtnClick(event = new PointerEvent('click'), obj) {
     if(event.altKey) {
         webData.setQRCodePopup(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
     } else if(event.ctrlKey) {
-        (obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self")) // If the Ctrl key is pressed, the webpage itself is automatically opened.
+        window.open(obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self")) // If the Ctrl key is pressed, the webpage itself is automatically opened.
+    } else if(event.shiftKey) {
+        router.push('/contact/#' + obj.id); // If the Shift key is pressed, the key opens up the social tab on the contact page for the button.
     } else {
-        startContactObj.value = ((startContactObj.value?.id === obj.id) ? null : obj); // Sets the Start Contact Dropdown.
+        startContactObj.value = ((startContactObj.value?.id === obj.id) ? null : obj); // If no special key is pressed, this sets the Start Contact Dropdown.
     }
 }
 
@@ -392,6 +396,10 @@ const MAIN_BTNS = [
     }
     .start-btn-caption {
         font-size: 9.5px;
+    }
+
+    .start-contactBtn-dropdown {
+        scale: 0.75;
     }
 }
 

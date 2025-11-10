@@ -58,12 +58,12 @@ const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/s
 onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     "These are the gamepad controls on my website."
-))
+));
 </script>
 
 <style scoped>
 .gamepad-controls-body {
-    height: 740px;
+    height: 780px;
     min-height: var(--body-height);
     width: 100%;
     display: flex;
