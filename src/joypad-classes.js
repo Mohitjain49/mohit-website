@@ -1,3 +1,8 @@
+/** This function returns whether the Web Gamepad API is supported or not. */
+export function checkGamepadsSupported() {
+    return Boolean((typeof navigator !== 'undefined') && (typeof navigator.getGamepads === 'function'));
+}
+
 export const leftAxisMovementThreshold = ref(0.05);
 export const rightAxisMovementThreshold = ref(0.05);
 export const fps = useFps();
@@ -28,6 +33,7 @@ export class GamepadButtonStatusEvent {
      */
     constructor(gamepad, buttonIndex = -1, status = "down", holdFrames = 0) {
         this.gamepad = gamepad;
+        this.gpIndex = gamepad.index;
         this.button = buttonIndex;
         this.status = status;
         this.framesHeld = holdFrames;
@@ -46,6 +52,7 @@ export class GamepadAxisMoveEvent {
      */
     constructor(gamepad, index = -1, movement = 0) {
         this.gamepad = gamepad;
+        this.gpIndex = gamepad.index;
         this.axisIndex = index;
         this.movement = movement;
         this.stick = ((index < 2) ? 'left_stick' : 'right_stick');

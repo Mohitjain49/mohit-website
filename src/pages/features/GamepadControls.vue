@@ -1,7 +1,23 @@
 <template>
+<ParticlesBackground :particlesOptions="GAMEPAD_CONTROLS_BACKGROUND" />
 <FeaturesReturnWidget />
-<main class="personal-web-body">
+
+<main class="personal-web-body transparent">
     <div class="gamepad-controls-body">
+        <div class="gamepad-desc">
+            <p>
+                This file simply shows the controls for using a gamepad here. 
+                The files below are the 4 main files in my code that give functionality to the Gamepad on this website.
+            </p>
+            <ul>
+                <li> <a :href="JOYPAD_EVENTS_FILE" target="mohit-gamepad"> Joypad Events </a> </li>
+                <li> <a :href="JOYPAD_CLASSES_FILE" target="mohit-gamepad"> Joypad Classes </a> </li>
+                <li> <a :href="GAMEPAD_STORE_FILE" target="mohit-gamepad"> Gamepad Pinia Store </a> </li>
+                <li> <a :href="GAMEPAD_COMPONENT_FILE" target="mohit-gamepad"> Gamepad Vue.js Component </a> </li>
+            </ul>
+            <FontAwesomeIcon class="gamepad-desc-icon" icon="fa-code" />
+        </div>
+
         <div class="gamepad-controls">
             <h2>
                 <font-awesome-icon icon="fa-gamepad" />
@@ -29,21 +45,7 @@
                 <span> Previous Page </span>
             </button>
         </div>
-
-        <div class="gamepad-desc">
-            <p>
-                This file simply shows the controls for using a gamepad here. 
-                The files below are the 4 main files in my code that give functionality to the Gamepad on this website.
-            </p>
-            <ul>
-                <li> <a :href="JOYPAD_EVENTS_FILE" target="mohit-gamepad"> Joypad Events </a> </li>
-                <li> <a :href="JOYPAD_CLASSES_FILE" target="mohit-gamepad"> Joypad Classes </a> </li>
-                <li> <a :href="GAMEPAD_STORE_FILE" target="mohit-gamepad"> Gamepad Pinia Store </a> </li>
-                <li> <a :href="GAMEPAD_COMPONENT_FILE" target="mohit-gamepad"> Gamepad Vue.js Component </a> </li>
-            </ul>
-        </div>
     </div>
-    <WebFooter />
 </main>
 </template>
 
@@ -57,12 +59,12 @@ const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/s
 onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     "These are the gamepad controls on my website."
-))
+));
 </script>
 
 <style scoped>
 .gamepad-controls-body {
-    height: 740px;
+    height: 780px;
     min-height: var(--body-height);
     width: 100%;
     display: flex;
@@ -71,9 +73,10 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     flex-direction: column;
 }
 .gamepad-controls {
-    padding: 24px;
+    padding: 23px;
     background-color: var(--dark-background);
     color: #eee;
+    border: 1px solid;
     border-radius: 15px;
     font-family: "Lexend", sans-serif;
 }
@@ -106,11 +109,13 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
 }
 
 .gamepad-desc {
-    margin-top: 20px;
+    position: relative;
+    margin-bottom: 20px;
     height: 180px;
     width: fit-content;
     max-width: 400px;
-    padding: 17px;
+    padding: 16px;
+    border: 1px solid var(--website-light-text);
     background-color: var(--dark-background);
     border-radius: 20px;
     font-family: 'Montserrat', sans-serif;
@@ -125,6 +130,14 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
 }
 .gamepad-desc a:hover {
     text-decoration: underline;
+}
+
+.gamepad-desc-icon {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    color: var(--website-light-text);
+    font-size: 24px;
 }
 
 @media (max-width: 500px) {

@@ -151,7 +151,7 @@ const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/def
 
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
-const route = useRoute();
+const router = useRouter();
 
 const titleInput = ref();
 const alertBoxText = ref("");
@@ -162,14 +162,15 @@ const msgMain = ref("");
 const senderName = ref("");
 const senderEmail = ref("");
 
+const routeHash = computed(() => { return router.currentRoute.value.hash; });
 useHead(getMeta("Mohit Jain | Contact Me", "contact",
     "This page hosts multiple links to platforms where you can contact me."
 ));
 
 /**
- * ----------------------------------------------------
- * These functions add Transitions to the contact page.
- * ----------------------------------------------------
+ * -------------------------------------------------------
+ * These functions manage Transitions to the contact page.
+ * -------------------------------------------------------
  */
 
 /**
@@ -177,7 +178,8 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
  */
 onMounted(() => {
     initWebData(70);
-    if(window.innerWidth <= 525 || route.hash !== "") { return; }
+    manageSocialTabGlow();
+    if(window.innerWidth <= 525 || routeHash.value !== "") { return; }
 
     const contactBoxes = [
         document.getElementsByClassName("contact-me-box").item(0),
@@ -187,19 +189,45 @@ onMounted(() => {
     for(let i = 0; i < contactBoxes.length; i++) {
         const box = contactBoxes[i];
         if(box && (typeof box.classList !== "undefined") && (box.classList instanceof DOMTokenList)) {
-            box.classList.add("animate__animated", "animate__fadeInDown")
+            box.classList.add("animate__animated", "animate__fadeInDown");
         }
     }
 });
 
+// This changes which, if any, social tab "glows" based on the router hash.
+watch(routeHash, (newValue, oldValue) => { manageSocialTabGlow(oldValue); });
+
+// This starts typing on the title input when the user is focused on the page but not on any input element.
+onStartTyping(() => { if(!titleInput.value.active) { titleInput.value.focus(); } });
+
 /**
- * This starts typing on the title input when the user is focused on the page but not on any input element.
+ * This function manages which social tab is "glowing" or not.
+ * @param {String} oldValue The old hash value.
  */
-onStartTyping(() => {
-    if(!titleInput.value.active) {
-        titleInput.value.focus();
+function manageSocialTabGlow(oldValue = "") {
+    // This section removes the glow effect from the old social tab.
+    if(oldValue !== "" && oldValue.length > 0) {
+        const oldIndex = SOCIALS.findIndex(item => item.id === oldValue.substring(1));
+        if(oldIndex != -1 && oldIndex != 2) {
+            const oldTab = document.getElementById(SOCIALS[oldIndex].id);
+            if(oldTab && typeof (oldTab.classList !== "undefined") && (oldTab.classList instanceof DOMTokenList)) {
+                oldTab.classList.remove("glowing");
+            }
+        }
     }
-});
+
+    // This section adds the glow effect to the new social tab.
+    const hash = routeHash.value;
+    if(hash !== "" && hash.length > 0) {
+        const newIndex = SOCIALS.findIndex(item => item.id === hash.substring(1));
+        if(newIndex != -1 && newIndex != 2) {
+            const socialTab = document.getElementById(SOCIALS[newIndex].id);
+            if(socialTab && typeof (socialTab.classList !== "undefined") && (socialTab.classList instanceof DOMTokenList)) {
+                socialTab.classList.add("glowing");
+            }
+        }
+    }
+}
 
 /**
  * ----------------------------------------------

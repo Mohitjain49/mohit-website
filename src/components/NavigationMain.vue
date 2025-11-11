@@ -137,7 +137,7 @@ function flashNavOpt(event = new MouseEvent("click"), path = "/") {
 
 const MAIN_BTNS = [
     { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
-    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
+    { path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
     { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
@@ -147,7 +147,7 @@ const MAIN_BTNS = [
 
 const LAPTOP_MAIN_BTNS = [
     { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
-    { path: "/contact", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
+    { path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
 ];
 
 const NAV_MENU_EXTRAS = [

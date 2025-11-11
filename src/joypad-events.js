@@ -72,7 +72,7 @@ function pollGamepad() {
  * This event runs whenever a new gamepad is connected.
  */
 window.addEventListener("gamepadconnected", (e) => {
-    useGamepadStore().startGamepadConnectedPolling();
+    useGamepadStore().gamepadCursors[e.gamepad.index].start();
     if(import.meta.env.DEV) { console.log(e); }
 });
 
@@ -83,19 +83,16 @@ window.addEventListener("gamepadbuttondown", (e) => {
     /** @type {GamepadButtonStatusEvent} */
     const event = e.detail;
     const buttonIndex = event.button;
+    const gpIndex = event.gpIndex;
     const gamepadStore = useGamepadStore();
     // if(import.meta.env.DEV) { console.log(buttonIndex); }
 
-    if(!gamepadStore.checkGamepadIndex(event.gamepad.index)) {
-        return;
-    }
-
     if(buttonIndex >= 12 && buttonIndex <= 15) {
-        gamepadStore.manageCustomCursorWithDpad(buttonIndex - 12);
+        gamepadStore.getCursor(gpIndex).manageCursorWithDpad(buttonIndex - 12);
     }
 
     if(buttonIndex >= 0 && buttonIndex <= 3) {
-        gamepadStore.emitClick();
+        gamepadStore.getCursor(gpIndex).emitClick();
     }
     if(buttonIndex == 8 || buttonIndex == 9) {
         gamepadStore.onGamepadMenuClick();
@@ -123,12 +120,9 @@ window.addEventListener("gamepadbuttonup", (e) => {
     /** @type {GamepadButtonStatusEvent} */
     const event = e.detail;
     const buttonIndex = event.button;
+    const gpIndex = event.gpIndex;
     const gamepadStore = useGamepadStore();
     // if(import.meta.env.DEV) { console.log(buttonIndex); }
-
-    if(!gamepadStore.checkGamepadIndex(event.gamepad.index)) {
-        return;
-    }
 
     if(buttonIndex == 6 || buttonIndex == 7) {
         useAudioStore().showVolumeGamepadMenu = false;
@@ -145,17 +139,13 @@ window.addEventListener("gamepadbuttonhold", (e) => {
     /** @type {GamepadButtonStatusEvent} */
     const event = e.detail;
     const buttonIndex = event.button;
+    const gpIndex = event.gpIndex;
     const holdFrames = event.framesHeld;
-
     const gamepadStore = useGamepadStore();
     // if(import.meta.env.DEV) { console.log(event); }
 
-    if(!gamepadStore.checkGamepadIndex(event.gamepad.index)) {
-        return;
-    }
-
     if(buttonIndex >= 12 && buttonIndex <= 15) {
-        gamepadStore.manageCustomCursorWithDpad(buttonIndex - 12);
+        gamepadStore.getCursor(gpIndex).manageCursorWithDpad(buttonIndex - 12);
     }
 
     if(event.secondsHeld < 0.8) { return; }
@@ -180,17 +170,14 @@ window.addEventListener("gamepadbuttonhold", (e) => {
 window.addEventListener("gamepadaxismove", (e) => {
     /** @type {GamepadAxisMoveEvent} */
     const event = e.detail;
+    const gpIndex = event.gpIndex;
     const gamepadStore = useGamepadStore();
     // if(import.meta.env.DEV) { console.log(event); }
 
-    if(!gamepadStore.checkGamepadIndex(event.gamepad.index)) {
-        return;
-    }
-
     if(event.stick === "left_stick") {
-        gamepadStore.manageCustomCursor(event);
+        gamepadStore.getCursor(gpIndex).manageCursor(event);
     } else if(event.axisIndex == 3) {
-        gamepadStore.initScrollYBy('bottom', (30 * event.movement));
+        gamepadStore.getCursor(gpIndex).initScrollYBy('bottom', (30 * event.movement));
     }
 });
 

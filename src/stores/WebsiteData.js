@@ -59,7 +59,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("scroll", () => { onWindowScroll(); }, { signal });
-        window.addEventListener("mousemove", () => { gamepadStore.setCustomCursor(false); }, { signal });
+        window.addEventListener("mousemove", () => { gamepadStore.hideAllCursors(); }, { signal });
         window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
@@ -83,8 +83,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function removeEventListeners() {
         controller.abort();
-        gamepadStore.disableGamepadVibration();
-        gamepadStore.stopGamepadConnectedPolling();
+        gamepadStore.stopAllCursors();
     }
 
     /**
@@ -92,7 +91,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
-        gamepadStore.initCustomCursorPosition();
+        gamepadStore.resetCursorPositions();
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -134,7 +133,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function onWindowScroll() {
         closeNavMenu();
-        gamepadStore.setCursorClickElement();
     }
 
     /**
@@ -257,7 +255,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         } else if(qrdata === "toggle") {
             setQRCodePopup(showSharePopup.value ? "quit" : "main");
         } else {
-            router.push({ path: route.path, hash: route.hash, query: { qrdata } })
+            router.push({ path: route.path, hash: route.hash, query: { qrdata } });
         }
     }
 

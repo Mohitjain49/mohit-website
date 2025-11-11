@@ -5,12 +5,14 @@ const audioStore = useAudioStore();
 
 <template>
 <client-only>
-    <font-awesome-icon v-if="gamepadStore.showCursor"
-        id="mohit-custom-cursor"
-        :icon="gamepadStore.cursorIcon"
-        :class="gamepadStore.cursorAnimation"
-        :style="gamepadStore.customCursor"
-    />
+    <template v-for="cursor in gamepadStore.gamepadCursors">
+        <font-awesome-icon v-if="cursor.showCursor"
+            class="mohit-custom-cursor"
+            :icon="cursor.icon"
+            :class="cursor.animation"
+            :style="cursor.style"
+        />
+    </template>
 
     <Transition name="cursorTitle-transition" fade>
         <div v-if="gamepadStore.cursorElementTitle !== ''" class="custom-cursor-titlePopup">
@@ -37,7 +39,7 @@ const audioStore = useAudioStore();
 </template>
 
 <style scoped>
-#mohit-custom-cursor {
+.mohit-custom-cursor {
     font-size: 27px;
     color: var(--vibrant-flame);
     padding: 5px;
@@ -58,7 +60,7 @@ const audioStore = useAudioStore();
     border: 2px solid white;
     color: white;
     border-radius: 25px;
-    z-index: 2000;
+    z-index: 9000;
     box-shadow: 0px 0px 20px 20px black;
     display: flex;
     justify-content: center;
@@ -112,7 +114,7 @@ const audioStore = useAudioStore();
 
 .custom-cursor-titlePopup {
     position: fixed;
-    z-index: 9999;
+    z-index: 9998;
     bottom: 0px;
     left: 0px;
     background-color: black;

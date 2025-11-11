@@ -107,7 +107,7 @@
                     @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
 
-                    <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-square-caret-down' : 'fa-arrow-up-from-bracket')" />
+                    <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-circle-xmark' : 'fa-ellipsis')" />
                 </button>
             </div>
         </div>
