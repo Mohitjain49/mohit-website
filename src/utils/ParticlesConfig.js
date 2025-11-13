@@ -1,6 +1,6 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
-import { faCopyright, faStar, faCertificate, faQuestion, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faCopyright, faStar, faCertificate, faQuestion, faDiamondTurnRight, faGear } from '@fortawesome/free-solid-svg-icons';
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const HOME_BACKGROUND = ref({
@@ -394,6 +394,46 @@ export const INVALID_BACKGROUND = ref({
             options: {
                 image: [
                     { src: getFontAwesomeSvg(faQuestion, "#700ee7ff"), width: 100, height: 100 }
+                ]
+            }
+        },
+        size: {
+            value: { min: 7, max: 7 },
+        },
+    },
+    detectRetina: true,
+    tRetina: true,
+});
+
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
+export const REDIRECT_BACKGROUND = ref({
+    background: {
+        color: "rgb(248, 206, 171)",
+    },
+    fpsLimit: 40,
+    particles: {
+        // color: { value: ["#DFC5FE"] },
+        move: {
+            direction: "none",
+            enable: true,
+            outModes: { default: "out" },
+            random: true,
+            speed: 0.75,
+            straight: false,
+        },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 500
+        },
+        opacity: {
+            value: { min: 0.1, max: 0.75 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "image",
+            options: {
+                image: [
+                    { src: getFontAwesomeSvg(faDiamondTurnRight, "#700ee7ff"), width: 100, height: 100 }
                 ]
             }
         },

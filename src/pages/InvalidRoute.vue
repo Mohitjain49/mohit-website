@@ -1,5 +1,5 @@
 <template>
-<ParticlesBackground v-if="showBackground" :particlesOptions="INVALID_BACKGROUND" />
+<ParticlesBackground :particlesOptions="(backgroundType == 0 ? INVALID_BACKGROUND : REDIRECT_BACKGROUND)" />
 <main id="invalid" class="personal-web-body">
     <h1 class="incomplete-title"> {{ PAGE_DESC }} </h1>
     <!-- <div class="incomplete-subtitle"> {{ '' }} </div> -->
@@ -17,11 +17,13 @@
 import "@/styles/navpage.css";
 const router = useRouter();
 
+const PAGE_TITLE = ref("Mohit Jain | 404 Error");
 const PAGE_DESC = ref("404 - Page Not Found");
-const showBackground = ref(true);
+const backgroundType = ref(0);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
-useHead(getMeta("Mohit Jain | 404 Error", "404", PAGE_DESC.value));
+const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value); });
+useHead(metaTags);
 
 onMounted(() => {
     // This section redirects to a particular page in the website if the user typed in a particular route.
@@ -43,8 +45,9 @@ onMounted(() => {
  * This function runs whenever the website starts redirecting the user to another page.
  */
 function startRedirect() {
+    PAGE_TITLE.value = "Mohit Jain | Redirecting...";
     PAGE_DESC.value = "Redirecting...";
-    showBackground.value = false;
+    backgroundType.value = 1;
 }
 
 /**

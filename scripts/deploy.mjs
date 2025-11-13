@@ -1,6 +1,9 @@
 // NPM Install Command: "npm install -D @aws-sdk/client-s3 @aws-sdk/client-cloudfront dotenv mime-types"
 // NOTE: This command does NOT work correctly when bucket versioning is enabled.
 
+// Use in GitHub Actions: https://github.com/Mohitjain49/mohit-website/blob/main/.github/workflows/main.yml#L30
+// Run with "node scripts/deploy.mjs". You can make a reference to this in your package.json file.
+
 import 'dotenv/config'; // Used To import .env variables independent from Vite.
 import * as fs from "fs"; // The File System Module. Used to find and get data from files in the build output.
 import * as path from 'path'; // The Path Module. Used to create path names and file names.

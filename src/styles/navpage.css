@@ -74,6 +74,9 @@
 }
 .incomplete-title {
     font-size: 60px;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid;
     width: fit-content;
     height: fit-content;
     margin-bottom: 5px;
@@ -81,8 +84,9 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     text-shadow: 0px 0px 5px var(--website-dark-text);
-    background-color: rgba(248, 206, 171, 0.75);
+    background-color: rgba(248, 206, 171, 0.9);
 }
+
 .incomplete-subtitle {
     font-size: 20px;
     font-family: "Roboto", "Lexend", sans-serif;

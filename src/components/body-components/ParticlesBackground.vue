@@ -48,6 +48,13 @@ function onParticlesLoaded(container) {
 }
 
 /**
+ * This function simple resets the particles in the tsparticles container.
+ */
+function resetParticles() {
+    if(tsparticlesContainer.value != null) { tsparticlesContainer.value.reset(props.particlesOptions); }
+}
+
+/**
  * This function is responsible for changing the intensity of tsparticles depending on the battery status.
  * It's main purpose is to have the app take up less operating power if the user's laptop battery is low.
  */
@@ -61,7 +68,7 @@ function onBatteryStatusChange() {
         particlesHalved.value = true;
         showLowBattery.value = true;
 
-        if(tsparticlesContainer.value != null) { tsparticlesContainer.value.reset(props.particlesOptions); }
+        resetParticles();
         if(popupTimeout != null) { clearTimeout(popupTimeout); }
 
         popupTimeout = setTimeout(() => {
@@ -71,7 +78,7 @@ function onBatteryStatusChange() {
     } else if(!batteryLow.value && prevStatus) {
         props.particlesOptions.particles.number.value *= 2;
         particlesHalved.value = false;
-        if(tsparticlesContainer.value != null) { tsparticlesContainer.value.reset(props.particlesOptions); }
+        resetParticles();
     }
     // if(import.meta.env.DEV) { console.log(props.particlesOptions.particles.number) };
 }
@@ -95,7 +102,9 @@ watch(visibility, () => {
 watch(battery.level, () => { onBatteryStatusChange(); });
 watch(battery.isSupported, () => { onBatteryStatusChange(); });
 watch(battery.charging, () => { onBatteryStatusChange(); });
+
 watch(tsparticlesContainer, () => { onBatteryStatusChange(); });
+watch(() => props.particlesOptions, () => { resetParticles(); });
 </script>
 
 <style scoped>
