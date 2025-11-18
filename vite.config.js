@@ -71,6 +71,9 @@ export default defineConfig({
                 (name) => {
                     if(name === "FontAwesomeIcon") {
                         return { name: "FontAwesomeIcon", from: '@fortawesome/vue-fontawesome' }
+                    } else if(name === "ParticlesComponent") {
+                        if(!!process.env.SSR) { return null; }
+                        return { name: "ParticlesComponent", from: 'src/components/body-components/ParticlesBackground.vue' }
                     }
                 }
             ]
@@ -90,7 +93,7 @@ export default defineConfig({
             includeAssets: ['**/*.woff2', '**/*.woff'],
 
             workbox: {
-                cacheId: `v3.4.0-${Date.now()}`,
+                cacheId: `v3.4.1-${Date.now()}`,
                 globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                 maximumFileSizeToCacheInBytes: 3000000,
                 navigateFallback: "/index.html",

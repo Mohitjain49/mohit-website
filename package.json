@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.4.0",
+    "version": "3.4.1",
     "private": true,
     "type": "module",
     "scripts": {
@@ -14,6 +14,7 @@
         "build:test": "npm run test && npm run build",
         "deploy": "node scripts/deploy.mjs",
         "update": "npx npm-check-updates",
+        "upgrade": "npx npm-check-updates -u",
         "test": "vitest run"
     },
     "dependencies": {
@@ -39,8 +40,8 @@
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.930.0",
-        "@aws-sdk/client-s3": "^3.930.0",
+        "@aws-sdk/client-cloudfront": "^3.933.0",
+        "@aws-sdk/client-s3": "^3.933.0",
         "@unhead/vue": "^2.0.19",
         "@vitejs/plugin-vue": "^6.0.1",
         "@vue/test-utils": "^2.4.6",
@@ -57,7 +58,7 @@
         "vite-plugin-qrcode": "^0.3.0",
         "vite-ssg": "^28.2.2",
         "vite-ssg-sitemap": "^0.10.0",
-        "vitest": "^4.0.8",
+        "vitest": "^4.0.10",
         "vue-router": "^4.6.3"
     }
 }

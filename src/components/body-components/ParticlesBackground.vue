@@ -1,20 +1,17 @@
 <template>
-<client-only>
-    <vue-particles id="particlests" :options="particlesOptions" @particlesLoaded="(e) => {onParticlesLoaded(e)}" />
-
-    <Transition name="batteryLow-transition" appear>
-        <div v-if="batteryLow && showLowBattery" class="batteryLow-box" :style="batteryLowStyle">
-            <div class="batteryLow-box-desc">
-                <font-awesome-icon icon="fa-battery-quarter" />
-                <span> {{ "Battery Below " + (BATTERY_LOW_THRESHOLD * 100) +"% and Not Charging. Reducing Particles..."}} </span>
-            </div>
-
-            <button @click="showLowBattery = false" class="batteryLow-box-closeBtn" title="Close Popup">
-                <FontAwesomeIcon icon="fa-xmark" />
-            </button>
+<vue-particles id="particlests" :options="particlesOptions" @particlesLoaded="(e) => {onParticlesLoaded(e)}" />
+<Transition name="batteryLow-transition" appear>
+    <div v-if="batteryLow && showLowBattery" class="batteryLow-box" :style="batteryLowStyle">
+        <div class="batteryLow-box-desc">
+            <font-awesome-icon icon="fa-battery-quarter" />
+            <span> {{ "Battery Below " + (BATTERY_LOW_THRESHOLD * 100) +"% and Not Charging. Reducing Particles..."}} </span>
         </div>
-    </Transition>
-</client-only>
+
+        <button @click="showLowBattery = false" class="batteryLow-box-closeBtn" title="Close Popup">
+            <FontAwesomeIcon icon="fa-xmark" />
+        </button>
+    </div>
+</Transition>
 </template>
 
 <script setup>
