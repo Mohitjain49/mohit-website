@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.4.1",
+    "version": "3.4.2",
     "private": true,
     "type": "module",
     "scripts": {
@@ -40,10 +40,10 @@
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.933.0",
-        "@aws-sdk/client-s3": "^3.933.0",
+        "@aws-sdk/client-cloudfront": "^3.934.0",
+        "@aws-sdk/client-s3": "^3.934.0",
         "@unhead/vue": "^2.0.19",
-        "@vitejs/plugin-vue": "^6.0.1",
+        "@vitejs/plugin-vue": "^6.0.2",
         "@vue/test-utils": "^2.4.6",
         "dotenv": "^17.2.3",
         "mime-types": "^3.0.1",
