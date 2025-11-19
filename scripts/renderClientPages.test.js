@@ -1,20 +1,19 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from "vitest";
-import { mount, flushPromises } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
 import { createPinia } from 'pinia';
 import { createHead } from "@unhead/vue/client";
 
 import { createRouter, createMemoryHistory } from "vue-router";
 import { personalRoutes } from "@/routes";
 
-import VueParticles from "@tsparticles/vue3";
-import { loadSlim } from "@tsparticles/slim";
-import { loadFireworksPreset } from "@tsparticles/preset-fireworks";
-
 const router = createRouter({
     history: createMemoryHistory('/'),
     routes: personalRoutes
 });
+
+vi.stubGlobal("FontAwesomeIcon", () => { })
+vi.stubGlobal("ClientOnly", () => { })
+vi.stubGlobal("VueParticles", () => { })
 
 /**
  * This function tests any component to see if it works or fails when rendered on the Client.
@@ -22,24 +21,25 @@ const router = createRouter({
  */
 export async function testClientComponent(component, name) {
     try {
-        const result = mount(component, {
-            global: {
-                plugins: [createPinia(), router, createHead()],
-                stubs: { FontAwesomeIcon: true, ClientOnly: true, VueParticles: true }
-            },
-        });
+        // const result = mount(component, {
+        //     global: {
+        //         plugins: [createPinia(), router, createHead()],
+        //         stubs: { FontAwesomeIcon: true, ClientOnly: true, VueParticles: true }
+        //     },
+        // });
+
+        const app = createApp(component);
+        app.use(router);
+
+        app.use(createPinia());
+        app.use(createHead());
+        app.mount(document.createElement('div'));
 
         // Wait for routing, async tasks, and rendering to finish
-        await router.isReady()
-        await flushPromises()
-        await nextTick()
+        await router.isReady();
+        await nextTick();
 
-        try {
-            await loadSlim(VueParticles)
-            await loadFireworksPreset(VueParticles)
-        } catch {}
-
-        return { success: true, result, name }
+        return { success: true, result: app, name }
     } catch(error) {
         return { success: false, error, name }
     }
