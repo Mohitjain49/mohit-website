@@ -4,38 +4,36 @@ const audioStore = useAudioStore();
 </script>
 
 <template>
-<client-only>
-    <template v-for="cursor in gamepadStore.gamepadCursors">
-        <font-awesome-icon v-if="cursor.showCursor"
-            class="mohit-custom-cursor"
-            :icon="cursor.icon"
-            :class="cursor.animation"
-            :style="cursor.style"
-        />
-    </template>
+<template v-for="cursor in gamepadStore.gamepadCursors">
+    <font-awesome-icon v-if="cursor.showCursor"
+        class="mohit-custom-cursor"
+        :icon="cursor.icon"
+        :class="cursor.animation"
+        :style="cursor.style"
+    />
+</template>
 
-    <Transition name="cursorTitle-transition" fade>
-        <div v-if="gamepadStore.cursorElementTitle !== ''" class="custom-cursor-titlePopup">
-            {{ truncate(gamepadStore.cursorElementTitle, 70) }}
-        </div>
-    </Transition>
+<Transition name="cursorTitle-transition" fade>
+    <div v-if="gamepadStore.cursorElementTitle !== ''" class="custom-cursor-titlePopup">
+        {{ truncate(gamepadStore.cursorElementTitle, 70) }}
+    </div>
+</Transition>
 
-    <Transition name="cursorSense-transition" fade>
-        <div v-if="gamepadStore.showCursorSpeedMenu" class="custom-cursor-sensitivity">
-            <h1> Cursor Speed </h1>
-            <input type="range" v-model="gamepadStore.maxCursorSpeed" min="1" max="30" disabled />
-            <p> {{ (gamepadStore.maxCursorSpeed + 'px per frame') }} </p>
-        </div>
-    </Transition>
+<Transition name="cursorSense-transition" fade>
+    <div v-if="gamepadStore.showCursorSpeedMenu" class="custom-cursor-sensitivity">
+        <h1> Cursor Speed </h1>
+        <input type="range" v-model="gamepadStore.maxCursorSpeed" min="1" max="30" disabled />
+        <p> {{ (gamepadStore.maxCursorSpeed + 'px per frame') }} </p>
+    </div>
+</Transition>
 
-    <Transition name="cursorSense-transition" fade>
-        <div v-if="audioStore.showVolumeGamepadMenu" class="custom-cursor-sensitivity volume">
-            <h1> Volume </h1>
-            <input type="range" v-model="audioStore.volumeInput" min="1" max="100" disabled />
-            <p> {{ (audioStore.volumeInput + '%') }} </p>
-        </div>
-    </Transition>
-</client-only>
+<Transition name="cursorSense-transition" fade>
+    <div v-if="audioStore.showVolumeGamepadMenu" class="custom-cursor-sensitivity volume">
+        <h1> Volume </h1>
+        <input type="range" v-model="audioStore.volumeInput" min="1" max="100" disabled />
+        <p> {{ (audioStore.volumeInput + '%') }} </p>
+    </div>
+</Transition>
 </template>
 
 <style scoped>

@@ -30,7 +30,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
     const showSharePopup = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
-        return (!checkSSR() && data != null && typeof data === "string");
+        return (data != null && typeof data === "string");
     });
 
     const wakeLockIcon = computed(() => {

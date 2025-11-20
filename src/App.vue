@@ -1,9 +1,9 @@
 <template>
 <NavigationMain />
 <GamepadComponent />
-<PageBookmark v-if="!checkSSR()" />
+<PageBookmark />
 <QrcodeTool v-if="webData.showSharePopup" />
-<UpdateBox v-if="!checkSSR()" />
+<UpdateBox />
 
 <RouterView :key="$route.path" />
 <div v-if="(webData.menuOpen != -1)" class="webpage-cover"></div>
