@@ -1,12 +1,14 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
     const fullScreenStore = useFullScreenStore();
-    const showCursorSpeedMenu = ref(false);
-    const maxCursorSpeed = ref(10);
+    var cursorSpeedTimeout = null;
 
     /** These are the gamepad cursors that can be used with the website. */
     const gamepadCursors = [useGamepadCursor(0), useGamepadCursor(1), useGamepadCursor(2), useGamepadCursor(3)];
+    const showCursorSpeedMenu = ref(false);
+
     const gamepadConnected = computed(() => { return (-1 != gamepadCursors.findIndex(item => item.connected.value)); });
     const cursorVisible = computed(() => { return (-1 != gamepadCursors.findIndex(item => item.showCursor.value)); });
+    const maxSpeedChanging = computed(() => { return (-1 != gamepadCursors.findIndex(item => item.maxSpeedChanging.value)); });
 
     const cursorElementTitle = computed(() => {
         const index = gamepadCursors.findIndex(item => (item.elementTitle.value !== ""));
@@ -17,28 +19,14 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         if(checkSSR() || !document) { return; }
         document.body.style.cursor = (cursorVisible.value ? "none" : "");
     });
-    watch(maxCursorSpeed, () => {
-        for(let i = 0; i < gamepadCursors.length; i++) {
-            gamepadCursors[i].setMaxCursorSpeed(maxCursorSpeed.value);
+    watch(maxSpeedChanging, () => {
+        if(cursorSpeedTimeout != null) { clearTimeout(cursorSpeedTimeout); }
+        if(maxSpeedChanging.value) {
+            showCursorSpeedMenu.value = true;
+        } else {
+            cursorSpeedTimeout = setTimeout(() => { showCursorSpeedMenu.value = false; }, 1000);
         }
     });
-
-    /**
-     * This function sets the max number of pixels that the cursor can travel per millisecond.
-     * @param {Number} newMax The max speed to set the cursor to. Default Value is 10.
-     */
-    function setMaxCursorSpeed(newMax = 10) {
-        maxCursorSpeed.value = Math.min(30, Math.max(newMax, 1));
-    }
-
-    /**
-     * This function adds a value to the total cursor max speed. Use only with Gamepad Event.
-     * @param {Number} amount The amount to add to the cursor speed.
-     */
-    function addToMaxCursorSpeed(amount = 1) {
-        showCursorSpeedMenu.value = true;
-        setMaxCursorSpeed(maxCursorSpeed.value + amount);
-    }
 
     /** This returns an object representing a gamepad cursor. */
     function getCursor(index) {
@@ -80,8 +68,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         }
     }
 
-    return { gamepadCursors, gamepadConnected, cursorElementTitle, maxCursorSpeed, showCursorSpeedMenu,
-        getCursor, onGamepadMenuClick, resetCursorPositions, hideAllCursors, stopAllCursors, addToMaxCursorSpeed
+    return { gamepadCursors, gamepadConnected, cursorElementTitle, showCursorSpeedMenu,
+        getCursor, onGamepadMenuClick, resetCursorPositions, hideAllCursors, stopAllCursors
     }
 });
 
@@ -93,10 +81,13 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
+
+    const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
 
     const connected = ref(false);
     const showCursor = ref(false);
+    const maxSpeedChanging = ref(false);
     
     const maxSpeed = ref(10);
     const x = ref(0);
@@ -116,7 +107,7 @@ function useGamepadCursor(index = 0) {
         left: (String(x.value) + "px"),
         top: (String(y.value) + "px"),
         fontSize: (onElement.value ? '32px' : ''),
-        color: CUSTOM_CURSOR_COLORS[index]
+        color: color.value
     }});
 
     const icon = computed(() => {
@@ -193,7 +184,15 @@ function useGamepadCursor(index = 0) {
      * @param {Number} amount The amount to add to the cursor speed.
      */
     function addToMaxCursorSpeed(amount = 1) {
+        maxSpeedChanging.value = true;
         setMaxCursorSpeed(maxSpeed.value + amount);
+    }
+
+    /**
+     * This function indicates the user has stopped changing their max cursor speed.
+     */
+    function stopChangingMaxCursorSpeed() {
+        maxSpeedChanging.value = false
     }
 
     /**
@@ -319,11 +318,11 @@ function useGamepadCursor(index = 0) {
         return ((xVal >= rect.left && xVal <= rect.right && yVal >= rect.top && yVal <= rect.bottom) ? navMenu : undefined);
     }
 
-    return { index, connected, showCursor, maxSpeed, x, y, clickElement,
-        onElement, onInputElement, style, icon, animation, elementTitle,
+    return { index, color, connected, showCursor, maxSpeedChanging, maxSpeed, x, y,
+        clickElement, onElement, onInputElement, style, icon, animation, elementTitle,
         start, stop, emitClick, setClickElement, initCursorPosition,
-        setMaxCursorSpeed, addToMaxCursorSpeed, setCustomCursor,
-        manageCursor, manageCursorWithDpad, initScrollYBy
+        setMaxCursorSpeed, addToMaxCursorSpeed, stopChangingMaxCursorSpeed,
+        setCustomCursor, manageCursor, manageCursorWithDpad, initScrollYBy
     }
 }
 

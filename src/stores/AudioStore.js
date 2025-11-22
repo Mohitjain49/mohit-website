@@ -4,7 +4,9 @@ import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
     const CLICK_VOLUME_MUTED_KEY = "mohit-audio-clickVolume-muted";
+
     const webData = useWebsiteDataStore();
+    var volumeGamepadMenuTimeout = null;
 
     /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect. */
     const audioClickClip = ref(null);
@@ -13,6 +15,8 @@ export const useAudioStore = defineStore("audio-store", () => {
     const audioScanClip = ref(null);
 
     const showVolumeGamepadMenu = ref(false);
+    const volumeChangingWithGamepad = ref(false);
+
     const volumeInput = ref("50");
     const audioMuted = ref(false);
 
@@ -42,6 +46,15 @@ export const useAudioStore = defineStore("audio-store", () => {
             return "Stop Playing Message.";
         } else {
             return "Play Your Message!";
+        }
+    });
+
+    watch(volumeChangingWithGamepad, () => {
+        if(volumeGamepadMenuTimeout != null) { clearTimeout(volumeGamepadMenuTimeout); }
+        if(volumeChangingWithGamepad.value) {
+            showVolumeGamepadMenu.value = true;
+        } else {
+            volumeGamepadMenuTimeout = setTimeout(() => { showVolumeGamepadMenu.value = false; }, 1000);
         }
     });
 
@@ -124,7 +137,7 @@ export const useAudioStore = defineStore("audio-store", () => {
      * @param {Number} amount the amount to add to the volume.
      */
     function addToVolume(amount = 1) {
-        showVolumeGamepadMenu.value = (!webData.navMenuOpen);
+        volumeChangingWithGamepad.value = (!webData.navMenuOpen);
         const volumeInt = (parseInt(volumeInput.value) + amount);
         volumeInput.value = String(Math.max(0, Math.min(100, volumeInt)));
         changeAudioVolume();
@@ -163,9 +176,10 @@ export const useAudioStore = defineStore("audio-store", () => {
         ttsPlaying.value = true;
     }
 
-    return { audioClickClip, audioScanClip, audioMuted, volumeInput, volumeInputIcon, volumeInputTitle, showVolumeGamepadMenu,
-        ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, checkTTSAvailable, cancelTTS, startTTS,
-        setupClickAudio, changeAudioVolume, confirmClickSound, addToVolume, setAudioMuted, playClickSound, playScanSound
+    return { audioClickClip, audioScanClip, audioMuted, volumeInput, volumeInputIcon, volumeInputTitle,
+        showVolumeGamepadMenu, volumeChangingWithGamepad, ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
+        checkTTSAvailable, cancelTTS, startTTS, setupClickAudio, changeAudioVolume, confirmClickSound,
+        addToVolume, setAudioMuted, playClickSound, playScanSound
     }
 });
 

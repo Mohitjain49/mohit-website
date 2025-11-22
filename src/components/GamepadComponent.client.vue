@@ -14,15 +14,12 @@ const audioStore = useAudioStore();
 </template>
 
 <Transition name="gamepad-volumeMeter-transition" fade>
-    <div class="new-volume-meter" v-if="audioStore.showVolumeGamepadMenu">
-        <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle">
-            <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
-        </button>
-        <input type="range" min="0" max="100" title="Volume Meter for the click sound."
-            v-model="audioStore.volumeInput" disabled
-            @input="audioStore.changeAudioVolume()"
-        />
-        <span> {{ (audioStore.volumeInput + '%') }} </span>
+    <div class="gamepad-volume-meter" v-if="audioStore.showVolumeGamepadMenu">
+        <div class="gamepadComp-input-section">
+            <div class="left-icon"> <FontAwesomeIcon :icon="audioStore.volumeInputIcon" /> </div>
+            <input type="range" min="0" max="100" disabled v-model="audioStore.volumeInput" />
+            <span> {{ (audioStore.volumeInput + '%') }} </span>
+        </div>
     </div>
 </Transition>
 
@@ -32,21 +29,16 @@ const audioStore = useAudioStore();
     </div>
 </Transition>
 
-<Transition name="cursorSense-transition" fade>
-    <div v-if="gamepadStore.showCursorSpeedMenu" class="custom-cursor-sensitivity">
-        <h1> Cursor Speed </h1>
-        <input type="range" v-model="gamepadStore.maxCursorSpeed" min="1" max="30" disabled />
-        <p> {{ (gamepadStore.maxCursorSpeed + 'px per frame') }} </p>
+<Transition name="gamepad-cursorSpeed-transition">
+    <div class="gamepad-cursorSpeed-menu" v-if="gamepadStore.showCursorSpeedMenu">
+        <h1> Cursor Speeds </h1>
+        <div v-for="cursor in gamepadStore.gamepadCursors" class="gamepadComp-input-section" :style="('color: ' + cursor.color + ';')">
+            <div class="left-icon" style="margin-left: 5px;"> <FontAwesomeIcon icon="fa-gauge" /> </div>
+            <input type="range" min="0" max="30" disabled v-model="cursor.maxSpeed" />
+            <span> {{ (cursor.maxSpeed + 'px') }} </span>
+        </div>
     </div>
 </Transition>
-
-<!-- <Transition name="cursorSense-transition" fade>
-    <div v-if="audioStore.showVolumeGamepadMenu" class="custom-cursor-sensitivity volume">
-        <h1> Volume </h1>
-        <input type="range" v-model="audioStore.volumeInput" min="1" max="100" disabled />
-        <p> {{ (audioStore.volumeInput + '%') }} </p>
-    </div>
-</Transition> -->
 </template>
 
 <style scoped>
@@ -62,28 +54,67 @@ const audioStore = useAudioStore();
     transition: var(--default-transition);
 }
 
-.new-volume-meter {
+.gamepad-volume-meter {
+    overflow: hidden;
     position: fixed;
     top: 5px;
     left: calc(50% - 152px);
-    z-index: 9000;
-    width: 300px;
     height: 40px;
+    width: 300px;
+    z-index: 9000;
     background-color: var(--blue-one);
     border: 2px solid var(--blue-cobalt);
     border-radius: 10px;
     box-shadow: 0px 0px 10px 2px var(--blue-zero);
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gamepad-cursorSpeed-menu {
+    overflow: hidden;
+    position: fixed;
+    bottom: 10px;
+    left: calc(50% - 152px);
+    z-index: 9000;
+    width: 300px;
+    height: 160px;
+    background-color: black;
+    border: 2px solid var(--website-text);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 2px black;
+}
+
+.gamepad-cursorSpeed-menu h1 {
+    margin: 5px auto 0px;
+    height: 29px;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    color: var(--website-light-text);
+    font-family: 'Lexend', sans-serif;
+    border-bottom: 1px solid;
+    border-radius: 3px;
+    padding: 0px 2px;
+    user-select: none;
+}
+
+.gamepadComp-input-section {
+    width: 300px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    color: black
+    color: inherit;
 }
-.new-volume-meter input {
+.gamepadComp-input-section input {
     width: calc(100% - 110px);
 }
 
-.new-volume-meter button {
+.gamepadComp-input-section .left-icon {
     font-size: 15px;
     width: 35px;
     margin-left: 10px;
@@ -95,7 +126,7 @@ const audioStore = useAudioStore();
     bottom: 0.5px;
     color: inherit;
 }
-.new-volume-meter span {
+.gamepadComp-input-section span {
     position: relative;
     bottom: 0.5px;
     cursor: default;
@@ -108,58 +139,6 @@ const audioStore = useAudioStore();
     justify-content: center;
     align-items: center;
     color: inherit;
-}
-
-.custom-cursor-sensitivity {
-    position: fixed;
-    left: calc(50% - 225px);
-    top: calc(50% - 125px);
-    width: 450px;
-    height: 250px;
-    border: 2px solid white;
-    color: white;
-    border-radius: 25px;
-    z-index: 9000;
-    box-shadow: 0px 0px 20px 20px black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    overflow: hidden;
-    background: repeating-linear-gradient(
-        45deg,
-        var(--blue-cobalt) 0,
-        var(--blue-cobalt) 30px,
-        black 30px,
-        black 60px
-    );
-}
-
-.custom-cursor-sensitivity input {
-    width: 175px;
-}
-.custom-cursor-sensitivity h1 {
-    color: white;
-    font-family: 'Lexend', sans-serif;
-    margin-bottom: 12px;
-    width: fit-content;
-    height: fit-content;
-    border-bottom: 3px dotted white;
-    border-radius: 10px;
-    padding-bottom: 2px;
-}
-.custom-cursor-sensitivity p {
-    color: white;
-    font-family: 'Lexend', sans-serif;
-    font-size: 17px;
-}
-
-.custom-cursor-sensitivity.volume h1 {
-    color: var(--lightning-yellow) !important;
-    border-color: var(--lightning-yellow) !important;
-}
-.custom-cursor-sensitivity.volume p {
-    color: var(--lightning-yellow) !important;
 }
 
 .custom-cursor-titlePopup {
@@ -181,16 +160,6 @@ const audioStore = useAudioStore();
     text-align: center;
 }
 
-.cursorSense-transition-enter-active, .cursorSense-transition-leave-active {
-    transition: opacity 1.25s;
-}
-.cursorSense-transition-leave-to {
-    opacity: 0
-}
-.cursorSense-transition-leave-from {
-    opacity: 1;
-}
-
 .cursorTitle-transition-enter-active, .cursorTitle-transition-leave-active {
     transition: opacity 0.75s;
 }
@@ -201,9 +170,11 @@ const audioStore = useAudioStore();
     opacity: 1;
 }
 
+.gamepad-volumeMeter-transition-enter-active {
+    transition: opacity 0.25s, top 0.25s;
+}
 .gamepad-volumeMeter-transition-leave-active {
     transition: opacity 0.75s, top 0.75s;
-    transition-delay: 0.75s;
 }
 .gamepad-volumeMeter-transition-enter-from, .gamepad-volumeMeter-transition-leave-to {
     opacity: 0;
@@ -212,6 +183,20 @@ const audioStore = useAudioStore();
 .gamepad-volumeMeter-transition-enter-to, .gamepad-volumeMeter-transition-leave-from {
     opacity: 1;
     top: 5px;
+}
+
+.gamepad-cursorSpeed-transition-enter-active {
+    transition: opacity 0.25s, bottom 0.25s;
+}
+.gamepad-cursorSpeed-transition-leave-active {
+    transition: opacity 0.75s, bottom 0.75s;
+}
+.gamepad-cursorSpeed-transition-enter-from, .gamepad-cursorSpeed-transition-leave-to {
+    opacity: 0;
+    bottom: -220px !important;
+}
+.gamepad-cursorSpeed-transition-enter-to, .gamepad-cursorSpeed-transition-leave-from {
+    opacity: 1;
 }
 
 @media (max-width: 500px) {
