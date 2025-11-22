@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<div v-if="!checkSSR()" id="mohit-documentBar" :class="[(webData.documentMenuOpen ? 'menu-open' : '')]" ref="docNavBar">
+<div id="mohit-documentBar" :class="[(webData.documentMenuOpen ? 'menu-open' : '')]" ref="docNavBar">
     <Transition name="documentMenu-transition">
         <div v-if="webData.documentMenuOpen" class="mohit-documentMenu">
             <div class="mohit-documentMenu-tools">

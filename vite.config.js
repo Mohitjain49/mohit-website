@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 
 import { VitePWA } from 'vite-plugin-pwa';
 import { qrcode } from 'vite-plugin-qrcode';
+import { resolveComponents, resolveFontAwesomeIcons } from './resolvers.js';
 
 import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
@@ -45,101 +46,98 @@ const VUEUSE_AUTO_IMPORTS = {
     ]
 }
 
-export default defineConfig({
-    base: "/",
-    server: { port: 5000 },
-    preview: { port: 4007 },
-    test: {
-        watch: false,
-        environment: "node",
-        server: { deps: { inline: true } },
-        setupFiles: ['./vitest.setup.js'],
-        pool: "forks",
-        isolate: true,
-        fileParallelism: false
-    },
-    plugins: [
-        vue({ include: [/\.vue$/, /\.md$/] }),
-        qrcode(),
-        Info(),
-        imagemin(),
-        EnvTypes({ dts: "./dts/vite-env.d.ts" }),
-        Components({
-            dts: './dts/components.d.ts',
-            extensions: ['vue', 'md'],
-            resolvers: [
-                (name) => {
-                    if(name === "FontAwesomeIcon") {
-                        return { name: "FontAwesomeIcon", from: '@fortawesome/vue-fontawesome' }
-                    } else if(name === "ParticlesComponent") {
-                        if(!!process.env.SSR) { return null; }
-                        return { name: "ParticlesComponent", from: 'src/components/body-components/ParticlesBackground.vue' }
-                    }
-                }
-            ]
-        }),
-        Markdown({
-            markdownItSetup(md) { md.use(attrs); }
-        }),
-        AutoImport({
-            imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, VUEUSE_AUTO_IMPORTS],
-            dirs: ['./src/stores/**', './src/utils/**', './src/joypad-classes.js'],
-            dts: './dts/auto-imports.d.ts',
-            vueTemplate: true
-        }),
-        VitePWA({
-            registerType: "prompt",
-            devOptions: { enabled: false },
-            includeAssets: ['**/*.woff2', '**/*.woff'],
+export default defineConfig(({ isSsrBuild }) => {
+    return {
+        base: "/",
+        server: { port: 5000 },
+        preview: { port: 4007 },
+        test: {
+            watch: false,
+            environment: "node",
+            server: { deps: { inline: true } },
+            setupFiles: ['./vitest.setup.js'],
+            pool: "forks",
+            isolate: true,
+            fileParallelism: false
+        },
+        plugins: [
+            vue({ include: [/\.vue$/, /\.md$/] }),
+            qrcode(),
+            Info(),
+            imagemin(),
+            EnvTypes({ dts: "./dts/vite-env.d.ts" }),
+            Components({
+                dirs: [],
+                dts: './dts/components.d.ts',
+                extensions: ['vue', 'client.vue', 'md'],
+                resolvers: [
+                    (name) => { return resolveComponents(name, isSsrBuild); },
+                    (name) => { return resolveFontAwesomeIcons(name); }
+                ]
+            }),
+            Markdown({
+                markdownItSetup(md) { md.use(attrs); }
+            }),
+            AutoImport({
+                imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, VUEUSE_AUTO_IMPORTS],
+                dirs: ['./src/stores/**', './src/utils/**', './src/joypad-classes.js'],
+                dts: './dts/auto-imports.d.ts',
+                vueTemplate: true
+            }),
+            VitePWA({
+                registerType: "prompt",
+                devOptions: { enabled: false },
+                includeAssets: ['**/*.woff2', '**/*.woff'],
 
-            workbox: {
-                cacheId: `v3.4.1-${Date.now()}`,
-                globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
-                maximumFileSizeToCacheInBytes: 3000000,
-                navigateFallback: "/index.html",
-                navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/],
-                cleanupOutdatedCaches: true,
-                clientsClaim: false,
-                skipWaiting: false
-            },
+                workbox: {
+                    cacheId: `v3.4.2-${Date.now()}`,
+                    globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
+                    maximumFileSizeToCacheInBytes: 3000000,
+                    navigateFallback: "/index.html",
+                    navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/],
+                    cleanupOutdatedCaches: true,
+                    clientsClaim: false,
+                    skipWaiting: false
+                },
 
-            manifest: {
-                name: 'Mohit Jain\'s Portfolio',
-                short_name: 'Mohit Jain',
-                start_url: '/',
-                display: 'minimal-ui',
-                background_color: '#ffffff',
-                theme_color: '#000000',
-                icons: [
-                    {
-                        src: 'static-icons/Personal_Icon_Expanded_Rounded.png',
-                        sizes: '192x192',
-                        type: 'image/png',
-                    },
-                    {
-                        src: 'static-icons/Personal_Icon_Expanded_Rounded.png',
-                        sizes: '512x512',
-                        type: 'image/png',
-                    },
-                ],
-            },
-        })
-    ],
-    ssgOptions: {
-        dirStyle: 'nested',
-        onFinished() {
-            generateSitemap({
-                hostname: "https://www.mohit-jain.com/",
-                exclude: SITEMAP_EXCLUDED_ROUTES,
-                readable: false
+                manifest: {
+                    name: 'Mohit Jain\'s Portfolio',
+                    short_name: 'Mohit Jain',
+                    start_url: '/',
+                    display: 'minimal-ui',
+                    background_color: '#ffffff',
+                    theme_color: '#000000',
+                    icons: [
+                        {
+                            src: 'static-icons/Personal_Icon_Expanded_Rounded.png',
+                            sizes: '192x192',
+                            type: 'image/png',
+                        },
+                        {
+                            src: 'static-icons/Personal_Icon_Expanded_Rounded.png',
+                            sizes: '512x512',
+                            type: 'image/png',
+                        },
+                    ],
+                },
             })
-        }
-    },
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url)),
-            '@types': fileURLToPath(new URL('./types', import.meta.url)),
-            '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)),
+        ],
+        ssgOptions: {
+            dirStyle: 'nested',
+            onFinished() {
+                generateSitemap({
+                    hostname: "https://www.mohit-jain.com/",
+                    exclude: SITEMAP_EXCLUDED_ROUTES,
+                    readable: false
+                })
+            }
+        },
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url)),
+                '@types': fileURLToPath(new URL('./types', import.meta.url)),
+                '@scripts': fileURLToPath(new URL('./scripts', import.meta.url))
+            }
         }
     }
 });

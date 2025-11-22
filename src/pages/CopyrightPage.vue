@@ -15,7 +15,7 @@
             <div class="copyright-body-desc">
                 I'm glad you're here and hope you find inspiration in my work.
                 Feel free to explore the site, take ideas, and use them to spark your own creativity.
-                However, please don't directly copy my content, design, or code without my permission.
+                However, please don't directly copy and then take full credit for my content, design, or code.
                 <br> <br>
                 If you would like to collaborate or discuss using any part of my work, 
                 I'd love to hear from you! You'll find some links to contact me on the footer 

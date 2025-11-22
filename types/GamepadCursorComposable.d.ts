@@ -5,11 +5,17 @@ declare global {
         /** The index of the gamepad being used. */
         index: number;
 
+        /** The color assigned to this specific custom cursor. */
+        color: string;
+
         /** Whether a gamepad is connected. */
         connected: Ref<boolean>;
 
         /** Whether the custom cursor is visible. */
         showCursor: Ref<boolean>;
+
+        /** Indicator for if the max speed of the cursor is changing or not. */
+        maxSpeedChanging: Ref<number>;
 
         /** Max cursor movement speed (pixels per ms). */
         maxSpeed: Ref<number>;
@@ -55,6 +61,9 @@ declare global {
 
         /** Add to the current maximum cursor speed. */
         addToMaxCursorSpeed: (amount?: number) => void;
+
+        /** Indicates that the user has stopped changing their max cursor speed. */
+        stopChangingMaxCursorSpeed: () => void;
 
         /** Show or hide the custom cursor. */
         setCustomCursor: (visible?: boolean) => void;
