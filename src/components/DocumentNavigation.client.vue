@@ -18,14 +18,17 @@
                 </button>
             </div>
             <div class="mohit-documentMenu-tools">
-                <button @click="webData.openQRCodePopup()" title="Share Webpage" :style="getColorStyles('var(--website-light-text)')">
+                <button class="light" @click="webData.openQRCodePopup()" title="Share Webpage">
                     <font-awesome-icon icon="fa-share-from-square" />
                 </button>
                 <button @click="reloadPage()" title="Reload Page">
                     <font-awesome-icon icon="fa-rotate-right" />
                 </button>
-                <a :href="documentLink" target="mohit-document" title="Open Document in New Tab" :style="getColorStyles('var(--website-light-text)')">
+                <a class="light" :href="documentLink" target="mohit-document" title="Open Document in New Tab">
                     <font-awesome-icon icon="fa-arrow-up-right-from-square" />
+                </a>
+                <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
+                    <img :src="pdfjs_logo" draggable="false" width="18" />
                 </a>
             </div>
         </div>
@@ -83,15 +86,7 @@
 
                     <font-awesome-icon icon="fa-school-flag" />
                 </a>
-                </template>
-
-            <a class="mohit-navBar-icon white" :href="PDFJS_LINK"
-                title="See More about PDF.js"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
-
-                <img :src="pdfjs_logo" draggable="false" width="20" />
-            </a>
+            </template>
         </div>
         <div class="mohit-documentBar-iconSection right">
             <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light"
@@ -160,4 +155,6 @@ watch(docNavBarSwipe.isSwiping, () => {
         triggerClickSound();
     }
 });
+
+const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 </script>

@@ -4,7 +4,7 @@ Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@
 
 # **SUMMARY** { .resume-markdown-section-title }
 
-*I’m a software developer experienced in web and mobile application development. I work across the stack, combining frontend design, backend systems, and third-party cloud services to build solutions that are intuitive, reliable and help solve everyday problems. I also lead teams and mentor young, emerging developers, fostering growth and collaboration. For more information about me, check out my Personal Website at [www.mohit-jain.com](http://www.mohit-jain.com/).* { .resume-markdown-mainSummary }
+*I’m a software developer experienced in web and mobile application development. I work across the stack, combining frontend design, backend systems, and third-party cloud services to build solutions that are intuitive, reliable and help solve everyday problems. I also lead teams and mentor young, emerging developers, fostering growth and collaboration. For more information about me, check out my Personal Website at [www.mohit-jain.com](https://www.mohit-jain.com/).* { .resume-markdown-mainSummary }
 
 # [**EXPERIENCE**](https://www.mohit-jain.com/experience/) { .resume-markdown-section-title }
 
@@ -36,7 +36,7 @@ Full-Stack Development { .resume-markdown-subHeader }
 **Kennesaw State University**  
 Bachelor Degree in Computer Science { .resume-markdown-subHeader }
 
-* **GPA:** 3.6  
+* **GPA:** 3.7  
 * **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis
 
 # [**SKILLS**](https://www.mohit-jain.com/skills/)  { .resume-markdown-section-title }

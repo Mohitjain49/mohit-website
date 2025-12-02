@@ -296,6 +296,7 @@
     flex-direction: row;
     gap: 7px;
 }
+
 .mohit-documentMenu-tools button, .mohit-documentMenu-tools a {
     cursor: pointer;
     width: 28px;
@@ -311,6 +312,15 @@
 }
 .mohit-documentMenu-tools button:hover, .mohit-documentMenu-tools a:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mohit-documentMenu-tools button.white, .mohit-documentMenu-tools a.white {
+    color: white;
+    border-color: white;
+}
+.mohit-documentMenu-tools button.light, .mohit-documentMenu-tools a.light {
+    color: var(--website-light-text);
+    border-color: var(--website-light-text);
 }
 
 /**
