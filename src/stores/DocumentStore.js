@@ -22,18 +22,17 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing a document. */
     var printIframe = null;
+    var printFunctionTimeout = null;
+
     const downloadingDocument = ref(false);
     const printingDocument = ref(false);
     const sharingDocument = ref(false);
+    const printingTimeoutError = ref(false);
 
-    /**
-     * @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website.
-     */
+    /** @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website. */
     const pdfComponent = shallowRef(null);
 
-    /**
-     * @type {Ref<Blob>} My resume with a Qr Code at the top right.
-     */
+    /** @type {Ref<Blob>} My resume with a Qr Code at the top right. */
     const qrcodeResume = ref(null);
     const qrcodeResumeUrl = useObjectUrl(qrcodeResume);
 
@@ -68,7 +67,11 @@ export const useDocumentStore = defineStore("document-store", () => {
             onResumeQrcodeRoute.value || onMarkdownRoute.value ||
             (routePath.value === "/resume") || (routePath.value === "/resume/")
         );
-    })
+    });
+
+    const printingIcon = computed(() => {
+        return (printingTimeoutError.value ? "fa-ban" : (printingDocument.value ? "fa-spinner" : "fa-print"));
+    });
 
     /**
      * This function downloads a document for the visitor to see.
@@ -91,13 +94,23 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function printDoc() {
         if(printIframe != null) { document.body.removeChild(printIframe); }
+        if(printFunctionTimeout != null) { clearTimeout(printFunctionTimeout); }
+        if(printingTimeoutError.value) { return; }
+
         printIframe = null;
-
         printingDocument.value = true;
+        
+        printFunctionTimeout = setTimeout(() => {
+            if(printingDocument.value) {
+                printingDocument.value = false;
+                printingTimeoutError.value = true;
+            }
+            printFunctionTimeout = null;
+        }, 7000);
+        
         const documentPdf = await getCurrentPDFObject();
-
-        printIframe = document.createElement("iframe");
         const url = URL.createObjectURL(documentPdf.blob);
+        printIframe = document.createElement("iframe");
 
         printIframe.style.position = "absolute";
         printIframe.style.width = "0";
@@ -110,7 +123,9 @@ export const useDocumentStore = defineStore("document-store", () => {
             const win = printIframe.contentWindow;
             win.focus();
             win.print();
+
             printingDocument.value = false;
+            clearTimeout(printFunctionTimeout);
         }
     }
 
@@ -273,7 +288,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { mounted, docLoaded, sharingDocument, downloadingDocument, printingDocument, qrcodeResumeUrl,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, printingIcon, printingTimeoutError,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
         onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, printDoc, shareDoc, toggleDocumentFullScreen, setPdfSize,
