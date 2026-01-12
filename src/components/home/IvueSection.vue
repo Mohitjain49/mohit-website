@@ -5,6 +5,11 @@
             <img :src="ivue_white_text" draggable="false" />
         </a>
     </div>
+    <p id="ivue-section-desc">
+        Since January 2023, I have been working with iVue as one of its lead software developers for Worlds iVue and the company websites. 
+        I have learned most of my application development skills through my work at iVue, 
+        effectively making iVue the core of my software development experience.
+    </p>
     <div class="ivue-section-tabs-container">
         <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
             @pointerenter="setPulseTwiceAnimation"
@@ -23,7 +28,7 @@
             <img :src="ivue_white_text" width="68" />
             <p>
                 iVue provides a broad range of products and services through its multiple subsidiaries. 
-                As iVue's Lead Developer, I founded and currently lead iVue's Website Development Team. 
+                As iVue's Lead Developer, I currently lead the development of Worlds iVue and our company websites. 
                 I also oversee iVue's usage of Amazon Web Services.
             </p>
         </a>
@@ -94,6 +99,7 @@ function setInitTransitions(isVisible) {
     }
 
     document.getElementById('ivue-section-title').classList.add("animate__animated", leftAnimation);
+    document.getElementById('ivue-section-desc').classList.add("animate__animated", leftAnimation);
     document.getElementById('wiv-tab').classList.add("animate__animated", rightAnimation);
     document.getElementById('main-tab').classList.add("animate__animated", leftAnimation);
     document.getElementById('media-tab').classList.add("animate__animated", rightAnimation);
@@ -118,6 +124,17 @@ function setInitTransitions(isVisible) {
     min-height: 1000px;
     width: 100%;
     padding: 100px 0px;
+}
+#ivue-section-desc {
+    width: 90%;
+    max-width: 1100px;
+    height: fit-content;
+    margin: 0px auto;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Lexend', 'sans-serif';
+    color: white;
 }
 
 #ivue-section-title {
