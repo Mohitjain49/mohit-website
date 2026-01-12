@@ -108,6 +108,7 @@ function setInitTransitions(isVisible) {
 
     setTimeout(() => {
         document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
+        document.getElementById('ivue-section-desc').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
         document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
         document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
         document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
