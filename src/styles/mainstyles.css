@@ -105,7 +105,7 @@ button {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: bold;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family:'Roboto', Calibri, 'Trebuchet MS', sans-serif;
     text-align: center;
 }
 
@@ -312,6 +312,15 @@ button {
     transition: text-shadow 0.2s;
 }
 .resume-markdown-section-title a:hover {
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+}
+
+.resume-markdown-section-subtitle a {
+    text-decoration: none;
+    color: black;
+    transition: text-shadow 0.2s;
+}
+.resume-markdown-section-subtitle a:hover {
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
 }
 

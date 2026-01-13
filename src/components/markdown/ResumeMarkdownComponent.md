@@ -8,7 +8,7 @@ Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@
 
 # [**EXPERIENCE**](https://www.mohit-jain.com/experience/) { .resume-markdown-section-title }
 
-**iVue | [Website](https://www.ivueworld.com/)**  
+**[iVue](https://www.ivueworld.com/)**{ .resume-markdown-section-subtitle }  
 Lead Software Developer { .resume-markdown-subHeader }
 
 * Defined company standards for web application development by mandating professional coding best practices, writing technical documentation, and creating training programs to help new developers build essential frontend skills at iVue.  
@@ -18,14 +18,14 @@ Lead Software Developer { .resume-markdown-subHeader }
 * Mentored multiple interns in front-end development by offering guidance and hands-on assistance on modern web development frameworks, responsive UI/UX design, and coding best practices.  
 * Implemented company-wide email services with [Amazon WorkMail](https://aws.amazon.com/workmail/), improving communication and productivity across sales, software development, and engineering teams.
 
-**Sublo | [Website](https://www.sublo.app/)**  
+**[Sublo](https://www.sublo.app/)**{ .resume-markdown-section-subtitle }  
 Intern Mobile Application Developer { .resume-markdown-subHeader }
 
 * Collaborated with other software developers to create a mobile application with [React Native](https://reactnative.dev/) by taking charge as the primary mobile application developer, integrating [Amazon Cognito](https://aws.amazon.com/cognito/) into their application to create its user authentication system, and utilizing mobile-specific APIs to enhance the app’s capabilities.
 
 # [**PROJECTS**](https://www.mohit-jain.com/projects/)  { .resume-markdown-section-title }
 
-**Mapping Neurodivergence | [Website](https://mnd.mohit-jain.com) | [GitHub](https://github.com/Mohitjain49/assurant-project)**  
+**[Mapping Neurodivergence](https://mnd.mohit-jain.com)**{ .resume-markdown-section-subtitle }  
 Full-Stack Development { .resume-markdown-subHeader }
 
 * Developed a web application that helps neurodivergent users easily connect with one another for the Spring 2025 Hackathon for Social Good at Kennesaw State University.  
@@ -37,7 +37,7 @@ Full-Stack Development { .resume-markdown-subHeader }
 Bachelor Degree in Computer Science { .resume-markdown-subHeader }
 
 * **GPA:** 3.7  
-* **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis
+* **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis, Operating Systems, Linear Algebra, Artificial Intelligence
 
 # [**SKILLS**](https://www.mohit-jain.com/skills/)  { .resume-markdown-section-title }
 
