@@ -77,6 +77,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/contact-me"], replacement: "/contact" },
     { routes: ["/exp"], replacement: "/experience/" },
     { routes: ["/icon", "/static-icons"], replacement: "/icons" },
+    { routes: ["/version", "/v"], replacement: "/copyright/" },
     { routes: ["/documents"], replacement: "/#documents" },
 
     { routes: ["/documents/resume"], replacement: "/resume" },
