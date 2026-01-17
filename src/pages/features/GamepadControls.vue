@@ -7,7 +7,7 @@
         <div class="gamepad-controls-body-container left">
             <div class="gamepad-desc">
                 <p>
-                    This file simply shows the controls for using a gamepad here. 
+                    This webpage simply shows the controls for using a gamepad here. 
                     The files below are the 4 main files in my code that give functionality to the Gamepad on this website.
                 </p>
                 <ul>
