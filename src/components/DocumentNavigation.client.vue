@@ -106,14 +106,6 @@
         </div>
     </div>
 </div>
-
-<div class="bottom-left-element">
-    <div id="g-savetodrive" class="g-savetodrive"
-        data-src="https://www.mohit-jain.com/Mohit_Jain_Resume.pdf"
-        data-filename="Mohit_Jain_Resume.pdf"
-        data-sitename="Mohit Jain">
-    </div>
-</div>
 </template>
 
 <script setup>
@@ -123,9 +115,6 @@ const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 const docNavBar = ref(null);
 const docNavBarSwipe = useSwipe(docNavBar, { passive: true });
 const fullScreenStore = useFullScreenStore();
-
-const pageMounted = ref(false);
-const scriptLoaded = ref(false);
 
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
@@ -150,17 +139,7 @@ function getColorStyles(color = "var(--website-text)") {
     return { color, borderColor: color }
 }
 
-onMounted(() => {
-    docStore.mountDocumentPage();
-    nextTick(() => {
-        pageMounted.value = true;
-        if(!scriptLoaded.value) { return; }
-
-        window.gapi.savetodrive.render(document.getElementById("g-savetodrive"),
-            { src: "https://www.mohit-jain.com/Mohit_Jain_Resume.pdf", filename: "Mohit_Jain_Resume.pdf", sitename: "Mohit Jain" }
-        );
-    })
-});
+onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
 
 // This tracks touch "swipe" events so that the user can open or close the document navigation bar with a swipe.
@@ -176,19 +155,6 @@ watch(docNavBarSwipe.isSwiping, () => {
         triggerClickSound();
     }
 });
-
-useScriptTag(
-    "https://apis.google.com/js/platform.js",
-    (el) => { console.log(el); scriptLoaded.value = true; },
-    { async: true, defer: true }
-);
-
-watch(scriptLoaded, () => {
-    if(!pageMounted.value) { return; }
-    window.gapi.savetodrive.render(document.getElementById("g-savetodrive"),
-        { src: "//www.mohit-jain.com/Mohit_Jain_Resume.pdf", filename: "Mohit_Jain_Resume.pdf", sitename: "Mohit Jain" }
-    );
-})
 
 const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 </script>
