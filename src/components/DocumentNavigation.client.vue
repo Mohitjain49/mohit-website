@@ -28,7 +28,7 @@
                     <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                 </a>
                 <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
-                    <img :src="pdfjs_logo" draggable="false" width="18" style="user-select: none;" />
+                    <img :src="pdfjs_logo" draggable="false" width="18" />
                 </a>
             </div>
         </div>
@@ -155,12 +155,6 @@ watch(docNavBarSwipe.isSwiping, () => {
         triggerClickSound();
     }
 });
-
-useScriptTag(
-    "https://apis.google.com/js/platform.js",
-    (el) => { console.log(el); },
-    { async: true, defer: true }
-);
 
 const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 </script>

@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.4.7",
+    "version": "3.4.6",
     "private": true,
     "type": "module",
     "scripts": {
@@ -36,7 +36,7 @@
         "pdf-lib": "^1.17.1",
         "pinia": "^3.0.4",
         "qr-code-styling": "^1.9.2",
-        "vue": "^3.5.27",
+        "vue": "^3.5.26",
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
