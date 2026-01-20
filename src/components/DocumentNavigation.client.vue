@@ -16,11 +16,6 @@
                 <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />
                 </button>
-                <div id="g-savetodrive" class="g-savetodrive"
-                    data-src="https://www.mohit-jain.com/Mohit_Jain_Resume.pdf"
-                    data-filename="Mohit_Jain_Resume.pdf"
-                    data-sitename="Mohit Jain">
-                </div>
             </div>
             <div class="mohit-documentMenu-tools">
                 <button class="light" @click="webData.openQRCodePopup()" title="Share Webpage">
@@ -111,6 +106,14 @@
         </div>
     </div>
 </div>
+
+<div class="bottom-left-element">
+    <div id="g-savetodrive" class="g-savetodrive"
+        data-src="https://www.mohit-jain.com/Mohit_Jain_Resume.pdf"
+        data-filename="Mohit_Jain_Resume.pdf"
+        data-sitename="Mohit Jain">
+    </div>
+</div>
 </template>
 
 <script setup>
@@ -189,3 +192,14 @@ watch(scriptLoaded, () => {
 
 const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 </script>
+
+<style>
+.bottom-left-element {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 9000;
+    height: fit-content;
+    width: fit-content;
+}
+</style>
