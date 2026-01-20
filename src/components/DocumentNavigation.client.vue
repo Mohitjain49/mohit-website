@@ -183,7 +183,7 @@ useScriptTag(
 watch(scriptLoaded, () => {
     if(!pageMounted.value) { return; }
     window.gapi.savetodrive.render(document.getElementById("g-savetodrive"),
-        { src: "https://www.mohit-jain.com/Mohit_Jain_Resume.pdf", filename: "Mohit_Jain_Resume.pdf", sitename: "Mohit Jain" }
+        { src: "//www.mohit-jain.com/Mohit_Jain_Resume.pdf", filename: "Mohit_Jain_Resume.pdf", sitename: "Mohit Jain" }
     );
 })
 
