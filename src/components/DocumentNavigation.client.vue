@@ -112,7 +112,7 @@
                 @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
-                <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-circle-xmark' : 'fa-file-import')" />
+                <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-file-circle-xmark' : 'fa-file-export')" />
             </button>
         </div>
     </div>
