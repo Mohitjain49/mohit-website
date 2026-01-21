@@ -29,11 +29,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     var printIframe = null;
     var printFunctionTimeout = null;
 
-    const downloadingDocument = ref(false);
-    const printingDocument = ref(false);
-    const sharingDocument = ref(false);
-    const uploadingDocumentToGoogleDrive = ref(false);
-    const printingTimeoutError = ref(false);
+    const documentDownloadStatus = ref({ pending: false, fresh: false });
+    const documentPrintStatus = ref({ pending: false, fresh: false, timeoutError: false });
+    const documentShareStatus = ref({ pending: false, fresh: false });
+    const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false });
 
     /** @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website. */
     const pdfComponent = shallowRef(null);
@@ -75,8 +74,21 @@ export const useDocumentStore = defineStore("document-store", () => {
         );
     });
 
-    const printingIcon = computed(() => {
-        return (printingTimeoutError.value ? "fa-ban" : (printingDocument.value ? "fa-spinner" : "fa-print"));
+    const downloadIcon = computed(() => {
+        const downloadObj = documentDownloadStatus.value;
+        return (downloadObj.fresh ? "fa-check" : (downloadObj.pending ? "fa-spinner" : "fa-file-download"));
+    });
+    const printIcon = computed(() => {
+        const printObj = documentPrintStatus.value;
+        return (printObj.timeoutError ? "fa-ban" : (printObj.fresh ? "fa-check" : (printObj.pending ? "fa-spinner" : "fa-print")));
+    });
+    const shareIcon = computed(() => {
+        const shareObj = documentShareStatus.value;
+        return (shareObj.fresh ? "fa-check" : (shareObj.pending ? "fa-spinner" : "fa-share"));
+    });
+    const uploadToGoogleDriveIcon = computed(() => {
+        const uploadObj = documentUploadToGoogleDriveStatus.value;
+        return (uploadObj.fresh ? "fa-check" : (uploadObj.pending ? "fa-spinner" : "fa-brands fa-google-drive"));
     });
 
     /**
@@ -89,7 +101,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function downloads a document for the visitor to see.
      */
     async function downloadDoc() {
-        downloadingDocument.value = true;
+        documentDownloadStatus.value.pending = true;
         const documentPdf = await getCurrentPDFObject();
 
         const link = document.createElement('a');
@@ -98,7 +110,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     
         link.click();
         link.remove();
-        downloadingDocument.value = false;
+
+        documentDownloadStatus.value.pending = false;
+        documentDownloadStatus.value.fresh = true;
+        setTimeout(() => { documentDownloadStatus.value.fresh = false; }, 3000);
     }
 
     /**
@@ -107,15 +122,15 @@ export const useDocumentStore = defineStore("document-store", () => {
     async function printDoc() {
         if(printIframe != null) { document.body.removeChild(printIframe); }
         if(printFunctionTimeout != null) { clearTimeout(printFunctionTimeout); }
-        if(printingTimeoutError.value) { return; }
+        if(documentPrintStatus.value.timeoutError) { return; }
 
         printIframe = null;
-        printingDocument.value = true;
+        documentPrintStatus.value.pending = true;
         
         printFunctionTimeout = setTimeout(() => {
-            if(printingDocument.value) {
-                printingDocument.value = false;
-                printingTimeoutError.value = true;
+            if(documentPrintStatus.value.pending) {
+                documentPrintStatus.value.pending = false;
+                documentPrintStatus.value.timeoutError = true;
             }
             printFunctionTimeout = null;
         }, 7000);
@@ -136,7 +151,10 @@ export const useDocumentStore = defineStore("document-store", () => {
             win.focus();
             win.print();
 
-            printingDocument.value = false;
+            documentPrintStatus.value.pending = false;
+            documentPrintStatus.value.fresh = true;
+
+            setTimeout(() => { documentPrintStatus.value.fresh = false; }, 3000);
             clearTimeout(printFunctionTimeout);
         }
     }
@@ -145,18 +163,20 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function shares the document with someone using the OS's built in share popup.
      */
     async function shareDoc() {
-        sharingDocument.value = true;
+        documentShareStatus.value.pending = true;
         const documentPdf = await getCurrentPDFObject();
-
         useWebsiteDataStore().shareFile(new File([documentPdf.blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
-        sharingDocument.value = false;
+
+        documentShareStatus.value.pending = false;
+        documentShareStatus.value.fresh = true;
+        setTimeout(() => { documentShareStatus.value.fresh = false; }, 3000);
     }
 
     /**
      * This function shares the document with someone using the OS's built in share popup.
      */
     async function uploadDocToGoogleDrive() {
-        uploadingDocumentToGoogleDrive.value = true;
+        documentUploadToGoogleDriveStatus.value.pending = true;
         const documentPdf = await getCurrentPDFObject();
         const form = new FormData();
 
@@ -168,12 +188,15 @@ export const useDocumentStore = defineStore("document-store", () => {
         const headers = new Headers({ 'Authorization': 'Bearer ' + googleAPIAccessToken });
 
         ofetch.raw(GOOGLE_API_LINK, { method: 'POST', headers, body: form }).then((response) => {
-            console.log(response)
-            if(response.status !== 200) { return; }
-            uploadingDocumentToGoogleDrive.value = false;
+            documentUploadToGoogleDriveStatus.value.pending = false;
+            documentUploadToGoogleDriveStatus.value.fresh = true;
+            setTimeout(() => { documentUploadToGoogleDriveStatus.value.fresh = false; }, 3000);
+
         }).catch((e) => {
             console.error(e);
-            uploadingDocumentToGoogleDrive.value = false;
+            documentUploadToGoogleDriveStatus.value.pending = false;
+            documentUploadToGoogleDriveStatus.value.fresh = true;
+            setTimeout(() => { documentUploadToGoogleDriveStatus.value.fresh = false; }, 3000);
         })
     }
 
@@ -362,8 +385,9 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { mounted, docLoaded, qrcodeResumeUrl, googleDriveUploadSupported,
-        sharingDocument, downloadingDocument, printingDocument, uploadingDocumentToGoogleDrive, printingTimeoutError,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, printingIcon,
+        documentDownloadStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
+        downloadIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
         onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,

@@ -8,21 +8,23 @@
         <div v-if="webData.documentMenuOpen" class="mohit-documentMenu">
             <div class="mohit-documentMenu-tools">
                 <button @click="docStore.downloadDoc()" title="Download Document" :style="getColorStyles('var(--blue-one)')">
-                    <font-awesome-icon :icon="(docStore.downloadingDocument ? 'fa-spinner' : 'fa-file-download')" :spin-pulse="docStore.downloadingDocument" />
+                    <font-awesome-icon :icon="docStore.downloadIcon" :spin-pulse="docStore.documentDownloadStatus.pending" />
                 </button>
                 <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-three)')">
-                    <font-awesome-icon :icon="(docStore.printingIcon)" :spin-pulse="(docStore.printingDocument && !docStore.printingTimeoutError)" />
+                    <font-awesome-icon :icon="(docStore.printIcon)"
+                        :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
+                    />
                 </button>
                 <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
-                    <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />
+                    <font-awesome-icon :icon="docStore.shareIcon" :spin-pulse="docStore.documentShareStatus.pending" />
                 </button>
                 <button v-if="docStore.googleDriveUploadSupported"
                     @click="docStore.requestGoogleToUploadDoc()"
                     title="Upload This Document To Your Google Drive!"
                     :style="getColorStyles('#34A853')">
 
-                    <font-awesome-icon :spin-pulse="docStore.uploadingDocumentToGoogleDrive"
-                        :icon="(docStore.uploadingDocumentToGoogleDrive ? 'fa-spinner' : 'fa-brands fa-google-drive')"
+                    <font-awesome-icon :spin-pulse="docStore.documentUploadToGoogleDriveStatus.pending"
+                        :icon="docStore.uploadToGoogleDriveIcon"
                     />
                 </button>
             </div>
