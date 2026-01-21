@@ -8,13 +8,24 @@
         <div v-if="webData.documentMenuOpen" class="mohit-documentMenu">
             <div class="mohit-documentMenu-tools">
                 <button @click="docStore.downloadDoc()" title="Download Document" :style="getColorStyles('var(--blue-one)')">
-                    <font-awesome-icon :icon="(docStore.downloadingDocument ? 'fa-spinner' : 'fa-file-download')" :spin-pulse="docStore.downloadingDocument" />
+                    <font-awesome-icon :icon="docStore.downloadIcon" :spin-pulse="docStore.documentDownloadStatus.pending" />
                 </button>
                 <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-three)')">
-                    <font-awesome-icon :icon="(docStore.printingIcon)" :spin-pulse="(docStore.printingDocument && !docStore.printingTimeoutError)" />
+                    <font-awesome-icon :icon="(docStore.printIcon)"
+                        :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
+                    />
                 </button>
                 <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
-                    <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />
+                    <font-awesome-icon :icon="docStore.shareIcon" :spin-pulse="docStore.documentShareStatus.pending" />
+                </button>
+                <button v-if="docStore.googleDriveUploadSupported"
+                    @click="docStore.requestGoogleToUploadDoc()"
+                    title="Upload This Document To Your Google Drive!"
+                    :style="getColorStyles('#34A853')">
+
+                    <font-awesome-icon :spin-pulse="docStore.documentUploadToGoogleDriveStatus.pending"
+                        :icon="docStore.uploadToGoogleDriveIcon"
+                    />
                 </button>
             </div>
             <div class="mohit-documentMenu-tools">
@@ -97,11 +108,11 @@
                 <font-awesome-icon :icon="fullScreenStore.faIcon" />
             </button>
             <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
-                :title="(webData.documentMenuOpen ? 'Close Document Options' : 'Open Document Options')"
+                :title="(webData.documentMenuOpen ? 'Close Document Actions' : 'Open Document Actions')"
                 @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
-                <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-circle-xmark' : 'fa-ellipsis')" />
+                <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-file-circle-xmark' : 'fa-file-export')" />
             </button>
         </div>
     </div>
@@ -114,10 +125,10 @@ const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 const docNavBar = ref(null);
 const docNavBarSwipe = useSwipe(docNavBar, { passive: true });
+const fullScreenStore = useFullScreenStore();
 
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
-const fullScreenStore = useFullScreenStore();
 
 const documentLink = computed(() => {
     if(docStore.onResumeQrcodeRoute) {
@@ -158,3 +169,14 @@ watch(docNavBarSwipe.isSwiping, () => {
 
 const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 </script>
+
+<style>
+.bottom-left-element {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 9000;
+    height: fit-content;
+    width: fit-content;
+}
+</style>

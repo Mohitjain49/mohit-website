@@ -12,7 +12,12 @@
 <script setup>
 import "./styles/mainstyles.css";
 const webData = useWebsiteDataStore();
+const documentStore = useDocumentStore();
 
 onMounted(() => { webData.setEventListeners(); });
 onBeforeUnmount(() => { webData.removeEventListeners(); });
+
+useScriptTag("https://accounts.google.com/gsi/client",
+    (el) => { documentStore.initGoogleTokenClient() },
+);
 </script>

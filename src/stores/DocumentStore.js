@@ -2,6 +2,7 @@ import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
 import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
+import { ofetch } from 'ofetch';
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
@@ -10,8 +11,12 @@ export const useDocumentStore = defineStore("document-store", () => {
     const fullScreenStore = useFullScreenStore();
 
     var docAbortController = new AbortController();
+    var googleTokenClient = { requestAccessToken: () => {} };
+    var googleAPIAccessToken = "";
+
     const mounted = ref(false);
     const docLoaded = ref(false);
+    const googleDriveUploadSupported = ref(false);
 
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
@@ -24,10 +29,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     var printIframe = null;
     var printFunctionTimeout = null;
 
-    const downloadingDocument = ref(false);
-    const printingDocument = ref(false);
-    const sharingDocument = ref(false);
-    const printingTimeoutError = ref(false);
+    const documentDownloadStatus = ref({ pending: false, fresh: false });
+    const documentPrintStatus = ref({ pending: false, fresh: false, timeoutError: false });
+    const documentShareStatus = ref({ pending: false, fresh: false });
+    const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false });
 
     /** @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website. */
     const pdfComponent = shallowRef(null);
@@ -69,15 +74,34 @@ export const useDocumentStore = defineStore("document-store", () => {
         );
     });
 
-    const printingIcon = computed(() => {
-        return (printingTimeoutError.value ? "fa-ban" : (printingDocument.value ? "fa-spinner" : "fa-print"));
+    const downloadIcon = computed(() => {
+        const downloadObj = documentDownloadStatus.value;
+        return (downloadObj.fresh ? "fa-check" : (downloadObj.pending ? "fa-spinner" : "fa-file-download"));
     });
+    const printIcon = computed(() => {
+        const printObj = documentPrintStatus.value;
+        return (printObj.timeoutError ? "fa-ban" : (printObj.fresh ? "fa-check" : (printObj.pending ? "fa-spinner" : "fa-print")));
+    });
+    const shareIcon = computed(() => {
+        const shareObj = documentShareStatus.value;
+        return (shareObj.fresh ? "fa-check" : (shareObj.pending ? "fa-spinner" : "fa-share"));
+    });
+    const uploadToGoogleDriveIcon = computed(() => {
+        const uploadObj = documentUploadToGoogleDriveStatus.value;
+        return (uploadObj.fresh ? "fa-check" : (uploadObj.pending ? "fa-spinner" : "fa-brands fa-google-drive"));
+    });
+
+    /**
+     * ---------------------------------------------------------------------------
+     * These functions are for fetching and exporting files present on my website.
+     * ---------------------------------------------------------------------------
+     */
 
     /**
      * This function downloads a document for the visitor to see.
      */
     async function downloadDoc() {
-        downloadingDocument.value = true;
+        documentDownloadStatus.value.pending = true;
         const documentPdf = await getCurrentPDFObject();
 
         const link = document.createElement('a');
@@ -86,7 +110,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     
         link.click();
         link.remove();
-        downloadingDocument.value = false;
+
+        documentDownloadStatus.value.pending = false;
+        documentDownloadStatus.value.fresh = true;
+        setTimeout(() => { documentDownloadStatus.value.fresh = false; }, 3000);
     }
 
     /**
@@ -95,15 +122,15 @@ export const useDocumentStore = defineStore("document-store", () => {
     async function printDoc() {
         if(printIframe != null) { document.body.removeChild(printIframe); }
         if(printFunctionTimeout != null) { clearTimeout(printFunctionTimeout); }
-        if(printingTimeoutError.value) { return; }
+        if(documentPrintStatus.value.timeoutError) { return; }
 
         printIframe = null;
-        printingDocument.value = true;
+        documentPrintStatus.value.pending = true;
         
         printFunctionTimeout = setTimeout(() => {
-            if(printingDocument.value) {
-                printingDocument.value = false;
-                printingTimeoutError.value = true;
+            if(documentPrintStatus.value.pending) {
+                documentPrintStatus.value.pending = false;
+                documentPrintStatus.value.timeoutError = true;
             }
             printFunctionTimeout = null;
         }, 7000);
@@ -124,7 +151,10 @@ export const useDocumentStore = defineStore("document-store", () => {
             win.focus();
             win.print();
 
-            printingDocument.value = false;
+            documentPrintStatus.value.pending = false;
+            documentPrintStatus.value.fresh = true;
+
+            setTimeout(() => { documentPrintStatus.value.fresh = false; }, 3000);
             clearTimeout(printFunctionTimeout);
         }
     }
@@ -133,11 +163,48 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function shares the document with someone using the OS's built in share popup.
      */
     async function shareDoc() {
-        sharingDocument.value = true;
+        documentShareStatus.value.pending = true;
         const documentPdf = await getCurrentPDFObject();
-
         useWebsiteDataStore().shareFile(new File([documentPdf.blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
-        sharingDocument.value = false;
+
+        documentShareStatus.value.pending = false;
+        documentShareStatus.value.fresh = true;
+        setTimeout(() => { documentShareStatus.value.fresh = false; }, 3000);
+    }
+
+    /**
+     * This function shares the document with someone using the OS's built in share popup.
+     */
+    async function uploadDocToGoogleDrive() {
+        documentUploadToGoogleDriveStatus.value.pending = true;
+        const documentPdf = await getCurrentPDFObject();
+        const form = new FormData();
+
+        const metadata = { name: documentPdf.name, mimeType: 'application/pdf' }
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', documentPdf.blob);
+
+        const GOOGLE_API_LINK = "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart";
+        const headers = new Headers({ 'Authorization': 'Bearer ' + googleAPIAccessToken });
+
+        ofetch.raw(GOOGLE_API_LINK, { method: 'POST', headers, body: form }).then((response) => {
+            documentUploadToGoogleDriveStatus.value.pending = false;
+            documentUploadToGoogleDriveStatus.value.fresh = true;
+            setTimeout(() => { documentUploadToGoogleDriveStatus.value.fresh = false; }, 3000);
+
+        }).catch((e) => {
+            console.error(e);
+            documentUploadToGoogleDriveStatus.value.pending = false;
+            documentUploadToGoogleDriveStatus.value.fresh = true;
+            setTimeout(() => { documentUploadToGoogleDriveStatus.value.fresh = false; }, 3000);
+        })
+    }
+
+    /**
+     * This function requests the google token client to upload their document to google drive.
+     */
+    function requestGoogleToUploadDoc() {
+        googleTokenClient.requestAccessToken();
     }
 
     /**
@@ -168,6 +235,12 @@ export const useDocumentStore = defineStore("document-store", () => {
             throw new Error("No document is currently in use.");
         }
     }
+
+    /**
+     * ------------------------------------------------------------------------------------------
+     * These functions are for initializing and disabling certain features provided by the store.
+     * ------------------------------------------------------------------------------------------
+     */
 
     /**
      * This function mounts the document store for the website.
@@ -236,6 +309,30 @@ export const useDocumentStore = defineStore("document-store", () => {
         setPdfSize();
         window.addEventListener("resize", setPdfSize, { signal: docAbortController.signal });
     }
+
+    /**
+     * This function initializes a token client for OAuth 2 necessary for the "Save To Google Drive" Feature.
+     */
+    function initGoogleTokenClient() {
+        googleTokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID,
+            scope: 'https://www.googleapis.com/auth/drive.file',
+            callback: (response) => {
+                if(response.access_token) {
+                    googleAPIAccessToken = response.access_token;
+                    uploadDocToGoogleDrive();
+                }
+            },
+        });
+        googleDriveUploadSupported.value = true;
+    }
+
+    /**
+     * ----------------------------------------------------------------------------------------------
+     * These functions are extra functions such as event listeners or setters used by document pages.
+     * ----------------------------------------------------------------------------------------------
+     */
+
     /**
      * Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf.
      */
@@ -287,12 +384,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    return { mounted, docLoaded, sharingDocument, downloadingDocument, printingDocument, qrcodeResumeUrl,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, printingIcon, printingTimeoutError,
+    return { mounted, docLoaded, qrcodeResumeUrl, googleDriveUploadSupported,
+        documentDownloadStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
+        downloadIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
         onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
-        downloadDoc, printDoc, shareDoc, toggleDocumentFullScreen, setPdfSize,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, onAnnotationClick
+        downloadDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient
     }
 });
 
