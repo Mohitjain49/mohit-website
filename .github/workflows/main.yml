@@ -25,6 +25,8 @@ jobs:
         run: npm run test
 
       - name: Build
+        env:
+          VITE_GOOGLE_CLOUD_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLOUD_CLIENT_ID }}
         run: npm run build
 
       - name: Deploy to AWS S3 and CloudFront with custom script

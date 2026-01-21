@@ -16,6 +16,15 @@
                 <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="(docStore.sharingDocument ? 'fa-spinner' : 'fa-share')" :spin-pulse="docStore.sharingDocument" />
                 </button>
+                <button v-if="docStore.googleDriveUploadSupported"
+                    @click="docStore.requestGoogleToUploadDoc()"
+                    title="Upload This Document To Your Google Drive!"
+                    :style="getColorStyles('#34A853')">
+
+                    <font-awesome-icon :spin-pulse="docStore.uploadingDocumentToGoogleDrive"
+                        :icon="(docStore.uploadingDocumentToGoogleDrive ? 'fa-spinner' : 'fa-brands fa-google-drive')"
+                    />
+                </button>
             </div>
             <div class="mohit-documentMenu-tools">
                 <button class="light" @click="webData.openQRCodePopup()" title="Share Webpage">
@@ -97,11 +106,11 @@
                 <font-awesome-icon :icon="fullScreenStore.faIcon" />
             </button>
             <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
-                :title="(webData.documentMenuOpen ? 'Close Document Options' : 'Open Document Options')"
+                :title="(webData.documentMenuOpen ? 'Close Document Actions' : 'Open Document Actions')"
                 @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
-                <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-circle-xmark' : 'fa-ellipsis')" />
+                <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-circle-xmark' : 'fa-file-import')" />
             </button>
         </div>
     </div>

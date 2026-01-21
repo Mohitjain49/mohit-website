@@ -42,7 +42,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useSwipe',
         'useElementBounding',
         'onClickOutside',
-        'useDateFormat'
+        'useDateFormat',
+        'useScriptTag'
     ]
 }
 
