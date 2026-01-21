@@ -39,7 +39,7 @@
                     <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                 </a>
                 <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
-                    <img :src="pdfjs_logo" draggable="false" width="18" />
+                    <img :src="pdfjs_logo" draggable="false" width="18" style="user-select: none;" />
                 </a>
             </div>
         </div>
