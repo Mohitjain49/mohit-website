@@ -17,6 +17,7 @@
 </template>
 
 <script setup>
+import dayjs from 'dayjs';
 import { registerSW } from 'virtual:pwa-register';
 import now from '~build/time';
 
@@ -26,20 +27,13 @@ const UPDATE_DATE = ref("10/24/2025");
 const installStore = useInstallStore();
 const buttonClicked = ref(false);
 
-onMounted(() => {
-    nextTick(() => {
-        const currentDate = new Date();
-        UPDATE_DATE.value = useDateFormat(now, "M/D/YYYY").value;
-
-        if(useDateFormat(currentDate, "M/D/YYYY").value === UPDATE_DATE.value) {
-            UPDATE_DATE.value = (useDateFormat(now, "h:mm A").value + " today");
-        }
-    });
-});
-
 const updateSW = registerSW({
     onNeedRefresh() { installStore.setUpdateBox(true); },
     onOfflineReady() { installStore.setPwaCreated(); }
+});
+
+onMounted(() => {
+    nextTick(() => { calculateDateDifference(); });
 });
 
 /**
@@ -49,6 +43,42 @@ function updateWebsite() {
     if(buttonClicked.value) { return; }
     updateSW();
     buttonClicked.value = true;
+}
+
+/**
+ * This function calculates the date difference between the present date and the date of the user's last update.
+ * Then, it makes a string for the update box.
+ * https://day.js.org/docs/en/display/difference
+ */
+function calculateDateDifference() {
+    const currentDate = dayjs(new Date());
+    const lastUpdateDate = dayjs(now);
+
+    const dateDifference = {
+        year: currentDate.diff(lastUpdateDate, "y"),
+        month: currentDate.diff(lastUpdateDate, "M"),
+        week: currentDate.diff(lastUpdateDate, "w"),
+        day: currentDate.diff(lastUpdateDate, "d"),
+        hour: currentDate.diff(lastUpdateDate, "h"),
+        minute: currentDate.diff(lastUpdateDate, "m"),
+    }
+    // console.log(dateDifference);
+
+    if(dateDifference.year > 0) {
+        UPDATE_DATE.value = (dateDifference.year + " year" + ((dateDifference.year > 1) ? "s" : "") + " ago");
+    } else if(dateDifference.month > 0) {
+        UPDATE_DATE.value = (dateDifference.month + " month" + ((dateDifference.month > 1) ? "s" : "") + " ago");
+    } else if(dateDifference.week > 0) {
+        UPDATE_DATE.value = (dateDifference.week + " week" + ((dateDifference.week > 1) ? "s" : "") + " ago");
+    } else if(dateDifference.day > 0) {
+        UPDATE_DATE.value = (dateDifference.day + " day" + ((dateDifference.day > 1) ? "s" : "") + " ago");
+    } else if(dateDifference.hour > 0) {
+        UPDATE_DATE.value = (dateDifference.hour + " hour" + ((dateDifference.hour > 1) ? "s" : "") + " ago");
+    } else if(dateDifference.minute > 0) {
+        UPDATE_DATE.value = (dateDifference.minute + " minute" + ((dateDifference.minute > 1) ? "s" : "") + " ago");
+    } else {
+        UPDATE_DATE.value = "a moment ago";
+    }
 }
 </script>
 
