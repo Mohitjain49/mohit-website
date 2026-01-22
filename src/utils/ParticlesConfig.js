@@ -1,6 +1,6 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
-import { faCopyright, faStar, faCertificate, faQuestion, faDiamondTurnRight, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faCopyright, faStar, faCertificate, faQuestion, faDiamondTurnRight, faGear, faGamepad } from '@fortawesome/free-solid-svg-icons';
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const HOME_BACKGROUND = ref({
@@ -353,7 +353,7 @@ export const GAMEPAD_CONTROLS_BACKGROUND = ref({
             type: "image",
             options: {
                 image: [
-                    { src: getFontAwesomeSvg(faGear, "#2E8B57"), width: 100, height: 100 }
+                    { src: getFontAwesomeSvg(faGamepad, "#2E8B57"), width: 100, height: 100 }
                 ]
             }
         },
