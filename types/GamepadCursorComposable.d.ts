@@ -11,6 +11,9 @@ declare global {
         /** Whether a gamepad is connected. */
         connected: Ref<boolean>;
 
+        /** Whether a gamepad has been connected recently. */
+        connectedFresh: Ref<boolean>;
+
         /** Whether the custom cursor is visible. */
         showCursor: Ref<boolean>;
 

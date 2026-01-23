@@ -86,6 +86,7 @@ function useGamepadCursor(index = 0) {
     var cursorAnimationFrameId = null;
 
     const connected = ref(false);
+    const connectedFresh = ref(false);
     const showCursor = ref(false);
     const maxSpeedChanging = ref(false);
     
@@ -121,6 +122,16 @@ function useGamepadCursor(index = 0) {
         return (onElement.value ? (element instanceof HTMLAnchorElement ? element.href : element.title) : '');
     });
 
+    // This will change connectedFresh based on when the connection status of the gamepad changes.
+    watch(connected, () => {
+        if(!connected.value) {
+            connectedFresh.value = false;
+        } else {
+            connectedFresh.value = true;
+            setTimeout(() => { connectedFresh.value = false; }, 3000);
+        }
+    });
+
     /**
      * This function starts animation frames for checking if any gamepad is connected or not.
      */
@@ -139,6 +150,7 @@ function useGamepadCursor(index = 0) {
                 }
             } else {
                 connected.value = false;
+                connectedFresh.value = false;
                 showCursor.value = false;
                 stop();
             }
@@ -318,7 +330,7 @@ function useGamepadCursor(index = 0) {
         return ((xVal >= rect.left && xVal <= rect.right && yVal >= rect.top && yVal <= rect.bottom) ? navMenu : undefined);
     }
 
-    return { index, color, connected, showCursor, maxSpeedChanging, maxSpeed, x, y,
+    return { index, color, connected, connectedFresh, showCursor, maxSpeedChanging, maxSpeed, x, y,
         clickElement, onElement, onInputElement, style, icon, animation, elementTitle,
         start, stop, emitClick, setClickElement, initCursorPosition,
         setMaxCursorSpeed, addToMaxCursorSpeed, stopChangingMaxCursorSpeed,

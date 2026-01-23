@@ -40,8 +40,8 @@ import { version } from "~build/package";
 const route = useRoute();
 const buttonClicked = ref(false);
 
-const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
-const RELEASE_DATE = ref("Released On: July 10, 2025");
+const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
+const RELEASE_DATE = ref("Released On: Jan 22, 2026");
 const RELEASE_TIME = ref("(11:59 PM)");
 const PROJECT_VERSION = ref("Version " + version);
 

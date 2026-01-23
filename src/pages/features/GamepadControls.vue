@@ -18,6 +18,21 @@
                 </ul>
                 <FontAwesomeIcon class="gamepad-desc-icon" icon="fa-code" />
             </div>
+
+            <div class="gamepad-connections">
+                <template v-for="cursor in gamepadStore.gamepadCursors">
+                    <div class="gamepad-connection-statusBar" :style="{ color: cursor.color }">
+                        <h2> {{ ('Gamepad ' + (cursor.index + 1)) }} </h2>
+
+                        <div class="statusIcon" :title="getGamepadConnectionStatusTitle(cursor.index, cursor.connected)">
+                            <FontAwesomeIcon :flip="cursor.connectedFresh"
+                                :style="{ color: (cursor.connected ? 'lightgreen' : 'darkred') }"
+                                :icon="('fa-plug-circle-' + (cursor.connected ? 'plus' : 'minus'))"
+                            />
+                        </div>
+                    </div>
+                </template>
+            </div>
         </div>
 
         <div class="gamepad-controls-body-container right">
@@ -102,10 +117,24 @@ const JOYPAD_CLASSES_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/
 const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/stores/GamepadStore.js");
 const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.vue");
 
+const GAMEPAD_CONNECTED_TITLE = " Is Connected To My Website!";
+const GAMEPAD_DISCONNECTED_TITLE = " Is Not Connected To My Website!";
+
+const gamepadStore = useGamepadStore();
 onMounted(() => { initWebData(); });
+
 useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     "These are the gamepad controls on my website."
 ));
+
+/**
+ * This function returns a String based on whether a gamepad is connected to the website.
+ * @param {Boolean} index The index of the gamepad relative to other gamepads.
+ * @param {Boolean} status The status of whether a gamepad is connected to the website or not.
+ */
+function getGamepadConnectionStatusTitle(index = 0, status = false) {
+    return ("Gamepad " + (index + 1) + " Is " + (status ? "" : "Not ") + "Connected To My Website" + (status ? "!" : "."));
+}
 </script>
 
 <style scoped>
@@ -195,18 +224,6 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     border-radius: 20px;
     font-family: 'Montserrat', sans-serif;
 }
-.gamepad-desc p {
-    color: var(--website-light-text);
-    font-family: 'Montserrat', sans-serif;
-}
-
-.gamepad-desc li {
-    color: var(--website-text);
-}
-.gamepad-desc a:hover {
-    text-decoration: underline;
-}
-
 .gamepad-desc-icon {
     position: absolute;
     bottom: 12px;
@@ -215,10 +232,70 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     font-size: 24px;
 }
 
+.gamepad-desc p {
+    color: var(--website-light-text);
+    font-family: 'Montserrat', sans-serif;
+}
+.gamepad-desc li {
+    color: var(--website-text);
+}
+.gamepad-desc a:hover {
+    text-decoration: underline;
+}
+
+.gamepad-connections {
+    position: relative;
+    margin-right: 20px;
+    margin-top: 20px;
+    height: 300px;
+    width: fit-content;
+    max-width: 400px;
+    padding: 16px;
+    border: 1px solid var(--blue-one);
+    background-color: var(--dark-background);
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+.gamepad-connection-statusBar {
+    width: 396px;
+    height: 60px;
+    border: 2px solid;
+    border-radius: 10px;
+    margin: 11px 0px;
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    color: inherit;
+}
+
+.gamepad-connection-statusBar h2 {
+    color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: bold;
+    font-size: 22px;
+    margin-left: 10px;
+}
+.gamepad-connection-statusBar .statusIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    font-size: 22px;
+    margin-right: 10px;
+    color: darkred;
+}
+
 @media (max-width: 1100px) {
     .gamepad-controls-body {
         grid-template-columns: 1fr;
-        height: 950px;
+        height: 1300px;
     }
     .gamepad-controls-body-container {
         align-items: center !important;
@@ -232,9 +309,12 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     .gamepad-controls {
         margin-left: 0px;
     }
+    .gamepad-connections {
+        margin-right: 0px;
+    }
 }
 @media (max-width: 500px) {
-    .gamepad-controls, .gamepad-desc {
+    .gamepad-controls, .gamepad-desc, .gamepad-connections {
         width: 300px;
         padding: 20px;
     }
@@ -244,8 +324,12 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
     .gamepad-controls h2 {
         font-size: 26px;
     }
+
     .gamepad-controls th, .gamepad-controls td {
         font-size: 12px;
+    }
+    .gamepad-connection-statusBar {
+        width: 300px;
     }
 }
 </style>

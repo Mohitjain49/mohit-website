@@ -302,7 +302,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, menuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
+    return { pageView, onFirstMount, menuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
         toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter,
