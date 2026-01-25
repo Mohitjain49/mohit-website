@@ -54,6 +54,7 @@
                             <td>
                                 <img :src="left_stick" />
                                 <span> Left Stick or </span>
+                                <br class="move-cursor-mobileBreak" />
                                 <img :src="dpad_controller" />
                                 <span> D-pad </span>
                             </td>
@@ -144,6 +145,9 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+}
+.move-cursor-mobileBreak {
+    display: none;
 }
 
 .gamepad-controls-body-container {
@@ -330,6 +334,9 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     }
     .gamepad-connection-statusBar {
         width: 300px;
+    }
+    .move-cursor-mobileBreak {
+        display: block;
     }
 }
 </style>
