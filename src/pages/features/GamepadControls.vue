@@ -118,9 +118,6 @@ const JOYPAD_CLASSES_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/
 const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/stores/GamepadStore.js");
 const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.vue");
 
-const GAMEPAD_CONNECTED_TITLE = " Is Connected To My Website!";
-const GAMEPAD_DISCONNECTED_TITLE = " Is Not Connected To My Website!";
-
 const gamepadStore = useGamepadStore();
 onMounted(() => { initWebData(); });
 

@@ -43,7 +43,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useElementBounding',
         'onClickOutside',
         'useDateFormat',
-        'useScriptTag'
+        'useScriptTag',
+        'useSpeechRecognition'
     ]
 }
 

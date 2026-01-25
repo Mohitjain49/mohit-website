@@ -30,12 +30,17 @@
                     >
                 </div>
                 <div class="contact-input-tab" style="height: calc(100% - 70px);">
-                    <div class="contact-input-tab-header-container">
+                    <div class="contact-input-tab-header-container withOptions">
                         <div class="contact-input-tab-header">
-                            <span> Your Message </span>
-                            <button @click="manageTTS()" :title="audioStore.ttsTitle">
-                                <font-awesome-icon :icon="audioStore.ttsIcon" />
-                            </button>
+                            <span style="margin-right: 10px;"> Your Message </span>
+                            <div class="options">
+                                <button @click="audioStore.manageTTS(msgMain)" :title="audioStore.ttsTitle">
+                                    <font-awesome-icon :icon="audioStore.ttsIcon" />
+                                </button>
+                                <button @click="audioStore.manageSTT()" :title="audioStore.sttUtilityTitle">
+                                    <font-awesome-icon :icon="audioStore.sttUtilityIcon" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
@@ -168,9 +173,9 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
 ));
 
 /**
- * -------------------------------------------------------
- * These functions manage Transitions to the contact page.
- * -------------------------------------------------------
+ * ----------------------------------------------------------------------------
+ * These functions manage Transitions and Event Listeners for the contact page.
+ * ----------------------------------------------------------------------------
  */
 
 /**
@@ -179,6 +184,8 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
 onMounted(() => {
     initWebData(70);
     manageSocialTabGlow();
+
+    audioStore.changeSTTUpdateFunc((str) => { updateMainMsg(str); });
     if(window.innerWidth <= 525 || routeHash.value !== "") { return; }
 
     const contactBoxes = [
@@ -227,6 +234,14 @@ function manageSocialTabGlow(oldValue = "") {
             }
         }
     }
+}
+
+/**
+ * This function can be used by event listeners to update the main message on the contact page.
+ * @param {String} str The new string that will become the main message.
+ */
+function updateMainMsg(str = "") {
+    msgMain.value += str;
 }
 
 /**
@@ -304,17 +319,6 @@ function getAPIErrorRedirect() {
  * These functions manage the alert box and some text strings.
  * -----------------------------------------------------------
  */
-
-/**
- * This function manages TTS with the message.
- */
-function manageTTS() {
-    if(audioStore.ttsPlaying) {
-        audioStore.cancelTTS();
-    } else {
-        audioStore.startTTS(msgMain.value);
-    }
-}
 
 /**
  * This sets the status of the alert box.

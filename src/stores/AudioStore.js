@@ -29,9 +29,7 @@ export const useAudioStore = defineStore("audio-store", () => {
         return (audioMuted.value ? 'Unmute Volume' : "Mute Volume");
     });
 
-    /**
-     * @type {SpeechSynthesisUtterance | null} This is the utterance for the speech synthesis.
-     */
+    /** @type {SpeechSynthesisUtterance | null} This is the utterance for the speech synthesis. */
     var ttsUtterance = null;
     const ttsAvailable = ref(false);
     const ttsPlaying = ref(false);
@@ -48,6 +46,26 @@ export const useAudioStore = defineStore("audio-store", () => {
             return "Play Your Message!";
         }
     });
+
+    const sttUtility = useSpeechRecognition({ lang: "en-US", interimResults: false });
+    var sttUpdateFunc = (result) => {}
+
+    const sttUtilityIcon = computed(() => {
+        const boolean = (sttUtility.isSupported.value && !sttUtility.isListening.value);
+        return (boolean ? "fa-microphone" : "fa-microphone-slash");
+    });
+    const sttUtilityTitle = computed(() => {
+        if(!sttUtility.isSupported.value) {
+            return "Speech To Text is Not Available.";
+        } else if(sttUtility.isListening.value) {
+            return "Deactivate Speech To Text.";
+        } else {
+            return "Activate Speech To Text!";
+        }
+    });
+
+    // This runs the update function whenever the speech to text mode gets a new value.
+    watch(sttUtility.result, () => { sttUpdateFunc(sttUtility.result.value); });
 
     watch(volumeChangingWithGamepad, () => {
         if(volumeGamepadMenuTimeout != null) { clearTimeout(volumeGamepadMenuTimeout); }
@@ -151,6 +169,18 @@ export const useAudioStore = defineStore("audio-store", () => {
     }
 
     /**
+     * This function toggles between whether the speech synthesis is playing or not.
+     * @param {String} msg The text for the utterance.
+     */
+    function manageTTS(msg = "") {
+        if(ttsPlaying.value) {
+            cancelTTS();
+        } else {
+            startTTS(msg);
+        }
+    }
+
+    /**
      * this function stops TTS from continuing.
      */
     function cancelTTS() {
@@ -176,9 +206,30 @@ export const useAudioStore = defineStore("audio-store", () => {
         ttsPlaying.value = true;
     }
 
+    /**
+     * This manages whether the website has activated speech to text mode.
+     * @param updateFunc A function that will take in the result of the speech recognition as a parameter.
+     */
+    function manageSTT() {
+        if(sttUtility.isListening.value) {
+            sttUtility.stop();
+        } else {
+            sttUtility.start();
+        }
+    }
+
+    /**
+     * This function changes the update function for the speech to text mode.
+     * @param updateFunc A function that will take in the result of the speech recognition as a parameter.
+     */
+    function changeSTTUpdateFunc(updateFunc = (str) => {}) {
+        sttUpdateFunc = updateFunc;
+    }
+
     return { audioClickClip, audioScanClip, audioMuted, volumeInput, volumeInputIcon, volumeInputTitle,
         showVolumeGamepadMenu, volumeChangingWithGamepad, ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
-        checkTTSAvailable, cancelTTS, startTTS, setupClickAudio, changeAudioVolume, confirmClickSound,
+        sttUtility, sttUtilityIcon, sttUtilityTitle, manageSTT, changeSTTUpdateFunc,
+        checkTTSAvailable, manageTTS, cancelTTS, startTTS, setupClickAudio, changeAudioVolume, confirmClickSound,
         addToVolume, setAudioMuted, playClickSound, playScanSound
     }
 });
