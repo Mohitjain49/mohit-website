@@ -18,7 +18,7 @@
                 <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="docStore.shareIcon" :spin-pulse="docStore.documentShareStatus.pending" />
                 </button>
-                <button v-if="docStore.googleDriveUploadSupported"
+                <button v-if="docStore.googleDriveOptionAvailable"
                     @click="docStore.requestGoogleToUploadDoc()"
                     title="Upload This Document To Your Google Drive!"
                     :style="getColorStyles('#34A853')">
