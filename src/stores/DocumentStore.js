@@ -16,7 +16,12 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const mounted = ref(false);
     const docLoaded = ref(false);
+
     const googleDriveUploadSupported = ref(false);
+    const googleDrivePickerAPILoaded = ref(false);
+    const googleDriveOptionAvailable = computed(() => {
+        return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value);
+    })
 
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
@@ -32,7 +37,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentDownloadStatus = ref({ pending: false, fresh: false });
     const documentPrintStatus = ref({ pending: false, fresh: false, timeoutError: false });
     const documentShareStatus = ref({ pending: false, fresh: false });
-    const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false });
+    const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false, error: false });
 
     /** @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website. */
     const pdfComponent = shallowRef(null);
@@ -173,41 +178,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
-     * This function shares the document with someone using the OS's built in share popup.
-     */
-    async function uploadDocToGoogleDrive() {
-        documentUploadToGoogleDriveStatus.value.pending = true;
-        const documentPdf = await getCurrentPDFObject();
-        const form = new FormData();
-
-        const metadata = { name: documentPdf.name, mimeType: 'application/pdf' }
-        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-        form.append('file', documentPdf.blob);
-
-        const GOOGLE_API_LINK = "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart";
-        const headers = new Headers({ 'Authorization': 'Bearer ' + googleAPIAccessToken });
-
-        ofetch.raw(GOOGLE_API_LINK, { method: 'POST', headers, body: form }).then((response) => {
-            documentUploadToGoogleDriveStatus.value.pending = false;
-            documentUploadToGoogleDriveStatus.value.fresh = true;
-            setTimeout(() => { documentUploadToGoogleDriveStatus.value.fresh = false; }, 3000);
-
-        }).catch((e) => {
-            console.error(e);
-            documentUploadToGoogleDriveStatus.value.pending = false;
-            documentUploadToGoogleDriveStatus.value.fresh = true;
-            setTimeout(() => { documentUploadToGoogleDriveStatus.value.fresh = false; }, 3000);
-        })
-    }
-
-    /**
-     * This function requests the google token client to upload their document to google drive.
-     */
-    function requestGoogleToUploadDoc() {
-        googleTokenClient.requestAccessToken();
-    }
-
-    /**
      * This function returns the PDF Object the website is currently using.
      */
     async function getCurrentPDFObject() {
@@ -234,6 +204,95 @@ export const useDocumentStore = defineStore("document-store", () => {
         } else {
             throw new Error("No document is currently in use.");
         }
+    }
+
+    /**
+     * ----------------------------------------------------------------------------------------
+     * These functions are used for saving a document Here To the user's personal Google Drive.
+     * ----------------------------------------------------------------------------------------
+     */
+
+    /**
+     * This function opens a view that lets the user pick the folder they want to upload my document to.
+     */
+    async function openGoogleDrivePicker() {
+        const docsView = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
+            .setIncludeFolders(true)
+            .setSelectFolderEnabled(true)
+            .setOwnedByMe(true);
+
+        const picker = new google.picker.PickerBuilder()
+            .addView(docsView)
+            .setTitle("Select A Folder (Or Click Cancel To Save This Document To Your Drive's Root)")
+            .setOAuthToken(googleAPIAccessToken)
+            .setDeveloperKey(import.meta.env.VITE_GOOGLE_CLOUD_API_KEY)
+            .setCallback((data) => { googleDrivePickerCallback(data); })
+            .setAppId(import.meta.env.VITE_GOOGLE_CLOUD_APP_ID)
+            .build();
+        picker.setVisible(true);
+    }
+
+    /**
+     * This function is a callback that is performed once the user performs an action on the google drive picker UI.
+     * @param {Object} data The data received by the picker to use for the callback.
+     * @param {String} data.action The type of action the user took to save the file.
+     */
+    function googleDrivePickerCallback(data = { action: "loaded" }) {
+        if(data.action === "loaded") {
+            document.body.style.overflowY = "hidden";
+        } else if(data.action === "cancel") {
+            document.body.style.overflowY = "";
+            uploadDocToGoogleDrive();
+        } else if(data.action === "picked") {
+            document.body.style.overflowY = "";
+            const firstFolder = data.docs[0];
+
+            if(firstFolder.type === "folder" && typeof firstFolder.id === "string") {
+                uploadDocToGoogleDrive(firstFolder.id);
+            }
+        }
+    }
+
+    /**
+     * This function shares the document with someone using the OS's built in share popup.
+     * @param {String} folderId The ID of the google drive folder to save the document in.
+     *      If this is blank, it saves the document to the user's "My Drive".
+     */
+    async function uploadDocToGoogleDrive(folderId = "") {
+        useWebsiteDataStore().menuOpen = 1;
+        documentUploadToGoogleDriveStatus.value.pending = true;
+
+        const documentPdf = await getCurrentPDFObject();
+        const form = new FormData();
+
+        const metadata = { name: documentPdf.name, mimeType: 'application/pdf' }
+        if(folderId !== "") { metadata.parents = [folderId]; }
+
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', documentPdf.blob);
+
+        const GOOGLE_API_LINK = "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart";
+        const headers = new Headers({ 'Authorization': 'Bearer ' + googleAPIAccessToken });
+
+        ofetch.raw(GOOGLE_API_LINK, { method: 'POST', headers, body: form }).then((response) => {
+            documentUploadToGoogleDriveStatus.value.pending = false;
+            documentUploadToGoogleDriveStatus.value.fresh = true;
+            setTimeout(() => { documentUploadToGoogleDriveStatus.value.fresh = false; }, 3000);
+
+        }).catch((e) => {
+            console.error(e);
+            documentUploadToGoogleDriveStatus.value.pending = false;
+            documentUploadToGoogleDriveStatus.value.error = true;
+            setTimeout(() => { documentUploadToGoogleDriveStatus.value.error = false; }, 3000);
+        })
+    }
+
+    /**
+     * This function requests the google token client to upload their document to google drive.
+     */
+    function requestGoogleToUploadDoc() {
+        if(!googleDriveOptionAvailable.value) { return; }
+        googleTokenClient.requestAccessToken();
     }
 
     /**
@@ -320,11 +379,19 @@ export const useDocumentStore = defineStore("document-store", () => {
             callback: (response) => {
                 if(response.access_token) {
                     googleAPIAccessToken = response.access_token;
-                    uploadDocToGoogleDrive();
+                    // uploadDocToGoogleDrive();
+                    openGoogleDrivePicker();
                 }
             },
         });
         googleDriveUploadSupported.value = true;
+    }
+
+    /**
+     * This function initializes an API that will be used to let users choose the folder they want to save one of my documents to.
+     */
+    function initGooglePickerAPI() {
+        gapi.load("picker", () => { googleDrivePickerAPILoaded.value = true; });
     }
 
     /**
@@ -384,14 +451,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    return { mounted, docLoaded, qrcodeResumeUrl, googleDriveUploadSupported,
+    return { mounted, docLoaded, qrcodeResumeUrl, googleDriveOptionAvailable,
         documentDownloadStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
         onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });
 

@@ -27,6 +27,8 @@ jobs:
       - name: Build
         env:
           VITE_GOOGLE_CLOUD_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLOUD_CLIENT_ID }}
+          VITE_GOOGLE_CLOUD_API_KEY: ${{ secrets.VITE_GOOGLE_CLOUD_API_KEY }}
+          VITE_GOOGLE_CLOUD_APP_ID: ${{ secrets.VITE_GOOGLE_CLOUD_APP_ID }}
         run: npm run build
 
       - name: Deploy to AWS S3 and CloudFront with custom script

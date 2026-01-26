@@ -18,6 +18,11 @@ onMounted(() => { webData.setEventListeners(); });
 onBeforeUnmount(() => { webData.removeEventListeners(); });
 
 useScriptTag("https://accounts.google.com/gsi/client",
-    (el) => { documentStore.initGoogleTokenClient() },
+    (el) => { documentStore.initGoogleTokenClient(); },
+    { async: true, defer: true }
 );
+useScriptTag("https://apis.google.com/js/api.js",
+    (el) => { documentStore.initGooglePickerAPI(); },
+    { async: true, defer: true }
+)
 </script>

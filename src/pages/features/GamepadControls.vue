@@ -54,6 +54,7 @@
                             <td>
                                 <img :src="left_stick" />
                                 <span> Left Stick or </span>
+                                <br class="move-cursor-mobileBreak" />
                                 <img :src="dpad_controller" />
                                 <span> D-pad </span>
                             </td>
@@ -117,9 +118,6 @@ const JOYPAD_CLASSES_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/
 const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/stores/GamepadStore.js");
 const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.vue");
 
-const GAMEPAD_CONNECTED_TITLE = " Is Connected To My Website!";
-const GAMEPAD_DISCONNECTED_TITLE = " Is Not Connected To My Website!";
-
 const gamepadStore = useGamepadStore();
 onMounted(() => { initWebData(); });
 
@@ -144,6 +142,9 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+}
+.move-cursor-mobileBreak {
+    display: none;
 }
 
 .gamepad-controls-body-container {
@@ -330,6 +331,9 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     }
     .gamepad-connection-statusBar {
         width: 300px;
+    }
+    .move-cursor-mobileBreak {
+        display: block;
     }
 }
 </style>
