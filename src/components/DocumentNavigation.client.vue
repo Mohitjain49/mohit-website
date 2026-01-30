@@ -5,21 +5,24 @@
 <template>
 <div id="mohit-documentBar" :class="[(webData.documentMenuOpen ? 'menu-open' : '')]" ref="docNavBar">
     <Transition name="documentMenu-transition">
-        <div v-if="webData.documentMenuOpen" class="mohit-documentMenu">
-            <div class="mohit-documentMenu-tools">
+        <div v-if="(webData.documentMenuOpen && (webData.nestedMenuOpen == 0))" class="mohit-documentMenu">
+            <div class="mohit-documentMenu-tools top">
                 <button @click="docStore.downloadDoc()" title="Download Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="docStore.downloadIcon" :spin-pulse="docStore.documentDownloadStatus.pending" />
                 </button>
-                <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-three)')">
+                <button v-if="docStore.saveAsSupported" @click="docStore.saveDoc()" title="Save Document" :style="getColorStyles('var(--blue-three)')">
+                    <font-awesome-icon :icon="docStore.saveDocIcon" :spin-pulse="docStore.documentSaveStatus.pending" />
+                </button>
+                <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="(docStore.printIcon)"
                         :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
                     />
                 </button>
-                <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-one)')">
+                <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-three)')">
                     <font-awesome-icon :icon="docStore.shareIcon" :spin-pulse="docStore.documentShareStatus.pending" />
                 </button>
                 <button v-if="docStore.googleDriveOptionAvailable"
-                    @click="docStore.requestGoogleToUploadDoc()"
+                    @click="webData.setNestedMenu(1)"
                     title="Upload This Document To Your Google Drive!"
                     :style="getColorStyles('#34A853')">
 
@@ -28,7 +31,7 @@
                     />
                 </button>
             </div>
-            <div class="mohit-documentMenu-tools">
+            <div class="mohit-documentMenu-tools bottom">
                 <button class="light" @click="webData.openQRCodePopup()" title="Share Webpage">
                     <font-awesome-icon icon="fa-share-from-square" />
                 </button>
@@ -41,6 +44,29 @@
                 <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
                     <img :src="pdfjs_logo" draggable="false" width="18" style="user-select: none;" />
                 </a>
+            </div>
+        </div>
+    </Transition>
+
+    <Transition name="documentMenu-transition">
+        <div v-if="showGoogleDriveNestedMenu" class="mohit-documentMenu">
+            <div class="mohit-documentMenu-googleOpt top">
+                <button @click="docStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE">
+                    <span> Use Default Save Folder </span>
+                    <font-awesome-icon icon="fa-folder" />
+                </button>
+            </div>
+            <div class="mohit-documentMenu-googleOpt">
+                <button @click="docStore.requestGoogleToUploadDoc(true)" :title="GOOGLE_CHOOSE_FOLDER_TITLE">
+                    <span> Choose Folder In Your Drive </span>
+                    <font-awesome-icon :icon="(docStore.documentUploadToGoogleDriveStatus.cancel ? 'fa-ban' : 'fa-folder-tree')" />
+                </button>
+            </div>
+            <div class="mohit-documentMenu-googleOpt bottom">
+                <button @click="webData.setNestedMenu(0)" :style="getColorStyles('red')">
+                    <span> Back To Document Options </span>
+                    <font-awesome-icon icon="fa-circle-arrow-down" />
+                </button>
             </div>
         </div>
     </Transition>
@@ -125,10 +151,14 @@ const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 const docNavBar = ref(null);
 const docNavBarSwipe = useSwipe(docNavBar, { passive: true });
-const fullScreenStore = useFullScreenStore();
 
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
+const fullScreenStore = useFullScreenStore();
+
+const showGoogleDriveNestedMenu = computed(() => {
+    return (webData.documentMenuOpen && (webData.nestedMenuOpen == 1) && docStore.googleDriveOptionAvailable);
+});
 
 const documentLink = computed(() => {
     if(docStore.onResumeQrcodeRoute) {
@@ -168,4 +198,6 @@ watch(docNavBarSwipe.isSwiping, () => {
 });
 
 const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
+const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";
+const GOOGLE_CHOOSE_FOLDER_TITLE = "Choose The Folder In Your Google Drive Where You Would Like To Keep My Document.";
 </script>

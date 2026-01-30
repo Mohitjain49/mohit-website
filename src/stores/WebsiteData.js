@@ -24,6 +24,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     const pageView = ref(0);
     const menuOpen = ref(-1);
+    const nestedMenuOpen = ref(0);
     const navFooterPresent = ref(false);
 
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
@@ -225,21 +226,40 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * The toggles the status of the home navigation menu.
      */
     function toggleNavMenu() {
-        menuOpen.value = ((menuOpen.value == 0) ? -1 : 0);
+        setMenuOpen(((menuOpen.value == 0) ? -1 : 0), 0);
     }
 
     /**
      * The toggles the status of the document menu.
+     * @param {Boolean} openGoogleDriveMenu If true, this will open the nested google drive menu over the default menu.
      */
-    function toggleDocumentMenu() {
-        menuOpen.value = ((menuOpen.value == 1) ? -1 : 1);
+    function toggleDocumentMenu(openGoogleDriveMenu = false) {
+        setMenuOpen(((menuOpen.value == 1) ? -1 : 1), ((menuOpen.value == 1 && openGoogleDriveMenu) ? 1 : 0));
+    }
+
+    /**
+     * This function sets the status of whether a website menu is open or not.
+     * @param {Number} index The index of what menu should be open.
+     * @param {Number} nestedIndex The index of what nested menu should be open.
+     */
+    function setMenuOpen(index = -1, nestedIndex = 0) {
+        menuOpen.value = index;
+        nestedMenuOpen.value = nestedIndex;
+    }
+
+    /**
+     * This function sets what nested menu is open or not.
+     * @param {Number} index The index of the nested menu. Zero, the default index, represents the default menu.
+     */
+    function setNestedMenu(index = 0) {
+        nestedMenuOpen.value = index;
     }
 
     /**
      * This function closes the Navigation Menu.
      */
     function closeNavMenu() {
-        menuOpen.value = -1;
+        setMenuOpen(-1, 0);
     }
 
     /**
@@ -302,9 +322,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, onFirstMount, menuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
+    return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
-        toggleNavMenu, toggleDocumentMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
+        toggleNavMenu, toggleDocumentMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter,
         setFlashAnimation, setHeartbeatAnimation, setBounceAnimation, addFlashAnimation, setPulseLoopAnimation
     }
