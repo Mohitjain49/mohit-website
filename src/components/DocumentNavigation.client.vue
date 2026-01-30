@@ -169,14 +169,3 @@ watch(docNavBarSwipe.isSwiping, () => {
 
 const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 </script>
-
-<style>
-.bottom-left-element {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 9000;
-    height: fit-content;
-    width: fit-content;
-}
-</style>

@@ -13,6 +13,7 @@ import tauri_icon from "../assets/Tauri_Icon.png";
 import vite_pwa_icon from "../assets/Vite_PWA_Icon.png";
 import arduino_icon from "../assets/Arduino_Icon.svg";
 import r_icon from "../assets/R_Project_Icon.png";
+import google_colab_icon from "../assets/Google_Colab_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
@@ -177,12 +178,25 @@ export const NEW_SKILL_ENTITIES = [
         name: "AWS",
         link: "/skills/#aws",
         color: "#5468ff",
-        desc: "I use Amazon Web Services (AWS) for almost any web service I need. " +
+        desc: "I use Amazon Web Services (AWS) for almost all of my cloud computing needs. " +
             "Every big project I have worked on used AWS in some way, whether I needed to deploy an website, " +
             "manage user authentication, setup business emails, or make an API for a Lambda function.",
 
         icon: {
             id: "fa-brands fa-aws",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Google",
+        link: "/skills/#google",
+        color: "#4c8bf5",
+        desc: "While I use Amazon Web Services to fill a majority of my cloud computing needs, " +
+            "I also utilize a few of Google's tools for coding such as Google Cloud and Google Colab.",
+
+        icon: {
+            id: "fa-brands fa-google",
             faIcon: true,
             size: "110"
         }
@@ -448,6 +462,36 @@ export const AWS_SKILL_NOTES = [
     }
 ];
 
+export const GOOGLE_SKILL_NOTES = [
+    {
+        name: "Google Drive API",
+        link: "https://developers.google.com/workspace/drive/api/guides/about-sdk",
+        color: "#34A853",
+        desc: "Google Cloud offers an API that lets developers integrate Google Drive Services " +
+            "such as creating, editing, deleting, or managing files into their website or app. " +
+            "For instance, you can save a copy one of my documents directly to your google drive with the provided document option.",
+
+        icon: {
+            id: "fa-brands fa-google-drive",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Google Colab",
+        link: "https://colab.google/",
+        color: "#E8710A",
+        desc: "Google Colab is a free-to-use hosted Jupyter Notebook service that provides access to a variety of computing resources. " +
+            "I use it to complete assignments for my college classes and for personal projects when necessary.",
+
+        icon: {
+            id: google_colab_icon,
+            faIcon: false,
+            size: "150"
+        }
+    }
+];
+
 export const MODULES_SKILL_NOTES = [
     {
         name: "Cesium",
@@ -537,7 +581,8 @@ export const LANGUAGES_SKILL_NOTES = [
         name: "Python",
         link: "https://www.python.org/",
         color: "#346E9E",
-        desc: "I use python for testing the MAVLink Protocol for Worlds iVue and to create AWS Lambda Functions.",
+        desc: "I use Python for testing the MAVLink Protocol for Worlds iVue and to create AWS Lambda Functions. " +
+            "I also use Python for creating Artifical Intelligence Models and for my college classes.",
 
         icon: {
             id: "fa-brands fa-python",
