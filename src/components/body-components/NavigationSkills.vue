@@ -57,6 +57,7 @@ const SKILLS_SECTIONS = [
     { title: "Vue.js", id: "vuejs", color: "#41B883" },
     { title: "Frontend", id: "frontend", color: "#D3B62A" },
     { title: "AWS", id: "aws", color: "#5468ff" },
+    { title: "Google", id: "google", color: "#4c8bf5" },
     { title: "Modules", id: "modules", color: "#5C9E57" },
     { title: "Languages", id: "languages", color: "#E34E26" },
     { title: "Icons", id: "icons", color: "rgb(83, 141, 215)" }
@@ -87,7 +88,7 @@ const SKILLS_SECTIONS = [
 }
 
 .skills-nav.skills-nav-expanded {
-    height: 279px;
+    height: 320px;
     width: 175px;
     border-radius: 15px;
     background-color: black;

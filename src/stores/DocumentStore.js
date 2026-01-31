@@ -8,6 +8,7 @@ import QRCodeStyling from "qr-code-styling";
 
 export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
+    const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
 
     var docAbortController = new AbortController();
@@ -21,7 +22,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => {
         return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value);
-    })
+    });
 
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
@@ -33,11 +34,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing a document. */
     var printIframe = null;
     var printFunctionTimeout = null;
+    var chooseGoogleDriveFolderForUpload = false;
 
     const documentDownloadStatus = ref({ pending: false, fresh: false });
+    const documentSaveStatus = ref({ pending: false, fresh: false, error: false });
     const documentPrintStatus = ref({ pending: false, fresh: false, timeoutError: false });
     const documentShareStatus = ref({ pending: false, fresh: false });
-    const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false, error: false });
+    const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false, cancel: false, error: false });
 
     /** @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website. */
     const pdfComponent = shallowRef(null);
@@ -78,10 +81,17 @@ export const useDocumentStore = defineStore("document-store", () => {
             (routePath.value === "/resume") || (routePath.value === "/resume/")
         );
     });
+    const saveAsSupported = computed(() => {
+        return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
+    })
 
     const downloadIcon = computed(() => {
         const downloadObj = documentDownloadStatus.value;
         return (downloadObj.fresh ? "fa-check" : (downloadObj.pending ? "fa-spinner" : "fa-file-download"));
+    });
+    const saveDocIcon = computed(() => {
+        const saveObj = documentSaveStatus.value;
+        return (saveObj.error ? "fa-ban" : (saveObj.fresh ? "fa-check" : (saveObj.pending ? "fa-spinner" : "fa-floppy-disk")));
     });
     const printIcon = computed(() => {
         const printObj = documentPrintStatus.value;
@@ -119,6 +129,34 @@ export const useDocumentStore = defineStore("document-store", () => {
         documentDownloadStatus.value.pending = false;
         documentDownloadStatus.value.fresh = true;
         setTimeout(() => { documentDownloadStatus.value.fresh = false; }, 3000);
+    }
+
+    /**
+     * This function opens a "Save File Picker" so the user can save my document at their preferred location.
+     */
+    async function saveDoc() {
+        if(!saveAsSupported.value) { return; }
+        try {
+            documentSaveStatus.value.pending = true;
+            const documentPdf = await getCurrentPDFObject();
+
+            const saveHandle = await window.showSaveFilePicker({
+                suggestedName: documentPdf.name,
+                types: [{ description: "PDF Document", accept: { 'application/pdf': ['.pdf'] } }]
+            });
+
+            const writable = await saveHandle.createWritable();
+            await writable.write(documentPdf.blob);
+            await writable.close();
+
+            documentSaveStatus.value.pending = false;
+            documentSaveStatus.value.fresh = true;
+            setTimeout(() => { documentSaveStatus.value.fresh = false; }, 4000);
+        } catch(err) {
+            documentSaveStatus.value.pending = false;
+            documentSaveStatus.value.error = true;
+            setTimeout(() => { documentSaveStatus.value.error = false; }, 4000);
+        }
     }
 
     /**
@@ -170,7 +208,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     async function shareDoc() {
         documentShareStatus.value.pending = true;
         const documentPdf = await getCurrentPDFObject();
-        useWebsiteDataStore().shareFile(new File([documentPdf.blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
+        webData.shareFile(new File([documentPdf.blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
 
         documentShareStatus.value.pending = false;
         documentShareStatus.value.fresh = true;
@@ -242,7 +280,10 @@ export const useDocumentStore = defineStore("document-store", () => {
             document.body.style.overflowY = "hidden";
         } else if(data.action === "cancel") {
             document.body.style.overflowY = "";
-            uploadDocToGoogleDrive();
+            webData.setMenuOpen(1, 1);
+
+            documentUploadToGoogleDriveStatus.value.cancel = true;
+            setTimeout(() => { documentUploadToGoogleDriveStatus.value.cancel = false; }, 3000);
         } else if(data.action === "picked") {
             document.body.style.overflowY = "";
             const firstFolder = data.docs[0];
@@ -259,7 +300,8 @@ export const useDocumentStore = defineStore("document-store", () => {
      *      If this is blank, it saves the document to the user's "My Drive".
      */
     async function uploadDocToGoogleDrive(folderId = "") {
-        useWebsiteDataStore().menuOpen = 1;
+        webData.setMenuOpen(1, 0);
+        chooseGoogleDriveFolderForUpload = false;
         documentUploadToGoogleDriveStatus.value.pending = true;
 
         const documentPdf = await getCurrentPDFObject();
@@ -289,9 +331,11 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /**
      * This function requests the google token client to upload their document to google drive.
+     * @param {Boolean} chooseFolder IF true, this function will activate the Google Picker API to let a user choose the folder on their drive.
      */
-    function requestGoogleToUploadDoc() {
+    function requestGoogleToUploadDoc(chooseFolder = false) {
         if(!googleDriveOptionAvailable.value) { return; }
+        chooseGoogleDriveFolderForUpload = chooseFolder;
         googleTokenClient.requestAccessToken();
     }
 
@@ -324,7 +368,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function mounts a page that hosts a document.
      */
     function mountDocumentPage() {
-        initWebData();
+        webData.mountWebData();
         nextTick(() => {
             if(onMarkdownRoute.value) { return; }
             mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
@@ -380,7 +424,11 @@ export const useDocumentStore = defineStore("document-store", () => {
                 if(response.access_token) {
                     googleAPIAccessToken = response.access_token;
                     // uploadDocToGoogleDrive();
-                    openGoogleDrivePicker();
+                    if(chooseGoogleDriveFolderForUpload) {
+                        openGoogleDrivePicker();
+                    } else {
+                        uploadDocToGoogleDrive();
+                    }
                 }
             },
         });
@@ -414,7 +462,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function toggleDocumentFullScreen() {
         fullScreenStore.setFullScreen(document.getElementById("resume-container"));
-        useWebsiteDataStore().closeNavMenu();
+        webData.closeNavMenu();
     }
 
     /**
@@ -451,13 +499,13 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    return { mounted, docLoaded, qrcodeResumeUrl, googleDriveOptionAvailable,
-        documentDownloadStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
-        downloadIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
+    return { mounted, docLoaded, qrcodeResumeUrl, googleDriveOptionAvailable, saveAsSupported,
+        documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
+        downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
         onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
-        downloadDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
+        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
         mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });

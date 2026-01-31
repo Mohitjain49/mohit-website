@@ -59,8 +59,26 @@
             </div>
         </div>
 
+        <div id="google" class="skills-category">
+            <div class="skills-category-header google" :ref="(el) => {titleRefs[3] = el}">
+                <font-awesome-icon icon="fa-brands fa-google" />
+                <span> oogle </span>
+            </div>
+
+            <div v-for="entity in GOOGLE_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </div>
+        </div>
+
         <div id="modules" class="skills-category">
-            <div class="skills-category-header modules" :ref="(el) => {titleRefs[3] = el}">
+            <div class="skills-category-header modules" :ref="(el) => {titleRefs[4] = el}">
                 <font-awesome-icon icon="fa-brands fa-node-js" />
                 <span> Modules </span>
             </div>
@@ -78,7 +96,7 @@
         </div>
 
         <div id="languages" class="skills-category">
-            <div class="skills-category-header languages" :ref="(el) => {titleRefs[4] = el}">
+            <div class="skills-category-header languages" :ref="(el) => {titleRefs[5] = el}">
                 <font-awesome-icon icon="fa-laptop-code" />
                 <span> Languages </span>
             </div>
@@ -96,7 +114,7 @@
         </div>
 
         <div id="icons" class="skills-category">
-            <div class="skills-category-header icons" :ref="(el) => {titleRefs[5] = el}">
+            <div class="skills-category-header icons" :ref="(el) => {titleRefs[6] = el}">
                 <font-awesome-icon icon="fa-brands fa-font-awesome" />
                 <span> Icons </span>
             </div>
@@ -227,6 +245,9 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
 }
 .skills-category-header.aws {
     color: #5468ff;
+}
+.skills-category-header.google {
+    color: #4c8bf5;
 }
 .skills-category-header.modules {
     color: #5C9E57;
