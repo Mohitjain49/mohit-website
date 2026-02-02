@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.5.2",
+    "version": "3.5.3",
     "private": true,
     "type": "module",
     "scripts": {
@@ -29,7 +29,7 @@
         "@tsparticles/preset-fireworks": "^3.2.0",
         "@tsparticles/slim": "^3.9.1",
         "@tsparticles/vue3": "^3.0.1",
-        "@vueuse/core": "^14.1.0",
+        "@vueuse/core": "^14.2.0",
         "animate.css": "^4.1.1",
         "dayjs": "^1.11.19",
         "markdown-it-attrs": "^4.3.1",
@@ -44,7 +44,7 @@
         "@aws-sdk/client-cloudfront": "^3.980.0",
         "@aws-sdk/client-s3": "^3.980.0",
         "@unhead/vue": "^2.1.2",
-        "@vitejs/plugin-vue": "^6.0.3",
+        "@vitejs/plugin-vue": "^6.0.4",
         "dotenv": "^17.2.3",
         "mime-types": "^3.0.2",
         "unplugin-auto-import": "^21.0.0",

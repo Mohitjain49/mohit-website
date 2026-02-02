@@ -1,60 +1,97 @@
+<script setup>
+import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
+import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
+import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
+import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
+// import fm_photo from "@/assets/ivue/FM_Profile_Photo.png";
+
+const ivueText = ref(null);
+const tabRefs = ref([]);
+var intSplit = 0;
+
+useIntersectionObserver(ivueText, ([{ isIntersecting }]) => {
+    const fromLeft = (intSplit % 2 == 1);
+    setHomeTabAnimation(document.getElementById('ivue-section-title'), fromLeft, isIntersecting);
+    setHomeTabAnimation(document.getElementById('ivue-section-desc'), fromLeft, isIntersecting);
+    intSplit++;
+});
+useIntersectionObserver(tabRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        setHomeTabAnimation(observed.target.firstElementChild, (intSplit % 2 == 1), observed.isIntersecting);
+        intSplit++;
+    }
+});
+</script>
+
 <template>
-<div id="ivue" class="ivue-section" ref="ivue">
-    <div id="ivue-section-title">
-        <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue">
-            <img :src="ivue_white_text" draggable="false" />
-        </a>
+<div id="ivue" class="ivue-section">
+    <div class="ivue-section-mainText" ref="ivueText">
+        <div id="ivue-section-title">
+            <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue">
+                <img :src="ivue_white_text" draggable="false" />
+            </a>
+        </div>
+        <p id="ivue-section-desc">
+            Since January 2023, I have been working with iVue as one of its lead software developers for Worlds iVue and the company websites. 
+            I have learned most of my application development skills through my work at iVue, 
+            effectively making iVue the core of my software development experience.
+        </p>
     </div>
-    <p id="ivue-section-desc">
-        Since January 2023, I have been working with iVue as one of its lead software developers for Worlds iVue and the company websites. 
-        I have learned most of my application development skills through my work at iVue, 
-        effectively making iVue the core of my software development experience.
-    </p>
+
     <div class="ivue-section-tabs-container">
-        <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+        <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
+            <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <img :src="wiv_banner" width="225" />
-            <p>
-                Worlds iVue is a 3D geospatial platform that functions as a ground control station for iVue's "Develop Air" Drones. 
-                It's Dev Stack, amongst other modules, contains Vue.js, Cesium, MAVLink, and Amazon Web Services.
-            </p>
-        </a>
-        <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+                <img :src="wiv_banner" width="225" />
+                <p>
+                    Worlds iVue is a 3D geospatial platform that functions as a ground control station for iVue's "Develop Air" Drones. 
+                    It's Dev Stack, amongst other modules, contains Vue.js, Cesium, MAVLink, and Amazon Web Services.
+                </p>
+            </a>
+        </div>
+        <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
+            <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <img :src="ivue_white_text" width="68" />
-            <p>
-                iVue provides a broad range of products and services through its multiple subsidiaries. 
-                As iVue's Lead Developer, I currently lead the development of Worlds iVue and our company websites. 
-                I also oversee iVue's usage of Amazon Web Services.
-            </p>
-        </a>
-        <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+                <img :src="ivue_white_text" width="68" />
+                <p>
+                    iVue provides a broad range of products and services through its multiple subsidiaries. 
+                    As iVue's Lead Developer, I currently lead the development of Worlds iVue and our company websites. 
+                    I also oversee iVue's usage of Amazon Web Services.
+                </p>
+            </a>
+        </div>
+        <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
+            <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <img :src="ivue_media_banner" width="175" />
-            <p>
-                iVue Media offers photography, videography, and content creation services to our clients. 
-                Apart from designing, developing, and deploying iVue Media's Website, 
-                the Worlds iVue Development Team is currently creating an app for iVue Media on Worlds iVue.
-            </p>
-        </a>
-        <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+                <img :src="ivue_media_banner" width="175" />
+                <p>
+                    iVue Media offers photography, videography, and content creation services to our clients. 
+                    Apart from designing, developing, and deploying iVue Media's Website, 
+                    the Worlds iVue Development Team is currently creating an app for iVue Media on Worlds iVue.
+                </p>
+            </a>
+        </div>
+        <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
+            <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <img :src="ivue_robotics_banner" width="190" />
-            <p>
-                iVue Robotics build Drone Hardware for the future. 
-                We've made a selection of "Develop Air" drone models and ModKits to boost drone capabilities. 
-                Now, you can order a drone directly on the website.
-            </p>
-        </a>
-        <a :href="FLORIDA_MAN_LINK" id="florida-man-tab" class="ivue-section-tab"
+                <img :src="ivue_robotics_banner" width="190" />
+                <p>
+                    iVue Robotics build Drone Hardware for the future. 
+                    We've made a selection of "Develop Air" drone models and ModKits to boost drone capabilities. 
+                    Now, you can order a drone directly on the website.
+                </p>
+            </a>
+        </div>
+        <!-- <a :href="FLORIDA_MAN_LINK" id="florida-man-tab" class="ivue-section-tab"
             @pointerenter="setPulseTwiceAnimation"
             @mouseleave="setPulseTwiceAnimation">
 
@@ -66,57 +103,10 @@
                 Florida Man is a new production that is being made by iVue Media in collaboration with Olympus Entertainment. 
                 You can check out the production's social media profiles on this website I personally made for the series.
             </p>
-        </a>
+        </a> -->
     </div>
 </div>
 </template>
-
-<script setup>
-import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
-import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
-import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
-import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
-import fm_photo from "@/assets/ivue/FM_Profile_Photo.png";
-
-const ivue = ref(null);
-const ANIMATE_DURATION = 800;
-
-useIntersectionObserver(ivue, ([{ isIntersecting }]) => {
-    setInitTransitions(isIntersecting);
-});
-
-/**
- * This functions sets initial transitions upon entering this section for iVue.
- */
-function setInitTransitions(isVisible) {
-    if(!isVisible) { return; }
-    var leftAnimation = "animate__lightSpeedInLeft";
-    var rightAnimation = "animate__lightSpeedInRight";
-
-    if(window.innerWidth <= 450) {
-        leftAnimation = "animate__fadeIn";
-        rightAnimation = "animate__fadeIn";
-    }
-
-    document.getElementById('ivue-section-title').classList.add("animate__animated", leftAnimation);
-    document.getElementById('ivue-section-desc').classList.add("animate__animated", leftAnimation);
-    document.getElementById('wiv-tab').classList.add("animate__animated", rightAnimation);
-    document.getElementById('main-tab').classList.add("animate__animated", leftAnimation);
-    document.getElementById('media-tab').classList.add("animate__animated", rightAnimation);
-    document.getElementById('robotics-tab').classList.add("animate__animated", leftAnimation);
-    document.getElementById('florida-man-tab').classList.add("animate__animated", rightAnimation);
-
-    setTimeout(() => {
-        document.getElementById('ivue-section-title').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('ivue-section-desc').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('wiv-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('main-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('media-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('robotics-tab').classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('florida-man-tab').classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-    }, ANIMATE_DURATION)
-}
-</script>
 
 <style scoped>
 .ivue-section {
@@ -136,6 +126,7 @@ function setInitTransitions(isVisible) {
     font-size: 16px;
     font-family: 'Lexend', 'sans-serif';
     color: white;
+    --animate-duration: 1.2s;
 }
 
 #ivue-section-title {
@@ -159,12 +150,20 @@ function setInitTransitions(isVisible) {
 
 .ivue-section-tabs-container {
     width: 100%;
-    height: 950px;
+    height: 760px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
 }
+.ivue-section-tab-parent {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .ivue-section-tab {
     cursor: pointer;
     width: 90%;

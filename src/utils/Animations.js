@@ -11,6 +11,21 @@ export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
 }
 
 /**
+ * This sets an Animation for the Home Tabs based on whether the tab is visible or not.
+ * @param {HTMLElement} target The HTML element that was observed.
+ * @param {Boolean} fromLeft If true, the element should enter from the left, otherwise it enters from the right.
+ * @param {Boolean} isVisible Whether the target is visible or not.
+ */
+export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
+    if(!isVisible) { return; }
+    const animationClassList = ["animate__animated", "animate__bounceInLeft", "animate__bounceInRight", "animate__fadeIn"];
+    const animationClass = animationClassList[(window.innerWidth > 450) ? (fromLeft ? 1 : 2) : 3];
+
+    target.classList.add("animate__animated", animationClass);
+    setTimeout(() => { target.classList.remove(...animationClassList); }, 1200);
+}
+
+/**
  * This adds a transition to a card/widget as visitors scroll to it.
  * @param {Boolean} isVisible This must be true for the function to run.
  * @param {Element} target The element gotten from the event.

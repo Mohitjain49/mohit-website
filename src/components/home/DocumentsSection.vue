@@ -1,112 +1,98 @@
+<script setup>
+import fcs_logo from "@/assets/Fulton_County_Schools_Logo.png";
+const tabRefs = ref([]);
+var numIntersections = 0;
+
+useIntersectionObserver(tabRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        setHomeTabAnimation(observed.target.firstElementChild, (numIntersections % 2 == 1), observed.isIntersecting);
+        numIntersections++;
+    }
+});
+</script>
+
 <template>
-<div id="documents" class="documents-section" ref="documents">
-    <div id="documents-section-title"> My Docs </div>
+<div id="documents" class="documents-section">
+    <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
+        <div id="documents-section-title"> My Docs </div>
+    </div>
     <div class="documents-section-tabs-container">
-        <RouterLink to="/resume" id="resume-tab" class="documents-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
+            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <div class="documents-section-tab-header">
-                <font-awesome-icon icon="fa-file-lines" />
-                <span> My Resume </span>
-            </div>
-            <p>
-                I regularly update my resume as I learn more skills and gain more experience in software development. 
-                Feel Free to take a look at it!
-            </p>
-        </RouterLink>
-        <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+                <div class="documents-section-tab-header">
+                    <font-awesome-icon icon="fa-file-lines" />
+                    <span> My Resume </span>
+                </div>
+                <p>
+                    I regularly update my resume as I learn more skills and gain more experience in software development. 
+                    Feel Free to take a look at it!
+                </p>
+            </RouterLink>
+        </div>
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
+            <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <div class="documents-section-tab-header">
-                <font-awesome-icon icon="fa-upload" />
-                <span> Deploy Script </span>
-            </div>
-            <p>
-                I made a custom script for deploying my website and other projects of mine to Amazon Web Services. 
-                It's made with Node.js and uses a few dependencies, but it is highly customizable.
-            </p>
-        </a>
-        <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+                <div class="documents-section-tab-header">
+                    <font-awesome-icon icon="fa-upload" />
+                    <span> Deploy Script </span>
+                </div>
+                <p>
+                    I made a custom script for deploying my website and other projects of mine to Amazon Web Services. 
+                    It's made with Node.js and uses a few dependencies, but it is highly customizable.
+                </p>
+            </a>
+        </div>
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
+            <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <div class="documents-section-tab-header">
-                <font-awesome-icon icon="fa-brands fa-github" />
-                <span> Create A GitHub Repo </span>
-            </div>
-            <p>
-                This is an instructions guide to how to create and clone a Repository with GitHub. 
-                It'll walk anyone through creating an account with GitHub as well.
-            </p>
-        </RouterLink>
-        <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+                <div class="documents-section-tab-header">
+                    <font-awesome-icon icon="fa-brands fa-github" />
+                    <span> Create A GitHub Repo </span>
+                </div>
+                <p>
+                    This is an instructions guide to how to create and clone a Repository with GitHub. 
+                    It'll walk anyone through creating an account with GitHub as well.
+                </p>
+            </RouterLink>
+        </div>
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[4] = el}">
+            <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <img :src="fcs_logo" width="110" draggable="false" />
-            <p>
-                iVue takes in a few interns through the Fulton County Schools Internship Program. 
-                We teach website design and development skills to these interns via interactive learning. 
-            </p>
-        </RouterLink>
-        <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
+                <img :src="fcs_logo" width="110" draggable="false" />
+                <p>
+                    iVue takes in a few interns through the Fulton County Schools Internship Program. 
+                    We teach website design and development skills to these interns via interactive learning. 
+                </p>
+            </RouterLink>
+        </div>
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[5] = el}">
+            <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab"
+                @pointerenter="setPulseTwiceAnimation"
+                @mouseleave="setPulseTwiceAnimation">
 
-            <div class="documents-section-tab-header">
-                <font-awesome-icon icon="fa-sitemap" />
-                <span> Sitemap.xml File </span>
-            </div>
-            <p>
-                This will direct you to the sitemap.xml file for this website. 
-                Feel Free to take a look at it!
-            </p>
-        </a>
+                <div class="documents-section-tab-header">
+                    <font-awesome-icon icon="fa-sitemap" />
+                    <span> Sitemap.xml File </span>
+                </div>
+                <p>
+                    This will direct you to the sitemap.xml file for this website. 
+                    Feel Free to take a look at it!
+                </p>
+            </a>
+        </div>
     </div>
 </div>
 </template>
-
-<script setup>
-import fcs_logo from "@/assets/Fulton_County_Schools_Logo.png";
-const documents = ref(null);
-const ANIMATE_DURATION = 800;
-
-useIntersectionObserver(documents, ([{ isIntersecting }]) => {
-    setInitTransitions(isIntersecting);
-});
-
-/**
- * This functions sets initial transitions upon entering this section for the documents.
- */
-function setInitTransitions(isVisible) {
-    if(!isVisible) { return; }
-    var leftAnimation = "animate__lightSpeedInLeft";
-    var rightAnimation = "animate__lightSpeedInRight";
-
-    if(window.innerWidth <= 450) {
-        leftAnimation = "animate__fadeIn";
-        rightAnimation = "animate__fadeIn";
-    }
-
-    document.getElementById('documents-section-title')?.classList.add("animate__animated", leftAnimation);
-    document.getElementById('resume-tab')?.classList.add("animate__animated", rightAnimation);
-    document.getElementById('deploy-script-tab')?.classList.add("animate__animated", leftAnimation);
-    document.getElementById('github-tab')?.classList.add("animate__animated", rightAnimation);
-    document.getElementById('fcs-certificate-tab')?.classList.add("animate__animated", leftAnimation);
-    document.getElementById('sitemap-tab')?.classList.add("animate__animated", rightAnimation);
-
-    setTimeout(() => {
-        document.getElementById('documents-section-title')?.classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('resume-tab')?.classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('deploy-script-tab')?.classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('github-tab')?.classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-        document.getElementById('fcs-certificate-tab')?.classList.remove("animate__animated", "animate__lightSpeedInLeft", "animate__fadeIn");
-        document.getElementById('sitemap-tab')?.classList.remove("animate__animated", "animate__lightSpeedInRight", "animate__fadeIn");
-    }, ANIMATE_DURATION);
-}
-</script>
 
 <style scoped>
 .documents-section {
@@ -130,6 +116,13 @@ function setInitTransitions(isVisible) {
     font-weight: bold;
     color: var(--website-light-text);
     text-shadow: var(--website-light-text) 1px 0 30px;
+}
+.documents-section-tab-parent {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .documents-section-tabs-container {
