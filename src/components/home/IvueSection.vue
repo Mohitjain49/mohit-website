@@ -7,19 +7,18 @@ import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
 
 const ivueText = ref(null);
 const tabRefs = ref([]);
-var intSplit = 0;
+const TAB_IDS = ["wiv-tab", "main-tab", "media-tab", "robotics-tab"];
 
 useIntersectionObserver(ivueText, ([{ isIntersecting }]) => {
-    const fromLeft = (intSplit % 2 == 1);
-    setHomeTabAnimation(document.getElementById('ivue-section-title'), fromLeft, isIntersecting);
-    setHomeTabAnimation(document.getElementById('ivue-section-desc'), fromLeft, isIntersecting);
-    intSplit++;
+    setHomeTabAnimation(document.getElementById('ivue-section-title'), true, isIntersecting);
+    setHomeTabAnimation(document.getElementById('ivue-section-desc'), true, isIntersecting);
 });
 useIntersectionObserver(tabRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
-        setHomeTabAnimation(observed.target.firstElementChild, (intSplit % 2 == 1), observed.isIntersecting);
-        intSplit++;
+        const observedChild = observed.target.firstElementChild;
+        const observedIdIndex = TAB_IDS.findIndex((item) => { return (observedChild.id === item); });
+        setHomeTabAnimation(observedChild, (observedIdIndex % 2 == 1), observed.isIntersecting);
     }
 });
 </script>
@@ -41,10 +40,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 
     <div class="ivue-section-tabs-container">
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
-            <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab">
                 <img :src="wiv_banner" width="225" />
                 <p>
                     Worlds iVue is a 3D geospatial platform that functions as a ground control station for iVue's "Develop Air" Drones. 
@@ -53,10 +49,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </a>
         </div>
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab">
                 <img :src="ivue_white_text" width="68" />
                 <p>
                     iVue provides a broad range of products and services through its multiple subsidiaries. 
@@ -66,10 +59,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </a>
         </div>
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
-            <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab">
                 <img :src="ivue_media_banner" width="175" />
                 <p>
                     iVue Media offers photography, videography, and content creation services to our clients. 
@@ -79,10 +69,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </a>
         </div>
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
-            <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab">
                 <img :src="ivue_robotics_banner" width="190" />
                 <p>
                     iVue Robotics build Drone Hardware for the future. 
@@ -262,7 +249,7 @@ useIntersectionObserver(tabRefs, (entry) => {
         height: 80px;
     }
     .ivue-section-tabs-container {
-        height: 1075px;
+        height: 850px;
     }
     .ivue-section-tab {
         height: 175px;

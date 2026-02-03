@@ -1,13 +1,14 @@
 <script setup>
 import fcs_logo from "@/assets/Fulton_County_Schools_Logo.png";
+const TAB_IDS = ["documents-section-title", "resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab", "sitemap-tab"];
 const tabRefs = ref([]);
-var numIntersections = 0;
 
 useIntersectionObserver(tabRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
-        setHomeTabAnimation(observed.target.firstElementChild, (numIntersections % 2 == 1), observed.isIntersecting);
-        numIntersections++;
+        const observedChild = observed.target.firstElementChild;
+        const observedIdIndex = TAB_IDS.findIndex((item) => { return (observedChild.id === item); });
+        setHomeTabAnimation(observedChild, (observedIdIndex % 2 == 0), observed.isIntersecting);
     }
 });
 </script>
@@ -19,10 +20,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     </div>
     <div class="documents-section-tabs-container">
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-file-lines" />
                     <span> My Resume </span>
@@ -34,10 +32,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
-            <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-upload" />
                     <span> Deploy Script </span>
@@ -49,10 +44,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </a>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
-            <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-brands fa-github" />
                     <span> Create A GitHub Repo </span>
@@ -64,10 +56,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[4] = el}">
-            <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab">
                 <img :src="fcs_logo" width="110" draggable="false" />
                 <p>
                     iVue takes in a few interns through the Fulton County Schools Internship Program. 
@@ -76,10 +65,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[5] = el}">
-            <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab"
-                @pointerenter="setPulseTwiceAnimation"
-                @mouseleave="setPulseTwiceAnimation">
-
+            <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-sitemap" />
                     <span> Sitemap.xml File </span>

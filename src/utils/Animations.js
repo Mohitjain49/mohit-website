@@ -1,3 +1,25 @@
+/** @type {Array<HTMLElement>} This stores the targets that use the home tab animations. */
+var homeTabTargets = [];
+
+/** @type {Array<HTMLElement>} This stores the targets that use the note card animations. */
+var noteCardTargets = [];
+
+/**
+ * This finds the index of a target element that currently has a home tab animation ongoing.
+ * @param {HTMLElement} target The HTML element that was observed.
+ */
+function findHomeTabTarget(target) {
+    return homeTabTargets.findIndex((item) => { return (item === target); });
+}
+
+/**
+ * This finds the index of a target element that currently has a note card animation ongoing.
+ * @param {HTMLElement} target The HTML element that was observed.
+ */
+function findNoteCardTarget(target) {
+    return noteCardTargets.findIndex((item) => { return (item === target); });
+}
+
 /**
  * This function sets the initial transition for a Nav Card.
  * @param {String} cardId The element id for the card.
@@ -17,12 +39,18 @@ export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
  * @param {Boolean} isVisible Whether the target is visible or not.
  */
 export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
-    if(!isVisible) { return; }
-    const animationClassList = ["animate__animated", "animate__bounceInLeft", "animate__bounceInRight", "animate__fadeIn"];
+    if(!isVisible || (findHomeTabTarget(target) != -1)) { return; }
+    const animationClassList = ["animate__animated", "animate__fadeInLeft", "animate__fadeInRight", "animate__fadeIn"];
     const animationClass = animationClassList[(window.innerWidth > 450) ? (fromLeft ? 1 : 2) : 3];
 
     target.classList.add("animate__animated", animationClass);
-    setTimeout(() => { target.classList.remove(...animationClassList); }, 1200);
+    homeTabTargets.unshift(target);
+
+    setTimeout(() => {
+        target.classList.remove(...animationClassList);
+        const targetIndex = findHomeTabTarget(target);
+        if(targetIndex != -1) { homeTabTargets.splice(targetIndex, 1); }
+    }, 1200);
 }
 
 /**
@@ -31,9 +59,15 @@ export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
  * @param {Element} target The element gotten from the event.
  */
 export function addNoteCardAnimation(target, isVisible = true) {
-    if(!isVisible) { return; }
+    if(!isVisible || (findNoteCardTarget(target) != -1)) { return; }
     target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
-    setTimeout(() => { target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
+    noteCardTargets.unshift(target);
+
+    setTimeout(() => {
+        target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn");
+        const targetIndex = findNoteCardTarget(target);
+        if(targetIndex != -1) { noteCardTargets.splice(targetIndex, 1); }
+    }, 1000);
 }
 
 /**
