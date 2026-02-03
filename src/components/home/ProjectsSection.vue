@@ -1,17 +1,21 @@
 <template>
-<div id="projects" class="projects-section" ref="projects">
-    <div class="projects-main-header">
-        <RouterLink to="/projects/" title="Explore My Projects"> My Projects </RouterLink>
+<div id="projects" class="projects-section">
+    <div class="projects-main-textContainer" ref="projectsText">
+        <div class="projects-main-header">
+            <RouterLink to="/projects/" title="Explore My Projects"> My Projects </RouterLink>
+        </div>
+        <div class="projects-main-desc">
+            While my best work is with iVue's websites and applications, 
+            I made a few personal projects over the years for various events and classes at College.
+        </div>
     </div>
-    <div class="projects-main-desc">
-        While my best work is with iVue's websites and applications, 
-        I made a few personal projects over the years for various events and classes at College.
-    </div>
-    <RouterLink class="projects-features-btn" to="/features" title="Explore this Website's Unique Capabilities">
-        <FontAwesomeIcon icon="fa-bolt-lightning" />
-        Website Features
-    </RouterLink>
 
+    <RouterLink class="projects-features-btn" to="/features" ref="featuresButton"
+        title="Explore this Website's Unique Capabilities">
+
+        <FontAwesomeIcon icon="fa-bolt-lightning" />
+        <span> Website Features </span>
+    </RouterLink>
     <div v-for="entity in PROJECT_ENTITIES" class="projects-note-container" ref="cardRefs">
         <SkillNote :link="entity.link"
             :color="entity.color"
@@ -26,11 +30,15 @@
 </template>
 
 <script setup>
-const projects = ref(null);
+const projectsText = ref(null);
+const featuresButton = ref(null);
 const cardRefs = ref([]);
 
-useIntersectionObserver(projects, ([{ isIntersecting }]) => {
+useIntersectionObserver(projectsText, ([{ isIntersecting }]) => {
     setProjectsTransitions(isIntersecting);
+});
+useIntersectionObserver(featuresButton, ([observed])=> {
+    addNoteCardAnimation(observed.target, observed.isIntersecting);
 });
 useIntersectionObserver(cardRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
@@ -47,12 +55,9 @@ function setProjectsTransitions(isVisible) {
     if(isVisible && window.innerWidth > 450) {
         document.getElementsByClassName('projects-main-header').item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('projects-main-desc').item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName('projects-features-btn').item(0)?.classList.add("animate__animated", "animate__zoomIn");
-        return;
     } else if(!isVisible) {
         document.getElementsByClassName('projects-main-header').item(0)?.classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('projects-main-desc').item(0)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
-        document.getElementsByClassName('projects-features-btn').item(0)?.classList.remove("animate__animated", "animate__zoomIn");
     }
 }
 </script>
@@ -66,9 +71,13 @@ function setProjectsTransitions(isVisible) {
     width: 1200px;
     padding: 80px calc(50% - 600px);
 }
+.projects-main-textContainer {
+    grid-column: span 3;
+    height: fit-content;
+    width: 100%;
+}
 
 .projects-main-header {
-    grid-column: span 3;
     height: fit-content;
     width: 100%;
     padding-top: 50px;
@@ -97,7 +106,6 @@ function setProjectsTransitions(isVisible) {
     width: calc(100% - 30px);
     height: fit-content;
     padding: 20px 15px;
-    grid-column: span 3;
     color: var(--globe-green-opaque);
     text-align: center;
     line-height: 35px;
@@ -141,7 +149,7 @@ function setProjectsTransitions(isVisible) {
         padding: 0px calc(50% - 400px);
         padding-bottom: 50px;
     }
-    .projects-main-header, .projects-main-desc, .projects-features-btn {
+    .projects-main-textContainer, .projects-features-btn {
         grid-column: span 2;
     }
 }
@@ -157,7 +165,7 @@ function setProjectsTransitions(isVisible) {
         min-width: 0px;
         height: 500px;
     }
-    .projects-main-header, .projects-main-desc, .projects-features-btn {
+    .projects-main-textContainer, .projects-features-btn {
         grid-column: span 1;
     }
 

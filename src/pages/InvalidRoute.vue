@@ -86,6 +86,7 @@ const INTERNAL_REDIRECTS = [
 
     { routes: ["/documents/create-github-repo"], replacement: "/create-github-repo" },
     { routes: ["/documents" + FCS_CERTIFICATE_ROUTE], replacement: FCS_CERTIFICATE_ROUTE },
+    { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" }
 ];
 
 // This is a list of redirects to other websites.

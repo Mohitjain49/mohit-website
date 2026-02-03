@@ -1,11 +1,13 @@
 <template>
-<div id="skills" class="skills-section" ref="skills">
-    <div class="skills-main-header">
-        <RouterLink to="/skills/" title="See My Skills"> My Skills </RouterLink>
-    </div>
-    <div class="skills-main-desc">
-        Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
-        by utilizing multiple programming languages, frontend frameworks, web services, and modules.
+<div id="skills" class="skills-section">
+    <div class="skills-main-textContainer" ref="skillsText">
+        <div class="skills-main-header">
+            <RouterLink to="/skills/" title="See My Skills"> My Skills </RouterLink>
+        </div>
+        <div class="skills-main-desc">
+            Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
+            by utilizing multiple programming languages, frontend frameworks, web services, and modules.
+        </div>
     </div>
 
     <div v-for="entity in NEW_SKILL_ENTITIES" class="skills-entity-container" ref="cardRefs">
@@ -22,10 +24,10 @@
 </template>
 
 <script setup>
-const skills = ref(null);
+const skillsText = ref(null);
 const cardRefs = ref([]);
 
-useIntersectionObserver(skills, ([{ isIntersecting }]) => {
+useIntersectionObserver(skillsText, ([{ isIntersecting }]) => {
     setSkillsTransitions(isIntersecting);
 });
 useIntersectionObserver(cardRefs, (entry) => {
@@ -60,9 +62,13 @@ function setSkillsTransitions(isVisible = false) {
     width: 1200px;
     padding: 80px calc(50% - 600px);
 }
+.skills-main-textContainer {
+    grid-column: span 3;
+    height: fit-content;
+    width: 100%;
+}
 
 .skills-main-header {
-    grid-column: span 3;
     height: fit-content;
     width: 100%;
     padding-top: 50px;
@@ -92,7 +98,6 @@ function setSkillsTransitions(isVisible = false) {
     height: fit-content;
     padding: 20px 15px;
     margin-bottom: 30px;
-    grid-column: span 3;
     color: var(--blue-zero);
     text-align: center;
     line-height: 35px;
@@ -112,7 +117,7 @@ function setSkillsTransitions(isVisible = false) {
         width: 800px;
         padding: 0px calc(50% - 400px);
     }
-    .skills-main-header, .skills-main-desc {
+    .skills-main-textContainer {
         grid-column: span 2;
     }
 }
@@ -127,7 +132,7 @@ function setSkillsTransitions(isVisible = false) {
         min-width: 0px;
         height: 500px;
     }
-    .skills-main-header, .skills-main-desc {
+    .skills-main-textContainer {
         grid-column: span 1;
     }
 

@@ -1,3 +1,25 @@
+/** @type {Array<HTMLElement>} This stores the targets that use the home tab animations. */
+var homeTabTargets = [];
+
+/** @type {Array<HTMLElement>} This stores the targets that use the note card animations. */
+var noteCardTargets = [];
+
+/**
+ * This finds the index of a target element that currently has a home tab animation ongoing.
+ * @param {HTMLElement} target The HTML element that was observed.
+ */
+function findHomeTabTarget(target) {
+    return homeTabTargets.findIndex((item) => { return (item === target); });
+}
+
+/**
+ * This finds the index of a target element that currently has a note card animation ongoing.
+ * @param {HTMLElement} target The HTML element that was observed.
+ */
+function findNoteCardTarget(target) {
+    return noteCardTargets.findIndex((item) => { return (item === target); });
+}
+
 /**
  * This function sets the initial transition for a Nav Card.
  * @param {String} cardId The element id for the card.
@@ -11,14 +33,41 @@ export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
 }
 
 /**
+ * This sets an Animation for the Home Tabs based on whether the tab is visible or not.
+ * @param {HTMLElement} target The HTML element that was observed.
+ * @param {Boolean} fromLeft If true, the element should enter from the left, otherwise it enters from the right.
+ * @param {Boolean} isVisible Whether the target is visible or not.
+ */
+export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
+    if(!isVisible || (findHomeTabTarget(target) != -1)) { return; }
+    const animationClassList = ["animate__animated", "animate__fadeInLeft", "animate__fadeInRight", "animate__fadeIn"];
+    const animationClass = animationClassList[(window.innerWidth > 450) ? (fromLeft ? 1 : 2) : 3];
+
+    target.classList.add("animate__animated", animationClass);
+    homeTabTargets.unshift(target);
+
+    setTimeout(() => {
+        target.classList.remove(...animationClassList);
+        const targetIndex = findHomeTabTarget(target);
+        if(targetIndex != -1) { homeTabTargets.splice(targetIndex, 1); }
+    }, 1200);
+}
+
+/**
  * This adds a transition to a card/widget as visitors scroll to it.
  * @param {Boolean} isVisible This must be true for the function to run.
  * @param {Element} target The element gotten from the event.
  */
 export function addNoteCardAnimation(target, isVisible = true) {
-    if(!isVisible) { return; }
+    if(!isVisible || (findNoteCardTarget(target) != -1)) { return; }
     target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
-    setTimeout(() => { target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn"); }, 1000);
+    noteCardTargets.unshift(target);
+
+    setTimeout(() => {
+        target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn");
+        const targetIndex = findNoteCardTarget(target);
+        if(targetIndex != -1) { noteCardTargets.splice(targetIndex, 1); }
+    }, 1000);
 }
 
 /**
