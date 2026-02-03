@@ -3,7 +3,6 @@ import ivue_white_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 import wiv_banner from "@/assets/ivue/Worlds_iVue_Banner.png";
 import ivue_media_banner from "@/assets/ivue/iVue_Media_Banner.png";
 import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
-// import fm_photo from "@/assets/ivue/FM_Profile_Photo.png";
 
 const ivueText = ref(null);
 const tabRefs = ref([]);
@@ -63,8 +62,8 @@ useIntersectionObserver(tabRefs, (entry) => {
                 <img :src="ivue_media_banner" width="175" />
                 <p>
                     iVue Media offers photography, videography, and content creation services to our clients. 
-                    Apart from designing, developing, and deploying iVue Media's Website, 
-                    the Worlds iVue Development Team is currently creating an app for iVue Media on Worlds iVue.
+                    Apart from designing, developing, and deploying iVue Media's Website Presence, 
+                    the Worlds iVue Development Team and I are currently creating an app for iVue Media on Worlds iVue.
                 </p>
             </a>
         </div>
@@ -74,23 +73,10 @@ useIntersectionObserver(tabRefs, (entry) => {
                 <p>
                     iVue Robotics build Drone Hardware for the future. 
                     We've made a selection of "Develop Air" drone models and ModKits to boost drone capabilities. 
-                    Now, you can order a drone directly on the website.
+                    Now, you can order a drone directly on our website!
                 </p>
             </a>
         </div>
-        <!-- <a :href="FLORIDA_MAN_LINK" id="florida-man-tab" class="ivue-section-tab"
-            @pointerenter="setPulseTwiceAnimation"
-            @mouseleave="setPulseTwiceAnimation">
-
-            <div class="ivue-section-tab-header">
-                <img :src="fm_photo" width="45" />
-                <span>Florida Man</span>
-            </div>
-            <p>
-                Florida Man is a new production that is being made by iVue Media in collaboration with Olympus Entertainment. 
-                You can check out the production's social media profiles on this website I personally made for the series.
-            </p>
-        </a> -->
     </div>
 </div>
 </template>
@@ -265,7 +251,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     .ivue-section-tab p {
         width: calc(100% - 20px);
         padding: 0px 10px;
-        font-size: 14px;
+        font-size: 13px;
     }
 }
 </style>
