@@ -131,7 +131,7 @@ function flashNavOpt(event = new MouseEvent("click"), path = "/") {
     if(routePath.value !== path && routePath.value !== (path + "/")) { return; }
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
-    webData.addFlashAnimation(event);
+    addFlashAnimation(event);
     webData.closeNavMenu();
 }
 

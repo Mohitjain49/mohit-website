@@ -4,6 +4,12 @@ var homeTabTargets = [];
 /** @type {Array<HTMLElement>} This stores the targets that use the note card animations. */
 var noteCardTargets = [];
 
+/** @type {Array<HTMLElement>} This stores the targets that use the flip In X animation. */
+var flipInXTargets = [];
+
+/** @type {Array<HTMLElement>} This stores the targets that use the flash animation. */
+var flashTargets = [];
+
 /**
  * This finds the index of a target element that currently has a home tab animation ongoing.
  * @param {HTMLElement} target The HTML element that was observed.
@@ -18,6 +24,22 @@ function findHomeTabTarget(target) {
  */
 function findNoteCardTarget(target) {
     return noteCardTargets.findIndex((item) => { return (item === target); });
+}
+
+/**
+ * This finds the index of a target element that currently has a Flip In X animation ongoing.
+ * @param {HTMLElement} target The HTML element that was observed.
+ */
+function findFlipInXTarget(target) {
+    return flipInXTargets.findIndex((item) => { return (item === target); });
+}
+
+/**
+ * This finds the index of a target element that currently has a Flash animation ongoing.
+ * @param {HTMLElement} target The HTML element that was observed.
+ */
+function findFlashTarget(target) {
+    return flashTargets.findIndex((item) => { return (item === target); });
 }
 
 /**
@@ -69,6 +91,46 @@ export function addNoteCardAnimation(target, isVisible = true) {
         if(targetIndex != -1) { noteCardTargets.splice(targetIndex, 1); }
     }, 1000);
 }
+
+/**
+ * This adds a transition to a title as visitors scroll to it.
+ * @param {Boolean} isVisible This must be true for the function to run.
+ * @param {Element} target The element gotten from the event.
+ */
+export function setFlipInXAnimation(target, isVisible) {
+    if(!isVisible || (findFlipInXTarget(target) != -1)) { return; }
+    target.classList.add("animate__animated", "animate__flipInX");
+    flipInXTargets.unshift(target)
+
+    setTimeout(() => {
+        target.classList.remove("animate__animated", "animate__flipInX");
+        const targetIndex = findFlipInXTarget(target);
+        if(targetIndex != -1) { flipInXTargets.splice(targetIndex, 1); }
+    }, 1000);
+}
+
+/**
+ * This function adds the flash animation, then removes it after 0.8s.
+ */
+export function addFlashAnimation(event = new MouseEvent("click")) {
+    const target = event.target;
+    if(findFlashTarget(target) != -1) { return; }
+    
+    target.classList.add('animate__animated', 'animate__flash');
+    flashTargets.unshift(target);
+
+    setTimeout(() => {
+        target.classList.remove('animate__animated', 'animate__flash');
+        const targetIndex = findFlashTarget(target);
+        if(targetIndex != -1) { flashTargets.splice(targetIndex, 1); }
+    }, 800);
+}
+
+/**
+ * -------------------------------------------------------------------
+ * These functions set animations for buttons that use pointer events.
+ * -------------------------------------------------------------------
+ */
 
 /**
  * This adds and removes a flash animation for any element.
@@ -134,12 +196,4 @@ export function setHeadShakeAnimation(event = new PointerEvent("pointerenter")) 
     } else {
         event.target.classList.remove("animate__animated", "animate__headShake");
     }
-}
-
-/**
- * This function adds the flash animation, then removes it after 0.8s.
- */
-export function addFlashAnimation(event = new MouseEvent("click")) {
-    event.target.classList.add('animate__animated', 'animate__flash');
-    setTimeout(() => { event.target.classList.remove('animate__animated', 'animate__flash'); }, 800)
 }
