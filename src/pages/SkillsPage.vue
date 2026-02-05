@@ -153,7 +153,7 @@ const cardRefs = ref([]);
 useIntersectionObserver(titleRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
-        setTitleTransition(observed.target, observed.isIntersecting);
+        setFlipInXAnimation(observed.target, observed.isIntersecting);
     }
 });
 useIntersectionObserver(cardRefs, (entry) => {
@@ -169,17 +169,6 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
     "web applications, and projects by utilizing multiple programming languages, " +
     "frontend frameworks, web services, and modules."
 ));
-
-/**
- * This adds a transition to a title as visitors scroll to it.
- * @param {Boolean} isVisible This must be true for the function to run.
- * @param {Element} target The element gotten from the event.
- */
- function setTitleTransition(target, isVisible) {
-    if(!isVisible) { return; }
-    target.classList.add("animate__animated", "animate__flipInX");
-    setTimeout(() => { target.classList.remove("animate__animated", "animate__flipInX"); }, 1000);
-}
 </script>
 
 <style scoped>
