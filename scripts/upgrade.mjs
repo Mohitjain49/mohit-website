@@ -1,8 +1,12 @@
-import { execSync } from 'child_process';
-import { readFile, writeFile } from 'fs/promises';
+import { execSync } from 'node:child_process';
+import { readFile, writeFile, rm } from 'node:fs/promises';
+import readline from 'node:readline/promises';
 
-// Get version type (default to 'patch')
-const versionType = (process.argv[2] || 'patch');
+/** This records user input in the terminal so users can choose options as they progress through the function. */
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 /**
  * This function runs an NPM Command.
@@ -14,22 +18,107 @@ function runCommand(command) {
     console.log("\n\n");
 };
 
+/**
+ * This function returns a spinner to show while the script is running to mimic loading.
+ * @param {String} text The text to display while the spinner is running.
+ */
+function createSpinner(text) {
+    const frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+    let i = 0;
+    process.stdout.write("\u001B[?25l");
+
+    const timer = setInterval(() => {
+        const frame = frames[i = ++i % frames.length];
+        process.stdout.write(`\r${frame} ${text}`);
+    }, 80);
+
+    return { succeed(endText) {
+        clearInterval(timer);
+        process.stdout.write(`\r✅ ${endText}\n`);
+        process.stdout.write("\u001B[?25h");
+    }}
+}
+
 /** This function is the core of the file and handles all the upgrade requirements. */
 async function main() {
     try {
-        runCommand('npx npm-check-updates -u');
-        runCommand(`npm version ${versionType} --no-git-tag-version --allow-same-version`);
-        runCommand('npm install');
+        // This section handles updating the current dependencies on the Vue.js project.
+        runCommand('npx npm-check-updates');
+        const updateDeps = await rl.question('Do you want to update the dependencies? (y/n): ');
+        const updateDepsBool = (updateDeps.toLowerCase() === "y" || updateDeps.toLowerCase() === "yes");
 
-        console.log("Updating PWA Cache ID...");
-        const packageData = JSON.parse(await readFile('./package.json', 'utf-8'));
-        const content = await readFile("./vite.config.js", 'utf8');
+        if(updateDepsBool) {
+            runCommand('npx npm-check-updates -u');
+            console.log("✅ Dependencies Ready To Install!\n\n")
+        } else {
+            console.log("🛑 Will Not Update Dependencies.\n\n");
+        }
 
-        const newVersion = packageData.version;
-        const updatedContent = content.replace(/v\d+\.\d+\.\d+-\$\{Date\.now\(\)\}/, `v${newVersion}-\${Date.now()}`);
+        // This section handles updating the Version Number.
+        const updateVersion = await rl.question('Do you want to update Your Website\'s version number? (y/n): ');
+        const updateVersionBool = (updateVersion.toLowerCase() === "y" || updateVersion.toLowerCase() === "yes");
 
-        await writeFile("./vite.config.js", updatedContent, 'utf8');
-        console.log(`✅ Successfully bumped version to v${newVersion} and updated packages!`);
+        if(updateVersionBool) {
+            const versionPattern = /^\d+\.\d+\.\d+$/;
+            var versionType = await rl.question('Please Enter the Version Number Here (M.m.p): ');
+
+            while(!versionPattern.test(versionType) && versionType != "patch" && versionType != "minor" && versionType != "major") {
+                versionType = await rl.question('Invalid Input. Please Try Again (M.m.p): ');
+            }
+
+            runCommand(`npm version ${versionType} --no-git-tag-version --allow-same-version`);
+            const versionJsonSpinner = createSpinner("Updating version.json...");
+
+            const packageData = JSON.parse(await readFile('./package.json', 'utf-8'));
+            const newVersion = packageData.version;
+
+            // Updates the version.json file.
+            await writeFile("./public/version.json", JSON.stringify({ version: newVersion }), 'utf8');
+            versionJsonSpinner.succeed("Updated version.json!!");
+
+            // Updates the vite.config.js file.
+            const viteConfigSpinner = createSpinner("Updating vite.config.js...");
+            const content = await readFile("./vite.config.js", 'utf8');
+            const updatedContent = content.replace(/v\d+\.\d+\.\d+-\$\{Date\.now\(\)\}/, `v${newVersion}-\${Date.now()}`);
+
+            await writeFile("./vite.config.js", updatedContent, 'utf8');
+            viteConfigSpinner.succeed("Updated Vite Config File!!");
+            console.log("\n\n");
+        } else {
+            // A message to show if the user declined.
+            console.log("🛑 Will Not Update Version Number.\n\n");
+        }
+
+        // This section handles recreating node_modules and package-lock.json.
+        const confirmInstall = await rl.question('Confirm Install Dependencies? (y/n): ');
+        const confirmInstallBool = (confirmInstall.toLowerCase() === "y" || confirmInstall.toLowerCase() === "yes");
+        
+        if(confirmInstallBool) {
+            const packageLockSpinner = createSpinner("Deleting package-lock.json...");
+            await rm("./package-lock.json", { recursive: true, force: true });
+            packageLockSpinner.succeed("Deleted package-lock.json.");
+
+            const dtsSpinner = createSpinner("Deleting the \"dts\" folder...");
+            await rm("./dts", { recursive: true, force: true });
+            dtsSpinner.succeed("Deleted the \"dts\" folder.");
+
+            const distSpinner = createSpinner("Deleting the \"dist\" folder...");
+            await rm("./dist", { recursive: true, force: true });
+            distSpinner.succeed("Deleted the \"dist\" folder.");
+
+            const nodeModulesSpinner = createSpinner("Deleting the \"node_modules\" folder...");
+            await rm("./node_modules", { recursive: true, force: true });
+            nodeModulesSpinner.succeed("Deleted the \"node_modules\" folder.");
+
+            // Installs all dependencies again.
+            runCommand("npm install");
+        } else {
+            console.log("🛑 Will Not Reinstall dependencies.\n\n");
+        }
+
+        // This section marks the end of the upgrade script and ends the process.
+        console.log("🏁 Processes Ended Successfully.");
+        process.exit(0);
     } catch(error) {
         console.error(error);
         console.error('\n❌ Update failed. Check the errors above.');
