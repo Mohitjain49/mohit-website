@@ -1,6 +1,6 @@
 <template>
 <ParticlesBackground :particlesOptions="HOME_BACKGROUND" />
-<KennesawWidget />
+<HomeWidgets />
 
 <main id="homepage" class="personal-web-body">
     <StartSection />

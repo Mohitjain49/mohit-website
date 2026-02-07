@@ -3,6 +3,7 @@
 * This Google Mockup Assignment is an easy way for new frontend developers to learn the basics of [Vue.js](https://vuejs.org/) and frontend development. This is how I started, and I give this task to basically all aspiring frontend developers at iVue as an intro task for the iVue Website Development Team. This doesn’t have any prerequisites except a desire to learn.  
 * Here is a link to the website: [https://www.google.com/](https://www.google.com/)  
 * This mockup must be coded in [Vue.js](http://Vue.js). There is a guide on the website to help you get started ([https://vuejs.org/guide/quick-start.html](https://vuejs.org/guide/quick-start.html)).  
+* __The point of mockup assignment is to ensure that all the necessary apps and dependencies like Node.js and GitHub Desktop are installed on your computer for this project and future ones.__  
 
 * Except for the points below, everything must look and operate **THE EXACT SAME** as the initial website.  
 * The mockup doesn’t need to have any search functionality. The main point to get out of this is User Interface development, not full on functionality.  

@@ -1,6 +1,6 @@
 <template>
 <div class="newCard-container">
-    <a :href="MAIN_IVUE_WEBSITE_LINK" id="ivue-nav-newCard" class="nav-newCard"
+    <RouterLink to="/#ivue" id="ivue-nav-newCard" class="nav-newCard"
         @pointerenter="setPulseLoopAnimation"
         @mouseleave="setPulseLoopAnimation">
 
@@ -30,7 +30,7 @@
         <div class="nav-newCard-desc center-flex-display">
             As a lead software developer at iVue, I take charge of the company's full-stack application development.
         </div>
-    </a>
+    </RouterLink>
 </div>
 </template>
 
