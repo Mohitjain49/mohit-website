@@ -4,7 +4,14 @@
         <template v-if="!directionsOpen">
             <h1 class="gMockup-title animate__animated animate__bounceIn"> Google </h1>
             <input type="text" id="search" v-model="gSearchInput" class="gMockup-search-bar animate__animated animate__bounceIn" placeholder="Search Google or type a URL" />
-            <button @click="searchOnGoogle()" class="gMockup-search-btn animate__animated animate__bounceIn"> Google Search </button>
+
+            <div class="gMockup-main-buttons">
+                <button @click="searchOnGoogle()" class="gMockup-search-btn animate__animated animate__bounceIn"> Google Search </button>
+                <RouterLink to="/skills/#google" class="gMockup-search-btn animate__animated animate__bounceIn">
+                    <span style="margin-right: 5px;"> See My Skills </span>
+                    <FontAwesomeIcon icon="fa-code" />
+                </RouterLink>
+            </div>
         </template>
         <template v-if="directionsOpen">
             <GoogleMockupAssignmentComponent id="directions" class="animate__animated animate__bounceIn" />
@@ -126,19 +133,33 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     color: #e0e0e0;
 }
 
-.gMockup-search-btn {
+.gMockup-main-buttons {
     height: fit-content;
     width: fit-content;
     margin-top: 25px;
     margin-bottom: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.gMockup-search-btn {
+    height: fit-content;
+    width: fit-content;
     padding: 10px;
     color: #121212;
-    background-color: #f8f9fa;
+    background-color: #dededf;
     border: var(--thin-empty-border);
     border-radius: 10px;
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     transition: var(--default-transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }
 .gMockup-search-btn:hover {
     box-shadow: 0px 0px 10px gray;
