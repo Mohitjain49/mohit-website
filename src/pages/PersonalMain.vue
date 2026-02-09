@@ -14,7 +14,7 @@
 
 <script setup>
 onMounted(() => { initWebData(); });
-useHead(getMeta());
+useHead(getHomeMeta());
 </script>
 
 <style scoped>
