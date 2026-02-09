@@ -1,6 +1,6 @@
 import og_img from "/static-icons/Personal_Icon_Expanded_Rounded.png";
-const WEBSITE_TITLE = "Mohit Jain | My Portfolio";
-const WEBSITE_DESC = "Hello! My name is Mohit Jain, and I use my portfolio to showcase " +
+export const WEBSITE_TITLE = "Mohit Jain | My Portfolio";
+export const WEBSITE_DESC = "Hello! My name is Mohit Jain, and I use my portfolio to showcase " +
     "my skills and as a \"Feature Lab\" for other projects of mine. Made With Vue.js.";
 
 /**
@@ -8,16 +8,33 @@ const WEBSITE_DESC = "Hello! My name is Mohit Jain, and I use my portfolio to sh
  * @param {String} pageTitle The document page title.
  * @param {String} pageRoute The link to the route.
  * @param {String} pageDesc The document meta description.
+ * @param { "default" | "resume-markdown" } type The type of webpage. Used if a page needs custom head tags compared to the default ones.
  */
-export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WEBSITE_DESC) {
+export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WEBSITE_DESC, type = "default") {
     const WEBSITE_PATH = (PERSONAL_WEBSITE_LINK + pageRoute);
+
+    const itemListElement = [
+        { "@type": "ListItem", "position": 1, "name": "Mohit Jain", "item": PERSONAL_WEBSITE_LINK },
+        { "@type": "ListItem", "position": ((type === "default") ? 2 : 3), "name": pageTitle, "item": WEBSITE_PATH }
+    ];
+    if(type === "resume-markdown") {
+        itemListElement.splice(1, 0, { "@type": "ListItem", "position": 2, "name": "Mohit Jain | My Resume", "item": (PERSONAL_WEBSITE_LINK + "resume") });
+    }
     
-    return {
+    /** @type {import("@unhead/vue").UseHeadInput} The resulting meta tags for the heading. */
+    const output = {
         title: pageTitle,
         link: [
             { rel: 'icon', href: og_img },
             { rel: 'canonical', href: WEBSITE_PATH }
         ],
+        script: [{ type: "application/ld+json", key: "breadcrumb-jsonld",
+            innerHTML: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement
+            })
+        }],
 
         meta: [
             { name: 'description', content: pageDesc },
@@ -37,7 +54,39 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
             { property: 'twitter:description', content: pageDesc },
             { property: 'twitter:image', content: og_img },
         ],
-    };
+    }
+    return output;
+}
+
+/**
+ * This function returns the meta tags for the homepage.
+ */
+export function getHomeMeta(pageTitle = WEBSITE_TITLE) {
+    const originObject = getMeta(pageTitle);
+    originObject.script[0] = {
+        type: "application/ld+json",
+        innerHTML: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "WebSite",
+                    "@id": (PERSONAL_WEBSITE_LINK + "#skills"),
+                    "url": PERSONAL_WEBSITE_LINK,
+                    "name": "Mohit Jain",
+                    "publisher": { "@id": (PERSONAL_WEBSITE_LINK + "#start") }
+                },
+                {
+                    "@type": "Organization",
+                    "@id": (PERSONAL_WEBSITE_LINK + "#start"),
+                    "url": PERSONAL_WEBSITE_LINK,
+                    "name": "Mohit Jain",
+                    "logo": (PERSONAL_WEBSITE_LINK + "static-icons/Personal_Icon_Expanded_Rounded.png"),
+                    "sameAs": [SOCIALS[1].link, SOCIALS[3].link]
+                }
+            ]
+        })
+    }
+    return originObject;
 }
 
 /**

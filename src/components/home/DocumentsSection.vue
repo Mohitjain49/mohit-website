@@ -1,25 +1,36 @@
 <script setup>
 import fcs_logo from "@/assets/Fulton_County_Schools_Logo.png";
-const TAB_IDS = ["documents-section-title", "resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab", "sitemap-tab"];
-const tabRefs = ref([]);
+const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab", "sitemap-tab"];
 
+const tabRefs = ref([]);
+const documentsText = ref(null);
+
+useIntersectionObserver(documentsText, ([{ isIntersecting }]) => {
+    setHomeTabAnimation(document.getElementById('documents-section-title'), true, isIntersecting);
+    setHomeTabAnimation(document.getElementById('documents-section-desc'), true, isIntersecting);
+});
 useIntersectionObserver(tabRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
         const observedChild = observed.target.firstElementChild;
         const observedIdIndex = TAB_IDS.findIndex((item) => { return (observedChild.id === item); });
-        setHomeTabAnimation(observedChild, (observedIdIndex % 2 == 0), observed.isIntersecting);
+        setHomeTabAnimation(observedChild, (observedIdIndex % 2 == 1), observed.isIntersecting);
     }
 });
 </script>
 
 <template>
 <div id="documents" class="documents-section">
-    <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
+    <div class="documents-section-mainText" ref="documentsText">
         <div id="documents-section-title"> My Docs </div>
+        <p id="documents-section-desc">
+            Below are few documents that I publicly display and use in professional environments. 
+            The PDFs here are rendered using PDF.js, and you can save any of these files to your computer 
+            or your Google Drive with the provided Document Options.
+        </p>
     </div>
     <div class="documents-section-tabs-container">
-        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
             <RouterLink to="/resume" id="resume-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-file-lines" />
@@ -31,7 +42,7 @@ useIntersectionObserver(tabRefs, (entry) => {
                 </p>
             </RouterLink>
         </div>
-        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
             <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-upload" />
@@ -43,7 +54,7 @@ useIntersectionObserver(tabRefs, (entry) => {
                 </p>
             </a>
         </div>
-        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
             <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-brands fa-github" />
@@ -55,7 +66,7 @@ useIntersectionObserver(tabRefs, (entry) => {
                 </p>
             </RouterLink>
         </div>
-        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[4] = el}">
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
             <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab">
                 <img :src="fcs_logo" width="110" draggable="false" />
                 <p>
@@ -64,7 +75,7 @@ useIntersectionObserver(tabRefs, (entry) => {
                 </p>
             </RouterLink>
         </div>
-        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[5] = el}">
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[4] = el}">
             <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-sitemap" />
@@ -88,6 +99,24 @@ useIntersectionObserver(tabRefs, (entry) => {
     width: 100%;
     padding: 100px 0px;
 }
+.documents-section-mainText {
+    width: 100%;
+    height: fit-content;
+}
+
+#documents-section-desc {
+    width: 90%;
+    max-width: 1100px;
+    height: fit-content;
+    margin: 0px auto;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Lexend', 'sans-serif';
+    color: var(--website-light-text);
+    text-shadow: 1px 0px 20px var(--website-light-text);
+    --animate-duration: 1.2s;
+}
 #documents-section-title {
     width: 100%;
     height: 125px;
@@ -103,6 +132,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     color: var(--website-light-text);
     text-shadow: var(--website-light-text) 1px 0 30px;
 }
+
 .documents-section-tab-parent {
     width: 100%;
     height: fit-content;
@@ -110,7 +140,6 @@ useIntersectionObserver(tabRefs, (entry) => {
     justify-content: center;
     align-items: center;
 }
-
 .documents-section-tabs-container {
     width: 100%;
     height: 1000px;
@@ -119,6 +148,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     align-items: center;
     justify-content: space-evenly;
 }
+
 .documents-section-tab {
     cursor: pointer;
     width: 90%;

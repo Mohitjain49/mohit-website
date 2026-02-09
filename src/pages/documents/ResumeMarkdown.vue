@@ -14,6 +14,7 @@
 <script setup>
 const fullScreenStore = useFullScreenStore();
 useHead(getMeta("Mohit Jain | My Resume (Markdown Format)", "resume/markdown",
-    "Feel free to take a look at my resume. This is in markdown format."
+    "Feel free to take a look at my resume. This is in markdown format.",
+    "resume-markdown"
 ));
 </script>
