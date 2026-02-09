@@ -13,8 +13,29 @@
 </template>
 
 <script setup>
-onMounted(() => { initWebData(); });
-useHead(getHomeMeta());
+const pageTitle = ref(WEBSITE_TITLE);
+const router = useRouter();
+
+const headTags = computed(() => { return getHomeMeta(pageTitle.value); });
+const routerHash = computed(() => { return router.currentRoute.value.hash; });
+
+onMounted(() => { initWebData(); changePageTitle(); });
+watch(routerHash, () => { changePageTitle(); })
+useHead(headTags);
+
+/** This function changes the document title of the homepage based of the URL Hash. */
+function changePageTitle() {
+    const hash = routerHash.value;
+    if(hash === "#ivue") {
+        pageTitle.value = "Mohit Jain | My Role Within iVue"
+    } else if(hash === "#documents") {
+        pageTitle.value = "Mohit Jain | My Documents"
+    } else if(hash === "#footer") {
+        pageTitle.value = "Mohit Jain | WebPages"
+    } else {
+        pageTitle.value = WEBSITE_TITLE;
+    }
+}
 </script>
 
 <style scoped>

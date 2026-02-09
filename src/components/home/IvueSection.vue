@@ -89,6 +89,11 @@ useIntersectionObserver(tabRefs, (entry) => {
     width: 100%;
     padding: 100px 0px;
 }
+.ivue-section-mainText {
+    width: 100%;
+    height: fit-content;
+}
+
 #ivue-section-desc {
     width: 90%;
     max-width: 1100px;
@@ -101,7 +106,6 @@ useIntersectionObserver(tabRefs, (entry) => {
     color: white;
     --animate-duration: 1.2s;
 }
-
 #ivue-section-title {
     width: 100%;
     height: 125px;
@@ -111,6 +115,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     align-items: center;
     --animate-duration: 1.2s;
 }
+
 #ivue-section-title > a {
     cursor: pointer;
     height: fit-content;
