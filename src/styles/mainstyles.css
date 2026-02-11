@@ -168,6 +168,7 @@ button {
     border-top: 5px solid #4cafef;
     border-radius: 50%;
     animation: spin-loading 1s linear infinite;
+    margin: 0px auto;
 }
 @keyframes spin-loading {
     0%   { transform: rotate(0deg); }

@@ -86,6 +86,8 @@ const INTERNAL_REDIRECTS = [
 
     { routes: ["/documents/create-github-repo"], replacement: "/create-github-repo" },
     { routes: ["/documents" + FCS_CERTIFICATE_ROUTE], replacement: FCS_CERTIFICATE_ROUTE },
+
+    { routes: ["/documents/deploy-script", "/deploy/script", "/aws-deploy-script"], replacement: "/deploy-script" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" }
 ];
 
@@ -97,7 +99,6 @@ const EXTERNAL_REDIRECTS = [
 
     { routes: ["/code", '/codesandbox', '/code-sandbox'], replacement: PERSONAL_WEBSITE_CODE_SANDBOX },
     { routes: ["/repo"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
-    { routes: ["/deploy-script", "/documents/deploy-script"], replacement: PERSONAL_DEPLOY_SCRIPT_LINK },
     { routes: ["/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },
