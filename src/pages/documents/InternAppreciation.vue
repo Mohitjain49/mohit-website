@@ -1,27 +1,26 @@
 <template>
 <DocumentNavigation />
-<client-only>
-    <main id="resume-container" v-if="documentStore.mounted">
-        <div class="pdf-doc-mohit-container">
-            <div id="certificate" class="pdf-page-innerContainer">
-                <DocumentViewerAddons :hideLinkButton="true" />
-                <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
-                    @loaded="() => {documentStore.setDocLoaded()}"
-                    :pdf="documentStore.fultonInternshipAppreciationPdfObj.pdf"
-                    :width="documentStore.customPdfWidth"
-                    :height="documentStore.customPdfHeight"
-                />
-            </div>
+<main id="resume-container" v-if="(documentStore.mounted && !checkSSR())">
+    <div class="pdf-doc-mohit-container">
+        <div id="certificate" class="pdf-page-innerContainer">
+            <DocumentViewerAddons :hideLinkButton="true" />
+            <component :is="documentStore.pdfComponent" id="tato-pdf-certificate"
+                @loaded="() => {documentStore.setDocLoaded()}"
+                :pdf="documentStore.fultonInternshipAppreciationPdfObj.pdf"
+                :width="documentStore.customPdfWidth"
+                :height="documentStore.customPdfHeight"
+            />
         </div>
-
-        <WebFooter v-if="!fullScreenStore.fullScreenSet" />
-        <GamepadComponent v-else />
-        <MinimizeScreenWidget />
-    </main>
-    <div id="resume-container" class="center-flex-display" v-else>
-        <div class="loading-spinner"></div>
     </div>
-</client-only>
+
+    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
+    <WebFooter v-if="!fullScreenStore.fullScreenSet" />
+    <GamepadComponent v-else />
+    <MinimizeScreenWidget />
+</main>
+<div id="resume-container" class="center-flex-display" v-else>
+    <div class="loading-spinner"></div>
+</div>
 </template>
 
 <script setup>

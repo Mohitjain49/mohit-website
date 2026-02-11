@@ -6,6 +6,9 @@ import { ofetch } from 'ofetch';
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
+/** 
+ * This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website.
+ */
 export const useDocumentStore = defineStore("document-store", () => {
     const router = useRouter();
     const webData = useWebsiteDataStore();

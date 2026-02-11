@@ -10,7 +10,13 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
 const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
 
-onMounted(async() => {
+onMounted(async() => { await mountWebpage(); });
+useHead(getMeta("Mohit Jain | My AWS Deployment Script", "/aws-deploy-script",
+    "This page shows my AWS deployment script that I use for my websites and web applications."
+));
+
+/** This function mounts the webpage to showcase the AWS Deployment Script. */
+async function mountWebpage() {
     initWebData();
     await nextTick(() => {});
 
@@ -24,10 +30,7 @@ onMounted(async() => {
         engine: createOnigurumaEngine(import('shiki/wasm')) 
     });
     html.value = highlighter.codeToHtml(deploy_code, { lang: "javascript", theme: "vitesse-dark" });
-});
-useHead(getMeta("Mohit Jain | My AWS Deployment Script", "/deploy-script",
-    "This page shows my AWS deployment script that I use for my websites and web applications."
-));
+}
 </script>
 
 <style scoped>

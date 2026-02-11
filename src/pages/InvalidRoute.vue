@@ -87,7 +87,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/documents/create-github-repo"], replacement: "/create-github-repo" },
     { routes: ["/documents" + FCS_CERTIFICATE_ROUTE], replacement: FCS_CERTIFICATE_ROUTE },
 
-    { routes: ["/documents/deploy-script", "/deploy/script", "/aws-deploy-script"], replacement: "/deploy-script" },
+    { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" }
 ];
 

@@ -118,34 +118,13 @@ button {
     height: fit-content;
     width: 100%;
     min-width: 350px;
-    background-color: #313131;
+    background: transparent;
 }
-#resume-container.iframe-page {
-    height: calc(100% - 70px);
-    min-height: 0px;
-}
-
 #resume-container:fullscreen {
     padding-top: 20px;
     min-height: calc(100% - 20px);
     overflow-y: auto;
-}
-#resume-container.iframe-page:fullscreen {
-    padding-top: 0px;
-    min-height: 0px;
-    height: 100%;
-    overflow-y: hidden !important;
-}
-
-#resume-container.iframe-page.google iframe {
-    height: calc(100% - 75px);
-}
-#resume-container.iframe-page.google:fullscreen {
-    padding-top: 20px;
-    height: calc(100% - 20px) !important;
-}
-#resume-container.iframe-page.google:fullscreen iframe {
-    height: 100% !important;
+    z-index: 1;
 }
 
 .webpage-cover {
@@ -263,6 +242,8 @@ button {
     min-height: calc(var(--body-height) - 100px);
     padding-top: 20px;
     padding-bottom: 80px;
+    z-index: 10;
+    position: relative;
 }
 
 .pdf-page-innerContainer {

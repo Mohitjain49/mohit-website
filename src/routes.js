@@ -76,7 +76,7 @@ export const personalRoutes = [
 
     { path: FCS_CERTIFICATE_ROUTE, name: "Intern Appreciation Certificate", component: InternAppreciation },
     { path: "/create-github-repo", name: "Create GitHub Repository Instructions", component: CreateGitHubRepo },
-    { path: "/deploy-script", name: "Deploy Script", component: DeployScript },
+    { path: "/aws-deploy-script", name: "Deploy Script", component: DeployScript },
 
     {
         path: "/resume",

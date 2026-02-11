@@ -43,7 +43,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <RouterLink to="/deploy-script" id="deploy-script-tab" class="documents-section-tab">
+            <RouterLink to="/aws-deploy-script" id="deploy-script-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-upload" />
                     <span> Deploy Script </span>

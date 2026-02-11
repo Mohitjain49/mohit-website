@@ -1,6 +1,8 @@
 <template>
 <DocumentNavigation />
+
 <main id="resume-container">
+    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <div class="pdf-doc-mohit-container">
         <ResumeMarkdownComponent />
     </div>

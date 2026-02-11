@@ -1,30 +1,29 @@
 <template>
 <DocumentNavigation />
-<client-only>
-    <main id="resume-container" v-if="documentStore.mounted">
-        <div class="pdf-doc-mohit-container">
-            <div class="pdf-page-innerContainer" v-for="(page, index) in pageNumbers" :id="('page_' + page)">
-                <DocumentViewerAddons :shareLink="getShareLink(page)" :titleEnd="('Page '+ page)" />
-                <component :is="documentStore.pdfComponent" class="tato-pdf-github-instructions"
-                    :pdf="documentStore.createGithubRepoPdfObj.pdf"
-                    text-layer annotation-layer
-                    @loaded="() => {setSingleDocLoaded(index)}"
-                    @annotation="(event) => {documentStore.onAnnotationClick(event)}"
-                    :width="documentStore.customPdfWidth"
-                    :height="documentStore.customPdfHeight"
-                    :page="page"
-                />
-            </div>>
-        </div>
-        
-        <WebFooter v-if="!fullScreenStore.fullScreenSet" />
-        <GamepadComponent v-else />
-        <MinimizeScreenWidget />
-    </main>
-    <div id="resume-container" class="center-flex-display" v-else>
-        <div class="loading-spinner"></div>
+<main id="resume-container" v-if="(documentStore.mounted && !checkSSR())">
+    <div class="pdf-doc-mohit-container">
+        <div class="pdf-page-innerContainer" v-for="(page, index) in pageNumbers" :id="('page_' + page)">
+            <DocumentViewerAddons :shareLink="getShareLink(page)" :titleEnd="('Page '+ page)" />
+            <component :is="documentStore.pdfComponent" class="tato-pdf-github-instructions"
+                :pdf="documentStore.createGithubRepoPdfObj.pdf"
+                text-layer annotation-layer
+                @loaded="() => {setSingleDocLoaded(index)}"
+                @annotation="(event) => {documentStore.onAnnotationClick(event)}"
+                :width="documentStore.customPdfWidth"
+                :height="documentStore.customPdfHeight"
+                :page="page"
+            />
+        </div>>
     </div>
-</client-only>
+    
+    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
+    <WebFooter v-if="!fullScreenStore.fullScreenSet" />
+    <GamepadComponent v-else />
+    <MinimizeScreenWidget />
+</main>
+<div id="resume-container" class="center-flex-display" v-else>
+    <div class="loading-spinner"></div>
+</div>
 </template>
 
 <script setup>
