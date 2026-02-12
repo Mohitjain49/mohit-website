@@ -1,5 +1,5 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
-    const fullScreenStore = useFullScreenStore();
+    const fullScreenSet = getFullScreenSet();
     var cursorSpeedTimeout = null;
 
     /** These are the gamepad cursors that can be used with the website. */
@@ -36,7 +36,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     /** This function runs whenever the visitor clicks on a typical gamepad menu button. */
     function onGamepadMenuClick() {
-        if(fullScreenStore.fullScreenSet && document.fullscreenElement !== document.body) { return; }
+        if(fullScreenSet.value && document.fullscreenElement !== document.body) { return; }
         useWebsiteDataStore().toggleNavMenu();
         triggerClickSound();
     }
@@ -80,7 +80,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
  */
 function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();
-    const fullScreenStore = useFullScreenStore();
+    const fullScreenSet = getFullScreenSet();
 
     const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
@@ -266,12 +266,12 @@ function useGamepadCursor(index = 0) {
 
         if(event.axisIndex == 0) {
             x.value += (maxSpeed.value * event.movement);
-            if(x.value < 0) { x.value = 0; }
-            if(x.value > (window.innerWidth - 35)) { x.value = (window.innerWidth - 35); }
+            if(x.value < -5) { x.value = -5; }
+            if(x.value > (window.innerWidth - 20)) { x.value = (window.innerWidth - 20); }
         } else {
             y.value += (maxSpeed.value * event.movement);
-            if(y.value < 0) { y.value = 0; }
-            if(y.value > (window.innerHeight - 35)) { y.value = (window.innerHeight - 35); }
+            if(y.value < -5) { y.value = -5; }
+            if(y.value > (window.innerHeight - 20)) { y.value = (window.innerHeight - 20); }
         }
         setClickElement();
     }
@@ -314,7 +314,7 @@ function useGamepadCursor(index = 0) {
      * This function checks whether the cursor is in the main navigation menu or not.
      */
     function getScrollElement() {
-        if(fullScreenStore.fullScreenSet && document.fullscreenElement.id === "resume-container") {
+        if(fullScreenSet.value && document.fullscreenElement.id === "resume-container") {
             return document.fullscreenElement;
         }
 

@@ -22,16 +22,17 @@
     </div>
     
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
-    <WebFooter v-if="!fullScreenStore.fullScreenSet" />
-    <GamepadComponent v-if="fullScreenStore.fullScreenSet" />
+    <WebFooter v-if="!fullScreenSet" />
+    <GamepadComponent v-if="fullScreenSet" />
     <MinimizeScreenWidget />
+    <FullScreenScrollBar :fs-element-id="'resume-container'" />
 </main>
 </template>
 
 <script setup>
 import { VuePDF, usePDF } from '@tato30/vue-pdf';
+const fullScreenSet = getFullScreenSet();
 const documentStore = useDocumentStore();
-const fullScreenStore = useFullScreenStore();
 const router = useRouter();
 
 const props = defineProps({
@@ -49,7 +50,7 @@ const { width: windowWidth } = useWindowSize();
 const docPages = ref([{ loaded: false, num: 0 }]);
 const showShare = computed(() => {
     const goodWidth = (props.shareMinWidth <= windowWidth.value);
-    return (props.addShare && documentStore.docLoaded && !fullScreenStore.fullScreenSet && goodWidth);
+    return (props.addShare && documentStore.docLoaded && !fullScreenSet.value && goodWidth);
 });
 
 watch(pages, () => {
@@ -115,6 +116,7 @@ function openShare(pageNum = 1) {
     justify-content: center;
     align-items: center;
 }
+
 @media (max-width: 600px) {
     .pdf-doc-linkBtn {
         width: 25px;

@@ -45,3 +45,9 @@ export const useFullScreenStore = defineStore("screen-store", () => {
         setFullScreen, setFullScreenStatus, exitFullScreen
     }
 });
+
+/** This function returns a computed value that returns whether the website is in full screen mode or not. */
+export function getFullScreenSet() {
+    const { fullScreenSet } = storeToRefs(useFullScreenStore());
+    return computed(() => { return fullScreenSet.value });
+}

@@ -1,6 +1,6 @@
 <template>
-<div id="start" class="start-section" ref="start">
-    <div id="start-innerContainer">
+<div id="start" class="start-section">
+    <div id="start-innerContainer" ref="startContent">
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
             Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" style="color: white;">iVue</a></span>
@@ -59,14 +59,14 @@ const webData = useWebsiteDataStore();
 const visitorLeftPage = usePageLeave();
 const router = useRouter();
 
-const start = ref(null);
+const startContent = ref(null);
 const startSocialsContainer = ref(null);
 const startContactObj = ref(null);
 
 const startSocialBtns = ref([]);
 const boxes = ref([]);
 
-useIntersectionObserver(start, ([{ isIntersecting }]) => {
+useIntersectionObserver(startContent, ([{ isIntersecting }]) => {
     setNameTransitions(isIntersecting);
 });
 
