@@ -45,24 +45,21 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentShareStatus = ref({ pending: false, fresh: false });
     const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false, cancel: false, error: false });
 
-    /** @type {ShallowRef<Component>} The VuePDF component dynamically imported for the website. */
-    const pdfComponent = shallowRef(null);
+    /** @type {Ref<Blob>} My resume. */
+    const resumeBlob = ref(null);
+    const resumeUrl = useObjectUrl(resumeBlob);
 
     /** @type {Ref<Blob>} My resume with a Qr Code at the top right. */
-    const qrcodeResume = ref(null);
-    const qrcodeResumeUrl = useObjectUrl(qrcodeResume);
+    const qrcodeResumeBlob = ref(null);
+    const qrcodeResumeUrl = useObjectUrl(qrcodeResumeBlob);
 
-    /** @type {Ref<usePDFObject>} } */
-    const resumePdfObj = ref(null);
+    /** @type {Ref<Blob>} My Fulton County Certificate. */
+    const fultonInternshipAppreciationBlob = ref(null);
+    const fultonInternshipAppreciationUrl = useObjectUrl(fultonInternshipAppreciationBlob);
 
-    /** @type {Ref<usePDFObject>} } */
-    const resumePdfWithQrcodeObj = ref(null);
-
-    /** @type {Ref<usePDFObject>} } */
-    const fultonInternshipAppreciationPdfObj = ref(null);
-
-    /** @type {Ref<usePDFObject>} } */
-    const createGithubRepoPdfObj = ref(null);
+    /** @type {Ref<Blob>} My Fulton County Certificate. */
+    const createGithubRepoBlob = ref(null);
+    const createGithubRepoUrl = useObjectUrl(createGithubRepoBlob);
 
     const routePath = computed(() => { return router.currentRoute.value.path; });
     const onResumeRoute = computed(() => { return routePath.value.includes("/resume"); });
@@ -120,7 +117,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function downloadDoc() {
         documentDownloadStatus.value.pending = true;
-        const documentPdf = await getCurrentPDFObject();
+        const documentPdf = getCurrentPDFObject();
 
         const link = document.createElement('a');
         link.href = URL.createObjectURL(documentPdf.blob);
@@ -141,7 +138,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(!saveAsSupported.value) { return; }
         try {
             documentSaveStatus.value.pending = true;
-            const documentPdf = await getCurrentPDFObject();
+            const documentPdf = getCurrentPDFObject();
 
             const saveHandle = await window.showSaveFilePicker({
                 suggestedName: documentPdf.name,
@@ -181,7 +178,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             printFunctionTimeout = null;
         }, 7000);
         
-        const documentPdf = await getCurrentPDFObject();
+        const documentPdf = getCurrentPDFObject();
         const url = URL.createObjectURL(documentPdf.blob);
         printIframe = document.createElement("iframe");
 
@@ -210,7 +207,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function shareDoc() {
         documentShareStatus.value.pending = true;
-        const documentPdf = await getCurrentPDFObject();
+        const documentPdf = getCurrentPDFObject();
         webData.shareFile(new File([documentPdf.blob], (documentPdf.name + '.pdf'), { type: 'application/pdf' }));
 
         documentShareStatus.value.pending = false;
@@ -221,27 +218,19 @@ export const useDocumentStore = defineStore("document-store", () => {
     /**
      * This function returns the PDF Object the website is currently using.
      */
-    async function getCurrentPDFObject() {
+    function getCurrentPDFObject() {
         if(onResumeQrcodeRoute.value) {
-            return { obj: resumePdfWithQrcodeObj.value, blob: qrcodeResume.value, name: "Mohit_Jain_Resume_With_QR_Code" }
+            // For the QR Code Resume Object.
+            return { blob: qrcodeResumeBlob.value, name: "Mohit_Jain_Resume_With_QR_Code", suffix: ".pdf" }
         } else if(onResumeRoute.value) {
-            const obj = resumePdfObj.value;
-            const docData = await obj.pdf.getData();
-            const blob = new Blob([docData], { type: 'application/pdf' });
-
-            return { obj, blob, name: "Mohit_Jain_Resume" }
+            // For the Original Resume Object.
+            return { blob: resumeBlob.value, name: "Mohit_Jain_Resume", suffix: ".pdf" }
         } else if(onFCSCertificateRoute.value) {
-            const obj = fultonInternshipAppreciationPdfObj.value;
-            const docData = await obj.pdf.getData();
-            const blob = new Blob([docData], { type: 'application/pdf' });
-
-            return { obj, blob, name: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025" }
+            // For the FCS Certificate Object.
+            return { blob: fultonInternshipAppreciationBlob.value, name: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", suffix: ".pdf" }
         } else if(onCreateGithubRepoRoute.value) {
-            const obj = createGithubRepoPdfObj.value;
-            const docData = await obj.pdf.getData();
-            const blob = new Blob([docData], { type: 'application/pdf' });
-
-            return { obj, blob, name: "Create_Github_Repo" }
+            // For the "Create GitHub Repo" Object.
+            return { blob: createGithubRepoBlob.value, name: "Create_Github_Repo", suffix: ".pdf" }
         } else {
             throw new Error("No document is currently in use.");
         }
@@ -307,7 +296,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         chooseGoogleDriveFolderForUpload = false;
         documentUploadToGoogleDriveStatus.value.pending = true;
 
-        const documentPdf = await getCurrentPDFObject();
+        const documentPdf = getCurrentPDFObject();
         const form = new FormData();
 
         const metadata = { name: documentPdf.name, mimeType: 'application/pdf' }
@@ -351,20 +340,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     /**
      * This function mounts the document store for the website.
      */
-    function mountDocumentStore() {
-        nextTick(() => {
-            import('@tato30/vue-pdf').then(async (result) => {
-                qrcodeResume.value = await createQrcodeResume();
-                const qrcodeResumeArrayBuffer = await qrcodeResume.value.arrayBuffer();
-                pdfComponent.value = result.VuePDF;
-
-                resumePdfObj.value = result.usePDF(Mohit_Jain_Resume);
-                resumePdfWithQrcodeObj.value = result.usePDF(qrcodeResumeArrayBuffer);
-                createGithubRepoPdfObj.value = result.usePDF(Create_Github_Repo);
-                fultonInternshipAppreciationPdfObj.value = result.usePDF(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025);
-                mounted.value = true;
-            });
-        });
+    async function mountDocumentStore() {
+        await nextTick();
+        qrcodeResumeBlob.value = await createQrcodeResume();
+        resumeBlob.value = await fetch(Mohit_Jain_Resume).then((res) => res.blob());
+        createGithubRepoBlob.value = await fetch(Create_Github_Repo).then((res) => res.blob());
+        fultonInternshipAppreciationBlob.value = await fetch(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025).then((res) => res.blob());
+        mounted.value = true;
     }
 
     /**
@@ -502,11 +484,11 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    return { mounted, docLoaded, qrcodeResumeUrl, googleDriveOptionAvailable, saveAsSupported,
+    return { mounted, docLoaded, googleDriveOptionAvailable, saveAsSupported,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
-        pdfComponent, resumePdfObj, resumePdfWithQrcodeObj, fultonInternshipAppreciationPdfObj, createGithubRepoPdfObj,
+        resumeUrl, qrcodeResumeUrl, createGithubRepoUrl, fultonInternshipAppreciationUrl,
         onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
         mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI

@@ -1,25 +1,11 @@
 <template>
-<DocumentNavigation />
-<main id="resume-container" v-if="(documentStore.mounted && !checkSSR())">
-    <div class="pdf-doc-mohit-container">
-        <div id="resume" class="pdf-page-innerContainer">
-            <DocumentViewerAddons :linkButtonMinWidth="500" titleEnd="My Resume!" />
-            <component :is="documentStore.pdfComponent" id="tato-pdf-resume"
-                :pdf="(documentStore.onResumeQrcodeRoute ? documentStore.resumePdfWithQrcodeObj.pdf : documentStore.resumePdfObj.pdf)"
-                text-layer annotation-layer
-                @loaded="() => {documentStore.setDocLoaded()}"
-                @annotation="(event) => {documentStore.onAnnotationClick(event)}"
-                :width="documentStore.customPdfWidth"
-                :height="documentStore.customPdfHeight"
-            />
-        </div>
-    </div>
-    
-    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
-    <WebFooter v-if="!fullScreenStore.fullScreenSet" />
-    <GamepadComponent v-else />
-    <MinimizeScreenWidget />
-</main>
+<DocumentViewer v-if="documentStore.mounted"
+    :annontations="true"
+    :url="url"
+    :shareMinWidth="500"
+    :addShare="true"
+    :id="'tato-pdf-resume'"
+/>
 <div id="resume-container" class="center-flex-display" v-else>
     <div class="loading-spinner"></div>
 </div>
@@ -27,7 +13,9 @@
 
 <script setup>
 const documentStore = useDocumentStore();
-const fullScreenStore = useFullScreenStore();
+const url = computed(() => {
+    return (documentStore.onResumeQrcodeRoute ? documentStore.qrcodeResumeUrl: documentStore.resumeUrl);
+});
 
 useHead(getMeta(
     ("Mohit Jain | My Resume" + (documentStore.onResumeQrcodeRoute ? " (With Qrcode)" : "")),
