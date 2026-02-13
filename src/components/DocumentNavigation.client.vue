@@ -13,12 +13,12 @@
                 <button v-if="docStore.saveAsSupported" @click="docStore.saveDoc()" title="Save Document" :style="getColorStyles('var(--blue-three)')">
                     <font-awesome-icon :icon="docStore.saveDocIcon" :spin-pulse="docStore.documentSaveStatus.pending" />
                 </button>
-                <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-one)')">
+                <button v-if="docStore.onDocumentRoute" @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="(docStore.printIcon)"
                         :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
                     />
                 </button>
-                <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-three)')">
+                <button v-if="webData.shareSupported && docStore.onDocumentRoute" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-three)')">
                     <font-awesome-icon :icon="docStore.shareIcon" :spin-pulse="docStore.documentShareStatus.pending" />
                 </button>
                 <button v-if="docStore.googleDriveOptionAvailable"
@@ -41,7 +41,7 @@
                 <a class="light" :href="documentLink" target="mohit-document" title="Open Document in New Tab">
                     <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                 </a>
-                <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
+                <a v-if="docStore.onDocumentRoute" class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
                     <img :src="pdfjs_logo" draggable="false" width="18" style="user-select: none;" />
                 </a>
             </div>
@@ -108,7 +108,7 @@
                     <font-awesome-icon icon="fa-brands fa-github" />
                 </a>
             </template>
-            <template v-else>
+            <template v-else-if="docStore.onFCSCertificateRoute">
                 <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
                     title="See LinkedIn Post" class="mohit-navBar-icon"
                     :style="getColorStyles('#0072B1')"
@@ -124,6 +124,16 @@
                     @mouseleave="setPulseLoopAnimation">
 
                     <font-awesome-icon icon="fa-school-flag" />
+                </a>
+            </template>
+            <template v-else-if="docStore.onScriptRoute">
+                <a :href="scriptLink" target="_blank"
+                    title="View Script On GitHub" class="mohit-navBar-icon"
+                    :style="getColorStyles('white')"
+                    @pointerenter="setPulseLoopAnimation"
+                    @mouseleave="setPulseLoopAnimation">
+
+                    <font-awesome-icon icon="fa-brands fa-github" />
                 </a>
             </template>
         </div>
@@ -164,7 +174,9 @@ const showGoogleDriveNestedMenu = computed(() => {
 });
 
 const documentLink = computed(() => {
-    if(docStore.onResumeQrcodeRoute) {
+    if(docStore.onScriptRoute) {
+        return scriptLink.value;
+    } else if(docStore.onResumeQrcodeRoute) {
         return docStore.qrcodeResumeUrl;
     } else if(docStore.onResumeRoute) {
         return PERSONAL_RESUME_LINK;
@@ -172,8 +184,18 @@ const documentLink = computed(() => {
         return FCS_CERTIFICATE_LINK;
     } else if(docStore.onCreateGithubRepoRoute) {
         return "https://www.mohit-jain.com/Create_Github_Repo.pdf";
+    } else {
+        return "";
     }
 });
+
+const scriptLink = computed(() => {
+    if(docStore.onDeployScriptRoute) {
+        return PERSONAL_DEPLOY_SCRIPT_LINK;
+    } else {
+        return "";
+    }
+})
 
 /**
  * This sets the color and border color of an icon.

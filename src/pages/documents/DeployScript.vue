@@ -1,36 +1,23 @@
 <template>
-<ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
-<main class="personal-web-body transparent">
-    <div class="code-file-inHTML" v-html="html"></div>
-    <WebFooter />
+<DocumentNavigation />
+<main id="script-page" class="personal-web-body transparent">
+    <div class="code-file-inHTML" v-html="documentStore.deployScriptHtml"></div>
+
+    <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
+    <WebFooter v-if="!fullScreenSet" />
+    <GamepadComponent v-if="fullScreenSet" />
+    <MinimizeScreenWidget />
+    <FullScreenScrollBar :fs-element-id="'script-page'" />
 </main>
 </template>
 
 <script setup>
-import deploy_code from "@scripts/deploy.mjs?raw";
-const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
+const documentStore = useDocumentStore();
+const fullScreenSet = getFullScreenSet();
 
-onMounted(async() => { await mountWebpage(); });
 useHead(getMeta("Mohit Jain | My AWS Deployment Script", "/aws-deploy-script",
     "This page shows my AWS deployment script that I use for my websites and web applications."
 ));
-
-/** This function mounts the webpage to showcase the AWS Deployment Script. */
-async function mountWebpage() {
-    initWebData();
-    await nextTick(() => {});
-
-    const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
-    const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
-    const langJs = (await import("shiki/dist/langs/javascript.mjs"));
-    const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
-
-    const highlighter = await createHighlighterCore({
-        themes: [themeVitesseDark], langs: [langJs],
-        engine: createOnigurumaEngine(import('shiki/wasm')) 
-    });
-    html.value = highlighter.codeToHtml(deploy_code, { lang: "javascript", theme: "vitesse-dark" });
-}
 </script>
 
 <style scoped>

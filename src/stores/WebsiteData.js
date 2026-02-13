@@ -115,7 +115,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.confirmClickSound(event);
         const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
 
-        if(documentStore.onDocumentRoute) {
+        if(documentStore.onHostedFileRoute) {
             var elementInDocumentMenu = false;
             nextTick(() => {
                 const documentMenu = document.getElementById("mohit-documentBar");
@@ -198,7 +198,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
             window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
-            if(hashStr === "" || documentStore.onDocumentRoute) { return; }
+            if(hashStr === "" || documentStore.onHostedFileRoute) { return; }
 
             try {
                 goToPageSection(hashStr, pixelOffset);

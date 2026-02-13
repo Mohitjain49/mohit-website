@@ -126,6 +126,12 @@ button {
     overflow-y: auto;
     z-index: 1;
 }
+#script-page:fullscreen {
+    padding-top: 20px;
+    min-height: calc(100% - 20px);
+    overflow-y: auto;
+    z-index: 1;
+}
 
 .webpage-cover {
     margin: 0;
