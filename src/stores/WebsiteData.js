@@ -216,9 +216,22 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         closeNavMenu();
 
         if(webFooterVisibility.value) {
-            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+            scrollToTop(false);
         } else {
             goToPageSection('footer');
+        }
+    }
+
+    /**
+     * This function has the webpage scroll to the top.
+     * @param {Boolean} updateURL If true, this function updates the URL of the webpage.
+     */
+    function scrollToTop(updateURL = true) {
+        if(updateURL) { router.push(router.currentRoute.value.path); }
+        if(fullScreenStore.fullScreenSet) {
+            document.fullscreenElement.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        } else {
+            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
         }
     }
 
@@ -325,7 +338,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
         toggleNavMenu, toggleDocumentMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
-        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter
+        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop
     }
 });
 

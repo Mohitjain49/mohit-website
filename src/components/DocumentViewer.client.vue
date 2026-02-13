@@ -2,7 +2,7 @@
 <DocumentNavigation />
 <main id="resume-container" v-if="documentStore.mounted">
     <div class="pdf-doc-mohit-container">
-        <div class="pdf-page-innerContainer" v-for="(page, index) in docPages" :id="('page_' + page)">
+        <div class="pdf-page-innerContainer" v-for="(page, index) in docPages" :id="('page_' + page.num)">
             <div v-if="!documentStore.docLoaded" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
             </div>
@@ -60,10 +60,11 @@ watch(pages, () => {
 
 /**
  * This function sets a particular document component as loaded and only runs the main function once every doc is loaded.
+ * @param {Number} index The index of the page being loaded starting from 0.
  */
-function setSingleDocLoaded(index) {
+function setSingleDocLoaded(index = 1) {
     docPages.value[index].loaded = true;
-    const notLoaded = docPages.value.findIndex(item => !item);
+    const notLoaded = docPages.value.findIndex(item => { return !item.loaded; });
     if(notLoaded == -1) { documentStore.setDocLoaded(); }
 }
 

@@ -65,7 +65,11 @@
                         </tr>
                         <tr>
                             <td> Select </td>
-                            <td> <img :src="a_button" /> <span> Right Buttons </span> </td>
+                            <td> <img :src="a_button" /> <span> / </span> <img :src="b_button" /> </td>
+                        </tr>
+                        <tr>
+                            <td> Scroll To Top </td>
+                            <td> <img :src="x_button" /> <span> / </span> <img :src="y_button" /> </td>
                         </tr>
                         <tr>
                             <td> Decrease Cursor Speed </td>
@@ -104,6 +108,9 @@ import right_stick_vertical from "@/assets/gamepad-buttons/right_stick_vertical.
 import dpad_controller from "@/assets/gamepad-buttons/dpad_controller.png";
 
 import a_button from "@/assets/gamepad-buttons/a_button.png";
+import b_button from "@/assets/gamepad-buttons/b_button.png";
+import x_button from "@/assets/gamepad-buttons/x_button.png";
+import y_button from "@/assets/gamepad-buttons/y_button.png";
 import plus_button from "@/assets/gamepad-buttons/plus_button.png";
 import minus_button from "@/assets/gamepad-buttons/minus_button.png";
 
@@ -137,7 +144,7 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
 
 <style scoped>
 .gamepad-controls-body {
-    height: 600px;
+    height: 650px;
     min-height: calc(100vh - 60px);
     width: 100%;
     display: grid;
@@ -248,7 +255,7 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     position: relative;
     margin-right: 20px;
     margin-top: 20px;
-    height: 300px;
+    height: 350px;
     width: fit-content;
     max-width: 400px;
     padding: 16px;
@@ -256,13 +263,16 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     background-color: var(--dark-background);
     border-radius: 20px;
     font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
 }
 .gamepad-connection-statusBar {
     width: 396px;
-    height: 60px;
+    height: 70px;
     border: 2px solid;
     border-radius: 10px;
-    margin: 11px 0px;
     background-color: black;
     display: flex;
     justify-content: space-between;
@@ -296,7 +306,7 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
 @media (max-width: 1100px) {
     .gamepad-controls-body {
         grid-template-columns: 1fr;
-        height: 1300px;
+        height: 1400px;
     }
     .gamepad-controls-body-container {
         align-items: center !important;

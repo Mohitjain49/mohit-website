@@ -91,26 +91,15 @@ window.addEventListener("gamepadbuttondown", (e) => {
         gamepadStore.getCursor(gpIndex).manageCursorWithDpad(buttonIndex - 12);
     }
 
-    if(buttonIndex >= 0 && buttonIndex <= 3) {
-        gamepadStore.getCursor(gpIndex).emitClick();
-    }
-    if(buttonIndex == 8 || buttonIndex == 9) {
-        gamepadStore.onGamepadMenuClick();
-    }
+    if(buttonIndex == 0 || buttonIndex == 1) { gamepadStore.getCursor(gpIndex).emitClick(); }
+    if(buttonIndex == 3 || buttonIndex == 2) { useWebsiteDataStore().scrollToTop(true); triggerClickSound(); }
+    if(buttonIndex == 8 || buttonIndex == 9) { gamepadStore.onGamepadMenuClick(); }
 
-    if(buttonIndex == 5) {
-        gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(1);
-    }
-    if(buttonIndex == 4) {
-        gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(-1);
-    }
+    if(buttonIndex == 5) { gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(1); }
+    if(buttonIndex == 4) { gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(-1); }
 
-    if(buttonIndex == 7) {
-        useAudioStore().addToVolume(1);
-    }
-    if(buttonIndex == 6) {
-        useAudioStore().addToVolume(-1);
-    }
+    if(buttonIndex == 7) { useAudioStore().addToVolume(1); }
+    if(buttonIndex == 6) { useAudioStore().addToVolume(-1); }
 });
 
 /**

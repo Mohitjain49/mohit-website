@@ -66,6 +66,7 @@ const ICON_WIDGETS = [
     { name: "Green Icon", img: "_Green.png" },
     { name: "Spaced Green Icon", img: "_Green_Expanded.png" },
     { name: "Gold Icon", img: "_Gold.png" },
+    { name: "Gold Rounded Icon", img: "_Gold_Expanded_Rounded.png" },
     { name: "Gold Clear Icon", img: "_Gold_Transparent.png" },
     { name: "Gold Spaced Icon", img: "_Gold_Expanded.png" },
     { name: "Gold Spaced Clear Icon", img: "_Gold_Expanded_Transparent.png" }
@@ -80,7 +81,7 @@ const ICON_WIDGETS = [
 }
 .icon-background {
     height: var(--body-height);
-    min-height: 700px;
+    min-height: 750px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -187,7 +188,7 @@ const ICON_WIDGETS = [
 }
 .web-widget-label {
     margin-top: 3px;
-    font-size: 12px;
+    font-size: 10px;
     width: fit-content;
     height: 40px;
     max-width: 70px;

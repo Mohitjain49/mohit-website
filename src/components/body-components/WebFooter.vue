@@ -102,7 +102,7 @@ const footerClass = computed(() => {
     const path = route.path;
     if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
         return 'main-page';
-    } else if(fullScreenSet.value && docStore.onDocumentRoute) {
+    } else if(!fullScreenSet.value && docStore.onDocumentRoute) {
         return 'document-route';
     } else {
         return '';
