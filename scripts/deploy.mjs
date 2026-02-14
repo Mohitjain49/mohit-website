@@ -176,4 +176,5 @@ async function main() {
     console.log("Script Complete!");
 }
 
+// Runs The Main Function.
 await main();

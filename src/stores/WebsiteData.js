@@ -4,10 +4,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
+    const scriptsStore = useScriptsStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
 
+    const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
     const wakeLock = useWakeLock();
 
@@ -55,6 +57,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.setupClickAudio();
 
         documentStore.mountDocumentStore();
+        scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();
 
@@ -115,7 +118,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.confirmClickSound(event);
         const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
 
-        if(documentStore.onHostedFileRoute) {
+        if(documentStore.onDocumentRoute) {
             var elementInDocumentMenu = false;
             nextTick(() => {
                 const documentMenu = document.getElementById("mohit-documentBar");
@@ -198,7 +201,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
             window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
-            if(hashStr === "" || documentStore.onHostedFileRoute) { return; }
+            if(hashStr === "" || onHostedFileRoute.value) { return; }
 
             try {
                 goToPageSection(hashStr, pixelOffset);
@@ -348,4 +351,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
  */
 export function initWebData(pixelOffset = 0) {
     useWebsiteDataStore().mountWebData(pixelOffset);
+}
+
+/**
+ * This function returns a reactive computed value on whether the user is on a hosted file page or not.
+ */
+export function getOnHostedFileRoute() {
+    const { onDocumentRoute } = storeToRefs(useDocumentStore());
+    const { onScriptRoute } = storeToRefs(useScriptsStore());
+    return computed(() => { return (onDocumentRoute.value || onScriptRoute.value) })
 }

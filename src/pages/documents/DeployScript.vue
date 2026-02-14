@@ -1,7 +1,7 @@
 <template>
-<DocumentNavigation />
+<ScriptsBar />
 <main id="script-page" class="personal-web-body transparent">
-    <div class="code-file-inHTML" v-html="documentStore.deployScriptHtml"></div>
+    <div class="code-file-inHTML" v-html="scriptsStore.deployScript.html"></div>
 
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-const documentStore = useDocumentStore();
+const scriptsStore = useScriptsStore();
 const fullScreenSet = getFullScreenSet();
 
 useHead(getMeta("Mohit Jain | My AWS Deployment Script", "/aws-deploy-script",

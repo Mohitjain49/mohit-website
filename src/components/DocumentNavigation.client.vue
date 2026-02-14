@@ -13,12 +13,12 @@
                 <button v-if="docStore.saveAsSupported" @click="docStore.saveDoc()" title="Save Document" :style="getColorStyles('var(--blue-three)')">
                     <font-awesome-icon :icon="docStore.saveDocIcon" :spin-pulse="docStore.documentSaveStatus.pending" />
                 </button>
-                <button v-if="docStore.onDocumentRoute" @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-one)')">
+                <button @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="(docStore.printIcon)"
                         :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
                     />
                 </button>
-                <button v-if="webData.shareSupported && docStore.onDocumentRoute" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-three)')">
+                <button v-if="webData.shareSupported" @click="docStore.shareDoc()" title="Share Document" :style="getColorStyles('var(--blue-three)')">
                     <font-awesome-icon :icon="docStore.shareIcon" :spin-pulse="docStore.documentShareStatus.pending" />
                 </button>
                 <button v-if="docStore.googleDriveOptionAvailable"
@@ -41,7 +41,7 @@
                 <a class="light" :href="documentLink" target="mohit-document" title="Open Document in New Tab">
                     <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                 </a>
-                <a v-if="docStore.onDocumentRoute" class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
+                <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
                     <img :src="pdfjs_logo" draggable="false" width="18" style="user-select: none;" />
                 </a>
             </div>
@@ -126,16 +126,6 @@
                     <font-awesome-icon icon="fa-school-flag" />
                 </a>
             </template>
-            <template v-else-if="docStore.onScriptRoute">
-                <a :href="scriptLink" target="_blank"
-                    title="View Script On GitHub" class="mohit-navBar-icon"
-                    :style="getColorStyles('white')"
-                    @pointerenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
-
-                    <font-awesome-icon icon="fa-brands fa-github" />
-                </a>
-            </template>
         </div>
         <div class="mohit-documentBar-iconSection right">
             <button @click="docStore.toggleDocumentFullScreen()"
@@ -174,9 +164,7 @@ const showGoogleDriveNestedMenu = computed(() => {
 });
 
 const documentLink = computed(() => {
-    if(docStore.onScriptRoute) {
-        return scriptLink.value;
-    } else if(docStore.onResumeQrcodeRoute) {
+    if(docStore.onResumeQrcodeRoute) {
         return docStore.qrcodeResumeUrl;
     } else if(docStore.onResumeRoute) {
         return PERSONAL_RESUME_LINK;
@@ -188,22 +176,6 @@ const documentLink = computed(() => {
         return "";
     }
 });
-
-const scriptLink = computed(() => {
-    if(docStore.onDeployScriptRoute) {
-        return PERSONAL_DEPLOY_SCRIPT_LINK;
-    } else {
-        return "";
-    }
-})
-
-/**
- * This sets the color and border color of an icon.
- * @param {String} color The color to use.
- */
-function getColorStyles(color = "var(--website-text)") {
-    return { color, borderColor: color }
-}
 
 onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });

@@ -233,10 +233,10 @@
 }
 
 /**
- * Below here are styles specific for the document menu.
+ * Below here are styles specific for the document and script bars and menus.
  */
 
-#mohit-documentBar {
+#mohit-documentBar, #mohit-scriptsBar {
     all: unset;
     position: fixed;
     bottom: 8px;
@@ -254,6 +254,21 @@
 #mohit-documentBar.menu-open .mohit-documentBar-bottom {
     border-top: 2px dashed var(--blue-cobalt);
     padding-top: 2px;
+}
+
+#mohit-scriptsBar {
+    border-color: var(--vibrant-flame);
+    width: 300px;
+    left: calc(50% - 150px);
+}
+.mohit-scriptsBar-bottom {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
 }
 
 .mohit-documentBar-bottom {
@@ -309,10 +324,16 @@
     padding-bottom: 10px;
 }
 
-.mohit-documentBar-bottom .mohit-navBar-icon {
+.mohit-documentBar-bottom .mohit-navBar-icon, .mohit-scriptsBar-bottom .mohit-navBar-icon {
     width: 30px;
     height: 30px;
     font-size: 18px;
+}
+.mohit-scriptsBar-bottom-separator {
+    height: 75%;
+    width: 3px;
+    border-radius: 3px;
+    background-color: var(--vibrant-flame);
 }
 
 .mohit-documentMenu-tools button, .mohit-documentMenu-tools a {

@@ -70,7 +70,7 @@
         </RouterLink>
     </div>
 
-    <button v-if="!docStore.onHostedFileRoute"
+    <button v-if="!onHostedFileRoute"
         @click="webData.openQRCodePopup()"
         class="qr-popup-open-section"
         title="Share This Page With Someone Else!">
@@ -83,7 +83,7 @@
 <script setup>
 const route = useRoute();
 const webData = useWebsiteDataStore();
-const docStore = useDocumentStore();
+const onHostedFileRoute = getOnHostedFileRoute();
 
 const fullScreenSet = getFullScreenSet();
 const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
@@ -102,7 +102,7 @@ const footerClass = computed(() => {
     const path = route.path;
     if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
         return 'main-page';
-    } else if(!fullScreenSet.value && docStore.onHostedFileRoute) {
+    } else if(!fullScreenSet.value && onHostedFileRoute) {
         return 'document-route';
     } else {
         return '';

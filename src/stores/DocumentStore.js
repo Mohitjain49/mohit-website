@@ -2,8 +2,6 @@ import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
 import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
-import deploy_code from "@scripts/deploy.mjs?raw";
-
 import { ofetch } from 'ofetch';
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
@@ -26,7 +24,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDriveUploadSupported = ref(false);
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => {
-        return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value && onDocumentRoute.value);
+        return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value);
     });
 
     const customPdfWidth = ref(800);
@@ -63,16 +61,12 @@ export const useDocumentStore = defineStore("document-store", () => {
     const createGithubRepoBlob = ref(null);
     const createGithubRepoUrl = useObjectUrl(createGithubRepoBlob);
 
-    const deployScriptHtml = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
-
     const routePath = computed(() => { return router.currentRoute.value.path; });
     const onResumeRoute = computed(() => { return routePath.value.includes("/resume"); });
     const onFCSCertificateRoute = computed(() => { return routePath.value.includes(FCS_CERTIFICATE_ROUTE); });
     const onCreateGithubRepoRoute = computed(() => { return (routePath.value === "/create-github-repo" || routePath.value === "/create-github-repo/"); });
-    const onDeployScriptRoute = computed(() => { return (routePath.value === "/aws-deploy-script" || routePath.value === "/aws-deploy-script/"); });
 
     const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown") || routePath.value.includes("md")); });
-    const onScriptRoute = computed(() => { return routePath.value.includes("-script"); });
     const onResumeQrcodeRoute = computed(() => {
         return (routePath.value === "/resume/qr" ||
             routePath.value === "/resume/qrcode" ||
@@ -87,7 +81,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             (routePath.value === "/resume") || (routePath.value === "/resume/")
         );
     });
-    const onHostedFileRoute = computed(() => { return (onDocumentRoute.value || onScriptRoute.value); });
     const saveAsSupported = computed(() => {
         return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
     })
@@ -149,10 +142,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
             const saveHandle = await window.showSaveFilePicker({
                 suggestedName: documentFile.name,
-                types: [(documentFile.suffix === ".pdf") ? 
-                    { description: "PDF Document", accept: { 'application/pdf': ['.pdf'] } } :
-                    { description: "JS File", accept: { 'text/javascript': [documentFile.suffix] } }
-                ]
+                types: [{ description: "PDF Document", accept: { 'application/pdf': ['.pdf'] } }]
             });
 
             const writable = await saveHandle.createWritable();
@@ -241,9 +231,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         } else if(onCreateGithubRepoRoute.value) {
             // For the "Create GitHub Repo" Object.
             return { blob: createGithubRepoBlob.value, name: "Create_Github_Repo", suffix: ".pdf" }
-        } else if(onDeployScriptRoute.value) {
-            // For the "AWS Deployment Script" Object.
-            return { blob: new Blob([deploy_code], { type: "text/javascript" }), name: "deploy", suffix: ".mjs" }
         } else {
             throw new Error("No document is currently in use.");
         }
@@ -359,31 +346,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         resumeBlob.value = await fetch(Mohit_Jain_Resume).then((res) => res.blob());
         createGithubRepoBlob.value = await fetch(Create_Github_Repo).then((res) => res.blob());
         fultonInternshipAppreciationBlob.value = await fetch(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025).then((res) => res.blob());
-
-        deployScriptHtml.value = await initCodeScriptElement(deploy_code);
         mounted.value = true;
-    }
-
-    /**
-     * This function returns a string consisting of HTML that can be displayed to a user. 
-     * @param {String} code The code as a string.
-     */
-    async function initCodeScriptElement(code = "") {
-        try {
-            const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
-            const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
-            const langJs = (await import("shiki/dist/langs/javascript.mjs"));
-            const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
-
-            const highlighter = await createHighlighterCore({
-                themes: [themeVitesseDark], langs: [langJs],
-                engine: createOnigurumaEngine(import('shiki/wasm')) 
-            });
-            const finalValue = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
-            return finalValue;
-        } catch(e) {
-            return "<pre> <div class=\"loading-spinner\"></div> </pre>";
-        }
     }
 
     /**
@@ -525,9 +488,8 @@ export const useDocumentStore = defineStore("document-store", () => {
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
-        resumeUrl, qrcodeResumeUrl, createGithubRepoUrl, fultonInternshipAppreciationUrl, deployScriptHtml,
-        onDocumentRoute, onHostedFileRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
-        onScriptRoute, onDeployScriptRoute,
+        resumeUrl, qrcodeResumeUrl, createGithubRepoUrl, fultonInternshipAppreciationUrl,
+        onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
         mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }

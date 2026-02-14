@@ -44,6 +44,14 @@ export function truncate(str = "", maxLength = 80) {
 }
 
 /**
+ * This sets the color and border color of an icon.
+ * @param {String} color The color to use.
+ */
+export function getColorStyles(color = "var(--website-text)") {
+    return { color, borderColor: color }
+}
+
+/**
  * This function returns how much an element has scrolled from its starting point to its end both horizontally and vertically.
  * @param {String} elementId The id of the element.
  */
