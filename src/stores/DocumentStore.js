@@ -10,6 +10,15 @@ import QRCodeStyling from "qr-code-styling";
  * This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website.
  */
 export const useDocumentStore = defineStore("document-store", () => {
+    const hostedDocuments = [
+        useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
+        useHostedDocument("/resume/qrcode", Mohit_Jain_Resume, "Mohit_Jain_Resume_With_QR_Code", ".pdf", PERSONAL_RESUME_LINK, true, false),
+        useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false, false),
+        useHostedDocument(FCS_CERTIFICATE_ROUTE, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025,
+            "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", ".pdf", FCS_CERTIFICATE_LINK, false, false
+        )
+    ];
+
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
@@ -45,45 +54,22 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentShareStatus = ref({ pending: false, fresh: false });
     const documentUploadToGoogleDriveStatus = ref({ pending: false, fresh: false, cancel: false, error: false });
 
-    /** @type {Ref<Blob>} My resume. */
-    const resumeBlob = ref(null);
-    const resumeUrl = useObjectUrl(resumeBlob);
-
-    /** @type {Ref<Blob>} My resume with a Qr Code at the top right. */
-    const qrcodeResumeBlob = ref(null);
-    const qrcodeResumeUrl = useObjectUrl(qrcodeResumeBlob);
-
-    /** @type {Ref<Blob>} My Fulton County Certificate. */
-    const fultonInternshipAppreciationBlob = ref(null);
-    const fultonInternshipAppreciationUrl = useObjectUrl(fultonInternshipAppreciationBlob);
-
-    /** @type {Ref<Blob>} My Fulton County Certificate. */
-    const createGithubRepoBlob = ref(null);
-    const createGithubRepoUrl = useObjectUrl(createGithubRepoBlob);
-
     const routePath = computed(() => { return router.currentRoute.value.path; });
-    const onResumeRoute = computed(() => { return routePath.value.includes("/resume"); });
-    const onFCSCertificateRoute = computed(() => { return routePath.value.includes(FCS_CERTIFICATE_ROUTE); });
-    const onCreateGithubRepoRoute = computed(() => { return (routePath.value === "/create-github-repo" || routePath.value === "/create-github-repo/"); });
+    const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown")); });
 
-    const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown") || routePath.value.includes("md")); });
-    const onResumeQrcodeRoute = computed(() => {
-        return (routePath.value === "/resume/qr" ||
-            routePath.value === "/resume/qrcode" ||
-            routePath.value === "/resume/qrcode/" ||
-            routePath.value === "/resume/qr/"
-        );
-    });
+    const onDocumentRoute = computed(() => { return (-1 != currentDocumentRoute.value); });
+    const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
+    const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
 
-    const onDocumentRoute = computed(() => {
-        return (onFCSCertificateRoute.value || onCreateGithubRepoRoute.value ||
-            onResumeQrcodeRoute.value || onMarkdownRoute.value ||
-            (routePath.value === "/resume") || (routePath.value === "/resume/")
-        );
-    });
+    const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
+    const onResumeQrcodeRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
+    const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
+    const onFCSCertificateRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
+
+    const onAnyResumeRoute = computed(() => { return (onResumeRoute.value || onResumeQrcodeRoute.value); });
     const saveAsSupported = computed(() => {
         return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
-    })
+    });
 
     const downloadIcon = computed(() => {
         const downloadObj = documentDownloadStatus.value;
@@ -219,21 +205,9 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function returns the PDF Object the website is currently using.
      */
     function getCurrentPDFObject() {
-        if(onResumeQrcodeRoute.value) {
-            // For the QR Code Resume Object.
-            return { blob: qrcodeResumeBlob.value, name: "Mohit_Jain_Resume_With_QR_Code", suffix: ".pdf" }
-        } else if(onResumeRoute.value) {
-            // For the Original Resume Object.
-            return { blob: resumeBlob.value, name: "Mohit_Jain_Resume", suffix: ".pdf" }
-        } else if(onFCSCertificateRoute.value) {
-            // For the FCS Certificate Object.
-            return { blob: fultonInternshipAppreciationBlob.value, name: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", suffix: ".pdf" }
-        } else if(onCreateGithubRepoRoute.value) {
-            // For the "Create GitHub Repo" Object.
-            return { blob: createGithubRepoBlob.value, name: "Create_Github_Repo", suffix: ".pdf" }
-        } else {
-            throw new Error("No document is currently in use.");
-        }
+        if(!onDocumentRoute.value) { return null; }
+        const index = currentDocumentRoute.value;
+        return { blob: hostedDocuments[index].blob.value, name: hostedDocuments[index].name, suffix: hostedDocuments[index].suffix }
     }
 
     /**
@@ -342,10 +316,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function mountDocumentStore() {
         await nextTick();
-        qrcodeResumeBlob.value = await createQrcodeResume();
-        resumeBlob.value = await fetch(Mohit_Jain_Resume).then((res) => res.blob());
-        createGithubRepoBlob.value = await fetch(Create_Github_Repo).then((res) => res.blob());
-        fultonInternshipAppreciationBlob.value = await fetch(Fulton_Internship_Program_Appreciation_Certificate_Spring_2025).then((res) => res.blob());
+        for(let i = 0; i < hostedDocuments.length; i++) { await hostedDocuments[i].initBlob(); }
         mounted.value = true;
     }
 
@@ -355,7 +326,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     function mountDocumentPage() {
         webData.mountWebData();
         nextTick(() => {
-            if(onMarkdownRoute.value || onScriptRoute.value) { return; }
+            if(onMarkdownRoute.value) { return; }
             mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
         });
 
@@ -484,20 +455,57 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    return { mounted, docLoaded, googleDriveOptionAvailable, saveAsSupported,
+    return { hostedDocuments, mounted, docLoaded, googleDriveOptionAvailable, saveAsSupported,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
-        resumeUrl, qrcodeResumeUrl, createGithubRepoUrl, fultonInternshipAppreciationUrl,
-        onDocumentRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink,
+        onDocumentRoute, onAnyResumeRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
         mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });
 
 /**
- * This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right.
+ * This serves as a simple utility that contains all the necessary objects a hosted document needs for a document page.
+ * @param {String} path The path in the website that displays this document.
+ * @param {String} file The imported file to display.
+ * @param {String} name The name of the file.
+ * @param {".pdf" | ".docx"} suffix The suffix of the file being displayed.
+ * @param {String | "custom"} originLink The link where that file is stored online.
+ * @param {Boolean} useBlobLink If true, this utility uses the blob object url as the link instead of the passed in link.
+ * @param {Boolean} withMd If true, this utility treats (path + "/markdown") as a viable route as well.
  */
+function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false, withMd = false) {
+    /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
+    const blob = ref(null);
+    const objectUrl = useObjectUrl(blob);
+    const router = useRouter();
+
+    const link = computed(() => { return (useBlobLink ? objectUrl.value : originLink); });
+    const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
+
+    /** This functions initializes the blob value for this hosted document. */
+    async function initBlob() {
+        if(path.includes("/resume/qrcode")) {
+            blob.value = await createQrcodeResume();
+        } else {
+            blob.value = await fetch(file).then((res) => res.blob());
+        }
+    }
+
+    /**
+     * This function checks whether the path associated with this hosted document is equivalent to another given path.
+     * @param {String} pathname The path parameter.
+     */
+    function checkPath(pathname) {
+        const mainCheck = (path === pathname || (path + "/") === pathname);
+        return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
+    }
+
+    return { path, onRoute, file, name, suffix, link, blob, objectUrl, originLink, withMd, initBlob, checkPath }
+}
+
+/** This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right. */
 async function createQrcodeResume() {
     try {
         // This fetches and loads the PDF file.

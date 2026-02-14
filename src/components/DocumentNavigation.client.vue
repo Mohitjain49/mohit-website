@@ -38,7 +38,7 @@
                 <button @click="reloadPage()" title="Reload Page">
                     <font-awesome-icon icon="fa-rotate-right" />
                 </button>
-                <a class="light" :href="documentLink" target="mohit-document" title="Open Document in New Tab">
+                <a class="light" :href="docStore.documentLink" target="mohit-document" title="Open Document in New Tab">
                     <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                 </a>
                 <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
@@ -73,7 +73,7 @@
 
     <div class="mohit-documentBar-bottom">
         <div class="mohit-documentBar-iconSection left">
-            <template v-if="docStore.onResumeRoute">
+            <template v-if="docStore.onAnyResumeRoute">
                 <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/"
                     class="mohit-navBar-icon light"
                     title="Use Website Viewer"
@@ -161,20 +161,6 @@ const fullScreenStore = useFullScreenStore();
 
 const showGoogleDriveNestedMenu = computed(() => {
     return (webData.documentMenuOpen && (webData.nestedMenuOpen == 1) && docStore.googleDriveOptionAvailable);
-});
-
-const documentLink = computed(() => {
-    if(docStore.onResumeQrcodeRoute) {
-        return docStore.qrcodeResumeUrl;
-    } else if(docStore.onResumeRoute) {
-        return PERSONAL_RESUME_LINK;
-    } else if(docStore.onFCSCertificateRoute) {
-        return FCS_CERTIFICATE_LINK;
-    } else if(docStore.onCreateGithubRepoRoute) {
-        return "https://www.mohit-jain.com/Create_Github_Repo.pdf";
-    } else {
-        return "";
-    }
 });
 
 onMounted(() => { docStore.mountDocumentPage(); });

@@ -2,7 +2,7 @@
 <DocumentViewer v-if="documentStore.mounted"
     :annontations="false"
     :addShare="false"
-    :url="documentStore.fultonInternshipAppreciationUrl"
+    :url="documentStore.hostedDocuments[3].objectUrl"
     :id="'tato-pdf-certificate'"
 />
 <div id="resume-container" class="center-flex-display" v-else>

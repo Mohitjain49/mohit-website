@@ -2,7 +2,7 @@
 <DocumentViewer v-if="documentStore.mounted"
     :annontations="true"
     :addShare="true"
-    :url="documentStore.createGithubRepoUrl"
+    :url="documentStore.hostedDocuments[2].objectUrl"
     :class="'tato-pdf-github-instructions'"
 />
 <div id="resume-container" class="center-flex-display" v-else>

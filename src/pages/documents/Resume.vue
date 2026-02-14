@@ -13,9 +13,7 @@
 
 <script setup>
 const documentStore = useDocumentStore();
-const url = computed(() => {
-    return (documentStore.onResumeQrcodeRoute ? documentStore.qrcodeResumeUrl: documentStore.resumeUrl);
-});
+const url = computed(() => { return documentStore.hostedDocuments[(documentStore.onResumeQrcodeRoute ? 1 : 0)].objectUrl; });
 
 useHead(getMeta(
     ("Mohit Jain | My Resume" + (documentStore.onResumeQrcodeRoute ? " (With Qrcode)" : "")),

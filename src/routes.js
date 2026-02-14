@@ -82,8 +82,8 @@ export const personalRoutes = [
         path: "/resume",
         children: [
             { path: "", name: "My Resume", component: Resume },
-            { path: "qrcode", alias: ["qr"], name: "My Resume (Qrcode)", component: Resume },
-            { path: "markdown", alias: ['md'], name: "My Resume (Markdown)", component: ResumeMarkdown }
+            { path: "qrcode", name: "My Resume (Qrcode)", component: Resume },
+            { path: "markdown", name: "My Resume (Markdown)", component: ResumeMarkdown }
         ]
     },
 

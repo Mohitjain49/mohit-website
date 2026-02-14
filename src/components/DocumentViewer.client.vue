@@ -10,7 +10,7 @@
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
-            <VuePDF :id="id" :class="class" :pdf="pdf"
+            <VuePDF :id="id" :class="class" :pdf="pdf" :ref="(el) => {docPagesRefs[index] = el}"
                 :text-layer="annontations" :annotation-layer="annontations"
                 @loaded="() => {setSingleDocLoaded(index)}"
                 @annotation="(event) => {documentStore.onAnnotationClick(event)}"
@@ -48,11 +48,14 @@ const { pdf, pages } = usePDF(props.url);
 const { width: windowWidth } = useWindowSize();
 
 const docPages = ref([{ loaded: false, num: 0 }]);
+const docPagesRefs = ref([]);
+
 const showShare = computed(() => {
     const goodWidth = (props.shareMinWidth <= windowWidth.value);
     return (props.addShare && documentStore.docLoaded && !fullScreenSet.value && goodWidth);
 });
 
+onBeforeUnmount(() => { cancelAllRendering(); });
 watch(pages, () => {
     if(pages.value < 1) { return; }
     docPages.value = Array.from({ length: pages.value }, (_, i) => { return { loaded: false, num: (i + 1) }; });
@@ -76,6 +79,14 @@ function openShare(pageNum = 1) {
     var path = router.currentRoute.value.path.substring(1);
     if(path.endsWith("/")) { path = path.substring(0, path.length - 1); }
     useWebsiteDataStore().setQRCodePopup(PERSONAL_WEBSITE_LINK + path + "/#page_" + pageNum);
+}
+
+/** This function cancels all pages from rendering fully. Called with "onBeforeUnmount". */
+function cancelAllRendering() {
+    if(documentStore.docLoaded) { return; }
+    for(let i = 0; i < docPagesRefs.value.length; i++) {
+        try { docPagesRefs.value[i].cancel(); } catch(e) {}
+    }
 }
 </script>
 
