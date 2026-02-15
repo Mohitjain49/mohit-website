@@ -43,7 +43,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <a :href="PERSONAL_DEPLOY_SCRIPT_LINK" id="deploy-script-tab" class="documents-section-tab">
+            <RouterLink to="/aws-deploy-script" id="deploy-script-tab" class="documents-section-tab">
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-upload" />
                     <span> Deploy Script </span>
@@ -52,7 +52,7 @@ useIntersectionObserver(tabRefs, (entry) => {
                     I made a custom script for deploying my website and other projects of mine to Amazon Web Services. 
                     It's made with Node.js and uses a few dependencies, but it is highly customizable.
                 </p>
-            </a>
+            </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
             <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab">

@@ -113,14 +113,6 @@ watch(navBarSwipe.isSwiping, () => {
 });
 
 /**
- * This sets the color and border color of an icon.
- * @param {String} color The color to use.
- */
-function getColorStyles(color = "var(--website-text)") {
-    return { color, borderColor: color }
-}
-
-/**
  * This function makes a button flash if it will do nothing.
  * @param event The event made when the user clicks on the navigation option.
  * @param path The route the option leads to.

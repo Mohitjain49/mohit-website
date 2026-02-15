@@ -4,10 +4,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
+    const scriptsStore = useScriptsStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
 
+    const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
     const wakeLock = useWakeLock();
 
@@ -55,6 +57,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.setupClickAudio();
 
         documentStore.mountDocumentStore();
+        scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();
 
@@ -198,7 +201,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
             window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
-            if(hashStr === "" || documentStore.onDocumentRoute) { return; }
+            if(hashStr === "" || onHostedFileRoute.value) { return; }
 
             try {
                 goToPageSection(hashStr, pixelOffset);
@@ -216,9 +219,22 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         closeNavMenu();
 
         if(webFooterVisibility.value) {
-            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+            scrollToTop(false);
         } else {
             goToPageSection('footer');
+        }
+    }
+
+    /**
+     * This function has the webpage scroll to the top.
+     * @param {Boolean} updateURL If true, this function updates the URL of the webpage.
+     */
+    function scrollToTop(updateURL = true) {
+        if(updateURL) { router.push(router.currentRoute.value.path); }
+        if(fullScreenStore.fullScreenSet) {
+            document.fullscreenElement.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        } else {
+            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
         }
     }
 
@@ -325,7 +341,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
         toggleNavMenu, toggleDocumentMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
-        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter
+        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop
     }
 });
 
@@ -335,4 +351,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
  */
 export function initWebData(pixelOffset = 0) {
     useWebsiteDataStore().mountWebData(pixelOffset);
+}
+
+/**
+ * This function returns a reactive computed value on whether the user is on a hosted file page or not.
+ */
+export function getOnHostedFileRoute() {
+    const { onDocumentRoute } = storeToRefs(useDocumentStore());
+    const { onScriptRoute } = storeToRefs(useScriptsStore());
+    return computed(() => { return (onDocumentRoute.value || onScriptRoute.value) })
 }

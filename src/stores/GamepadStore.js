@@ -1,5 +1,5 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
-    const fullScreenStore = useFullScreenStore();
+    const fullScreenSet = getFullScreenSet();
     var cursorSpeedTimeout = null;
 
     /** These are the gamepad cursors that can be used with the website. */
@@ -34,10 +34,16 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         return gamepadCursors[index];
     }
 
-    /** This function runs whenever the visitor clicks on a typical gamepad menu button. */
+    /** This function runs whenever the visitor clicks on a typical gamepad "menu" button. */
     function onGamepadMenuClick() {
-        if(fullScreenStore.fullScreenSet && document.fullscreenElement !== document.body) { return; }
+        if(fullScreenSet.value && document.fullscreenElement !== document.body) { return; }
         useWebsiteDataStore().toggleNavMenu();
+        triggerClickSound();
+    }
+
+    /** This function runs whenever the visitor clicks on "x", "y", or the right stick. */
+    function onScrollToTopButton() {
+        useWebsiteDataStore().scrollToTop()
         triggerClickSound();
     }
 
@@ -69,7 +75,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     }
 
     return { gamepadCursors, gamepadConnected, cursorElementTitle, showCursorSpeedMenu,
-        getCursor, onGamepadMenuClick, resetCursorPositions, hideAllCursors, stopAllCursors
+        getCursor, onGamepadMenuClick, onScrollToTopButton, resetCursorPositions, hideAllCursors, stopAllCursors
     }
 });
 
@@ -80,13 +86,15 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
  */
 function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();
-    const fullScreenStore = useFullScreenStore();
+    const fullScreenSet = getFullScreenSet();
 
     const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
 
     const connected = ref(false);
     const connectedFresh = ref(false);
+    const standardMapping = ref(true);
+
     const showCursor = ref(false);
     const maxSpeedChanging = ref(false);
     
@@ -144,14 +152,15 @@ function useGamepadCursor(index = 0) {
 
                 if(connected.value) {
                     if(showCursor.value) { setClickElement(); }
+                    setStandardMapping(gamepads[index].mapping === "standard");
                     cursorAnimationFrameId = requestAnimationFrame(checkGamepadConnected);
                 } else {
+                    setStandardMapping();
                     stop();
                 }
             } else {
                 connected.value = false;
-                connectedFresh.value = false;
-                showCursor.value = false;
+                setStandardMapping();
                 stop();
             }
         }
@@ -218,6 +227,14 @@ function useGamepadCursor(index = 0) {
     }
 
     /**
+     * This sets whether or not the mapping is standard or not.
+     * @param {Boolean} newStatus the new status of the mapping. Default Value is True.
+     */
+    function setStandardMapping(newStatus = true) {
+        standardMapping.value = newStatus;
+    }
+
+    /**
      * This finds the element that the cursor is hovering over.
      */
     function setClickElement() {
@@ -266,12 +283,12 @@ function useGamepadCursor(index = 0) {
 
         if(event.axisIndex == 0) {
             x.value += (maxSpeed.value * event.movement);
-            if(x.value < 0) { x.value = 0; }
-            if(x.value > (window.innerWidth - 35)) { x.value = (window.innerWidth - 35); }
+            if(x.value < -5) { x.value = -5; }
+            if(x.value > (window.innerWidth - 20)) { x.value = (window.innerWidth - 20); }
         } else {
             y.value += (maxSpeed.value * event.movement);
-            if(y.value < 0) { y.value = 0; }
-            if(y.value > (window.innerHeight - 35)) { y.value = (window.innerHeight - 35); }
+            if(y.value < -5) { y.value = -5; }
+            if(y.value > (window.innerHeight - 20)) { y.value = (window.innerHeight - 20); }
         }
         setClickElement();
     }
@@ -314,10 +331,7 @@ function useGamepadCursor(index = 0) {
      * This function checks whether the cursor is in the main navigation menu or not.
      */
     function getScrollElement() {
-        if(fullScreenStore.fullScreenSet && document.fullscreenElement.id === "resume-container") {
-            return document.fullscreenElement;
-        }
-
+        if(fullScreenSet.value) { return document.fullscreenElement; }
         const navMenu = document.getElementById("mohit-navMenu");
         if(!webData.navMenuOpen || navMenu == null) { return undefined; }
 
@@ -330,7 +344,8 @@ function useGamepadCursor(index = 0) {
         return ((xVal >= rect.left && xVal <= rect.right && yVal >= rect.top && yVal <= rect.bottom) ? navMenu : undefined);
     }
 
-    return { index, color, connected, connectedFresh, showCursor, maxSpeedChanging, maxSpeed, x, y,
+    return { index, color, connected, connectedFresh, standardMapping, showCursor,
+        maxSpeedChanging, maxSpeed, x, y,
         clickElement, onElement, onInputElement, style, icon, animation, elementTitle,
         start, stop, emitClick, setClickElement, initCursorPosition,
         setMaxCursorSpeed, addToMaxCursorSpeed, stopChangingMaxCursorSpeed,

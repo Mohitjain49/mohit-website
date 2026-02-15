@@ -233,17 +233,17 @@
 }
 
 /**
- * Below here are styles specific for the document menu.
+ * Below here are styles specific for the document and script bars and menus.
  */
 
-#mohit-documentBar {
+#mohit-documentBar, #mohit-scriptsBar {
     all: unset;
     position: fixed;
     bottom: 8px;
     left: calc((100% - 695px) / 2);
     width: 695px;
     height: fit-content;
-    min-height: 50px;
+    min-height: 40px;
     background-color: black;
     z-index: 515;
     border: 2px solid var(--blue-cobalt);
@@ -256,8 +256,23 @@
     padding-top: 2px;
 }
 
+#mohit-scriptsBar {
+    border-color: var(--vibrant-flame);
+    width: 300px;
+    left: calc(50% - 150px);
+}
+.mohit-scriptsBar-bottom {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
 .mohit-documentBar-bottom {
-    height: 50px;
+    height: 40px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -274,6 +289,11 @@
     gap: 7px;
 }
 
+.mohit-navBar-icon.document {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+}
 .mohit-documentBar-iconSection.left {
     padding-left: 10px;
 }
@@ -302,6 +322,18 @@
 }
 .mohit-documentMenu-tools.bottom {
     padding-bottom: 10px;
+}
+
+.mohit-documentBar-bottom .mohit-navBar-icon, .mohit-scriptsBar-bottom .mohit-navBar-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+}
+.mohit-scriptsBar-bottom-separator {
+    height: 75%;
+    width: 3px;
+    border-radius: 3px;
+    background-color: var(--vibrant-flame);
 }
 
 .mohit-documentMenu-tools button, .mohit-documentMenu-tools a {
@@ -422,12 +454,6 @@
     }
     .mohit-documentBar-iconSection {
         gap: 5px;
-    }
-    .mohit-documentBar-bottom .mohit-navBar-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 18px;
-        margin-left: 3px;
     }
 }
 @media (max-width: 350px) {

@@ -38,7 +38,7 @@
                 <button @click="reloadPage()" title="Reload Page">
                     <font-awesome-icon icon="fa-rotate-right" />
                 </button>
-                <a class="light" :href="documentLink" target="mohit-document" title="Open Document in New Tab">
+                <a class="light" :href="docStore.documentLink" target="mohit-document" title="Open Document in New Tab">
                     <font-awesome-icon icon="fa-arrow-up-right-from-square" />
                 </a>
                 <a class="white" :href="PDFJS_LINK" :title="PDFJS_TITLE">
@@ -73,22 +73,25 @@
 
     <div class="mohit-documentBar-bottom">
         <div class="mohit-documentBar-iconSection left">
-            <template v-if="docStore.onResumeRoute">
-                <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/" class="mohit-navBar-icon light"
+            <template v-if="docStore.onAnyResumeRoute">
+                <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/"
+                    class="mohit-navBar-icon light"
                     title="Use Website Viewer"
                     @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
 
                     <font-awesome-icon icon="fa-file-lines" />
                 </RouterLink>
-                <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode" class="mohit-navBar-icon light"
+                <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode"
+                    class="mohit-navBar-icon light"
                     title="See My Resume With A QR Code."
                     @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
 
                     <font-awesome-icon icon="fa-qrcode" />
                 </RouterLink>
-                <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown" class="mohit-navBar-icon light"
+                <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown"
+                    class="mohit-navBar-icon light"
                     title="Use Markdown Format"
                     @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
@@ -97,8 +100,7 @@
                 </RouterLink>
             </template>
             <template v-else-if="docStore.onCreateGithubRepoRoute">
-                <a href="https://github.com/" to="/create-github-repo" class="mohit-navBar-icon"
-                    title="Go To GitHub"
+                <a href="https://github.com/" class="mohit-navBar-icon" title="Go To GitHub"
                     :style="getColorStyles('#FFFFFF')"
                     @pointerenter="setPulseLoopAnimation"
                     @mouseleave="setPulseLoopAnimation">
@@ -106,7 +108,7 @@
                     <font-awesome-icon icon="fa-brands fa-github" />
                 </a>
             </template>
-            <template v-else>
+            <template v-else-if="docStore.onFCSCertificateRoute">
                 <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
                     title="See LinkedIn Post" class="mohit-navBar-icon"
                     :style="getColorStyles('#0072B1')"
@@ -126,7 +128,8 @@
             </template>
         </div>
         <div class="mohit-documentBar-iconSection right">
-            <button @click="docStore.toggleDocumentFullScreen()" class="mohit-navBar-icon light"
+            <button @click="docStore.toggleDocumentFullScreen()"
+                class="mohit-navBar-icon light"
                 :title="fullScreenStore.docElementTitle"
                 @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
@@ -159,26 +162,6 @@ const fullScreenStore = useFullScreenStore();
 const showGoogleDriveNestedMenu = computed(() => {
     return (webData.documentMenuOpen && (webData.nestedMenuOpen == 1) && docStore.googleDriveOptionAvailable);
 });
-
-const documentLink = computed(() => {
-    if(docStore.onResumeQrcodeRoute) {
-        return docStore.qrcodeResumeUrl;
-    } else if(docStore.onResumeRoute) {
-        return PERSONAL_RESUME_LINK;
-    } else if(docStore.onFCSCertificateRoute) {
-        return FCS_CERTIFICATE_LINK;
-    } else if(docStore.onCreateGithubRepoRoute) {
-        return "https://www.mohit-jain.com/Create_Github_Repo.pdf";
-    }
-});
-
-/**
- * This sets the color and border color of an icon.
- * @param {String} color The color to use.
- */
-function getColorStyles(color = "var(--website-text)") {
-    return { color, borderColor: color }
-}
 
 onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });

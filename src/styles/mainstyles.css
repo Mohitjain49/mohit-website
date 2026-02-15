@@ -118,34 +118,19 @@ button {
     height: fit-content;
     width: 100%;
     min-width: 350px;
-    background-color: #313131;
+    background: transparent;
 }
-#resume-container.iframe-page {
-    height: calc(100% - 70px);
-    min-height: 0px;
-}
-
 #resume-container:fullscreen {
     padding-top: 20px;
     min-height: calc(100% - 20px);
     overflow-y: auto;
+    z-index: 1;
 }
-#resume-container.iframe-page:fullscreen {
-    padding-top: 0px;
-    min-height: 0px;
-    height: 100%;
-    overflow-y: hidden !important;
-}
-
-#resume-container.iframe-page.google iframe {
-    height: calc(100% - 75px);
-}
-#resume-container.iframe-page.google:fullscreen {
+#script-page:fullscreen {
     padding-top: 20px;
-    height: calc(100% - 20px) !important;
-}
-#resume-container.iframe-page.google:fullscreen iframe {
-    height: 100% !important;
+    min-height: calc(100% - 20px);
+    overflow-y: auto;
+    z-index: 1;
 }
 
 .webpage-cover {
@@ -168,6 +153,7 @@ button {
     border-top: 5px solid #4cafef;
     border-radius: 50%;
     animation: spin-loading 1s linear infinite;
+    margin: 0px auto;
 }
 @keyframes spin-loading {
     0%   { transform: rotate(0deg); }
@@ -262,6 +248,8 @@ button {
     min-height: calc(var(--body-height) - 100px);
     padding-top: 20px;
     padding-bottom: 80px;
+    z-index: 10;
+    position: relative;
 }
 
 .pdf-page-innerContainer {
