@@ -42,11 +42,11 @@
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.987.0",
-        "@aws-sdk/client-s3": "^3.987.0",
+        "@aws-sdk/client-cloudfront": "^3.990.0",
+        "@aws-sdk/client-s3": "^3.990.0",
         "@unhead/vue": "^2.1.4",
         "@vitejs/plugin-vue": "^6.0.4",
-        "dotenv": "^17.2.4",
+        "dotenv": "^17.3.1",
         "mime-types": "^3.0.2",
         "shiki": "^3.22.0",
         "unplugin-auto-import": "^21.0.0",
