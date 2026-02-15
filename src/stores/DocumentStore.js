@@ -417,7 +417,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function sets the full screen for the element containing the document or script.
      */
     function toggleDocumentFullScreen() {
-        fullScreenStore.setFullScreen(document.getElementById(onScriptRoute.value ? 'script-page' : "resume-container"));
+        fullScreenStore.setFullScreen(document.getElementById("resume-container"));
         webData.closeNavMenu();
     }
 

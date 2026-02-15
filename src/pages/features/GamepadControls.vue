@@ -24,11 +24,16 @@
                     <div class="gamepad-connection-statusBar" :style="{ color: cursor.color }">
                         <h2> {{ ('Gamepad ' + (cursor.index + 1)) }} </h2>
 
-                        <div class="statusIcon" :title="getGamepadConnectionStatusTitle(cursor.index, cursor.connected)">
-                            <FontAwesomeIcon :flip="cursor.connectedFresh"
-                                :style="{ color: (cursor.connected ? 'lightgreen' : 'darkred') }"
-                                :icon="('fa-plug-circle-' + (cursor.connected ? 'plus' : 'minus'))"
-                            />
+                        <div class="status-icons">
+                            <div v-if="!cursor.standardMapping" class="statusIcon" :title="NON_STANDARD_MAPPING_MESSAGE">
+                                <FontAwesomeIcon icon="fa-warning" style="color: orange;" />
+                            </div>
+                            <div class="statusIcon" :title="getGamepadConnectionStatusTitle(cursor.index, cursor.connected)">
+                                <FontAwesomeIcon :flip="cursor.connectedFresh"
+                                    :style="{ color: (cursor.connected ? 'lightgreen' : 'darkred') }"
+                                    :icon="('fa-plug-circle-' + (cursor.connected ? 'plus' : 'minus'))"
+                                />
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -60,6 +65,10 @@
                             </td>
                         </tr>
                         <tr>
+                            <td> Reset Cursor </td>
+                            <td> <img :src="left_stick_press" /> <span> Left Stick (Press) </span> </td>
+                        </tr>
+                        <tr>
                             <td> Scroll Vertically </td>
                             <td> <img :src="right_stick_vertical" /> <span> Right Stick </span> </td>
                         </tr>
@@ -69,27 +78,35 @@
                         </tr>
                         <tr>
                             <td> Scroll To Top </td>
-                            <td> <img :src="x_button" /> <span> / </span> <img :src="y_button" /> </td>
-                        </tr>
-                        <tr>
-                            <td> Decrease Cursor Speed </td>
-                            <td> <img :src="left_bumper" /> <span> Left Bumper </span> </td>
-                        </tr>
-                        <tr>
-                            <td> Increase Cursor Speed </td>
-                            <td> <img :src="right_bumper" /> <span> Right Bumper </span> </td>
-                        </tr>
-                        <tr>
-                            <td> Decrease Volume </td>
-                            <td> <img :src="left_trigger" /> <span> Left Trigger </span> </td>
-                        </tr>
-                        <tr>
-                            <td> Increase Volume </td>
-                            <td> <img :src="right_trigger" /> <span> Right Trigger </span> </td>
+                            <td>
+                                <img :src="x_button" />
+                                <span> / </span>
+                                <img :src="y_button" />
+                                <span> / </span>
+                                <img :src="right_stick_press" />
+                            </td>
                         </tr>
                         <tr>
                             <td> Navigation Menu </td>
                             <td> <img :src="plus_button" /> <span>/</span> <img :src="minus_button" /> </td>
+                        </tr>
+                        <tr>
+                            <td> Set Cursor Speed </td>
+                            <td>
+                                <img :src="left_bumper" />
+                                <span> / </span>
+                                <img :src="right_bumper" />
+                                <span> (Bumpers) </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Set Volume </td>
+                            <td>
+                                <img :src="left_trigger" />
+                                <span> / </span>
+                                <img :src="right_trigger" />
+                                <span> (Triggers) </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -104,7 +121,9 @@
 
 <script setup>
 import left_stick from "@/assets/gamepad-buttons/left_stick.png";
+import left_stick_press from "@/assets/gamepad-buttons/left_stick_press.png";
 import right_stick_vertical from "@/assets/gamepad-buttons/right_stick_vertical.png";
+import right_stick_press from "@/assets/gamepad-buttons/right_stick_press.png";
 import dpad_controller from "@/assets/gamepad-buttons/dpad_controller.png";
 
 import a_button from "@/assets/gamepad-buttons/a_button.png";
@@ -140,6 +159,10 @@ useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
 function getGamepadConnectionStatusTitle(index = 0, status = false) {
     return ("Gamepad " + (index + 1) + " Is " + (status ? "" : "Not ") + "Connected To My Website" + (status ? "!" : "."));
 }
+
+const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
+    "Note that some of the default gamepad controls for my website may not work as expected with this particular gamepad."
+);
 </script>
 
 <style scoped>
@@ -168,7 +191,7 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
 
 .gamepad-controls {
     height: fit-content;
-    padding: 23px;
+    padding: 30px;
     background-color: var(--dark-background);
     color: #eee;
     border: 1px solid;
@@ -189,7 +212,7 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
 }
 .gamepad-controls th, .gamepad-controls td {
     border: 1px solid #555;
-    padding: 12px;
+    padding: 14px 12px;
     text-align: left;
     vertical-align: middle;
 }
@@ -292,7 +315,8 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     font-size: 22px;
     margin-left: 10px;
 }
-.gamepad-connection-statusBar .statusIcon {
+
+.gamepad-connection-statusBar .status-icons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -300,6 +324,16 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     height: fit-content;
     font-size: 22px;
     margin-right: 10px;
+    color: darkred;
+    gap: 10px;
+}
+.gamepad-connection-statusBar .statusIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    font-size: 22px;
     color: darkred;
 }
 

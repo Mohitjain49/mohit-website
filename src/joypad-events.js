@@ -90,9 +90,10 @@ window.addEventListener("gamepadbuttondown", (e) => {
     if(buttonIndex >= 12 && buttonIndex <= 15) {
         gamepadStore.getCursor(gpIndex).manageCursorWithDpad(buttonIndex - 12);
     }
+    if(buttonIndex == 10) { gamepadStore.getCursor(gpIndex).initCursorPosition(); }
 
     if(buttonIndex == 0 || buttonIndex == 1) { gamepadStore.getCursor(gpIndex).emitClick(); }
-    if(buttonIndex == 3 || buttonIndex == 2) { useWebsiteDataStore().scrollToTop(true); triggerClickSound(); }
+    if(buttonIndex == 3 || buttonIndex == 2 || buttonIndex == 11) { gamepadStore.onScrollToTopButton(); }
     if(buttonIndex == 8 || buttonIndex == 9) { gamepadStore.onGamepadMenuClick(); }
 
     if(buttonIndex == 5) { gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(1); }
@@ -113,12 +114,8 @@ window.addEventListener("gamepadbuttonup", (e) => {
     const gamepadStore = useGamepadStore();
     // if(import.meta.env.DEV) { console.log(buttonIndex); }
 
-    if(buttonIndex == 6 || buttonIndex == 7) {
-        useAudioStore().volumeChangingWithGamepad = false;
-    }
-    if(buttonIndex == 4 || buttonIndex == 5) {
-        gamepadStore.getCursor(gpIndex).stopChangingMaxCursorSpeed();
-    }
+    if(buttonIndex == 6 || buttonIndex == 7) { useAudioStore().volumeChangingWithGamepad = false; }
+    if(buttonIndex == 4 || buttonIndex == 5) { gamepadStore.getCursor(gpIndex).stopChangingMaxCursorSpeed(); }
 });
 
 /**
@@ -138,19 +135,11 @@ window.addEventListener("gamepadbuttonhold", (e) => {
     }
 
     if(event.secondsHeld < 0.8) { return; }
-    if(buttonIndex == 5 && holdFrames % 5 == 0) {
-        gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(1);
-    }
-    if(buttonIndex == 4 && holdFrames % 5 == 0) {
-        gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(-1);
-    }
+    if(buttonIndex == 5 && holdFrames % 5 == 0) { gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(1); }
+    if(buttonIndex == 4 && holdFrames % 5 == 0) { gamepadStore.getCursor(gpIndex).addToMaxCursorSpeed(-1); }
 
-    if(buttonIndex == 7 && holdFrames % 3 == 0) {
-        useAudioStore().addToVolume(1);
-    }
-    if(buttonIndex == 6 && holdFrames % 3 == 0) {
-        useAudioStore().addToVolume(-1);
-    }
+    if(buttonIndex == 7 && holdFrames % 3 == 0) { useAudioStore().addToVolume(1); }
+    if(buttonIndex == 6 && holdFrames % 3 == 0) { useAudioStore().addToVolume(-1); }
 });
 
 /**

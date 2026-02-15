@@ -14,6 +14,9 @@ declare global {
         /** Whether a gamepad has been connected recently. */
         connectedFresh: Ref<boolean>;
 
+        /** Whether a gamepad has standard mapping or not according to the Web Gamepad API. */
+        mappingStandard: Ref<boolean>;
+
         /** Whether the custom cursor is visible. */
         showCursor: Ref<boolean>;
 
