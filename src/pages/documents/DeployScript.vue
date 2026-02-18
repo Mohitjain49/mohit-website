@@ -1,7 +1,7 @@
 <template>
 <ScriptsBar />
 <main id="script-page" class="personal-web-body transparent">
-    <div class="code-file-inHTML" v-html="scriptsStore.deployScript.html"></div>
+    <div class="code-file-inHTML" v-html="scriptsStore.scripts[0].html"></div>
 
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
