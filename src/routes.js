@@ -44,15 +44,8 @@ const REDIRECT_PAGES = [
  * @returns {import('vue-router').RouteRecordRaw} The route record for the router.
  */
 function getRedirectRouteRecord(path = "") {
-    const index = REDIRECT_PAGES.findIndex(item => item.path === path);
-    const page = REDIRECT_PAGES[index];
-    const name = ("Redirect Page - " + page.title);
-
-    if(page.alias) {
-        return { path, name, alias: page.alias, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
-    } else {
-        return { path, name, component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
-    }
+    const page = REDIRECT_PAGES[REDIRECT_PAGES.findIndex(item => item.path === path)];
+    return { path, name: ("Redirect Page - " + page.title), component: Redirect, props: { link: page.link, title: page.title, desc: page.desc } }
 }
 
 /**

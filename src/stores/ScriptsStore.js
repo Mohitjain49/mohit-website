@@ -216,7 +216,9 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
     const router = useRouter();
 
     const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
-    const htmlLoaded = ref({ status: false, error: false });
+    const htmlLoaded = ref({ status: false, error: false, progress: 0 });
+
+    const progressStr = computed(() => { return (String(htmlLoaded.value.progress) + "%"); });
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted script. */
@@ -239,26 +241,42 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         if(htmlLoaded.value.status || htmlLoaded.value.error) { return; }
         try {
             const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
+            setLoadedProgress(20);
+
             const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
+            setLoadedProgress(40);
+
             const langJs = (await import("shiki/dist/langs/javascript.mjs"));
+            setLoadedProgress(60);
+
             const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
+            setLoadedProgress(80);
 
             const highlighter = await createHighlighterCore({
                 themes: [themeVitesseDark], langs: [langJs],
                 engine: createOnigurumaEngine(import('shiki/wasm')) 
             });
+            setLoadedProgress(99);
 
-            const finalValue = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
-            html.value = finalValue;
-            htmlLoaded.value = { status: true, error: false }
+            await sleep(100);
+            html.value = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
+            htmlLoaded.value = { status: true, error: false, progress: 100 }
         } catch(e) {
             console.error(e);
             html.value = "<pre> <div class=\"loading-spinner\"></div> </pre>";
-            htmlLoaded.value = { status: false, error: true }
+            htmlLoaded.value = { status: false, error: true, progress: htmlLoaded.value.progress }
         }
     }
 
-    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded,
+    /**
+     * This function sets the progress in creating the code script html.
+     * @param {Number} num The new number (between 0 and 100) that represents the new progress status.
+     */
+    function setLoadedProgress(num) {
+        htmlLoaded.value.progress = num;
+    }
+
+    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, progressStr,
         initBlob, checkPath, initCodeScriptElement
     }
 }

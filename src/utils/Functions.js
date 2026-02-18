@@ -13,6 +13,14 @@ export function getFontAwesomeSvg(faIcon, color = "#FFFFFF") {
 }
 
 /**
+ * This function is a generic sleep function that lets a function wait before performing the next act.
+ * @param {Number} ms The number of milliseconds you want the function to sleep.
+ */
+export async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
  * This function reloads the website.
  */
 export function reloadPage() {
