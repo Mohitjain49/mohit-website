@@ -45,7 +45,7 @@
                 :spin-pulse="scriptsStore.scriptCopyStatus.pending"
             />
         </button>
-        <div class="mohit-scriptsBar-bottom-separator"></div>
+        <div class="mohit-navBar-bottom-separator scriptBar"></div>
 
         <button class="mohit-navBar-icon light" title="Share Webpage"
             @click="webData.openQRCodePopup()"

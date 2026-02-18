@@ -72,78 +72,111 @@
     </Transition>
 
     <div class="mohit-documentBar-bottom">
-        <div class="mohit-documentBar-iconSection left">
-            <template v-if="docStore.onAnyResumeRoute">
-                <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/"
-                    class="mohit-navBar-icon light"
-                    title="Use Website Viewer"
-                    @pointerenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
-
-                    <font-awesome-icon icon="fa-file-lines" />
-                </RouterLink>
-                <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode"
-                    class="mohit-navBar-icon light"
-                    title="See My Resume With A QR Code."
-                    @pointerenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
-
-                    <font-awesome-icon icon="fa-qrcode" />
-                </RouterLink>
-                <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown"
-                    class="mohit-navBar-icon light"
-                    title="Use Markdown Format"
-                    @pointerenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
-
-                    <font-awesome-icon icon="fa-brands fa-markdown" />
-                </RouterLink>
-            </template>
-            <template v-else-if="docStore.onCreateGithubRepoRoute">
-                <a href="https://github.com/" class="mohit-navBar-icon" title="Go To GitHub"
-                    :style="getColorStyles('#FFFFFF')"
-                    @pointerenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
-
-                    <font-awesome-icon icon="fa-brands fa-github" />
-                </a>
-            </template>
-            <template v-else-if="docStore.onFCSCertificateRoute">
-                <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
-                    title="See LinkedIn Post" class="mohit-navBar-icon"
-                    :style="getColorStyles('#0072B1')"
-                    @pointerenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
-
-                    <font-awesome-icon icon="fa-brands fa-linkedin" />
-                </a>
-                <a :href="FCS_CAREER_INTERNSHIP_LINK"  target="_blank"
-                    title="FCS Career Internship Program" class="mohit-navBar-icon"
-                    :style="getColorStyles('var(--fulton-green)')"
-                    @pointerenter="setPulseLoopAnimation"
-                    @mouseleave="setPulseLoopAnimation">
-
-                    <font-awesome-icon icon="fa-school-flag" />
-                </a>
-            </template>
-        </div>
-        <div class="mohit-documentBar-iconSection right">
-            <button @click="docStore.toggleDocumentFullScreen()"
+        <template v-if="docStore.onAnyResumeRoute">
+            <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/"
                 class="mohit-navBar-icon light"
-                :title="fullScreenStore.docElementTitle"
+                title="Use Website Viewer"
                 @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
-                <font-awesome-icon :icon="fullScreenStore.faIcon" />
-            </button>
-            <button @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
-                :title="(webData.documentMenuOpen ? 'Close Document Actions' : 'Open Document Actions')"
+                <font-awesome-icon icon="fa-file-lines" />
+            </RouterLink>
+            <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode"
+                class="mohit-navBar-icon light"
+                title="See My Resume With A QR Code."
                 @pointerenter="setPulseLoopAnimation"
                 @mouseleave="setPulseLoopAnimation">
 
-                <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-file-circle-xmark' : 'fa-file-export')" />
+                <font-awesome-icon icon="fa-qrcode" />
+            </RouterLink>
+            <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown"
+                class="mohit-navBar-icon light"
+                title="Use Markdown Format"
+                @pointerenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon icon="fa-brands fa-markdown" />
+            </RouterLink>
+        </template>
+        <template v-else-if="docStore.onCreateGithubRepoRoute">
+            <a href="https://github.com/" class="mohit-navBar-icon" title="Go To GitHub"
+                :style="getColorStyles('#FFFFFF')"
+                @pointerenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon icon="fa-brands fa-github" />
+            </a>
+        </template>
+        <template v-else-if="docStore.onFCSCertificateRoute">
+            <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
+                title="See LinkedIn Post" class="mohit-navBar-icon"
+                :style="getColorStyles('#0072B1')"
+                @pointerenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon icon="fa-brands fa-linkedin" />
+            </a>
+            <a :href="FCS_CAREER_INTERNSHIP_LINK"  target="_blank"
+                title="FCS Career Internship Program" class="mohit-navBar-icon"
+                :style="getColorStyles('var(--fulton-green)')"
+                @pointerenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon icon="fa-school-flag" />
+            </a>
+        </template>
+        <div class="mohit-navBar-bottom-separator"></div>
+
+        <template v-if="laptopBar">
+            <a class="mohit-navBar-icon white" :href="docStore.documentLink" target="mohit-document" title="Open Document in New Tab">
+                <font-awesome-icon icon="fa-up-right-from-square" />
+            </a>
+            <button class="mohit-navBar-icon" @click="docStore.downloadDoc()" title="Download Document" :style="getColorStyles('var(--blue-one)')">
+                <font-awesome-icon :icon="docStore.downloadIcon" :spin-pulse="docStore.documentDownloadStatus.pending" />
             </button>
-        </div>
+            <button v-if="docStore.saveAsSupported" class="mohit-navBar-icon" @click="docStore.saveDoc()" title="Save Document" :style="getColorStyles('var(--blue-three)')">
+                <font-awesome-icon :icon="docStore.saveDocIcon" :spin-pulse="docStore.documentSaveStatus.pending" />
+            </button>
+            <button class="mohit-navBar-icon" @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-one)')">
+                <font-awesome-icon :icon="(docStore.printIcon)"
+                    :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
+                />
+            </button>
+            <button v-if="docStore.googleDriveOptionAvailable"
+                class="mohit-navBar-icon"
+                @click="webData.toggleDocumentMenu(true)"
+                title="Upload This Document To Your Google Drive!"
+                :style="getColorStyles('#34A853')">
+
+                <font-awesome-icon :spin-pulse="docStore.documentUploadToGoogleDriveStatus.pending"
+                    :icon="docStore.uploadToGoogleDriveIcon"
+                />
+            </button>
+            <div class="mohit-navBar-bottom-separator"></div>
+
+            <button class="mohit-navBar-icon light" title="Share Webpage"
+                @click="webData.openQRCodePopup()"
+                @pointerenter="setPulseLoopAnimation"
+                @mouseleave="setPulseLoopAnimation">
+
+                <font-awesome-icon icon="fa-share-from-square" />
+            </button>
+        </template>
+        <button @click="docStore.toggleDocumentFullScreen()"
+            class="mohit-navBar-icon light"
+            :title="fullScreenStore.docElementTitle"
+            @pointerenter="setPulseLoopAnimation"
+            @mouseleave="setPulseLoopAnimation">
+
+            <font-awesome-icon :icon="fullScreenStore.faIcon" />
+        </button>
+        <button v-if="!laptopBar" @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
+            :title="(webData.documentMenuOpen ? 'Close Document Actions' : 'Open Document Actions')"
+            @pointerenter="setPulseLoopAnimation"
+            @mouseleave="setPulseLoopAnimation">
+
+            <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-file-circle-xmark' : 'fa-file-export')" />
+        </button>
     </div>
 </div>
 </template>
@@ -154,17 +187,24 @@ const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 const docNavBar = ref(null);
 const docNavBarSwipe = useSwipe(docNavBar, { passive: true });
+const { width: windowWidth } = useWindowSize();
 
 const webData = useWebsiteDataStore();
 const docStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
 
+const laptopBar = computed(() => { return (windowWidth.value > 500); });
 const showGoogleDriveNestedMenu = computed(() => {
     return (webData.documentMenuOpen && (webData.nestedMenuOpen == 1) && docStore.googleDriveOptionAvailable);
 });
 
 onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
+
+watch(laptopBar, () => {
+    if(!laptopBar.value || webData.menuOpen != 1 || webData.nestedMenuOpen != 0) { return; }
+    webData.setMenuOpen(-1, 0);
+});
 
 // This tracks touch "swipe" events so that the user can open or close the document navigation bar with a swipe.
 watch(docNavBarSwipe.isSwiping, () => {

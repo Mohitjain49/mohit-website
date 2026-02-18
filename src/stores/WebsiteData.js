@@ -250,7 +250,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Boolean} openGoogleDriveMenu If true, this will open the nested google drive menu over the default menu.
      */
     function toggleDocumentMenu(openGoogleDriveMenu = false) {
-        setMenuOpen(((menuOpen.value == 1) ? -1 : 1), ((menuOpen.value == 1 && openGoogleDriveMenu) ? 1 : 0));
+        setMenuOpen(((menuOpen.value == 1) ? -1 : 1), ((menuOpen.value == -1 && openGoogleDriveMenu) ? 1 : 0));
     }
 
     /**
