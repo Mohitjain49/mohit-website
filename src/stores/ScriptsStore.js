@@ -153,29 +153,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     /**
-     * This function returns a string consisting of HTML that can be displayed to a user. 
-     * @param {String} code The code as a string.
-     */
-    async function initCodeScriptElement(code = "") {
-        try {
-            const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
-            const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
-            const langJs = (await import("shiki/dist/langs/javascript.mjs"));
-            const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
-
-            const highlighter = await createHighlighterCore({
-                themes: [themeVitesseDark], langs: [langJs],
-                engine: createOnigurumaEngine(import('shiki/wasm')) 
-            });
-            const finalValue = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
-            return finalValue;
-        } catch(e) {
-            console.error(e);
-            return "<pre> <div class=\"loading-spinner\"></div> </pre>";
-        }
-    }
-
-    /**
      * --------------------------------------------------------------------------------
      * These functions are extra functions used by both the store and the script pages.
      * --------------------------------------------------------------------------------
