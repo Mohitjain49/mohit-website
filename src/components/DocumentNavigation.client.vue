@@ -5,7 +5,7 @@
 <template>
 <div id="mohit-documentBar" :class="[(webData.documentMenuOpen ? 'menu-open' : '')]" ref="docNavBar">
     <Transition name="documentMenu-transition">
-        <div v-if="(webData.documentMenuOpen && (webData.nestedMenuOpen == 0))" class="mohit-documentMenu">
+        <div v-if="showMobileMenu" class="mohit-documentMenu">
             <div class="mohit-documentMenu-tools top">
                 <button @click="docStore.downloadDoc()" title="Download Document" :style="getColorStyles('var(--blue-one)')">
                     <font-awesome-icon :icon="docStore.downloadIcon" :spin-pulse="docStore.documentDownloadStatus.pending" />
@@ -73,54 +73,40 @@
 
     <div class="mohit-documentBar-bottom">
         <template v-if="docStore.onAnyResumeRoute">
-            <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/"
+            <RouterLink v-if="(docStore.onMarkdownRoute || docStore.onResumeQrcodeRoute)" to="/resume/" pulse-loop
                 class="mohit-navBar-icon light"
-                title="Use Website Viewer"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
+                title="Use Website Viewer">
 
                 <font-awesome-icon icon="fa-file-lines" />
             </RouterLink>
-            <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode"
+            <RouterLink v-if="!docStore.onResumeQrcodeRoute" to="/resume/qrcode" pulse-loop
                 class="mohit-navBar-icon light"
-                title="See My Resume With A QR Code."
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
+                title="See My Resume With A QR Code.">
 
                 <font-awesome-icon icon="fa-qrcode" />
             </RouterLink>
-            <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown"
+            <RouterLink v-if="!docStore.onMarkdownRoute" to="/resume/markdown" pulse-loop
                 class="mohit-navBar-icon light"
-                title="Use Markdown Format"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
+                title="Use Markdown Format">
 
                 <font-awesome-icon icon="fa-brands fa-markdown" />
             </RouterLink>
         </template>
         <template v-else-if="docStore.onCreateGithubRepoRoute">
-            <a href="https://github.com/" class="mohit-navBar-icon" title="Go To GitHub"
-                :style="getColorStyles('#FFFFFF')"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
-
+            <a href="https://github.com/" class="mohit-navBar-icon white" title="Go To GitHub" pulse-loop>
                 <font-awesome-icon icon="fa-brands fa-github" />
             </a>
         </template>
         <template v-else-if="docStore.onFCSCertificateRoute">
-            <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank"
+            <a :href="FCS_CERTIFICATE_LINKEDIN_POST"  target="_blank" pulse-loop
                 title="See LinkedIn Post" class="mohit-navBar-icon"
-                :style="getColorStyles('#0072B1')"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
+                :style="getColorStyles('#0072B1')">
 
                 <font-awesome-icon icon="fa-brands fa-linkedin" />
             </a>
-            <a :href="FCS_CAREER_INTERNSHIP_LINK"  target="_blank"
+            <a :href="FCS_CAREER_INTERNSHIP_LINK" target="_blank" pulse-loop
                 title="FCS Career Internship Program" class="mohit-navBar-icon"
-                :style="getColorStyles('var(--fulton-green)')"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
+                :style="getColorStyles('var(--fulton-green)')">
 
                 <font-awesome-icon icon="fa-school-flag" />
             </a>
@@ -128,24 +114,38 @@
         <div class="mohit-navBar-bottom-separator"></div>
 
         <template v-if="laptopBar">
-            <a class="mohit-navBar-icon white" :href="docStore.documentLink" target="mohit-document" title="Open Document in New Tab">
+            <a :href="docStore.documentLink" target="mohit-document" pulse-loop
+                class="mohit-navBar-icon white"
+                title="Open Document in New Tab">
+
                 <font-awesome-icon icon="fa-up-right-from-square" />
             </a>
-            <button class="mohit-navBar-icon" @click="docStore.downloadDoc()" title="Download Document" :style="getColorStyles('var(--blue-one)')">
-                <font-awesome-icon :icon="docStore.downloadIcon" :spin-pulse="docStore.documentDownloadStatus.pending" />
+            <button @click="docStore.downloadDoc()" pulse-loop
+                class="mohit-navBar-icon" title="Download Document"
+                :style="getColorStyles('var(--blue-one)')">
+
+                <font-awesome-icon :icon="docStore.downloadIcon"
+                    :spin-pulse="docStore.documentDownloadStatus.pending"
+                />
             </button>
-            <button v-if="docStore.saveAsSupported" class="mohit-navBar-icon" @click="docStore.saveDoc()" title="Save Document" :style="getColorStyles('var(--blue-three)')">
-                <font-awesome-icon :icon="docStore.saveDocIcon" :spin-pulse="docStore.documentSaveStatus.pending" />
+            <button v-if="docStore.saveAsSupported" @click="docStore.saveDoc()" pulse-loop
+                class="mohit-navBar-icon" title="Save Document"
+                :style="getColorStyles('var(--blue-three)')">
+
+                <font-awesome-icon :icon="docStore.saveDocIcon"
+                    :spin-pulse="docStore.documentSaveStatus.pending"
+                />
             </button>
-            <button class="mohit-navBar-icon" @click="docStore.printDoc()" title="Print Document" :style="getColorStyles('var(--blue-one)')">
+            <button @click="docStore.printDoc()" pulse-loop
+                class="mohit-navBar-icon" title="Print Document"
+                :style="getColorStyles('var(--blue-one)')">
+
                 <font-awesome-icon :icon="(docStore.printIcon)"
                     :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
                 />
             </button>
-            <button v-if="docStore.googleDriveOptionAvailable"
-                class="mohit-navBar-icon"
-                @click="webData.toggleDocumentMenu(true)"
-                title="Upload This Document To Your Google Drive!"
+            <button v-if="docStore.googleDriveOptionAvailable" @click="webData.toggleDocumentMenu(true)" pulse-loop
+                class="mohit-navBar-icon" title="Upload This Document To Your Google Drive!"
                 :style="getColorStyles('#34A853')">
 
                 <font-awesome-icon :spin-pulse="docStore.documentUploadToGoogleDriveStatus.pending"
@@ -154,26 +154,18 @@
             </button>
             <div class="mohit-navBar-bottom-separator"></div>
 
-            <button class="mohit-navBar-icon light" title="Share Webpage"
-                @click="webData.openQRCodePopup()"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
-
+            <button class="mohit-navBar-icon light" title="Share Webpage" @click="webData.openQRCodePopup()" pulse-loop>
                 <font-awesome-icon icon="fa-share-from-square" />
             </button>
         </template>
         <button @click="docStore.toggleDocumentFullScreen()"
-            class="mohit-navBar-icon light"
-            :title="fullScreenStore.docElementTitle"
-            @pointerenter="setPulseLoopAnimation"
-            @mouseleave="setPulseLoopAnimation">
+            class="mohit-navBar-icon light" pulse-loop
+            :title="fullScreenStore.docElementTitle">
 
             <font-awesome-icon :icon="fullScreenStore.faIcon" />
         </button>
-        <button v-if="!laptopBar" @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light"
-            :title="(webData.documentMenuOpen ? 'Close Document Actions' : 'Open Document Actions')"
-            @pointerenter="setPulseLoopAnimation"
-            @mouseleave="setPulseLoopAnimation">
+        <button v-if="!laptopBar" @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light" pulse-loop
+            :title="(webData.documentMenuOpen ? 'Close Document Actions' : 'Open Document Actions')">
 
             <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-file-circle-xmark' : 'fa-file-export')" />
         </button>
@@ -194,12 +186,12 @@ const docStore = useDocumentStore();
 const fullScreenStore = useFullScreenStore();
 
 const laptopBar = computed(() => { return (windowWidth.value > 500); });
-const showGoogleDriveNestedMenu = computed(() => {
-    return (webData.documentMenuOpen && (webData.nestedMenuOpen == 1) && docStore.googleDriveOptionAvailable);
-});
+const showMobileMenu = computed(() => { return (webData.documentMenuOpen && (webData.nestedMenuOpen == 0) && !laptopBar.value); });
+const showGoogleDriveNestedMenu = computed(() => { return (webData.documentMenuOpen && (webData.nestedMenuOpen == 1) && docStore.googleDriveOptionAvailable); });
 
 onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
+usePulseLoopAnimation();
 
 watch(laptopBar, () => {
     if(!laptopBar.value || webData.menuOpen != 1 || webData.nestedMenuOpen != 0) { return; }
