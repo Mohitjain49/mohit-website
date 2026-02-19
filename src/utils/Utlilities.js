@@ -63,32 +63,53 @@ export function useScrollPercentage(elementId = "") {
 
 /**
  * This utility sets the necessary event listeners to enable any HTML element to use the pulse loop animation.
+ * @param {ShallowRef<HTMLElement>} container This is the main container to which the utility will apply to.
  */
-export function usePulseLoopAnimation() {
-    const controller = new AbortController();
+export function usePulseLoopAnimation(container = null) {
+    /** @type {MutationObserver} */
+    var observer = null;
+
+    /** @type {AbortController} */
+    var controller = null;
+
     const enabled = ref(false);
     const numElements = ref(0);
 
     /** This function enables the pulse loop HTML Attribute. */
     async function enable() {
-        if(enabled.value) { return; }
+        if(enabled.value || container.value == null) { return; }
+        await setEventListeners();
+        
+        if(observer == null) { observer = new MutationObserver(() => { setEventListeners(); }); }
+        observer.observe(container.value, { childList: true, subtree: true })
+        enabled.value = true;
+    }
+
+    /** This function sets the necessary event listeners for those with the pulse-loop HTML Attribute. */
+    async function setEventListeners() {
+        if(controller != null) { controller.abort(); }
+        controller = new AbortController();
+
         await nextTick();
+        if(!container.value) { return; }
 
         const signal = controller.signal;
-        const elements = document.querySelectorAll('[pulse-loop]');
+        const elements = container.value.querySelectorAll('[pulse-loop]');
         numElements.value = elements.length;
 
         elements.forEach((element) => {
             element.addEventListener("pointerenter", (event) => { setPulseLoopAnimation(event); }, { signal });
             element.addEventListener("mouseleave", (event) => { setPulseLoopAnimation(event); }, { signal });
         });
-        enabled.value = true;
     }
 
     /** This function disables the pulse loop HTML Attribute. */
     function disable() {
         if(!enabled.value) { return; }
-        controller.abort();
+        if(controller != null) { controller.abort(); }
+
+        controller = null;
+        observer.disconnect();
         numElements.value = 0;
         enabled.value = false;
     }

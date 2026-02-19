@@ -50,21 +50,44 @@
 
     <Transition name="documentMenu-transition">
         <div v-if="showGoogleDriveNestedMenu" class="mohit-documentMenu">
-            <div class="mohit-documentMenu-googleOpt top">
-                <button @click="docStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE">
+            <div class="mohit-documentMenu-bigOpt google top">
+                <button @click="docStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE" pulse-loop>
                     <span> Use Default Save Folder </span>
                     <font-awesome-icon icon="fa-folder" />
                 </button>
             </div>
-            <div class="mohit-documentMenu-googleOpt">
-                <button @click="docStore.requestGoogleToUploadDoc(true)" :title="GOOGLE_CHOOSE_FOLDER_TITLE">
+            <div class="mohit-documentMenu-bigOpt google">
+                <button @click="docStore.requestGoogleToUploadDoc(true)" :title="GOOGLE_CHOOSE_FOLDER_TITLE" pulse-loop>
                     <span> Choose Folder In Your Drive </span>
                     <font-awesome-icon :icon="(docStore.documentUploadToGoogleDriveStatus.cancel ? 'fa-ban' : 'fa-folder-tree')" />
                 </button>
             </div>
-            <div class="mohit-documentMenu-googleOpt bottom">
-                <button @click="webData.setNestedMenu(0)" :style="getColorStyles('red')">
-                    <span> Back To Document Options </span>
+            <div class="mohit-documentMenu-bigOpt close bottom">
+                <button @click="webData.setMenuOpen((laptopBar ? -1 : 1), 0)" pulse-loop>
+                    <span> Close Google Docs Options </span>
+                    <font-awesome-icon icon="fa-circle-arrow-down" />
+                </button>
+            </div>
+        </div>
+    </Transition>
+
+    <Transition name="documentMenu-transition">
+        <div v-if="showShareMenu" class="mohit-documentMenu">
+            <div class="mohit-documentMenu-bigOpt top">
+                <button @click="webData.openQRCodePopup()" pulse-loop>
+                    <span> Share Webpage </span>
+                    <font-awesome-icon icon="fa-share-from-square" />
+                </button>
+            </div>
+            <div v-if="webData.shareSupported" class="mohit-documentMenu-bigOpt">
+                <button @click="docStore.shareDoc()" :style="getColorStyles('var(--blue-one)')" pulse-loop>
+                    <span> Share Document </span>
+                    <font-awesome-icon :icon="docStore.shareIcon" :spin-pulse="docStore.documentShareStatus.pending" />
+                </button>
+            </div>
+            <div class="mohit-documentMenu-bigOpt close bottom">
+                <button @click="webData.closeNavMenu()" pulse-loop>
+                    <span> Close Share Options </span>
                     <font-awesome-icon icon="fa-circle-arrow-down" />
                 </button>
             </div>
@@ -122,7 +145,7 @@
             </a>
             <button @click="docStore.downloadDoc()" pulse-loop
                 class="mohit-navBar-icon" title="Download Document"
-                :style="getColorStyles('var(--blue-one)')">
+                :style="getColorStyles('var(--blue-three)')">
 
                 <font-awesome-icon :icon="docStore.downloadIcon"
                     :spin-pulse="docStore.documentDownloadStatus.pending"
@@ -130,7 +153,7 @@
             </button>
             <button v-if="docStore.saveAsSupported" @click="docStore.saveDoc()" pulse-loop
                 class="mohit-navBar-icon" title="Save Document"
-                :style="getColorStyles('var(--blue-three)')">
+                :style="getColorStyles('var(--blue-one)')">
 
                 <font-awesome-icon :icon="docStore.saveDocIcon"
                     :spin-pulse="docStore.documentSaveStatus.pending"
@@ -138,13 +161,13 @@
             </button>
             <button @click="docStore.printDoc()" pulse-loop
                 class="mohit-navBar-icon" title="Print Document"
-                :style="getColorStyles('var(--blue-one)')">
+                :style="getColorStyles('var(--blue-three)')">
 
                 <font-awesome-icon :icon="(docStore.printIcon)"
                     :spin-pulse="(docStore.documentPrintStatus.pending && !docStore.documentPrintStatus.timeoutError)"
                 />
             </button>
-            <button v-if="docStore.googleDriveOptionAvailable" @click="webData.toggleDocumentMenu(true)" pulse-loop
+            <button v-if="docStore.googleDriveOptionAvailable" @click="webData.toggleDocumentMenu(1)" pulse-loop
                 class="mohit-navBar-icon" title="Upload This Document To Your Google Drive!"
                 :style="getColorStyles('#34A853')">
 
@@ -154,7 +177,7 @@
             </button>
             <div class="mohit-navBar-bottom-separator"></div>
 
-            <button class="mohit-navBar-icon light" title="Share Webpage" @click="webData.openQRCodePopup()" pulse-loop>
+            <button class="mohit-navBar-icon light" title="Share Webpage" @click="webData.toggleDocumentMenu(2)" pulse-loop>
                 <font-awesome-icon icon="fa-share-from-square" />
             </button>
         </template>
@@ -164,7 +187,7 @@
 
             <font-awesome-icon :icon="fullScreenStore.faIcon" />
         </button>
-        <button v-if="!laptopBar" @click="webData.toggleDocumentMenu()" class="mohit-navBar-icon light" pulse-loop
+        <button v-if="!laptopBar" @click="webData.toggleDocumentMenu(0, true)" class="mohit-navBar-icon light" pulse-loop
             :title="(webData.documentMenuOpen ? 'Close Document Actions' : 'Open Document Actions')">
 
             <font-awesome-icon :icon="(webData.documentMenuOpen ? 'fa-file-circle-xmark' : 'fa-file-export')" />
@@ -188,14 +211,16 @@ const fullScreenStore = useFullScreenStore();
 const laptopBar = computed(() => { return (windowWidth.value > 500); });
 const showMobileMenu = computed(() => { return (webData.documentMenuOpen && (webData.nestedMenuOpen == 0) && !laptopBar.value); });
 const showGoogleDriveNestedMenu = computed(() => { return (webData.documentMenuOpen && (webData.nestedMenuOpen == 1) && docStore.googleDriveOptionAvailable); });
+const showShareMenu = computed(() => { return (webData.documentMenuOpen && (webData.nestedMenuOpen == 2) && laptopBar.value); });
 
 onMounted(() => { docStore.mountDocumentPage(); });
 onBeforeUnmount(() => { docStore.unmountDocumentPage(); });
-usePulseLoopAnimation();
+usePulseLoopAnimation(docNavBar);
 
+// This closes document menus that should not be open based on the viewport size.
 watch(laptopBar, () => {
-    if(!laptopBar.value || webData.menuOpen != 1 || webData.nestedMenuOpen != 0) { return; }
-    webData.setMenuOpen(-1, 0);
+    if(laptopBar.value && webData.menuOpen == 1 && webData.nestedMenuOpen == 0) { webData.setMenuOpen(-1, 0); }
+    if(!laptopBar.value && webData.menuOpen == 1 && webData.nestedMenuOpen == 2) { webData.setMenuOpen(-1, 0); }
 });
 
 // This tracks touch "swipe" events so that the user can open or close the document navigation bar with a swipe.

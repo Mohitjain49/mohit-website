@@ -266,7 +266,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      *      If this is blank, it saves the document to the user's "My Drive".
      */
     async function uploadDocToGoogleDrive(folderId = "") {
-        webData.setMenuOpen(1, 0);
+        webData.setMenuOpen((window.innerWidth > 500 ? -1 : 1), 0);
         chooseGoogleDriveFolderForUpload = false;
         documentUploadToGoogleDriveStatus.value.pending = true;
 
