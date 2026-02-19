@@ -1,24 +1,41 @@
 <template>
-<div v-if="fullScreenSet" class="fullScreen-scrollBar">
-    <button class="top" @click="scrollFsElement(true)" title="Click Here To Scroll Up!"> <FontAwesomeIcon icon="fa-caret-up" /> </button>
-    <div class="fullScreen-scrollBar-body"> <div class="inner" :style="scrollbarStyle"></div> </div>
-    <button class="bottom" @click="scrollFsElement(false)" title="Click Here To Scroll Down!"> <FontAwesomeIcon icon="fa-caret-down" /> </button>
+<div v-if="showScrollBar" class="fullScreen-scrollBar">
+    <button class="top" @click="scrollFsElement(-10)" title="Click Here To Scroll Up!"> <FontAwesomeIcon icon="fa-caret-up" /> </button>
+    <div class="fullScreen-scrollBar-body"> <div :class="innerScrollBarClasses" ref="scrollbar-inner" :style="vScrollbarStyle"></div> </div>
+    <button class="bottom" @click="scrollFsElement(10)" title="Click Here To Scroll Down!"> <FontAwesomeIcon icon="fa-caret-down" /> </button>
 </div>
 </template>
 
 <script setup>
 const props = defineProps({ fsElementId: { type: String, required: true } });
+const { vScrollbarStyle, vertical } = useScrollPercentage(props.fsElementId);
 const fullScreenSet = getFullScreenSet();
-const { scrollbarStyle } = useScrollPercentage(props.fsElementId);
+
+const interactiveScroll = useTemplateRef('scrollbar-inner');
+const { pressed: mousePressed } = useMousePressed({ target: interactiveScroll });
+const { y: mouseY } = useMouse();
+
+const showScrollBar = computed(() => { return (fullScreenSet.value && vertical.value.inView < 100); });
+const innerScrollBarClasses = computed(() => { return ['inner', (mousePressed.value ? 'active' : '')]; });
+
+watch(mouseY, (newY, oldY) => { if(mousePressed.value) { scrollFsElement(170 / (newY - oldY)); } });
+watch(mousePressed, () => { setUserSelect(!mousePressed.value); });
+onBeforeUnmount(() => { setUserSelect(true); });
 
 /**
  * This function scrolls within the Full Screen element.
- * @param {Boolean} up If true, scrolls up, otherwise it scrolls down.
+ * @param {Number} divisor The number to divide the full screen element's total height by.
  */
-function scrollFsElement(up) {
-    const value = (up ? -30 : 30);
+function scrollFsElement(divisor = 10) {
     const element = document.getElementById(props.fsElementId);
-    element.scrollTop = Math.max(0, Math.min(element.scrollHeight, (element.scrollTop + value)));
+    const newValue = (element.scrollTop + (element.scrollHeight / divisor));
+    element.scrollTop = Math.max(0, Math.min(element.scrollHeight, newValue));
+}
+
+/** This function enables and disables vistors from selecting text on the full screen element. */
+function setUserSelect(enable = true) {
+    const element = document.getElementById(props.fsElementId);
+    if(element) { element.style.userSelect = (enable ? "" : "none"); }
 }
 </script>
 
@@ -41,9 +58,17 @@ function scrollFsElement(up) {
     border-top: 1px solid white;
     border-bottom: 1px solid white;
 }
+
 .fullScreen-scrollBar-body .inner {
     width: 100% !important;
     background-color: var(--vibrant-flame);
+    transition: var(--default-transition);
+    position: relative;
+    border-radius: 20px;
+}
+.fullScreen-scrollBar-body .inner.active,
+.fullScreen-scrollBar-body .inner:hover {
+    background-color: var(--vibrant-flame-dark);
 }
 
 .fullScreen-scrollBar button {

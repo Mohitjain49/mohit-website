@@ -4,13 +4,20 @@
  */
 export function useScrollPercentage(elementId = "") {
     var animationFrame = null;
-    const horizontal = ref(0);
-    const vertical = ref(0);
     const active = ref(false);
 
-    /** A simple object that can be used by custom scrollbars. */
-    const scrollbarStyle = computed(() => {
-        return { height: (vertical.value + "%"), width: (horizontal.value + "%") }
+    const horizontal = ref({ main: 0, inView: 0 });
+    const vertical = ref({ main: 0, inView: 0 });
+
+    /** A simple object that can be used by vertical custom scrollbars. */
+    const vScrollbarStyle = computed(() => {
+        const topNum = ((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / 100) * (100 - vertical.value.inView)));
+        return { height: (vertical.value.inView + "%"), top: (topNum + "%") }
+    });
+    /** A simple object that can be used by horizontal custom scrollbars. */
+    const hScrollbarStyle = computed(() => {
+        const leftNum = ((horizontal.value.inView >= 100) ? 0 : ((horizontal.value.main / 100) * (100 - horizontal.value.inView)));
+        return { width: (horizontal.value.inView + "%"), left: (leftNum + "%") }
     });
 
     /** This function calculates both the horizontal and vertical percentages. */
@@ -19,13 +26,17 @@ export function useScrollPercentage(elementId = "") {
         const element = document.getElementById(elementId);
         if(element == null) { return; }
 
-        // This section calculates the scroll percentage from the element. 
-        vertical.value = element.scrollTop / (element.scrollHeight - element.clientHeight);
-        horizontal.value = element.scrollLeft / (element.scrollWidth - element.clientWidth);
+        // This section calculates how far the user scrolled from the top of the element.
+        vertical.value.main = (element.scrollTop / (element.scrollHeight - element.clientHeight));
+        horizontal.value.main = (element.scrollLeft / (element.scrollWidth - element.clientWidth));
 
         // This section simplifies the calculations into "clean" numbers for other JS code.
-        vertical.value = (Number.isNaN(vertical.value) ? 100 : (Math.round(vertical.value * 10000) / 100));
-        horizontal.value = (Number.isNaN(horizontal.value) ? 100 : (Math.round(horizontal.value * 10000) / 100));
+        vertical.value.main = (Number.isNaN(vertical.value.main) ? 100 : (Math.round(vertical.value.main * 10000) / 100));
+        horizontal.value.main = (Number.isNaN(horizontal.value.main) ? 100 : (Math.round(horizontal.value.main * 10000) / 100));
+
+        // This calculates what percentage of the element is viewable on the viewport.
+        vertical.value.inView = (Math.round((element.clientHeight / element.scrollHeight) * 10000) / 100);
+        horizontal.value.inView = (Math.round((element.clientWidth / element.scrollWidth) * 10000) / 100);
         return { horizontal: horizontal.value, vertical: vertical.value }
     }
 
@@ -58,7 +69,7 @@ export function useScrollPercentage(elementId = "") {
     // This mounts and unmounts the necessary event listeners for this utility.
     onMounted(() => { nextTick().then(() => { calculate(); start(); }); });
     onBeforeUnmount(() => { stop(); });
-    return { horizontal, vertical, scrollbarStyle, calculate, start, stop, toggle }
+    return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate, start, stop, toggle }
 }
 
 /**

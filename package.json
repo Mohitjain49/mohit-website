@@ -42,8 +42,8 @@
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.992.0",
-        "@aws-sdk/client-s3": "^3.992.0",
+        "@aws-sdk/client-cloudfront": "^3.993.0",
+        "@aws-sdk/client-s3": "^3.993.0",
         "@unhead/vue": "^2.1.4",
         "@vitejs/plugin-vue": "^6.0.4",
         "dotenv": "^17.3.1",
@@ -64,6 +64,7 @@
         "vue-router": "^5.0.2"
     },
     "overrides": {
-        "fast-xml-parser": "^5.3.6"
+        "fast-xml-parser": "^5.3.6",
+        "minimatch": "^10.2.1"
     }
 }

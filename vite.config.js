@@ -44,7 +44,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'onClickOutside',
         'useDateFormat',
         'useScriptTag',
-        'useSpeechRecognition'
+        'useSpeechRecognition',
+        'useMousePressed'
     ]
 }
 
