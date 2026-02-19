@@ -86,7 +86,7 @@ const webData = useWebsiteDataStore();
 const onHostedFileRoute = getOnHostedFileRoute();
 
 const fullScreenSet = getFullScreenSet();
-const COPYRIGHT_TEXT = ref("2025 Mohit Jain");
+const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
 
 onMounted(() => {
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
@@ -102,7 +102,7 @@ const footerClass = computed(() => {
     const path = route.path;
     if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
         return 'main-page';
-    } else if(!fullScreenSet.value && onHostedFileRoute) {
+    } else if(!fullScreenSet.value && onHostedFileRoute.value) {
         return 'document-route';
     } else {
         return '';

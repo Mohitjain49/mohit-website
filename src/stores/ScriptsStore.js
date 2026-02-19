@@ -3,11 +3,10 @@ import deploy_code from "@scripts/deploy.mjs?raw";
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
     /**
-     * @type {Array<{ path: String, code: String, name: String, suffix: String, blob: Blob, link: String }>}
      * This stores basic object data for each of the scripts hosted on my website.
      */
     const scripts = [
-        { path: "/aws-deploy-script", code: deploy_code, name: "deploy", suffix: ".mjs", blob: null, link: PERSONAL_DEPLOY_SCRIPT_LINK }
+        useHostedScript("/aws-deploy-script", deploy_code, "deploy", ".mjs", PERSONAL_DEPLOY_SCRIPT_LINK),
     ];
 
     const router = useRouter();
@@ -15,8 +14,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const fullScreenStore = useFullScreenStore();
 
     const mounted = ref(false);
-    const deployScript = ref({ html: "<pre> <div class=\"loading-spinner\"></div> </pre>", loaded: false });
-
     const scriptDownloadStatus = ref({ pending: false, fresh: false, timeout: null });
     const scriptSaveStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
     const scriptCopyStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
@@ -24,9 +21,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This calculates what script page the visitor is currently viewing. */
     const currentScriptRoute = computed(() => {
         const routePath = router.currentRoute.value.path;
-        return scripts.findIndex((item) => {
-            return ((item.path === routePath || (item.path + "/") === routePath));
-        });
+        return scripts.findIndex((item) => { return item.checkPath(routePath); });
     });
     const saveAsSupported = computed(() => {
         return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
@@ -35,7 +30,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** The GitHub Link of the script currently being displayed. */
     const currentScriptLink = computed(() => { return ((currentScriptRoute.value == -1) ? "" : scripts[currentScriptRoute.value].link) });
     const onScriptRoute = computed(() => { return (currentScriptRoute.value != -1); });
-    const onDeployScriptRoute = computed(() => { return (currentScriptRoute.value == 0); });
+    const onDeployScriptRoute = computed(() => { return scripts[0].onRoute.value; });
 
     const downloadIcon = computed(() => {
         const downloadObj = scriptDownloadStatus.value;
@@ -59,11 +54,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This function downloads a script for the visitor to use. */
     function downloadScript() {
         scriptDownloadStatus.value.pending = true;
-        const documentFile = getCurrentScript();
+        const scriptFile = getCurrentScript();
 
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(documentFile.blob);
-        link.download = (documentFile.name + documentFile.suffix);
+        link.href = URL.createObjectURL(scriptFile.blob.value);
+        link.download = (scriptFile.name + scriptFile.suffix);
     
         link.click();
         link.remove();
@@ -81,9 +76,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This function lets users copy a script. */
     async function copyScript() {
         scriptCopyStatus.value.pending = true;
-        const documentFile = getCurrentScript();
+        const scriptFile = getCurrentScript();
 
-        await navigator.clipboard.writeText(documentFile.code);
+        await navigator.clipboard.writeText(scriptFile.code);
         scriptCopyStatus.value.pending = false;
         scriptCopyStatus.value.fresh = true;
 
@@ -99,15 +94,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         if(!saveAsSupported.value) { return; }
         try {
             scriptSaveStatus.value.pending = true;
-            const documentFile = getCurrentScript();
+            const scriptFile = getCurrentScript();
 
             const saveHandle = await window.showSaveFilePicker({
-                suggestedName: documentFile.name,
-                types: [{ description: "JS File", accept: { 'text/javascript': [documentFile.suffix] } }]
+                suggestedName: scriptFile.name,
+                types: [{ description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] } }]
             });
 
             const writable = await saveHandle.createWritable();
-            await writable.write(documentFile.blob);
+            await writable.write(scriptFile.blob.value);
             await writable.close();
 
             scriptSaveStatus.value.pending = false;
@@ -138,20 +133,16 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function mounts the scripts store so the application can use it. */
     function mountScriptsStore() {
-        for(let i = 0; i < scripts.length; i++) {
-            scripts[i].blob = new Blob([scripts[i].code], { type: "text/javascript" });
-        }
+        for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
         mounted.value = true;
     }
 
     /** This function mounts a page that hosts a script. */
     async function mountScriptPage() {
         webData.mountWebData();
-        await nextTick();
-
-        if(onDeployScriptRoute.value && !deployScript.value.loaded) {
-            deployScript.value.html = await initCodeScriptElement(scripts[0].code);
-            deployScript.value.loaded = true;
+        if(onScriptRoute.value) {
+            await nextTick();
+            await scripts[currentScriptRoute.value].initCodeScriptElement();
         }
     }
 
@@ -159,29 +150,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     function unmountScriptPage() {
         document.body.style.overflowY = "";
         fullScreenStore.exitFullScreen();
-    }
-
-    /**
-     * This function returns a string consisting of HTML that can be displayed to a user. 
-     * @param {String} code The code as a string.
-     */
-    async function initCodeScriptElement(code = "") {
-        try {
-            const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
-            const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
-            const langJs = (await import("shiki/dist/langs/javascript.mjs"));
-            const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
-
-            const highlighter = await createHighlighterCore({
-                themes: [themeVitesseDark], langs: [langJs],
-                engine: createOnigurumaEngine(import('shiki/wasm')) 
-            });
-            const finalValue = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
-            return finalValue;
-        } catch(e) {
-            console.error(e);
-            return "<pre> <div class=\"loading-spinner\"></div> </pre>";
-        }
     }
 
     /**
@@ -204,9 +172,88 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         webData.closeNavMenu();
     }
 
-    return { mounted, saveAsSupported, deployScript, onScriptRoute, onDeployScriptRoute, currentScriptLink,
+    return { scripts, mounted, saveAsSupported, onScriptRoute, onDeployScriptRoute, currentScriptLink,
         scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen,
         mountScriptsStore, mountScriptPage, unmountScriptPage
     }
 });
+
+/**
+ * This serves as a simple utility that contains all the necessary objects a hosted script needs for a script page.
+ * @param {String} path The path in the website that displays this script.
+ * @param {String} code The actual code that this script has.
+ * @param {String} name The name of the file.
+ * @param {".mjs" | ".js" | ".cjs"} suffix The suffix of the file.
+ * @param {String} link A link where this file would be stored online. Most likely a GitHub Link.
+ */
+function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link = "") {
+    /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
+    const blob = ref(null);
+    const router = useRouter();
+
+    const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
+    const htmlLoaded = ref({ status: false, error: false, progress: 0 });
+
+    const progressStr = computed(() => { return (String(htmlLoaded.value.progress) + "%"); });
+    const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
+
+    /** This functions initializes the blob value for this hosted script. */
+    function initBlob() {
+        blob.value = new Blob([code], { type: "text/javascript" });
+    }
+
+    /**
+     * This function checks whether the path associated with this hosted script is equivalent to another given path.
+     * @param {String} pathname The path parameter.
+     */
+    function checkPath(pathname) {
+        return (path === pathname || (path + "/") === pathname);
+    }
+
+    /**
+     * This function returns a string consisting of HTML that can be displayed to a user. 
+     */
+    async function initCodeScriptElement() {
+        if(htmlLoaded.value.status || htmlLoaded.value.error) { return; }
+        try {
+            const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
+            setLoadedProgress(20);
+
+            const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
+            setLoadedProgress(40);
+
+            const langJs = (await import("shiki/dist/langs/javascript.mjs"));
+            setLoadedProgress(60);
+
+            const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
+            setLoadedProgress(80);
+
+            const highlighter = await createHighlighterCore({
+                themes: [themeVitesseDark], langs: [langJs],
+                engine: createOnigurumaEngine(import('shiki/wasm')) 
+            });
+            setLoadedProgress(99);
+
+            await sleep(100);
+            html.value = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
+            htmlLoaded.value = { status: true, error: false, progress: 100 }
+        } catch(e) {
+            console.error(e);
+            html.value = "<pre> <div class=\"loading-spinner\"></div> </pre>";
+            htmlLoaded.value = { status: false, error: true, progress: htmlLoaded.value.progress }
+        }
+    }
+
+    /**
+     * This function sets the progress in creating the code script html.
+     * @param {Number} num The new number (between 0 and 100) that represents the new progress status.
+     */
+    function setLoadedProgress(num) {
+        htmlLoaded.value.progress = num;
+    }
+
+    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, progressStr,
+        initBlob, checkPath, initCodeScriptElement
+    }
+}

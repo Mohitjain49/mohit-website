@@ -247,10 +247,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /**
      * The toggles the status of the document menu.
-     * @param {Boolean} openGoogleDriveMenu If true, this will open the nested google drive menu over the default menu.
+     * @param {Number} nestedIndex The index of the nested menu to open.
+     * @param {Boolean} ignoreNested If true, this will ignore the Nested Index when determining the state of the main menu.
      */
-    function toggleDocumentMenu(openGoogleDriveMenu = false) {
-        setMenuOpen(((menuOpen.value == 1) ? -1 : 1), ((menuOpen.value == 1 && openGoogleDriveMenu) ? 1 : 0));
+    function toggleDocumentMenu(nestedIndex = 0, ignoreNested = false) {
+        setMenuOpen(((menuOpen.value == 1 && (nestedIndex == nestedMenuOpen.value || ignoreNested)) ? -1 : 1), nestedIndex);
     }
 
     /**
@@ -260,7 +261,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function setMenuOpen(index = -1, nestedIndex = 0) {
         menuOpen.value = index;
-        nestedMenuOpen.value = nestedIndex;
+        nestedMenuOpen.value = ((index == -1) ? 0 : nestedIndex);
     }
 
     /**

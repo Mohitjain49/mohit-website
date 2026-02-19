@@ -10,21 +10,16 @@
         </RouterLink>
 
         <div class="mohit-navBar-icons">
-            <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path"
+            <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path" :title="btn.title"
                 @click="(event) => { flashNavOpt(event, btn.path) }"
-                :title="btn.title"
-                class="mohit-navBar-icon"
                 :style="getColorStyles(btn.color)"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
+                class="mohit-navBar-icon" pulse-loop>
 
                 <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
             <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
                 :title="(webData.navMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu')"
-                :style="getColorStyles('var(--website-light-text)')"
-                @pointerenter="setPulseLoopAnimation"
-                @mouseleave="setPulseLoopAnimation">
+                :style="getColorStyles('var(--website-light-text)')" pulse-loop>
 
                 <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
             </button>
@@ -32,7 +27,7 @@
     </div>
 
     <Transition name="navMenu-transition">
-        <div v-if="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="mohit-navMenu">
+        <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="mohit-navMenu">
             <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
                 <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
@@ -42,14 +37,13 @@
 
             <div class="mohit-navMenu-opt">
                 <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
-                    :title="extra.title"
+                    :title="extra.title" :style="getColorStyles(extra.color)"
                     class="mohit-navMenu-extra"
-                    @click="(event) => { flashNavOpt(event, extra.path) }"
-                    :style="getColorStyles(extra.color)">
+                    @click="(event) => { flashNavOpt(event, extra.path) }" pulse-loop>
 
                     <font-awesome-icon :icon="extra.icon" />
                 </RouterLink>
-                <RouterLink v-if="webData.navFooterPresent" :to="footerRoute"
+                <RouterLink v-if="webData.navFooterPresent" :to="footerRoute" pulse-loop
                     class="mohit-navMenu-extra"
                     @click="webData.scrollToAndFromFooter()"
                     :style="getColorStyles('var(--website-text)')"
@@ -63,7 +57,7 @@
                     <font-awesome-icon icon="fa-share-from-square" />
                 </button>
                 <div class="mohit-navMenu-volume-meter">
-                    <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle">
+                    <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" pulse-loop>
                         <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
                     </button>
                     <input type="range" min="0" max="100" title="Volume Meter for the click sound."
@@ -85,9 +79,11 @@ const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const router = useRouter();
 
-const { height: windowHeight } = useWindowSize();
 const navBar = ref(null);
 const navBarSwipe = useSwipe(navBar, { passive: true });
+
+const { height: windowHeight } = useWindowSize();
+usePulseLoopAnimation(navBar);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
