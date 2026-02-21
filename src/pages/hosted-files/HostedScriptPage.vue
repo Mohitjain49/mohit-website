@@ -1,10 +1,10 @@
 <template>
 <ScriptsBar />
 <main id="script-page" class="personal-web-body transparent">
-    <template v-if="scriptsStore.scripts[0].htmlLoaded.status">
-        <div class="code-file-inHTML" v-html="scriptsStore.scripts[0].html"></div>
+    <template v-if="scriptsStore.scripts[index].htmlLoaded.status">
+        <div class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
     </template>
-    <template v-else-if="scriptsStore.scripts[0].htmlLoaded.error">
+    <template v-else-if="scriptsStore.scripts[index].htmlLoaded.error">
         <div class="code-file-loadingBar-container">
             <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
         </div>
@@ -12,9 +12,9 @@
     <template v-else>
         <div class="code-file-loadingBar-container">
             <div class="code-file-loadingBar">
-                <div class="inner" :style="{ 'width': scriptsStore.scripts[0].progressStr }"></div>
+                <div class="inner" :style="{ 'width': scriptsStore.scripts[index].progressStr }"></div>
             </div>
-            <p> {{ scriptsStore.scripts[0].progressStr }} </p>
+            <p> {{ scriptsStore.scripts[index].progressStr }} </p>
         </div>
     </template>
 
@@ -29,10 +29,16 @@
 <script setup>
 const scriptsStore = useScriptsStore();
 const fullScreenSet = getFullScreenSet();
+const props = defineProps({ index: { type: Number, required: true } });
 
-useHead(getMeta("Mohit Jain | My AWS Deployment Script", "/aws-deploy-script",
-    "This page shows my AWS deployment script that I use for my websites and web applications."
-));
+const PAGE_METADATA = [{
+    title: "Mohit Jain | My AWS Deployment Script",
+    route: "aws-deploy-script",
+    desc: "This page shows my AWS deployment script that I use for my websites and web applications."
+}];
+
+const CURRENT_METADATA = PAGE_METADATA[props.index];
+useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc));
 </script>
 
 <style scoped>

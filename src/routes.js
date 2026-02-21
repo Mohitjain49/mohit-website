@@ -13,11 +13,9 @@ import InstallPage from "./pages/features/InstallPage.vue";
 import CodeScanner from "./pages/features/CodeReader.vue";
 import GoogleMockup from "./pages/GoogleMockup.vue";
 
-import Resume from "./pages/documents/Resume.vue";
-import ResumeMarkdown from "./pages/documents/ResumeMarkdown.vue";
-import CreateGitHubRepo from "./pages/documents/CreateGitHubRepo.vue";
-import InternAppreciation from "./pages/documents/InternAppreciation.vue";
-import DeployScript from "./pages/documents/DeployScript.vue";
+import HostedDocumentPage from "./pages/hosted-files/HostedDocumentPage.vue";
+import HostedScriptPage from "./pages/hosted-files/HostedScriptPage.vue";
+import ResumeMarkdown from "./pages/hosted-files/ResumeMarkdown.vue";
 
 import Redirect from "./pages/redirects/Redirect.vue";
 import EmailRedirect from "./pages/redirects/EmailRedirect.vue";
@@ -67,15 +65,15 @@ export const personalRoutes = [
     { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/google-mockup", name: "Google Mockup Page", component: GoogleMockup },
 
-    { path: FCS_CERTIFICATE_ROUTE, name: "Intern Appreciation Certificate", component: InternAppreciation },
-    { path: "/create-github-repo", name: "Create GitHub Repository Instructions", component: CreateGitHubRepo },
-    { path: "/aws-deploy-script", name: "Deploy Script", component: DeployScript },
+    { path: "/aws-deploy-script", name: "Deploy Script", component: HostedScriptPage, props: { index: 0 } },
+    { path: "/create-github-repo", name: "Create GitHub Repository Instructions", component: HostedDocumentPage, props: { index: 2 } },
+    { path: FCS_CERTIFICATE_ROUTE, name: "Intern Appreciation Certificate", component: HostedDocumentPage, props: { index: 3 } },
 
     {
         path: "/resume",
         children: [
-            { path: "", name: "My Resume", component: Resume },
-            { path: "qrcode", name: "My Resume (Qrcode)", component: Resume },
+            { path: "", name: "My Resume", component: HostedDocumentPage, props: { index: 0 } },
+            { path: "qrcode", name: "My Resume (Qrcode)", component: HostedDocumentPage, props: { index: 1 } },
             { path: "markdown", name: "My Resume (Markdown)", component: ResumeMarkdown }
         ]
     },

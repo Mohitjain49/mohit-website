@@ -11,7 +11,7 @@
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
 
-            <div class="contact-box-title-container center-flex-display">
+            <div class="contact-box-title-container">
                 <h1 class="gradient-text contact-box-title"> Contact Me </h1>
             </div>
             <div class="contact-box-desc">
@@ -48,6 +48,10 @@
                         v-model="msgMain"
                         @click="setAlertBox('')"
                     ></textarea>
+                    <div :class="['contact-input-tab-characterCount', (messageLong ? 'good' : '')]">
+                        <span class="main-count"> {{ (msgMain.length) + ' / ' + MIN_MESSAGE_LENGTH }} </span>
+                        <span class="small-text"> required characters </span>
+                    </div>
                 </div>
                 <div class="contact-box-line"></div>
 
@@ -71,13 +75,14 @@
                         @click="setAlertBox('')"
                     >
                 </div>
-                <div class="contact-box-buttons-container center-flex-display">
-                    <div class="contact-input-tab-btn-container center-flex-display">
-                        <button class="contact-input-tab-btn center-flex-display"
-                            @click="sendEmail()"
-                            @pointerenter="setHeartbeatAnimation"
-                            @mouseleave="setHeartbeatAnimation"
-                            v-html="'Send Message'">
+                <div class="contact-box-buttons-container">
+                    <div class="contact-input-tab-btn-container">
+                        <button class="contact-input-tab-btn" @click="sendEmail()"
+                            @pointerenter="setPulseLoopAnimation"
+                            @mouseleave="setPulseLoopAnimation">
+
+                            <span> Send Message </span>
+                            <FontAwesomeIcon :icon="sendMessageIcon" :spinPulse="sendMessageState.pending" />
                         </button>
                     </div>
                 </div>
@@ -85,7 +90,7 @@
         </div>
 
         <div class="contact-me-box socials">
-            <div class="contact-box-title-container center-flex-display">
+            <div class="contact-box-title-container">
                 <div class="gradient-text contact-box-title">My Socials</div>
             </div>
             <div class="contact-box-desc">
@@ -152,7 +157,8 @@
 
 <script setup>
 import { ofetch } from 'ofetch';
-const AWS_API_LINK = "https://bdddff0ya8.execute-api.us-east-2.amazonaws.com/default/sendEmail";
+const AWS_API_LINK = "https://contact-api.mohit-jain.com/sendEmail";
+const MIN_MESSAGE_LENGTH = 50;
 
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
@@ -160,7 +166,9 @@ const router = useRouter();
 
 const titleInput = ref();
 const alertBoxText = ref("");
+
 var alertBoxTimeout = null;
+var sendMessageTimeout = null;
 
 const msgTitle = ref("");
 const msgMain = ref("");
@@ -168,9 +176,14 @@ const senderName = ref("");
 const senderEmail = ref("");
 
 const routeHash = computed(() => { return router.currentRoute.value.hash; });
-useHead(getMeta("Mohit Jain | Contact Me", "contact",
-    "This page hosts multiple links to platforms where you can contact me."
-));
+const messageLong = computed(() => { return (msgMain.value.length >= MIN_MESSAGE_LENGTH); });
+const sendMessageState = ref({ pending: false, sent: false, error: false });
+
+const sendMessageIcon = computed(() => {
+    const sendMessageObj = sendMessageState.value;
+    return ("fa-" + (sendMessageObj.error ? "ban" : (sendMessageObj.sent ? "check" : (sendMessageObj.pending ? "spinner" : "arrow-right-from-bracket"))));
+});
+useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple links to platforms where you can contact me."));
 
 /**
  * ----------------------------------------------------------------------------
@@ -255,6 +268,7 @@ function updateMainMsg(str = "") {
  */
 function sendEmail() {
     // Stores the necessary parameters for the message.
+    sendMessageState.value.pending = true;
     const body = {
         title: msgTitle.value,
         msgBody: msgMain.value,
@@ -264,19 +278,32 @@ function sendEmail() {
 
     if(AWS_API_LINK === "") {
         setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + getAPIErrorRedirect());
+        onSendEmailError();
         return;
     } else if(!checkAPIParameters(body)) {
+        onSendEmailError();
         return;
     }
 
     ofetch.raw(AWS_API_LINK, { method: 'POST', body }).then((response) => {
         if(response.status !== 200) { return; }
         setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
+
+        // This changes an icon to show the message was sent successfully.
+        sendMessageState.value.pending = false;
+        sendMessageState.value.error = false;
+        sendMessageState.value.sent = true;
+
+        if(sendMessageTimeout != null) { clearTimeout(sendMessageTimeout); }
+        sendMessageTimeout = setTimeout(() => {
+            sendMessageState.value.sent = false;
+            sendMessageTimeout = null;
+        }, 4000);
     }).catch((e) => {
         console.error(e);
+        onSendEmailError();
         setAlertBox("This feature is not working at the moment." + getAPIErrorRedirect());
-    })
-
+    });
 }
 
 /**
@@ -290,8 +317,8 @@ function sendEmail() {
 function checkAPIParameters(message) {
     if(message.title === "") {
         setAlertBox("Please enter an appropriate title for your message.");
-    } else if(message.msgBody.length < 50) {
-        setAlertBox("Please ensure that your message is at least 50 characters long.");
+    } else if(message.msgBody.length < MIN_MESSAGE_LENGTH) {
+        setAlertBox("Please ensure that your message is at least " + MIN_MESSAGE_LENGTH + " characters long.");
     } else if(message.name === "") {
         setAlertBox("Please enter your name that I can refer to you as.");
     } else if(message.emailAddress === "") {
@@ -307,11 +334,22 @@ function checkAPIParameters(message) {
     return false;
 }
 
-/**
- * This returns a string redirecting visitors to email my work email.
- */
+/** This returns a string redirecting visitors to email my work email. */
 function getAPIErrorRedirect() {
     return (" You can email me directly with my work email: " + getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink));
+}
+
+/** This function runs whenever an error is detected when sendng an email to me. */
+function onSendEmailError() {
+    sendMessageState.value.pending = false;
+    sendMessageState.value.sent = false;
+    sendMessageState.value.error = true;
+
+    if(sendMessageTimeout != null) { clearTimeout(sendMessageTimeout); }
+    sendMessageTimeout = setTimeout(() => {
+        sendMessageState.value.error = false;
+        sendMessageTimeout = null;
+    }, 4000);
 }
 
 /**

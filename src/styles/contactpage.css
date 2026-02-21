@@ -68,6 +68,10 @@
     height: 75px;
     width: 100%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }
 .contact-box-title {
     font-size: 50px;
@@ -197,7 +201,7 @@
 
 .contact-input-tab-textarea {
     resize: vertical;
-    height: 200px;
+    height: 185px;
     max-width: 75%;
     min-width: 75%;
     min-height: 20px;
@@ -206,6 +210,9 @@
     overflow-x: hidden;
 }
 .contact-box-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     width: 100%;
     height: fit-content;
@@ -214,6 +221,10 @@
 .contact-input-tab-btn-container {
     height: 60px;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }
 .contact-input-tab-btn {
     cursor: pointer;
@@ -228,13 +239,47 @@
     border: var(--empty-border);
     background-color: var(--website-light-text);
     transition: var(--default-transition);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }
 
-.contact-input-tab-btn:hover {
-    border-color: var(--website-text);
+.contact-input-tab-btn:hover { border-color: var(--website-text); }
+.contact-input-tab-btn:focus { border-color: var(--website-text); }
+
+.contact-input-tab-btn span { margin-left: 10px; }
+.contact-input-tab-btn svg { margin-right: 10px; }
+
+.contact-input-tab-characterCount {
+    position: relative;
+    user-select: none;
+    height: 15px;
+    width: 75%;
+    left: 12.5%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    gap: 0px;
+    color: yellow;
+    text-shadow: 0px 0px 5px var(--website-text);
+    font-family: 'Lexend', sans-serif;
+    font-size: 12px;
 }
-.contact-input-tab-btn:focus {
-    border-color: var(--website-text);
+.contact-input-tab-characterCount.good {
+    color: var(--globe-green);
+    text-shadow: 0px 0px 0px var(--globe-green);
+}
+
+.contact-input-tab-characterCount .main-count {
+    margin-left: 3px;
+    user-select: inherit;
+}
+.contact-input-tab-characterCount .small-text {
+    font-size: 9px;
+    margin-left: 3px;
+    user-select: inherit;
 }
 
 .social-tab {
