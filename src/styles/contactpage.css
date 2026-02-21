@@ -253,6 +253,7 @@
 
 .contact-input-tab-characterCount {
     position: relative;
+    user-select: none;
     height: 15px;
     width: 75%;
     left: 12.5%;
@@ -262,7 +263,7 @@
     flex-direction: row;
     gap: 0px;
     color: yellow;
-    text-shadow: 0px 0px 3px var(--website-text);
+    text-shadow: 0px 0px 5px var(--website-text);
     font-family: 'Lexend', sans-serif;
     font-size: 12px;
 }
@@ -273,10 +274,12 @@
 
 .contact-input-tab-characterCount .main-count {
     margin-left: 3px;
+    user-select: inherit;
 }
 .contact-input-tab-characterCount .small-text {
     font-size: 9px;
     margin-left: 3px;
+    user-select: inherit;
 }
 
 .social-tab {

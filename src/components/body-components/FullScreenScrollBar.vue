@@ -32,10 +32,14 @@ function scrollFsElement(divisor = 10) {
     element.scrollTop = Math.max(0, Math.min(element.scrollHeight, newValue));
 }
 
-/** This function enables and disables vistors from selecting text on the full screen element. */
+/**
+ * This function enables and disables vistors from selecting text on the full screen element.
+ * @warn This has no effect if there isn't a full screen element active.
+ * @param {Boolean} enable Whether to enable user text selection or not.
+ */
 function setUserSelect(enable = true) {
     const element = document.getElementById(props.fsElementId);
-    if(element) { element.style.userSelect = (enable ? "" : "none"); }
+    if(element) { element.style.userSelect = ((enable || !fullScreenSet.value) ? "" : "none"); }
 }
 </script>
 
