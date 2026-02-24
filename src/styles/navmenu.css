@@ -299,6 +299,10 @@
     height: 30px;
     font-size: 18px;
 }
+.mohit-documentBar-mobileSpace {
+    width: calc(100% - 200px);
+}
+
 .mohit-navBar-bottom-separator {
     height: 75%;
     width: 3px;

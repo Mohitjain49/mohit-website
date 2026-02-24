@@ -10,7 +10,7 @@
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
-            <VuePDF :id="id" :class="class" :pdf="pdf" :ref="(el) => {docPagesRefs[index] = el}"
+            <VuePDF :class="id" :id="class" :pdf="pdf" :ref="(el) => {docPagesRefs[index] = el}"
                 :text-layer="annontations" :annotation-layer="annontations"
                 @loaded="() => {setSingleDocLoaded(index)}"
                 @annotation="(event) => {documentStore.onAnnotationClick(event)}"

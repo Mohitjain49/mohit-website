@@ -116,6 +116,12 @@
             </RouterLink>
         </template>
         <template v-else-if="docStore.onCreateGithubRepoRoute">
+            <button class="mohit-navBar-icon" title="See Table Of Contents" pulse-loop
+                :style="getColorStyles('var(--vibrant-flame)')"
+                @click="scrollToTableOfContents(2)">
+
+                <font-awesome-icon icon="fa-list" />
+            </button>
             <a href="https://github.com/" class="mohit-navBar-icon white" title="Go To GitHub" pulse-loop>
                 <font-awesome-icon icon="fa-brands fa-github" />
             </a>
@@ -134,9 +140,10 @@
                 <font-awesome-icon icon="fa-school-flag" />
             </a>
         </template>
-        <div class="mohit-navBar-bottom-separator"></div>
+        <div v-if="!laptopBar" class="mohit-documentBar-mobileSpace"></div>
 
         <template v-if="laptopBar">
+            <div class="mohit-navBar-bottom-separator"></div>
             <a :href="docStore.documentLink" target="mohit-document" pulse-loop
                 class="mohit-navBar-icon white"
                 title="Open Document in New Tab">
@@ -236,6 +243,14 @@ watch(docNavBarSwipe.isSwiping, () => {
         triggerClickSound();
     }
 });
+
+/**
+ * This function scrolls to the page the table of contents is on.
+ * @param {Number} pageNum The number of the page that the table of contents is on.
+ */
+function scrollToTableOfContents(pageNum = 2) {
+    try { goToPageSection(("page_" + pageNum), 70); } catch(e) {}
+}
 
 const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";
