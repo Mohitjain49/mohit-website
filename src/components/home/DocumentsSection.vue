@@ -1,6 +1,6 @@
 <script setup>
 import fcs_logo from "@/assets/Fulton_County_Schools_Logo.png";
-const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab", "sitemap-tab"];
+const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab"];
 
 const tabRefs = ref([]);
 const documentsText = ref(null);
@@ -24,9 +24,8 @@ useIntersectionObserver(tabRefs, (entry) => {
     <div class="documents-section-mainText" ref="documentsText">
         <div id="documents-section-title"> My Docs </div>
         <p id="documents-section-desc">
-            Below are few documents that I publicly display and use in professional environments. 
-            The PDFs here are rendered using PDF.js, and you can save any of these files to your computer 
-            or your Google Drive with the provided Document Options.
+            These are a few documents and scripts I have put together that help showcase my professional expertise. 
+            Whether you are here to take a quick look or want to keep a copy for yourself, feel free to grab whatever helps you out!
         </p>
     </div>
     <div class="documents-section-tabs-container">
@@ -74,18 +73,6 @@ useIntersectionObserver(tabRefs, (entry) => {
                     We teach website design and development skills to these interns via interactive learning. 
                 </p>
             </RouterLink>
-        </div>
-        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[4] = el}">
-            <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab">
-                <div class="documents-section-tab-header">
-                    <font-awesome-icon icon="fa-sitemap" />
-                    <span> Sitemap.xml File </span>
-                </div>
-                <p>
-                    This will direct you to the sitemap.xml file for this website. 
-                    Feel Free to take a look at it!
-                </p>
-            </a>
         </div>
     </div>
 </div>
@@ -142,7 +129,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 }
 .documents-section-tabs-container {
     width: 100%;
-    height: 1000px;
+    height: 800px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -241,7 +228,7 @@ useIntersectionObserver(tabRefs, (entry) => {
         font-size: 80px;
     }
     .documents-section-tabs-container {
-        height: 1000px;
+        height: 800px;
     }
     .documents-section-tab {
         height: 150px;

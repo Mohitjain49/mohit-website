@@ -194,7 +194,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     async function shareDoc() {
         documentShareStatus.value.pending = true;
         const documentFile = getCurrentPDFObject();
-        webData.shareFile(new File([documentFile.blob], (documentFile.name + documentFile.suffix), { type: 'application/pdf' }));
+        await webData.shareFile(new File([documentFile.blob], (documentFile.name + documentFile.suffix), { type: 'application/pdf' }));
 
         documentShareStatus.value.pending = false;
         documentShareStatus.value.fresh = true;

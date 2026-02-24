@@ -88,7 +88,8 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/documents" + FCS_CERTIFICATE_ROUTE], replacement: FCS_CERTIFICATE_ROUTE },
 
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
-    { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" }
+    { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
+    { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" }
 ];
 
 // This is a list of redirects to other websites.

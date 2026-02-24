@@ -307,18 +307,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This function triggers the browser to share a link.
      * @param {String} link The link to share.
      */
-    function shareLink(link = PERSONAL_WEBSITE_LINK) {
+    async function shareLink(link = PERSONAL_WEBSITE_LINK) {
         if(!shareSupported) { return; }
-        share({ url: link, text: ("Sharing Link From " + PERSONAL_WEBSITE_LINK), title: "Sharing Link..." })
+        await share({ url: link, text: ("Sharing Link From " + PERSONAL_WEBSITE_LINK), title: "Sharing Link..." })
     }
 
     /**
      * This function triggers the browser to share a file
      * @param {File} file The file to share.
      */
-    function shareFile(file) {
+    async function shareFile(file) {
         if(!shareSupported) { return; }
-        share({ files: [file], text: ("Sharing File From " + PERSONAL_WEBSITE_LINK), title: "Sharing File..." })
+        await share({ files: [file], text: ("Sharing File From " + PERSONAL_WEBSITE_LINK), title: "Sharing File..." })
     }
 
     /**
