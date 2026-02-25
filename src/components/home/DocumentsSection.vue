@@ -4,6 +4,8 @@ const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certifica
 
 const tabRefs = ref([]);
 const documentsText = ref(null);
+const documentsSectionRef = useTemplateRef('mohit-documents-section');
+usePulseLoopAnimation(documentsSectionRef);
 
 useIntersectionObserver(documentsText, ([{ isIntersecting }]) => {
     setHomeTabAnimation(document.getElementById('documents-section-title'), true, isIntersecting);
@@ -20,7 +22,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 </script>
 
 <template>
-<div id="documents" class="documents-section">
+<div id="documents" class="documents-section" ref="mohit-documents-section">
     <div class="documents-section-mainText" ref="documentsText">
         <div id="documents-section-title"> My Docs </div>
         <p id="documents-section-desc">
@@ -30,7 +32,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     </div>
     <div class="documents-section-tabs-container">
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
-            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab">
+            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-file-lines" />
                     <span> My Resume </span>
@@ -42,7 +44,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <RouterLink to="/aws-deploy-script" id="deploy-script-tab" class="documents-section-tab">
+            <RouterLink to="/aws-deploy-script" id="deploy-script-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-upload" />
                     <span> Deploy Script </span>
@@ -54,7 +56,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
-            <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab">
+            <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-brands fa-github" />
                     <span> Create A GitHub Repo </span>
@@ -66,7 +68,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
-            <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab">
+            <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab" pulse-loop>
                 <img :src="fcs_logo" width="110" draggable="false" />
                 <p>
                     iVue takes in a few interns through the Fulton County Schools Internship Program. 
