@@ -1,9 +1,11 @@
 <script setup>
 import fcs_logo from "@/assets/Fulton_County_Schools_Logo.png";
-const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab", "sitemap-tab"];
+const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab"];
 
 const tabRefs = ref([]);
 const documentsText = ref(null);
+const documentsSectionRef = useTemplateRef('mohit-documents-section');
+usePulseLoopAnimation(documentsSectionRef);
 
 useIntersectionObserver(documentsText, ([{ isIntersecting }]) => {
     setHomeTabAnimation(document.getElementById('documents-section-title'), true, isIntersecting);
@@ -20,18 +22,17 @@ useIntersectionObserver(tabRefs, (entry) => {
 </script>
 
 <template>
-<div id="documents" class="documents-section">
+<div id="documents" class="documents-section" ref="mohit-documents-section">
     <div class="documents-section-mainText" ref="documentsText">
         <div id="documents-section-title"> My Docs </div>
         <p id="documents-section-desc">
-            Below are few documents that I publicly display and use in professional environments. 
-            The PDFs here are rendered using PDF.js, and you can save any of these files to your computer 
-            or your Google Drive with the provided Document Options.
+            These are a few documents and scripts I have put together that help showcase my professional expertise. 
+            Whether you are here to take a quick look or want to keep a copy for yourself, feel free to grab whatever helps you out!
         </p>
     </div>
     <div class="documents-section-tabs-container">
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
-            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab">
+            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-file-lines" />
                     <span> My Resume </span>
@@ -43,7 +44,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <RouterLink to="/aws-deploy-script" id="deploy-script-tab" class="documents-section-tab">
+            <RouterLink to="/aws-deploy-script" id="deploy-script-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-upload" />
                     <span> Deploy Script </span>
@@ -55,7 +56,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
-            <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab">
+            <RouterLink to="/create-github-repo/" id="github-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-brands fa-github" />
                     <span> Create A GitHub Repo </span>
@@ -67,25 +68,13 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
-            <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab">
+            <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab" pulse-loop>
                 <img :src="fcs_logo" width="110" draggable="false" />
                 <p>
                     iVue takes in a few interns through the Fulton County Schools Internship Program. 
                     We teach website design and development skills to these interns via interactive learning. 
                 </p>
             </RouterLink>
-        </div>
-        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[4] = el}">
-            <a :href="PERSONAL_SITEMAP_LINK" id="sitemap-tab" class="documents-section-tab">
-                <div class="documents-section-tab-header">
-                    <font-awesome-icon icon="fa-sitemap" />
-                    <span> Sitemap.xml File </span>
-                </div>
-                <p>
-                    This will direct you to the sitemap.xml file for this website. 
-                    Feel Free to take a look at it!
-                </p>
-            </a>
         </div>
     </div>
 </div>
@@ -142,7 +131,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 }
 .documents-section-tabs-container {
     width: 100%;
-    height: 1000px;
+    height: 800px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -241,7 +230,7 @@ useIntersectionObserver(tabRefs, (entry) => {
         font-size: 80px;
     }
     .documents-section-tabs-container {
-        height: 1000px;
+        height: 800px;
     }
     .documents-section-tab {
         height: 150px;

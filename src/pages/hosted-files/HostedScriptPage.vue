@@ -43,7 +43,7 @@ useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA
 
 <style scoped>
 .code-file-inHTML :deep(pre) {
-    max-width: 1000px;
+    max-width: 1250px;
     width: calc(100% - 70px);
     height: fit-content;
     min-height: var(--body-height);

@@ -1,6 +1,6 @@
 {
     "name": "mohit-website",
-    "version": "3.6.2",
+    "version": "3.6.3",
     "private": true,
     "type": "module",
     "scripts": {
@@ -20,7 +20,7 @@
     "dependencies": {
         "@fontsource/lexend": "^5.2.11",
         "@fontsource/montserrat": "^5.2.8",
-        "@fontsource/roboto": "^5.2.9",
+        "@fontsource/roboto": "^5.2.10",
         "@fortawesome/fontawesome-svg-core": "^7.2.0",
         "@fortawesome/free-brands-svg-icons": "^7.2.0",
         "@fortawesome/free-solid-svg-icons": "^7.2.0",
@@ -38,13 +38,13 @@
         "pinia": "^3.0.4",
         "qr-code-styling": "^1.9.2",
         "uninstall": "^0.0.0",
-        "vue": "^3.5.28",
+        "vue": "^3.5.29",
         "vue-qrcode-reader": "^5.7.3"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.995.0",
-        "@aws-sdk/client-s3": "^3.995.0",
-        "@unhead/vue": "^2.1.4",
+        "@aws-sdk/client-cloudfront": "^3.997.0",
+        "@aws-sdk/client-s3": "^3.997.0",
+        "@unhead/vue": "^2.1.6",
         "@vitejs/plugin-vue": "^6.0.4",
         "dotenv": "^17.3.1",
         "mime-types": "^3.0.2",
