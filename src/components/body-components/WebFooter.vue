@@ -137,8 +137,7 @@ const EXTRA_ROUTES = [
 
 const REPO_ROUTES = [
     { name: "Code Sandbox", link: PERSONAL_WEBSITE_CODE_SANDBOX, icon: "fa-square-pen", color: "var(--lightning-yellow)" },
-    { name: "Commits", link: PERSONAL_WEBSITE_COMMITS_LINK, icon: "fa-code-commit", color: "white" },
-    { name: "Sitemap", link: PERSONAL_SITEMAP_LINK, icon: "fa-sitemap", color: "lightgrey" },
+    { name: "Commits", link: PERSONAL_WEBSITE_COMMITS_LINK, icon: "fa-code-commit", color: "white" }
 ];
 
 const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/features/"];

@@ -47,9 +47,9 @@
                     class="mohit-navMenu-extra"
                     @click="webData.scrollToAndFromFooter()"
                     :style="getColorStyles('var(--website-text)')"
-                    :title="(webData.webFooterVisibility ? 'Scroll To The Top' : 'Scroll Down To Footer')">
+                    :title="(webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages')">
 
-                    <FontAwesomeIcon :icon="(webData.webFooterVisibility ? 'fa-angles-up' : 'fa-angles-down')" />
+                    <FontAwesomeIcon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
                 </RouterLink>
             </div>
             <div class="mohit-navMenu-opt small-features">

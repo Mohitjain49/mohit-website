@@ -93,7 +93,7 @@ export default defineConfig(({ isSsrBuild }) => {
                 includeAssets: ['**/*.woff2', '**/*.woff'],
 
                 workbox: {
-                    cacheId: `v3.6.3-${Date.now()}`,
+                    cacheId: `v3.6.4-${Date.now()}`,
                     globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                     maximumFileSizeToCacheInBytes: 5000000,
                     navigateFallback: "/index.html",
@@ -127,6 +127,7 @@ export default defineConfig(({ isSsrBuild }) => {
         ],
         ssgOptions: {
             dirStyle: 'nested',
+            beastiesOptions: { preload: 'media' },
             onFinished() {
                 generateSitemap({
                     hostname: "https://www.mohit-jain.com/",
