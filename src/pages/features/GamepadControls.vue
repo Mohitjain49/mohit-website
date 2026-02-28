@@ -13,8 +13,8 @@
                 <ul>
                     <li> <a :href="JOYPAD_EVENTS_FILE" target="mohit-gamepad"> Joypad Events </a> </li>
                     <li> <a :href="JOYPAD_CLASSES_FILE" target="mohit-gamepad"> Joypad Classes </a> </li>
-                    <li> <a :href="GAMEPAD_STORE_FILE" target="mohit-gamepad"> Gamepad Pinia Store </a> </li>
-                    <li> <a :href="GAMEPAD_COMPONENT_FILE" target="mohit-gamepad"> Gamepad Vue.js Component </a> </li>
+                    <li> <RouterLink to="/gamepad/store-and-utility" target="mohit-gamepad"> Gamepad Vue.js Store & Utility </RouterLink> </li>
+                    <li> <RouterLink to="/gamepad/vuejs-component" target="mohit-gamepad"> Gamepad Vue.js Component </RouterLink> </li>
                 </ul>
                 <FontAwesomeIcon class="gamepad-desc-icon" icon="fa-code" />
             </div>
@@ -111,11 +111,12 @@
                     </tbody>
                 </table>
                 <p class="gamepad-controls-iconSource">
-                    <span> Icon Source: </span> <a :href="ICON_SOURCE" v-html="ICON_SOURCE"></a>
+                    <span> Icon Source: </span> <a :href="GAMEPAD_ICON_SOURCE" v-html="GAMEPAD_ICON_SOURCE"></a>
                 </p>
             </div>
         </div>
     </div>
+    <WebFooter />
 </main>
 </template>
 
@@ -137,12 +138,6 @@ import left_bumper from "@/assets/gamepad-buttons/left_bumper.png";
 import right_bumper from "@/assets/gamepad-buttons/right_bumper.png";
 import left_trigger from "@/assets/gamepad-buttons/left_trigger.png";
 import right_trigger from "@/assets/gamepad-buttons/right_trigger.png";
-
-const ICON_SOURCE = "https://kenney.nl/assets/input-prompts";
-const JOYPAD_EVENTS_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/joypad-events.js");
-const JOYPAD_CLASSES_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/joypad-classes.js");
-const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/stores/GamepadStore.js");
-const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.vue");
 
 const gamepadStore = useGamepadStore();
 onMounted(() => { initWebData(); });
@@ -378,6 +373,10 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     }
     .move-cursor-mobileBreak {
         display: block;
+    }
+
+    .gamepad-desc ul {
+        padding-left: 20px;
     }
 }
 </style>

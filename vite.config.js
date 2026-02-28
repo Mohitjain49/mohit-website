@@ -18,7 +18,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Markdown from 'unplugin-vue-markdown/vite';
 
 const SITEMAP_EXCLUDED_ROUTES = [
-    "/gamepad", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
+    "/gamepad", "/gamepad/**", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
     "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner", "/resume/qrcode",
     "/ivue", "/ivuemedia", "/ivuerobotics", "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",

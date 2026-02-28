@@ -61,7 +61,6 @@ export const personalRoutes = [
     { path: "/features", name: "Main Features Page", component: Features },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },
     { path: "/code-scanner", alias: ["/code-reader"], name: "Code Reader Page", component: CodeScanner },
-    { path: "/gamepad", name: "Gamepad Controls", component: GamepadControls },
     { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/google-mockup", name: "Google Mockup Page", component: GoogleMockup },
 
@@ -75,6 +74,14 @@ export const personalRoutes = [
             { path: "", name: "My Resume", component: HostedDocumentPage, props: { index: 0 } },
             { path: "qrcode", name: "My Resume (Qrcode)", component: HostedDocumentPage, props: { index: 1 } },
             { path: "markdown", name: "My Resume (Markdown)", component: ResumeMarkdown }
+        ]
+    },
+    {
+        path: "/gamepad",
+        children: [
+            { path: "", name: "Gamepad Controls", component: GamepadControls },
+            { path: "store-and-utility", name: "Gamepad Store And Utility Code", component: HostedScriptPage, props: { index: 1 } },
+            { path: "vuejs-component", name: "Gamepad Component Code", component: HostedScriptPage, props: { index: 2 } }
         ]
     },
 

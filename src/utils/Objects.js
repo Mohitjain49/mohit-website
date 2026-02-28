@@ -37,6 +37,12 @@ export const PERSONAL_SITEMAP_LINK = "https://www.mohit-jain.com/sitemap.xml";
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
 export const CREATE_GITHUB_REPO_DOC_LINK = "https://www.mohit-jain.com/Create_Github_Repo.pdf";
 
+export const GAMEPAD_ICON_SOURCE = "https://kenney.nl/assets/input-prompts";
+export const JOYPAD_EVENTS_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/joypad-events.js");
+export const JOYPAD_CLASSES_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/joypad-classes.js");
+export const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/stores/GamepadStore.js");
+export const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.client.vue");
+
 export const MND_PROJECT_LINK = "https://mnd.mohit-jain.com/";
 export const PERSONAL_GLOBE_LINK = "https://mohitjain49.github.io/globe/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";

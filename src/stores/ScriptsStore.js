@@ -1,4 +1,6 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
+import gamepad_store_utility_code from "@/stores/GamepadStore.js?raw";
+import gamepad_component_code from "@/components/GamepadComponent.client.vue?raw";
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
@@ -7,6 +9,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     const scripts = [
         useHostedScript("/aws-deploy-script", deploy_code, "deploy", ".mjs", PERSONAL_DEPLOY_SCRIPT_LINK),
+        useHostedScript("/gamepad/store-and-utility", gamepad_store_utility_code, "GamepadStore", ".js", GAMEPAD_STORE_FILE),
+        useHostedScript("/gamepad/vuejs-component", gamepad_component_code, "GamepadComponent", ".client.vue", GAMEPAD_COMPONENT_FILE),
     ];
 
     const router = useRouter();
@@ -96,10 +100,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
             scriptSaveStatus.value.pending = true;
             const scriptFile = getCurrentScript();
 
-            const saveHandle = await window.showSaveFilePicker({
-                suggestedName: scriptFile.name,
-                types: [{ description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] } }]
-            });
+            var typeObj = { description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] } }
+            if(!scriptFile.suffix.endsWith("js")) { typeObj = { description: "JS File", accept: { 'text/plain': [scriptFile.suffix] } } }
+            const saveHandle = await window.showSaveFilePicker({ suggestedName: scriptFile.name, types: [typeObj] });
 
             const writable = await saveHandle.createWritable();
             await writable.write(scriptFile.blob.value);
@@ -184,7 +187,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
  * @param {String} path The path in the website that displays this script.
  * @param {String} code The actual code that this script has.
  * @param {String} name The name of the file.
- * @param {".mjs" | ".js" | ".cjs"} suffix The suffix of the file.
+ * @param {".mjs" | ".js" | ".cjs" | ".vue" | ".client.vue"} suffix The suffix of the file.
  * @param {String} link A link where this file would be stored online. Most likely a GitHub Link.
  */
 function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link = "") {
