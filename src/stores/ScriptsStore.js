@@ -1,6 +1,7 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
 import gamepad_store_utility_code from "@/stores/GamepadStore.js?raw";
 import gamepad_component_code from "@/components/GamepadComponent.client.vue?raw";
+import gamepad_events_code from "@/gamepad-events.js?raw";
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
@@ -11,6 +12,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         useHostedScript("/aws-deploy-script", deploy_code, "deploy", ".mjs", PERSONAL_DEPLOY_SCRIPT_LINK),
         useHostedScript("/gamepad/store-and-utility", gamepad_store_utility_code, "GamepadStore", ".js", GAMEPAD_STORE_FILE),
         useHostedScript("/gamepad/vuejs-component", gamepad_component_code, "GamepadComponent", ".client.vue", GAMEPAD_COMPONENT_FILE),
+        useHostedScript("/gamepad/custom-events", gamepad_events_code, "gamepad-events", ".js", GAMEPAD_EVENTS_FILE)
     ];
 
     const router = useRouter();
@@ -226,20 +228,25 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
             const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
             setLoadedProgress(40);
 
-            const langJs = (await import("shiki/dist/langs/javascript.mjs"));
+            var lang = null;
+            if(suffix.endsWith("js")) {
+                lang = (await import("shiki/dist/langs/javascript.mjs"));
+            } else if(suffix.endsWith("vue")) {
+                lang = (await import("shiki/dist/langs/vue.mjs"));
+            }
             setLoadedProgress(60);
 
-            const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
+            const themeVitesseBlack = (await import("shiki/dist/themes/vitesse-black.mjs"));
             setLoadedProgress(80);
 
             const highlighter = await createHighlighterCore({
-                themes: [themeVitesseDark], langs: [langJs],
+                themes: [themeVitesseBlack], langs: [lang],
                 engine: createOnigurumaEngine(import('shiki/wasm')) 
             });
             setLoadedProgress(99);
 
             await sleep(100);
-            html.value = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
+            html.value = highlighter.codeToHtml(code, { lang: (suffix.endsWith("js") ? "javascript" : "vue"), theme: "vitesse-black" });
             htmlLoaded.value = { status: true, error: false, progress: 100 }
         } catch(e) {
             console.error(e);

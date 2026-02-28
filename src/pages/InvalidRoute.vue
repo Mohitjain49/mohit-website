@@ -89,6 +89,7 @@ const INTERNAL_REDIRECTS = [
 
     { routes: ["/gamepad/store", "/gamepad/utility", "/scripts/gamepad/**"], replacement: "/gamepad/store-and-utility" },
     { routes: ["/gamepad/component", "/gamepad/vue.js-component"], replacement: "/gamepad/vuejs-component" },
+    { routes: ["/gamepad/events"], replacement: "/gamepad/custom-events" },
 
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },

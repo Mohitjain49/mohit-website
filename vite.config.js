@@ -83,7 +83,7 @@ export default defineConfig(({ isSsrBuild }) => {
             }),
             AutoImport({
                 imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, VUEUSE_AUTO_IMPORTS],
-                dirs: ['./src/stores/**', './src/utils/**', './src/joypad-classes.js'],
+                dirs: ['./src/stores/**', './src/utils/**'],
                 dts: './dts/auto-imports.d.ts',
                 vueTemplate: true
             }),

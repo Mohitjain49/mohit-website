@@ -11,10 +11,9 @@
                     The files below are the 4 main files in my code that give functionality to the Gamepad on this website.
                 </p>
                 <ul>
-                    <li> <a :href="JOYPAD_EVENTS_FILE" target="mohit-gamepad"> Joypad Events </a> </li>
-                    <li> <a :href="JOYPAD_CLASSES_FILE" target="mohit-gamepad"> Joypad Classes </a> </li>
-                    <li> <RouterLink to="/gamepad/store-and-utility" target="mohit-gamepad"> Gamepad Vue.js Store & Utility </RouterLink> </li>
-                    <li> <RouterLink to="/gamepad/vuejs-component" target="mohit-gamepad"> Gamepad Vue.js Component </RouterLink> </li>
+                    <li> <RouterLink to="/gamepad/custom-events"> Custom Gamepad Events </RouterLink> </li>
+                    <li> <RouterLink to="/gamepad/store-and-utility"> Gamepad Vue.js Store & Utility </RouterLink> </li>
+                    <li> <RouterLink to="/gamepad/vuejs-component"> Gamepad Vue.js Component </RouterLink> </li>
                 </ul>
                 <FontAwesomeIcon class="gamepad-desc-icon" icon="fa-code" />
             </div>

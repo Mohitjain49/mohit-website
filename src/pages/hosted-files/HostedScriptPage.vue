@@ -47,6 +47,11 @@ const PAGE_METADATA = [
         route: "gamepad/vuejs-component",
         desc: "This page shows the code that displays the gamepad cursor and other components activated by the gamepad on this website."
     },
+    {
+        title: "Mohit Jain | Gamepad Controls | Custom Events",
+        route: "gamepad/custom-events",
+        desc: "This page shows the code that fires and handles the custom gamepad events I made on my website."
+    },
 ];
 
 const CURRENT_METADATA = PAGE_METADATA[props.index];

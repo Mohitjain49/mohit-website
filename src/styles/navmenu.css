@@ -258,8 +258,8 @@
 
 #mohit-scriptsBar {
     border-color: var(--vibrant-flame);
-    width: 300px;
-    left: calc(50% - 150px);
+    width: 330px;
+    left: calc(50% - 165px);
 }
 .mohit-documentBar-bottom, .mohit-scriptsBar-bottom {
     height: 40px;
@@ -447,6 +447,9 @@
     }
     .mohit-documentBar-iconSection {
         gap: 5px;
+    }
+    #mohit-scriptsBar {
+        scale: 0.90;
     }
 }
 @media (max-width: 350px) {

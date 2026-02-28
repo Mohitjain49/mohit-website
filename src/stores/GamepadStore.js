@@ -275,7 +275,7 @@ function useGamepadCursor(index = 0) {
 
     /**
      * This function manages the custom cursor based on an event.
-     * @param {GamepadAxisMoveEvent} event The object returned by moving the axis.
+     * @param {{ stick: String, axisIndex: Number, movement: Number }} event The object returned by moving the axis.
      */
     function manageCursor(event) {
         if(event.stick !== "left_stick") { return; }
@@ -351,6 +351,11 @@ function useGamepadCursor(index = 0) {
         setMaxCursorSpeed, addToMaxCursorSpeed, stopChangingMaxCursorSpeed,
         setCustomCursor, manageCursor, manageCursorWithDpad, initScrollYBy
     }
+}
+
+/** This function returns whether the Web Gamepad API is supported or not. */
+export function checkGamepadsSupported() {
+    return Boolean((typeof navigator !== 'undefined') && (typeof navigator.getGamepads === 'function'));
 }
 
 const CUSTOM_CURSOR_COLORS = [

@@ -81,7 +81,8 @@ export const personalRoutes = [
         children: [
             { path: "", name: "Gamepad Controls", component: GamepadControls },
             { path: "store-and-utility", name: "Gamepad Store And Utility Code", component: HostedScriptPage, props: { index: 1 } },
-            { path: "vuejs-component", name: "Gamepad Component Code", component: HostedScriptPage, props: { index: 2 } }
+            { path: "vuejs-component", name: "Gamepad Component Code", component: HostedScriptPage, props: { index: 2 } },
+            { path: "custom-events", name: "Gamepad Events Code", component: HostedScriptPage, props: { index: 3 } }
         ]
     },
 
