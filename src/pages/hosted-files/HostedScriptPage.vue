@@ -31,11 +31,28 @@ const scriptsStore = useScriptsStore();
 const fullScreenSet = getFullScreenSet();
 const props = defineProps({ index: { type: Number, required: true } });
 
-const PAGE_METADATA = [{
-    title: "Mohit Jain | My AWS Deployment Script",
-    route: "aws-deploy-script",
-    desc: "This page shows my AWS deployment script that I use for my websites and web applications."
-}];
+const PAGE_METADATA = [
+    {
+        title: "Mohit Jain | My AWS Deployment Script",
+        route: "aws-deploy-script",
+        desc: "This page shows my AWS deployment script that I use for my websites and web applications."
+    },
+    {
+        title: "Mohit Jain | Gamepad Controls | Pinia Store and Gamepad Utility Code",
+        route: "gamepad/store-and-utility",
+        desc: "This page shows the main code that this website uses to implement Gamepad functionality."
+    },
+    {
+        title: "Mohit Jain | Gamepad Controls | Vue.js Component Code",
+        route: "gamepad/vuejs-component",
+        desc: "This page shows the code that displays the gamepad cursor and other components activated by the gamepad on this website."
+    },
+    {
+        title: "Mohit Jain | Gamepad Controls | Custom Events",
+        route: "gamepad/custom-events",
+        desc: "This page shows the code that fires and handles the custom gamepad events I made on my website."
+    },
+];
 
 const CURRENT_METADATA = PAGE_METADATA[props.index];
 useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc));

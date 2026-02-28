@@ -33,7 +33,7 @@ export const createApp = ViteSSG(App, { routes: personalRoutes },
         //     ).toString();
         // });
 
-        if(navigator.getGamepads()) { import("./joypad-events.js"); }
+        if(navigator.getGamepads()) { import("./gamepad-events.js"); }
         app.use(VueParticles, { init: async engine => {
             await loadSlim(engine);
             await loadFireworksPreset(engine);

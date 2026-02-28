@@ -5,6 +5,11 @@
 <template>
 <div id="mohit-scriptsBar" ref="mohit-script-bar">
     <div class="mohit-scriptsBar-bottom">
+        <button class="mohit-navBar-icon light" title="Navigate To Last Page" @click="router.back()" pulse-loop>
+            <font-awesome-icon icon="fa-arrow-left" />
+        </button>
+        <div class="mohit-navBar-bottom-separator scriptBar"></div>
+
         <a v-if="(scriptsStore.currentScriptLink != '')" pulse-loop
             :href="scriptsStore.currentScriptLink" target="_blank"
             class="mohit-navBar-icon white" title="See Code On Github">
@@ -55,6 +60,7 @@
 const webData = useWebsiteDataStore();
 const scriptsStore = useScriptsStore();
 const fullScreenStore = useFullScreenStore();
+const router = useRouter();
 
 const scriptBar = useTemplateRef('mohit-script-bar');
 usePulseLoopAnimation(scriptBar);

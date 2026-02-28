@@ -1,5 +1,6 @@
 let prevButtons = [];
 let holdTimes = [];
+const fps = useFps();
 
 /**
  * This function polls the gamepad each frame to check for if any change occurred on the controller.
@@ -66,6 +67,48 @@ function pollGamepad() {
 
     // Loops the function to continue reading the gamepad each frame.
     requestAnimationFrame(pollGamepad);
+}
+
+/**
+ * This class represents a event that indicates the current state of a button on a connected gamepad.
+ */
+class GamepadButtonStatusEvent {
+    /**
+     * @param {Gamepad} gamepad The gamepad where the button originates from.
+     * @param {Number} buttonIndex The index of the button on the gamepad relative to other buttons.
+     * @param {String} status The string that represents the status of a button on a gamepad.
+     * @param {Number} holdFrames The number of frames the button was held down. 
+     */
+    constructor(gamepad, buttonIndex = -1, status = "down", holdFrames = 0) {
+        this.gamepad = gamepad;
+        this.gpIndex = gamepad.index;
+        this.button = buttonIndex;
+        this.status = status;
+        this.framesHeld = holdFrames;
+        this.secondsHeld = ((holdFrames < 1) ? 0 :  Number((this.framesHeld / fps.value).toFixed(4)));
+    }
+}
+
+/**
+ * This class represents a event that indicates when a joystick is moving on a connected gamepad.
+ */
+class GamepadAxisMoveEvent {
+    /**
+     * @param {Gamepad} gamepad The gamepad where the button originates from.
+     * @param {Number} index The index of the axis on the gamepad relative to the other axes.
+     * @param {Number} movement A number that represents the amount the joystick moved from its original position.
+     */
+    constructor(gamepad, index = -1, movement = 0) {
+        this.gamepad = gamepad;
+        this.gpIndex = gamepad.index;
+        this.axisIndex = index;
+        this.movement = movement;
+        this.stick = ((index < 2) ? 'left_stick' : 'right_stick');
+
+        const leftStickInvalid = (this.stick === "left_stick" && (this.movement <= 0.05 && this.movement >= -0.05));
+        const rightStickInvalid = (this.stick === "right_stick" && (this.movement <= 0.05 && this.movement >= -0.05));
+        this.validEvent = !(leftStickInvalid || rightStickInvalid);
+    }
 }
 
 /**

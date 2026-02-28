@@ -87,9 +87,13 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/documents/create-github-repo"], replacement: "/create-github-repo" },
     { routes: ["/documents" + FCS_CERTIFICATE_ROUTE], replacement: FCS_CERTIFICATE_ROUTE },
 
+    { routes: ["/gamepad/store", "/gamepad/utility", "/scripts/gamepad/**"], replacement: "/gamepad/store-and-utility" },
+    { routes: ["/gamepad/component", "/gamepad/vue.js-component"], replacement: "/gamepad/vuejs-component" },
+    { routes: ["/gamepad/events"], replacement: "/gamepad/custom-events" },
+
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
-    { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" }
+    { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" },
 ];
 
 // This is a list of redirects to other websites.
@@ -98,8 +102,7 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/pizza"], replacement: PIZZA_WEBSITE_LINK },
     { routes: ["/globe/**"], replacement: PERSONAL_GLOBE_LINK },
 
-    { routes: ["/code", '/codesandbox', '/code-sandbox'], replacement: PERSONAL_WEBSITE_CODE_SANDBOX },
-    { routes: ["/repo"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
+    { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
     { routes: ["/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },

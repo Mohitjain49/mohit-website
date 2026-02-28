@@ -2,12 +2,12 @@
 <footer id="footer" :class="footerClass" ref="mohit-footer">
     <div class="footer-body">
         <div class="footer-routes-column">
-            <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')">
+            <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')" pulse-loop>
                 <font-awesome-icon icon="fa-house" />
                 <span> Home Page </span>
             </RouterLink>
 
-            <RouterLink v-for="tab in MAIN_ROUTES" :to="(tab.path + '/')"
+            <RouterLink v-for="tab in MAIN_ROUTES" :to="(tab.path + '/')" pulse-loop
                 :style="{ 'color': tab.color }"
                 class="footer-routes-opt"
                 @click="scrollToTop(tab.path)">
@@ -17,22 +17,22 @@
             </RouterLink>
         </div>
 
-        <div class="footer-routes-column right">
-            <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')">
+        <div class="footer-routes-column">
+            <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')" pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
                 <span> Contact Me </span>
             </RouterLink>
 
             <template v-for="(social, index) in SOCIALS">
-                <a v-if="(index != 2)" :href="social.link" class="footer-routes-opt" :style="{ 'color': social.color }">
+                <a v-if="(index != 2)" :href="social.link" class="footer-routes-opt" :style="{ 'color': social.color }" pulse-loop>
                     <font-awesome-icon :icon="social.linkIcon" />
                     <span> {{ social.name }} </span>
                 </a>
             </template>
         </div>
 
-        <div class="footer-routes-column extras">
-            <RouterLink to="/features" class="footer-routes-header"
+        <div class="footer-routes-column">
+            <RouterLink to="/features" class="footer-routes-header" pulse-loop
                 @click="scrollToTop('/features')"
                 style="color: var(--lightning-yellow)">
 
@@ -40,7 +40,7 @@
                 <span> Features </span>
             </RouterLink>
 
-            <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path"
+            <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path" pulse-loop
                 :style="{ 'color': tab.color }"
                 class="footer-routes-opt"
                 @click="scrollToTop(tab.path)">
@@ -48,17 +48,10 @@
                 <font-awesome-icon :icon="tab.icon" />
                 <span> {{ tab.name }} </span>
             </RouterLink>
-        </div>
 
-        <div class="footer-routes-column extras right">
-            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-header white">
+            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="{ 'color': 'white' }" pulse-loop>
                 <font-awesome-icon icon="fa-code-branch" />
                 <span> Repository </span>
-            </a>
-
-            <a v-for="tab in REPO_ROUTES" :href="tab.link" :style="{ 'color': tab.color }" class="footer-routes-opt">
-                <font-awesome-icon :icon="tab.icon" />
-                <span> {{ tab.name }} </span>
             </a>
         </div>
     </div>
@@ -70,7 +63,7 @@
         </RouterLink>
     </div>
 
-    <button v-if="!onHostedFileRoute"
+    <button v-if="!onHostedFileRoute" pulse-loop
         @click="webData.openQRCodePopup()"
         class="qr-popup-open-section"
         title="Share This Page With Someone Else!">
@@ -88,6 +81,9 @@ const onHostedFileRoute = getOnHostedFileRoute();
 const fullScreenSet = getFullScreenSet();
 const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
 
+const footerRef = useTemplateRef('mohit-footer');
+usePulseLoopAnimation(footerRef);
+
 onMounted(() => {
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
     webData.navFooterPresent = true;
@@ -100,7 +96,7 @@ onBeforeUnmount(() => {
 
 const footerClass = computed(() => {
     const path = route.path;
-    if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex(item => item === path)) {
+    if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex((item) => { return (item === path || (item + "/") === path) })) {
         return 'main-page';
     } else if(!fullScreenSet.value && onHostedFileRoute.value) {
         return 'document-route';
@@ -132,16 +128,10 @@ const EXTRA_ROUTES = [
     { name: "Barcode Reader", path: "/code-reader", icon: "fa-barcode", color: "var(--blue-cobalt)" },
     { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
     { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
-    { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" },
+    { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" }
 ];
 
-const REPO_ROUTES = [
-    { name: "Code Sandbox", link: PERSONAL_WEBSITE_CODE_SANDBOX, icon: "fa-square-pen", color: "var(--lightning-yellow)" },
-    { name: "Commits", link: PERSONAL_WEBSITE_COMMITS_LINK, icon: "fa-code-commit", color: "white" },
-    { name: "Sitemap", link: PERSONAL_SITEMAP_LINK, icon: "fa-sitemap", color: "lightgrey" },
-];
-
-const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/features/"];
+const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad"];
 </script>
 
 <style scoped>
@@ -149,7 +139,7 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     position: relative;
     background-color: rgba(0, 0, 0, 0.95);
     width: 100%;
-    height: 375px;
+    height: fit-content;
     border: none;
     padding-top: 25px;
     z-index: 20;
@@ -159,16 +149,16 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     background-color: rgb(10, 10, 10);
 }
 #footer.document-route {
-    padding-bottom: 30px;
+    padding-bottom: 40px;
 }
 
 .footer-body {
     position: relative;
-    left: calc((100% - 1000px) / 2);
-    width: 1000px;
+    left: calc((100% - 750px) / 2);
+    width: 750px;
     height: fit-content;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 .footer-bottom {
     width: 100%;
@@ -199,15 +189,12 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
 }
 
 .footer-routes-column {
-    height: 300px;
+    height: fit-content;
     width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
-}
-.footer-routes-column.extras {
-    height: fit-content;
     padding-bottom: 20px;
 }
 
@@ -216,8 +203,7 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     font-family: 'Roboto', sans-serif;
     font-size: 27px;
     font-weight: bold;
-    border-bottom: var(--thin-empty-border);
-    transition: var(--default-transition);
+    transition: scale 0.2s;
     padding-bottom: 1px;
     margin-bottom: 20px;
     margin-left: 40px;
@@ -227,7 +213,7 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     margin-bottom: 2px;
 }
 .footer-routes-header:hover {
-    border-color: inherit;
+    scale: 1.05;
 }
 
 .footer-routes-header.light {
@@ -241,14 +227,13 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     color: var(--website-text);
     font-family: 'Roboto', sans-serif;
     font-size: 19px;
-    border-bottom: 1px dashed rgba(0, 0, 0, 0);
-    transition: var(--default-transition);
+    transition: scale 0.2s;
     padding-bottom: 2px;
     margin-bottom: 10px;
     margin-left: 40px;
 }
 .footer-routes-opt:hover {
-    border-color: inherit;
+    scale: 1.05;
 }
 .footer-routes-opt svg {
     width: 25px;
@@ -279,46 +264,47 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     scale: 1.1;
 }
 
-@media (max-width: 1050px) {
-    #footer {
-        height: 640px;
-    }
+@media (max-width: 800px) {
     #footer.document-route {
-        padding-bottom: 20px;
+        padding-bottom: 30px;
     }
     .footer-body {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(1, 1fr);
         left: 0px;
         width: 100%;
     }
 
     .footer-routes-column {
-        width: 230px;
-        position: relative;
-        left: calc(100% - 250px)
-    }
-    .footer-routes-column.right {
-        left: 20px;
-    }
-}
-@media (max-width: 700px) {
-    .footer-body {
-        left: 0px;
         width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .footer-routes-header {
+        width: 250px;
+        text-align: left;
+        font-size: 36px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .footer-routes-header svg {
+        font-size: 28px;
+    }
+
+    .footer-routes-opt {
+        width: 170px;
+        text-align: left;
+        margin-left: 0px;
+        margin-right: 0px;
     }
 }
 @media (max-width: 525px) {
-    #footer {
-        height: 545px;
-    }
     #footer.document-route {
         padding-bottom: 40px;
     }
-    .footer-body {
-        height: 470px;
-        left: 0px;
-        width: 100%;
-    }
+
     .footer-bottom {
         padding: 10px 0px;
     }
@@ -327,33 +313,6 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/wakelock/", "/features", "/f
     }
     .copyright-statement svg {
         font-size: 21px;
-    }
-
-    .footer-routes-column {
-        height: 260px;
-        left: 0px;
-        width: auto;
-    }
-    .footer-routes-column.right {
-        left: 0px;
-    }
-
-    .footer-routes-header {
-        font-size: 20px;
-        margin-left: 18px;
-        margin-bottom: 15px;
-    }
-    .footer-routes-header svg {
-        font-size: 18px;
-    }
-
-    .footer-routes-opt {
-        font-size: 14px;
-        margin-left: 20px;
-    }
-    .footer-routes-opt svg {
-        width: 15px;
-        margin-right: 5px;
     }
 
     .qr-popup-open-section {

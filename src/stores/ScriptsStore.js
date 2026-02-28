@@ -1,4 +1,7 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
+import gamepad_store_utility_code from "@/stores/GamepadStore.js?raw";
+import gamepad_component_code from "@/components/GamepadComponent.client.vue?raw";
+import gamepad_events_code from "@/gamepad-events.js?raw";
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
@@ -7,6 +10,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     const scripts = [
         useHostedScript("/aws-deploy-script", deploy_code, "deploy", ".mjs", PERSONAL_DEPLOY_SCRIPT_LINK),
+        useHostedScript("/gamepad/store-and-utility", gamepad_store_utility_code, "GamepadStore", ".js", GAMEPAD_STORE_FILE),
+        useHostedScript("/gamepad/vuejs-component", gamepad_component_code, "GamepadComponent", ".client.vue", GAMEPAD_COMPONENT_FILE),
+        useHostedScript("/gamepad/custom-events", gamepad_events_code, "gamepad-events", ".js", GAMEPAD_EVENTS_FILE)
     ];
 
     const router = useRouter();
@@ -96,10 +102,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
             scriptSaveStatus.value.pending = true;
             const scriptFile = getCurrentScript();
 
-            const saveHandle = await window.showSaveFilePicker({
-                suggestedName: scriptFile.name,
-                types: [{ description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] } }]
-            });
+            var typeObj = { description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] } }
+            if(!scriptFile.suffix.endsWith("js")) { typeObj = { description: "JS File", accept: { 'text/plain': [scriptFile.suffix] } } }
+            const saveHandle = await window.showSaveFilePicker({ suggestedName: scriptFile.name, types: [typeObj] });
 
             const writable = await saveHandle.createWritable();
             await writable.write(scriptFile.blob.value);
@@ -184,7 +189,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
  * @param {String} path The path in the website that displays this script.
  * @param {String} code The actual code that this script has.
  * @param {String} name The name of the file.
- * @param {".mjs" | ".js" | ".cjs"} suffix The suffix of the file.
+ * @param {".mjs" | ".js" | ".cjs" | ".vue" | ".client.vue"} suffix The suffix of the file.
  * @param {String} link A link where this file would be stored online. Most likely a GitHub Link.
  */
 function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link = "") {
@@ -223,20 +228,25 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
             const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
             setLoadedProgress(40);
 
-            const langJs = (await import("shiki/dist/langs/javascript.mjs"));
+            var lang = null;
+            if(suffix.endsWith("js")) {
+                lang = (await import("shiki/dist/langs/javascript.mjs"));
+            } else if(suffix.endsWith("vue")) {
+                lang = (await import("shiki/dist/langs/vue.mjs"));
+            }
             setLoadedProgress(60);
 
-            const themeVitesseDark = (await import("shiki/dist/themes/vitesse-dark.mjs"));
+            const themeVitesseBlack = (await import("shiki/dist/themes/vitesse-black.mjs"));
             setLoadedProgress(80);
 
             const highlighter = await createHighlighterCore({
-                themes: [themeVitesseDark], langs: [langJs],
+                themes: [themeVitesseBlack], langs: [lang],
                 engine: createOnigurumaEngine(import('shiki/wasm')) 
             });
             setLoadedProgress(99);
 
             await sleep(100);
-            html.value = highlighter.codeToHtml(code, { lang: "javascript", theme: "vitesse-dark" });
+            html.value = highlighter.codeToHtml(code, { lang: (suffix.endsWith("js") ? "javascript" : "vue"), theme: "vitesse-black" });
             htmlLoaded.value = { status: true, error: false, progress: 100 }
         } catch(e) {
             console.error(e);
