@@ -4,8 +4,6 @@ const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certifica
 
 const tabRefs = ref([]);
 const documentsText = ref(null);
-const documentsSectionRef = useTemplateRef('mohit-documents-section');
-usePulseLoopAnimation(documentsSectionRef);
 
 useIntersectionObserver(documentsText, ([{ isIntersecting }]) => {
     setHomeTabAnimation(document.getElementById('documents-section-title'), true, isIntersecting);
@@ -22,7 +20,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 </script>
 
 <template>
-<div id="documents" class="documents-section" ref="mohit-documents-section">
+<div id="documents" class="documents-section">
     <div class="documents-section-mainText" ref="documentsText">
         <div id="documents-section-title"> My Docs </div>
         <p id="documents-section-desc">

@@ -1,9 +1,6 @@
 <template>
 <div class="newCard-container">
-    <a :href="PIZZA_WEBSITE_LINK" id="pizza-nav-newCard" class="nav-newCard"
-        @pointerenter="setPulseLoopAnimation"
-        @mouseleave="setPulseLoopAnimation">
-
+    <a :href="PIZZA_WEBSITE_LINK" id="pizza-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
             <font-awesome-icon icon="fa-pizza-slice" style="font-size: 80px;" />
         </div>

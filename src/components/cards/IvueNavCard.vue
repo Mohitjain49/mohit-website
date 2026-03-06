@@ -1,9 +1,6 @@
 <template>
 <div class="newCard-container">
-    <RouterLink to="/#ivue" id="ivue-nav-newCard" class="nav-newCard"
-        @pointerenter="setPulseLoopAnimation"
-        @mouseleave="setPulseLoopAnimation">
-
+    <RouterLink to="/#ivue" id="ivue-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
             <img :src="ivue_text" width="150" />
         </div>

@@ -1,11 +1,11 @@
 <template>
 <ParticlesBackground :particlesOptions="GREEN_BACKGROUND" />
-<main id="project-page" class="personal-web-body transparent">
+<main id="project-page" class="personal-web-body transparent" ref="mohit-projects-page">
     <div class="main-nav-page-container">
         <h1 class="nav-page-title project"> My Projects </h1>
-        <RouterLink id="main-projects-features-btn" to="/features" title="Explore this Website's Unique Capabilities">
+        <RouterLink id="main-projects-features-btn" to="/features" title="Explore this Website's Unique Capabilities" pulse-loop>
             <FontAwesomeIcon icon="fa-bolt-lightning" />
-            Website Features
+            <span> Website Features </span>
         </RouterLink>
 
         <div class="main-nav-page">
@@ -25,6 +25,9 @@
 </template>
 
 <script setup>
+const projectsRef = useTemplateRef('mohit-projects-page');
+usePulseLoopAnimation(projectsRef);
+
 onMounted(() => {
     initWebData();
     setNavCardAnimation("main-projects-features-btn");

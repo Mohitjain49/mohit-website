@@ -8,9 +8,6 @@ const ivueText = ref(null);
 const tabRefs = ref([]);
 const TAB_IDS = ["wiv-tab", "main-tab", "media-tab", "robotics-tab"];
 
-const ivueSectionRef = useTemplateRef('mohit-ivue-section');
-usePulseLoopAnimation(ivueSectionRef);
-
 useIntersectionObserver(ivueText, ([{ isIntersecting }]) => {
     setHomeTabAnimation(document.getElementById('ivue-section-title'), true, isIntersecting);
     setHomeTabAnimation(document.getElementById('ivue-section-desc'), true, isIntersecting);
@@ -26,7 +23,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 </script>
 
 <template>
-<div id="ivue" class="ivue-section" ref="mohit-ivue-section">
+<div id="ivue" class="ivue-section">
     <div class="ivue-section-mainText" ref="ivueText">
         <div id="ivue-section-title">
             <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue" pulse-loop>

@@ -1,7 +1,7 @@
 <template>
 <ParticlesBackground :particlesOptions="ORANGE_BACKGROUND" />
 <main id="exp-page" class="personal-web-body transparent">
-    <div class="main-nav-page-container">
+    <div class="main-nav-page-container" ref="mohit-exp-page">
         <div class="nav-page-title">My Experience</div>
         <div class="main-nav-page">
             <WIVNavCard />
@@ -20,9 +20,15 @@
 </template>
 
 <script setup>
-import "@/styles/navpage.css";
+const experienceRef = useTemplateRef('mohit-exp-page');
+usePulseLoopAnimation(experienceRef);
+
 onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Experience", "experience/",
     "On this page, I go into depth about my work experience."
 ));
 </script>
+
+<style scoped>
+@import "@/styles/navpage.css";
+</style>

@@ -2,7 +2,7 @@
 <div id="skills" class="skills-section">
     <div class="skills-main-textContainer" ref="skillsText">
         <div class="skills-main-header">
-            <RouterLink to="/skills/" title="See My Skills"> My Skills </RouterLink>
+            <RouterLink to="/skills/" title="See My Skills" pulse-loop> My Skills </RouterLink>
         </div>
         <div class="skills-main-desc">
             Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 

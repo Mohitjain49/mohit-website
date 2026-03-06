@@ -2,7 +2,7 @@
 <ParticlesBackground :particlesOptions="HOME_BACKGROUND" />
 <HomeWidgets />
 
-<main id="homepage" class="personal-web-body">
+<main id="homepage" class="personal-web-body" ref="mohit-homepage">
     <StartSection />
     <SkillsSection />
     <IvueSection />
@@ -18,6 +18,9 @@ const router = useRouter();
 
 const headTags = computed(() => { return getHomeMeta(pageTitle.value); });
 const routerHash = computed(() => { return router.currentRoute.value.hash; });
+
+const hompageRef = useTemplateRef('mohit-homepage');
+usePulseLoopAnimation(hompageRef);
 
 onMounted(() => { initWebData(); changePageTitle(); });
 watch(routerHash, () => { changePageTitle(); })
