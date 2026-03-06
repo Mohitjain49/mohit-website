@@ -96,24 +96,6 @@ export function usePulseLoopAnimation(container = null) {
         enabled.value = true;
     }
 
-    /** This function sets the necessary event listeners for those with the pulse-loop HTML Attribute. */
-    async function setEventListeners() {
-        if(controller != null) { controller.abort(); }
-        controller = new AbortController();
-
-        await nextTick();
-        if(!container.value) { return; }
-
-        const signal = controller.signal;
-        const elements = container.value.querySelectorAll('[pulse-loop]');
-        numElements.value = elements.length;
-
-        elements.forEach((element) => {
-            element.addEventListener("pointerenter", (event) => { setPulseLoopAnimation(event); }, { signal });
-            element.addEventListener("mouseleave", (event) => { setPulseLoopAnimation(event); }, { signal });
-        });
-    }
-
     /** This function disables the pulse loop HTML Attribute. */
     function disable() {
         if(!enabled.value) { return; }
@@ -131,7 +113,35 @@ export function usePulseLoopAnimation(container = null) {
         await enable();
     }
 
+    /** This is a practical copy of {@link setPulseLoopAnimation}. */
+    function animate(event) {
+        if(event.type === "pointerenter" && event.pointerType === "mouse") {
+            if(event.target.classList.contains('animate__animated')) { return; }
+            event.target.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
+        } else {
+            event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
+        }
+    }
+
+    /** This function sets the necessary event listeners for those with the pulse-loop HTML Attribute. */
+    async function setEventListeners() {
+        if(controller != null) { controller.abort(); }
+        controller = new AbortController();
+
+        await nextTick();
+        if(!container.value) { return; }
+
+        const signal = controller.signal;
+        const elements = container.value.querySelectorAll('[pulse-loop]');
+        numElements.value = elements.length;
+
+        elements.forEach((element) => {
+            element.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
+            element.addEventListener("mouseleave", (event) => { animate(event); }, { signal });
+        });
+    }
+
     onMounted(async() => { await enable(); });
     onBeforeUnmount(() => { disable(); });
-    return { enabled, numElements, enable, disable, reset }
+    return { enabled, numElements, enable, disable, reset, animate }
 }
