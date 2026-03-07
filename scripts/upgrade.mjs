@@ -42,13 +42,38 @@ function createSpinner(text) {
 /** This function is the core of the file and handles all the upgrade requirements. */
 async function main() {
     try {
+        // This section handles asking for and dependencies to reject for the next step.
+        const rejectDeps = await rl.question('Do you want to exclude any dependencies from being updated? (y/n): ');
+        const rejectDepsBool = (rejectDeps.toLowerCase() === "y" || rejectDeps.toLowerCase() === "yes");
+
+        /** @type {Array<String>} An array that stores all the dependencies to not update. */
+        const rejectDepsArray = [];
+
+        if(rejectDepsBool) {
+            var rejectDepsInput = "";
+            while(rejectDepsInput != "_no_") {
+                rejectDepsInput = await rl.question('Type in the name of a package, or the string \"_no_\" if you would like to stop: ');
+                if(rejectDepsInput != "_no_") { rejectDepsArray.push(rejectDepsInput.toLowerCase()); }
+            }
+            console.log("✅ Packages Recorded.\n\n")
+        } else {
+            console.log("🛑 Will Not Ignore Any Dependencies.\n\n");
+        }
+
+        var rejectDepsCommandOption = "";
+        if(rejectDepsArray.length > 0) {
+            rejectDepsCommandOption = " --reject ";
+            rejectDepsArray.forEach((item) => { rejectDepsCommandOption += (item + ","); });
+            rejectDepsCommandOption = rejectDepsCommandOption.substring(0, rejectDepsCommandOption.length - 1);
+        }
+
         // This section handles updating the current dependencies on the Vue.js project.
-        runCommand('npx npm-check-updates');
+        runCommand('npx npm-check-updates' + rejectDepsCommandOption);
         const updateDeps = await rl.question('Do you want to update the dependencies? (y/n): ');
         const updateDepsBool = (updateDeps.toLowerCase() === "y" || updateDeps.toLowerCase() === "yes");
 
         if(updateDepsBool) {
-            runCommand('npx npm-check-updates -u');
+            runCommand('npx npm-check-updates --upgrade' + rejectDepsCommandOption);
             console.log("✅ Dependencies Ready To Install!\n\n")
         } else {
             console.log("🛑 Will Not Update Dependencies.\n\n");

@@ -1,9 +1,6 @@
 <template>
 <div id="third-nav-card" class="newCard-container">
-    <a :href="SUBLO_WEBSITE_LINK" id="sublo-nav-newCard" class="nav-newCard"
-        @pointerenter="setPulseLoopAnimation"
-        @mouseleave="setPulseLoopAnimation">
-
+    <a :href="SUBLO_WEBSITE_LINK" id="sublo-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
             <img :src="sublo_icon" width="55" />
             <div class="nav-newCard-header-text" style="color: #36A1D9"> ublo </div>

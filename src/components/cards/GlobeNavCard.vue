@@ -1,9 +1,6 @@
 <template>
 <div id="third-nav-card" class="newCard-container">
-    <a :href="PERSONAL_GLOBE_LINK" id="globe-nav-newCard" class="nav-newCard"
-        @pointerenter="setPulseLoopAnimation"
-        @mouseleave="setPulseLoopAnimation">
-
+    <a :href="PERSONAL_GLOBE_LINK" id="globe-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
             <font-awesome-icon icon="fa-earth-americas" style="font-size: 80px;" />
         </div>

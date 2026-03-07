@@ -1,9 +1,6 @@
 <template>
 <div class="newCard-container">
-    <a :href="MND_PROJECT_LINK" id="mnd-nav-newCard" class="nav-newCard"
-        @pointerenter="setPulseLoopAnimation"
-        @mouseleave="setPulseLoopAnimation">
-
+    <a :href="MND_PROJECT_LINK" id="mnd-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
             <img :src="mnd_text" width="200" class="nav-newCard-personalText" />
         </div>

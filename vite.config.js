@@ -18,11 +18,12 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Markdown from 'unplugin-vue-markdown/vite';
 
 const SITEMAP_EXCLUDED_ROUTES = [
-    "/gamepad", "/gamepad/**", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
+    "/gamepad", "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
     "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner", "/resume/qrcode",
     "/ivue", "/ivuemedia", "/ivuerobotics", "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
+    "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap",
+    "/gamepad/store-and-utility", "/gamepad/vuejs-component", "/gamepad/custom-events",
 ];
 const VUEUSE_AUTO_IMPORTS = {
     '@vueuse/core': [
@@ -93,7 +94,7 @@ export default defineConfig(({ isSsrBuild }) => {
                 includeAssets: ['**/*.woff2', '**/*.woff'],
 
                 workbox: {
-                    cacheId: `v3.6.4-${Date.now()}`,
+                    cacheId: `v3.6.5-${Date.now()}`,
                     globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                     maximumFileSizeToCacheInBytes: 5000000,
                     navigateFallback: "/index.html",

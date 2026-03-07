@@ -62,7 +62,7 @@ export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
  */
 export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
     if(!isVisible || (findHomeTabTarget(target) != -1)) { return; }
-    const animationClassList = ["animate__animated", "animate__fadeInLeft", "animate__fadeInRight", "animate__fadeIn"];
+    const animationClassList = ["animate__animated", "animate__fadeInLeft", "animate__fadeInRight", "animate__zoomIn"];
     const animationClass = animationClassList[(window.innerWidth > 450) ? (fromLeft ? 1 : 2) : 3];
 
     target.classList.add("animate__animated", animationClass);
@@ -82,11 +82,11 @@ export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
  */
 export function addNoteCardAnimation(target, isVisible = true) {
     if(!isVisible || (findNoteCardTarget(target) != -1)) { return; }
-    target.classList.add("animate__animated", ((window.innerWidth > 450) ? "animate__zoomIn" : "animate__fadeIn"));
+    target.classList.add("animate__animated", "animate__zoomIn");
     noteCardTargets.unshift(target);
 
     setTimeout(() => {
-        target.classList.remove("animate__animated", "animate__zoomIn", "animate__fadeIn");
+        target.classList.remove("animate__animated", "animate__zoomIn");
         const targetIndex = findNoteCardTarget(target);
         if(targetIndex != -1) { noteCardTargets.splice(targetIndex, 1); }
     }, 1000);
