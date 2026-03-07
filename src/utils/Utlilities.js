@@ -119,6 +119,7 @@ export function usePulseLoopAnimation(container = null) {
             if(event.target.classList.contains('animate__animated')) { return; }
             event.target.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
         } else {
+            if(!event.target.classList.contains('animate__pulse')) { return; }
             event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
         }
     }

@@ -1,8 +1,8 @@
 <template>
-<RouterLink to="/#ivue" @click="goToIvueSection" class="ivue-widget animate__animated animate__fadeInUp" :title="IVUE_WIDGET_TITLE">
+<RouterLink to="/#ivue" @click="goToIvueSection" id="ivue-widget" :title="IVUE_WIDGET_TITLE" pulse-loop>
     <img :src="ivue_logo" draggable="false" />
 </RouterLink>
-<a :href="KSU_CCSE_LINK" target="mohit-ksu" class="ksu-widget animate__animated animate__fadeInUp" :title="KSU_WIDGET_TITLE">
+<a :href="KSU_CCSE_LINK" target="mohit-ksu" id="ksu-widget" :title="KSU_WIDGET_TITLE" pulse-loop>
     <img :src="ksu_logo" draggable="false" />
 </a>
 </template>
@@ -19,10 +19,20 @@ const IVUE_WIDGET_TITLE = "See My Experience With iVue!";
 function goToIvueSection() {
     try { goToPageSection('ivue'); } catch(e) {}
 }
+
+onMounted(() => { nextTick(() => {
+    document.getElementById("ivue-widget")?.classList.add("animate__animated", "animate__fadeInUp");
+    document.getElementById("ksu-widget")?.classList.add("animate__animated", "animate__fadeInUp");
+
+    setTimeout(() => {
+        document.getElementById("ivue-widget")?.classList.remove("animate__animated", "animate__fadeInUp");
+        document.getElementById("ksu-widget")?.classList.remove("animate__animated", "animate__fadeInUp");
+    }, 1100);
+}); });
 </script>
 
 <style scoped>
-.ivue-widget {
+#ivue-widget {
     position: fixed;
     bottom: 15px;
     left: 15px;
@@ -38,16 +48,16 @@ function goToIvueSection() {
     align-items: center;
     transition: var(--default-transition);
 }
-.ivue-widget:hover {
+#ivue-widget:hover {
     border-color: #48A548;
     box-shadow: 0px 0px 10px white;
 }
-.ivue-widget img {
+#ivue-widget img {
     height: 75px;
     user-select: none;
 }
 
-.ksu-widget {
+#ksu-widget {
     position: fixed;
     bottom: 15px;
     right: 15px;
@@ -63,28 +73,28 @@ function goToIvueSection() {
     align-items: center;
     transition: var(--default-transition);
 }
-.ksu-widget:hover {
+#ksu-widget:hover {
     border-color: #FEC52E;
 }
-.ksu-widget img {
+#ksu-widget img {
     height: 32px;
     user-select: none;
 }
 
 @media (max-width: 525px) {
-    .ivue-widget {
+    #ivue-widget {
         height: 45px;
         width: 68px;
     }
-    .ivue-widget img {
+    #ivue-widget img {
         height: 62px;
     }
 
-    .ksu-widget {
+    #ksu-widget {
         height: 45px;
         width: 45px;
     }
-    .ksu-widget img {
+    #ksu-widget img {
         height: 23px;
     }
 }

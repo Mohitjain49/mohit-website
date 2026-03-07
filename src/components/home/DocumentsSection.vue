@@ -225,8 +225,12 @@ useIntersectionObserver(tabRefs, (entry) => {
 }
 @media (max-width: 600px) {
     #documents-section-title {
+        height: 90px;
+    }
+    #documents-section-title {
         font-size: 80px;
     }
+    
     .documents-section-tabs-container {
         height: 800px;
     }

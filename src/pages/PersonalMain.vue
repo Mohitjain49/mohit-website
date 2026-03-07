@@ -1,6 +1,5 @@
 <template>
 <ParticlesBackground :particlesOptions="HOME_BACKGROUND" />
-<HomeWidgets />
 
 <main id="homepage" class="personal-web-body" ref="mohit-homepage">
     <StartSection />
@@ -8,6 +7,8 @@
     <IvueSection />
     <ProjectsSection />
     <DocumentsSection />
+
+    <HomeWidgets />
     <WebFooter />
 </main>
 </template>

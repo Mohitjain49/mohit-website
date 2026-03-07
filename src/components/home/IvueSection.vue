@@ -6,6 +6,8 @@ import ivue_robotics_banner from "@/assets/ivue/iVue_Robotics_Banner.png";
 
 const ivueText = ref(null);
 const tabRefs = ref([]);
+
+const contactTabRef = useTemplateRef("ivue-contact-tabRef");
 const TAB_IDS = ["wiv-tab", "main-tab", "media-tab", "robotics-tab"];
 
 useIntersectionObserver(ivueText, ([{ isIntersecting }]) => {
@@ -20,6 +22,13 @@ useIntersectionObserver(tabRefs, (entry) => {
         setHomeTabAnimation(observedChild, (observedIdIndex % 2 == 1), observed.isIntersecting);
     }
 });
+useIntersectionObserver(contactTabRef, ([{ isIntersecting }]) => {
+    addNoteCardAnimation(contactTabRef.value, isIntersecting);
+});
+
+const LINKEDIN_TITLE = "This is iVue's LinkedIn Profile. We at iVue announce updates to Worlds iVue and other fun activities on this platform.";
+const YOUTUBE_TITLE = "This is the iVue Robotics Youtube Channel. We at iVue release many test flight videos on any and all improvements made to our drones.";
+const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to join our team to work with us at iVue, please join here to do so.";
 </script>
 
 <template>
@@ -72,10 +81,23 @@ useIntersectionObserver(tabRefs, (entry) => {
                 <img :src="ivue_robotics_banner" width="190" />
                 <p>
                     iVue Robotics build Drone Hardware for the future. 
-                    We've made a selection of "Develop Air" drone models and ModKits to boost drone capabilities. 
+                    We have made a selection of "Develop Air" drone models and ModKits to boost drone capabilities. 
                     Now, you can order a drone directly on our website!
                 </p>
             </a>
+        </div>
+        <div class="ivue-section-tab-parent">
+            <div id="ivue-contact-tab" ref="ivue-contact-tabRef">
+                <a :href="(MAIN_IVUE_WEBSITE_LINK + 'linkedin')" class="linkedin" :title="LINKEDIN_TITLE" pulse-loop>
+                    <font-awesome-icon icon="fa-brands fa-linkedin" />
+                </a>
+                <a :href="(IVUE_ROBOTICS_WEBSITE_LINK + 'youtube')" class="youtube" :title="YOUTUBE_TITLE" pulse-loop>
+                    <font-awesome-icon icon="fa-brands fa-youtube" />
+                </a>
+                <a :href="(MAIN_IVUE_WEBSITE_LINK + 'discord')" class="discord" :title="DISCORD_TITLE" pulse-loop>
+                    <font-awesome-icon icon="fa-brands fa-discord" />
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -85,7 +107,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 .ivue-section {
     background: transparent;
     height: fit-content;
-    min-height: 1000px;
+    min-height: 1100px;
     width: 100%;
     padding: 100px 0px;
 }
@@ -128,7 +150,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 
 .ivue-section-tabs-container {
     width: 100%;
-    height: 760px;
+    height: 825px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -147,7 +169,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     width: 90%;
     max-width: 1100px;
     height: 145px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.75);
     border: 3px solid white;
     border-radius: 20px;
     transition: box-shadow 0.35s;
@@ -230,17 +252,61 @@ useIntersectionObserver(tabRefs, (entry) => {
     box-shadow: 0px 0px 12px 12px rgba(0, 113, 188, 0.25);
 }
 
+#ivue-contact-tab {
+    height: 50px;
+    width: 200px;
+    border: 2px solid white;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    --animate-duration: 1.2s;
+}
+#ivue-contact-tab a {
+    width: 35px;
+    height: 35px;
+    color: white;
+    border: 1px solid white;
+    border-radius: 12px;
+    border-top-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#ivue-contact-tab a.youtube {
+    color: #b2071d;
+    border-color: #b2071d;
+}
+#ivue-contact-tab a.linkedin {
+    color: #0077b5;
+    border-color: #0077b5;
+}
+#ivue-contact-tab a.discord {
+    color: #5865f2;
+    border-color: #5865f2;
+}
+
 @media (max-width: 850px) {
     .ivue-section-tab p {
         font-size: 16px;
     }
 }
 @media (max-width: 600px) {
+    #ivue-section-title {
+        height: 90px;
+    }
     #ivue-section-title > a > img {
         height: 80px;
     }
+    
     .ivue-section-tabs-container {
-        height: 850px;
+        height: 925px;
     }
     .ivue-section-tab {
         height: 175px;
