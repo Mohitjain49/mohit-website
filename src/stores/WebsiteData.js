@@ -111,11 +111,14 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param event The event.
      */
     function onDocumentBodyClick(event = new MouseEvent("click")) {
-        const navMenu = document.getElementById("mohit-navBar");
+        const navBar = document.getElementById("mohit-navBar");
+        const navBarElements = Array.from(navBar.querySelectorAll('*'));
+        const navMenu = document.getElementById("mohit-navMenu");
         const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
         const srcElement = event.target;
 
         audioStore.confirmClickSound(event);
+        const elementInNavBar = (navBar === srcElement || navBarElements.includes(srcElement));
         const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
 
         if(documentStore.onDocumentRoute) {
@@ -124,11 +127,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 const documentMenu = document.getElementById("mohit-documentBar");
                 const documentMenuElements = Array.from(documentMenu.querySelectorAll('*'));
                 elementInDocumentMenu = (documentMenu === srcElement || documentMenuElements.includes(srcElement));
-                if(!elementInDocumentMenu && !elementInNavMenu) { closeNavMenu(); }
+                if(!elementInDocumentMenu && !elementInNavMenu && !elementInNavBar) { closeNavMenu(); }
             });
         } else {
             audioStore.confirmClickSound(event);
-            if(!elementInNavMenu) { closeNavMenu(); }
+            if(!elementInNavMenu && !elementInNavBar) { closeNavMenu(); }
         }
     }
 

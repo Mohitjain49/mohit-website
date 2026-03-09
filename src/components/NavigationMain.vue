@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" :class="navBarClasses" ref="navBar">
+<nav id="mohit-navBar" ref="navBar">
     <div class="mohit-navBar-top">
         <div class="mohit-navBar-icons left">
             <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
@@ -11,7 +11,7 @@
             </RouterLink>
         </div>
 
-        <div class="mohit-navBar-mainLinks" v-show="showCenterLinks">
+        <div class="mohit-navBar-mainLinks" v-show="(windowWidth > 650)">
             <RouterLink v-for="link in CENTER_LINKS" :to="link.path"
                 @click="(event) => { flashNavOpt(event, link.path) }"
                 :style="getColorStyles(link.color)"
@@ -20,7 +20,6 @@
                 <span> {{ link.title }} </span>
             </RouterLink>
         </div>
-        <h2 class="mohit-navMenu-header" v-if="showNavMenuHeader"> Navigation Menu </h2>
 
         <div class="mohit-navBar-icons right">
             <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path" :title="btn.title"
@@ -30,60 +29,68 @@
 
                 <font-awesome-icon :icon="btn.icon" />
             </RouterLink>
-            <button class="mohit-navBar-icon" @click="webData.toggleNavMenu()"
-                :title="(webData.navMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu')"
-                :style="getColorStyles('var(--website-light-text)')" pulse-loop>
-
-                <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
+            <button class="mohit-navBar-icon light" @click="webData.toggleNavMenu()" title="Open Navigation Menu" pulse-loop>
+                <font-awesome-icon icon="fa-bars" />
             </button>
         </div>
     </div>
+</nav>
 
-    <Transition name="navMenu-transition">
-        <div v-if="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="mohit-navMenu">
-            <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-                <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
-                    <font-awesome-icon :icon="btn.icon" />
-                    <span> {{ btn.title }} </span>
+<Transition name="navMenu-transition">
+    <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="navMenu">
+        <div class="mohit-navMenu-top">
+            <div class="mohit-navBar-icons left">
+                <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
+                    <img :src="mkj_text" draggable="false" />
                 </RouterLink>
             </div>
 
-            <div class="mohit-navMenu-opt">
-                <RouterLink v-for="extra in NAV_MENU_EXTRAS" :to="extra.path"
-                    :title="extra.title" :style="getColorStyles(extra.color)"
-                    class="mohit-navMenu-extra"
-                    @click="(event) => { flashNavOpt(event, extra.path) }" pulse-loop>
-
-                    <font-awesome-icon :icon="extra.icon" />
-                </RouterLink>
-                <RouterLink v-if="webData.navFooterPresent" :to="footerRoute" pulse-loop
-                    class="mohit-navMenu-extra"
-                    @click="webData.scrollToAndFromFooter()"
-                    :style="getColorStyles('var(--website-text)')"
-                    :title="(webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages')">
-
-                    <FontAwesomeIcon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
-                </RouterLink>
-            </div>
-            <div class="mohit-navMenu-opt small-features">
-                <button @click="webData.openQRCodePopup()" class="mohit-navMenu-smallFeatures-btn" title="Share This Page With Someone Else!">
+            <div class="mohit-navBar-icons right">
+                <button @click="webData.openQRCodePopup()" class="mohit-navBar-icon light" title="Share This Page With Someone Else!" pulse-loop>
                     <font-awesome-icon icon="fa-share-from-square" />
                 </button>
-                <div class="mohit-navMenu-volume-meter">
-                    <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" pulse-loop>
-                        <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
-                    </button>
-                    <input type="range" min="0" max="100" title="Volume Meter for the click sound."
-                        v-model="audioStore.volumeInput"
-                        @input="audioStore.changeAudioVolume()"
-                    />
-                    <span> {{ (audioStore.volumeInput + '%') }} </span>
-                </div>
-                <div class="mohit-navMenu-smallFeatures-right"></div>
+                <button class="mohit-navBar-icon light" @click="webData.closeNavMenu()" title="Close Navigation Menu" pulse-loop>
+                    <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
+                </button>
             </div>
         </div>
-    </Transition>
-</nav>
+
+        <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
+            <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }" pulse-loop>
+                <span> {{ btn.title }} </span>
+                <font-awesome-icon :icon="btn.icon" />
+            </RouterLink>
+        </div>
+        <div class="mohit-navMenu-opt-break"></div>
+
+        <div v-for="btn in NAV_MENU_EXTRAS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
+            <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }" pulse-loop>
+                <span> {{ btn.title }} </span>
+                <font-awesome-icon :icon="btn.icon" />
+            </RouterLink>
+        </div>
+        <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
+            <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" @click="webData.scrollToAndFromFooter()" pulse-loop>
+                <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
+                <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
+            </RouterLink>
+        </div>
+        <div class="mohit-navMenu-opt-break"></div>
+
+        <div class="mohit-navMenu-opt small-features">
+            <div class="mohit-navMenu-volume-meter">
+                <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" pulse-loop>
+                    <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+                </button>
+                <input type="range" min="0" max="100" title="Volume Meter for the click sound."
+                    v-model="audioStore.volumeInput"
+                    @input="audioStore.changeAudioVolume()"
+                />
+                <span> {{ (audioStore.volumeInput + '%') }} </span>
+            </div>
+        </div>
+    </div>
+</Transition>
 </template>
 
 <script setup>
@@ -92,33 +99,26 @@ const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const router = useRouter();
 
-const navBar = ref(null);
+const navBar = shallowRef(null);
+const navMenu = shallowRef(null);
 const navBarSwipe = useSwipe(navBar, { passive: true });
 
-const { height: windowHeight, width: windowWidth } = useWindowSize();
+const { width: windowWidth } = useWindowSize();
 usePulseLoopAnimation(navBar);
+usePulseLoopAnimation(navMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
-
-const showCenterLinks = computed(() => { return ((windowWidth.value > 650) && !webData.navMenuOpen); });
-const showNavMenuHeader = computed(() => { return ((windowWidth.value > 650) && webData.navMenuOpen); });
-
-// These are extra classes for the main navigation bar.
-const navBarClasses = computed(() => {
-    const notOpen = !webData.navMenuOpen;
-    return [(notOpen ? '' : 'menu-open'), ((notOpen || windowHeight.value >= 590) ? '' : 'menu-overflowing')];
-});
 
 // This tracks touch "swipe" events so that the user can change the page if the swipe left or right.
 watch(navBarSwipe.isSwiping, () => {
     if(!navBarSwipe.isSwiping.value) { return; }
     const direction = navBarSwipe.direction.value;
 
-    if(direction === "up" && webData.navMenuOpen) {
+    if(direction === "right" && webData.navMenuOpen) {
         webData.menuOpen = -1;
         triggerClickSound();
-    } else if(direction === "down" && !webData.navMenuOpen) {
+    } else if(direction === "left" && !webData.navMenuOpen) {
         webData.menuOpen = 0;
         triggerClickSound();
     }
@@ -162,7 +162,7 @@ const CENTER_LINKS = [
 
 const NAV_MENU_EXTRAS = [
     { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
-    { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright" },
+    { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
     { path: "/documents", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
 ];
 </script>

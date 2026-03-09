@@ -7,7 +7,7 @@
     height: fit-content;
     min-height: 50px;
     background-color: rgba(0, 0, 0, 0.9);
-    z-index: 516;
+    z-index: 499;
     border-bottom: 2px solid var(--website-text);
     overflow: hidden;
     transition: height 0.2s, box-shadow 0.2s;
@@ -128,23 +128,37 @@
 }
 
 .mohit-navMenu {
-    --nav-menu-height: 520px;
-    width: 100%;
-    height: var(--nav-menu-height);
-    max-height: calc(100vh - 50px);
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 325px;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: black;
+    z-index: 516;
+    border-left: 1px solid var(--website-light-text);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.mohit-navMenu-top {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }
 
 .mohit-navMenu-opt {
     width: 100%;
-    height: 60px;
+    height: 42px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: var(--website-text);
     font-family: 'Lexend', sans-serif;
-    font-size: 18px;
+    font-size: 15px;
 }
 .mohit-navMenu-opt.small-features {
     height: 40px;
@@ -154,24 +168,31 @@
 .mohit-navMenu-mainOpt {
     cursor: pointer;
     background-color: rgba(20, 20, 20);
-    height: 40px;
-    width: calc(100% - 50px);
-    padding: 0px 10px;
+    height: 30px;
+    width: calc(100% - 42px);
+    padding: 0px 6px;
     color: inherit;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    border: 2px dashed;
-    border-radius: 15px;
+    border: 1px solid;
+    border-radius: 10px;
     transition: var(--default-transition);
     user-select: none;
+    font-family: 'Lexend', sans-serif;
+    font-size: 15px;
 }
 .mohit-navMenu-mainOpt:hover {
     background-color: rgba(40, 40, 40);
 }
-.mohit-navMenu-mainOpt svg {
-    margin-right: 10px;
-    width: 25px;
+
+.mohit-navMenu-opt-break {
+    position: relative;
+    left: 25px;
+    width: calc(100% - 50px);
+    height: 2px;
+    background-color: var(--website-text);
+    margin: 10px 0px;
 }
 
 .mohit-navMenu-extra {
@@ -211,7 +232,9 @@
 }
 
 .mohit-navMenu-volume-meter {
-    width: 335px;
+    position: relative;
+    left: calc(50% - 140px);
+    width: 280px;
     height: 100%;
     color: var(--lightning-yellow);
     display: flex;
@@ -220,7 +243,7 @@
     flex-direction: row;
 }
 .mohit-navMenu-volume-meter input {
-    width: 72.5%;
+    width: calc(100% - 110px);
     cursor: pointer;
 }
 
@@ -247,28 +270,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.mohit-navMenu-smallFeatures-btn {
-    width: 38px;
-    height: calc(100% - 2px);
-    color: var(--website-light-text);
-    border-top: 2px dashed var(--website-text);
-    border-right: 2px dashed var(--website-text);
-    border-top-right-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 22px;
-    transition: var(--default-transition), font-size 0.2s;
-}
-.mohit-navMenu-smallFeatures-btn:hover {
-    background-color: var(--dark-background);
-    font-size: 24px;
-}
-
-.mohit-navMenu-smallFeatures-right {
-    width: 40px;
 }
 
 /**
@@ -429,14 +430,16 @@
  */
 
 .navMenu-transition-enter-active, .navMenu-transition-leave-active {
-    transition: height 0.5s;
+    transition: opacity 0.5s, right 0.5s;
 }
 .navMenu-transition-enter-from, .navMenu-transition-leave-to {
-    height: 0;
+    opacity: 0;
+    right: -325px;
     overflow-y: hidden;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
-    height: 520px;
+    opacity: 1;
+    right: 0px;
     overflow-y: hidden;
 }
 
@@ -456,9 +459,6 @@
     #mohit-documentBar.menu-open {
         width: calc(100% - 30px);
         left: 15px;
-    }
-    .mohit-navMenu-volume-meter {
-        width: 56%;
     }
 }
 
