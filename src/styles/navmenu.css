@@ -152,13 +152,11 @@
 
 .mohit-navMenu-opt {
     width: 100%;
-    height: 42px;
+    height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: var(--website-text);
-    font-family: 'Lexend', sans-serif;
-    font-size: 15px;
 }
 .mohit-navMenu-opt.small-features {
     height: 40px;
@@ -168,7 +166,7 @@
 .mohit-navMenu-mainOpt {
     cursor: pointer;
     background-color: rgba(20, 20, 20);
-    height: 30px;
+    height: 25px;
     width: calc(100% - 42px);
     padding: 0px 6px;
     color: inherit;
@@ -179,8 +177,9 @@
     border-radius: 10px;
     transition: var(--default-transition);
     user-select: none;
+    color: inherit;
     font-family: 'Lexend', sans-serif;
-    font-size: 15px;
+    font-size: 13px;
 }
 .mohit-navMenu-mainOpt:hover {
     background-color: rgba(40, 40, 40);
@@ -241,6 +240,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    padding-bottom: 5px;
 }
 .mohit-navMenu-volume-meter input {
     width: calc(100% - 110px);

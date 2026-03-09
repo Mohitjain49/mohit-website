@@ -1,6 +1,7 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
     const controller = new AbortController();
+    var wakeLockTimeout = null;
 
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
@@ -27,7 +28,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const pageView = ref(0);
     const menuOpen = ref(-1);
     const nestedMenuOpen = ref(0);
+
     const navFooterPresent = ref(false);
+    const wakeLockChangeFresh = ref(false);
 
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
@@ -37,16 +40,34 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     });
 
     const wakeLockIcon = computed(() => {
-        return (wakeLock.isSupported.value ? (wakeLock.isActive.value ? 'fa-unlock' : 'fa-lock') : 'fa-ban');
+        const active = wakeLock.isActive.value;
+        const fresh = wakeLockChangeFresh.value;
+        return (wakeLock.isSupported.value ? (((active && fresh) || (!active && !fresh)) ? 'fa-lock' : 'fa-unlock') : 'fa-ban');
+    });
+    const wakeLockTitle = computed(() => {
+        if(!wakeLock.isSupported.value) {
+            return "Feature Unavailable.";
+        } else if(wakeLock.isActive.value) {
+            return "Screen Wake Lock Set! Click Here To Release It.";
+        } else {
+            return "Screen Wake Lock Released. Click Here To Set It.";
+        }
     });
     const wakeLockStatement = computed(() => {
         if(!wakeLock.isSupported.value) {
             return "Feature Unavailable.";
         } else if(wakeLock.isActive.value) {
-            return "Release Screen Wake Lock";
+            return (wakeLockChangeFresh.value ? "Wake Lock Set!" : "Release Screen Wake Lock");
         } else {
-            return "Set Screen Wake Lock";
+            return (wakeLockChangeFresh.value ? "Wake Lock Released!" : "Set Screen Wake Lock");
         }
+    });
+
+    // This is used to track if the wake lock was freshly changed or not.
+    watch(wakeLock.isActive, () => {
+        if(wakeLockTimeout != null) { clearTimeout(wakeLockTimeout); }
+        wakeLockChangeFresh.value = true;
+        wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000)
     });
 
     /**
@@ -329,8 +350,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     async function toggleWakeLock() {
         if(!wakeLock.isSupported.value) { return; }
-        closeNavMenu();
-
         if(wakeLock.isActive.value) {
             await wakeLock.release();
         } else {
@@ -343,7 +362,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
-        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
+        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, webFooter, webFooterVisibility,
         toggleNavMenu, toggleDocumentMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop
     }

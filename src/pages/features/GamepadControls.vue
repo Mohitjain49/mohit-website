@@ -8,7 +8,7 @@
             <div class="gamepad-desc">
                 <p>
                     This webpage simply shows the controls for using a gamepad here. 
-                    The files below are the 4 main files in my code that give functionality to the Gamepad on this website.
+                    The files below are the 3 main files in my code that give functionality to the Gamepad on this website.
                 </p>
                 <ul>
                     <li> <RouterLink to="/gamepad/custom-events"> Custom Gamepad Events </RouterLink> </li>
@@ -162,7 +162,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
 <style scoped>
 .gamepad-controls-body {
     height: 650px;
-    min-height: calc(100vh - 60px);
+    min-height: calc(100vh - 50px);
     width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);

@@ -22,12 +22,8 @@
         </div>
 
         <div class="mohit-navBar-icons right">
-            <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path" :title="btn.title"
-                @click="(event) => { flashNavOpt(event, btn.path) }"
-                :style="getColorStyles(btn.color)"
-                class="mohit-navBar-icon" pulse-loop>
-
-                <font-awesome-icon :icon="btn.icon" />
+            <RouterLink to="/contact/" title="Contact Me!" @click="(event) => { flashNavOpt(event, '/contact/') }" class="mohit-navBar-icon" pulse-loop>
+                <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
             <button class="mohit-navBar-icon light" @click="webData.toggleNavMenu()" title="Open Navigation Menu" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
@@ -77,6 +73,18 @@
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
+        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad" @click="(event) => { flashNavOpt(event, '/gamepad') }" pulse-loop>
+                <span> Gamepad Controls </span>
+                <font-awesome-icon icon="fa-gamepad" />
+            </RouterLink>
+        </div>
+        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
+            <button class="mohit-navMenu-mainOpt" @click="webData.toggleWakeLock()" :title="webData.wakeLockTitle" pulse-loop>
+                <span> {{ webData.wakeLockStatement }} </span>
+                <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
+            </button>
+        </div>
         <div class="mohit-navMenu-opt small-features">
             <div class="mohit-navMenu-volume-meter">
                 <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" pulse-loop>
@@ -101,7 +109,9 @@ const router = useRouter();
 
 const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
+
 const navBarSwipe = useSwipe(navBar, { passive: true });
+const navMenuSwipe = useSwipe(navMenu, { passive: true });
 
 const { width: windowWidth } = useWindowSize();
 usePulseLoopAnimation(navBar);
@@ -110,7 +120,7 @@ usePulseLoopAnimation(navMenu);
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
 
-// This tracks touch "swipe" events so that the user can change the page if the swipe left or right.
+// This tracks touch "swipe" events for the navigation bar so that the user can change the page if they swipe left or right.
 watch(navBarSwipe.isSwiping, () => {
     if(!navBarSwipe.isSwiping.value) { return; }
     const direction = navBarSwipe.direction.value;
@@ -122,6 +132,17 @@ watch(navBarSwipe.isSwiping, () => {
         webData.menuOpen = 0;
         triggerClickSound();
     }
+});
+
+// This tracks touch "swipe" events for the navigation menu so that the user can change the page if they swipe left or right.
+watch(navMenuSwipe.isSwiping, () => {
+    if(!navMenuSwipe.isSwiping.value) { return; }
+    const direction = navMenuSwipe.direction.value;
+
+    if(direction === "right" && webData.navMenuOpen) {
+        webData.menuOpen = -1;
+        triggerClickSound();
+    } 
 });
 
 /**
@@ -142,15 +163,12 @@ function flashNavOpt(event = new MouseEvent("click"), path = "/") {
 const MAIN_BTNS = [
     { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
     { path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
-    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "See My Skills" },
-    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience" },
-    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects" },
-    { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume" },
+    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "My Skills" },
+    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "My Experience" },
+    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "My Projects" },
+    { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "My Resume" },
+    { path: "/documents", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
     { path: "/features", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
-];
-
-const LAPTOP_MAIN_BTNS = [
-    { path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
 ];
 
 const CENTER_LINKS = [
@@ -163,6 +181,5 @@ const CENTER_LINKS = [
 const NAV_MENU_EXTRAS = [
     { path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
     { path: "/copyright", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
-    { path: "/documents", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
 ];
 </script>
