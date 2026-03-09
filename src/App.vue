@@ -1,7 +1,6 @@
 <template>
 <NavigationMain />
 <GamepadComponent />
-<PageBookmark />
 <QrcodeTool v-if="webData.showSharePopup" />
 <UpdateBox />
 

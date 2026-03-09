@@ -109,7 +109,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
     height: fit-content;
     min-height: 1100px;
     width: 100%;
-    padding: 100px 0px;
+    padding: 70px 0px;
 }
 .ivue-section-mainText {
     width: 100%;

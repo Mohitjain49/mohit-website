@@ -5,11 +5,24 @@
 <template>
 <nav id="mohit-navBar" :class="navBarClasses" ref="navBar">
     <div class="mohit-navBar-top">
-        <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Back To Home Page">
-            <img :src="mkj_text" draggable="false" />
-        </RouterLink>
+        <div class="mohit-navBar-icons left">
+            <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
+                <img :src="mkj_text" draggable="false" />
+            </RouterLink>
+        </div>
 
-        <div class="mohit-navBar-icons">
+        <div class="mohit-navBar-mainLinks" v-show="showCenterLinks">
+            <RouterLink v-for="link in CENTER_LINKS" :to="link.path"
+                @click="(event) => { flashNavOpt(event, link.path) }"
+                :style="getColorStyles(link.color)"
+                class="mohit-navBar-link" pulse-loop>
+
+                <span> {{ link.title }} </span>
+            </RouterLink>
+        </div>
+        <h2 class="mohit-navMenu-header" v-if="showNavMenuHeader"> Navigation Menu </h2>
+
+        <div class="mohit-navBar-icons right">
             <RouterLink v-for="btn in LAPTOP_MAIN_BTNS" :to="btn.path" :title="btn.title"
                 @click="(event) => { flashNavOpt(event, btn.path) }"
                 :style="getColorStyles(btn.color)"
@@ -27,7 +40,7 @@
     </div>
 
     <Transition name="navMenu-transition">
-        <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="mohit-navMenu">
+        <div v-if="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="mohit-navMenu">
             <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
                 <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }">
                     <font-awesome-icon :icon="btn.icon" />
@@ -74,7 +87,7 @@
 </template>
 
 <script setup>
-import mkj_text from "/static-icons/Personal_Icon_Transparent.png";
+import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const router = useRouter();
@@ -82,11 +95,14 @@ const router = useRouter();
 const navBar = ref(null);
 const navBarSwipe = useSwipe(navBar, { passive: true });
 
-const { height: windowHeight } = useWindowSize();
+const { height: windowHeight, width: windowWidth } = useWindowSize();
 usePulseLoopAnimation(navBar);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
+
+const showCenterLinks = computed(() => { return ((windowWidth.value > 650) && !webData.navMenuOpen); });
+const showNavMenuHeader = computed(() => { return ((windowWidth.value > 650) && webData.navMenuOpen); });
 
 // These are extra classes for the main navigation bar.
 const navBarClasses = computed(() => {
@@ -134,8 +150,14 @@ const MAIN_BTNS = [
 ];
 
 const LAPTOP_MAIN_BTNS = [
-    { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
     { path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me!" },
+];
+
+const CENTER_LINKS = [
+    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "Skills" },
+    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "Experience" },
+    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "Projects" },
+    { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "Resume" },
 ];
 
 const NAV_MENU_EXTRAS = [

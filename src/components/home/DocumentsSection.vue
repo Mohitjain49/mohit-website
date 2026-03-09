@@ -84,7 +84,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     height: fit-content;
     min-height: 400px;
     width: 100%;
-    padding: 100px 0px;
+    padding: 70px 0px;
 }
 .documents-section-mainText {
     width: 100%;
