@@ -63,11 +63,7 @@
         </RouterLink>
     </div>
 
-    <button v-if="!onDocumentRoute" pulse-loop
-        @click="webData.openQRCodePopup()"
-        class="qr-popup-open-section"
-        title="Share This Page With Someone Else!">
-
+    <button @click="webData.openQRCodePopup()" class="qr-popup-open-section" title="Share This Page With Someone Else!" pulse-loop>
         <FontAwesomeIcon icon="fa-share-from-square" />
     </button>
 </footer>
@@ -76,9 +72,6 @@
 <script setup>
 const route = useRoute();
 const webData = useWebsiteDataStore();
-const { onDocumentRoute } = storeToRefs(useDocumentStore());
-
-const fullScreenSet = getFullScreenSet();
 const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
 
 const footerRef = useTemplateRef('mohit-footer');
@@ -98,8 +91,6 @@ const footerClass = computed(() => {
     const path = route.path;
     if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex((item) => { return (item === path || (item + "/") === path) })) {
         return 'main-page';
-    } else if(!fullScreenSet.value && onDocumentRoute.value) {
-        return 'document-route';
     } else {
         return '';
     }

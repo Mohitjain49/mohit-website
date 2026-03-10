@@ -4,7 +4,7 @@
 
 <template>
 <Transition name="navMenu-transition">
-    <div v-show="webData.menuOpen == 2" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
+    <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
         <div class="mohit-navMenu-top">
             <div class="mohit-navBar-icons left" style="margin-left: 15px;">
                 <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
@@ -46,11 +46,8 @@
                 />
             </button>
         </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
-            <a v-if="(scriptsStore.currentScriptLink != '')" pulse-loop
-                :href="scriptsStore.currentScriptLink" target="_blank"
-                class="mohit-navMenu-mainOpt">
-
+        <div v-if="(scriptsStore.currentScriptLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
+            <a :href="scriptsStore.currentScriptLink" target="_blank" class="mohit-navMenu-mainOpt" pulse-loop>
                 <span> See Code On Github </span>
                 <font-awesome-icon icon="fa-brands fa-github" />
             </a>
@@ -92,10 +89,10 @@ usePulseLoopAnimation(scriptsMenu);
 
 // This tracks touch "swipe" events for the navigation menu so that the user can change the page if they swipe left or right.
 watch(scriptsMenuSwipe.isSwiping, () => {
-    if(!navMenuSwipe.isSwiping.value) { return; }
-    const direction = navMenuSwipe.direction.value;
+    if(!scriptsMenuSwipe.isSwiping.value) { return; }
+    const direction = scriptsMenuSwipe.direction.value;
 
-    if(direction === "right" && webData.menuOpen == 2) {
+    if(direction === "right" && webData.scriptsMenuOpen) {
         webData.menuOpen = -1;
         triggerClickSound();
     } 

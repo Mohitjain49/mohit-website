@@ -26,7 +26,10 @@
                 <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
             <button v-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.toggleScriptsMenu()" title="Script Options" pulse-loop>
-                <font-awesome-icon icon="fa-download" />
+                <font-awesome-icon icon="fa-file-export" />
+            </button>
+            <button v-if="documentStore.onDocumentRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, 0)" title="Document Options" pulse-loop>
+                <font-awesome-icon icon="fa-file-export" />
             </button>
             <button class="mohit-navBar-icon light" @click="webData.toggleNavMenu()" title="Open Navigation Menu" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
@@ -58,7 +61,16 @@
             <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
                 <button class="mohit-navMenu-mainOpt" @click="webData.toggleScriptsMenu()" pulse-loop>
                     <span> See Script Options </span>
-                    <font-awesome-icon icon="fa-download" />
+                    <font-awesome-icon icon="fa-file-export" />
+                </button>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
+        </template>
+        <template v-if="documentStore.onDocumentRoute">
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3, 0)" pulse-loop>
+                    <span> See Document Options </span>
+                    <font-awesome-icon icon="fa-file-export" />
                 </button>
             </div>
             <div class="mohit-navMenu-opt-break"></div>
@@ -114,6 +126,7 @@
 </Transition>
 
 <ScriptsMenu />
+<DocumentMenu />
 </template>
 
 <script setup>
@@ -121,6 +134,7 @@ import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
+const documentStore = useDocumentStore();
 const router = useRouter();
 
 const navBar = shallowRef(null);

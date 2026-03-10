@@ -1,5 +1,4 @@
 <template>
-<DocumentNavigation />
 <main id="resume-container" v-if="documentStore.mounted">
     <div class="pdf-doc-mohit-container">
         <div class="pdf-page-innerContainer" v-for="(page, index) in docPages" :id="('page_' + page.num)">
@@ -24,8 +23,8 @@
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
     <GamepadComponent v-if="fullScreenSet" />
-    <MinimizeScreenWidget />
     <FullScreenScrollBar :fs-element-id="'resume-container'" />
+    <FileWidgets />
 </main>
 </template>
 

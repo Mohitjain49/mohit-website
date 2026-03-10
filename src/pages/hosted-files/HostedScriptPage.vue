@@ -20,8 +20,12 @@
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
     <GamepadComponent v-if="fullScreenSet" />
-    <MinimizeScreenWidget />
+    <FileWidgets />
     <FullScreenScrollBar :fs-element-id="'script-page'" />
+
+    <button v-if="!fullScreenSet" @click="openScriptsMenu()" class="download-file-widget animate__animated animate__fadeInUp" title="Open Script Options">
+        <FontAwesomeIcon icon="fa-download" />
+    </button>
 </main>
 </template>
 
@@ -58,6 +62,13 @@ const PAGE_METADATA = [
 
 const CURRENT_METADATA = PAGE_METADATA[props.index];
 useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc));
+
+/** This function opens the scripts menu. */
+function openScriptsMenu() {
+    const webData = useWebsiteDataStore();
+    webData.bypassBodyClick();
+    webData.toggleScriptsMenu();
+}
 </script>
 
 <style scoped>
@@ -144,6 +155,29 @@ useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA
 .code-file-loadingError {
     color: red;
     font-size: 50px;
+}
+
+.download-file-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: var(--dark-background);
+    border: 2px solid var(--website-light-text);
+    color: var(--website-light-text);
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    transition: var(--default-transition), scale 0.2s;
+}
+.download-file-widget:hover {
+    box-shadow: 0px 0px 20px var(--website-light-text);
+    scale: 1.1;
 }
 
 @keyframes border-pulse {
