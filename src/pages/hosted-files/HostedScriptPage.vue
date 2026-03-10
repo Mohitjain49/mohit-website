@@ -1,5 +1,4 @@
 <template>
-<ScriptsBar />
 <main id="script-page" class="personal-web-body transparent">
     <template v-if="scriptsStore.scripts[index].htmlLoaded.status">
         <div class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
@@ -30,6 +29,9 @@
 const scriptsStore = useScriptsStore();
 const fullScreenSet = getFullScreenSet();
 const props = defineProps({ index: { type: Number, required: true } });
+
+onMounted(() => { scriptsStore.mountScriptPage(); });
+onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 
 const PAGE_METADATA = [
     {

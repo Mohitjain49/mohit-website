@@ -11,7 +11,7 @@
             </RouterLink>
         </div>
 
-        <div class="mohit-navBar-mainLinks" v-show="(windowWidth > 650)">
+        <div class="mohit-navBar-mainLinks" v-show="(windowWidth > 700)">
             <RouterLink v-for="link in CENTER_LINKS" :to="link.path"
                 @click="(event) => { flashNavOpt(event, link.path) }"
                 :style="getColorStyles(link.color)"
@@ -25,6 +25,9 @@
             <RouterLink to="/contact/" title="Contact Me!" @click="(event) => { flashNavOpt(event, '/contact/') }" class="mohit-navBar-icon" pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
+            <button v-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.toggleScriptsMenu()" title="Script Options" pulse-loop>
+                <font-awesome-icon icon="fa-download" />
+            </button>
             <button class="mohit-navBar-icon light" @click="webData.toggleNavMenu()" title="Open Navigation Menu" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
             </button>
@@ -35,21 +38,31 @@
 <Transition name="navMenu-transition">
     <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="navMenu">
         <div class="mohit-navMenu-top">
-            <div class="mohit-navBar-icons left">
+            <div class="mohit-navBar-icons left" style="margin-left: 15px;">
                 <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
                     <img :src="mkj_text" draggable="false" />
                 </RouterLink>
             </div>
 
-            <div class="mohit-navBar-icons right">
-                <button @click="webData.openQRCodePopup()" class="mohit-navBar-icon light" title="Share This Page With Someone Else!" pulse-loop>
+            <div class="mohit-navBar-icons right" style="margin-right: 12px;">
+                <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" title="Share This Page With Someone Else!" pulse-loop>
                     <font-awesome-icon icon="fa-share-from-square" />
                 </button>
                 <button class="mohit-navBar-icon light" @click="webData.closeNavMenu()" title="Close Navigation Menu" pulse-loop>
-                    <font-awesome-icon :icon="(webData.navMenuOpen ? 'fa-square-xmark' : 'fa-bars')" />
+                    <font-awesome-icon icon="fa-square-xmark" />
                 </button>
             </div>
         </div>
+
+        <template v-if="scriptsStore.onScriptRoute">
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.toggleScriptsMenu()" pulse-loop>
+                    <span> See Script Options </span>
+                    <font-awesome-icon icon="fa-download" />
+                </button>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
+        </template>
 
         <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
             <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }" pulse-loop>
@@ -99,12 +112,15 @@
         </div>
     </div>
 </Transition>
+
+<ScriptsMenu />
 </template>
 
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
+const scriptsStore = useScriptsStore();
 const router = useRouter();
 
 const navBar = shallowRef(null);

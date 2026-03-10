@@ -34,6 +34,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
+    const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
+
     const showSharePopup = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
         return (data != null && typeof data === "string");
@@ -132,15 +134,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param event The event.
      */
     function onDocumentBodyClick(event = new MouseEvent("click")) {
-        const navBar = document.getElementById("mohit-navBar");
-        const navBarElements = Array.from(navBar.querySelectorAll('*'));
-        const navMenu = document.getElementById("mohit-navMenu");
-        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        const srcElement = event.target;
-
         audioStore.confirmClickSound(event);
-        const elementInNavBar = (navBar === srcElement || navBarElements.includes(srcElement));
-        const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
+        const srcElement = event.target;
+        const elementInMenu = checkNavigationElement(srcElement);
 
         if(documentStore.onDocumentRoute) {
             var elementInDocumentMenu = false;
@@ -148,12 +144,33 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 const documentMenu = document.getElementById("mohit-documentBar");
                 const documentMenuElements = Array.from(documentMenu.querySelectorAll('*'));
                 elementInDocumentMenu = (documentMenu === srcElement || documentMenuElements.includes(srcElement));
-                if(!elementInDocumentMenu && !elementInNavMenu && !elementInNavBar) { closeNavMenu(); }
+                if(!elementInDocumentMenu && !elementInMenu) { closeNavMenu(); }
             });
         } else {
             audioStore.confirmClickSound(event);
-            if(!elementInNavMenu && !elementInNavBar) { closeNavMenu(); }
+            if(!elementInMenu) { closeNavMenu(); }
         }
+    }
+
+    /**
+     * This function returns whether an element is in any navigation menu within the website.
+     * @param {HTMLElement} element The element.
+     */
+    function checkNavigationElement(element) {
+        const navBar = document.getElementById("mohit-navBar");
+        const navBarElements = Array.from(navBar.querySelectorAll('*'));
+        if(navBar === element || navBarElements.includes(element)) { return true; }
+
+        const navMenu = document.getElementById("mohit-navMenu");
+        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
+        if(navMenu === element || navMenuElements.includes(element)) { return true; }
+
+        const scriptsMenu = document.getElementById("mohit-scriptsMenu");
+        const scriptsMenuElements = Array.from(scriptsMenu.querySelectorAll('*'));
+        if(scriptsMenu === element || scriptsMenuElements.includes(element)) { return true; }
+
+        // Returns false if element was not found in any menu.
+        return false;
     }
 
     /**
@@ -279,6 +296,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
+     * The toggles the status of the home navigation menu.
+     */
+    function toggleScriptsMenu() {
+        setMenuOpen(((menuOpen.value == 2) ? -1 : 2), 0);
+    }
+
+    /**
      * This function sets the status of whether a website menu is open or not.
      * @param {Number} index The index of what menu should be open.
      * @param {Number} nestedIndex The index of what nested menu should be open.
@@ -361,9 +385,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
+    return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, webFooter, webFooterVisibility,
-        toggleNavMenu, toggleDocumentMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
+        toggleNavMenu, toggleDocumentMenu, toggleScriptsMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop
     }
 });
