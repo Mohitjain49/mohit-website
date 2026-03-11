@@ -3,6 +3,7 @@
 
 :root {
     --body-height: calc(100vh - 50px);
+    --main-scrollbar-width: 10px;
 
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
@@ -360,10 +361,11 @@ button {
  */
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: var(--main-scrollbar-width);
     height: 10px;
     border: 1px solid white;
     background: var(--blue-zero);
+    transition: width 0.5s;
 }
 ::-webkit-scrollbar-thumb {
     background-color: var(--blue-three);

@@ -189,6 +189,12 @@
     font-size: 15px;
 }
 
+.mohit-navMenu-mainOpt img {
+    height: 16px;
+    user-select: none;
+    margin-left: 3px;
+}
+
 .mohit-navMenu-opt-break {
     position: relative;
     left: 25px;
@@ -213,42 +219,6 @@
     margin-bottom: 10px;
     padding-bottom: 2px;
     color: var(--website-text);
-}
-
-.mohit-navMenu-extra {
-    height: 35px;
-    width: 35px;
-    font-size: 21px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px dashed var(--website-light-text);
-    border-radius: 15px;
-    transition: var(--default-transition);
-    background-color: rgb(20, 20, 20);
-    color: var(--website-light-text);
-    margin: 0px 6px;
-}
-.mohit-navMenu-extra.large {
-    height: 47px;
-    width: 47px;
-    font-size: 28px;
-}
-.mohit-navMenu-extra:hover {
-    background-color: rgb(40, 40, 40);
-}
-
-.mohit-navMenu-extra.website-text {
-    color: var(--website-text);
-    border-color: var(--website-text);
-}
-.mohit-navMenu-extra.lock {
-    color: var(--vibrant-flame);
-    border-color: var(--vibrant-flame);
-}
-.mohit-navMenu-extra.repo {
-    color: white;
-    border-color: white;
 }
 
 .mohit-navMenu-volume-meter {
@@ -299,6 +269,7 @@
 
 .navMenu-transition-enter-active, .navMenu-transition-leave-active {
     transition: opacity 0.5s, right 0.5s;
+    transition-delay: 0.05s;
 }
 .navMenu-transition-enter-from, .navMenu-transition-leave-to {
     opacity: 0;

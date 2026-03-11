@@ -150,12 +150,23 @@
                 <font-awesome-icon icon="fa-tent-arrow-turn-left" />
             </button>
         </div>
+        <div class="mohit-navMenu-opt-break"></div>
+
+        <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
+            <a :href="PDFJS_LINK" target="_blank" class="mohit-navMenu-mainOpt" :title="PDFJS_TITLE" pulse-loop>
+                <span> PDF.js </span>
+                <img :src="pdfjs_icon" draggable="false" />
+            </a>
+        </div>
     </div>
 </Transition>
 </template>
 
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
+import pdfjs_icon from "@/assets/PDFJS_logo.svg";
+const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
+
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const scriptsStore = useScriptsStore();
@@ -187,4 +198,5 @@ function scrollToTableOfContents(pageNum = 2) {
 
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";
 const GOOGLE_CHOOSE_FOLDER_TITLE = "Choose The Folder In Your Google Drive Where You Would Like To Keep My Document.";
+const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
 </script>

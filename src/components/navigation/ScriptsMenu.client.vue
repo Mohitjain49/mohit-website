@@ -72,12 +72,23 @@
                 <font-awesome-icon icon="fa-tent-arrow-turn-left" />
             </button>
         </div>
+        <div class="mohit-navMenu-opt-break"></div>
+
+        <div class="mohit-navMenu-opt" :style="getColorStyles('#83D0DA')">
+            <a :href="SHIKI_LINK" target="_blank" class="mohit-navMenu-mainOpt" :title="SHIKI_TITLE" pulse-loop>
+                <span> Shiki </span>
+                <img :src="shiki_icon" draggable="false" />
+            </a>
+        </div>
     </div>
 </Transition>
 </template>
 
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
+import shiki_icon from "@/assets/Shiki_logo.svg";
+const SHIKI_LINK = "https://shiki.style/";
+
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const scriptsStore = useScriptsStore();
@@ -97,4 +108,6 @@ watch(scriptsMenuSwipe.isSwiping, () => {
         triggerClickSound();
     } 
 });
+
+const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my documents on this website. Click here to see more about Shiki.";
 </script>

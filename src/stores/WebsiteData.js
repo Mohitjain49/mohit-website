@@ -34,8 +34,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const nullifyBodyClick = ref(false);
 
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
-    const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
+    const compassMenuOpen = computed(() => { return (menuOpen.value == 1); });
     const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
+    const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
 
     const showSharePopup = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
@@ -66,11 +67,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     });
 
+    // This hides and reveals the main website scrollbar based on if a website menu is open or not.
+    watch(menuOpen, () => {
+        const newWidth = ((menuOpen.value == -1) ? '10px' : '0px');
+        try { document.documentElement.style.setProperty('--main-scrollbar-width', newWidth); } catch(e) {}
+    });
+
     // This is used to track if the wake lock was freshly changed or not.
     watch(wakeLock.isActive, () => {
         if(wakeLockTimeout != null) { clearTimeout(wakeLockTimeout); }
         wakeLockChangeFresh.value = true;
-        wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000)
+        wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000);
     });
 
     /**
