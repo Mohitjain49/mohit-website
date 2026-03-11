@@ -5,22 +5,7 @@
 <template>
 <Transition name="navMenu-transition">
     <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
-        <div class="mohit-navMenu-top">
-            <div class="mohit-navBar-icons left" style="margin-left: 15px;">
-                <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
-                    <img :src="mkj_text" draggable="false" />
-                </RouterLink>
-            </div>
-
-            <div class="mohit-navBar-icons right" style="margin-right: 12px;">
-                <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" title="Share This Page With Someone Else!" pulse-loop>
-                    <font-awesome-icon icon="fa-share-from-square" />
-                </button>
-                <button class="mohit-navBar-icon light" @click="webData.closeNavMenu()" title="Close Scripts Menu" pulse-loop>
-                    <font-awesome-icon icon="fa-square-xmark" />
-                </button>
-            </div>
-        </div>
+        <MenuTop />
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
             <button class="mohit-navMenu-mainOpt" @click="scriptsStore.downloadScript()" pulse-loop>
@@ -85,7 +70,6 @@
 </template>
 
 <script setup>
-import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 import shiki_icon from "@/assets/Shiki_logo.svg";
 const SHIKI_LINK = "https://shiki.style/";
 

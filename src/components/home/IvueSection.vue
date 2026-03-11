@@ -11,6 +11,7 @@ const contactTabRef = useTemplateRef("ivue-contact-tabRef");
 const TAB_IDS = ["wiv-tab", "main-tab", "media-tab", "robotics-tab"];
 
 useIntersectionObserver(ivueText, ([{ isIntersecting }]) => {
+    if(window.innerWidth < 450) { return; }
     setHomeTabAnimation(document.getElementById('ivue-section-title'), true, isIntersecting);
     setHomeTabAnimation(document.getElementById('ivue-section-desc'), true, isIntersecting);
 });
@@ -295,6 +296,11 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
 @media (max-width: 850px) {
     .ivue-section-tab p {
         font-size: 16px;
+    }
+}
+@media (max-width: 825px) {
+    #ivue-section-desc {
+        text-align: left;
     }
 }
 @media (max-width: 600px) {

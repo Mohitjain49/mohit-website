@@ -5,22 +5,7 @@
 <template>
 <Transition name="navMenu-transition">
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
-        <div class="mohit-navMenu-top">
-            <div class="mohit-navBar-icons left" style="margin-left: 15px;">
-                <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
-                    <img :src="mkj_text" draggable="false" />
-                </RouterLink>
-            </div>
-
-            <div class="mohit-navBar-icons right" style="margin-right: 12px;">
-                <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" title="Share This Page With Someone Else!" pulse-loop>
-                    <font-awesome-icon icon="fa-share-from-square" />
-                </button>
-                <button class="mohit-navBar-icon light" @click="webData.closeNavMenu()" title="Close Document Menu" pulse-loop>
-                    <font-awesome-icon icon="fa-square-xmark" />
-                </button>
-            </div>
-        </div>
+        <MenuTop />
 
         <template v-if="documentStore.onAnyResumeRoute">
             <div v-if="(documentStore.onMarkdownRoute || documentStore.onResumeQrcodeRoute)" class="mohit-navMenu-opt light">

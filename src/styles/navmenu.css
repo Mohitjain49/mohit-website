@@ -89,6 +89,10 @@
     color: white;
     border-color: white;
 }
+.mohit-navBar-icon.red {
+    color: red;
+    border-color: red;
+}
 .mohit-navBar-icon img {
     user-select: none;
     width: 23px
