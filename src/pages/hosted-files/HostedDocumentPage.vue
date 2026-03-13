@@ -1,4 +1,5 @@
 <template>
+<DocumentMenu />
 <DocumentViewer v-if="documentStore.mounted"
     :url="documentStore.hostedDocuments[index].objectUrl"
     :shareMinWidth="0"

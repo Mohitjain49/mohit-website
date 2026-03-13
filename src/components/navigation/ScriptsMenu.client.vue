@@ -46,7 +46,7 @@
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0, 0)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0)" pulse-loop>
                 <span> Open Navigation Menu </span>
                 <font-awesome-icon icon="fa-bars" />
             </button>

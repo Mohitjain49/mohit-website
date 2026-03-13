@@ -124,7 +124,7 @@
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0, 0)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0)" pulse-loop>
                 <span> Open Navigation Menu </span>
                 <font-awesome-icon icon="fa-bars" />
             </button>
@@ -148,7 +148,6 @@
 </template>
 
 <script setup>
-import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 import pdfjs_icon from "@/assets/PDFJS_logo.svg";
 const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 

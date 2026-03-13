@@ -246,7 +246,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             document.body.style.overflowY = "hidden";
         } else if(data.action === "cancel") {
             document.body.style.overflowY = "";
-            webData.setMenuOpen(3, 0);
+            webData.setMenuOpen(3);
 
             documentUploadToGoogleDriveStatus.value.cancel = true;
             setTimeout(() => { documentUploadToGoogleDriveStatus.value.cancel = false; }, 3000);
@@ -266,7 +266,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      *      If this is blank, it saves the document to the user's "My Drive".
      */
     async function uploadDocToGoogleDrive(folderId = "") {
-        webData.setMenuOpen(3, 0);
+        webData.setMenuOpen(3);
         chooseGoogleDriveFolderForUpload = false;
         documentUploadToGoogleDriveStatus.value.pending = true;
 

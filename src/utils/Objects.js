@@ -18,10 +18,12 @@ import google_colab_icon from "../assets/Google_Colab_Icon.png";
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
 import ivue_black_text from "../assets/ivue/iVue_Black_Text_Cropped.png";
+import worlds_ivue_icon from "../assets/ivue/Worlds_iVue_Icon.png";
 import mnd_text from "/static-icons/MND_Icon_Transparent.png";
 import tsparticles from "../assets/TS_Particles_Banner.png";
 
 import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
+import aws_icon from "@/assets/aws/AWS_Icon.png";
 import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
 import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
 import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
@@ -881,4 +883,22 @@ export const FEATURE_ENTITIES = [
             size: "100"
         }
     }
+];
+
+export const HOME_COMPASS = [
+    { title: "Start", id: "start", color: "var(--website-text)", faIcon: true, icon: "fa-house" },
+    { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code" },
+    { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon },
+    { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes" },
+    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open" }
+];
+
+export const SKILLS_COMPASS = [
+    { title: "Vue.js", id: "vuejs", color: "#41B883", faIcon: false, icon: vue_icon },
+    { title: "Frontend", id: "frontend", color: "#D3B62A", faIcon: true, icon: "fa-brands fa-js" },
+    { title: "AWS", id: "aws", color: "#5468ff", faIcon: false, icon: aws_icon },
+    { title: "Google", id: "google", color: "#4c8bf5", faIcon: true, icon: "fa-brands fa-google" },
+    { title: "Modules", id: "modules", color: "#5C9E57", faIcon: true, icon: "fa-brands fa-node-js" },
+    { title: "Languages", id: "languages", color: "#E34E26", faIcon: true, icon: "fa-laptop-code" },
+    { title: "Icons", id: "icons", color: "rgb(83, 141, 215)", faIcon: true, icon: "fa-brands fa-font-awesome" }
 ];

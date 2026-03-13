@@ -28,7 +28,7 @@ usePulseLoopAnimation(fileWidgets);
 /** This function opens the options for the file. */
 function openOptions() {
     webData.bypassBodyClick();
-    webData.setMenuOpen((onDocumentRoute.value ? 3 : 2), 0);
+    webData.setMenuOpen(onDocumentRoute.value ? 3 : 2);
 }
 
 /** This function manages the string animations for both widgets. */

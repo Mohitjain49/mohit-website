@@ -25,10 +25,13 @@
             <RouterLink to="/contact/" title="Contact Me!" @click="(event) => { flashNavOpt(event, '/contact/') }" class="mohit-navBar-icon" pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
-            <button v-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.toggleScriptsMenu()" title="Script Options" pulse-loop>
+            <button v-if="webData.compassMenuAvailable" class="mohit-navBar-icon light" @click="webData.setMenuOpen(1)" title="Navigate This Page" pulse-loop>
+                <font-awesome-icon icon="fa-compass" />
+            </button>
+            <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.toggleScriptsMenu()" title="Script Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
-            <button v-if="documentStore.onDocumentRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, 0)" title="Document Options" pulse-loop>
+            <button v-else-if="documentStore.onDocumentRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3)" title="Document Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
             <button class="mohit-navBar-icon light" @click="webData.toggleNavMenu()" title="Open Navigation Menu" pulse-loop>
@@ -42,7 +45,16 @@
     <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="navMenu">
         <MenuTop />
 
-        <template v-if="scriptsStore.onScriptRoute">
+        <template v-if="webData.compassMenuAvailable">
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(1)" pulse-loop>
+                    <span> Navigate This Page </span>
+                    <font-awesome-icon icon="fa-compass" />
+                </button>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
+        </template>
+        <template v-else-if="scriptsStore.onScriptRoute">
             <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
                 <button class="mohit-navMenu-mainOpt" @click="webData.toggleScriptsMenu()" pulse-loop>
                     <span> See Script Options </span>
@@ -51,9 +63,9 @@
             </div>
             <div class="mohit-navMenu-opt-break"></div>
         </template>
-        <template v-if="documentStore.onDocumentRoute">
+        <template v-else-if="documentStore.onDocumentRoute">
             <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3, 0)" pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
                     <span> See Document Options </span>
                     <font-awesome-icon icon="fa-file-export" />
                 </button>
@@ -109,9 +121,6 @@
         </div>
     </div>
 </Transition>
-
-<ScriptsMenu />
-<DocumentMenu />
 </template>
 
 <script setup>

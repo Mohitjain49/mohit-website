@@ -1,4 +1,5 @@
 <template>
+<ScriptsMenu />
 <main id="script-page" class="personal-web-body transparent">
     <template v-if="scriptsStore.scripts[index].htmlLoaded.status">
         <div class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
@@ -22,10 +23,6 @@
     <GamepadComponent v-if="fullScreenSet" />
     <FileWidgets />
     <FullScreenScrollBar :fs-element-id="'script-page'" />
-
-    <button v-if="!fullScreenSet" @click="openScriptsMenu()" class="download-file-widget animate__animated animate__fadeInUp" title="Open Script Options">
-        <FontAwesomeIcon icon="fa-download" />
-    </button>
 </main>
 </template>
 

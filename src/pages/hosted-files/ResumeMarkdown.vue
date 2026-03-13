@@ -1,4 +1,5 @@
 <template>
+<DocumentMenu />
 <main id="resume-container">
     <div class="pdf-doc-mohit-container"> <ResumeMarkdownComponent /> </div>
 

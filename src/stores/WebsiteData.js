@@ -27,9 +27,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     const pageView = ref(0);
     const menuOpen = ref(-1);
-    const nestedMenuOpen = ref(0);
 
     const navFooterPresent = ref(false);
+    const compassMenuAvailable = ref(false);
     const wakeLockChangeFresh = ref(false);
     const nullifyBodyClick = ref(false);
 
@@ -164,13 +164,23 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
         if(navMenu === element || navMenuElements.includes(element)) { return true; }
 
+        const compassMenu = document.getElementById("mohit-compassMenu");
+        if(compassMenu != null) {
+            const compassMenuElements = Array.from(compassMenu.querySelectorAll('*'));
+            if(compassMenu === element || compassMenuElements.includes(element)) { return true; }
+        }
+
         const scriptsMenu = document.getElementById("mohit-scriptsMenu");
-        const scriptsMenuElements = Array.from(scriptsMenu.querySelectorAll('*'));
-        if(scriptsMenu === element || scriptsMenuElements.includes(element)) { return true; }
+        if(scriptsMenu != null) {
+            const scriptsMenuElements = Array.from(scriptsMenu.querySelectorAll('*'));
+            if(scriptsMenu === element || scriptsMenuElements.includes(element)) { return true; }
+        }
 
         const docMenu = document.getElementById("mohit-docMenu");
-        const docMenuElements = Array.from(docMenu.querySelectorAll('*'));
-        if(docMenu === element || docMenuElements.includes(element)) { return true; }
+        if(docMenu != null) {
+            const docMenuElements = Array.from(docMenu.querySelectorAll('*'));
+            if(docMenu === element || docMenuElements.includes(element)) { return true; }
+        }
 
         // Returns false if element was not found in any menu.
         return false;
@@ -282,44 +292,26 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    /**
-     * The toggles the status of the home navigation menu.
-     */
+    /** The toggles the status of the home navigation menu. */
     function toggleNavMenu() {
-        setMenuOpen(((menuOpen.value == 0) ? -1 : 0), 0);
+        setMenuOpen((menuOpen.value == 0) ? -1 : 0);
     }
 
-    /**
-     * The toggles the status of the home navigation menu.
-     */
+    /** The toggles the status of the home navigation menu. */
     function toggleScriptsMenu() {
-        setMenuOpen(((menuOpen.value == 2) ? -1 : 2), 0);
+        setMenuOpen((menuOpen.value == 2) ? -1 : 2);
     }
 
     /**
      * This function sets the status of whether a website menu is open or not.
      * @param {Number} index The index of what menu should be open.
-     * @param {Number} nestedIndex The index of what nested menu should be open.
      */
-    function setMenuOpen(index = -1, nestedIndex = 0) {
+    function setMenuOpen(index = -1) {
         menuOpen.value = index;
-        nestedMenuOpen.value = ((index == -1) ? 0 : nestedIndex);
     }
 
-    /**
-     * This function sets what nested menu is open or not.
-     * @param {Number} index The index of the nested menu. Zero, the default index, represents the default menu.
-     */
-    function setNestedMenu(index = 0) {
-        nestedMenuOpen.value = index;
-    }
-
-    /**
-     * This function closes the Navigation Menu.
-     */
-    function closeNavMenu() {
-        setMenuOpen(-1, 0);
-    }
+    /** This function closes any open Navigation Menu. */
+    function closeNavMenu() { setMenuOpen(-1); }
 
     /**
      * This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked.
@@ -386,9 +378,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
-        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, webFooter, webFooterVisibility,
-        toggleNavMenu, toggleScriptsMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
+    return { pageView, onFirstMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
+        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
+        toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop, bypassBodyClick
     }
 });
