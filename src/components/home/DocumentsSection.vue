@@ -6,6 +6,7 @@ const tabRefs = ref([]);
 const documentsText = ref(null);
 
 useIntersectionObserver(documentsText, ([{ isIntersecting }]) => {
+    if(window.innerWidth < 450) { return; }
     setHomeTabAnimation(document.getElementById('documents-section-title'), true, isIntersecting);
     setHomeTabAnimation(document.getElementById('documents-section-desc'), true, isIntersecting);
 });
@@ -84,7 +85,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     height: fit-content;
     min-height: 400px;
     width: 100%;
-    padding: 100px 0px;
+    padding: 70px 0px;
 }
 .documents-section-mainText {
     width: 100%;
@@ -221,6 +222,11 @@ useIntersectionObserver(tabRefs, (entry) => {
 @media (max-width: 975px) {
     .documents-section-tab p {
         font-size: 17px;
+    }
+}
+@media (max-width: 825px) {
+    #documents-section-desc {
+        text-align: left;
     }
 }
 @media (max-width: 600px) {

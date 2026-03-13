@@ -1,4 +1,5 @@
 <template>
+<DocumentMenu />
 <DocumentViewer v-if="documentStore.mounted"
     :url="documentStore.hostedDocuments[index].objectUrl"
     :shareMinWidth="0"
@@ -18,6 +19,9 @@ const props = defineProps({ index: { type: Number, required: true } });
 
 const htmlClass = computed(() => { return ((props.index != 2) ? '' : CURRENT_METADATA.class); });
 const htmlID = computed(() => { return ((props.index == 2) ? '' : CURRENT_METADATA.id); });
+
+onMounted(() => { documentStore.mountDocumentPage(); });
+onBeforeUnmount(() => { documentStore.unmountDocumentPage(); });
 
 const PAGE_METADATA = [
     {

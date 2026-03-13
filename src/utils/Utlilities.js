@@ -136,6 +136,10 @@ export function usePulseLoopAnimation(container = null) {
         const elements = container.value.querySelectorAll('[pulse-loop]');
         numElements.value = elements.length;
 
+        if(container.value.hasAttribute("pulse-loop")) {
+            container.value.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
+            container.value.addEventListener("mouseleave", (event) => { animate(event); }, { signal });
+        }
         elements.forEach((element) => {
             element.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
             element.addEventListener("mouseleave", (event) => { animate(event); }, { signal });

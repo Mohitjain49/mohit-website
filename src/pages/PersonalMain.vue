@@ -1,5 +1,6 @@
 <template>
 <ParticlesBackground :particlesOptions="HOME_BACKGROUND" />
+<CompassMenu :routes="HOME_COMPASS" />
 
 <main id="homepage" class="personal-web-body" ref="mohit-homepage">
     <StartSection />

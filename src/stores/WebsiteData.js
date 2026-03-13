@@ -1,6 +1,7 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
     const controller = new AbortController();
+    var wakeLockTimeout = null;
 
     const gamepadStore = useGamepadStore();
     const documentStore = useDocumentStore();
@@ -26,27 +27,57 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     const pageView = ref(0);
     const menuOpen = ref(-1);
-    const nestedMenuOpen = ref(0);
+
     const navFooterPresent = ref(false);
+    const compassMenuAvailable = ref(false);
+    const wakeLockChangeFresh = ref(false);
+    const nullifyBodyClick = ref(false);
 
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
-    const documentMenuOpen = computed(() => { return (menuOpen.value == 1); });
+    const compassMenuOpen = computed(() => { return (menuOpen.value == 1); });
+    const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
+    const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
+
     const showSharePopup = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
         return (data != null && typeof data === "string");
     });
 
     const wakeLockIcon = computed(() => {
-        return (wakeLock.isSupported.value ? (wakeLock.isActive.value ? 'fa-unlock' : 'fa-lock') : 'fa-ban');
+        const active = wakeLock.isActive.value;
+        const fresh = wakeLockChangeFresh.value;
+        return (wakeLock.isSupported.value ? (((active && fresh) || (!active && !fresh)) ? 'fa-lock' : 'fa-unlock') : 'fa-ban');
+    });
+    const wakeLockTitle = computed(() => {
+        if(!wakeLock.isSupported.value) {
+            return "Feature Unavailable.";
+        } else if(wakeLock.isActive.value) {
+            return "Screen Wake Lock Set! Click Here To Release It.";
+        } else {
+            return "Screen Wake Lock Released. Click Here To Set It.";
+        }
     });
     const wakeLockStatement = computed(() => {
         if(!wakeLock.isSupported.value) {
             return "Feature Unavailable.";
         } else if(wakeLock.isActive.value) {
-            return "Release Screen Wake Lock";
+            return (wakeLockChangeFresh.value ? "Wake Lock Set!" : "Release Screen Wake Lock");
         } else {
-            return "Set Screen Wake Lock";
+            return (wakeLockChangeFresh.value ? "Wake Lock Released!" : "Set Screen Wake Lock");
         }
+    });
+
+    // This hides and reveals the main website scrollbar based on if a website menu is open or not.
+    watch(menuOpen, () => {
+        const newWidth = ((menuOpen.value == -1) ? '10px' : '0px');
+        try { document.documentElement.style.setProperty('--main-scrollbar-width', newWidth); } catch(e) {}
+    });
+
+    // This is used to track if the wake lock was freshly changed or not.
+    watch(wakeLock.isActive, () => {
+        if(wakeLockTimeout != null) { clearTimeout(wakeLockTimeout); }
+        wakeLockChangeFresh.value = true;
+        wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000);
     });
 
     /**
@@ -111,25 +142,48 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param event The event.
      */
     function onDocumentBodyClick(event = new MouseEvent("click")) {
-        const navMenu = document.getElementById("mohit-navBar");
-        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        const srcElement = event.target;
-
         audioStore.confirmClickSound(event);
-        const elementInNavMenu = (navMenu === srcElement || navMenuElements.includes(srcElement));
+        if(!checkNavigationElement(event.target)) { closeNavMenu(); }
+    }
 
-        if(documentStore.onDocumentRoute) {
-            var elementInDocumentMenu = false;
-            nextTick(() => {
-                const documentMenu = document.getElementById("mohit-documentBar");
-                const documentMenuElements = Array.from(documentMenu.querySelectorAll('*'));
-                elementInDocumentMenu = (documentMenu === srcElement || documentMenuElements.includes(srcElement));
-                if(!elementInDocumentMenu && !elementInNavMenu) { closeNavMenu(); }
-            });
-        } else {
-            audioStore.confirmClickSound(event);
-            if(!elementInNavMenu) { closeNavMenu(); }
+    /**
+     * This function returns whether an element is in any navigation menu within the website.
+     * @param {HTMLElement} element The element.
+     */
+    function checkNavigationElement(element) {
+        if(nullifyBodyClick.value) {
+            nullifyBodyClick.value = false;
+            return true;
         }
+
+        const navBar = document.getElementById("mohit-navBar");
+        const navBarElements = Array.from(navBar.querySelectorAll('*'));
+        if(navBar === element || navBarElements.includes(element)) { return true; }
+
+        const navMenu = document.getElementById("mohit-navMenu");
+        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
+        if(navMenu === element || navMenuElements.includes(element)) { return true; }
+
+        const compassMenu = document.getElementById("mohit-compassMenu");
+        if(compassMenu != null) {
+            const compassMenuElements = Array.from(compassMenu.querySelectorAll('*'));
+            if(compassMenu === element || compassMenuElements.includes(element)) { return true; }
+        }
+
+        const scriptsMenu = document.getElementById("mohit-scriptsMenu");
+        if(scriptsMenu != null) {
+            const scriptsMenuElements = Array.from(scriptsMenu.querySelectorAll('*'));
+            if(scriptsMenu === element || scriptsMenuElements.includes(element)) { return true; }
+        }
+
+        const docMenu = document.getElementById("mohit-docMenu");
+        if(docMenu != null) {
+            const docMenuElements = Array.from(docMenu.querySelectorAll('*'));
+            if(docMenu === element || docMenuElements.includes(element)) { return true; }
+        }
+
+        // Returns false if element was not found in any menu.
+        return false;
     }
 
     /**
@@ -221,7 +275,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(webFooterVisibility.value) {
             scrollToTop(false);
         } else {
-            goToPageSection('footer');
+            goToPageSection('footer', 50);
         }
     }
 
@@ -238,45 +292,32 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    /**
-     * The toggles the status of the home navigation menu.
-     */
+    /** The toggles the status of the home navigation menu. */
     function toggleNavMenu() {
-        setMenuOpen(((menuOpen.value == 0) ? -1 : 0), 0);
+        setMenuOpen((menuOpen.value == 0) ? -1 : 0);
     }
 
-    /**
-     * The toggles the status of the document menu.
-     * @param {Number} nestedIndex The index of the nested menu to open.
-     * @param {Boolean} ignoreNested If true, this will ignore the Nested Index when determining the state of the main menu.
-     */
-    function toggleDocumentMenu(nestedIndex = 0, ignoreNested = false) {
-        setMenuOpen(((menuOpen.value == 1 && (nestedIndex == nestedMenuOpen.value || ignoreNested)) ? -1 : 1), nestedIndex);
+    /** The toggles the status of the home navigation menu. */
+    function toggleScriptsMenu() {
+        setMenuOpen((menuOpen.value == 2) ? -1 : 2);
     }
 
     /**
      * This function sets the status of whether a website menu is open or not.
      * @param {Number} index The index of what menu should be open.
-     * @param {Number} nestedIndex The index of what nested menu should be open.
      */
-    function setMenuOpen(index = -1, nestedIndex = 0) {
+    function setMenuOpen(index = -1) {
         menuOpen.value = index;
-        nestedMenuOpen.value = ((index == -1) ? 0 : nestedIndex);
     }
 
-    /**
-     * This function sets what nested menu is open or not.
-     * @param {Number} index The index of the nested menu. Zero, the default index, represents the default menu.
-     */
-    function setNestedMenu(index = 0) {
-        nestedMenuOpen.value = index;
-    }
+    /** This function closes any open Navigation Menu. */
+    function closeNavMenu() { setMenuOpen(-1); }
 
     /**
-     * This function closes the Navigation Menu.
+     * This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked.
      */
-    function closeNavMenu() {
-        setMenuOpen(-1, 0);
+    function bypassBodyClick() {
+        nullifyBodyClick.value = true;
     }
 
     /**
@@ -326,8 +367,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     async function toggleWakeLock() {
         if(!wakeLock.isSupported.value) { return; }
-        closeNavMenu();
-
         if(wakeLock.isActive.value) {
             await wakeLock.release();
         } else {
@@ -339,10 +378,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, onFirstMount, menuOpen, nestedMenuOpen, navMenuOpen, documentMenuOpen, shareSupported, showSharePopup,
-        wakeLock, wakeLockIcon, wakeLockStatement, navFooterPresent, webFooter, webFooterVisibility,
-        toggleNavMenu, toggleDocumentMenu, setMenuOpen, setNestedMenu, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
-        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop
+    return { pageView, onFirstMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
+        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
+        toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
+        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop, bypassBodyClick
     }
 });
 

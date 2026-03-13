@@ -7,7 +7,7 @@
         <div :class="['wakeLock-box', ((menuState == 1) ? 'keybinds' : '')]">
             <template v-if="menuState == 0">
                 <button class="wakeLock-button" @click="webData.toggleWakeLock()">
-                    <font-awesome-icon :icon="webData.wakeLockIcon" />
+                    <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
                     <span> {{ webData.wakeLockStatement }} </span>
                 </button>
                 <a :href="WAKE_LOCK_MDN_DOCS" class="wakeLock-mdn-docs">
