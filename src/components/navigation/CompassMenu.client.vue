@@ -18,13 +18,6 @@
                 <img v-else :src="section.icon" draggable="false" />
             </RouterLink>
         </div>
-        <!-- <RouterLink v-for="section in SKILLS_SECTIONS" :class="circleOptClasses"
-            :title="('Scroll To The ' + section.title + ' Section')"
-            :to="('/skills/#' + section.id)"
-            @click="goToPageSection(section.id)"
-            :style="{ 'color': section.color }"
-            v-html="section.title">
-        </RouterLink> -->
         <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">

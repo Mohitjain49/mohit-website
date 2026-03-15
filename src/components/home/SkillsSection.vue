@@ -60,7 +60,7 @@ function setSkillsTransitions(isVisible = false) {
     grid-template-columns: repeat(3, 1fr);
     height: fit-content;
     width: 1200px;
-    padding: 80px calc(50% - 600px);
+    padding: 70px calc(50% - 600px);
 }
 .skills-main-textContainer {
     grid-column: span 3;
@@ -71,7 +71,7 @@ function setSkillsTransitions(isVisible = false) {
 .skills-main-header {
     height: fit-content;
     width: 100%;
-    padding-top: 50px;
+    padding-top: 0px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -97,13 +97,13 @@ function setSkillsTransitions(isVisible = false) {
     width: calc(100% - 30px);
     height: fit-content;
     padding: 20px 15px;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
     color: var(--blue-zero);
     text-align: center;
     line-height: 35px;
 }
 .skills-entity-container {
-    height: 550px;
+    height: 500px;
     width: 100%;
     min-width: 400px;
     display: flex;
@@ -115,7 +115,7 @@ function setSkillsTransitions(isVisible = false) {
     .skills-section {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
-        padding: 0px calc(50% - 400px);
+        padding: 70px calc(50% - 400px);
     }
     .skills-main-textContainer {
         grid-column: span 2;
@@ -126,7 +126,7 @@ function setSkillsTransitions(isVisible = false) {
     .skills-section {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
-        padding: 0px 10px;
+        padding: 70px 10px;
     }
     .skills-entity-container {
         min-width: 0px;

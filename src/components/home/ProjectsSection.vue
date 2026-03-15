@@ -69,7 +69,7 @@ function setProjectsTransitions(isVisible) {
     grid-template-columns: repeat(3, 1fr);
     height: fit-content;
     width: 1200px;
-    padding: 80px calc(50% - 600px);
+    padding: 70px calc(50% - 600px);
 }
 .projects-main-textContainer {
     grid-column: span 3;
@@ -80,7 +80,7 @@ function setProjectsTransitions(isVisible) {
 .projects-main-header {
     height: fit-content;
     width: 100%;
-    padding-top: 50px;
+    padding-top: 0px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -111,7 +111,7 @@ function setProjectsTransitions(isVisible) {
     line-height: 35px;
 }
 .projects-note-container {
-    height: 550px;
+    height: 500px;
     width: 100%;
     min-width: 400px;
     display: flex;
@@ -146,8 +146,7 @@ function setProjectsTransitions(isVisible) {
     .projects-section {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
-        padding: 0px calc(50% - 400px);
-        padding-bottom: 50px;
+        padding: 70px calc(50% - 400px);
     }
     .projects-main-textContainer, .projects-features-btn {
         grid-column: span 2;
@@ -158,8 +157,7 @@ function setProjectsTransitions(isVisible) {
     .projects-section {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
-        padding: 0px 10px;
-        padding-bottom: 50px;
+        padding: 70px 10px;
     }
     .projects-note-container {
         min-width: 0px;
