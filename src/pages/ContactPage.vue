@@ -183,7 +183,7 @@ const sendMessageIcon = computed(() => {
     const sendMessageObj = sendMessageState.value;
     return ("fa-" + (sendMessageObj.error ? "ban" : (sendMessageObj.sent ? "check" : (sendMessageObj.pending ? "spinner" : "arrow-right-from-bracket"))));
 });
-useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple links to platforms where you can contact me."));
+useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple links to platforms where you can contact me.", "rgb(248, 206, 171)"));
 
 /**
  * ----------------------------------------------------------------------------

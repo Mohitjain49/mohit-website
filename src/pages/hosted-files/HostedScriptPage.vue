@@ -38,34 +38,31 @@ const PAGE_METADATA = [
     {
         title: "Mohit Jain | My AWS Deployment Script",
         route: "aws-deploy-script",
-        desc: "This page shows my AWS deployment script that I use for my websites and web applications."
+        desc: "This page shows my AWS deployment script that I use for my websites and web applications.",
+        type: "default"
     },
     {
         title: "Mohit Jain | Gamepad Controls | Pinia Store and Gamepad Utility Code",
         route: "gamepad/store-and-utility",
-        desc: "This page shows the main code that this website uses to implement Gamepad functionality."
+        desc: "This page shows the main code that this website uses to implement Gamepad functionality.",
+        type: "gamepad-extra"
     },
     {
         title: "Mohit Jain | Gamepad Controls | Vue.js Component Code",
         route: "gamepad/vuejs-component",
-        desc: "This page shows the code that displays the gamepad cursor and other components activated by the gamepad on this website."
+        desc: "This page shows the code that displays the gamepad cursor and other components activated by the gamepad on this website.",
+        type: "gamepad-extra"
     },
     {
         title: "Mohit Jain | Gamepad Controls | Custom Events",
         route: "gamepad/custom-events",
-        desc: "This page shows the code that fires and handles the custom gamepad events I made on my website."
+        desc: "This page shows the code that fires and handles the custom gamepad events I made on my website.",
+        type: "gamepad-extra"
     },
 ];
 
 const CURRENT_METADATA = PAGE_METADATA[props.index];
-useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc));
-
-/** This function opens the scripts menu. */
-function openScriptsMenu() {
-    const webData = useWebsiteDataStore();
-    webData.bypassBodyClick();
-    webData.toggleScriptsMenu();
-}
+useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc, "#4d3e3e", CURRENT_METADATA.type));
 </script>
 
 <style scoped>

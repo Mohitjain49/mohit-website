@@ -33,7 +33,8 @@ onMounted(() => {
     setNavCardAnimation("main-projects-features-btn");
 });
 useHead(getMeta("Mohit Jain | My Projects", "projects/",
-    "On this page, I go into depth on the projects that I have made."
+    "On this page, I go into depth on the projects that I have made.",
+    "rgb(0, 100, 0)"
 ));
 </script>
 

@@ -26,7 +26,7 @@ const bodyBackground = computed(() => {
 });
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value); });
+const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value, "rgb(248, 206, 171)"); });
 useHead(metaTags);
 
 onMounted(() => {
