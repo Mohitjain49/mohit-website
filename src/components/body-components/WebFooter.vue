@@ -7,7 +7,7 @@
                 <span> Home Page </span>
             </RouterLink>
 
-            <RouterLink v-for="tab in MAIN_ROUTES" :to="(tab.path + '/')" pulse-loop
+            <RouterLink v-for="tab in MAIN_ROUTES" :to="tab.path" pulse-loop
                 :style="{ 'color': tab.color }"
                 class="footer-routes-opt"
                 @click="scrollToTop(tab.path)">
@@ -57,7 +57,7 @@
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright" class="copyright-statement" @click="scrollToTop('/copyright')">
+        <RouterLink to="/copyright/" class="copyright-statement" @click="scrollToTop('/copyright')">
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
@@ -101,6 +101,7 @@ const footerClass = computed(() => {
  * @param {String} routeStr The route the button is attached to.
  */
 function scrollToTop(routeStr = "/") {
+    if(routeStr.endsWith("/")) { routeStr = routeStr.substring(0, (routeStr.length - 1)); }
     if(routeStr !== route.path && (routeStr + "/") !== route.path) { return; }
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 }
