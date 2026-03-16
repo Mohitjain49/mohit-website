@@ -498,6 +498,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * @param {String} pathname The path parameter.
      */
     function checkPath(pathname) {
+        if(pathname.endsWith("/")) { pathname = pathname.substring(0, (pathname.length - 1)); }
         const mainCheck = (path === pathname || (path + "/") === pathname);
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }

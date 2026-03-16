@@ -63,7 +63,7 @@ export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 export const NUXT_WEBSITE_LINK = "https://nuxt.com/";
 export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/";
 
-export const FCS_CERTIFICATE_ROUTE = "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025";
+export const FCS_CERTIFICATE_ROUTE = "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025/";
 export const FCS_CERTIFICATE_LINK = "https://www.mohit-jain.com/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 export const FCS_CERTIFICATE_LINKEDIN_POST = "https://www.linkedin.com/posts/mohitjain49_sharing-my-certificate-of-appreciation-from-activity-7331780981911080960-W_aN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-tIy0BLb0spd_jNR2x-8zVBRSshOre_lI";
 export const FCS_CAREER_INTERNSHIP_LINK = "https://www.fultonschools.org/all-departments/academics/learning-teaching/academic-programs/accelerated-extended-programming/advanced-studies/talented-and-gifted-tag/career-internship-program";
@@ -780,7 +780,7 @@ export const PROJECT_ENTITIES = [
 export const FEATURE_ENTITIES = [
     {
         name: "Gamepads",
-        link: "/gamepad",
+        link: "/gamepad/",
         color: "var(--website-light-text)",
         desc: "I integrated the Web Gamepad API into my website with joypad.js so that visitors can freely use a " +
             "PS5, Xbox, Nintendo Switch, and other controllers with my website.",
@@ -793,7 +793,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Barcode Reader",
-        link: "/code-scanner",
+        link: "/code-scanner/",
         color: "var(--blue-cobalt)",
         desc: "This page is capable of reading values from Barcodes and Qr Codes. " +
             "It uses the \"vue-qrocde-reader\" dependency to do so.",
@@ -819,7 +819,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Install Website",
-        link: "/install",
+        link: "/install/",
         color: "var(--website-text)",
         desc: "I used the \"Vite PWA\" dependency to build a service worker " +
             "for my website so that I can install and fully utilize my website offline.",
@@ -832,7 +832,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Wake Lock",
-        link: "/wakelock",
+        link: "/wakelock/",
         color: "var(--vibrant-flame)",
         desc: "This website can effectively use the Screen Wake Lock Web API so that " +
             "the laptop does not go to sleep naturally when enabled.",
@@ -845,7 +845,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Documents",
-        link: "/documents",
+        link: "/documents/",
         color: "var(--website-text)",
         desc: "I used multiple modules to display my resume and other documents on this website. " +
             "This includes using PDF.js to natively display the PDF as a whole and the \"unplugin-vue-markdown\" " +

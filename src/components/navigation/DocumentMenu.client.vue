@@ -15,13 +15,13 @@
                 </RouterLink>
             </div>
             <div v-if="(!documentStore.onResumeQrcodeRoute)" class="mohit-navMenu-opt light">
-                <RouterLink to="/resume/qrcode" class="mohit-navMenu-mainOpt" pulse-loop>
+                <RouterLink to="/resume/qrcode/" class="mohit-navMenu-mainOpt" pulse-loop>
                     <span> See My Main Resume (With QR Code) </span>
                     <font-awesome-icon icon="fa-qrcode" />
                 </RouterLink>
             </div>
             <div v-if="(!documentStore.onMarkdownRoute)" class="mohit-navMenu-opt light">
-                <RouterLink to="/resume/markdown" class="mohit-navMenu-mainOpt" pulse-loop>
+                <RouterLink to="/resume/markdown/" class="mohit-navMenu-mainOpt" pulse-loop>
                     <span> See My Main Resume (Markdown) </span>
                     <font-awesome-icon icon="fa-brands fa-markdown" />
                 </RouterLink>

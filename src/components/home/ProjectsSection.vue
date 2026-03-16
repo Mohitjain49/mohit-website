@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <RouterLink class="projects-features-btn" to="/features" ref="featuresButton"
+    <RouterLink class="projects-features-btn" to="/features/" ref="featuresButton"
         title="Explore this Website's Unique Capabilities" pulse-loop>
 
         <FontAwesomeIcon icon="fa-bolt-lightning" />

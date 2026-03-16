@@ -1,5 +1,5 @@
 <template>
-<RouterLink to="/features" class="features-return-widget animate__animated animate__fadeInUp" title="Return To Features Page">
+<RouterLink to="/features/" class="features-return-widget animate__animated animate__fadeInUp" title="Return To Features Page">
     <FontAwesomeIcon icon="fa-bolt-lightning" />
 </RouterLink>
 </template>

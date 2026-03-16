@@ -11,9 +11,9 @@
                     The files below are the 3 main files in my code that give functionality to the Gamepad on this website.
                 </p>
                 <ul>
-                    <li> <RouterLink to="/gamepad/custom-events"> Custom Gamepad Events </RouterLink> </li>
-                    <li> <RouterLink to="/gamepad/store-and-utility"> Gamepad Vue.js Store & Utility </RouterLink> </li>
-                    <li> <RouterLink to="/gamepad/vuejs-component"> Gamepad Vue.js Component </RouterLink> </li>
+                    <li> <RouterLink to="/gamepad/custom-events/"> Custom Gamepad Events </RouterLink> </li>
+                    <li> <RouterLink to="/gamepad/store-and-utility/"> Gamepad Vue.js Store & Utility </RouterLink> </li>
+                    <li> <RouterLink to="/gamepad/vuejs-component/"> Gamepad Vue.js Component </RouterLink> </li>
                 </ul>
                 <FontAwesomeIcon class="gamepad-desc-icon" icon="fa-code" />
             </div>

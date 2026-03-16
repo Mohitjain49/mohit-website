@@ -18,7 +18,7 @@
         </div>
 
         <div class="footer-routes-column">
-            <RouterLink to="/contact" class="footer-routes-header" @click="scrollToTop('/contact')" pulse-loop>
+            <RouterLink to="/contact/" class="footer-routes-header" @click="scrollToTop('/contact')" pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
                 <span> Contact Me </span>
             </RouterLink>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="footer-routes-column">
-            <RouterLink to="/features" class="footer-routes-header" pulse-loop
+            <RouterLink to="/features/" class="footer-routes-header" pulse-loop
                 @click="scrollToTop('/features')"
                 style="color: var(--lightning-yellow)">
 
@@ -106,19 +106,19 @@ function scrollToTop(routeStr = "/") {
 }
 
 const MAIN_ROUTES = [
-    { name: "My Skills", path: "/skills", icon: "fa-code", color: "var(--blue-two)" },
-    { name: "My Experience", path: "/experience", icon: "fa-file-code", color: "var(--website-text)" },
-    { name: "My Projects", path: "/projects", icon: "fa-cubes", color: "var(--globe-green)" },
-    { name: "My Resume", path: "/resume", icon: "fa-file-lines", color: "var(--website-text)" },
-    { name: "My Documents", path: "/documents", icon: "fa-folder-open", color: "var(--website-light-text)" },
-    { name: "My Icons", path: "/icons", icon: "fa-pen-fancy", color: "var(--blue-two)" },
+    { name: "My Skills", path: "/skills/", icon: "fa-code", color: "var(--blue-two)" },
+    { name: "My Experience", path: "/experience/", icon: "fa-file-code", color: "var(--website-text)" },
+    { name: "My Projects", path: "/projects/", icon: "fa-cubes", color: "var(--globe-green)" },
+    { name: "My Resume", path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)" },
+    { name: "My Documents", path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)" },
+    { name: "My Icons", path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-two)" },
 ];
 
 const EXTRA_ROUTES = [
-    { name: "Gamepad", path: "/gamepad", icon: "fa-gamepad", color: "var(--website-light-text)" },
-    { name: "Barcode Reader", path: "/code-reader", icon: "fa-barcode", color: "var(--blue-cobalt)" },
-    { name: "Install Website", path: "/install", icon: "fa-download", color: "var(--website-text)" },
-    { name: "Wake Lock", path: "/wakelock", icon: "fa-lock", color: "var(--vibrant-flame)" },
+    { name: "Gamepad", path: "/gamepad/", icon: "fa-gamepad", color: "var(--website-light-text)" },
+    { name: "Barcode Reader", path: "/code-reader/", icon: "fa-barcode", color: "var(--blue-cobalt)" },
+    { name: "Install Website", path: "/install/", icon: "fa-download", color: "var(--website-text)" },
+    { name: "Wake Lock", path: "/wakelock/", icon: "fa-lock", color: "var(--vibrant-flame)" },
     { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" }
 ];
 

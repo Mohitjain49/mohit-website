@@ -31,7 +31,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     </div>
     <div class="documents-section-tabs-container">
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
-            <RouterLink to="/resume" id="resume-tab" class="documents-section-tab" pulse-loop>
+            <RouterLink to="/resume/" id="resume-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-file-lines" />
                     <span> My Resume </span>
@@ -43,7 +43,7 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <RouterLink to="/aws-deploy-script" id="deploy-script-tab" class="documents-section-tab" pulse-loop>
+            <RouterLink to="/aws-deploy-script/" id="deploy-script-tab" class="documents-section-tab" pulse-loop>
                 <div class="documents-section-tab-header">
                     <font-awesome-icon icon="fa-upload" />
                     <span> Deploy Script </span>

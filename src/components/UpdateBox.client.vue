@@ -11,7 +11,7 @@
     <div :class="['update-box-buttons', (buttonClicked ? 'updating' : '')]">
         <button class="updateBtn" @click="updateWebsite()"> {{ (buttonClicked ? 'Updating...' : 'Update') }} </button>
         <button class="closeBtn" @click="installStore.setUpdateBox(false)"> Close </button>
-        <RouterLink to="/copyright" class="copyrightBtn"> Current Version </RouterLink>
+        <RouterLink to="/copyright/" class="copyrightBtn"> Current Version </RouterLink>
     </div>
 </div>
 </template>
