@@ -117,7 +117,7 @@ const MAIN_ROUTES = [
 
 const EXTRA_ROUTES = [
     { name: "Gamepad", path: "/gamepad/", icon: "fa-gamepad", color: "var(--website-light-text)" },
-    { name: "Barcode Reader", path: "/code-reader/", icon: "fa-barcode", color: "var(--blue-cobalt)" },
+    { name: "Barcode Reader", path: "/code-scanner/", icon: "fa-barcode", color: "var(--blue-cobalt)" },
     { name: "Install Website", path: "/install/", icon: "fa-download", color: "var(--website-text)" },
     { name: "Wake Lock", path: "/wakelock/", icon: "fa-lock", color: "var(--vibrant-flame)" },
     { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" }
