@@ -1,6 +1,9 @@
 <template>
 <footer id="footer" :class="footerClass" ref="mohit-footer">
     <div class="footer-body">
+        <div class="footer-main-icon">
+            <RouterLink to="/" @click="scrollToTop('/')"> <img :src="mkj_icon" draggable="false" /> </RouterLink>
+        </div>
         <div class="footer-routes-column">
             <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')" pulse-loop>
                 <font-awesome-icon icon="fa-house" />
@@ -56,6 +59,20 @@
         </div>
     </div>
 
+    <div class="footer-contact-section">
+        <template v-for="(contact, index) in SOCIALS">
+            <a v-if="(index != 2)" :href="contact.link" pulse-loop
+                :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
+                :style="getColorStyles(contact.color)">
+
+                <font-awesome-icon :icon="contact.linkIcon" />
+            </a>
+        </template>
+    </div>
+    <div class="footer-job-title">
+        Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" pulse-loop> <img :src="ivue_text" draggable="false" /> </a></span>
+    </div>
+
     <div class="footer-bottom">
         <RouterLink to="/copyright/" class="copyright-statement" @click="scrollToTop('/copyright')" pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
@@ -65,7 +82,7 @@
             <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
-            <RouterLink :to="{ route: route.path }" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
+            <RouterLink :to="routePath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />
             </RouterLink>
         </div>
@@ -74,7 +91,10 @@
 </template>
 
 <script setup>
-const route = useRoute();
+import mkj_icon from "/static-icons/Personal_Icon_Expanded_Rounded.png";
+import ivue_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
+
+const router = useRouter();
 const webData = useWebsiteDataStore();
 const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
 
@@ -91,14 +111,10 @@ onBeforeUnmount(() => {
     webData.webFooter = null;
 })
 
+const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerClass = computed(() => {
-    const path = route.path;
-    if(-1 != MAIN_PAGE_STYLE_ROUTES.findIndex((item) => { return (item === path || (item + "/") === path) })) {
-        return 'main-page';
-    } else {
-        return '';
-    }
-})
+    return ((-1 == MAIN_PAGE_STYLE_ROUTES.findIndex((item) => { return (item === routePath.value || (item + "/") === routePath.value) })) ? '' : 'main-page');
+});
 
 /**
  * This scrolls to the top of the webpage if the user won't change routes.
@@ -106,7 +122,7 @@ const footerClass = computed(() => {
  */
 function scrollToTop(routeStr = "/") {
     if(routeStr.endsWith("/")) { routeStr = routeStr.substring(0, (routeStr.length - 1)); }
-    if(routeStr !== route.path && (routeStr + "/") !== route.path) { return; }
+    if(routeStr !== routePath.value && (routeStr + "/") !== routePath.value) { return; }
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 }
 
@@ -147,40 +163,37 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
 
 .footer-body {
     position: relative;
-    left: calc((100% - 750px) / 2);
-    width: 750px;
+    left: calc(50% - 600px);
+    width: 1200px;
     height: fit-content;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
-.footer-bottom {
-    width: calc(100% - 30px);
-    height: 50px;
-    justify-content: space-between;
-    align-items: center;
+.footer-main-icon {
+    grid-column: span 1;
+    width: 100%;
+    height: 275px;
     display: flex;
-    flex-direction: row;
-    padding: 4px 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    align-items: center;
+    justify-content: center;
 }
 
-.copyright-statement {
+.footer-main-icon > a {
+    height: fit-content;
     width: fit-content;
-    text-align: center;
-    color: var(--blue-cobalt);
-    font-size: 20px;
-    font-family: 'Lexend', sans-serif;
-    cursor: pointer;
-    transition: scale 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
-    gap: 3px;
+    padding: 20px;
+    border-radius: 40px;
+    transition: var(--default-transition);
 }
-.copyright-statement:hover {
-    scale: 1.05;
-    text-decoration: underline;
+.footer-main-icon > a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.footer-main-icon > a > img {
+    height: 220px;
+    user-select: none;
 }
 
 .footer-routes-column {
@@ -235,6 +248,101 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
     margin-right: 8px;
 }
 
+.footer-contact-section {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 15px;
+    padding-top: 15px;
+}
+.footer-contact-section > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 35px;
+    font-size: 20px;
+    color: var(--website-text);
+    border: 1px solid;
+    border-radius: 7px;
+    transition: var(--default-transition), scale 0.2s;
+    background-color: black;
+}
+
+.footer-job-title {
+    height: fit-content;
+    width: 100%;
+    padding: 5px 0px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: rgb(202, 202, 202);
+    font-family: 'Lexend', sans-serif;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 3px;
+}
+.footer-job-title img {
+    user-select: none;
+    height: 16px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid white;
+}
+
+.footer-job-title span {
+    position: relative;
+    top: 1px;
+    height: fit-content;
+    width: fit-content;
+}
+.footer-job-title a {
+    display: block;
+    height: 21px;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+.footer-job-title a:hover {
+    background-color: rgba(255, 255, 255, 0.151);
+}
+
+.footer-bottom {
+    width: calc(100% - 30px);
+    height: 50px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    padding: 4px 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+.copyright-statement {
+    width: fit-content;
+    text-align: center;
+    color: var(--blue-cobalt);
+    font-size: 20px;
+    font-family: 'Lexend', sans-serif;
+    cursor: pointer;
+    transition: scale 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 3px;
+}
+.copyright-statement:hover {
+    scale: 1.05;
+    text-decoration: underline;
+}
+
 .footer-bottom-buttons {
     display: flex;
     justify-content: center;
@@ -264,7 +372,7 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
     scale: 1.1;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
     .footer-body {
         grid-template-columns: repeat(1, 1fr);
         left: 0px;
