@@ -68,6 +68,8 @@ export const FCS_CERTIFICATE_LINK = "https://www.mohit-jain.com/Fulton_Internshi
 export const FCS_CERTIFICATE_LINKEDIN_POST = "https://www.linkedin.com/posts/mohitjain49_sharing-my-certificate-of-appreciation-from-activity-7331780981911080960-W_aN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-tIy0BLb0spd_jNR2x-8zVBRSshOre_lI";
 export const FCS_CAREER_INTERNSHIP_LINK = "https://www.fultonschools.org/all-departments/academics/learning-teaching/academic-programs/accelerated-extended-programming/advanced-studies/talented-and-gifted-tag/career-internship-program";
 
+export const SHARE_PAGE_TITLE = "Share This Page With Someone Else!";
+
 export const SOCIALS = [
     {
         name: "My Email",

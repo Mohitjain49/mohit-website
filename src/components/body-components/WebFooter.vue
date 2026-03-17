@@ -57,15 +57,19 @@
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright/" class="copyright-statement" @click="scrollToTop('/copyright')">
+        <RouterLink to="/copyright/" class="copyright-statement" @click="scrollToTop('/copyright')" pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
+        <div class="footer-bottom-buttons">
+            <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
+                <FontAwesomeIcon icon="fa-share-from-square" />
+            </button>
+            <RouterLink :to="{ route: route.path }" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
+                <FontAwesomeIcon icon="fa-turn-up" />
+            </RouterLink>
+        </div>
     </div>
-
-    <button @click="webData.openQRCodePopup()" class="qr-popup-open-section" title="Share This Page With Someone Else!" pulse-loop>
-        <FontAwesomeIcon icon="fa-share-from-square" />
-    </button>
 </footer>
 </template>
 
@@ -123,7 +127,7 @@ const EXTRA_ROUTES = [
     { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" }
 ];
 
-const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad"];
+const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/code-scanner"];
 </script>
 
 <style scoped>
@@ -140,9 +144,6 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad"];
     border-top: 2px dashed var(--website-light-text);
     background-color: rgb(10, 10, 10);
 }
-#footer.document-route {
-    padding-bottom: 40px;
-}
 
 .footer-body {
     position: relative;
@@ -153,31 +154,33 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad"];
     grid-template-columns: repeat(3, 1fr);
 }
 .footer-bottom {
-    width: 100%;
+    width: calc(100% - 30px);
     height: 50px;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     display: flex;
-    text-align: center;
-    padding-bottom: 15px;
+    flex-direction: row;
+    padding: 4px 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .copyright-statement {
     width: fit-content;
     text-align: center;
     color: var(--blue-cobalt);
-    font-size: 25px;
+    font-size: 20px;
     font-family: 'Lexend', sans-serif;
     cursor: pointer;
-    border-bottom: var(--empty-border);
-    transition: var(--default-transition);
-}
-.copyright-statement svg {
-    font-size: 23px;
-    margin-right: 4px;
+    transition: scale 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 3px;
 }
 .copyright-statement:hover {
-    border-color: var(--blue-cobalt);
+    scale: 1.05;
+    text-decoration: underline;
 }
 
 .footer-routes-column {
@@ -232,40 +235,41 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad"];
     margin-right: 8px;
 }
 
-.qr-popup-open-section {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
+.footer-bottom-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: fit-content;
+    flex-direction: row;
+    height: 100%;
     width: fit-content;
-    color: var(--website-light-text);
-    padding: 7px;
+    gap: 10px;
+}
+.footer-bottom-buttons > button, .footer-bottom-buttons > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 33px;
+    width: 33px;
+    color: var(--website-text);
     border: 1px solid;
-    border-radius: 10px;
+    border-radius: 7px;
     transition: var(--default-transition), scale 0.2s;
 }
-.qr-popup-open-section svg {
-    width: 35px;
-    height: 35px;
+
+.footer-bottom-buttons > button > svg, .footer-bottom-buttons > a > svg {
+    font-size: 20px;
 }
-.qr-popup-open-section:hover {
+.footer-bottom-buttons > button:hover, .footer-bottom-buttons > a:hover {
     background-color: rgb(43, 43, 43);
     scale: 1.1;
 }
 
 @media (max-width: 800px) {
-    #footer.document-route {
-        padding-bottom: 30px;
-    }
     .footer-body {
         grid-template-columns: repeat(1, 1fr);
         left: 0px;
         width: 100%;
     }
-
     .footer-routes-column {
         width: 100%;
         display: flex;
@@ -293,26 +297,15 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad"];
     }
 }
 @media (max-width: 525px) {
-    #footer.document-route {
-        padding-bottom: 40px;
-    }
+    .footer-bottom { height: 40px; }
+    .copyright-statement { font-size: 18px; }
 
-    .footer-bottom {
-        padding: 10px 0px;
+    .footer-bottom-buttons > button, .footer-bottom-buttons > a {
+        height: 27px;
+        width: 27px;
     }
-    .copyright-statement {
-        font-size: 23px;
-    }
-    .copyright-statement svg {
-        font-size: 21px;
-    }
-
-    .qr-popup-open-section {
-        bottom: 20px;
-    }
-    .qr-popup-open-section svg {
-        width: 25px;
-        height: 25px;
+    .footer-bottom-buttons > button > svg, .footer-bottom-buttons > a > svg {
+        font-size: 17px;
     }
 }
 </style>

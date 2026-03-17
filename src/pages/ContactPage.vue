@@ -7,7 +7,7 @@
 <main id="contact-page" class="personal-web-body">
     <div class="contact-boxes-container">
         <div class="contact-me-box web-service">
-            <button @click="webData.openQRCodePopup()" class="contact-share-btn" title="Share This Page With Someone Else!">
+            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE">
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
 

@@ -64,6 +64,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
             </div>
         </div>
     </div>
+    <WebFooter />
 </main>
 
 <div v-if="(codeScanner.scannedItemMenu != -1)" id="code-scanner-popup" class="webpage-cover">
@@ -100,7 +101,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 }
 .code-scanner-main {
     width: 100%;
-    height: calc(100vh - 60px);
+    height: var(--body-height);
     min-height: 600px;
     display: flex;
     justify-content: center;
