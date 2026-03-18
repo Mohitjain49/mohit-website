@@ -1,7 +1,7 @@
 <template>
 <ParticlesBackground :particlesOptions="BLUE_BACKGROUND" />
 <CompassMenu :routes="SKILLS_COMPASS" />
-<CompassWidget />
+<CompassWidget :htmlClass="'blue'" />
 
 <main id="skills-page" class="personal-web-body">
     <div class="skills-body">

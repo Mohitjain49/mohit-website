@@ -901,19 +901,28 @@ export const FEATURE_ENTITIES = [
 ];
 
 export const HOME_COMPASS = [
-    { title: "Start", id: "start", color: "var(--website-text)", faIcon: true, icon: "fa-house" },
-    { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code" },
-    { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon },
-    { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes" },
-    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open" }
+    { title: "Start", id: "start", color: "var(--website-text)", faIcon: true, icon: "fa-house", offset: 0 },
+    { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code", offset: 0 },
+    { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon, offset: 0 },
+    { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes", offset: 0 },
+    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 }
 ];
 
 export const SKILLS_COMPASS = [
-    { title: "Vue.js", id: "vuejs", color: "#41B883", faIcon: false, icon: vue_icon },
-    { title: "Frontend", id: "frontend", color: "#D3B62A", faIcon: true, icon: "fa-brands fa-js" },
-    { title: "AWS", id: "aws", color: "#5468ff", faIcon: false, icon: aws_icon },
-    { title: "Google", id: "google", color: "#4c8bf5", faIcon: true, icon: "fa-brands fa-google" },
-    { title: "Modules", id: "modules", color: "#5C9E57", faIcon: true, icon: "fa-brands fa-node-js" },
-    { title: "Languages", id: "languages", color: "#E34E26", faIcon: true, icon: "fa-laptop-code" },
-    { title: "Icons", id: "icons", color: "rgb(83, 141, 215)", faIcon: true, icon: "fa-brands fa-font-awesome" }
+    { title: "Vue.js", id: "vuejs", color: "#41B883", faIcon: false, icon: vue_icon, offset: 0 },
+    { title: "Frontend", id: "frontend", color: "#D3B62A", faIcon: true, icon: "fa-brands fa-js", offset: 0 },
+    { title: "AWS", id: "aws", color: "#5468ff", faIcon: false, icon: aws_icon, offset: 0 },
+    { title: "Google", id: "google", color: "#4c8bf5", faIcon: true, icon: "fa-brands fa-google", offset: 0 },
+    { title: "Modules", id: "modules", color: "#5C9E57", faIcon: true, icon: "fa-brands fa-node-js", offset: 0 },
+    { title: "Languages", id: "languages", color: "#E34E26", faIcon: true, icon: "fa-laptop-code", offset: 0 },
+    { title: "Icons", id: "icons", color: "rgb(83, 141, 215)", faIcon: true, icon: "fa-brands fa-font-awesome", offset: 0 }
+];
+
+export const CONTACT_COMPASS = [
+    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square", offset: 70 },
+    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope", offset: 70 },
+    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin", offset: 70 },
+    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 70 },
+    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 70 },
+    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 70 }
 ];
