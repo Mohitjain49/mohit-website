@@ -25,7 +25,8 @@ usePulseLoopAnimation(experienceRef);
 
 onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Experience", "experience/",
-    "On this page, I go into depth about my work experience."
+    "On this page, I go into depth about my work experience.",
+    "rgb(248, 206, 171)"
 ));
 </script>
 

@@ -60,7 +60,7 @@ export const personalRoutes = [
 
     { path: "/features", name: "Main Features Page", component: Features },
     { path: "/wakelock", name: "Set Wake Lock", component: WakeLockPage },
-    { path: "/code-scanner", alias: ["/code-reader"], name: "Code Reader Page", component: CodeScanner },
+    { path: "/code-scanner", name: "Code Reader Page", component: CodeScanner },
     { path: "/install", name: "Install Website", component: InstallPage },
     { path: "/google-mockup", name: "Google Mockup Page", component: GoogleMockup },
 

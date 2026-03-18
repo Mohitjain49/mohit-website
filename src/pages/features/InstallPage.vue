@@ -27,7 +27,8 @@ const installStore = useInstallStore();
 const VITE_PWA_WEBSITE = "https://vite-pwa-org.netlify.app/";
 
 useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
-    "My website can be installed as a Progressive Web Application (PWA) on this page."
+    "My website can be installed as a Progressive Web Application (PWA) on this page.",
+    "#232323"
 ));
 </script>
 

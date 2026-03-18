@@ -80,7 +80,8 @@ function searchOnGoogle() {
 }
 
 useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
-    "This is a simple project I give to new frontend developers to introduce them to Vue.js development."
+    "This is a simple project I give to new frontend developers to introduce them to Vue.js development.",
+    "#FFFFFF"
 ));
 </script>
 

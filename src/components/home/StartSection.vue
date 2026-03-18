@@ -187,10 +187,9 @@ const MAIN_BTNS = [
 <style scoped>
 .start-section {
     position: relative;
-    height: 600px;
+    height: 640px;
     min-height: 100vh;
-    width: 1200px;
-    padding: 0px calc(50% - 600px);
+    width: 100%;
     padding-bottom: 10px;
     color: var(--website-text);
     display: flex;
@@ -213,19 +212,19 @@ const MAIN_BTNS = [
 .start-section-title {
     text-align: center;
     position: relative;
-    font-size: 115px;
+    font-size: 100px;
     font-weight: bold;
     color: var(--website-text);
     width: 100%;
     height: fit-content;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     text-shadow: var(--website-text) 1px 0 30px;
 }
 .start-section-subtitle {
     text-align: center;
     width: 100%;
-    font-size: 27px;
-    line-height: 38px;
+    font-size: 26px;
+    line-height: 35px;
     color: var(--website-text);
     text-shadow: var(--website-text) 1px 0 10px;
 }
@@ -242,8 +241,8 @@ const MAIN_BTNS = [
 }
 
 .start-buttonRow {
-    margin-top: 20px;
-    width: 700px;
+    margin-top: 15px;
+    width: 640px;
     height: fit-content;
     border-radius: 15px;
     background-color: transparent;
@@ -255,7 +254,7 @@ const MAIN_BTNS = [
     margin-top: 40px;
 }
 .start-buttonRow.contact-links {
-    width: 580px;
+    width: 540px;
 }
 
 .start-buttonRow-btn {
@@ -263,11 +262,11 @@ const MAIN_BTNS = [
     text-decoration: none;
     color: var(--website-text);
     background-color: rgba(0, 0, 0, 1);
-    font-size: 29px;
+    font-size: 27px;
     font-weight: bold;
     padding: 10px;
-    width: 36px;
-    height: 36px;
+    width: 33px;
+    height: 33px;
     border-radius: 15px;
     border: 2px solid var(--website-text);
     transition: var(--default-transition);
@@ -300,7 +299,7 @@ const MAIN_BTNS = [
     left: 0;
     color: white;
     border: 2px solid;
-    border-radius: 20px;
+    border-radius: 10px;
     transition: left 0.2s, opacity 0.5s, color 0.2s;
     --filter-drop-shadow: drop-shadow(0 -2px 0 white);
 }
@@ -316,9 +315,9 @@ const MAIN_BTNS = [
 }
 
 .start-contactBtn-dropdown-button {
-    height: 34px;
+    height: 30px;
     width: 100%;
-    font-size: 12.5px;
+    font-size: 11px;
     color: inherit;
     text-align: center;
     display: flex;
@@ -335,37 +334,18 @@ const MAIN_BTNS = [
 }
 
 .start-contactBtn-dropdown-button.top {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     font-size: 16px;
     gap: 4px;
 }
 .start-contactBtn-dropdown-button.bottom {
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     border-bottom: none;
 }
 
-@media (max-width: 1225px) {
-    .start-section {
-        width: 100%;
-        padding: 0px;
-        padding-bottom: 10px;
-    }
-    .start-section-title {
-        font-size: 120px;
-    }
-}
-@media (max-width: 800px) {
-    .start-section-title {
-        font-size: 100px;
-    }
-    .start-section-subtitle {
-        font-size: 26px;
-        line-height: 35px;
-    }
-}
-@media (max-width: 700px) {
+@media (max-width: 640px) {
     .start-buttonRow.main {
         width: 100%;
     }
@@ -405,7 +385,7 @@ const MAIN_BTNS = [
 
 @media (max-width: 450px) {
     .start-section-title {
-        font-size: 56px;
+        font-size: 62px;
         margin-bottom: 10px;
     }
     .start-section-subtitle {

@@ -26,7 +26,7 @@ const bodyBackground = computed(() => {
 });
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value); });
+const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value, "rgb(248, 206, 171)"); });
 useHead(metaTags);
 
 onMounted(() => {
@@ -78,9 +78,12 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/exp"], replacement: "/experience/" },
     { routes: ["/icon", "/static-icons"], replacement: "/icons" },
     { routes: ["/version", "/v"], replacement: "/copyright/" },
-    { routes: ["/documents"], replacement: "/#documents" },
 
-    { routes: ["/documents/resume"], replacement: "/resume" },
+    { routes: ["/documents"], replacement: "/#documents" },
+    { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
+    { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" },
+
+    { routes: ["/documents/resume"], replacement: "/resume/" },
     { routes: ["/documents/resume/qrcode"], replacement: "/resume/qrcode" },
     { routes: ["/documents/resume/markdown"], replacement: "/resume/markdown" },
 
@@ -92,8 +95,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/gamepad/events"], replacement: "/gamepad/custom-events" },
 
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
-    { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
-    { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" },
+    { routes: ["/code-reader"], replacement: "/code-scanner" },
 ];
 
 // This is a list of redirects to other websites.

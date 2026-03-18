@@ -11,7 +11,7 @@
     </div>
 
     <div class="mohit-navBar-icons right" style="margin-right: 12px;">
-        <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" title="Share This Page With Someone Else!" pulse-loop>
+        <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" pulse-loop>
             <font-awesome-icon icon="fa-share-from-square" />
         </button>
         <button class="mohit-navBar-icon red" @click="webData.closeNavMenu()" title="Close Menu" pulse-loop>

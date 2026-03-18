@@ -1,7 +1,7 @@
 <template>
 <ParticlesBackground :particlesOptions="BLUE_BACKGROUND" />
 <CompassMenu :routes="SKILLS_COMPASS" />
-<CompassWidget />
+<CompassWidget :htmlClass="'blue'" />
 
 <main id="skills-page" class="personal-web-body">
     <div class="skills-body">
@@ -168,7 +168,8 @@ onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Skills", "skills/",
     "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
     "web applications, and projects by utilizing multiple programming languages, " +
-    "frontend frameworks, web services, and modules."
+    "frontend frameworks, web services, and modules.",
+    "#0047AB"
 ));
 </script>
 

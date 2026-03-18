@@ -1,10 +1,11 @@
 <template>
-<button id="compass-widget" ref="compass-widget" @click="openCompass()" title="Navigate This Page" pulse-loop>
+<button id="compass-widget" ref="compass-widget" :class="htmlClass" @click="openCompass()" title="Navigate This Page" pulse-loop>
     <font-awesome-icon icon="fa-compass" />
 </button>
 </template>
 
 <script setup>
+const props = defineProps({ htmlClass: { type: String, default: "main" } });
 const webData = useWebsiteDataStore();
 const compassWidgetRef = useTemplateRef('compass-widget');
 usePulseLoopAnimation(compassWidgetRef);
@@ -29,8 +30,8 @@ onMounted(() => { nextTick(() => {
     bottom: 15px;
     left: 15px;
     background-color: black;
-    color: var(--blue-one);
-    border: 2px solid var(--blue-one);
+    color: var(--website-light-text);
+    border: 2px solid var(--website-light-text);
     font-size: 28px;
     height: 50px;
     width: 50px;
@@ -40,10 +41,21 @@ onMounted(() => { nextTick(() => {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    transition: var(--default-transition), height 0.2s, width 0.2s;
+    transition: var(--default-transition), scale 0.2s;
 }
 #compass-widget:hover {
+    scale: 1.1;
     background-color: var(--dark-background);
+    box-shadow: 0px 0px 10px 1px;
+}
+
+#compass-widget.main {
+    color: var(--website-light-text);
+    border-color: var(--website-light-text);
+}
+#compass-widget.blue {
+    color: var(--blue-one);
+    border-color: var(--blue-one);
 }
 
 @media (max-width: 800px) {

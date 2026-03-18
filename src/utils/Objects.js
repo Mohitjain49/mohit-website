@@ -63,10 +63,12 @@ export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 export const NUXT_WEBSITE_LINK = "https://nuxt.com/";
 export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/";
 
-export const FCS_CERTIFICATE_ROUTE = "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025";
+export const FCS_CERTIFICATE_ROUTE = "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025/";
 export const FCS_CERTIFICATE_LINK = "https://www.mohit-jain.com/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 export const FCS_CERTIFICATE_LINKEDIN_POST = "https://www.linkedin.com/posts/mohitjain49_sharing-my-certificate-of-appreciation-from-activity-7331780981911080960-W_aN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-tIy0BLb0spd_jNR2x-8zVBRSshOre_lI";
 export const FCS_CAREER_INTERNSHIP_LINK = "https://www.fultonschools.org/all-departments/academics/learning-teaching/academic-programs/accelerated-extended-programming/advanced-studies/talented-and-gifted-tag/career-internship-program";
+
+export const SHARE_PAGE_TITLE = "Share This Page With Someone Else!";
 
 export const SOCIALS = [
     {
@@ -780,7 +782,7 @@ export const PROJECT_ENTITIES = [
 export const FEATURE_ENTITIES = [
     {
         name: "Gamepads",
-        link: "/gamepad",
+        link: "/gamepad/",
         color: "var(--website-light-text)",
         desc: "I integrated the Web Gamepad API into my website with joypad.js so that visitors can freely use a " +
             "PS5, Xbox, Nintendo Switch, and other controllers with my website.",
@@ -793,7 +795,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Barcode Reader",
-        link: "/code-scanner",
+        link: "/code-scanner/",
         color: "var(--blue-cobalt)",
         desc: "This page is capable of reading values from Barcodes and Qr Codes. " +
             "It uses the \"vue-qrocde-reader\" dependency to do so.",
@@ -819,7 +821,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Install Website",
-        link: "/install",
+        link: "/install/",
         color: "var(--website-text)",
         desc: "I used the \"Vite PWA\" dependency to build a service worker " +
             "for my website so that I can install and fully utilize my website offline.",
@@ -832,7 +834,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Wake Lock",
-        link: "/wakelock",
+        link: "/wakelock/",
         color: "var(--vibrant-flame)",
         desc: "This website can effectively use the Screen Wake Lock Web API so that " +
             "the laptop does not go to sleep naturally when enabled.",
@@ -845,7 +847,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Documents",
-        link: "/documents",
+        link: "/documents/",
         color: "var(--website-text)",
         desc: "I used multiple modules to display my resume and other documents on this website. " +
             "This includes using PDF.js to natively display the PDF as a whole and the \"unplugin-vue-markdown\" " +
@@ -853,6 +855,19 @@ export const FEATURE_ENTITIES = [
 
         icon: {
             id: "fa-folder-open",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Scripts",
+        link: "/aws-deploy-script/",
+        color: "rgb(144, 62, 62)",
+        desc: "I use the \"Shiki\" module to display code on my website. " +
+            "Currently, I only display my AWS Deployment Script and some of my Web Gamepad API code here.",
+
+        icon: {
+            id: "fa-laptop-code",
             faIcon: true,
             size: "100"
         }
@@ -886,19 +901,28 @@ export const FEATURE_ENTITIES = [
 ];
 
 export const HOME_COMPASS = [
-    { title: "Start", id: "start", color: "var(--website-text)", faIcon: true, icon: "fa-house" },
-    { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code" },
-    { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon },
-    { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes" },
-    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open" }
+    { title: "Start", id: "start", color: "var(--website-text)", faIcon: true, icon: "fa-house", offset: 0 },
+    { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code", offset: 0 },
+    { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon, offset: 0 },
+    { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes", offset: 0 },
+    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 }
 ];
 
 export const SKILLS_COMPASS = [
-    { title: "Vue.js", id: "vuejs", color: "#41B883", faIcon: false, icon: vue_icon },
-    { title: "Frontend", id: "frontend", color: "#D3B62A", faIcon: true, icon: "fa-brands fa-js" },
-    { title: "AWS", id: "aws", color: "#5468ff", faIcon: false, icon: aws_icon },
-    { title: "Google", id: "google", color: "#4c8bf5", faIcon: true, icon: "fa-brands fa-google" },
-    { title: "Modules", id: "modules", color: "#5C9E57", faIcon: true, icon: "fa-brands fa-node-js" },
-    { title: "Languages", id: "languages", color: "#E34E26", faIcon: true, icon: "fa-laptop-code" },
-    { title: "Icons", id: "icons", color: "rgb(83, 141, 215)", faIcon: true, icon: "fa-brands fa-font-awesome" }
+    { title: "Vue.js", id: "vuejs", color: "#41B883", faIcon: false, icon: vue_icon, offset: 0 },
+    { title: "Frontend", id: "frontend", color: "#D3B62A", faIcon: true, icon: "fa-brands fa-js", offset: 0 },
+    { title: "AWS", id: "aws", color: "#5468ff", faIcon: false, icon: aws_icon, offset: 0 },
+    { title: "Google", id: "google", color: "#4c8bf5", faIcon: true, icon: "fa-brands fa-google", offset: 0 },
+    { title: "Modules", id: "modules", color: "#5C9E57", faIcon: true, icon: "fa-brands fa-node-js", offset: 0 },
+    { title: "Languages", id: "languages", color: "#E34E26", faIcon: true, icon: "fa-laptop-code", offset: 0 },
+    { title: "Icons", id: "icons", color: "rgb(83, 141, 215)", faIcon: true, icon: "fa-brands fa-font-awesome", offset: 0 }
+];
+
+export const CONTACT_COMPASS = [
+    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square", offset: 70 },
+    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope", offset: 70 },
+    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin", offset: 70 },
+    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 70 },
+    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 70 },
+    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 70 }
 ];

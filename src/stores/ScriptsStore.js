@@ -213,6 +213,7 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
      * @param {String} pathname The path parameter.
      */
     function checkPath(pathname) {
+        if(pathname.endsWith("/")) { pathname = pathname.substring(0, (pathname.length - 1)); }
         return (path === pathname || (path + "/") === pathname);
     }
 

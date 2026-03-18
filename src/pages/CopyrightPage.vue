@@ -52,7 +52,8 @@ onMounted(() => {
     RELEASE_TIME.value = ("(" + useDateFormat(now, "h:mm A").value + ")");
 });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
-    "A legal disclaimer for any vistors on my website."
+    "A legal disclaimer for any vistors on my website.",
+    "rgb(248, 206, 171)"
 ));
 
 /**

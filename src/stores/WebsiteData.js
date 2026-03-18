@@ -215,13 +215,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 toggleNavMenu();
                 triggerClickSound();
             } else if(key === "w") {
-                router.push("/wakelock");
+                router.push("/wakelock/");
                 triggerClickSound();
             } else if(key === "i") {
-                router.push("/install");
+                router.push("/install/");
                 triggerClickSound();
             } else if(key === "r" || key === "c") {
-                router.push("/code-scanner");
+                router.push("/code-scanner/");
                 triggerClickSound();
             }
         } else if(key === "Escape") {

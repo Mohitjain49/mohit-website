@@ -4,10 +4,13 @@
 
 <template>
 <ParticlesBackground :particlesOptions="ORANGE_BACKGROUND" />
+<CompassMenu :routes="CONTACT_COMPASS" />
+<CompassWidget :htmlClass="'main'" />
+
 <main id="contact-page" class="personal-web-body">
     <div class="contact-boxes-container">
-        <div class="contact-me-box web-service">
-            <button @click="webData.openQRCodePopup()" class="contact-share-btn" title="Share This Page With Someone Else!">
+        <div class="contact-me-box web-service" id="form">
+            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE">
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
 
@@ -183,7 +186,7 @@ const sendMessageIcon = computed(() => {
     const sendMessageObj = sendMessageState.value;
     return ("fa-" + (sendMessageObj.error ? "ban" : (sendMessageObj.sent ? "check" : (sendMessageObj.pending ? "spinner" : "arrow-right-from-bracket"))));
 });
-useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple links to platforms where you can contact me."));
+useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple links to platforms where you can contact me.", "rgb(248, 206, 171)"));
 
 /**
  * ----------------------------------------------------------------------------

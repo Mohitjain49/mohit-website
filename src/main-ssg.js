@@ -1,3 +1,5 @@
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
 import "@fontsource/lexend";
 import "@fontsource/roboto";
 import "@fontsource/montserrat";
@@ -13,13 +15,17 @@ import { loadFireworksPreset } from "@tsparticles/preset-fireworks";
 import App from "./App.vue";
 import { personalRoutes } from "./routes";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { library, config } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+config.autoAddCss = false;
 library.add(fas, fab); // Adds ALL the solid and brand font awesome icons.
 
 export const createApp = ViteSSG(App, { routes: personalRoutes },
     ({ app }) => {
+        app.component('font-awesome-icon', FontAwesomeIcon)
         app.use(createPinia());
         if(import.meta.env.SSR) { return; }
             
