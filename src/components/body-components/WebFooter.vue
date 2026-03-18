@@ -2,59 +2,49 @@
 <footer id="footer" :class="footerClass" ref="mohit-footer">
     <div class="footer-body">
         <div class="footer-main-icon">
-            <RouterLink to="/" @click="scrollToTop('/')"> <img :src="mkj_icon" draggable="false" /> </RouterLink>
-        </div>
-        <div class="footer-routes-column">
-            <RouterLink to="/" class="footer-routes-header light" @click="scrollToTop('/')" pulse-loop>
-                <font-awesome-icon icon="fa-house" />
-                <span> Home Page </span>
+            <RouterLink to="/" @click="scrollToTop('/')" title="Home Page" pulse-loop>
+                <img :src="mkj_icon" draggable="false" />
             </RouterLink>
+        </div>
 
+        <div class="footer-routes-column">
+            <h2 class="footer-routes-header light"> Main Pages </h2>
             <RouterLink v-for="tab in MAIN_ROUTES" :to="tab.path" pulse-loop
-                :style="{ 'color': tab.color }"
+                :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
                 @click="scrollToTop(tab.path)">
 
-                <font-awesome-icon :icon="tab.icon" />
                 <span> {{ tab.name }} </span>
+                <font-awesome-icon :icon="tab.icon" />
             </RouterLink>
         </div>
 
         <div class="footer-routes-column">
-            <RouterLink to="/contact/" class="footer-routes-header" @click="scrollToTop('/contact')" pulse-loop>
-                <font-awesome-icon icon="fa-paper-plane" />
-                <span> Contact Me </span>
-            </RouterLink>
+            <h2 class="footer-routes-header"> Secondary Pages </h2>
+            <RouterLink v-for="tab in SECONDARY_ROUTES" :to="tab.path" pulse-loop
+                :style="getColorStyles(tab.color)"
+                class="footer-routes-opt"
+                @click="scrollToTop(tab.path)">
 
-            <template v-for="(social, index) in SOCIALS">
-                <a v-if="(index != 2)" :href="social.link" class="footer-routes-opt" :style="{ 'color': social.color }" pulse-loop>
-                    <font-awesome-icon :icon="social.linkIcon" />
-                    <span> {{ social.name }} </span>
-                </a>
-            </template>
+                <span> {{ tab.name }} </span>
+                <font-awesome-icon :icon="tab.icon" />
+            </RouterLink>
         </div>
 
         <div class="footer-routes-column">
-            <RouterLink to="/features/" class="footer-routes-header" pulse-loop
-                @click="scrollToTop('/features')"
-                style="color: var(--lightning-yellow)">
-
-                <font-awesome-icon icon="fa-bolt-lightning" />
-                <span> Features </span>
-            </RouterLink>
-
+            <h2 class="footer-routes-header light"> Extra Pages </h2>
             <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path" pulse-loop
-                :style="{ 'color': tab.color }"
+                :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
                 @click="scrollToTop(tab.path)">
 
-                <font-awesome-icon :icon="tab.icon" />
                 <span> {{ tab.name }} </span>
+                <font-awesome-icon :icon="tab.icon" />
             </RouterLink>
 
-            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="{ 'color': 'white' }" pulse-loop>
+            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="getColorStyles('white')" pulse-loop>
+                <span> Website Repository </span>
                 <font-awesome-icon icon="fa-code-branch" />
-                <span> Repository </span>
             </a>
         </div>
     </div>
@@ -78,6 +68,7 @@
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
+
         <div class="footer-bottom-buttons">
             <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
                 <FontAwesomeIcon icon="fa-share-from-square" />
@@ -127,16 +118,23 @@ function scrollToTop(routeStr = "/") {
 }
 
 const MAIN_ROUTES = [
+    { name: "Home Page", path: "/", icon: "fa-house", color: "var(--website-light-text)" },
+    { name: "Contact Me", path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)" },
     { name: "My Skills", path: "/skills/", icon: "fa-code", color: "var(--blue-two)" },
     { name: "My Experience", path: "/experience/", icon: "fa-file-code", color: "var(--website-text)" },
     { name: "My Projects", path: "/projects/", icon: "fa-cubes", color: "var(--globe-green)" },
-    { name: "My Resume", path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)" },
+    { name: "My Resume", path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)" }
+]
+
+const SECONDARY_ROUTES = [
     { name: "My Documents", path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)" },
+    { name: "Website Features", path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)" },
+    { name: "Copyright Statement", path: "/copyright/", icon: "fa-copyright", color: "var(--blue-cobalt)" },
     { name: "My Icons", path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-two)" },
-];
+    { name: "Gamepad Controls", path: "/gamepad/", icon: "fa-gamepad", color: "var(--website-light-text)" },
+]
 
 const EXTRA_ROUTES = [
-    { name: "Gamepad", path: "/gamepad/", icon: "fa-gamepad", color: "var(--website-light-text)" },
     { name: "Barcode Reader", path: "/code-scanner/", icon: "fa-barcode", color: "var(--blue-cobalt)" },
     { name: "Install Website", path: "/install/", icon: "fa-download", color: "var(--website-text)" },
     { name: "Wake Lock", path: "/wakelock/", icon: "fa-lock", color: "var(--vibrant-flame)" },
@@ -205,47 +203,41 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
     flex-direction: column;
     padding-bottom: 20px;
 }
-
 .footer-routes-header {
     color: var(--website-text);
     font-family: 'Roboto', sans-serif;
     font-size: 27px;
     font-weight: bold;
-    transition: scale 0.2s;
     padding-bottom: 1px;
+    margin: 0px auto;
     margin-bottom: 20px;
-    margin-left: 40px;
+    border-bottom: 2px solid;
 }
-.footer-routes-header svg {
-    font-size: 22px;
-    margin-bottom: 2px;
-}
-.footer-routes-header:hover {
-    scale: 1.05;
-}
-
 .footer-routes-header.light {
     color: var(--website-light-text);
 }
-.footer-routes-header.white {
-    color: white;
-}
 
 .footer-routes-opt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    border: 1px solid var(--website-text);
+    border-radius: 12px;
+    height: fit-content;
+    width: 190px;
     color: var(--website-text);
+    background-color: rgb(29, 29, 29);
     font-family: 'Roboto', sans-serif;
-    font-size: 19px;
+    font-weight: bold;
+    font-size: 16px;
     transition: scale 0.2s;
-    padding-bottom: 2px;
+    padding: 4px;
+    margin: 0px auto;
     margin-bottom: 10px;
-    margin-left: 40px;
 }
 .footer-routes-opt:hover {
     scale: 1.05;
-}
-.footer-routes-opt svg {
-    width: 25px;
-    margin-right: 8px;
 }
 
 .footer-contact-section {
@@ -270,6 +262,9 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
     border-radius: 7px;
     transition: var(--default-transition), scale 0.2s;
     background-color: black;
+}
+.footer-contact-section > a:hover {
+    scale: 1.1;
 }
 
 .footer-job-title {
@@ -308,9 +303,10 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, scale 0.2s;
 }
 .footer-job-title a:hover {
+    scale: 1.05;
     background-color: rgba(255, 255, 255, 0.151);
 }
 
@@ -322,7 +318,7 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
     display: flex;
     flex-direction: row;
     padding: 4px 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
 }
 .copyright-statement {
     width: fit-content;
@@ -374,37 +370,29 @@ const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/cod
 
 @media (max-width: 1200px) {
     .footer-body {
+        grid-template-columns: repeat(3, 1fr);
+        left: 0px;
+        width: 100%;
+    }
+    .footer-main-icon {
+        grid-column: span 3;
+        margin-bottom: 20px;
+    }
+}
+@media (max-width: 750px) {
+    .footer-body { grid-template-columns: repeat(2, 1fr); }
+    .footer-main-icon { grid-column: span 2; }
+}
+@media (max-width: 550px) {
+    .footer-body {
         grid-template-columns: repeat(1, 1fr);
         left: 0px;
         width: 100%;
     }
-    .footer-routes-column {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-    
-    .footer-routes-header {
-        width: 250px;
-        text-align: left;
-        font-size: 36px;
-        margin-left: 0px;
-        margin-right: 0px;
-    }
-    .footer-routes-header svg {
-        font-size: 28px;
+    .footer-main-icon {
+        grid-column: span 1;
     }
 
-    .footer-routes-opt {
-        width: 170px;
-        text-align: left;
-        margin-left: 0px;
-        margin-right: 0px;
-    }
-}
-@media (max-width: 525px) {
     .footer-bottom { height: 40px; }
     .copyright-statement { font-size: 18px; }
 

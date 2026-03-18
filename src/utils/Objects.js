@@ -860,6 +860,19 @@ export const FEATURE_ENTITIES = [
         }
     },
     {
+        name: "Scripts",
+        link: "/aws-deploy-script/",
+        color: "rgb(144, 62, 62)",
+        desc: "I use the \"Shiki\" module to display code on my website. " +
+            "Currently, I only display my AWS Deployment Script and some of my Web Gamepad API code here.",
+
+        icon: {
+            id: "fa-laptop-code",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
         name: "tsParticles",
         link: "https://particles.js.org/",
         color: "black",
