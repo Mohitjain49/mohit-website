@@ -23,7 +23,13 @@
         </div>
         <div class="start-buttonRow contact-links" ref="startSocialsContainer">
             <template v-for="(contact, index) in SOCIALS">
-                <button v-if="(index != 2 && index != 4)" class="start-buttonRow-btn"
+                <a v-if="(checkSSR() && index != 2 && index != 4)" :href="contact.link" class="start-buttonRow-btn"
+                    :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
+                    :style="getSpecialBtnStyles(contact.color)">
+
+                    <font-awesome-icon :icon="contact.linkIcon" />
+                </a>
+                <button v-if="(!checkSSR() && index != 2 && index != 4)" class="start-buttonRow-btn"
                     :ref="(el) => {startSocialBtns[index] = ref(el)}"
                     :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                     :style="getSpecialBtnStyles(contact.color)"
