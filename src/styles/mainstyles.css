@@ -184,10 +184,11 @@ button {
     text-decoration: none;
     border: var(--empty-border);
     background-color: var(--website-light-text);
-    transition: var(--default-transition);
+    transition: var(--default-transition), scale 0.2s;
 }
 .main-sector-bottom-linkBtn a:hover {
     border-color: var(--website-text);
+    scale: 1.1;
 }
 
 .main-sector-bottom-linkBtn a.linkBtn-blue {

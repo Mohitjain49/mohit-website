@@ -9,10 +9,7 @@
             <SubloNavCard />
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-            <RouterLink to="/" v-html="'Back to Home'"
-                @pointerenter="setHeartbeatAnimation"
-                @mouseleave="setHeartbeatAnimation"
-            />
+            <RouterLink to="/" pulse-loop> Back To Home </RouterLink>
         </div>
     </div>
     <WebFooter />

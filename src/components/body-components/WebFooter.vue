@@ -1,5 +1,5 @@
 <template>
-<footer id="footer" :class="footerClass" ref="mohit-footer">
+<footer id="footer" ref="mohit-footer">
     <div class="footer-body">
         <div class="footer-main-icon">
             <RouterLink to="/" @click="scrollToTop('/')" title="Home Page" pulse-loop>
@@ -100,12 +100,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
     webData.navFooterPresent = false;
     webData.webFooter = null;
-})
-
-const routePath = computed(() => { return router.currentRoute.value.path; });
-const footerClass = computed(() => {
-    return ((-1 == MAIN_PAGE_STYLE_ROUTES.findIndex((item) => { return (item === routePath.value || (item + "/") === routePath.value) })) ? '' : 'main-page');
 });
+const routePath = computed(() => { return router.currentRoute.value.path; });
 
 /**
  * This scrolls to the top of the webpage if the user won't change routes.
@@ -140,23 +136,19 @@ const EXTRA_ROUTES = [
     { name: "Wake Lock", path: "/wakelock/", icon: "fa-lock", color: "var(--vibrant-flame)" },
     { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" }
 ];
-
-const MAIN_PAGE_STYLE_ROUTES = ["/", "/wakelock", "/features", "/gamepad", "/code-scanner"];
 </script>
 
 <style scoped>
 #footer {
     position: relative;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: black;
     width: 100%;
     height: fit-content;
     border: none;
+    overflow: hidden;
     padding-top: 25px;
     z-index: 20;
-}
-#footer.main-page {
-    border-top: 2px dashed var(--website-light-text);
-    background-color: rgb(10, 10, 10);
+    border-top: 2px solid var(--website-light-text)
 }
 
 .footer-body {

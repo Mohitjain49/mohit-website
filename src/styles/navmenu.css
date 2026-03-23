@@ -1,3 +1,7 @@
+/**
+ * This section defines the styles for the navigation bar at the top of every page.
+ */
+
 #mohit-navBar {
     all: unset;
     position: fixed;
@@ -6,7 +10,7 @@
     width: 100%;
     height: fit-content;
     min-height: 50px;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 1);
     z-index: 499;
     border-bottom: 2px solid var(--website-text);
     overflow: hidden;
@@ -122,6 +126,10 @@
     scale: 1.05;
     text-decoration: underline;
 }
+
+/**
+ * Below are classes that specifically concern the navigation menus.
+ */
 
 .mohit-navMenu {
     position: fixed;
@@ -284,11 +292,6 @@
     opacity: 1;
     right: 0px;
     overflow-y: hidden;
-}
-@media (max-width: 350px) {
-    #mohit-documentBar {
-        width: 270px;
-    }
 }
 
 .mohit-navMenu::-webkit-scrollbar {
