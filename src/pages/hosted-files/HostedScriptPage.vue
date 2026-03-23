@@ -151,29 +151,6 @@ useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA
     font-size: 50px;
 }
 
-.download-file-widget {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background-color: var(--dark-background);
-    border: 2px solid var(--website-light-text);
-    color: var(--website-light-text);
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    overflow: hidden;
-    z-index: 5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    transition: var(--default-transition), scale 0.2s;
-}
-.download-file-widget:hover {
-    box-shadow: 0px 0px 20px var(--website-light-text);
-    scale: 1.1;
-}
-
 @keyframes border-pulse {
     from {
         border-color: white;

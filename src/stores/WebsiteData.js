@@ -220,9 +220,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             } else if(key === "i") {
                 router.push("/install/");
                 triggerClickSound();
-            } else if(key === "r" || key === "c") {
-                router.push("/code-scanner/");
-                triggerClickSound();
             }
         } else if(key === "Escape") {
             if(fullScreenStore.fullScreenSet) { triggerClickSound(); }

@@ -150,3 +150,33 @@ export function usePulseLoopAnimation(container = null) {
     onBeforeUnmount(() => { disable(); });
     return { enabled, numElements, enable, disable, reset, animate }
 }
+
+/**
+ * This utility is used by this website's side menus to set the necessary events to close itself with a swipe.
+ * @param {ShallowRef<HTMLElement>} menuElement This is the main container to which the utility will apply to.
+ */
+export function useSwipeToCloseMenu(menuElement) {
+    const webData = useWebsiteDataStore();
+    const menuSwipe = useSwipe(menuElement, { passive: true });
+
+    /** This determines whether the utility is enabled or not. */
+    const enabled = ref(true);
+
+    // This tracks touch "swipe" events for the navigation menu so that the user can close the menu by swiping to the right.
+    watch(menuSwipe.isSwiping, () => {
+        if(!enabled.value || !menuSwipe.isSwiping.value || menuSwipe.direction.value !== 'right') { return; }
+        webData.closeNavMenu();
+        triggerClickSound();
+    });
+
+    /** This function enables the utility. */
+    function enable() { enabled.value = true; }
+
+    /** This function disables the utility. */
+    function disable() { enabled.value = false; }
+
+    /** This function toggles whether the utility is enabled or not. */
+    function toggle() { enabled.value = !enabled.value; }
+
+    return { enabled, enable, disable, toggle }
+}

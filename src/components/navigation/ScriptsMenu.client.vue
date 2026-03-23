@@ -79,19 +79,8 @@ const scriptsStore = useScriptsStore();
 const router = useRouter();
 
 const scriptsMenu = shallowRef(null);
-const scriptsMenuSwipe = useSwipe(scriptsMenu, { passive: true });
+useSwipeToCloseMenu(scriptsMenu);
 usePulseLoopAnimation(scriptsMenu);
-
-// This tracks touch "swipe" events for the navigation menu so that the user can change the page if they swipe left or right.
-watch(scriptsMenuSwipe.isSwiping, () => {
-    if(!scriptsMenuSwipe.isSwiping.value) { return; }
-    const direction = scriptsMenuSwipe.direction.value;
-
-    if(direction === "right" && webData.scriptsMenuOpen) {
-        webData.menuOpen = -1;
-        triggerClickSound();
-    } 
-});
 
 const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my documents on this website. Click here to see more about Shiki.";
 </script>

@@ -134,10 +134,9 @@
     </div>
 
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-        <RouterLink to="/" class="linkBtn-blue" v-html="'Back to Home'"
-            @pointerenter="setHeartbeatAnimation"
-            @mouseleave="setHeartbeatAnimation"
-        />
+        <RouterLink to="/" class="linkBtn-blue" @pointerenter="setPulseLoopAnimation" @mouseleave="setPulseLoopAnimation">
+            Back To Home
+        </RouterLink>
     </div>
     <WebFooter />
 </main>

@@ -158,19 +158,8 @@ const documentStore = useDocumentStore();
 const router = useRouter();
 
 const docMenu = shallowRef(null);
-const docMenuSwipe = useSwipe(docMenu, { passive: true });
+useSwipeToCloseMenu(docMenu);
 usePulseLoopAnimation(docMenu);
-
-// This tracks touch "swipe" events for the navigation menu so that the user can change the page if they swipe left or right.
-watch(docMenuSwipe.isSwiping, () => {
-    if(!docMenuSwipe.isSwiping.value) { return; }
-    const direction = docMenuSwipe.direction.value;
-
-    if(direction === "right" && webData.documentMenuOpen) {
-        webData.menuOpen = -1;
-        triggerClickSound();
-    } 
-});
 
 /**
  * This function scrolls to the page the table of contents is on.

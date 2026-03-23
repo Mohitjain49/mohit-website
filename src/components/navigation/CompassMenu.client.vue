@@ -48,22 +48,11 @@ const router = useRouter();
 const webData = useWebsiteDataStore();
 
 const compassMenu = shallowRef(null);
-const compassMenuSwipe = useSwipe(compassMenu, { passive: true });
+useSwipeToCloseMenu(compassMenu);
 usePulseLoopAnimation(compassMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
-
-// This tracks touch "swipe" events for the navigation menu so that the user can change the page if they swipe left or right.
-watch(compassMenuSwipe.isSwiping, () => {
-    if(!compassMenuSwipe.isSwiping.value) { return; }
-    const direction = compassMenuSwipe.direction.value;
-
-    if(direction === "right" && webData.compassMenuOpen) {
-        webData.menuOpen = -1;
-        triggerClickSound();
-    } 
-});
 
 onMounted(() => { nextTick(() => { webData.compassMenuAvailable = true; }); });
 onBeforeUnmount(() => { webData.compassMenuAvailable = false; });
