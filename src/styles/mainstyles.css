@@ -194,11 +194,11 @@ button {
 .main-sector-bottom-linkBtn a.linkBtn-blue {
     color: var(--blue-zero);
     border-color: var(--blue-zero);
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: black;
 }
 .main-sector-bottom-linkBtn a.linkBtn-blue:hover {
-    background-color: var(--blue-three);
     border-color: var(--blue-zero);
+    box-shadow: 0px 0px 10px 2px var(--blue-zero);
 }
 
 .main-sector-bottom-linkBtn a.linkBtn-green {

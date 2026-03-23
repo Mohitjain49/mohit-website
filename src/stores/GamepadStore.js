@@ -82,7 +82,6 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 /**
  * This function creates a Gamepad Cursor object for the Gamepad Store to use.
  * @param {Number} index The index of the gamepad object.
- * @returns {GamepadCursorComposable}
  */
 function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();

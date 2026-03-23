@@ -148,7 +148,6 @@ export default defineConfig(({ isSsrBuild }) => {
         resolve: {
             alias: {
                 '@': fileURLToPath(new URL('./src', import.meta.url)),
-                '@types': fileURLToPath(new URL('./types', import.meta.url)),
                 '@scripts': fileURLToPath(new URL('./scripts', import.meta.url))
             }
         }

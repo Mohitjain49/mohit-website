@@ -135,7 +135,7 @@ const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
 
 const navBarSwipe = useSwipe(navBar, { passive: true });
-const navMenuSwipe = useSwipe(navMenu, { passive: true });
+useSwipeToCloseMenu(navMenu);
 
 const { width: windowWidth } = useWindowSize();
 usePulseLoopAnimation(navBar);
@@ -156,17 +156,6 @@ watch(navBarSwipe.isSwiping, () => {
         webData.menuOpen = 0;
         triggerClickSound();
     }
-});
-
-// This tracks touch "swipe" events for the navigation menu so that the user can change the page if they swipe left or right.
-watch(navMenuSwipe.isSwiping, () => {
-    if(!navMenuSwipe.isSwiping.value) { return; }
-    const direction = navMenuSwipe.direction.value;
-
-    if(direction === "right" && webData.navMenuOpen) {
-        webData.menuOpen = -1;
-        triggerClickSound();
-    } 
 });
 
 /**
