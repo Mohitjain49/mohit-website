@@ -127,6 +127,10 @@ async function main() {
             await rm("./dts", { recursive: true, force: true });
             dtsSpinner.succeed("Deleted the \"dts\" folder.");
 
+            const pluginVisualizerSpinner = createSpinner("Deleting the \".plugin-visualizer\" folder...");
+            await rm("./.plugin-visualizer", { recursive: true, force: true });
+            pluginVisualizerSpinner.succeed("Deleted the \".plugin-visualizer\" folder.");
+
             const distSpinner = createSpinner("Deleting the \"dist\" folder...");
             await rm("./dist", { recursive: true, force: true });
             distSpinner.succeed("Deleted the \"dist\" folder.");
