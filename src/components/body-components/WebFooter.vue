@@ -325,6 +325,7 @@ const EXTRA_ROUTES = [
     align-items: center;
     flex-direction: row;
     gap: 3px;
+    user-select: none;
 }
 .copyright-statement:hover {
     scale: 1.05;
@@ -363,8 +364,8 @@ const EXTRA_ROUTES = [
 @media (max-width: 1200px) {
     .footer-body {
         grid-template-columns: repeat(3, 1fr);
-        left: 0px;
-        width: 100%;
+        left: calc(50% - 375px);
+        width: 750px;
     }
     .footer-main-icon {
         grid-column: span 3;
@@ -372,8 +373,14 @@ const EXTRA_ROUTES = [
     }
 }
 @media (max-width: 750px) {
-    .footer-body { grid-template-columns: repeat(2, 1fr); }
-    .footer-main-icon { grid-column: span 2; }
+    .footer-body {
+        grid-template-columns: repeat(2, 1fr);
+        left: calc(50% - 275px);
+        width: 550px;
+    }
+    .footer-main-icon {
+        grid-column: span 2;
+    }
 }
 @media (max-width: 550px) {
     .footer-body {

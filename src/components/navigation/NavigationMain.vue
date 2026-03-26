@@ -11,7 +11,7 @@
             </RouterLink>
         </div>
 
-        <div class="mohit-navBar-mainLinks" v-show="(windowWidth > 700)">
+        <div class="mohit-navBar-mainLinks">
             <RouterLink v-for="link in CENTER_LINKS" :to="link.path"
                 @click="(event) => { flashNavOpt(event, link.path) }"
                 :style="getColorStyles(link.color)"
@@ -136,8 +136,6 @@ const navMenu = shallowRef(null);
 
 const navBarSwipe = useSwipe(navBar, { passive: true });
 useSwipeToCloseMenu(navMenu);
-
-const { width: windowWidth } = useWindowSize();
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
 
