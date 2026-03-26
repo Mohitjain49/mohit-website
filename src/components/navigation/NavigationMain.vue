@@ -102,7 +102,7 @@
             </RouterLink>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.toggleWakeLock()" :title="webData.wakeLockTitle" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="(event) => { onWakeLockButtonClick(event); }" :title="webData.wakeLockTitle" pulse-loop>
                 <span> {{ webData.wakeLockStatement }} </span>
                 <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
             </button>
@@ -169,6 +169,22 @@ function flashNavOpt(event = new MouseEvent("click"), path = "/") {
 
     addFlashAnimation(event);
     webData.closeNavMenu();
+}
+
+/**
+ * This function triggers whenever someone clicks on the Wake Lock Button.
+ * @param {PointerEvent} event The Click event to draw from.
+ */
+function onWakeLockButtonClick(event) {
+    if(event.ctrlKey) {
+        if(routePath.value !== "/wakelock" && routePath.value !== "/wakelock/") {
+            router.push("/wakelock/");
+        } else {
+            flashNavOpt(event, "/wakelock");
+        }
+    } else {
+        webData.toggleWakeLock();
+    }
 }
 
 const MAIN_BTNS = [

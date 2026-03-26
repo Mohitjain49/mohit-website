@@ -46,6 +46,10 @@
                 <span> Website Repository </span>
                 <font-awesome-icon icon="fa-code-branch" />
             </a>
+            <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="footer-routes-opt" :style="getColorStyles('#F05133')" pulse-loop>
+                <span> Update Log </span>
+                <font-awesome-icon icon="fa-brands fa-git-alt" />
+            </a>
         </div>
     </div>
 
