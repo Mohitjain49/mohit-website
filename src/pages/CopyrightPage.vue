@@ -2,7 +2,7 @@
 <ParticlesBackground :particlesOptions="COPYRIGHT_BACKGROUND" />
 <main class="personal-web-body transparent">
     <div class="copyright-body-exterior">
-        <div class="copyright-body">
+        <div class="copyright-body" ref="copyright-main-body">
             <h1 class="copyright-body-header">
                 <font-awesome-icon icon="fa-copyright" />
                 <span> {{ COPYRIGHT_TEXT }} </span>
@@ -20,13 +20,16 @@
                 If you would like to collaborate or discuss using any part of my work, 
                 I'd love to hear from you! You'll find some links to contact me on the footer 
                 <span style="text-decoration: underline;">
-                    <RouterLink :to="{ path: route.path, hash: '#footer' }" @click="goToPageSection('footer')">below.</RouterLink>
+                    <RouterLink :to="{ path: route.path, hash: '#footer' }" @click="goToFooter()">below.</RouterLink>
                 </span>
             </div>
 
-            <button @click="checkForUpdates()" class="copyright-reload-btn" title="Update Website">
-                <FontAwesomeIcon icon="fa-rotate" :spin="buttonClicked" />
+            <button @click="checkForUpdates()" class="copyright-reload-btn" title="Update Website" pulse-loop>
+                <FontAwesomeIcon icon="fa-rotate" :spin="updateButtonClicked" />
             </button>
+            <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-reload-btn updateLog" title="Update Log" pulse-loop>
+                <FontAwesomeIcon icon="fa-brands fa-git-alt" />
+            </a>
         </div>
     </div>
     <WebFooter />
@@ -38,7 +41,8 @@ import now from '~build/time';
 import { version } from "~build/package";
 
 const route = useRoute();
-const buttonClicked = ref(false);
+const copyrightBodyRef = useTemplateRef('copyright-main-body');
+const updateButtonClicked = ref(false);
 
 const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
 const RELEASE_DATE = ref("Released On: Jan 22, 2026");
@@ -55,13 +59,14 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website.",
     "rgb(248, 206, 171)"
 ));
+usePulseLoopAnimation(copyrightBodyRef);
 
 /**
  * This function checks for updates and deletes the cache and unregisters service workers.
  */
 async function checkForUpdates() {
-    if(buttonClicked.value) { return; }
-    buttonClicked.value = true;
+    if(updateButtonClicked.value) { return; }
+    updateButtonClicked.value = true;
 
     if('serviceWorker' in navigator) {
         const regs = await navigator.serviceWorker.getRegistrations();
@@ -163,10 +168,18 @@ async function checkForUpdates() {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: var(--default-transition);
+    transition: var(--default-transition), scale 0.2s;
+}
+.copyright-reload-btn.updateLog {
+    color: #F05133;
+    border-color: #F05133;
+    font-size: 23px;
+    left: auto;
+    right: 15px;
 }
 .copyright-reload-btn:hover {
     box-shadow: 0px 0px 10px 1px var(--website-light-text);
+    scale: 1.05;
 }
 
 @media (max-width: 680px) {
@@ -194,6 +207,11 @@ async function checkForUpdates() {
         font-size: 14px;
         width: 30px;
         height: 30px;
+    }
+    .copyright-reload-btn.updateLog {
+        left: auto;
+        right: 10px;
+        font-size: 17px;
     }
 }
 @media (max-width: 450px) {

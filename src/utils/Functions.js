@@ -44,6 +44,11 @@ export function goToPageSection(id = "start", offset = 0) {
     window.scrollTo({ top: top, left: 0, behavior: "smooth" });
 }
 
+/** This function scrolls to the footer and applies the proper offset. */
+export function goToFooter() {
+    try { goToPageSection('footer', 50); } catch(e) {}
+}
+
 /**
  * This function cuts a string to ensure it has the max length of characters.
  */

@@ -279,6 +279,10 @@
  * Below contain specific styles like transitions and @media sections.
  */
 
+@media (max-width: 700px) {
+    .mohit-navBar-mainLinks { display: none; }
+}
+
 .navMenu-transition-enter-active, .navMenu-transition-leave-active {
     transition: opacity 0.5s, right 0.5s;
     transition-delay: 0.05s;

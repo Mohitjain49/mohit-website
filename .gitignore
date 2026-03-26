@@ -17,6 +17,7 @@ coverage
 *.local
 
 .vite-ssg-temp
+.plugin-visualizer
 
 /cypress/videos/
 /cypress/screenshots/

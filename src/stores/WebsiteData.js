@@ -272,7 +272,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(webFooterVisibility.value) {
             scrollToTop(false);
         } else {
-            goToPageSection('footer', 50);
+            goToFooter();
         }
     }
 

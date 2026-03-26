@@ -8,6 +8,7 @@ import { resolveComponents, resolveFontAwesomeIcons } from './resolvers.js';
 import vue from "@vitejs/plugin-vue";
 import generateSitemap from 'vite-ssg-sitemap';
 import attrs from 'markdown-it-attrs';
+import visualizer from 'rollup-plugin-visualizer';
 
 import Info from "unplugin-info/vite";
 import imagemin from 'unplugin-imagemin/vite';
@@ -64,6 +65,28 @@ export default defineConfig(({ isSsrBuild }) => {
             isolate: true,
             fileParallelism: false
         },
+        build: {
+            rollupOptions: {
+                output: { 
+                    manualChunks: (!isSsrBuild ? {
+                        'vue-pdf': ['@tato30/vue-pdf'],
+                        'fontawesome': [
+                            '@fortawesome/fontawesome-svg-core',
+                            '@fortawesome/free-solid-svg-icons',
+                            '@fortawesome/free-brands-svg-icons',
+                            '@fortawesome/vue-fontawesome'
+                        ],
+                        'pdf-editor': ['pdf-lib'],
+                        'tsparticles': [
+                            '@tsparticles/preset-fireworks',
+                            '@tsparticles/slim',
+                            '@tsparticles/vue3'
+                        ],
+                        'qr-code-reader': ['vue-qrcode-reader']
+                    } : undefined)
+                }
+            }
+        },
         plugins: [
             vue({ include: [/\.vue$/, /\.md$/] }),
             qrcode(),
@@ -94,7 +117,7 @@ export default defineConfig(({ isSsrBuild }) => {
                 includeAssets: ['**/*.woff2', '**/*.woff'],
 
                 workbox: {
-                    cacheId: `v3.8.1-${Date.now()}`,
+                    cacheId: `v3.8.2-${Date.now()}`,
                     globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                     maximumFileSizeToCacheInBytes: 5000000,
                     navigateFallback: "/index.html",
@@ -124,7 +147,14 @@ export default defineConfig(({ isSsrBuild }) => {
                         },
                     ],
                 },
-            })
+            }),
+            visualizer({
+                open: true,
+                title: "Mohit Jain | Website Plugins Mapped (" + (isSsrBuild ? "SSR" : "CSR") + ")",
+                filename: (isSsrBuild ? ".plugin-visualizer/ssr.html" : ".plugin-visualizer/csr.html"),
+                gzipSize: true,
+                brotliSize: true
+            }),
         ],
         ssgOptions: {
             dirStyle: 'nested',

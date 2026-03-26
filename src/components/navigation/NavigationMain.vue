@@ -11,7 +11,7 @@
             </RouterLink>
         </div>
 
-        <div class="mohit-navBar-mainLinks" v-show="(windowWidth > 700)">
+        <div class="mohit-navBar-mainLinks">
             <RouterLink v-for="link in CENTER_LINKS" :to="link.path"
                 @click="(event) => { flashNavOpt(event, link.path) }"
                 :style="getColorStyles(link.color)"
@@ -102,7 +102,7 @@
             </RouterLink>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.toggleWakeLock()" :title="webData.wakeLockTitle" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="(event) => { onWakeLockButtonClick(event); }" :title="webData.wakeLockTitle" pulse-loop>
                 <span> {{ webData.wakeLockStatement }} </span>
                 <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
             </button>
@@ -136,8 +136,6 @@ const navMenu = shallowRef(null);
 
 const navBarSwipe = useSwipe(navBar, { passive: true });
 useSwipeToCloseMenu(navMenu);
-
-const { width: windowWidth } = useWindowSize();
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
 
@@ -171,6 +169,22 @@ function flashNavOpt(event = new MouseEvent("click"), path = "/") {
 
     addFlashAnimation(event);
     webData.closeNavMenu();
+}
+
+/**
+ * This function triggers whenever someone clicks on the Wake Lock Button.
+ * @param {PointerEvent} event The Click event to draw from.
+ */
+function onWakeLockButtonClick(event) {
+    if(event.ctrlKey) {
+        if(routePath.value !== "/wakelock" && routePath.value !== "/wakelock/") {
+            router.push("/wakelock/");
+        } else {
+            flashNavOpt(event, "/wakelock");
+        }
+    } else {
+        webData.toggleWakeLock();
+    }
 }
 
 const MAIN_BTNS = [

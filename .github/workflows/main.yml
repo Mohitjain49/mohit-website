@@ -19,7 +19,7 @@ jobs:
           node-version: '24.3.0' # Set this to your Node.js version
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         env:
