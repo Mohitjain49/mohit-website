@@ -121,26 +121,54 @@
         </div>
     </div>
 </Transition>
+
+<div v-show="showNavWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
+    <button v-if="showWakeLockWidget" :title="webData.wakeLockTitle" pulse-loop
+        @click="(event) => { onWakeLockButtonClick(event); }"
+        class="mohit-navBar-statusIcon wakelock">
+
+        <font-awesome-icon :flip="webData.wakeLockChangeFresh"
+            :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
+        />
+    </button>
+    <RouterLink to="/gamepad/" v-if="gamepadStore.gamepadConnected"
+        @click="(event) => { flashNavOpt(event, '/gamepad'); }"
+        title="A gamepad is currently connected. Click Here to See More."
+        class="mohit-navBar-statusIcon" pulse-loop>
+
+        <font-awesome-icon icon="fa-gamepad" />
+    </RouterLink>
+</div>
 </template>
 
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
+
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
+const gamepadStore = useGamepadStore();
 const router = useRouter();
 
 const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
+const navWidgets = shallowRef(null);
 
 const navBarSwipe = useSwipe(navBar, { passive: true });
 useSwipeToCloseMenu(navMenu);
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
+usePulseLoopAnimation(navWidgets);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
+
+const showWakeLockWidget = computed(() => {
+    const isActive = webData.wakeLock.isActive;
+    return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
+});
+const showNavWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected)); });
 
 // This tracks touch "swipe" events for the navigation bar so that the user can change the page if they swipe left or right.
 watch(navBarSwipe.isSwiping, () => {

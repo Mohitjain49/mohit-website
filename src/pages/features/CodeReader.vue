@@ -261,7 +261,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 1000;
+    z-index: 495;
     background-color: rgba(0, 0, 0, 0.9);
 }
 .scanner-itemMenu {

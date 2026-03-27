@@ -329,17 +329,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(onMarkdownRoute.value) { return; }
             mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
         });
-
-        // This makes sure that the website doesn't scroll with the swipe events made for the document navigation bar.
-        nextTick(() => {
-            const mohitDocNavBar = document.getElementById("mohit-documentBar");
-            if(mohitDocNavBar == null) { return; }
-
-            mohitDocNavBar.addEventListener("touchmove", (e) => {
-                const target = e.target;
-                if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
-            }, { passive: false, signal: docAbortController.signal });
-        })
     }
 
     /**
