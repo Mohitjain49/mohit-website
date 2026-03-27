@@ -69,20 +69,20 @@ export default defineConfig(({ isSsrBuild }) => {
             rollupOptions: {
                 output: { 
                     manualChunks: (!isSsrBuild ? {
-                        'vue-pdf': ['@tato30/vue-pdf'],
-                        'fontawesome': [
+                        'vendor-vue-pdf': ['@tato30/vue-pdf'],
+                        'vendor-fontawesome': [
                             '@fortawesome/fontawesome-svg-core',
                             '@fortawesome/free-solid-svg-icons',
                             '@fortawesome/free-brands-svg-icons',
                             '@fortawesome/vue-fontawesome'
                         ],
-                        'pdf-editor': ['pdf-lib'],
-                        'tsparticles': [
+                        'vendor-pdf-editor': ['pdf-lib'],
+                        'vendor-tsparticles': [
                             '@tsparticles/preset-fireworks',
                             '@tsparticles/slim',
                             '@tsparticles/vue3'
                         ],
-                        'qr-code-reader': ['vue-qrcode-reader']
+                        'vendor-qr-code-reader': ['vue-qrcode-reader']
                     } : undefined)
                 }
             }
@@ -95,7 +95,7 @@ export default defineConfig(({ isSsrBuild }) => {
             EnvTypes({ dts: "./dts/vite-env.d.ts" }),
             Components({
                 dirs: [],
-                dts: './dts/components.d.ts',
+                dts: (isSsrBuild ? false : './dts/components.d.ts'),
                 extensions: ['vue', 'client.vue', 'md'],
                 resolvers: [
                     (name) => { return resolveComponents(name, isSsrBuild); },
@@ -108,7 +108,7 @@ export default defineConfig(({ isSsrBuild }) => {
             AutoImport({
                 imports: ['vue', 'vue-router', 'pinia', { '@unhead/vue': ['useHead'] }, VUEUSE_AUTO_IMPORTS],
                 dirs: ['./src/stores/**', './src/utils/**'],
-                dts: './dts/auto-imports.d.ts',
+                dts: (isSsrBuild ? false : './dts/auto-imports.d.ts'),
                 vueTemplate: true
             }),
             VitePWA({
@@ -117,7 +117,7 @@ export default defineConfig(({ isSsrBuild }) => {
                 includeAssets: ['**/*.woff2', '**/*.woff'],
 
                 workbox: {
-                    cacheId: `v3.8.2-${Date.now()}`,
+                    cacheId: `v3.8.3-${Date.now()}`,
                     globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                     maximumFileSizeToCacheInBytes: 5000000,
                     navigateFallback: "/index.html",
@@ -149,9 +149,9 @@ export default defineConfig(({ isSsrBuild }) => {
                 },
             }),
             visualizer({
-                open: true,
+                open: false,
                 title: "Mohit Jain | Website Plugins Mapped (" + (isSsrBuild ? "SSR" : "CSR") + ")",
-                filename: (isSsrBuild ? ".plugin-visualizer/ssr.html" : ".plugin-visualizer/csr.html"),
+                filename: (isSsrBuild ? "bundle-visualizer/ssr.html" : "bundle-visualizer/csr.html"),
                 gzipSize: true,
                 brotliSize: true
             }),

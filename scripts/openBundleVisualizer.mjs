@@ -3,8 +3,8 @@ import path from 'node:path';
 
 // Get current directory in ESM
 const __dirname = path.resolve(import.meta.dirname, '..');
-const csrFilePath = path.join(__dirname, "./.plugin-visualizer/csr.html");
-const ssrFilePath = path.join(__dirname, "./.plugin-visualizer/ssr.html");
+const csrFilePath = path.join(__dirname, "./bundle-visualizer/csr.html");
+const ssrFilePath = path.join(__dirname, "./bundle-visualizer/ssr.html");
 
 // Determine the command based on the OS
 const onWindows = (process.platform === 'win32');
