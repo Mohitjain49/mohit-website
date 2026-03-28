@@ -20,6 +20,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const fullScreenStore = useFullScreenStore();
 
     const mounted = ref(false);
+    const wrapCode = ref(false);
+
     const scriptDownloadStatus = ref({ pending: false, fresh: false, timeout: null });
     const scriptSaveStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
     const scriptCopyStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
@@ -50,6 +52,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         const copyObj = scriptCopyStatus.value;
         return (copyObj.fresh ? "fa-check" : (copyObj.pending ? "fa-spinner" : "fa-copy"));
     });
+
+    const wrapIcon = computed(() => { return (wrapCode.value ? "fa-align-left" : "fa-arrows-left-right-to-line"); });
+    const wrapStatement = computed(() => { return (wrapCode.value ? "Let Code Overflow" : "Wrap Code"); });
 
     /**
      * ---------------------------------------------------------------------------
@@ -177,9 +182,27 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         webData.closeNavMenu();
     }
 
-    return { scripts, mounted, saveAsSupported, onScriptRoute, onDeployScriptRoute, currentScriptLink,
-        scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
-        downloadScript, copyScript, saveScript, toggleScriptFullScreen,
+    /**
+     * This function sets a boolean that determines whether the code should be wrapped or overflowing.
+     * @param {Boolean | "toggle"} status The new status for wrapping code. If it is set to "toggle", then it just flips the value.
+     */
+    function setCodeWrapping(status = "toggle") {
+        wrapCode.value = ((status === "toggle") ? !wrapCode.value : status);
+        setWrapCodeStyles();
+    }
+
+    /** Based on the current status of the "wrapCode" boolean, this function sets the styles for wrapping the code text. */
+    function setWrapCodeStyles() {
+        const preElement = document.getElementById("mohit-scriptPage-code");
+        if(preElement != null) {
+            preElement.style.textWrap = (wrapCode.value ? "wrap" : "nowrap");
+            preElement.style.overflowWrap = (wrapCode.value ? "break-word" : "normal");
+        }
+    }
+
+    return { scripts, mounted, wrapCode, saveAsSupported, onScriptRoute, onDeployScriptRoute, currentScriptLink,
+        scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon, wrapIcon, wrapStatement,
+        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles,
         mountScriptsStore, mountScriptPage, unmountScriptPage
     }
 });
@@ -247,7 +270,15 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
             setLoadedProgress(99);
 
             await sleep(100);
-            html.value = highlighter.codeToHtml(code, { lang: (suffix.endsWith("js") ? "javascript" : "vue"), theme: "vitesse-black" });
+            html.value = highlighter.codeToHtml(code, {
+                theme: "vitesse-black",
+                lang: (suffix.endsWith("js") ? "javascript" : "vue"),
+                transformers: [{
+                    pre(node) { node.properties.id = "mohit-scriptPage-code"; },
+                    code(node) { node.properties.id = "mohit-scriptPage-code-inner"; },
+                    line(node, lineNum) { transformCodeLine(this.addClassToHast, node, lineNum); }
+                }]
+            });
             htmlLoaded.value = { status: true, error: false, progress: 100 }
         } catch(e) {
             console.error(e);
@@ -262,6 +293,31 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
      */
     function setLoadedProgress(num) {
         htmlLoaded.value.progress = num;
+    }
+
+    /**
+     * This function transforms how the HTML code for a line looks when fully rendered.
+     * @param {Function} addClassToHast This function adds a class to the line. 
+     * @param {import("../../node_modules/@types/hast/index").Element} node The line element itself.
+     * @param {Number} lineNum The number of said line.
+     */
+    function transformCodeLine(addClassToHast, node, lineNum) {
+        addClassToHast(node, "mohit-scriptPage-code-line");
+        const originalChildren = node.children;
+
+        node.children = [{
+            type: 'element',
+            tagName: 'span',
+            properties: { className: 'mohit-scriptPage-code-line-content', },
+            children: originalChildren
+        }]
+
+        node.children.unshift({
+            type: "element",
+            tagName: "span",
+            properties: { className: "mohit-scriptPage-code-lineNum" },
+            children: [{ type: "text", value: String(lineNum) }]
+        });
     }
 
     return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, progressStr,

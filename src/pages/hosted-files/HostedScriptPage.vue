@@ -1,9 +1,36 @@
 <template>
 <ScriptsMenu />
 <main id="script-page" class="personal-web-body transparent">
-    <template v-if="scriptsStore.scripts[index].htmlLoaded.status">
-        <div class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
-    </template>
+    <div v-if="scriptsStore.scripts[index].htmlLoaded.status" class="mohit-main-script">
+        <div ref="script-options" class="mohit-main-script-top">
+            <div class="mohit-main-script-top-sideSection">
+                <button class="lightblue" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
+                    <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.scriptDownloadStatus.pending" />
+                </button>
+                <button class="blue" v-if="scriptsStore.saveAsSupported" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
+                        <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.scriptSaveStatus.pending" />
+                </button>
+                <button class="lightblue" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>
+                    <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.scriptCopyStatus.pending" />
+                </button>
+                <a class="white" v-if="(scriptsStore.currentScriptLink != '')" :href="scriptsStore.currentScriptLink" title="See Code On Github" pulse-loop>
+                    <font-awesome-icon icon="fa-brands fa-github" />
+                </a>
+            </div>
+            <div class="mohit-main-script-top-sideSection">
+                <button @click="openScriptsMenu()" title="Open Script Options" pulse-loop>
+                    <FontAwesomeIcon icon="fa-file-export" />
+                </button>
+                <button class="flame" @click="scriptsStore.setCodeWrapping('toggle')" :title="scriptsStore.wrapStatement" pulse-loop>
+                    <FontAwesomeIcon :icon="scriptsStore.wrapIcon" />
+                </button>
+                <button @click="scriptsStore.toggleScriptFullScreen()" :title="fullScreenStore.elementTitle" pulse-loop>
+                    <FontAwesomeIcon :icon="fullScreenStore.faIcon" />
+                </button>
+            </div>
+        </div>
+        <div ref="script-html" class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
+    </div>
     <template v-else-if="scriptsStore.scripts[index].htmlLoaded.error">
         <div class="code-file-loadingBar-container">
             <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
@@ -19,8 +46,8 @@
     </template>
 
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
-    <WebFooter v-if="!fullScreenSet" />
-    <GamepadComponent v-if="fullScreenSet" />
+    <WebFooter v-if="!fullScreenStore.fullScreenSet" />
+    <GamepadComponent v-if="fullScreenStore.fullScreenSet" />
     <FileWidgets />
     <FullScreenScrollBar :fs-element-id="'script-page'" />
 </main>
@@ -28,11 +55,27 @@
 
 <script setup>
 const scriptsStore = useScriptsStore();
-const fullScreenSet = getFullScreenSet();
+const webData = useWebsiteDataStore();
+const fullScreenStore = useFullScreenStore();
+
 const props = defineProps({ index: { type: Number, required: true } });
+const scriptHTML = useTemplateRef('script-html');
+const scriptOptions = useTemplateRef('script-options');
+const { reset: resetPulseLoop } = usePulseLoopAnimation(scriptOptions);
 
 onMounted(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
+
+watch(scriptHTML, () => {
+    if(scriptHTML.value) { scriptsStore.setWrapCodeStyles(); }
+    resetPulseLoop();
+});
+
+/** This function opens the scripts menu. */
+function openScriptsMenu() {
+    webData.bypassBodyClick();
+    webData.setMenuOpen(2);
+}
 
 const PAGE_METADATA = [
     {
@@ -65,34 +108,123 @@ const CURRENT_METADATA = PAGE_METADATA[props.index];
 useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc, "#4d3e3e", CURRENT_METADATA.type));
 </script>
 
-<style scoped>
-.code-file-inHTML :deep(pre) {
+<style>
+.mohit-main-script {
+    padding: 10px 20px;
+    margin: 20px auto;
+    border-radius: 10px;
     max-width: 1250px;
     width: calc(100% - 70px);
     height: fit-content;
     min-height: var(--body-height);
+    background-color: #121212 !important;
+}
+#mohit-scriptPage-code {
+    width: 100%;
+    height: fit-content;
     overflow-y: hidden;
     overflow-x: auto;
-    left: 10px;
-    padding: 30px 0px;
-    border-left: 20px solid;
-    border-right: 20px solid;
+    border-top-left-radius: 10px;
     border-color: #121212 !important;
-    border-radius: 15px;
-    margin: 20px auto;
     background-color: #121212 !important;
+}
+#mohit-scriptPage-code-inner {
+    width: 100%;
+    display: flex !important;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.mohit-scriptPage-code-line {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: row;
+}
+.mohit-scriptPage-code-line-content {
+    width: calc(100% - 45px);
+    height: fit-content;
+    padding-bottom: 2px;
+}
+
+.mohit-scriptPage-code-lineNum {
+    width: 27px;
+    padding-bottom: 2px;
+    display: inline-block;
+    border-right: 1px solid lightgray;
+    text-align: right;
+    padding-right: 5px;
+    margin-right: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mohit-main-script-top {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.mohit-main-script-top-sideSection {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin: 10px;
+    gap: 5px;
+}
+
+.mohit-main-script-top button, .mohit-main-script-top a {
+    color: var(--website-light-text);
+    border: 1px solid var(--website-light-text);
+    border-radius: 7px;
+    font-size: 12px;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: scale 0.2s, background-color 0.2s;
+}
+.mohit-main-script-top button:hover, .mohit-main-script-top a:hover {
+    scale: 1.1;
+    background-color: black;
+}
+
+.mohit-main-script-top button.flame, .mohit-main-script-top a.flame {
+    color: var(--vibrant-flame);
+    border-color: var(--vibrant-flame);
+}
+.mohit-main-script-top button.white, .mohit-main-script-top a.white {
+    color: white;
+    border-color: white;
+}
+.mohit-main-script-top button.lightblue, .mohit-main-script-top a.lightblue {
+    color: var(--blue-one);
+    border-color: var(--blue-one);
+}
+.mohit-main-script-top button.blue, .mohit-main-script-top a.blue {
+    color: var(--blue-three);
+    border-color: var(--blue-three);
 }
 
 .code-file-inHTML ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
     border: 1px solid white;
-    border-radius: 30px;
     background: var(--blue-zero);
 }
 .code-file-inHTML ::-webkit-scrollbar-thumb {
     background-color: var(--website-text);
-    border-radius: 30px;
     transition: background-color 0.2s;
 }
 .code-file-inHTML ::-webkit-scrollbar-thumb:hover {
