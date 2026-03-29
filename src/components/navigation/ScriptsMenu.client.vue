@@ -40,11 +40,13 @@
         <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-            <button class="mohit-navMenu-mainOpt" @click="scriptsStore.setCodeWrapping('toggle')" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="scriptsStore.setCodeWrapping('toggle', true)" pulse-loop>
                 <span> {{ scriptsStore.wrapStatement }} </span>
                 <font-awesome-icon :icon="scriptsStore.wrapIcon" />
             </button>
         </div>
+        <div class="mohit-navMenu-opt-break"></div>
+
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="scriptsStore.toggleScriptFullScreen()" pulse-loop>
                 <span> Maximize Script </span>

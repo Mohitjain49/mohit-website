@@ -11,12 +11,23 @@
             <button v-if="webData.shareSupported" @click="webData.shareLink(qrCodeLink)" class="qrcode-mainPopup-btn light" title="Share Webpage Link">
                 <FontAwesomeIcon icon="fa-share-nodes" />
             </button>
-            <button v-if="webData.shareSupported" @click="shareQRCode()" class="qrcode-mainPopup-btn" title="Share QR Code">
-                <FontAwesomeIcon icon="fa-share" />
-            </button>
-            <button @click="downloadQRCode()" class="qrcode-mainPopup-btn" title="Download QR Code.">
-                <FontAwesomeIcon icon="fa-download" />
-            </button>
+            <div class="qrcode-mainPopup-btn_v2">
+                <button @click="setImageOptions('toggle')" class="qrcode-mainPopup-btn"
+                    :title="((showImageOptions ? 'Close' : 'See') + ' Image Options')">
+
+                    <FontAwesomeIcon icon="fa-image" />
+                </button>
+                <Transition name="fade-transition">
+                    <div v-if="showImageOptions" class="qrcode-image-options">
+                        <button v-if="webData.shareSupported" @click="shareQRCode()" class="qrcode-mainPopup-btn yellow" title="Share QR Code">
+                            <FontAwesomeIcon icon="fa-share" />
+                        </button>
+                        <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow" title="Download QR Code.">
+                            <FontAwesomeIcon icon="fa-download" />
+                        </button>
+                    </div>
+                </Transition>
+            </div>
         </div>
 
         <button @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-btn close" title="Close Popup">
@@ -25,7 +36,7 @@
         <button v-if="(sharePopupMode == 0)" @click="webData.setQRCodePopup('filter')" class="qrcode-mainPopup-btn topLeft light" title="Remove All Hashes">
             <FontAwesomeIcon icon="fa-filter" />
         </button>
-        <a v-if="(sharePopupMode == 2)" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn topLeft white" title="Open Link In New Tab">
+        <a v-if="showOpenNewTabButton" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn topLeft white" title="Open Link In New Tab">
             <FontAwesomeIcon icon="fa-up-right-from-square" />
         </a>
     </div>
@@ -41,20 +52,23 @@ const codeScannerStore = useCodeScannerStore();
 const { width: windowWidth } = useWindowSize();
 const overflowLocked = useScrollLock(document.body);
 
-/**
- * @type {Ref<QRCodeStyling | null>} This stores the qrcode object created when aking the QR Code for the Popup.
- */
+/** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
 const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref({ display: "none" });
 
 const sharePopupMode = ref(0);
+const showImageOptions = ref(false);
+
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
 const qrCodeFormattedLink = computed(() => {
     if(typeof qrCodeLink.value !== "string") { return qrCodeLink.value; }
     if(qrCodeLink.value.startsWith("mailto:")) { return qrCodeLink.value.substring(7); }
     if(qrCodeLink.value.startsWith("tel:")) { return qrCodeLink.value.substring(4); }
     return qrCodeLink.value;
+});
+const showOpenNewTabButton = computed(() => {
+    return (sharePopupMode == 2 && !qrCodeLink.startsWith(PERSONAL_WEBSITE_LINK));
 });
 
 const linkCopied = ref(false);
@@ -147,20 +161,30 @@ function copyQRCodeLink() {
 }
 
 /**
+ * This function sets a boolean that sets whether to show the image options.
+ * @param {Boolean | "toggle"} status The new status for the image options. If it is set to "toggle", then it just flips the value.
+ */
+function setImageOptions(status = "toggle") {
+    showImageOptions.value = ((status === "toggle") ? !showImageOptions.value : status);
+}
+
+/**
  * This function shares the actual QR Code image.
  */
 function shareQRCode() {
     const canvas = document.getElementById("mohit-qrcode").querySelector("canvas");
-    canvas.toBlob((blob) => {
-        webData.shareFile(new File([blob], 'Mohit_Website_QRCode.png', { type: blob.type }));
+    canvas.toBlob(async(blob) => {
+        await webData.shareFile(new File([blob], 'Mohit_Website_QRCode.png', { type: blob.type }));
+        setImageOptions(false);
     }, 'image/png');
 }
 
 /**
  * This function lets the user download the QR Code as a .png file.
  */
-function downloadQRCode() {
-    qrcode.value.download({ extension: "png" });
+async function downloadQRCode() {
+    await qrcode.value.download({ extension: "png" });
+    setImageOptions(false);
 }
 </script>
 
@@ -179,6 +203,7 @@ function downloadQRCode() {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow: visible;
     height: 575px;
     width: 575px;
     border-radius: 20px;
@@ -228,6 +253,7 @@ function downloadQRCode() {
     gap: 7px;
 }
 .qrcode-mainPopup-btn {
+    position: relative;
     padding: 6px;
     border: 2px solid;
     border-radius: 50%;
@@ -258,12 +284,48 @@ function downloadQRCode() {
 .qrcode-mainPopup-btn.light {
     color: var(--website-light-text);
 }
+.qrcode-mainPopup-btn.yellow {
+    color: var(--lightning-yellow);
+}
 .qrcode-mainPopup-btn.white {
     color: white;
 }
 .qrcode-mainPopup-btn:hover {
     background-color: black;
     box-shadow: 0px 0px 10px black;
+}
+
+.qrcode-mainPopup-btn_v2 {
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qrcode-image-options {
+    position: absolute;
+    top: calc(100% + 0px);
+    height: fit-content;
+    width: fit-content;
+    padding: 3px 5px;
+    gap: 5px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    background: var(--blue-one)
+}
+.qrcode-image-options::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: calc(50% - 9px);
+    border-width: 9px;
+    border-style: solid;
+    border-color: transparent transparent var(--blue-one) transparent;
+    filter: var(--filter-drop-shadow);
 }
 
 @media (max-width: 625px) {

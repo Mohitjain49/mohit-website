@@ -190,10 +190,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /**
      * This function sets a boolean that determines whether the code should be wrapped or overflowing.
      * @param {Boolean | "toggle"} status The new status for wrapping code. If it is set to "toggle", then it just flips the value.
+     * @param {Boolean} closeMenu If true, this will also close the navigation menu.
      */
-    function setCodeWrapping(status = "toggle") {
+    function setCodeWrapping(status = "toggle", closeMenu = false) {
         wrapCode.value = ((status === "toggle") ? !wrapCode.value : status);
         setWrapCodeStyles();
+
+        if(!closeMenu) { return; }
+        webData.bypassBodyClick();
+        webData.closeNavMenu();
     }
 
     /** Based on the current status of the "wrapCode" boolean, this function sets the styles for wrapping the code text. */

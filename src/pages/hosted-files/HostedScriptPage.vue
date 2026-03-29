@@ -161,12 +161,14 @@ useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA
 }
 .mohit-scriptPage-code-lineNum a, .mohit-scriptPage-code-lineNum button {
     width: 27px;
-    height: 100%;
+    height: calc(100% - 1px);
     font-size: 12px;
     text-align: right;
-    display: inline-block;
-    padding-right: 5px;
-    padding-bottom: 2px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex-direction: row;
+    padding: 1px 5px 2px 0px;
     border-right: 1px solid lightgray;
     transition: var(--default-transition);
 }
