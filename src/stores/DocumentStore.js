@@ -27,15 +27,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
-    const mounted = ref(false);
-    const docLoaded = ref(false);
-
     const googleDriveUploadSupported = ref(false);
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => {
         return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value);
     });
 
+    const docLoaded = ref(false);
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
     const customPdfScaleFactor = ref(1.375);
@@ -311,24 +309,17 @@ export const useDocumentStore = defineStore("document-store", () => {
      * ------------------------------------------------------------------------------------------
      */
 
-    /**
-     * This function mounts the document store for the website.
-     */
-    async function mountDocumentStore() {
-        await nextTick();
-        for(let i = 0; i < hostedDocuments.length; i++) { await hostedDocuments[i].initBlob(); }
-        mounted.value = true;
-    }
-
-    /**
-     * This function mounts a page that hosts a document.
-     */
-    function mountDocumentPage() {
+    /** This function mounts a page that hosts a document. */
+    async function mountDocumentPage() {
         webData.mountWebData();
-        nextTick(() => {
-            if(onMarkdownRoute.value) { return; }
-            mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
-        });
+        await nextTick();
+
+        if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
+            await hostedDocuments[currentDocumentRoute.value].initBlob();
+        }
+
+        if(onMarkdownRoute.value) { return; }
+        mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
     }
 
     /**
@@ -419,7 +410,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(hashStr === "") { return; }
 
         try {
-            goToPageSection(hashStr, ((hashStr === "footer") ? 0 : 70));
+            goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 70));
         } catch(e) {
             window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         }
@@ -444,13 +435,13 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    return { hostedDocuments, mounted, docLoaded, googleDriveOptionAvailable, saveAsSupported,
+    return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink,
         onDocumentRoute, onAnyResumeRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
+        mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });
 
@@ -470,11 +461,13 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const objectUrl = useObjectUrl(blob);
     const router = useRouter();
 
+    const blobCreated = computed(() => { return (blob.value != null); });
     const link = computed(() => { return (useBlobLink ? objectUrl.value : originLink); });
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {
+        if(blobCreated.value) { return; }
         if(path.includes("/resume/qrcode")) {
             blob.value = await createQrcodeResume();
         } else {
@@ -492,7 +485,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, name, suffix, link, blob, objectUrl, originLink, withMd, initBlob, checkPath }
+    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd, initBlob, checkPath }
 }
 
 /** This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right. */

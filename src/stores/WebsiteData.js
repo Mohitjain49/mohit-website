@@ -87,7 +87,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const signal = controller.signal;
         audioStore.setupClickAudio();
 
-        documentStore.mountDocumentStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();
@@ -111,6 +110,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             const target = e.target;
             if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
         }, { passive: false, signal });
+
+        // This sets a new function in the window object to let static HTML elements access the share popup.
+        window.openShareMenu = (param = "") => { setQRCodePopup(param); }
     }
 
     /**
@@ -255,7 +257,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             if(hashStr === "" || onHostedFileRoute.value) { return; }
 
             try {
-                goToPageSection(hashStr, pixelOffset);
+                goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset));
             } catch(e) {
                 window.scrollTo({ top: 0, left: 0, behavior: "instant" });
             }

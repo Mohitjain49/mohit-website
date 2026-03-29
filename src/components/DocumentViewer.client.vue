@@ -1,5 +1,5 @@
 <template>
-<main id="resume-container" v-if="documentStore.mounted">
+<main id="resume-container">
     <div class="pdf-doc-mohit-container">
         <div class="pdf-page-innerContainer" v-for="(page, index) in docPages" :id="('page_' + page.num)">
             <div v-if="!documentStore.docLoaded" class="pdf-doc-loadingCover">

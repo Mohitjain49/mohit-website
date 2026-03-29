@@ -143,6 +143,7 @@ useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA
     justify-content: flex-start;
     align-items: stretch;
     flex-direction: row;
+    scroll-margin-top: 90px;
 }
 .mohit-scriptPage-code-line-content {
     width: calc(100% - 45px);
@@ -151,14 +152,28 @@ useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA
 }
 
 .mohit-scriptPage-code-lineNum {
-    width: 27px;
-    padding-bottom: 2px;
+    height: auto;
+    width: 32px;
     display: inline-block;
-    border-right: 1px solid lightgray;
     text-align: right;
-    padding-right: 5px;
     margin-right: 5px;
     background-color: rgba(255, 255, 255, 0.1);
+}
+.mohit-scriptPage-code-lineNum a, .mohit-scriptPage-code-lineNum button {
+    width: 27px;
+    height: 100%;
+    font-size: 12px;
+    text-align: right;
+    display: inline-block;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    border-right: 1px solid lightgray;
+    transition: var(--default-transition);
+}
+.mohit-scriptPage-code-lineNum a:hover, .mohit-scriptPage-code-lineNum button:hover {
+    color: var(--website-light-text);
+    border-right: 3px solid var(--website-light-text);
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 .mohit-main-script-top {

@@ -150,9 +150,16 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This function mounts a page that hosts a script. */
     async function mountScriptPage() {
         webData.mountWebData();
-        if(onScriptRoute.value) {
+        if(!onScriptRoute.value) { return; }
+
+        try {
             await nextTick();
             await scripts[currentScriptRoute.value].initCodeScriptElement();
+
+            const hashStr = router.currentRoute.value.hash.substring(1);
+            if(hashStr !== "") { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 80)); }
+        } catch(e) {
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         }
     }
 
@@ -174,9 +181,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         return scripts[currentScriptRoute.value];
     }
 
-    /**
-     * This function sets the full screen for the element containing the document or script.
-     */
+    /** This function sets the full screen for the element containing the document or script. */
     function toggleScriptFullScreen() {
         fullScreenStore.setFullScreen(document.getElementById('script-page'));
         webData.closeNavMenu();
@@ -303,6 +308,7 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
      */
     function transformCodeLine(addClassToHast, node, lineNum) {
         addClassToHast(node, "mohit-scriptPage-code-line");
+        node.properties.id = ("L" + String(lineNum));
         const originalChildren = node.children;
 
         node.children = [{
@@ -316,7 +322,15 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
             type: "element",
             tagName: "span",
             properties: { className: "mohit-scriptPage-code-lineNum" },
-            children: [{ type: "text", value: String(lineNum) }]
+            children: [{
+                type: "element",
+                tagName: "button",
+                properties: {
+                    onclick: "window.openShareMenu(\"" + (PERSONAL_WEBSITE_LINK + path.substring(1) + "/#L" + String(lineNum)) + "\")",
+                    title: "See Options for Line " + lineNum + " Of This Code Script."
+                },
+                children: [{ type: "text", value: String(lineNum) }]
+            }]
         });
     }
 

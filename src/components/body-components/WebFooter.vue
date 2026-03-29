@@ -152,7 +152,8 @@ const EXTRA_ROUTES = [
     overflow: hidden;
     padding-top: 25px;
     z-index: 20;
-    border-top: 2px solid var(--website-light-text)
+    border-top: 2px solid var(--website-light-text);
+    scroll-margin-top: 50px;
 }
 
 .footer-body {
