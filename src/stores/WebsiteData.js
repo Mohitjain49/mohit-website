@@ -153,7 +153,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             const lineOptionsElements = Array.from(lineOptions.querySelectorAll('*'));
             const pattern = new RegExp("^L" + "\\d+$");
 
-            if(lineOptions === element || lineOptionsElements.includes(element) || pattern.test(element.closest("span").id)) { return; }
+            const lineId = element.closest("span")?.id
+            if(lineOptions === element || lineOptionsElements.includes(element) || pattern.test(lineId)) { return; }
             scriptsStore.setLineOptions(null, -1);
         }
     }
