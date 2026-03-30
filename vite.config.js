@@ -83,7 +83,14 @@ export default defineConfig(({ isSsrBuild }) => {
                             '@tsparticles/vue3'
                         ],
                         'vendor-qr-code-reader': ['vue-qrcode-reader']
-                    } : undefined)
+                    } : {
+                        'vendor-fontawesome': [
+                            '@fortawesome/fontawesome-svg-core',
+                            '@fortawesome/free-solid-svg-icons',
+                            '@fortawesome/free-brands-svg-icons',
+                            '@fortawesome/vue-fontawesome'
+                        ],
+                    })
                 }
             }
         },

@@ -21,6 +21,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     const mounted = ref(false);
     const wrapCode = ref(false);
+    const lineOptions = ref({ num: -1, style: { left: "0px", top: "0px" }, timeout: null, lastCopied: "" });
 
     const scriptDownloadStatus = ref({ pending: false, fresh: false, timeout: null });
     const scriptSaveStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
@@ -55,6 +56,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     const wrapIcon = computed(() => { return (wrapCode.value ? "fa-align-left" : "fa-arrows-left-right-to-line"); });
     const wrapStatement = computed(() => { return (wrapCode.value ? "Let Code Overflow" : "Wrap Code"); });
+
+    const copyCodeTextIcon = computed(() => {
+        const lastCopied = lineOptions.value.lastCopied;
+        return ((lineOptions.value.timeout == null) ? "fa-copy" : ((lastCopied === "error") ? 'fa-ban' : (lastCopied === "text") ? 'fa-check' : 'fa-copy'));
+    });
+    const copyCodePermalinkIcon = computed(() => {
+        const lastCopied = lineOptions.value.lastCopied;
+        return ((lineOptions.value.timeout == null) ? "fa-clone" : ((lastCopied === "error") ? 'fa-ban' : (lastCopied === "link") ? 'fa-check' : 'fa-clone'));
+    });
 
     /**
      * ---------------------------------------------------------------------------
@@ -141,9 +151,13 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * ------------------------------------------------------------------------------------
      */
 
-    /** This function mounts the scripts store so the application can use it. */
+    /**
+     * This function mounts the scripts store so the website can properly use it.
+     * It also sets a function for the window to open options for each line of code displayed.
+     */
     function mountScriptsStore() {
         for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
+        window.openCodeLineOptions = (event, lineNum) => { setLineOptions(event, lineNum); }
         mounted.value = true;
     }
 
@@ -210,10 +224,50 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, mounted, wrapCode, saveAsSupported, onScriptRoute, onDeployScriptRoute, currentScriptLink,
-        scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon, wrapIcon, wrapStatement,
-        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles,
-        mountScriptsStore, mountScriptPage, unmountScriptPage
+    /**
+     * This function sets the status of the line options menu.
+     * @param {MouseEvent} event The event fired by clicking on the mouse.
+     * @param {Number} lineNum The number of the line to be opened. -1 closes the options menu.
+     */
+    function setLineOptions(event, lineNum = -1) {
+        lineOptions.value.num = ((lineNum == lineOptions.value.num) ? -1 : lineNum);
+        if(lineNum == -1) { return; }
+
+        const clientY = event.clientY;
+        const yNum = (((clientY + 140) > window.innerHeight) ? (clientY - 125): (clientY + 5) );
+        lineOptions.value.style = { left: ((event.clientX + 3) + "px"), top: (yNum + "px") }
+    }
+
+    /**
+     * This function lets the user copy an attribute of a specific line.
+     * @param {String} attribute The attribute to copy.
+     */
+    function copyLineAttribute(attribute = "text") {
+        const element = document.getElementById("L" + lineOptions.value.num);
+        if(element == null) { return; }
+
+        navigator.clipboard.writeText(element.getAttribute("mohit-code-as-" + attribute)).then(() => {
+            lineOptions.value.lastCopied = attribute;
+            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
+            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
+        }).catch(() => {
+            lineOptions.value.lastCopied = "error";
+            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
+            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
+        });
+    }
+
+    /** This function opens the share popup for a line's permalink. */
+    function shareLinePermalink() {
+        const element = document.getElementById("L" + lineOptions.value.num);
+        if(element != null) { webData.setQRCodePopup(element.getAttribute("mohit-code-as-link")); }
+    }
+
+    return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, currentScriptLink,
+        scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
+        copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
+        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions,
+        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
     }
 });
 
@@ -313,8 +367,12 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
      */
     function transformCodeLine(addClassToHast, node, lineNum) {
         addClassToHast(node, "mohit-scriptPage-code-line");
-        node.properties.id = ("L" + String(lineNum));
         const originalChildren = node.children;
+        const lineAsText = extractTextFromLine(originalChildren);
+
+        node.properties['id'] = ("L" + String(lineNum));
+        node.properties['mohit-code-as-text'] = lineAsText;
+        node.properties['mohit-code-as-link'] = (PERSONAL_WEBSITE_LINK + path.substring(1) + "/#L" + String(lineNum));
 
         node.children = [{
             type: 'element',
@@ -325,18 +383,30 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
 
         node.children.unshift({
             type: "element",
-            tagName: "span",
+            tagName: "div",
             properties: { className: "mohit-scriptPage-code-lineNum" },
             children: [{
                 type: "element",
                 tagName: "button",
                 properties: {
-                    onclick: "window.openShareMenu(\"" + (PERSONAL_WEBSITE_LINK + path.substring(1) + "/#L" + String(lineNum)) + "\")",
+                    onclick: "window.openCodeLineOptions(event, " + String(lineNum) + ")",
                     title: "See Options for Line " + lineNum + " Of This Code Script."
                 },
                 children: [{ type: "text", value: String(lineNum) }]
             }]
         });
+    }
+
+    /**
+     * This recursive function extracts all the text from a line and returns a string
+     * @param {Array<import("../../node_modules/@types/hast/index").ElementContent>} children The children of the node.
+     */
+    function extractTextFromLine(children) {
+        return children.map((child) => {
+            if(child.type === "text") { return child.value; }
+            else if(child.children) { return extractTextFromLine(child.children); }
+            else { return ""; }
+        }).join("");
     }
 
     return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, progressStr,

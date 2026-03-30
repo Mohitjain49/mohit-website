@@ -1,3 +1,7 @@
+<style>
+@import "@/styles/scriptpage.css";
+</style>
+
 <template>
 <ScriptsMenu />
 <main id="script-page" class="personal-web-body transparent">
@@ -51,6 +55,26 @@
     <FileWidgets />
     <FullScreenScrollBar :fs-element-id="'script-page'" />
 </main>
+
+<Transition name="fade-transition">
+    <div v-if="(scriptsStore.lineOptions.num != -1)" id="mohit-line-options" class="mohit-script-lineOptions" :style="scriptsStore.lineOptions.style">
+        <div class="mohit-script-lineOptions-top">
+            <h3> {{ ('Line ' + scriptsStore.lineOptions.num) }} </h3>
+            <button @click="scriptsStore.setLineOptions(null, -1)" title="Close Line Options">
+                <FontAwesomeIcon icon="fa-xmark" />
+            </button>
+        </div>
+        <button @click="scriptsStore.copyLineAttribute('text')">
+            <span> Copy Text </span> <FontAwesomeIcon :icon="scriptsStore.copyCodeTextIcon" />
+        </button>
+        <button @click="scriptsStore.copyLineAttribute('link')">
+            <span> Copy Permalink </span> <FontAwesomeIcon :icon="scriptsStore.copyCodePermalinkIcon" />
+        </button>
+        <button class="share" @click="scriptsStore.shareLinePermalink()">
+            <span> Share Permalink </span> <FontAwesomeIcon icon="fa-share-from-square" />
+        </button>
+    </div>
+</Transition>
 </template>
 
 <script setup>
@@ -107,207 +131,3 @@ const PAGE_METADATA = [
 const CURRENT_METADATA = PAGE_METADATA[props.index];
 useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc, "#4d3e3e", CURRENT_METADATA.type));
 </script>
-
-<style>
-.mohit-main-script {
-    padding: 10px 20px;
-    margin: 20px auto;
-    border-radius: 10px;
-    max-width: 1250px;
-    width: calc(100% - 70px);
-    height: fit-content;
-    min-height: var(--body-height);
-    background-color: #121212 !important;
-}
-#mohit-scriptPage-code {
-    width: 100%;
-    height: fit-content;
-    overflow-y: hidden;
-    overflow-x: auto;
-    border-top-left-radius: 10px;
-    border-color: #121212 !important;
-    background-color: #121212 !important;
-}
-#mohit-scriptPage-code-inner {
-    width: 100%;
-    display: flex !important;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-}
-
-.mohit-scriptPage-code-line {
-    width: 100%;
-    height: fit-content;
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-    flex-direction: row;
-    scroll-margin-top: 90px;
-}
-.mohit-scriptPage-code-line-content {
-    width: calc(100% - 45px);
-    height: fit-content;
-    padding-bottom: 2px;
-}
-
-.mohit-scriptPage-code-lineNum {
-    height: auto;
-    width: 32px;
-    display: inline-block;
-    text-align: right;
-    margin-right: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-.mohit-scriptPage-code-lineNum a, .mohit-scriptPage-code-lineNum button {
-    width: 27px;
-    height: calc(100% - 1px);
-    font-size: 12px;
-    text-align: right;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    flex-direction: row;
-    padding: 1px 5px 2px 0px;
-    border-right: 1px solid lightgray;
-    transition: var(--default-transition);
-}
-.mohit-scriptPage-code-lineNum a:hover, .mohit-scriptPage-code-lineNum button:hover {
-    color: var(--website-light-text);
-    border-right: 3px solid var(--website-light-text);
-    background-color: rgba(255, 255, 255, 0.25);
-}
-
-.mohit-main-script-top {
-    width: 100%;
-    height: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-.mohit-main-script-top-sideSection {
-    width: fit-content;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    margin: 10px;
-    gap: 5px;
-}
-
-.mohit-main-script-top button, .mohit-main-script-top a {
-    color: var(--website-light-text);
-    border: 1px solid var(--website-light-text);
-    border-radius: 7px;
-    font-size: 12px;
-    height: 20px;
-    width: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: scale 0.2s, background-color 0.2s;
-}
-.mohit-main-script-top button:hover, .mohit-main-script-top a:hover {
-    scale: 1.1;
-    background-color: black;
-}
-
-.mohit-main-script-top button.flame, .mohit-main-script-top a.flame {
-    color: var(--vibrant-flame);
-    border-color: var(--vibrant-flame);
-}
-.mohit-main-script-top button.white, .mohit-main-script-top a.white {
-    color: white;
-    border-color: white;
-}
-.mohit-main-script-top button.lightblue, .mohit-main-script-top a.lightblue {
-    color: var(--blue-one);
-    border-color: var(--blue-one);
-}
-.mohit-main-script-top button.blue, .mohit-main-script-top a.blue {
-    color: var(--blue-three);
-    border-color: var(--blue-three);
-}
-
-.code-file-inHTML ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    border: 1px solid white;
-    background: var(--blue-zero);
-}
-.code-file-inHTML ::-webkit-scrollbar-thumb {
-    background-color: var(--website-text);
-    transition: background-color 0.2s;
-}
-.code-file-inHTML ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--website-dark-text);
-}
-.code-file-inHTML ::-webkit-scrollbar-button {
-    display: none;
-}
-
-.code-file-loadingBar-container {
-    max-width: 1000px;
-    width: calc(100% - 70px);
-    height: fit-content;
-    min-height: var(--body-height);
-    overflow-y: hidden;
-    overflow-x: auto;
-    left: 10px;
-    padding: 30px 0px;
-    border-left: 20px solid;
-    border-right: 20px solid;
-    border-color: #121212 !important;
-    border-radius: 15px;
-    margin: 20px auto;
-    background-color: #121212 !important;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: row;
-}
-.code-file-loadingBar-container p {
-    color: var(--globe-green-light);
-    font-family: 'Lexend', sans-serif;
-    font-size: 18px;
-    margin-left: 7px;
-}
-
-.code-file-loadingBar {
-    height: 20px;
-    width: 200px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid white;
-    box-shadow: 0px 0px 3px 0px white;
-    border-radius: 20px;
-    overflow: hidden;
-    animation: border-pulse 0.2s linear infinite alternate;
-}
-.code-file-loadingBar .inner {
-    width: 0%;
-    height: 100%;
-    background-color: var(--globe-green-light);
-    border-radius: 20px;
-}
-
-.code-file-loadingError {
-    color: red;
-    font-size: 50px;
-}
-
-@keyframes border-pulse {
-    from {
-        border-color: white;
-        box-shadow: 0px 0px 3px 0px white;
-    }
-    to {
-        border-color: var(--lightning-yellow);
-        box-shadow: 0px 0px 8px 0px var(--lightning-yellow);
-    }
-}
-</style>

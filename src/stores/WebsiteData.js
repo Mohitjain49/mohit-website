@@ -145,7 +145,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function onDocumentBodyClick(event = new MouseEvent("click")) {
         audioStore.confirmClickSound(event);
-        if(!checkNavigationElement(event.target)) { closeNavMenu(); }
+        const element = event.target;
+        if(!checkNavigationElement(element)) { closeNavMenu(); }
+
+        const lineOptions = document.getElementById("mohit-line-options");
+        if(lineOptions != null) {
+            const lineOptionsElements = Array.from(lineOptions.querySelectorAll('*'));
+            const pattern = new RegExp("^L" + "\\d+$");
+
+            if(lineOptions === element || lineOptionsElements.includes(element) || pattern.test(element.closest("span").id)) { return; }
+            scriptsStore.setLineOptions(null, -1);
+        }
     }
 
     /**
