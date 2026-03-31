@@ -5,7 +5,7 @@
 <template>
 <ScriptsMenu />
 <main id="script-page" class="personal-web-body transparent">
-    <div v-if="scriptsStore.scripts[index].htmlLoaded.status" class="mohit-main-script">
+    <div v-if="scriptsStore.scripts[index].htmlLoaded.status" class="mohit-main-script" id="mohit-main-script">
         <div ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
                 <button class="lightblue" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
@@ -54,27 +54,8 @@
     <GamepadComponent v-if="fullScreenStore.fullScreenSet" />
     <FileWidgets />
     <FullScreenScrollBar :fs-element-id="'script-page'" />
+    <ScriptLineOptions />
 </main>
-
-<Transition name="fade-transition">
-    <div v-if="(scriptsStore.lineOptions.num != -1)" id="mohit-line-options" class="mohit-script-lineOptions" :style="scriptsStore.lineOptions.style">
-        <div class="mohit-script-lineOptions-top">
-            <h3> {{ ('Line ' + scriptsStore.lineOptions.num) }} </h3>
-            <button @click="scriptsStore.setLineOptions(null, -1)" title="Close Line Options">
-                <FontAwesomeIcon icon="fa-xmark" />
-            </button>
-        </div>
-        <button @click="scriptsStore.copyLineAttribute('text')">
-            <span> Copy Text </span> <FontAwesomeIcon :icon="scriptsStore.copyCodeTextIcon" />
-        </button>
-        <button @click="scriptsStore.copyLineAttribute('link')">
-            <span> Copy Permalink </span> <FontAwesomeIcon :icon="scriptsStore.copyCodePermalinkIcon" />
-        </button>
-        <button class="share" @click="scriptsStore.shareLinePermalink()">
-            <span> Share Permalink </span> <FontAwesomeIcon icon="fa-share-from-square" />
-        </button>
-    </div>
-</Transition>
 </template>
 
 <script setup>

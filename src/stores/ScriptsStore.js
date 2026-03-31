@@ -21,7 +21,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     const mounted = ref(false);
     const wrapCode = ref(false);
-    const lineOptions = ref({ num: -1, style: { left: "0px", top: "0px" }, timeout: null, lastCopied: "" });
+    const lineOptions = ref({ num: -1, style: { left: "0px", top: "0px" }, onTopRight: false, timeout: null, lastCopied: "" });
 
     const scriptDownloadStatus = ref({ pending: false, fresh: false, timeout: null });
     const scriptSaveStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
@@ -65,6 +65,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         const lastCopied = lineOptions.value.lastCopied;
         return ((lineOptions.value.timeout == null) ? "fa-clone" : ((lastCopied === "error") ? 'fa-ban' : (lastCopied === "link") ? 'fa-check' : 'fa-clone'));
     });
+
+    // This function sets the place of the line options menu to its default state when it is closed.
+    watch(() => lineOptions.value.num, (newValue) => { if(newValue == -1) { setLineOptionsPlacement(false); } });
 
     /**
      * ---------------------------------------------------------------------------
@@ -157,7 +160,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function mountScriptsStore() {
         for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
-        window.openCodeLineOptions = (event, lineNum) => { setLineOptions(event, lineNum); }
+        window.openCodeLineOptions = (lineNum) => { setLineOptions(lineNum); }
         mounted.value = true;
     }
 
@@ -229,13 +232,29 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {MouseEvent} event The event fired by clicking on the mouse.
      * @param {Number} lineNum The number of the line to be opened. -1 closes the options menu.
      */
-    function setLineOptions(event, lineNum = -1) {
-        lineOptions.value.num = ((lineNum == lineOptions.value.num) ? -1 : lineNum);
-        if(lineNum == -1) { return; }
+    function setLineOptions(lineNum = -1) {
+        if(lineNum == -1 || !lineNum) {
+            lineOptions.value.num = -1;
+        } else if(lineNum == lineOptions.value.num && lineOptions.value.onTopRight) {
+            setLineOptionsPlacement(false);
+        } else if(lineNum == lineOptions.value.num && !lineOptions.value.onTopRight) {
+            lineOptions.value.num = -1;
+        } else {
+            const element = document.getElementById("L" + lineNum);
+            lineOptions.value.num = lineNum;
 
-        const clientY = event.clientY;
-        const yNum = (((clientY + 140) > window.innerHeight) ? (clientY - 125): (clientY + 5) );
-        lineOptions.value.style = { left: ((event.clientX + 3) + "px"), top: (yNum + "px") }
+            const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
+            const yNum = (((rect.top + 140) > window.innerHeight) ? (rect.top - 120): (rect.top + rect.height) );
+            lineOptions.value.style = { left: ((rect.left + rect.width) + "px"), top: (yNum + "px") }
+        }
+    }
+
+    /**
+     * This function sets a boolean that determines whether the code should be wrapped or overflowing.
+     * @param {Boolean | "toggle"} status The new status for wrapping code. If it is set to "toggle", then it just flips the value.
+     */
+    function setLineOptionsPlacement(status = "toggle") {
+        lineOptions.value.onTopRight = ((status === "toggle") ? !lineOptions.value.onTopRight : status)
     }
 
     /**
@@ -267,7 +286,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions,
-        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
+        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, setLineOptionsPlacement
     }
 });
 
@@ -389,7 +408,7 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
                 type: "element",
                 tagName: "button",
                 properties: {
-                    onclick: "window.openCodeLineOptions(event, " + String(lineNum) + ")",
+                    onclick: "window.openCodeLineOptions(" + String(lineNum) + ")",
                     title: "See Options for Line " + lineNum + " Of This Code Script."
                 },
                 children: [{ type: "text", value: String(lineNum) }]

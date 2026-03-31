@@ -127,15 +127,22 @@ button {
 }
 #resume-container:fullscreen {
     padding-top: 20px;
-    min-height: calc(100% - 20px);
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1;
 }
 #script-page:fullscreen {
-    padding-top: 0px;
-    min-height: calc(100% - 20px);
+    padding: 0px !important;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1;
+}
+
+#resume-container:fullscreen::-webkit-scrollbar {
+    display: none;
+}
+#script-page:fullscreen::-webkit-scrollbar {
+    display: none;
 }
 
 .webpage-cover {

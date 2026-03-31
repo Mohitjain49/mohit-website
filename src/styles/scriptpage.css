@@ -8,6 +8,7 @@
     min-height: var(--body-height);
     background-color: #121212 !important;
 }
+
 #mohit-scriptPage-code {
     width: 100%;
     height: fit-content;
@@ -133,7 +134,7 @@
     height: fit-content;
     width: 200px;
     border-radius: 10px;
-    z-index: 5;
+    z-index: 25;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -158,21 +159,36 @@
     user-select: none;
 }
 
-.mohit-script-lineOptions-top > button {
+.mohit-script-lineOptions-topOpts {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+}
+.mohit-script-lineOptions-top button {
     color: red;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 14px;
     width: 14px;
-    border: 2px solid red;
-    border-radius: 50%;
+    border: 1px solid red;
+    border-radius: 4px;
     transition: var(--default-transition);
+    user-select: none;
 }
-.mohit-script-lineOptions-top > button:hover {
+
+.mohit-script-lineOptions-top button.white {
+    color: white;
+    border-color: white;
+}
+.mohit-script-lineOptions-top button:hover {
     background-color: var(--dark-background);
 }
-.mohit-script-lineOptions-top > button > svg {
+.mohit-script-lineOptions-topOpts button > svg {
     height: 9px;
 }
 

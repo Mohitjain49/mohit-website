@@ -4,7 +4,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     var wakeLockTimeout = null;
 
     const gamepadStore = useGamepadStore();
-    const documentStore = useDocumentStore();
     const scriptsStore = useScriptsStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
@@ -129,6 +128,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
         gamepadStore.resetCursorPositions();
+        scriptsStore.setLineOptions(-1);
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -155,7 +155,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
             const lineId = element.closest("span")?.id
             if(lineOptions === element || lineOptionsElements.includes(element) || pattern.test(lineId)) { return; }
-            scriptsStore.setLineOptions(null, -1);
+            scriptsStore.setLineOptions(-1);
         }
     }
 
