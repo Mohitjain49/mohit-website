@@ -1,7 +1,7 @@
 <template>
 <NavigationMain />
 <GamepadComponent />
-<QrcodeTool v-if="webData.showSharePopup" />
+<QrcodeTool v-if="showShare" />
 <UpdateBox />
 
 <RouterView :key="$route.path" />
@@ -12,7 +12,9 @@
 import "./styles/mainstyles.css";
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
+const fullScreenSet = getFullScreenSet();
 
+const showShare = computed(() => { return (webData.showSharePopup && !fullScreenSet.value); });
 onMounted(() => { webData.setEventListeners(); });
 onBeforeUnmount(() => { webData.removeEventListeners(); });
 

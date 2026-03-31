@@ -244,7 +244,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
             lineOptions.value.num = lineNum;
 
             const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
-            const yNum = (((rect.top + 140) > window.innerHeight) ? (rect.top - 120): (rect.top + rect.height) );
+            const yNum = (((rect.top + 140) > window.innerHeight) ? (rect.top - 120) : (rect.top + rect.height) );
             lineOptions.value.style = { left: ((rect.left + rect.width) + "px"), top: (yNum + "px") }
         }
     }

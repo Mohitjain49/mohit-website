@@ -81,7 +81,7 @@
                 />
             </button>
         </div>
-        <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
+        <div v-if="webData.shareSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" pulse-loop>
                 <span> Share Document </span>
                 <font-awesome-icon :icon="documentStore.shareIcon"

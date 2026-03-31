@@ -22,7 +22,7 @@
                 </a>
             </div>
             <div class="mohit-main-script-top-sideSection">
-                <button @click="openScriptsMenu()" title="Open Script Options" pulse-loop>
+                <button v-if="!fullScreenStore.fullScreenSet" @click="openScriptsMenu()" title="Open Script Options" pulse-loop>
                     <FontAwesomeIcon icon="fa-file-export" />
                 </button>
                 <button class="flame" @click="scriptsStore.setCodeWrapping('toggle')" :title="scriptsStore.wrapStatement" pulse-loop>
@@ -49,11 +49,15 @@
         </div>
     </template>
 
+    <template v-if="fullScreenStore.fullScreenSet">
+        <QrcodeTool v-if="(webData.showSharePopup)" />
+        <WebScrollBar :fs-element-id="'script-page'" />
+        <GamepadComponent />
+    </template>
+
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <WebFooter v-if="!fullScreenStore.fullScreenSet" />
-    <GamepadComponent v-if="fullScreenStore.fullScreenSet" />
     <FileWidgets />
-    <FullScreenScrollBar :fs-element-id="'script-page'" />
     <ScriptLineOptions />
 </main>
 </template>

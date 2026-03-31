@@ -8,6 +8,10 @@
     min-height: var(--body-height);
     background-color: #121212 !important;
 }
+:fullscreen .mohit-main-script {
+    min-width: 0px;
+    max-width: none;
+}
 
 #mohit-scriptPage-code {
     width: 100%;

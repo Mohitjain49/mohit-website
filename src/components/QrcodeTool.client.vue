@@ -2,7 +2,7 @@
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
         <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeFormattedLink, ((windowWidth > 625) ? 54 : 47)) }} </button>
-        <client-only> <div id="mohit-qrcode" :style="qrCodeDisplay"></div> </client-only>
+        <div id="mohit-qrcode" :style="qrCodeDisplay"></div>
 
         <div class="qrcode-mainPopup-options">
             <button v-if="webData.shareSupported" @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="(linkCopied ? 'Copied Link!' : 'Copy Link')">

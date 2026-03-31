@@ -1,17 +1,25 @@
 <template>
 <DocumentMenu />
 <main id="resume-container">
-    <div class="pdf-doc-mohit-container"> <ResumeMarkdownComponent /> </div>
+    <div class="pdf-doc-mohit-container">
+        <DocumentTopBar />
+        <ResumeMarkdownComponent />
+    </div>
 
-    <FullScreenScrollBar :fs-element-id="'resume-container'" />
+    <template v-if="fullScreenSet">
+        <GamepadComponent />
+        <WebScrollBar :fs-element-id="'resume-container'" />
+        <QrcodeTool v-if="webData.showSharePopup" />
+    </template>
+
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
-    <GamepadComponent v-if="fullScreenSet" />
     <FileWidgets />
 </main>
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const fullScreenSet = getFullScreenSet();
 
