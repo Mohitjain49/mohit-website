@@ -2,7 +2,7 @@
 <footer id="footer" ref="mohit-footer">
     <div class="footer-body">
         <div class="footer-main-icon">
-            <RouterLink to="/" @click="scrollToTop('/')" title="Home Page" pulse-loop>
+            <RouterLink to="/" @click="footerScrollToTop('/')" title="Home Page" pulse-loop>
                 <img :src="mkj_icon" draggable="false" />
             </RouterLink>
         </div>
@@ -12,7 +12,7 @@
             <RouterLink v-for="tab in MAIN_ROUTES" :to="tab.path" pulse-loop
                 :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
-                @click="scrollToTop(tab.path)">
+                @click="footerScrollToTop(tab.path)">
 
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
@@ -24,7 +24,7 @@
             <RouterLink v-for="tab in SECONDARY_ROUTES" :to="tab.path" pulse-loop
                 :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
-                @click="scrollToTop(tab.path)">
+                @click="footerScrollToTop(tab.path)">
 
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
@@ -36,7 +36,7 @@
             <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path" pulse-loop
                 :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
-                @click="scrollToTop(tab.path)">
+                @click="footerScrollToTop(tab.path)">
 
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
@@ -68,7 +68,7 @@
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright/" class="copyright-statement" @click="scrollToTop('/copyright')" pulse-loop>
+        <RouterLink to="/copyright/" class="copyright-statement" @click="footerScrollToTop('/copyright')" pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
@@ -111,10 +111,10 @@ const routePath = computed(() => { return router.currentRoute.value.path; });
  * This scrolls to the top of the webpage if the user won't change routes.
  * @param {String} routeStr The route the button is attached to.
  */
-function scrollToTop(routeStr = "/") {
+function footerScrollToTop(routeStr = "/") {
     if(routeStr.endsWith("/")) { routeStr = routeStr.substring(0, (routeStr.length - 1)); }
     if(routeStr !== routePath.value && (routeStr + "/") !== routePath.value) { return; }
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    scrollToTop(false, 0);
 }
 
 const MAIN_ROUTES = [

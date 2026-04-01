@@ -410,9 +410,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(hashStr === "") { return; }
 
         try {
-            sleep(1).then(() => { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 70)); });
+            goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 70), 10);
         } catch(e) {
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            scrollToTop(true, 0);
         }
     }
 

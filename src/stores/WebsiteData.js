@@ -272,9 +272,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
             allImagesReady().then(() => {
                 try {
-                    goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset));
+                    goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset), 10);
                 } catch(e) {
-                    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                    scrollToTop(true, 0);
                 }
             });
         });
@@ -298,22 +298,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         closeNavMenu();
 
         if(webFooterVisibility.value) {
-            scrollToTop(false);
+            scrollToTop(false, 0);
         } else {
             goToFooter();
-        }
-    }
-
-    /**
-     * This function has the webpage scroll to the top.
-     * @param {Boolean} updateURL If true, this function updates the URL of the webpage.
-     */
-    function scrollToTop(updateURL = true) {
-        if(updateURL) { router.push(router.currentRoute.value.path); }
-        if(fullScreenStore.fullScreenSet) {
-            document.fullscreenElement.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-        } else {
-            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
         }
     }
 
@@ -406,7 +393,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     return { pageView, onFirstMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
-        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop, bypassBodyClick
+        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });
 

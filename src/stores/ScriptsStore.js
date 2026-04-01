@@ -172,12 +172,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         try {
             await nextTick();
             await scripts[currentScriptRoute.value].initCodeScriptElement();
-            await sleep(1);
 
             const hashStr = router.currentRoute.value.hash.substring(1);
-            if(hashStr !== "") { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 80)); }
+            if(hashStr !== "") { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 80), 10); }
         } catch(e) {
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            scrollToTop(true, 0);
         }
     }
 

@@ -43,7 +43,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     /** This function runs whenever the visitor clicks on "x", "y", or the right stick. */
     function onScrollToTopButton() {
-        useWebsiteDataStore().scrollToTop()
+        useScrollStore().gamepadScrollToTop();
         triggerClickSound();
     }
 

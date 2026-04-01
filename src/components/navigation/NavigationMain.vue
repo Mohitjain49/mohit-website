@@ -3,7 +3,11 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" ref="navBar">
+<nav id="mohit-navBar" :style="{ 'height': (scrollProgress.show ? '53px' : '50px') }" ref="navBar">
+    <div class="mohit-main-progressBar" v-if="scrollProgress.show">
+        <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
+    </div>
+
     <div class="mohit-navBar-top">
         <div class="mohit-navBar-icons left">
             <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
@@ -143,6 +147,7 @@
 
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
+const { scrollProgress } = storeToRefs(useScrollStore());
 
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
@@ -191,10 +196,9 @@ watch(navBarSwipe.isSwiping, () => {
  */
 function flashNavOpt(event = new MouseEvent("click"), path = "/") {
     path = (path.endsWith("/") ? path.slice(0, -1) : path);
-    
     if(routePath.value !== path && routePath.value !== (path + "/")) { return; }
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
+    scrollToTop(false, 0);
     addFlashAnimation(event);
     webData.closeNavMenu();
 }
