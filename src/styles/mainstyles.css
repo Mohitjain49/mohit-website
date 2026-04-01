@@ -1,5 +1,6 @@
 @import "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
 @import "@tato30/vue-pdf/style.css";
+@import 'lenis/dist/lenis.css';
 @import "./documentpage.css";
 
 :root {
@@ -54,13 +55,16 @@ body {
     margin: 0;
     padding: 0;
     position: absolute;
-    height: 100%;
+    height: fit-content;
     width: 100%;
     min-width: 350px;
     top: 0;
     left: 0;
     overflow-x: hidden;
     overflow-y: auto;
+}
+#app {
+    height: fit-content;
 }
 
 a, RouterLink {

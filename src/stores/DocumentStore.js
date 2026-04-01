@@ -410,7 +410,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(hashStr === "") { return; }
 
         try {
-            goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 70));
+            sleep(1).then(() => { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 70)); });
         } catch(e) {
             window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         }
@@ -419,7 +419,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     /**
      * This function is triggered whenever someone clicks on an annotation on the custom PDF.
      * @param event The object returned from clicking on an annotation. Go to the following link for more:
-     * https://tato30.github.io/vue-pdf/guide/events.html#annotation
+     * @see {@link https://tato30.github.io/vue-pdf/guide/events.html#annotation}
      */
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
         const type = event.type;

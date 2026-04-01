@@ -8,6 +8,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
+    const scrollStore = useScrollStore();
 
     const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
@@ -84,8 +85,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function setEventListeners() {
         const signal = controller.signal;
-        audioStore.setupClickAudio();
+        history.scrollRestoration = "manual";
 
+        audioStore.setupClickAudio();
+        scrollStore.mountScrollStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();
@@ -101,6 +104,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("keydown", onKeyDown, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
 
+        // This sets a new function in the window object to let static HTML elements access the share popup.
+        window.openShareMenu = (param = "") => { setQRCodePopup(param); }
+
         // This makes sure that the website doesn't scroll with the swipe events made for the navigation bar.
         const mohitNavBar = document.getElementById("mohit-navBar");
         if(mohitNavBar == null) { return; }
@@ -109,9 +115,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             const target = e.target;
             if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
         }, { passive: false, signal });
-
-        // This sets a new function in the window object to let static HTML elements access the share popup.
-        window.openShareMenu = (param = "") => { setQRCodePopup(param); }
     }
 
     /**
@@ -267,13 +270,25 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
             if(hashStr === "" || onHostedFileRoute.value) { return; }
 
-            try {
-                goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset));
-            } catch(e) {
-                window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            }
+            allImagesReady().then(() => {
+                try {
+                    goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset));
+                } catch(e) {
+                    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                }
+            });
         });
     }
+
+    /** This function runs to ensure that all the images in a webpage are loaded before the scroll event takes place. */
+    async function allImagesReady() {
+        const images = Array.from(document.documentElement.querySelectorAll('img'));
+        const promises = images.map(async(img) => {
+            if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+            try { return await img.decode(); } catch (err) {}
+        });
+        return Promise.all(promises);
+    };
 
     /**
      * This function scrolls to the footer of the webpage if it exists.
