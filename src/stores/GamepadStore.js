@@ -85,7 +85,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
  */
 function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();
-    const fullScreenSet = getFullScreenSet();
+    const scrollStore = useScrollStore();
 
     const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
@@ -320,7 +320,7 @@ function useGamepadCursor(index = 0) {
         const scrollValue = (speed * ((direction === "top") ? -1 : 1));
 
         if(scrollElement == undefined) {
-            window.scrollBy(window.scrollX, scrollValue);
+            scrollStore.scrollByIncrement(scrollValue);
         } else {
             scrollElement.scrollBy(0, scrollValue);
         }
@@ -330,7 +330,6 @@ function useGamepadCursor(index = 0) {
      * This function checks whether the cursor is in the main navigation menu or not.
      */
     function getScrollElement() {
-        if(fullScreenSet.value) { return document.fullscreenElement; }
         const navMenu = document.getElementById("mohit-navMenu");
         if(!webData.navMenuOpen || navMenu == null) { return undefined; }
 

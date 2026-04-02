@@ -187,6 +187,89 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     /**
+     * -------------------------------------------------------------------------------
+     * These functions are used to set and record the status of the line options menu.
+     * -------------------------------------------------------------------------------
+     */
+
+    /**
+     * This function sets the status of the line options menu.
+     * @param {MouseEvent} event The event fired by clicking on the mouse.
+     * @param {Number} lineNum The number of the line to be opened. -1 closes the options menu.
+     */
+    function setLineOptions(lineNum = -1) {
+        if(lineNum == -1 || !lineNum) {
+            lineOptions.value.num = -1;
+        } else if(lineNum == lineOptions.value.num && lineOptions.value.onTopRight) {
+            setLineOptionsPlacement(false);
+        } else if(lineNum == lineOptions.value.num && !lineOptions.value.onTopRight) {
+            lineOptions.value.num = -1;
+        } else {
+            lineOptions.value.num = lineNum;
+            placeLineOptionsOnCode(lineNum);
+        }
+    }
+
+    /**
+     * This function sets a boolean that determines whether the code should be wrapped or overflowing.
+     * @param {Boolean | "toggle"} status The new status for wrapping code. If it is set to "toggle", then it just flips the value.
+     */
+    async function setLineOptionsPlacement(status = "toggle") {
+        lineOptions.value.onTopRight = ((status === "toggle") ? !lineOptions.value.onTopRight : status);
+        if(!lineOptions.value.onTopRight) { await placeLineOptionsOnCode(lineOptions.value.num); }
+    }
+
+    /**
+     * This function sets the specific coords for where the popup should be on the code.
+     * @param {Number} lineNum The Line number.
+     */
+    async function placeLineOptionsOnCode(lineNum = -1) {
+        const element = document.getElementById("L" + lineNum);
+        if(element == null) { return; }
+
+        const mainRect = element.getBoundingClientRect();
+        const vertInView = (mainRect.top <= window.innerHeight) && ((mainRect.top + mainRect.height) >= 60);
+        if(!vertInView) { await scrollToLine(lineNum); }
+
+        const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
+        const yNum = (((rect.top + 140) > window.innerHeight) ? (rect.top - 120) : (rect.top + rect.height) );
+        lineOptions.value.style = { left: ((rect.left + rect.width) + "px"), top: (yNum + "px") }
+    }
+
+    /**
+     * This function lets the user copy an attribute of a specific line.
+     * @param {String} attribute The attribute to copy.
+     */
+    function copyLineAttribute(attribute = "text") {
+        const element = document.getElementById("L" + lineOptions.value.num);
+        if(element == null) { return; }
+
+        navigator.clipboard.writeText(element.getAttribute("mohit-code-as-" + attribute)).then(() => {
+            lineOptions.value.lastCopied = attribute;
+            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
+            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
+        }).catch(() => {
+            lineOptions.value.lastCopied = "error";
+            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
+            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
+        });
+    }
+
+    /** This function opens the share popup for a line's permalink. */
+    function shareLinePermalink() {
+        const element = document.getElementById("L" + lineOptions.value.num);
+        if(element != null) { webData.setQRCodePopup(element.getAttribute("mohit-code-as-link")); }
+    }
+
+    /**
+     * This function scrolls to any particular line of code specified by the user.
+     * @param {Number} lineNum The Line number. The default value is the number the line options is open for.
+     */
+    async function scrollToLine(lineNum = lineOptions.value.num) {
+        await goToPageSection(("L" + lineNum), (fullScreenStore.fullScreenSet ? 30 : 80), 0)
+    }
+
+    /**
      * --------------------------------------------------------------------------------
      * These functions are extra functions used by both the store and the script pages.
      * --------------------------------------------------------------------------------
@@ -227,66 +310,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    /**
-     * This function sets the status of the line options menu.
-     * @param {MouseEvent} event The event fired by clicking on the mouse.
-     * @param {Number} lineNum The number of the line to be opened. -1 closes the options menu.
-     */
-    function setLineOptions(lineNum = -1) {
-        if(lineNum == -1 || !lineNum) {
-            lineOptions.value.num = -1;
-        } else if(lineNum == lineOptions.value.num && lineOptions.value.onTopRight) {
-            setLineOptionsPlacement(false);
-        } else if(lineNum == lineOptions.value.num && !lineOptions.value.onTopRight) {
-            lineOptions.value.num = -1;
-        } else {
-            const element = document.getElementById("L" + lineNum);
-            lineOptions.value.num = lineNum;
-
-            const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
-            const yNum = (((rect.top + 140) > window.innerHeight) ? (rect.top - 120) : (rect.top + rect.height) );
-            lineOptions.value.style = { left: ((rect.left + rect.width) + "px"), top: (yNum + "px") }
-        }
-    }
-
-    /**
-     * This function sets a boolean that determines whether the code should be wrapped or overflowing.
-     * @param {Boolean | "toggle"} status The new status for wrapping code. If it is set to "toggle", then it just flips the value.
-     */
-    function setLineOptionsPlacement(status = "toggle") {
-        lineOptions.value.onTopRight = ((status === "toggle") ? !lineOptions.value.onTopRight : status)
-    }
-
-    /**
-     * This function lets the user copy an attribute of a specific line.
-     * @param {String} attribute The attribute to copy.
-     */
-    function copyLineAttribute(attribute = "text") {
-        const element = document.getElementById("L" + lineOptions.value.num);
-        if(element == null) { return; }
-
-        navigator.clipboard.writeText(element.getAttribute("mohit-code-as-" + attribute)).then(() => {
-            lineOptions.value.lastCopied = attribute;
-            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
-            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
-        }).catch(() => {
-            lineOptions.value.lastCopied = "error";
-            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
-            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
-        });
-    }
-
-    /** This function opens the share popup for a line's permalink. */
-    function shareLinePermalink() {
-        const element = document.getElementById("L" + lineOptions.value.num);
-        if(element != null) { webData.setQRCodePopup(element.getAttribute("mohit-code-as-link")); }
-    }
-
     return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, currentScriptLink,
         scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
-        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions,
-        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, setLineOptionsPlacement
+        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
+        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, setLineOptionsPlacement, placeLineOptionsOnCode
     }
 });
 

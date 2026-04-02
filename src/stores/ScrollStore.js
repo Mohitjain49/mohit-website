@@ -20,15 +20,19 @@ export const useScrollStore = defineStore("scroll-store", () => {
     var calculateScrollInterval = null;
 
     const webpageHeight = ref(0);
-    const scrollProgress = ref({ pct: 0, duration: 0, show: false });
+    const scrollProgress = ref({ pct: 0, duration: 0, show: false, targetElement: null });
+    const isAutoScrolling = computed(() => { return scrollProgress.value.show; });
 
     // If the height of the main element changed, lenis resizes itself.
     watch(webpageHeight, () => { if(mounted.value && lenis) { lenis.resize(); } });
 
+    // As the user switches between full screen mode and a normal mode, this makes sure that the lenis instance is properly set.
+    watch(fullScreenSet, () => { sleep(10).then(() => { setLenisInstance(); }); });
+
     /** This function mounts the scroll store. */
     function mountScrollStore() {
         if(mounted.value) { return; }
-        lenis = new Lenis({ autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
+        setLenisInstance();
 
         /** This function runs every frame to see if there is any change to the scroll height. */
         const updateWebpageHeight = () => {
@@ -38,7 +42,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
                     document.body.offsetHeight, 
                     document.documentElement.offsetHeight,
                     document.body.clientHeight, 
-                    document.documentElement.clientHeight
+                    document.documentElement.clientHeight,
+                    (fullScreenSet.value ? document.fullscreenElement.scrollHeight : 0)
                 );
             } catch(e) {
                 webpageHeight.value = 0;
@@ -51,27 +56,44 @@ export const useScrollStore = defineStore("scroll-store", () => {
         mounted.value = true;
     }
 
+    /** This function sets the lenis instance based on the full screen status. */
+    function setLenisInstance() {
+        if(lenis != null) { lenis.destroy(); }
+        if(fullScreenSet.value) {
+            lenis = new Lenis({ wrapper: document.fullscreenElement, autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
+            lenis.resize();
+        } else {
+            lenis = new Lenis({ wrapper: window, autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
+            lenis.resize();
+        }
+    }
+
     /**
      * This function scrolls to the section the visitor requested using Lenis.
      * @param {String} id The element ID of the section.
      * @param {Number} offset The offset from where the element exists. (Works like "scroll-padding-top").
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
-    function scrollToId(id = "start", offset = 0, delay = 0) {
-        if(!mounted.value) { return; }
-        const target = document.getElementById(id);
-        const initDuration = (Math.abs((target.getBoundingClientRect().top + window.scrollY) - window.scrollY) / 4000);
-        const finalDuration = Math.max(0.75, Math.min(initDuration, 3));
+    async function scrollToId(id = "start", offset = 0, delay = 0) {
+        return new Promise((resolve, reject) => {
+            if(!mounted.value) { reject("Website Not Loaded Yet."); }
+            const target = document.getElementById(id);
+            if(target == null) { reject("Element with id \"\""); }
 
-        scrollProgress.value.duration = finalDuration;
-        scrollStartTime = dayjs(new Date());
+            const initDuration = (Math.abs((target.getBoundingClientRect().top + window.scrollY) - window.scrollY) / 4000);
+            const finalDuration = Math.max(0.75, Math.min(initDuration, 3));
 
-        if(parseFloat(window.getComputedStyle(target).getPropertyValue('scroll-margin-top')) != 0) { offset = 0; }
-        sleep(delay).then(() => { lenis.scrollTo(target, {
-            offset, duration: finalDuration, lock: true,
-            onStart: () => { setScrollInterval(true); },
-            onComplete: () => { setScrollInterval(false); }
-        }); });
+            scrollProgress.value.targetElement = target;
+            scrollProgress.value.duration = finalDuration;
+            scrollStartTime = dayjs(new Date());
+
+            if(parseFloat(window.getComputedStyle(target).getPropertyValue('scroll-margin-top')) != 0) { offset = 0; }
+            sleep(delay).then(() => { lenis.scrollTo(target, {
+                offset, duration: finalDuration, lock: true,
+                onStart: () => { setScrollInterval(true); },
+                onComplete: () => { setScrollInterval(false); resolve("Scroll Complete!"); }
+            }); });
+        });
     }
 
     /**
@@ -80,30 +102,34 @@ export const useScrollStore = defineStore("scroll-store", () => {
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
     function scrollToTop(instant = false, delay = 0) {
-        if(instant) { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); }
-        if(!mounted.value || instant) { return; }
-        const duration = Math.max(0.75, Math.min((window.scrollY / 4000), 3));
+        return new Promise((resolve, reject) => {
+            if(!mounted.value) { reject("Website Not Loaded Yet."); }
+            const duration = Math.max(0.75, Math.min((window.scrollY / 4000), 3));
 
-        scrollProgress.value.duration = duration;
-        scrollStartTime = dayjs(new Date());
+            scrollProgress.value.duration = duration;
+            scrollStartTime = dayjs(new Date());
 
-        sleep(delay).then(() => { lenis.scrollTo("top", {
-            duration, lock: true,
-            onStart: () => { setScrollInterval(true); },
-            onComplete: () => { setScrollInterval(false); }
-        }); });
+            sleep(delay).then(() => { lenis.scrollTo("top", {
+                duration, lock: true, immediate: instant,
+                onStart: () => { setScrollInterval(true); },
+                onComplete: () => { setScrollInterval(false); resolve("Scroll Complete!"); }
+            }); });
+        });
+    }
+
+    /**
+     * This function scrolls by adding an increment to the current scroll.
+     * @param {Number} increment The increment scroll.
+     */
+    function scrollByIncrement(increment) {
+        lenis.scrollTo(lenis.scroll + increment, { immediate: true, force: true });
     }
 
     /** This function handles auto scrolling for the gamepad. */
     function gamepadScrollToTop() {
         const routerObj = router.currentRoute.value;
         if(routerObj.hash !== "") { router.push(routerObj.path); }
-
-        if(fullScreenSet.value) {
-            document.fullscreenElement.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-        } else {
-            scrollToTop(false, 0);
-        }
+        scrollToTop(false, 10);
     }
 
     /**
@@ -114,7 +140,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(!start && calculateScrollInterval != null) {
             clearInterval(calculateScrollInterval);
             calculateScrollInterval = null;
-            scrollProgress.value = { show: false, pct: 0, duration: 0 }
+            scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null }
         } else if(start && calculateScrollInterval == null) {
             calculateScrollInterval = setInterval(() => { calculateScrollProgress(); }, 10);
             scrollProgress.value.show = true;
@@ -132,7 +158,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This easing function is used by Lenis to make cool animations. */
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
-    return { mounted, scrollProgress, mountScrollStore, scrollToId, scrollToTop, gamepadScrollToTop }
+    return { mounted, scrollProgress, isAutoScrolling,
+        mountScrollStore, scrollToId, scrollToTop, scrollByIncrement, gamepadScrollToTop
+    }
 });
 
 /**
@@ -141,8 +169,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
  * @param {Number} offset The offset from where the element exists. (Works like "scroll-padding-top").
  * @param {Number} delay How much time to delay the scroll before starting it.
  */
-export function goToPageSection(id = "start", offset = 0, delay = 0) {
-    useScrollStore().scrollToId(id, offset, delay);
+export async function goToPageSection(id = "start", offset = 0, delay = 0) {
+    return useScrollStore().scrollToId(id, offset, delay);
 }
 
 /**
@@ -150,11 +178,17 @@ export function goToPageSection(id = "start", offset = 0, delay = 0) {
  * @param {Boolean} instant If true, this function skips the animation and instantly takes the user to the top.
  * @param {Number} delay How much time to delay the scroll before starting it.
  */
-export function scrollToTop(instant = false, delay = 0) {
-    useScrollStore().scrollToTop(instant, delay);
+export async function scrollToTop(instant = false, delay = 0) {
+    return useScrollStore().scrollToTop(instant, delay);
 }
 
 /** This function scrolls to the footer and applies the proper offset. */
 export function goToFooter() {
     try { goToPageSection('footer', 50); } catch(e) {}
+}
+
+/** This function returns a computed object that determines if the website is auto scrolling or not. */
+export function getAutoScrollingStatus() {
+    const { isAutoScrolling } = storeToRefs(useScrollStore());
+    return computed(() => { return isAutoScrolling.value; });
 }

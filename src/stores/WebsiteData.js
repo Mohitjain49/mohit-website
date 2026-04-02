@@ -215,6 +215,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function onKeyDown(event) {
         const key = event.key;
+        if(event.repeat) { return; }
+
         if(event.ctrlKey && event.altKey) {
             if(key === "w" || key === "W") {
                 toggleWakeLock();

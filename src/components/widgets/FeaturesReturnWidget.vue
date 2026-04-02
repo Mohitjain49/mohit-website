@@ -1,11 +1,23 @@
 <template>
-<RouterLink to="/features/" class="features-return-widget animate__animated animate__fadeInUp" title="Return To Features Page">
-    <FontAwesomeIcon icon="fa-bolt-lightning" />
-</RouterLink>
+<div ref="features-widget" class="features-widget-wrapper">
+    <RouterLink to="/features/" id="features-return-widget" title="Return To Features Page" pulse-loop>
+        <FontAwesomeIcon icon="fa-bolt-lightning" />
+    </RouterLink>
+</div>
 </template>
 
+<script setup>
+const featuresWidgetRef = useTemplateRef('features-widget');
+usePulseLoopAnimation(featuresWidgetRef);
+
+onMounted(() => { nextTick(() => {
+    document.getElementById("features-return-widget")?.classList.add("animate__animated", "animate__fadeInUp");
+    setTimeout(() => { document.getElementById("features-return-widget")?.classList.remove("animate__animated", "animate__fadeInUp"); }, 1100);
+}); });
+</script>
+
 <style scoped>
-.features-return-widget {
+#features-return-widget {
     position: fixed;
     bottom: 20px;
     left: 20px;
@@ -23,7 +35,7 @@
     font-size: 25px;
     transition: var(--default-transition), scale 0.2s;
 }
-.features-return-widget:hover {
+#features-return-widget:hover {
     box-shadow: 0px 0px 20px var(--lightning-yellow);
     scale: 1.1;
 }
