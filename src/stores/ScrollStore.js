@@ -56,6 +56,14 @@ export const useScrollStore = defineStore("scroll-store", () => {
         mounted.value = true;
     }
 
+    /** This function unmounts the scroll store. */
+    function unmountScrollStore() {
+        if(!mounted.value) { return; }
+        if(animationFrame != null) { cancelAnimationFrame(animationFrame); }
+        lenis.destroy();
+        mounted.value = false;
+    }
+
     /** This function sets the lenis instance based on the full screen status. */
     function setLenisInstance() {
         if(lenis != null) { lenis.destroy(); }
@@ -70,7 +78,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     /**
      * This function scrolls to the section the visitor requested using Lenis.
-     * @param {String} id The element ID of the section.
+     * @param {String} id The element ID of the section. Make sure it doesn't start with a "#" character.
      * @param {Number} offset The offset from where the element exists. (Works like "scroll-padding-top").
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
@@ -159,7 +167,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
     return { mounted, scrollProgress, isAutoScrolling,
-        mountScrollStore, scrollToId, scrollToTop, scrollByIncrement, gamepadScrollToTop
+        mountScrollStore, unmountScrollStore, scrollToId, scrollToTop, scrollByIncrement, gamepadScrollToTop
     }
 });
 

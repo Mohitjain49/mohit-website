@@ -226,8 +226,6 @@ const MAIN_BTNS = [
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "My Experience" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "My Projects" },
     { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "My Resume" },
-    { path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
-    { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
 ];
 
 const CENTER_LINKS = [
@@ -238,7 +236,8 @@ const CENTER_LINKS = [
 ];
 
 const NAV_MENU_EXTRAS = [
-    { path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
+    { path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
+    { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
     { path: "/copyright/", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
 ];
 </script>

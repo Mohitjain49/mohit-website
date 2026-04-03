@@ -21,6 +21,9 @@
         </a>
     </div>
     <div class="mohit-document-topBar-sideSection">
+        <button class="flame" v-if="documentStore.onCreateGithubRepoRoute" @click="documentStore.scrollToPage(2)" title="Scroll To Table Of Contents" pulse-loop>
+            <FontAwesomeIcon icon="fa-list" />
+        </button>
         <button v-if="!fullScreenStore.fullScreenSet" @click="openDocumentMenu()" title="Open Document Options" pulse-loop>
             <FontAwesomeIcon icon="fa-file-export" />
         </button>

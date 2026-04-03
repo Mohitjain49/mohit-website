@@ -80,6 +80,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000);
     });
 
+    // This tracks the router hash value for changes so that the website auto-scrolls if the hash changes in a way not triggered by the website itself.
+    watch(() => router.currentRoute.value.hash, async (newValue) => {
+        await sleep(50);
+        if(scrollStore.isAutoScrolling) { return; }
+
+        if(newValue.length > 0) {
+            try { goToPageSection(newValue.substring(1), 0, 0) } catch(e) {}
+        } else {
+            scrollToTop(false, 0);
+        }
+    })
+
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
@@ -321,7 +333,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Number} index The index of what menu should be open.
      */
     function setMenuOpen(index = -1) {
-        menuOpen.value = index;
+        menuOpen.value = (scrollStore.isAutoScrolling ? -1 : index);
     }
 
     /** This function closes any open Navigation Menu. */

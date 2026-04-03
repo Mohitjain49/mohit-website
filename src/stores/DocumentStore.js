@@ -431,8 +431,19 @@ export const useDocumentStore = defineStore("document-store", () => {
                 window.open(url, "_blank");
             }
         } else if(type === "internal-link") {
-            goToPageSection(("page_" + event.data.referencedPage), ((event.data.offset.bottom < 500) ? -150 : 70));
+            goToPageSection("page_" + event.data.referencedPage);
         }
+    }
+
+    /**
+     * This function scrolls to any page on a document webpage.
+     * @param {Number} pageNum The number of the specified page.
+     */
+    function scrollToPage(pageNum = 1) {
+        const id = ("page_" + pageNum);
+        if(document.getElementById(id) == null) { return; }
+        router.push(routePath.value + "#" + id);
+        try { goToPageSection(id, 70); } catch(e) {}
     }
 
     return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported,
@@ -440,7 +451,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink,
         onDocumentRoute, onAnyResumeRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
+        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
         mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });

@@ -29,7 +29,7 @@
         </template>
         <template v-else-if="documentStore.onCreateGithubRepoRoute">
             <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-                <button class="mohit-navMenu-mainOpt" @click="scrollToTableOfContents(2)" pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.scrollToPage(2)" pulse-loop>
                     <span> See Table Of Contents </span>
                     <font-awesome-icon icon="fa-list" />
                 </button>
@@ -160,14 +160,6 @@ const router = useRouter();
 const docMenu = shallowRef(null);
 useSwipeToCloseMenu(docMenu);
 usePulseLoopAnimation(docMenu);
-
-/**
- * This function scrolls to the page the table of contents is on.
- * @param {Number} pageNum The number of the page that the table of contents is on.
- */
-function scrollToTableOfContents(pageNum = 2) {
-    try { goToPageSection(("page_" + pageNum), 70); } catch(e) {}
-}
 
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";
 const GOOGLE_CHOOSE_FOLDER_TITLE = "Choose The Folder In Your Google Drive Where You Would Like To Keep My Document.";
