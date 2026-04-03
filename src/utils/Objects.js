@@ -898,6 +898,19 @@ export const FEATURE_ENTITIES = [
             faIcon: true,
             size: "100"
         }
+    },
+    {
+        name: "Bundle Visualizer",
+        link: (PERSONAL_WEBSITE_REPOSITORY_LINK + "/tree/gh-pages"),
+        color: "#c69dc3",
+        desc: "I used the \"rollup-plugin-visualizer\" plugin within my code to visualize and modify my build bundles. " +
+            "You can view these bundles by clicking here.",
+
+        icon: {
+            id: "fa-cubes-stacked",
+            faIcon: true,
+            size: "100"
+        }
     }
 ];
 

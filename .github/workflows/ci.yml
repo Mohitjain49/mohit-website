@@ -3,7 +3,7 @@ name: Vue.js CI
 on: [push]
 
 permissions:
-    contents: write
+  contents: write
 
 jobs:
   build:
@@ -23,7 +23,10 @@ jobs:
       - name: Building...
         run: npm run build
 
-      - name: Deploy 🚀
+      - name: Deploy Bundles To GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: bundle-visualizer
+          clean: true
+          clean-exclude: |
+            README.md

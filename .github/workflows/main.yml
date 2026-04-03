@@ -5,6 +5,9 @@ on:
     branches:
       - main # Set this to your deployment branch
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,7 +31,7 @@ jobs:
           VITE_GOOGLE_CLOUD_APP_ID: ${{ secrets.VITE_GOOGLE_CLOUD_APP_ID }}
         run: npm run build
 
-      - name: Deploy to AWS S3 and CloudFront with custom script
+      - name: Deploy to AWS S3 and CloudFront with Custom Script
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -37,4 +40,13 @@ jobs:
           AWS_REGION: ${{ 'us-east-1' }}
           BUILD_OUTPUT: ${{ 'dist' }}
         run: npm run deploy
+
+      - name: Deploy Bundles To GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: bundle-visualizer
+          clean: true
+          clean-exclude: |
+            README.md
 
