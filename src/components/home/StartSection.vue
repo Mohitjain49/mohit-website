@@ -3,7 +3,7 @@
     <div id="start-innerContainer" ref="startContent">
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
-            Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" style="color: white;">iVue</a></span>
+            Lead Software Developer At <span><RouterLink to="/#ivue" style="color: white;" @click="goToIvueSection()">iVue</RouterLink></span>
         </div>
         <div class="start-section-subtitle">
             Co-creator of <span><a :href="WORLDS_IVUE_LINK" style="color: #48A548;">Worlds iVue</a></span>
@@ -75,7 +75,6 @@ const boxes = ref([]);
 useIntersectionObserver(startContent, ([{ isIntersecting }]) => {
     setNameTransitions(isIntersecting);
 });
-
 watch(visitorLeftPage, () => {
     if(visitorLeftPage.value) { hideStartContactDropdown(); }
 });
@@ -179,6 +178,11 @@ function hideStartContactDropdown() {
  */
 function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
     return { color, borderColor: color, boxShadow: ("0px 0px 10px 1px " + color) }
+}
+
+/** This function takes the visitor to the ivue section of my website. */
+function goToIvueSection() {
+    try { goToPageSection('ivue'); } catch(e) {}
 }
 
 const MAIN_BTNS = [

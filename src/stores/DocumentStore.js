@@ -424,12 +424,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
         const type = event.type;
         if(type === "link") {
-            const url = event.data.url;
-            if(url.includes(PERSONAL_WEBSITE_LINK)) {
-                router.push("/" + url.replace(PERSONAL_WEBSITE_LINK, ""));
-            } else {
-                window.open(url, "_blank");
-            }
+            window.open(event.data.url, "_blank");
         } else if(type === "internal-link") {
             goToPageSection("page_" + event.data.referencedPage);
         }

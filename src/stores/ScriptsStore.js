@@ -40,6 +40,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const currentScriptLink = computed(() => { return ((currentScriptRoute.value == -1) ? "" : scripts[currentScriptRoute.value].link) });
     const onScriptRoute = computed(() => { return (currentScriptRoute.value != -1); });
     const onDeployScriptRoute = computed(() => { return scripts[0].onRoute.value; });
+    const onGamepadScriptRoute = computed(() => { return (currentScriptLink.value >= 1 || currentScriptLink.value <= 3); });
 
     const downloadIcon = computed(() => {
         const downloadObj = scriptDownloadStatus.value;
@@ -310,7 +311,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, currentScriptLink,
+    return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute, currentScriptLink,
         scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
@@ -331,10 +332,8 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
     const blob = ref(null);
     const router = useRouter();
 
+    const htmlLoaded = ref(0);
     const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
-    const htmlLoaded = ref({ status: false, error: false, progress: 0 });
-
-    const progressStr = computed(() => { return (String(htmlLoaded.value.progress) + "%"); });
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted script. */
@@ -355,13 +354,10 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
      * This function returns a string consisting of HTML that can be displayed to a user. 
      */
     async function initCodeScriptElement() {
-        if(htmlLoaded.value.status || htmlLoaded.value.error) { return; }
+        if(htmlLoaded.value != 0) { return; }
         try {
             const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
-            setLoadedProgress(20);
-
             const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
-            setLoadedProgress(40);
 
             var lang = null;
             if(suffix.endsWith("js")) {
@@ -369,20 +365,15 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
             } else if(suffix.endsWith("vue")) {
                 lang = (await import("shiki/dist/langs/vue.mjs"));
             }
-            setLoadedProgress(60);
 
-            const themeVitesseBlack = (await import("shiki/dist/themes/vitesse-black.mjs"));
-            setLoadedProgress(80);
-
+            const themeMaterialOcean = (await import("shiki/dist/themes/material-theme-ocean.mjs"));
             const highlighter = await createHighlighterCore({
-                themes: [themeVitesseBlack], langs: [lang],
+                themes: [themeMaterialOcean], langs: [lang],
                 engine: createOnigurumaEngine(import('shiki/wasm')) 
             });
-            setLoadedProgress(99);
 
-            await sleep(100);
             html.value = highlighter.codeToHtml(code, {
-                theme: "vitesse-black",
+                theme: "material-theme-ocean",
                 lang: (suffix.endsWith("js") ? "javascript" : "vue"),
                 transformers: [{
                     pre(node) { node.properties.id = "mohit-scriptPage-code"; },
@@ -390,20 +381,12 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
                     line(node, lineNum) { transformCodeLine(this.addClassToHast, node, lineNum); }
                 }]
             });
-            htmlLoaded.value = { status: true, error: false, progress: 100 }
+            htmlLoaded.value = 1;
         } catch(e) {
             console.error(e);
             html.value = "<pre> <div class=\"loading-spinner\"></div> </pre>";
-            htmlLoaded.value = { status: false, error: true, progress: htmlLoaded.value.progress }
+            htmlLoaded.value = -1;
         }
-    }
-
-    /**
-     * This function sets the progress in creating the code script html.
-     * @param {Number} num The new number (between 0 and 100) that represents the new progress status.
-     */
-    function setLoadedProgress(num) {
-        htmlLoaded.value.progress = num;
     }
 
     /**
@@ -456,7 +439,7 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         }).join("");
     }
 
-    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, progressStr,
+    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded,
         initBlob, checkPath, initCodeScriptElement
     }
 }

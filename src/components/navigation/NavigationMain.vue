@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" :style="{ 'height': (scrollProgress.show ? '53px' : '50px') }" ref="navBar">
+<nav id="mohit-navBar" :style="{ 'height': navBarHeight }" ref="navBar">
     <div class="mohit-main-progressBar" v-if="scrollProgress.show">
         <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
     </div>
@@ -126,7 +126,7 @@
     </div>
 </Transition>
 
-<div v-show="showNavWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
+<div v-show="showNavWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons" ref="navWidgets">
     <button v-if="showWakeLockWidget" :title="webData.wakeLockTitle" pulse-loop
         @click="(event) => { onWakeLockButtonClick(event); }"
         class="mohit-navBar-statusIcon wakelock">
@@ -173,7 +173,9 @@ const showWakeLockWidget = computed(() => {
     const isActive = webData.wakeLock.isActive;
     return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
 });
+
 const showNavWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected)); });
+const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
 
 // This tracks touch "swipe" events for the navigation bar so that the user can change the page if they swipe left or right.
 watch(navBarSwipe.isSwiping, () => {

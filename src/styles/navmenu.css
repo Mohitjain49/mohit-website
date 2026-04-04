@@ -246,6 +246,7 @@
     color: inherit;
     font-family: 'Lexend', sans-serif;
     font-size: 13px;
+    overflow: hidden;
 }
 .mohit-navMenu-mainOpt:hover {
     background-color: rgba(40, 40, 40);
@@ -263,6 +264,12 @@
     height: 16px;
     user-select: none;
     margin-left: 3px;
+}
+.mohit-navMenu-mainOpt img.ivue {
+    all: unset;
+    height: 14px;
+    margin-left: 1px;
+    user-select: none;
 }
 
 .mohit-navMenu-opt-break {

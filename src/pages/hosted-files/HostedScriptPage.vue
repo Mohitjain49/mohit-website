@@ -5,7 +5,7 @@
 <template>
 <ScriptsMenu />
 <main id="script-page" class="personal-web-body transparent">
-    <div v-if="scriptsStore.scripts[index].htmlLoaded.status" class="mohit-main-script" id="mohit-main-script">
+    <div v-if="(scriptsStore.scripts[index].htmlLoaded == 1)" class="mohit-main-script" id="mohit-main-script">
         <div ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
                 <button class="lightblue" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
@@ -35,19 +35,13 @@
         </div>
         <div ref="script-html" class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
     </div>
-    <template v-else-if="scriptsStore.scripts[index].htmlLoaded.error">
-        <div class="code-file-loadingBar-container">
-            <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
-        </div>
-    </template>
-    <template v-else>
-        <div class="code-file-loadingBar-container">
-            <div class="code-file-loadingBar">
-                <div class="inner" :style="{ 'width': scriptsStore.scripts[index].progressStr }"></div>
-            </div>
-            <p> {{ scriptsStore.scripts[index].progressStr }} </p>
-        </div>
-    </template>
+
+    <div v-else-if="(scriptsStore.scripts[index].htmlLoaded == -1)" class="code-file-loading-container">
+        <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
+    </div>
+    <div v-else class="code-file-loading-container">
+        <FontAwesomeIcon class="code-file-loadingSpinner" icon="fa-spinner" :spin-pulse="true" />
+    </div>
 
     <template v-if="fullScreenStore.fullScreenSet">
         <QrcodeTool v-if="(webData.showSharePopup)" />

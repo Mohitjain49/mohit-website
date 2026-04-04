@@ -13,9 +13,15 @@
                 :title="('Scroll To The ' + section.title + ' Section')"
                 :to="getSectionLink(section.id)">
 
-                <span> {{ section.title }} </span>
-                <font-awesome-icon v-if="section.faIcon" :icon="section.icon" />
-                <img v-else :src="section.icon" draggable="false" />
+                <template v-if="section.title === 'iVue'">
+                    <img :src="ivue_logo" draggable="false" class="ivue" />
+                    <img :src="section.icon" draggable="false" />
+                </template>
+                <template v-else>
+                    <span> {{ section.title }} </span>
+                    <font-awesome-icon v-if="section.faIcon" :icon="section.icon" />
+                    <img v-else :src="section.icon" draggable="false" />
+                </template>
             </RouterLink>
         </div>
         <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
@@ -43,7 +49,9 @@
 </template>
 
 <script setup>
+import ivue_logo from "@/assets/ivue/iVue_White_Text_Cropped.png";
 const props = defineProps({ routes: { type: Array, default: [] } });
+
 const router = useRouter();
 const webData = useWebsiteDataStore();
 
