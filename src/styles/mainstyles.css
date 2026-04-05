@@ -54,7 +54,7 @@ html {
 body {
     margin: 0;
     padding: 0;
-    position: absolute;
+    position: relative;
     height: fit-content;
     width: 100%;
     min-width: 350px;
@@ -90,7 +90,7 @@ button {
 }
 
 .personal-web-body {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     padding-top: 60px;
@@ -120,7 +120,7 @@ button {
 }
 
 #resume-container {
-    position: absolute;
+    position: relative;
     padding-top: 70px;
     top: 0;
     left: 0;

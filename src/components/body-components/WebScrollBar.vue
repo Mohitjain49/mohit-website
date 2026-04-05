@@ -11,7 +11,7 @@ const props = defineProps({ fsElementId: { type: String, required: true } });
 const { vScrollbarStyle, vertical } = useScrollPercentage(props.fsElementId);
 
 const interactiveScroll = useTemplateRef('scrollbar-inner');
-const { pressed: mousePressed } = useMousePressed({ target: interactiveScroll });
+const { pressed: mousePressed } = useMousePressed({ target: interactiveScroll, touch: false });
 const { y: mouseY } = useMouse();
 
 const showScrollBar = computed(() => { return (vertical.value.inView < 100); });

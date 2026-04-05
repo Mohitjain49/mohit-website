@@ -20,7 +20,7 @@ function addSitemapXsl() {
         }
 
         writeFileSync(sitemapPath, newContent, 'utf8');
-        console.log('✅ sitemap.xml updated with XSL reference');
+        console.log('✅ Successfully added XSL reference to sitemap.xml!');
     } else {
         console.warn(`⚠️ sitemap.xml not found at ${sitemapPath}`);
     }
@@ -42,7 +42,7 @@ function addIconTagsToBundleVisualizers() {
 
         $('head').append('<link rel="icon" href="https://www.mohit-jain.com/static-icons/Personal_Icon_Expanded_Rounded.png">');
         writeFileSync(filePath, $.html(), 'utf8');
-        console.log("✅ Successfully updated " + ((i == 0) ? "Client" : "Server") + " Bundle Visualizer");
+        console.log("✅ Successfully added icon tag to " + ((i == 0) ? "Client" : "Server") + " Bundle Visualizer!");
     }
 }
 

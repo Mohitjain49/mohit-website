@@ -81,16 +81,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     });
 
     // This tracks the router hash value for changes so that the website auto-scrolls if the hash changes in a way not triggered by the website itself.
-    watch(() => router.currentRoute.value.hash, async (newValue) => {
+    watch(router.currentRoute, async (newValue, oldValue) => {
         await sleep(50);
         if(scrollStore.isAutoScrolling) { return; }
 
-        if(newValue.length > 0) {
+        if(newValue.hash.length > 0) {
             try { goToPageSection(newValue.substring(1), 0, 0) } catch(e) {}
-        } else {
+        } else if(newValue.name === oldValue.name) {
             scrollToTop(false, 0);
         }
-    })
+    }, { deep: true });
 
     /**
      * This function adds event listeners to the website as soon as its loaded.
