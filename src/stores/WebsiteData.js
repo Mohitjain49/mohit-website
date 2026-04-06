@@ -87,7 +87,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         if(newValue.hash.length > 0) {
             try { goToPageSection(newValue.substring(1), 0, 0) } catch(e) {}
-        } else if(newValue.name === oldValue.name) {
+        } else if(newValue.name === oldValue.name && newValue.query === oldValue.query) {
             scrollToTop(false, 0);
         }
     }, { deep: true });
