@@ -33,50 +33,32 @@
 
 <script setup>
 const router = useRouter();
-const route = useRoute();
 const gSearchInput = ref("");
 
 const isDarkMode = ref(false);
-const directionsOpen = ref(false);
-watch(() => route.hash, () => { setDirectionsComp(); });
+const directionsOpen = computed(() => { return (router.currentRoute.value.hash === "#directions"); });
 
 onMounted(() => {
     initWebData();
-    setDirectionsComp();
-
     if((typeof window !== 'undefined') && (typeof window.matchMedia === 'function')) {
         if(window.matchMedia('(prefers-color-scheme: dark)').matches) { toggleDarkMode(); }
     }
 });
 
-/**
- * This function toggles whether the page is in dark mode or not.
- */
+/** This function toggles whether the page is in dark mode or not. */
 function toggleDarkMode() {
-    isDarkMode.value = !isDarkMode.value
+    isDarkMode.value = !isDarkMode.value;
 }
 
-/**
- * This function toggles whether the directions for the assignments are open or not.
- */
+/** This function toggles whether the directions for the assignments are open or not. */
 function toggleDirections() {
-    router.push({ path: route.path, hash: (directionsOpen.value ? '' : '#directions') });
+    router.push({ path: router.currentRoute.value.path, hash: (directionsOpen.value ? '' : '#directions') });
 }
 
-/**
- * This function opens the directions component if the hash value is there.
- */
-function setDirectionsComp() {
-    directionsOpen.value = (route.hash === "#directions");
-}
-
-/**
- * This function opens up Google.com to search up something the visitor wants.
- */
+/** This function opens up Google.com to search up something the visitor wants. */
 function searchOnGoogle() {
     if(gSearchInput.value === "") { return; }
-    const url = `https://www.google.com/search?q=${encodeURIComponent(gSearchInput.value)}`;
-    window.open(url, "_blank"); 
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(gSearchInput.value)}`, "_blank"); 
 }
 
 useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",

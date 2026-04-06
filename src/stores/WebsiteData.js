@@ -371,6 +371,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
+     * This function triggers the browser to share text To The User.
+     * @param {String} link The text to share.
+     */
+    async function shareText(text = PERSONAL_WEBSITE_LINK) {
+        if(!shareSupported) { return; }
+        await share({ text: ("Sharing Link From " + PERSONAL_WEBSITE_LINK + "\n" + text), title: "Sharing Text..." });
+    }
+
+    /**
      * This function triggers the browser to share a link.
      * @param {String} link The link to share.
      */
@@ -407,7 +416,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     return { pageView, onFirstMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
-        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
+        shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });
 
