@@ -4,11 +4,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     var wakeLockTimeout = null;
 
     const gamepadStore = useGamepadStore();
-    const documentStore = useDocumentStore();
     const scriptsStore = useScriptsStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
+    const scrollStore = useScrollStore();
 
     const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
@@ -80,14 +80,27 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000);
     });
 
+    // This tracks the router hash value for changes so that the website auto-scrolls if the hash changes in a way not triggered by the website itself.
+    watch(router.currentRoute, async (newValue, oldValue) => {
+        await sleep(50);
+        if(scrollStore.isAutoScrolling) { return; }
+
+        if(newValue.hash.length > 0) {
+            try { goToPageSection(newValue.substring(1), 0, 0) } catch(e) {}
+        } else if(newValue.name === oldValue.name && newValue.query === oldValue.query) {
+            scrollToTop(false, 0);
+        }
+    }, { deep: true });
+
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
     function setEventListeners() {
         const signal = controller.signal;
-        audioStore.setupClickAudio();
+        history.scrollRestoration = "manual";
 
-        documentStore.mountDocumentStore();
+        audioStore.setupClickAudio();
+        scrollStore.mountScrollStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();
@@ -102,6 +115,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
         document.body.addEventListener("keydown", onKeyDown, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
+
+        // This sets a new function in the window object to let static HTML elements access the share popup.
+        window.openShareMenu = (param = "") => { setQRCodePopup(param); }
 
         // This makes sure that the website doesn't scroll with the swipe events made for the navigation bar.
         const mohitNavBar = document.getElementById("mohit-navBar");
@@ -127,6 +143,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function resizePageComponents() {
         const windowWidth = window.innerWidth;
         gamepadStore.resetCursorPositions();
+        scriptsStore.setLineOptions(-1);
         
         if(windowWidth <= 600) {
             pageView.value = 2;
@@ -143,7 +160,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function onDocumentBodyClick(event = new MouseEvent("click")) {
         audioStore.confirmClickSound(event);
-        if(!checkNavigationElement(event.target)) { closeNavMenu(); }
+        const element = event.target;
+        if(!checkNavigationElement(element)) { closeNavMenu(); }
+
+        const lineOptions = document.getElementById("mohit-line-options");
+        if(lineOptions != null) {
+            const lineOptionsElements = Array.from(lineOptions.querySelectorAll('*'));
+            const pattern = new RegExp("^L" + "\\d+$");
+
+            const lineId = element.closest("span")?.id
+            if(lineOptions === element || lineOptionsElements.includes(element) || pattern.test(lineId)) { return; }
+            scriptsStore.setLineOptions(-1);
+        }
     }
 
     /**
@@ -199,6 +227,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function onKeyDown(event) {
         const key = event.key;
+        if(event.repeat) { return; }
+
         if(event.ctrlKey && event.altKey) {
             if(key === "w" || key === "W") {
                 toggleWakeLock();
@@ -254,13 +284,25 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
             if(hashStr === "" || onHostedFileRoute.value) { return; }
 
-            try {
-                goToPageSection(hashStr, pixelOffset);
-            } catch(e) {
-                window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            }
+            allImagesReady().then(() => {
+                try {
+                    goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset), 10);
+                } catch(e) {
+                    scrollToTop(true, 0);
+                }
+            });
         });
     }
+
+    /** This function runs to ensure that all the images in a webpage are loaded before the scroll event takes place. */
+    async function allImagesReady() {
+        const images = Array.from(document.documentElement.querySelectorAll('img'));
+        const promises = images.map(async(img) => {
+            if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+            try { return await img.decode(); } catch (err) {}
+        });
+        return Promise.all(promises);
+    };
 
     /**
      * This function scrolls to the footer of the webpage if it exists.
@@ -270,22 +312,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         closeNavMenu();
 
         if(webFooterVisibility.value) {
-            scrollToTop(false);
+            scrollToTop(false, 0);
         } else {
             goToFooter();
-        }
-    }
-
-    /**
-     * This function has the webpage scroll to the top.
-     * @param {Boolean} updateURL If true, this function updates the URL of the webpage.
-     */
-    function scrollToTop(updateURL = true) {
-        if(updateURL) { router.push(router.currentRoute.value.path); }
-        if(fullScreenStore.fullScreenSet) {
-            document.fullscreenElement.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-        } else {
-            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
         }
     }
 
@@ -304,7 +333,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Number} index The index of what menu should be open.
      */
     function setMenuOpen(index = -1) {
-        menuOpen.value = index;
+        menuOpen.value = (scrollStore.isAutoScrolling ? -1 : index);
     }
 
     /** This function closes any open Navigation Menu. */
@@ -339,6 +368,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function openQRCodePopup() {
         setQRCodePopup('main');
+    }
+
+    /**
+     * This function triggers the browser to share text To The User.
+     * @param {String} link The text to share.
+     */
+    async function shareText(text = PERSONAL_WEBSITE_LINK) {
+        if(!shareSupported) { return; }
+        await share({ text: ("Sharing Link From " + PERSONAL_WEBSITE_LINK + "\n" + text), title: "Sharing Text..." });
     }
 
     /**
@@ -378,7 +416,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     return { pageView, onFirstMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
-        shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, scrollToTop, bypassBodyClick
+        shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });
 

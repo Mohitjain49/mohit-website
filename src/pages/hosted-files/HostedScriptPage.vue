@@ -1,38 +1,84 @@
+<style>
+@import "@/styles/scriptpage.css";
+</style>
+
 <template>
 <ScriptsMenu />
 <main id="script-page" class="personal-web-body transparent">
-    <template v-if="scriptsStore.scripts[index].htmlLoaded.status">
-        <div class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
-    </template>
-    <template v-else-if="scriptsStore.scripts[index].htmlLoaded.error">
-        <div class="code-file-loadingBar-container">
-            <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
-        </div>
-    </template>
-    <template v-else>
-        <div class="code-file-loadingBar-container">
-            <div class="code-file-loadingBar">
-                <div class="inner" :style="{ 'width': scriptsStore.scripts[index].progressStr }"></div>
+    <div v-if="(scriptsStore.scripts[index].htmlLoaded == 1)" class="mohit-main-script" id="mohit-main-script">
+        <div ref="script-options" class="mohit-main-script-top">
+            <div class="mohit-main-script-top-sideSection">
+                <button class="lightblue" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
+                    <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.scriptDownloadStatus.pending" />
+                </button>
+                <button class="blue" v-if="scriptsStore.saveAsSupported" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
+                        <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.scriptSaveStatus.pending" />
+                </button>
+                <button class="lightblue" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>
+                    <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.scriptCopyStatus.pending" />
+                </button>
+                <a class="white" v-if="(scriptsStore.currentScriptLink != '')" :href="scriptsStore.currentScriptLink" title="See Code On Github" pulse-loop>
+                    <font-awesome-icon icon="fa-brands fa-github" />
+                </a>
             </div>
-            <p> {{ scriptsStore.scripts[index].progressStr }} </p>
+            <div class="mohit-main-script-top-sideSection">
+                <button v-if="!fullScreenStore.fullScreenSet" @click="openScriptsMenu()" title="Open Script Options" pulse-loop>
+                    <FontAwesomeIcon icon="fa-file-export" />
+                </button>
+                <button class="flame" @click="scriptsStore.setCodeWrapping('toggle')" :title="scriptsStore.wrapStatement" pulse-loop>
+                    <FontAwesomeIcon :icon="scriptsStore.wrapIcon" />
+                </button>
+                <button @click="scriptsStore.toggleScriptFullScreen()" :title="fullScreenStore.elementTitle" pulse-loop>
+                    <FontAwesomeIcon :icon="fullScreenStore.faIcon" />
+                </button>
+            </div>
         </div>
+        <div ref="script-html" class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
+    </div>
+
+    <div v-else-if="(scriptsStore.scripts[index].htmlLoaded == -1)" class="code-file-loading-container">
+        <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
+    </div>
+    <div v-else class="code-file-loading-container">
+        <FontAwesomeIcon class="code-file-loadingSpinner" icon="fa-spinner" :spin-pulse="true" />
+    </div>
+
+    <template v-if="fullScreenStore.fullScreenSet">
+        <QrcodeTool v-if="(webData.showSharePopup)" />
+        <WebScrollBar :fs-element-id="'script-page'" />
+        <GamepadComponent />
     </template>
 
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
-    <WebFooter v-if="!fullScreenSet" />
-    <GamepadComponent v-if="fullScreenSet" />
+    <WebFooter v-if="!fullScreenStore.fullScreenSet" />
     <FileWidgets />
-    <FullScreenScrollBar :fs-element-id="'script-page'" />
+    <ScriptLineOptions />
 </main>
 </template>
 
 <script setup>
 const scriptsStore = useScriptsStore();
-const fullScreenSet = getFullScreenSet();
+const webData = useWebsiteDataStore();
+const fullScreenStore = useFullScreenStore();
+
 const props = defineProps({ index: { type: Number, required: true } });
+const scriptHTML = useTemplateRef('script-html');
+const scriptOptions = useTemplateRef('script-options');
+const { reset: resetPulseLoop } = usePulseLoopAnimation(scriptOptions);
 
 onMounted(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
+
+watch(scriptHTML, () => {
+    if(scriptHTML.value) { scriptsStore.setWrapCodeStyles(); }
+    resetPulseLoop();
+});
+
+/** This function opens the scripts menu. */
+function openScriptsMenu() {
+    webData.bypassBodyClick();
+    webData.setMenuOpen(2);
+}
 
 const PAGE_METADATA = [
     {
@@ -64,101 +110,3 @@ const PAGE_METADATA = [
 const CURRENT_METADATA = PAGE_METADATA[props.index];
 useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc, "#4d3e3e", CURRENT_METADATA.type));
 </script>
-
-<style scoped>
-.code-file-inHTML :deep(pre) {
-    max-width: 1250px;
-    width: calc(100% - 70px);
-    height: fit-content;
-    min-height: var(--body-height);
-    overflow-y: hidden;
-    overflow-x: auto;
-    left: 10px;
-    padding: 30px 0px;
-    border-left: 20px solid;
-    border-right: 20px solid;
-    border-color: #121212 !important;
-    border-radius: 15px;
-    margin: 20px auto;
-    background-color: #121212 !important;
-}
-
-.code-file-inHTML ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    border: 1px solid white;
-    border-radius: 30px;
-    background: var(--blue-zero);
-}
-.code-file-inHTML ::-webkit-scrollbar-thumb {
-    background-color: var(--website-text);
-    border-radius: 30px;
-    transition: background-color 0.2s;
-}
-.code-file-inHTML ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--website-dark-text);
-}
-.code-file-inHTML ::-webkit-scrollbar-button {
-    display: none;
-}
-
-.code-file-loadingBar-container {
-    max-width: 1000px;
-    width: calc(100% - 70px);
-    height: fit-content;
-    min-height: var(--body-height);
-    overflow-y: hidden;
-    overflow-x: auto;
-    left: 10px;
-    padding: 30px 0px;
-    border-left: 20px solid;
-    border-right: 20px solid;
-    border-color: #121212 !important;
-    border-radius: 15px;
-    margin: 20px auto;
-    background-color: #121212 !important;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: row;
-}
-.code-file-loadingBar-container p {
-    color: var(--globe-green-light);
-    font-family: 'Lexend', sans-serif;
-    font-size: 18px;
-    margin-left: 7px;
-}
-
-.code-file-loadingBar {
-    height: 20px;
-    width: 200px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid white;
-    box-shadow: 0px 0px 3px 0px white;
-    border-radius: 20px;
-    overflow: hidden;
-    animation: border-pulse 0.2s linear infinite alternate;
-}
-.code-file-loadingBar .inner {
-    width: 0%;
-    height: 100%;
-    background-color: var(--globe-green-light);
-    border-radius: 20px;
-}
-
-.code-file-loadingError {
-    color: red;
-    font-size: 50px;
-}
-
-@keyframes border-pulse {
-    from {
-        border-color: white;
-        box-shadow: 0px 0px 3px 0px white;
-    }
-    to {
-        border-color: var(--lightning-yellow);
-        box-shadow: 0px 0px 8px 0px var(--lightning-yellow);
-    }
-}
-</style>

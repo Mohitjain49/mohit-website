@@ -1,6 +1,7 @@
 <template>
-<main id="resume-container" v-if="documentStore.mounted">
+<main id="resume-container">
     <div class="pdf-doc-mohit-container">
+        <DocumentTopBar />
         <div class="pdf-page-innerContainer" v-for="(page, index) in docPages" :id="('page_' + page.num)">
             <div v-if="!documentStore.docLoaded" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
@@ -20,16 +21,21 @@
         </div>>
     </div>
     
+    <template v-if="fullScreenSet">
+        <GamepadComponent />
+        <WebScrollBar :fs-element-id="'resume-container'" />
+        <QrcodeTool v-if="webData.showSharePopup" />
+    </template>
+
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
-    <GamepadComponent v-if="fullScreenSet" />
-    <FullScreenScrollBar :fs-element-id="'resume-container'" />
     <FileWidgets />
 </main>
 </template>
 
 <script setup>
 import { VuePDF, usePDF } from '@tato30/vue-pdf';
+const webData = useWebsiteDataStore();
 const fullScreenSet = getFullScreenSet();
 const documentStore = useDocumentStore();
 const router = useRouter();

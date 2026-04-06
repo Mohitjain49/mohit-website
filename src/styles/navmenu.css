@@ -8,20 +8,34 @@
     top: 0px;
     left: 0px;
     width: 100%;
-    height: fit-content;
-    min-height: 50px;
+    height: 50px;
     background-color: rgba(0, 0, 0, 1);
-    z-index: 499;
+    z-index: 490;
     border-bottom: 2px solid var(--website-text);
     overflow: hidden;
-    transition: height 0.2s, box-shadow 0.2s;
+    transition: box-shadow 0.5s;
     touch-action: pan-y;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
-#mohit-navBar.menu-overflowing {
-    border-bottom-right-radius: 0px !important;
+
+.mohit-main-progressBar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 3px;
+    background-color: black;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
 }
-#mohit-navBar.menu-open {
-    box-shadow: 0px 0px 10px 1px var(--website-text);
+.mohit-main-progressBar > .inner {
+    height: 100%;
+    width: 100%;
+    background-color: var(--vibrant-flame);
 }
 
 .mohit-navBar-top {
@@ -114,6 +128,24 @@
     flex-direction: row;
     gap: 15px;
 }
+.mohit-navBar-status-icons {
+    position: fixed;
+    top: 50px;
+    left: 0px;
+    width: fit-content;
+    padding: 6px 10px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 7px;
+    background-color: black;
+    z-index: 491;
+    border-right: 2px solid var(--website-text);
+    border-bottom: 2px solid var(--website-text);
+    border-bottom-right-radius: 5px;
+}
 
 .mohit-navBar-link {
     font-size: 20px;
@@ -125,6 +157,32 @@
 .mohit-navBar-link:hover {
     scale: 1.05;
     text-decoration: underline;
+}
+
+.mohit-navBar-statusIcon {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    color: var(--website-light-text);
+    border: 1px solid var(--website-light-text);;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: scale 0.2s, box-shadow 0.2s;
+}
+.mohit-navBar-statusIcon:hover {
+    scale: 1.05;
+    box-shadow: 0px 0px 2px 1px;
+}
+
+.mohit-navBar-statusIcon svg {
+    width: 14px;
+}
+.mohit-navBar-statusIcon.wakelock {
+    color: var(--vibrant-flame);
+    border-color: var(--vibrant-flame);
 }
 
 /**
@@ -188,6 +246,7 @@
     color: inherit;
     font-family: 'Lexend', sans-serif;
     font-size: 13px;
+    overflow: hidden;
 }
 .mohit-navMenu-mainOpt:hover {
     background-color: rgba(40, 40, 40);
@@ -205,6 +264,12 @@
     height: 16px;
     user-select: none;
     margin-left: 3px;
+}
+.mohit-navMenu-mainOpt img.ivue {
+    all: unset;
+    height: 14px;
+    margin-left: 1px;
+    user-select: none;
 }
 
 .mohit-navMenu-opt-break {
@@ -281,6 +346,19 @@
 
 @media (max-width: 700px) {
     .mohit-navBar-mainLinks { display: none; }
+}
+@media (max-width: 550px) {
+    .mohit-navBar-status-icons {
+        height: 16px;
+    }
+    .mohit-navBar-statusIcon {
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+    }
+    .mohit-navBar-statusIcon svg {
+        width: 12px;
+    }
 }
 
 .navMenu-transition-enter-active, .navMenu-transition-leave-active {

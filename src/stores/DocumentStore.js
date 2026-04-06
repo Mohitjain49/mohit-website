@@ -27,15 +27,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
-    const mounted = ref(false);
-    const docLoaded = ref(false);
-
     const googleDriveUploadSupported = ref(false);
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => {
         return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value);
     });
 
+    const docLoaded = ref(false);
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
     const customPdfScaleFactor = ref(1.375);
@@ -311,35 +309,17 @@ export const useDocumentStore = defineStore("document-store", () => {
      * ------------------------------------------------------------------------------------------
      */
 
-    /**
-     * This function mounts the document store for the website.
-     */
-    async function mountDocumentStore() {
-        await nextTick();
-        for(let i = 0; i < hostedDocuments.length; i++) { await hostedDocuments[i].initBlob(); }
-        mounted.value = true;
-    }
-
-    /**
-     * This function mounts a page that hosts a document.
-     */
-    function mountDocumentPage() {
+    /** This function mounts a page that hosts a document. */
+    async function mountDocumentPage() {
         webData.mountWebData();
-        nextTick(() => {
-            if(onMarkdownRoute.value) { return; }
-            mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
-        });
+        await nextTick();
 
-        // This makes sure that the website doesn't scroll with the swipe events made for the document navigation bar.
-        nextTick(() => {
-            const mohitDocNavBar = document.getElementById("mohit-documentBar");
-            if(mohitDocNavBar == null) { return; }
+        if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
+            await hostedDocuments[currentDocumentRoute.value].initBlob();
+        }
 
-            mohitDocNavBar.addEventListener("touchmove", (e) => {
-                const target = e.target;
-                if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
-            }, { passive: false, signal: docAbortController.signal });
-        })
+        if(onMarkdownRoute.value) { return; }
+        mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
     }
 
     /**
@@ -430,38 +410,44 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(hashStr === "") { return; }
 
         try {
-            goToPageSection(hashStr, ((hashStr === "footer") ? 0 : 70));
+            goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 70), 10);
         } catch(e) {
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            scrollToTop(true, 0);
         }
     }
 
     /**
      * This function is triggered whenever someone clicks on an annotation on the custom PDF.
      * @param event The object returned from clicking on an annotation. Go to the following link for more:
-     * https://tato30.github.io/vue-pdf/guide/events.html#annotation
+     * @see {@link https://tato30.github.io/vue-pdf/guide/events.html#annotation}
      */
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
         const type = event.type;
         if(type === "link") {
-            const url = event.data.url;
-            if(url.includes(PERSONAL_WEBSITE_LINK)) {
-                router.push("/" + url.replace(PERSONAL_WEBSITE_LINK, ""));
-            } else {
-                window.open(url, "_blank");
-            }
+            window.open(event.data.url, "_blank");
         } else if(type === "internal-link") {
-            goToPageSection(("page_" + event.data.referencedPage), ((event.data.offset.bottom < 500) ? -150 : 70));
+            goToPageSection("page_" + event.data.referencedPage);
         }
     }
 
-    return { hostedDocuments, mounted, docLoaded, googleDriveOptionAvailable, saveAsSupported,
+    /**
+     * This function scrolls to any page on a document webpage.
+     * @param {Number} pageNum The number of the specified page.
+     */
+    function scrollToPage(pageNum = 1) {
+        const id = ("page_" + pageNum);
+        if(document.getElementById(id) == null) { return; }
+        router.push(routePath.value + "#" + id);
+        try { goToPageSection(id, 70); } catch(e) {}
+    }
+
+    return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink,
         onDocumentRoute, onAnyResumeRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
+        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
+        mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });
 
@@ -481,11 +467,13 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const objectUrl = useObjectUrl(blob);
     const router = useRouter();
 
+    const blobCreated = computed(() => { return (blob.value != null); });
     const link = computed(() => { return (useBlobLink ? objectUrl.value : originLink); });
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {
+        if(blobCreated.value) { return; }
         if(path.includes("/resume/qrcode")) {
             blob.value = await createQrcodeResume();
         } else {
@@ -503,7 +491,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, name, suffix, link, blob, objectUrl, originLink, withMd, initBlob, checkPath }
+    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd, initBlob, checkPath }
 }
 
 /** This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right. */

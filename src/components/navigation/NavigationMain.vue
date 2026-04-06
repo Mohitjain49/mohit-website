@@ -3,7 +3,11 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" ref="navBar">
+<nav id="mohit-navBar" :style="{ 'height': navBarHeight }" ref="navBar">
+    <div class="mohit-main-progressBar" v-if="scrollProgress.show">
+        <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
+    </div>
+
     <div class="mohit-navBar-top">
         <div class="mohit-navBar-icons left">
             <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" pulse-loop>
@@ -121,26 +125,57 @@
         </div>
     </div>
 </Transition>
+
+<div v-show="showNavWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons" ref="navWidgets">
+    <button v-if="showWakeLockWidget" :title="webData.wakeLockTitle" pulse-loop
+        @click="(event) => { onWakeLockButtonClick(event); }"
+        class="mohit-navBar-statusIcon wakelock">
+
+        <font-awesome-icon :flip="webData.wakeLockChangeFresh"
+            :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
+        />
+    </button>
+    <RouterLink to="/gamepad/" v-if="gamepadStore.gamepadConnected"
+        @click="(event) => { flashNavOpt(event, '/gamepad'); }"
+        title="A gamepad is currently connected. Click Here to See More."
+        class="mohit-navBar-statusIcon" pulse-loop>
+
+        <font-awesome-icon icon="fa-gamepad" />
+    </RouterLink>
+</div>
 </template>
 
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
+const { scrollProgress } = storeToRefs(useScrollStore());
+
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
+const gamepadStore = useGamepadStore();
 const router = useRouter();
 
 const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
+const navWidgets = shallowRef(null);
 
 const navBarSwipe = useSwipe(navBar, { passive: true });
 useSwipeToCloseMenu(navMenu);
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
+usePulseLoopAnimation(navWidgets);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
+
+const showWakeLockWidget = computed(() => {
+    const isActive = webData.wakeLock.isActive;
+    return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
+});
+
+const showNavWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected)); });
+const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
 
 // This tracks touch "swipe" events for the navigation bar so that the user can change the page if they swipe left or right.
 watch(navBarSwipe.isSwiping, () => {
@@ -163,10 +198,9 @@ watch(navBarSwipe.isSwiping, () => {
  */
 function flashNavOpt(event = new MouseEvent("click"), path = "/") {
     path = (path.endsWith("/") ? path.slice(0, -1) : path);
-    
     if(routePath.value !== path && routePath.value !== (path + "/")) { return; }
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
+    scrollToTop(false, 0);
     addFlashAnimation(event);
     webData.closeNavMenu();
 }
@@ -194,8 +228,6 @@ const MAIN_BTNS = [
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "My Experience" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "My Projects" },
     { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "My Resume" },
-    { path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
-    { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
 ];
 
 const CENTER_LINKS = [
@@ -206,7 +238,8 @@ const CENTER_LINKS = [
 ];
 
 const NAV_MENU_EXTRAS = [
-    { path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-one)", title: "My Icons" },
+    { path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
+    { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
     { path: "/copyright/", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
 ];
 </script>

@@ -95,6 +95,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/gamepad/events"], replacement: "/gamepad/custom-events" },
 
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
+    { routes: ["/google-mockup/directions/**"], replacement: "/google-mockup/#directions" },
     { routes: ["/code-reader"], replacement: "/code-scanner" },
 ];
 

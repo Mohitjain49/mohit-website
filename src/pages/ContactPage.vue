@@ -408,8 +408,12 @@ function copyUsername(name = "") {
  * This function lets the user share a link with someone else.
  * @param {String} link The link to share.
  */
-function shareLink(link = "") {
-    webData.shareLink((link === SOCIALS[0].displayLink) ? (PERSONAL_WEBSITE_LINK + "email") : link);
+async function shareLink(link = "") {
+    if(link === SOCIALS[0].displayLink) {
+        await webData.shareText(link);
+    } else {
+        await webData.shareLink(link);
+    }
 }
 
 /**

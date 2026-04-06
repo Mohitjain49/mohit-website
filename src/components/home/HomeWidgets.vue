@@ -1,7 +1,5 @@
 <template>
-<RouterLink to="/#ivue" @click="goToIvueSection" id="ivue-widget" :title="IVUE_WIDGET_TITLE" pulse-loop>
-    <img :src="ivue_logo" draggable="false" />
-</RouterLink>
+<CompassWidget />
 <a :href="KSU_CCSE_LINK" target="mohit-ksu" id="ksu-widget" :title="KSU_WIDGET_TITLE" pulse-loop>
     <img :src="ksu_logo" draggable="false" />
 </a>
@@ -9,16 +7,8 @@
 
 <script setup>
 import ksu_logo from "@/assets/Kennesaw_Logo.png";
-import ivue_logo from "@/assets/ivue/iVue_White_Text.png";
-
 const KSU_CCSE_LINK = "https://www.kennesaw.edu/ccse/";
 const KSU_WIDGET_TITLE = "I'm A Proud Computer Science Student Of Kennesaw State University!";
-const IVUE_WIDGET_TITLE = "See My Experience With iVue!";
-
-/** This function takes the visitor to the ivue section of my website. */
-function goToIvueSection() {
-    try { goToPageSection('ivue'); } catch(e) {}
-}
 
 onMounted(() => { nextTick(() => {
     document.getElementById("ivue-widget")?.classList.add("animate__animated", "animate__fadeInUp");

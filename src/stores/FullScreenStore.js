@@ -2,7 +2,6 @@ export const useFullScreenStore = defineStore("screen-store", () => {
     const fullScreenSet = ref(false);
     const faIcon = computed(() => { return (fullScreenSet.value ? 'fa-compress' : 'fa-expand'); });
     const elementTitle = computed(() => { return (fullScreenSet.value ? 'Exit Full Screen' : 'Full Screen'); });
-    const docElementTitle = computed(() => { return (fullScreenSet.value ? "Shrink Document" : "Expand Document"); });
 
     /**
      * This function sets whether a specific element takes up the whole screen or not.
@@ -41,9 +40,7 @@ export const useFullScreenStore = defineStore("screen-store", () => {
         if(fullScreenSet.value) { return document.exitFullscreen(); }
     }
 
-    return { fullScreenSet, faIcon, elementTitle, docElementTitle,
-        setFullScreen, setFullScreenStatus, exitFullScreen
-    }
+    return { fullScreenSet, faIcon, elementTitle, setFullScreen, setFullScreenStatus, exitFullScreen }
 });
 
 /** This function returns a computed value that returns whether the website is in full screen mode or not. */

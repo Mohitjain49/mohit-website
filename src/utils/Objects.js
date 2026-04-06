@@ -49,6 +49,7 @@ export const PERSONAL_GLOBE_LINK = "https://mohitjain49.github.io/globe/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
 
 export const KSU_LINK = "https://kennesaw.edu/"
+const GEN_AI_APPLICATIONS_PAPER_LINK = "https://www.americanscholarspress.us/journals/IMR/pdf/IMR-1-2026/IMRv22N12026-art7.pdf"
 export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
 
 export const MAIN_IVUE_WEBSITE_LINK = "https://www.ivueworld.com/";
@@ -894,6 +895,19 @@ export const FEATURE_ENTITIES = [
 
         icon: {
             id: "fa-brands fa-google",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Bundle Visualizer",
+        link: (PERSONAL_WEBSITE_REPOSITORY_LINK + "/tree/gh-pages"),
+        color: "#c69dc3",
+        desc: "I used the \"rollup-plugin-visualizer\" plugin within my code to visualize and modify my build bundles. " +
+            "You can view these bundles by clicking here.",
+
+        icon: {
+            id: "fa-cubes-stacked",
             faIcon: true,
             size: "100"
         }

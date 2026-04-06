@@ -29,7 +29,7 @@ const route = useRoute();
 /** This function manages the home button on a website menu. */
 function manageHomeNav() {
     if(route.path !== "/") { return; }
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    scrollToTop(false, 0);
     webData.closeNavMenu();
 }
 </script>
