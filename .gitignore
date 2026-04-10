@@ -11,10 +11,13 @@ node_modules
 .DS_Store
 dist
 dist-ssr
+dist-client
 dev-dist
 dts
 coverage
 *.local
+.output
+.mohit-output
 
 .vite-ssg-temp
 bundle-visualizer
