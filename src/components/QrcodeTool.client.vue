@@ -1,7 +1,7 @@
 <template>
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
-        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> {{ truncate(qrCodeFormattedLink, ((windowWidth > 625) ? 54 : 47)) }} </button>
+        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div id="mohit-qrcode" v-show="qrCodeDisplay"></div>
 
         <div class="qrcode-mainPopup-options">
@@ -43,12 +43,15 @@
 
 <script setup>
 import QRCodeStyling from 'qr-code-styling';
+import Lenis from 'lenis';
+
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const codeScannerStore = useCodeScannerStore();
-
-const { width: windowWidth } = useWindowSize();
 const overflowLocked = useScrollLock(document.body);
+
+/** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
+var lenis = null;
 
 /** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
 const qrcode = ref(null);
@@ -92,18 +95,24 @@ const downloadImageIcon = computed(() => {
 onMounted(() => {
     overflowLocked.value = true;
     nextTick(() => { setQRCodeLink(); });
+
+    // This creates and starts the Lenis auto scrolling for this popup.
+    lenis = new Lenis({ autoRaf: true, orientation: "horizontal",
+        wrapper: document.getElementsByClassName("popup-qr-text").item(0),
+        content: document.getElementsByClassName("popup-qr-text").item(0).querySelector("p")
+    });
+    manageLenisScrolling();
 });
 onBeforeUnmount(() => {
     qrCodeDisplay.value = false;
+    lenis.destroy();
     overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
 });
 
 // This watches for changes to the QR Code Data so the popup changes reactively.
 watch(qrdata, () => { setQRCodeLink(); });
 
-/**
- * This function sets the link for the Share Popup.
- */
+/** This function sets the link for the Share Popup. */
 function setQRCodeLink() {
     const data = qrdata.value;
     const route = router.currentRoute.value;
@@ -259,6 +268,21 @@ async function downloadQRCode() {
         }, 3000); 
     }
 }
+
+/** This function triggers all parts of the lenis autoscroll for this popup. */
+async function triggerLenisAutoScroll() {
+    lenis.scrollTo("left", { immediate: true });
+    await sleep(500);
+    lenis.scrollTo("right", { duration: 3, onComplete: () => { manageLenisScrolling(); } });
+}
+
+/** This function starts a loop that enables the link at the top of the popup to autoscroll. */
+function manageLenisScrolling() {
+    autoscrollTimeout = setTimeout(() => {
+        triggerLenisAutoScroll();
+        autoscrollTimeout = null;
+    }, 1500);
+}
 </script>
 
 <style>
@@ -303,15 +327,30 @@ async function downloadQRCode() {
 
 .popup-qr-text {
     cursor: copy;
+    height: fit-content;
+    width: fit-content;
+    max-width: 430px;
     color: black;
     font-family: 'Lexend', sans-serif;
     font-size: 16px;
     background-color: white;
-    padding: 7px;
+    padding: 7px 10px;
     margin-top: 10px;
     border-radius: 5px;
     border: 1px solid;
-    overflow-wrap: break-word;
+    text-align: center;
+    overflow: hidden;
+    scroll-behavior: auto;
+}
+.popup-qr-text p {
+    width: max-content;
+    height: fit-content;
+    color: var(--blue-five);
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px 3px;
+    white-space: nowrap;
 }
 .popup-qr-text:hover {
     text-decoration: underline;
@@ -402,6 +441,15 @@ async function downloadQRCode() {
     filter: var(--filter-drop-shadow);
 }
 
+@keyframes stadium-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-100%));
+    }
+}
+
 @media (max-width: 625px) {
     .qrcode-mainPopup {
         width: 325px;
@@ -416,8 +464,11 @@ async function downloadQRCode() {
         width: 100%;
     }
     .popup-qr-text {
-        font-size: 9px;
         padding: 5px;
+        max-width: 215px;
+    }
+    .popup-qr-text p {
+        font-size: 9px;
     }
 
     .qrcode-mainPopup-btn {

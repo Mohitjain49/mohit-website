@@ -47,7 +47,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useDateFormat',
         'useScriptTag',
         'useSpeechRecognition',
-        'useMousePressed'
+        'useMousePressed',
+        'usePointerSwipe'
     ]
 }
 

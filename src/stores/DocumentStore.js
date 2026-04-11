@@ -100,6 +100,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function downloads a document for the visitor to see.
      */
     async function downloadDoc() {
+        if(documentDownloadStatus.value.pending) { return; }
         documentDownloadStatus.value.pending = true;
         const documentFile = getCurrentPDFObject();
 
@@ -119,7 +120,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function opens a "Save File Picker" so the user can save my document at their preferred location.
      */
     async function saveDoc() {
-        if(!saveAsSupported.value) { return; }
+        if(!saveAsSupported.value || documentSaveStatus.value.pending) { return; }
         try {
             documentSaveStatus.value.pending = true;
             const documentFile = getCurrentPDFObject();
@@ -149,7 +150,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     async function printDoc() {
         if(printIframe != null) { document.body.removeChild(printIframe); }
         if(printFunctionTimeout != null) { clearTimeout(printFunctionTimeout); }
-        if(documentPrintStatus.value.timeoutError) { return; }
+        if(documentPrintStatus.value.timeoutError || documentPrintStatus.value.pending) { return; }
 
         printIframe = null;
         documentPrintStatus.value.pending = true;
@@ -190,7 +191,9 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function shares the document with someone using the OS's built in share popup.
      */
     async function shareDoc() {
+        if(documentShareStatus.value.pending) { return; }
         documentShareStatus.value.pending = true;
+
         const documentFile = getCurrentPDFObject();
         await webData.shareFile(new File([documentFile.blob], (documentFile.name + documentFile.suffix), { type: 'application/pdf' }));
 
@@ -298,7 +301,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Boolean} chooseFolder IF true, this function will activate the Google Picker API to let a user choose the folder on their drive.
      */
     function requestGoogleToUploadDoc(chooseFolder = false) {
-        if(!googleDriveOptionAvailable.value) { return; }
+        if(!googleDriveOptionAvailable.value || documentUploadToGoogleDriveStatus.value.pending) { return; }
         chooseGoogleDriveFolderForUpload = chooseFolder;
         googleTokenClient.requestAccessToken();
     }
@@ -426,7 +429,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(type === "link") {
             window.open(event.data.url, "_blank");
         } else if(type === "internal-link") {
-            goToPageSection("page_" + event.data.referencedPage);
+            scrollToPage(event.data.referencedPage);
         }
     }
 
@@ -462,6 +465,8 @@ export const useDocumentStore = defineStore("document-store", () => {
  * @param {Boolean} withMd If true, this utility treats (path + "/markdown") as a viable route as well.
  */
 function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false, withMd = false) {
+    path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
+
     /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = ref(null);
     const objectUrl = useObjectUrl(blob);
