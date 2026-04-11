@@ -125,7 +125,7 @@ function getFAIconStyle() {
     width: calc(100% - 20px);
     padding: 10px 10px 0px;
     text-align: left;
-    font-family: 'Lexend', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 .skills-note-body.more-info {
     color: var(--website-light-text);
@@ -148,6 +148,8 @@ function getFAIconStyle() {
     font-size: 35px;
     color: inherit;
     margin-bottom: 12px;
+    font-weight: bold;
+    font-family: 'Lexend', sans-serif;
 }
 .skills-note-desc {
     font-size: 16px;

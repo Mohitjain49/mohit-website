@@ -52,6 +52,7 @@ const overflowLocked = useScrollLock(document.body);
 
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
+var autoscrollTimeout = null;
 
 /** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
 const qrcode = ref(null);

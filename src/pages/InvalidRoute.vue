@@ -104,6 +104,7 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/mnd"], replacement: MND_PROJECT_LINK },
     { routes: ["/pizza"], replacement: PIZZA_WEBSITE_LINK },
     { routes: ["/globe/**"], replacement: PERSONAL_GLOBE_LINK },
+    { routes: ["/eeg/**", "/eeg-ai/**"], replacement: "https://eeg-ai.mohit-jain.com" },
 
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
     { routes: ["/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
