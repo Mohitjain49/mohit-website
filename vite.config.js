@@ -47,7 +47,8 @@ const VUEUSE_AUTO_IMPORTS = {
         'useDateFormat',
         'useScriptTag',
         'useSpeechRecognition',
-        'useMousePressed'
+        'useMousePressed',
+        'usePointerSwipe'
     ]
 }
 
@@ -124,7 +125,7 @@ export default defineConfig(({ isSsrBuild }) => {
                 includeAssets: ['**/*.woff2', '**/*.woff'],
 
                 workbox: {
-                    cacheId: `v3.9.0-${Date.now()}`,
+                    cacheId: `v3.9.1-${Date.now()}`,
                     globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}'],
                     maximumFileSizeToCacheInBytes: 5000000,
                     navigateFallback: "/index.html",
@@ -161,7 +162,7 @@ export default defineConfig(({ isSsrBuild }) => {
                 filename: (isSsrBuild ? "bundle-visualizer/ssr.html" : "bundle-visualizer/csr.html"),
                 gzipSize: true,
                 brotliSize: true
-            }),
+            })
         ],
         ssgOptions: {
             dirStyle: 'nested',

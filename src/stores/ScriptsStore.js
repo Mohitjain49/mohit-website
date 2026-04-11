@@ -78,6 +78,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function downloads a script for the visitor to use. */
     function downloadScript() {
+        if(scriptDownloadStatus.value.pending) { return; }
         scriptDownloadStatus.value.pending = true;
         const scriptFile = getCurrentScript();
 
@@ -100,6 +101,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function lets users copy a script. */
     async function copyScript() {
+        if(scriptCopyStatus.value.pending) { return; }
         scriptCopyStatus.value.pending = true;
         const scriptFile = getCurrentScript();
 
@@ -116,7 +118,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function opens a "Save File Picker" so the user can save my script at their preferred location. */
     async function saveScript() {
-        if(!saveAsSupported.value) { return; }
+        if(!saveAsSupported.value || scriptSaveStatus.value.pending) { return; }
         try {
             scriptSaveStatus.value.pending = true;
             const scriptFile = getCurrentScript();
@@ -328,6 +330,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
  * @param {String} link A link where this file would be stored online. Most likely a GitHub Link.
  */
 function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link = "") {
+    path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
+
     /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = ref(null);
     const router = useRouter();
@@ -350,93 +354,14 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         return (path === pathname || (path + "/") === pathname);
     }
 
-    /**
-     * This function returns a string consisting of HTML that can be displayed to a user. 
-     */
+    /** This function manages creating a string consisting of HTML that can be displayed to a user. */
     async function initCodeScriptElement() {
         if(htmlLoaded.value != 0) { return; }
-        try {
-            const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
-            const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
+        htmlLoaded.value = 1;
 
-            var lang = null;
-            if(suffix.endsWith("js")) {
-                lang = (await import("shiki/dist/langs/javascript.mjs"));
-            } else if(suffix.endsWith("vue")) {
-                lang = (await import("shiki/dist/langs/vue.mjs"));
-            }
-
-            const themeMaterialOcean = (await import("shiki/dist/themes/material-theme-ocean.mjs"));
-            const highlighter = await createHighlighterCore({
-                themes: [themeMaterialOcean], langs: [lang],
-                engine: createOnigurumaEngine(import('shiki/wasm')) 
-            });
-
-            html.value = highlighter.codeToHtml(code, {
-                theme: "material-theme-ocean",
-                lang: (suffix.endsWith("js") ? "javascript" : "vue"),
-                transformers: [{
-                    pre(node) { node.properties.id = "mohit-scriptPage-code"; },
-                    code(node) { node.properties.id = "mohit-scriptPage-code-inner"; },
-                    line(node, lineNum) { transformCodeLine(this.addClassToHast, node, lineNum); }
-                }]
-            });
-            htmlLoaded.value = 1;
-        } catch(e) {
-            console.error(e);
-            html.value = "<pre> <div class=\"loading-spinner\"></div> </pre>";
-            htmlLoaded.value = -1;
-        }
-    }
-
-    /**
-     * This function transforms how the HTML code for a line looks when fully rendered.
-     * @param {Function} addClassToHast This function adds a class to the line. 
-     * @param {import("../../node_modules/@types/hast/index").Element} node The line element itself.
-     * @param {Number} lineNum The number of said line.
-     */
-    function transformCodeLine(addClassToHast, node, lineNum) {
-        addClassToHast(node, "mohit-scriptPage-code-line");
-        const originalChildren = node.children;
-        const lineAsText = extractTextFromLine(originalChildren);
-
-        node.properties['id'] = ("L" + String(lineNum));
-        node.properties['mohit-code-as-text'] = lineAsText;
-        node.properties['mohit-code-as-link'] = (PERSONAL_WEBSITE_LINK + path.substring(1) + "/#L" + String(lineNum));
-
-        node.children = [{
-            type: 'element',
-            tagName: 'span',
-            properties: { className: 'mohit-scriptPage-code-line-content', },
-            children: originalChildren
-        }]
-
-        node.children.unshift({
-            type: "element",
-            tagName: "div",
-            properties: { className: "mohit-scriptPage-code-lineNum" },
-            children: [{
-                type: "element",
-                tagName: "button",
-                properties: {
-                    onclick: "window.openCodeLineOptions(" + String(lineNum) + ")",
-                    title: "See Options for Line " + lineNum + " Of This Code Script."
-                },
-                children: [{ type: "text", value: String(lineNum) }]
-            }]
-        });
-    }
-
-    /**
-     * This recursive function extracts all the text from a line and returns a string
-     * @param {Array<import("../../node_modules/@types/hast/index").ElementContent>} children The children of the node.
-     */
-    function extractTextFromLine(children) {
-        return children.map((child) => {
-            if(child.type === "text") { return child.value; }
-            else if(child.children) { return extractTextFromLine(child.children); }
-            else { return ""; }
-        }).join("");
+        const { success, html: htmlResult } = await renderCodeScript(code, suffix, path);
+        htmlLoaded.value = (success ? 2 : 3);
+        html.value = htmlResult;
     }
 
     return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded,

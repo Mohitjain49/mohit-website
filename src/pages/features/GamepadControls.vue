@@ -5,7 +5,7 @@
 <main class="personal-web-body transparent">
     <div class="gamepad-controls-body">
         <div class="gamepad-controls-body-container left">
-            <div class="gamepad-desc">
+            <div class="gamepad-desc" id="scripts">
                 <p>
                     This webpage simply shows the controls for using a gamepad here. 
                     The files below are the 3 main files in my code that give functionality to the Gamepad on this website.
@@ -18,7 +18,7 @@
                 <FontAwesomeIcon class="gamepad-desc-icon" icon="fa-code" />
             </div>
 
-            <div class="gamepad-connections">
+            <div class="gamepad-connections" id="connections">
                 <template v-for="cursor in gamepadStore.gamepadCursors">
                     <div class="gamepad-connection-statusBar" :style="{ color: cursor.color }">
                         <h2> {{ ('Gamepad ' + (cursor.index + 1)) }} </h2>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="gamepad-controls-body-container right">
-            <div class="gamepad-controls">
+            <div class="gamepad-controls" id="controls">
                 <h2>
                     <font-awesome-icon icon="fa-gamepad" />
                     <span> Gamepad Controls </span>
@@ -139,11 +139,41 @@ import left_trigger from "@/assets/gamepad-buttons/left_trigger.png";
 import right_trigger from "@/assets/gamepad-buttons/right_trigger.png";
 
 const gamepadStore = useGamepadStore();
-onMounted(() => { initWebData(); });
+const router = useRouter();
 
-useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad",
-    "These are the gamepad controls on my website."
-));
+onMounted(() => { initWebData(); manageGamepadTabGlow(); });
+useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad", "These are the gamepad controls on my website." ));
+watch(() => router.currentRoute.value.hash, (newValue, oldValue) => { manageGamepadTabGlow(oldValue); });
+
+/**
+ * This function manages which gamepad tab is "glowing" or not.
+ * @param {String} oldValue The old hash value.
+ */
+function manageGamepadTabGlow(oldValue = "") {
+    // This section removes the glow effect from the old tab.
+    if(oldValue !== "" && oldValue.length > 0) {
+        const oldIndex = GAMEPAD_PAGE_TABS.findIndex(item => item === oldValue.substring(1));
+        if(oldIndex != -1) {
+            const oldTab = document.getElementById(GAMEPAD_PAGE_TABS[oldIndex]);
+            if(oldTab && typeof (oldTab.classList !== "undefined") && (oldTab.classList instanceof DOMTokenList)) {
+                oldTab.classList.remove("glowing");
+            }
+        }
+    }
+
+    // This section adds the glow effect to the new tab.
+    const hash = router.currentRoute.value.hash;
+    if(hash !== "" && hash.length > 0) {
+        const newIndex = GAMEPAD_PAGE_TABS.findIndex(item => item === hash.substring(1));
+        console.log(hash, newIndex)
+        if(newIndex != -1) {
+            const newTab = document.getElementById(GAMEPAD_PAGE_TABS[newIndex]);
+            if(newTab && typeof (newTab.classList !== "undefined") && (newTab.classList instanceof DOMTokenList)) {
+                newTab.classList.add("glowing");
+            }
+        }
+    }
+}
 
 /**
  * This function returns a String based on whether a gamepad is connected to the website.
@@ -154,6 +184,7 @@ function getGamepadConnectionStatusTitle(index = 0, status = false) {
     return ("Gamepad " + (index + 1) + " Is " + (status ? "" : "Not ") + "Connected To My Website" + (status ? "!" : "."));
 }
 
+const GAMEPAD_PAGE_TABS = ["scripts", "connections", "controls"];
 const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     "Note that some of the default gamepad controls for my website may not work as expected with this particular gamepad."
 );
@@ -182,6 +213,9 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
 .gamepad-controls-body-container.left {
     align-items: flex-end;
 }
+.glowing {
+    box-shadow: 0px 0px 10px 2px var(--website-light-text);
+}
 
 .gamepad-controls {
     height: fit-content;
@@ -192,6 +226,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     border-radius: 15px;
     font-family: "Lexend", sans-serif;
     margin-left: 20px;
+    scroll-margin-top: 70px;
 }
 .gamepad-controls h2 {
     font-size: 30px;
@@ -248,6 +283,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     background-color: var(--dark-background);
     border-radius: 20px;
     font-family: 'Montserrat', sans-serif;
+    scroll-margin-top: 70px;
 }
 .gamepad-desc-icon {
     position: absolute;
@@ -284,6 +320,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
+    scroll-margin-top: 70px;
 }
 .gamepad-connection-statusBar {
     width: 396px;

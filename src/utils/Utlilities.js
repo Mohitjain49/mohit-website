@@ -157,14 +157,16 @@ export function usePulseLoopAnimation(container = null) {
  */
 export function useSwipeToCloseMenu(menuElement) {
     const webData = useWebsiteDataStore();
-    const menuSwipe = useSwipe(menuElement, { passive: true });
+    const menuSwipe = usePointerSwipe(menuElement,
+        { pointerTypes: ['mouse', 'touch', 'pen'], disableTextSelect: true, threshold: 50 }
+    );
 
     /** This determines whether the utility is enabled or not. */
     const enabled = ref(true);
 
-    // This tracks touch "swipe" events for the navigation menu so that the user can close the menu by swiping to the right.
-    watch(menuSwipe.isSwiping, () => {
-        if(!enabled.value || !menuSwipe.isSwiping.value || menuSwipe.direction.value !== 'right') { return; }
+    // This tracks all "swipe" events for the navigation menu so that the user can close the menu by swiping to the right.
+    watch(menuSwipe.isSwiping, (isSwiping) => {
+        if(!enabled.value || !isSwiping || menuSwipe.direction.value !== 'right') { return; }
         webData.closeNavMenu();
         triggerClickSound();
     });

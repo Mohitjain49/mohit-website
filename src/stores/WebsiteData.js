@@ -86,7 +86,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(scrollStore.isAutoScrolling) { return; }
 
         if(newValue.hash.length > 0) {
-            try { goToPageSection(newValue.substring(1), 0, 0) } catch(e) {}
+            try { goToPageSection(newValue.hash.substring(1), 0, 0) } catch(e) {}
         } else if(newValue.name === oldValue.name && newValue.query === oldValue.query) {
             scrollToTop(false, 0);
         }

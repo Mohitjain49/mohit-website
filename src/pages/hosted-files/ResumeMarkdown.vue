@@ -2,7 +2,7 @@
 <DocumentMenu />
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
-        <DocumentTopBar />
+        <DocumentTopBar v-if="documentStore.hostedDocuments[0].blobCreated" />
         <ResumeMarkdownComponent />
     </div>
 

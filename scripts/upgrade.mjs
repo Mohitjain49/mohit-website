@@ -43,6 +43,7 @@ function createSpinner(text) {
 async function main() {
     try {
         // This section handles asking for and dependencies to reject for the next step.
+        runCommand('npx npm-check-updates');
         const rejectDeps = await rl.question('Do you want to exclude any dependencies from being updated? (y/n): ');
         const rejectDepsBool = (rejectDeps.toLowerCase() === "y" || rejectDeps.toLowerCase() === "yes");
 
@@ -68,7 +69,7 @@ async function main() {
         }
 
         // This section handles updating the current dependencies on the Vue.js project.
-        runCommand('npx npm-check-updates' + rejectDepsCommandOption);
+        if(rejectDepsCommandOption !== "") { runCommand('npx npm-check-updates' + rejectDepsCommandOption); }
         const updateDeps = await rl.question('Do you want to update the dependencies? (y/n): ');
         const updateDepsBool = (updateDeps.toLowerCase() === "y" || updateDeps.toLowerCase() === "yes");
 
