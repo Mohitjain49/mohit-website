@@ -103,12 +103,12 @@ async function main() {
             versionJsonSpinner.succeed("Updated version.json!!");
 
             // Updates the vite.config.js file.
-            const viteConfigSpinner = createSpinner("Updating vite.config.js...");
-            const content = await readFile("./vite.config.js", 'utf8');
+            const viteConfigSpinner = createSpinner("Updating nuxt.config.ts...");
+            const content = await readFile("./nuxt.config.ts", 'utf8');
             const updatedContent = content.replace(/v\d+\.\d+\.\d+-\$\{Date\.now\(\)\}/, `v${newVersion}-\${Date.now()}`);
 
-            await writeFile("./vite.config.js", updatedContent, 'utf8');
-            viteConfigSpinner.succeed("Updated Vite Config File!!");
+            await writeFile("./nuxt.config.ts", updatedContent, 'utf8');
+            viteConfigSpinner.succeed("Updated Nuxt Config File!!");
             console.log("\n\n");
         } else {
             // A message to show if the user declined.
@@ -124,13 +124,17 @@ async function main() {
             await rm("./package-lock.json", { recursive: true, force: true });
             packageLockSpinner.succeed("Deleted package-lock.json.");
 
-            const dtsSpinner = createSpinner("Deleting the \"dts\" folder...");
-            await rm("./dts", { recursive: true, force: true });
-            dtsSpinner.succeed("Deleted the \"dts\" folder.");
+            const dataSpinner = createSpinner("Deleting the \".data\" folder...");
+            await rm("./.data", { recursive: true, force: true });
+            dataSpinner.succeed("Deleted the \".data\" folder.");
 
-            const pluginVisualizerSpinner = createSpinner("Deleting the \"bundle-visualizer\" folder...");
-            await rm("./bundle-visualizer", { recursive: true, force: true });
-            pluginVisualizerSpinner.succeed("Deleted the \"bundle-visualizer\" folder.");
+            const nuxtSpinner = createSpinner("Deleting the \".nuxt\" folder...");
+            await rm("./.nuxt", { recursive: true, force: true });
+            nuxtSpinner.succeed("Deleted the \".nuxt\" folder.");
+
+            const outputSpinner = createSpinner("Deleting the \".output\" folder...");
+            await rm("./.output", { recursive: true, force: true });
+            outputSpinner.succeed("Deleted the \".output\" folder.");
 
             const distSpinner = createSpinner("Deleting the \"dist\" folder...");
             await rm("./dist", { recursive: true, force: true });

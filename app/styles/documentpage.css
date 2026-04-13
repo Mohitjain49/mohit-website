@@ -1,0 +1,187 @@
+/**
+ * These are the styles for markdown components and the tato pdf viewer.
+ */
+
+#tato-pdf-resume {
+    margin: 0px auto;
+    width: calc(var(--total-scale-factor) * 612px) !important;
+    height: calc(var(--total-scale-factor) * 792px) !important;
+    scroll-margin-top: 70px;
+}
+.tato-pdf-github-instructions {
+    margin: 0px auto;
+    margin-bottom: 20px;
+    width: calc(var(--total-scale-factor) * 612px) !important;
+    height: calc(var(--total-scale-factor) * 792px) !important;
+    scroll-margin-top: 70px;
+}
+#tato-pdf-certificate {
+    margin: 0 auto;
+    width: fit-content;
+    height: fit-content;
+    scroll-margin-top: 70px;
+}
+
+.markdown-body {
+    width: calc(100% - 70px);
+    max-width: 1000px;
+    padding: 15px;
+    border-radius: 5px;
+    height: fit-content;
+    margin: auto;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+}
+:fullscreen .markdown-body {
+    min-width: 0px;
+    max-width: none;
+}
+
+.pdf-doc-mohit-container {
+    height: fit-content;
+    width: 100%;
+    min-height: calc(var(--body-height) - 100px);
+    padding-top: 20px;
+    padding-bottom: 80px;
+    z-index: 10;
+    position: relative;
+}
+:fullscreen .pdf-doc-mohit-container {
+    padding-bottom: 0px;
+}
+
+.pdf-page-innerContainer {
+    scroll-margin-top: 67px;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    margin: 0px auto;
+}
+.linkAnnotation {
+    cursor: pointer;
+}
+
+#resume-container:fullscreen .pdf-doc-mohit-container {
+    min-height: calc(100% - 100px);
+}
+.markdown-body h1, .markdown-body p, .markdown-body li {
+    color: black !important;
+    font-family: 'Roboto', sans-serif;
+}
+.markdown-body a {
+    color: #517ac7;
+    text-decoration: underline;
+    font-family: 'Roboto', sans-serif;
+}
+
+.markdown-body h1 {
+    font-size: 27px;
+}
+.markdown-body ul {
+    margin-top: 0px;
+}
+
+.resume-markdown-title {
+    font-size: 40px !important;
+}
+.resume-markdown-mainLinks, .resume-markdown-mainSummary {
+    margin-bottom: 20px;
+}
+.resume-markdown-mainSummary p {
+    font-style: italic;
+}
+
+.resume-markdown-subHeader {
+    margin-bottom: 5px;
+}
+.resume-markdown-section-title a {
+    text-decoration: none;
+    color: black;
+    transition: text-shadow 0.2s;
+}
+.resume-markdown-section-title a:hover {
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+}
+
+.resume-markdown-section-subtitle a {
+    text-decoration: none;
+    color: black;
+    transition: text-shadow 0.2s;
+}
+.resume-markdown-section-subtitle a:hover {
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+}
+
+@media (max-width: 850px) {
+    .markdown-body h1 {
+        font-size: 20px;
+    }
+    .markdown-body p, .markdown-body li {
+        font-size: 13px;
+    }
+}
+@media (max-width: 600px) {
+    .markdown-body h1 {
+        font-size: 17px;
+    }
+    .markdown-body p, .markdown-body li {
+        font-size: 11px;
+    }
+}
+
+.mohit-document-topBar {
+    width: calc(100% - 70px);
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    overflow: hidden;
+    background-color: rgb(28, 28, 28);
+    border-radius: 5px;
+    margin: 0px auto 10px auto;
+}
+.mohit-document-topBar-sideSection {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin: 10px;
+    gap: 5px;
+}
+
+.mohit-document-topBar button, .mohit-document-topBar a {
+    color: var(--website-light-text);
+    border: 1px solid var(--website-light-text);
+    border-radius: 7px;
+    font-size: 12px;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: scale 0.2s, background-color 0.2s;
+}
+.mohit-document-topBar button:hover, .mohit-document-topBar a:hover {
+    scale: 1.1;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.mohit-document-topBar button.flame, .mohit-document-topBar a.flame {
+    color: var(--vibrant-flame);
+    border-color: var(--vibrant-flame);
+}
+.mohit-document-topBar button.white, .mohit-document-topBar a.white {
+    color: white;
+    border-color: white;
+}
+.mohit-document-topBar button.lightblue, .mohit-document-topBar a.lightblue {
+    color: var(--blue-one);
+    border-color: var(--blue-one);
+}
+.mohit-document-topBar button.blue, .mohit-document-topBar a.blue {
+    color: var(--blue-three);
+    border-color: var(--blue-three);
+}
