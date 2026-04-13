@@ -86,8 +86,8 @@ export default defineNuxtConfig({
         client: { periodicSyncForUpdates: 60 },
         workbox: {
             cacheId: `v3.10.0-${Date.now()}`,
-            globDirectory: ".output/public",
-            globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}', '_nuxt/fonts/**'],
+            globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}', '_fonts/**'],
+            // globIgnores: ['**/_nuxt/builds/**', '**/latest.json'],
             maximumFileSizeToCacheInBytes: 5000000,
             navigateFallback: "/index.html",
             navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/, /node_modules/],
