@@ -2,6 +2,7 @@ export const useInstallStore = defineStore("install-store", () => {
     const pwaCreated = ref(false);
     const deferredPrompt = ref(null);
     const showUpdateBox = ref(false);
+    const swRegistered = ref(false);
 
     const installIcon = computed(() => {
         return ((deferredPrompt.value == null || pwaCreated.value) ? 'fa-ban' : 'fa-download');
@@ -55,7 +56,7 @@ export const useInstallStore = defineStore("install-store", () => {
         showUpdateBox.value = status
     }
 
-    return { installIcon, installText, showUpdateBox,
+    return { installIcon, installText, showUpdateBox, swRegistered,
         mountInstallStore, installApp, setPwaCreated, setUpdateBox
     }
 });

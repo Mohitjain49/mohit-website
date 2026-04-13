@@ -18,7 +18,7 @@
 
 <script setup>
 import dayjs from 'dayjs';
-import { registerSW } from 'virtual:pwa-register';
+import { useRegisterSW } from 'virtual:pwa-register/vue';
 import now from '~build/time';
 
 const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website version was from ");
@@ -27,11 +27,11 @@ const UPDATE_DATE = ref("10/24/2025");
 const installStore = useInstallStore();
 const buttonClicked = ref(false);
 
-const updateSW = registerSW({
+const updateSW = useRegisterSW({
     onNeedRefresh() { installStore.setUpdateBox(true); },
-    onOfflineReady() { installStore.setPwaCreated(); }
+    onOfflineReady() { installStore.setPwaCreated(); },
+    onRegisteredSW() { installStore.swRegistered = true; }
 });
-
 onMounted(() => {
     nextTick(() => { calculateDateDifference(); });
 });
@@ -39,10 +39,10 @@ onMounted(() => {
 /**
  * This button triggers a reload that updates the website to its latest version.
  */
-function updateWebsite() {
+async function updateWebsite() {
     if(buttonClicked.value) { return; }
-    updateSW();
     buttonClicked.value = true;
+    await updateSW.updateServiceWorker(true);
 }
 
 /**
