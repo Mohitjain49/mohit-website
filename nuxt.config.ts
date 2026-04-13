@@ -72,7 +72,7 @@ export default defineNuxtConfig({
             Info(),
             imagetools({
                 include: /assets\/.*\.(png|jpe?g)$/,
-                defaultDirectives: (url) => { return new URLSearchParams('format=webp&quality=70') }
+                defaultDirectives: (url) => { return new URLSearchParams('format=webp&quality=70'); }
             })
         ]
     },
