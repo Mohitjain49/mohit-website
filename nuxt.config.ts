@@ -83,9 +83,7 @@ export default defineNuxtConfig({
         includeAssets: ['**/*.woff2', '**/*.woff'],
         registerWebManifestInRouteRules: true,
 
-        client: {
-            periodicSyncForUpdates: 60
-        },
+        client: { periodicSyncForUpdates: 60 },
         workbox: {
             cacheId: `v3.10.0-${Date.now()}`,
             globDirectory: ".output/public",
@@ -95,7 +93,8 @@ export default defineNuxtConfig({
             navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/],
             cleanupOutdatedCaches: true,
             clientsClaim: false,
-            skipWaiting: false
+            skipWaiting: false,
+            modifyURLPrefix: { '': '/' }
         },
 
         manifest: {
