@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     devServer: { port: 5000, host: "localhost" },
     modules: [
         '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
-        '@nuxtjs/sitemap', '@nuxtjs/robots',
+        '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts',
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',
@@ -52,6 +52,13 @@ export default defineNuxtConfig({
         }
     },
     routeRules: { '/**': { prerender: true } },
+    fonts: {
+        families: [
+            { name: "Lexend", provider: "npm" },
+            { name: "Roboto", provider: "npm" },
+            { name: "Montserrat", provider: "npm" }
+        ]
+    },
 
     site: {
         url: "https://www.mohit-jain.com",

@@ -13,10 +13,6 @@
 import "~/styles/mainstyles.css";
 import '~build/console';
 
-import "@fontsource/lexend";
-import "@fontsource/roboto";
-import "@fontsource/montserrat";
-
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const fullScreenSet = getFullScreenSet();
