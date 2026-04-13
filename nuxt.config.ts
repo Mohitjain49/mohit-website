@@ -72,6 +72,7 @@ export default defineNuxtConfig({
         registerType: "prompt",
         devOptions: { enabled: false },
         includeAssets: ['**/*.woff2', '**/*.woff'],
+        registerWebManifestInRouteRules: true,
 
         workbox: {
             cacheId: `v3.10.0-${Date.now()}`,
