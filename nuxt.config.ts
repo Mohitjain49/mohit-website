@@ -65,6 +65,7 @@ export default defineNuxtConfig({
         name: "Mohit Jain | My Portfolio"
     },
     sitemap: { exclude: SITEMAP_EXCLUDED_ROUTES },
+    experimental: { appManifest: true },
 
     vite: {
         plugins: [
@@ -76,6 +77,7 @@ export default defineNuxtConfig({
         ]
     },
     pwa: {
+        strategies: "generateSW",
         registerType: "prompt",
         devOptions: { enabled: false },
         includeAssets: ['**/*.woff2', '**/*.woff'],

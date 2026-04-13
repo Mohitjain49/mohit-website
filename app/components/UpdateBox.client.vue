@@ -18,23 +18,19 @@
 
 <script setup>
 import dayjs from 'dayjs';
-import { useRegisterSW } from 'virtual:pwa-register/vue';
 import now from '~build/time';
+
+const { $pwa } = useNuxtApp();
+const installStore = useInstallStore();
+const buttonClicked = ref(false);
 
 const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website version was from ");
 const UPDATE_DATE = ref("10/24/2025");
 
-const installStore = useInstallStore();
-const buttonClicked = ref(false);
-
-const updateSW = useRegisterSW({
-    onNeedRefresh() { installStore.setUpdateBox(true); },
-    onOfflineReady() { installStore.setPwaCreated(); },
-    onRegisteredSW() { installStore.swRegistered = true; }
-});
-onMounted(() => {
-    nextTick(() => { calculateDateDifference(); });
-});
+onMounted(() => { nextTick(() => { calculateDateDifference(); }); });
+watch(() => $pwa?.needRefresh, (newValue) => { if(newValue) { installStore.setUpdateBox(); } });
+watch(() => $pwa?.offlineReady, (newValue) => { if(newValue) { installStore.setPwaCreated(); } });
+watch(() => $pwa?.swActivated, (newValue) => { if(newValue) { installStore.swRegistered = true; } });
 
 /**
  * This button triggers a reload that updates the website to its latest version.
@@ -42,7 +38,7 @@ onMounted(() => {
 async function updateWebsite() {
     if(buttonClicked.value) { return; }
     buttonClicked.value = true;
-    await updateSW.updateServiceWorker(true);
+    await $pwa?.updateServiceWorker(true);
 }
 
 /**
