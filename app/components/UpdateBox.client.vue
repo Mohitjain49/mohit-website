@@ -28,7 +28,7 @@ const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website 
 const UPDATE_DATE = ref("10/24/2025");
 
 onMounted(() => { nextTick(() => { calculateDateDifference(); }); });
-watch(() => $pwa?.needRefresh, (newValue) => { if(newValue) { installStore.setUpdateBox(); } });
+watch(() => $pwa?.needRefresh, (newValue) => { if(newValue) { installStore.setUpdateBox(true); } });
 watch(() => $pwa?.offlineReady, (newValue) => { if(newValue) { installStore.setPwaCreated(); } });
 watch(() => $pwa?.swActivated, (newValue) => { if(newValue) { installStore.swRegistered = true; } });
 
