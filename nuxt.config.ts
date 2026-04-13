@@ -83,6 +83,9 @@ export default defineNuxtConfig({
         includeAssets: ['**/*.woff2', '**/*.woff'],
         registerWebManifestInRouteRules: true,
 
+        client: {
+            periodicSyncForUpdates: 60
+        },
         workbox: {
             cacheId: `v3.10.0-${Date.now()}`,
             globDirectory: ".output/public",
