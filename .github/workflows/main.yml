@@ -38,15 +38,15 @@ jobs:
           AWS_CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_WEBSITE_ID }}
           AWS_BUCKET: ${{ 'mohit-website' }}
           AWS_REGION: ${{ 'us-east-1' }}
-          BUILD_OUTPUT: ${{ 'dist' }}
+          BUILD_OUTPUT: ${{ '.output/public' }}
         run: npm run deploy
 
-      - name: Deploy Bundles To GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: bundle-visualizer
-          clean: true
-          clean-exclude: |
-            README.md
+    #   - name: Deploy Bundles To GitHub Pages
+    #     uses: JamesIves/github-pages-deploy-action@v4
+    #     with:
+    #       branch: gh-pages
+    #       folder: bundle-visualizer
+    #       clean: true
+    #       clean-exclude: |
+    #         README.md
 
