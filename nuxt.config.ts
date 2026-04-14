@@ -39,6 +39,7 @@ export default defineNuxtConfig({
     css: ['@fortawesome/fontawesome-svg-core/styles.css'],
     build: {
         transpile: [
+            'nuxt-site-config',
             '@fortawesome/fontawesome-svg-core',
             '@fortawesome/free-solid-svg-icons',
             '@fortawesome/free-brands-svg-icons',
@@ -54,9 +55,9 @@ export default defineNuxtConfig({
     routeRules: { '/**': { prerender: true } },
     fonts: {
         families: [
-            { name: "Lexend", provider: "npm" },
-            { name: "Roboto", provider: "npm" },
-            { name: "Montserrat", provider: "npm" }
+            { name: "Lexend", provider: "fontsource" },
+            { name: "Roboto", provider: "fontsource" },
+            { name: "Montserrat", provider: "fontsource" }
         ]
     },
 
@@ -80,20 +81,21 @@ export default defineNuxtConfig({
         strategies: "generateSW",
         registerType: "prompt",
         devOptions: { enabled: false },
-        includeAssets: ['**/*.woff2', '**/*.woff'],
+        // includeAssets: ['**/*.woff2', '**/*.woff'],
         registerWebManifestInRouteRules: true,
 
-        client: { periodicSyncForUpdates: 60 },
+        // client: { periodicSyncForUpdates: 60 },
         workbox: {
             cacheId: `v3.10.0-${Date.now()}`,
-            globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3}', '_fonts/**'],
+            globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3,json}', '_fonts/**'],
+            globIgnores: ['**/node_modules/**/*'],
+            dontCacheBustURLsMatching: /_nuxt\/builds\//,
             maximumFileSizeToCacheInBytes: 5000000,
-            navigateFallback: "/index.html",
-            navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/, /node_modules/],
+            navigateFallback: "/",
+            navigateFallbackDenylist: [/\.xml$/, /\.txt$/, /\.xsl$/],
             cleanupOutdatedCaches: true,
             clientsClaim: false,
-            skipWaiting: false,
-            modifyURLPrefix: { '': '/' }
+            skipWaiting: false
         },
 
         manifest: {
@@ -114,7 +116,7 @@ export default defineNuxtConfig({
                     sizes: '512x512',
                     type: 'image/png',
                 },
-            ],
+            ]
         }
     },
     alias: {
