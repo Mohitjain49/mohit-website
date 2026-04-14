@@ -88,7 +88,7 @@ export default defineNuxtConfig({
             cacheId: `v3.10.0-${Date.now()}`,
             globPatterns: [
                 '**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3,json}',
-                '_fonts/**', '**/_payload.json'
+                '_fonts/**', '**/_payload.json?**'
             ],
             globIgnores: ['**/node_modules/**/*'],
             dontCacheBustURLsMatching: /_nuxt\/builds\//,

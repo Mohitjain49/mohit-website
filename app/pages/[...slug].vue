@@ -97,7 +97,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/google-mockup/directions/**"], replacement: "/google-mockup/#directions" },
     { routes: ["/code-reader"], replacement: "/code-scanner" },
 
-    { routes: ["/qrcode"], replacement: "/?qrdata=main" }
+    { routes: ["/qrcode/**"], replacement: "/?qrdata=main" }
 ];
 
 // This is a list of redirects to other websites.
