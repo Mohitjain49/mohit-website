@@ -6,14 +6,15 @@ export default {
     async scrollBehavior(to, from, savedPosition) {
         const { $pinia } = useNuxtApp();
         const scrollStore = useScrollStore($pinia);
+        const queryChanged = (JSON.stringify(to.query) !== JSON.stringify(from.query));
 
         await sleep(50);
-        if(scrollStore.isAutoScrolling) { return; }
+        if(scrollStore.isAutoScrolling || queryChanged) { return; }
         const hash = to.hash;
 
         if(hash.length > 0) {
             try { goToPageSection(hash.substring(1), 0, 0) } catch(e) {}
-        } else if(to.name === from.name && JSON.stringify(to.query) === JSON.stringify(from.query)) {
+        } else if(to.name === from.name) {
             scrollToTop(false, 0);
         }
     }

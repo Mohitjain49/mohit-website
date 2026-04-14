@@ -143,6 +143,11 @@
         <font-awesome-icon icon="fa-gamepad" />
     </RouterLink>
 </div>
+<div v-show="isMounted" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons right" ref="shareWidget">
+    <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" pulse-loop>
+        <font-awesome-icon icon="fa-share-from-square" />
+    </button>
+</div>
 </template>
 
 <script setup>
@@ -161,12 +166,14 @@ const isMounted = useMounted();
 const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
 const navWidgets = shallowRef(null);
+const shareWidget = shallowRef(null);
 
 const navBarSwipe = useSwipe(navBar, { passive: true });
 useSwipeToCloseMenu(navMenu);
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
 usePulseLoopAnimation(navWidgets);
+const { reset: resetShareWidgetPulse } = usePulseLoopAnimation(shareWidget);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });

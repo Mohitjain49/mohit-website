@@ -146,6 +146,14 @@
     border-bottom: 2px solid var(--website-text);
     border-bottom-right-radius: 5px;
 }
+.mohit-navBar-status-icons.right {
+    left: auto;
+    right: 0px;
+    border-right: none;
+    border-left: 2px solid var(--website-text);
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 5px;
+}
 
 .mohit-navBar-link {
     font-size: 20px;
@@ -183,6 +191,9 @@
 .mohit-navBar-statusIcon.wakelock {
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame);
+}
+.mohit-navBar-statusIcon.share {
+    background-color: rgba(0, 0, 0, 1);
 }
 
 /**

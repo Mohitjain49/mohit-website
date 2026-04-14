@@ -96,6 +96,8 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
     { routes: ["/google-mockup/directions/**"], replacement: "/google-mockup/#directions" },
     { routes: ["/code-reader"], replacement: "/code-scanner" },
+
+    { routes: ["/qrcode"], replacement: "/?qrdata=main" }
 ];
 
 // This is a list of redirects to other websites.

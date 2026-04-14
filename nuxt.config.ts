@@ -81,13 +81,15 @@ export default defineNuxtConfig({
         strategies: "generateSW",
         registerType: "prompt",
         devOptions: { enabled: false },
-        // includeAssets: ['**/*.woff2', '**/*.woff'],
         registerWebManifestInRouteRules: true,
 
-        // client: { periodicSyncForUpdates: 60 },
+        client: { periodicSyncForUpdates: 600 },
         workbox: {
             cacheId: `v3.10.0-${Date.now()}`,
-            globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3,json}', '_fonts/**'],
+            globPatterns: [
+                '**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3,json}',
+                '_fonts/**', '**/_payload.json'
+            ],
             globIgnores: ['**/node_modules/**/*'],
             dontCacheBustURLsMatching: /_nuxt\/builds\//,
             maximumFileSizeToCacheInBytes: 5000000,
