@@ -34,6 +34,16 @@ onMounted(() => {
     if(internalRoute != -1) {
         startRedirect(true);
         router.replace(INTERNAL_REDIRECTS[internalRoute].replacement);
+        return;
+    }
+
+    // This section opens the share popup on the main page.
+    const openSharePopup = (routePath.value === "/qrcode" || routePath.value.startsWith("/qrcode/**"));
+    if(openSharePopup) {
+        startRedirect(true);
+        webData.openShareOnMount = true;
+        router.replace("/?qrdata=main");
+        return;
     }
 
     // This section redirects to another website if the user typed in a particular route.
@@ -41,8 +51,9 @@ onMounted(() => {
     if(externalRoute != -1) {
         startRedirect(false);
         window.location.replace(EXTERNAL_REDIRECTS[externalRoute].replacement);
+        return;
     }
-    if(internalRoute == -1 && externalRoute == -1) { backgroundType.value = 0; }
+    if(internalRoute == -1 && externalRoute == -1 && !openSharePopup) { backgroundType.value = 0; }
 });
 
 /**
@@ -95,9 +106,7 @@ const INTERNAL_REDIRECTS = [
 
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
     { routes: ["/google-mockup/directions/**"], replacement: "/google-mockup/#directions" },
-    { routes: ["/code-reader"], replacement: "/code-scanner" },
-
-    { routes: ["/qrcode/**"], replacement: "/?qrdata=main" }
+    { routes: ["/code-reader"], replacement: "/code-scanner" }
 ];
 
 // This is a list of redirects to other websites.

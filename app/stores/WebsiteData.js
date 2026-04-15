@@ -17,7 +17,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** @type {Ref<HTMLElement>} This represents the website footer. */
     const webFooter = ref(null);
     const webFooterVisibility = useElementVisibility(webFooter);
-    const onFirstMount = ref(true);
+    const openShareOnMount = ref(true);
 
     /**
      * An reference integer that determines the Mode of the Nav Bar.
@@ -261,8 +261,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      */
     function mountWebData(pixelOffset = 0) {
         closeNavMenu();
-        if(onFirstMount.value) {
-            onFirstMount.value = false;
+        if(openShareOnMount.value) {
+            openShareOnMount.value = false;
         } else {
             setQRCodePopup("quit");
         }
@@ -401,7 +401,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, onFirstMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
+    return { pageView, openShareOnMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
