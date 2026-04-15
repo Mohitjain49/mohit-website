@@ -27,6 +27,7 @@ const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_D
 useHead(metaTags);
 
 onMounted(() => {
+    // console.log(router.getRoutes());
     webData.closeNavMenu();
 
     // This section redirects to a particular page in the website if the user typed in a particular route.
@@ -38,7 +39,7 @@ onMounted(() => {
     }
 
     // This section opens the share popup on the main page.
-    const openSharePopup = (routePath.value === "/qrcode" || routePath.value.startsWith("/qrcode/**"));
+    const openSharePopup = (routePath.value === "/qrcode" || routePath.value.startsWith("/qrcode/"));
     if(openSharePopup) {
         startRedirect(true);
         webData.openShareOnMount = true;
