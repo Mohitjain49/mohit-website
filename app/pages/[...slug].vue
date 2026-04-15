@@ -118,7 +118,7 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/eeg/**", "/eeg-ai/**"], replacement: "https://eeg-ai.mohit-jain.com" },
 
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
-    { routes: ["/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
+    { routes: ["/sitemap", "/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },
     { routes: ["/ivuemedia", "/ivue/media"], replacement: IVUE_MEDIA_WEBSITE_LINK },
