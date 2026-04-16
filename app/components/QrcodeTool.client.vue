@@ -1,10 +1,18 @@
 <template>
 <div id="qr-code-popup" class="webpage-cover">
     <div class="qrcode-mainPopup animate__animated animate__bounceIn">
-        <button class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
+        <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
+        <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
         <div id="mohit-qrcode" v-show="qrCodeDisplay"></div>
 
         <div class="qrcode-mainPopup-options">
+            <button v-if="(sharePopupMode == 0)" @click="webData.setQRCodePopup('filter')" class="qrcode-mainPopup-btn light" title="Remove All Hashes">
+                <FontAwesomeIcon icon="fa-filter" />
+            </button>
+            <a v-if="showOpenNewTabButton" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn white" title="Open Link In New Tab">
+                <FontAwesomeIcon icon="fa-up-right-from-square" />
+            </a>
+
             <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
                 <FontAwesomeIcon :icon="copyLinkIcon" :spin-pulse="(actions.copy == 1)" />
             </button>
@@ -28,15 +36,9 @@
             </div>
         </div>
 
-        <button @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-btn close" title="Close Popup">
-            <FontAwesomeIcon icon="fa-xmark" />
+        <button ref="sharePopup-close" @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-close" title="Close Popup">
+            <FontAwesomeIcon icon="fa-xmark" :beat="hoverOverCloseBtn" />
         </button>
-        <button v-if="(sharePopupMode == 0)" @click="webData.setQRCodePopup('filter')" class="qrcode-mainPopup-btn topLeft light" title="Remove All Hashes">
-            <FontAwesomeIcon icon="fa-filter" />
-        </button>
-        <a v-if="showOpenNewTabButton" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn topLeft white" title="Open Link In New Tab">
-            <FontAwesomeIcon icon="fa-up-right-from-square" />
-        </a>
     </div>
 </div>
 </template>
@@ -53,6 +55,7 @@ const overflowLocked = useScrollLock(document.body);
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
 var autoscrollTimeout = null;
+const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage("popup-shareLink");
 
 /** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
 const qrcode = ref(null);
@@ -62,7 +65,12 @@ const qrCodeDisplay = ref(false);
 const sharePopupMode = ref(0);
 const showImageOptions = ref(false);
 
+const shareCloseRef = useTemplateRef('sharePopup-close');
+const hoverOverCloseBtn = useElementHover(shareCloseRef);
+
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
+const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
+
 const qrCodeFormattedLink = computed(() => {
     if(typeof qrCodeLink.value !== "string") { return qrCodeLink.value; }
     if(qrCodeLink.value.startsWith("mailto:")) { return qrCodeLink.value.substring(7); }
@@ -70,7 +78,7 @@ const qrCodeFormattedLink = computed(() => {
     return qrCodeLink.value;
 });
 const showOpenNewTabButton = computed(() => {
-    return (sharePopupMode == 2 && !qrCodeLink.startsWith(PERSONAL_WEBSITE_LINK));
+    return (sharePopupMode.value == 2 && !qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK));
 });
 
 const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0 });
@@ -307,7 +315,7 @@ function manageLenisScrolling() {
     overflow: visible;
     height: 575px;
     width: 575px;
-    border-radius: 20px;
+    border-radius: 10px;
     background: linear-gradient(
         to bottom right,
         var(--blue-cobalt) 0%,
@@ -360,6 +368,23 @@ function manageLenisScrolling() {
     text-decoration: underline;
 }
 
+.popup-qr-text-scrollBar {
+    width: 450px;
+    height: 3px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: black;
+}
+.popup-qr-text-scrollBar .inner {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    border-radius: 5px;
+    background-color: var(--vibrant-flame);
+    height: 100%;
+    width: 100%;
+}
+
 .qrcode-mainPopup-options {
     display: flex;
     justify-content: center;
@@ -380,21 +405,45 @@ function manageLenisScrolling() {
     background: var(--dark-background);
     color: var(--website-text);
 }
+
 .qrcode-mainPopup-btn svg {
     width: 17px;
     height: 17px;
-}
-
-.qrcode-mainPopup-btn.close {
-    color: red;
-    position: absolute;
-    top: 10px;
-    right: 10px;
 }
 .qrcode-mainPopup-btn.topLeft {
     position: absolute;
     top: 10px;
     left: 10px;
+    padding: 4px;
+}
+.qrcode-mainPopup-btn.topLeft svg {
+    width: 12px;
+    height: 12px;
+}
+
+.qrcode-mainPopup-close {
+    color: red;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    transition: box-shadow 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--dark-background);
+    width: 28px;
+    height: 28px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 6px;
+    border-left: 1px solid white;
+    border-bottom: 1px solid white;
+}
+.qrcode-mainPopup-close:hover {
+    box-shadow: 0px 0px 20px 3px black;
+}
+.qrcode-mainPopup-close svg {
+    width: 15px;
+    height: 15px;
 }
 
 .qrcode-mainPopup-btn.light {
@@ -421,7 +470,7 @@ function manageLenisScrolling() {
 
 .qrcode-image-options {
     position: absolute;
-    top: calc(100% + 0px);
+    top: 100%;
     height: fit-content;
     width: fit-content;
     padding: 3px 5px;
@@ -473,6 +522,9 @@ function manageLenisScrolling() {
     }
     .popup-qr-text p {
         font-size: 9px;
+    }
+    .popup-qr-text-scrollBar {
+        width: 225px;
     }
 
     .qrcode-mainPopup-btn {

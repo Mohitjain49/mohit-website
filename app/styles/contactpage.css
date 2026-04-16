@@ -479,10 +479,13 @@
 
 @media (max-width: 525px) {
     #contact-page {
-        padding-top: 70px;
+        padding-top: 50px;
     }
     .contact-boxes-container {
         grid-template-columns: 1fr;
+    }
+    .contact-share-btn {
+        display: none;
     }
 
     .contact-me-box {
