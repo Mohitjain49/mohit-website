@@ -96,7 +96,8 @@ const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
 const footerRef = useTemplateRef('mohit-footer');
 usePulseLoopAnimation(footerRef);
 
-onMounted(() => {
+onMounted(async() => {
+    await nextTick();
     COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
     webData.navFooterPresent = true;
     webData.webFooter = document.getElementById("footer");

@@ -80,7 +80,8 @@ watch(visitorLeftPage, () => {
     if(visitorLeftPage.value) { hideStartContactDropdown(); }
 });
 
-onMounted(() => {
+onMounted(async() => {
+    await nextTick();
     const emailRect = useElementBounding(startSocialBtns.value[0]);
     const linkedinRect = useElementBounding(startSocialBtns.value[1]);
     const githubRect = useElementBounding(startSocialBtns.value[3]);
@@ -100,7 +101,7 @@ const dropdownLinkTarget = computed(() => {
 
 // This returns custom styles for the contact button dropdown so that it looks unique.
 const dropdownCoords = computed(() => {
-    if(checkSSR() || startContactObj.value === null) {
+    if(import.meta.env.SSR || startContactObj.value === null) {
         return { left: "0px", top: "0px", color: "white", "--filter-drop-shadow": "drop-shadow(0 -2px 0 white)" }
     }
 

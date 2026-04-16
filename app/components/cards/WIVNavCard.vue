@@ -34,10 +34,7 @@ import cesium_icon from "~/assets/Cesium_Globe_Icon.svg";
 import mavlink_icon from "~/assets/ivue/Mavlink_Icon.png";
 import aws_icon from "~/assets/aws/AWS_Icon.png";
 
-onMounted(() => {
-    setNavCardAnimation("wiv-nav-newCard");
-});
-
+onMounted(() => { nextTick(() => { setNavCardAnimation("wiv-nav-newCard"); }); });
 const DEV_STACK = [
     { title: "Vue.js", icon: vuejs_icon },
     { title: "Cesium", icon: cesium_icon },

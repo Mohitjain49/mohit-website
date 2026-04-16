@@ -93,20 +93,23 @@ const downloadImageIcon = computed(() => {
     return ((status == 0) ? 'fa-download' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
 });
 
-onMounted(() => {
+onMounted(async() => {
     overflowLocked.value = true;
-    nextTick(() => { setQRCodeLink(); });
+    await nextTick();
+    setQRCodeLink();
 
     // This creates and starts the Lenis auto scrolling for this popup.
     lenis = new Lenis({ autoRaf: true, orientation: "horizontal",
         wrapper: document.getElementsByClassName("popup-qr-text").item(0),
-        content: document.getElementsByClassName("popup-qr-text").item(0).querySelector("p")
+        content: document.getElementsByClassName("popup-qr-text").item(0).querySelector("p"),
+        easing: (x = 0) => { return x; }
     });
     manageLenisScrolling();
 });
 onBeforeUnmount(() => {
     qrCodeDisplay.value = false;
-    lenis.destroy();
+    if(lenis != null) { lenis.destroy(); }
+    if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
     overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
 });
 
@@ -274,7 +277,7 @@ async function downloadQRCode() {
 async function triggerLenisAutoScroll() {
     lenis.scrollTo("left", { immediate: true });
     await sleep(500);
-    lenis.scrollTo("right", { duration: 3, onComplete: () => { manageLenisScrolling(); } });
+    lenis.scrollTo("right", { duration: 3, onComplete: () => { manageLenisScrolling(); }, easing: (x = 0) => { return x; } });
 }
 
 /** This function starts a loop that enables the link at the top of the popup to autoscroll. */

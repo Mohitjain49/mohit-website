@@ -35,10 +35,7 @@ import vuejs_icon from "~/assets/Vuejs_Icon.png";
 import cesium_icon from "~/assets/Cesium_Globe_Icon.svg";
 import tauri_icon from "~/assets/Tauri_Icon.png";
 
-onMounted(() => {
-    setNavCardAnimation("globe-nav-newCard");
-});
-
+onMounted(() => { nextTick(() => { setNavCardAnimation("globe-nav-newCard"); }); });
 const DEV_STACK = [
     { title: "Vue.js", icon: vuejs_icon },
     { title: "Cesium", icon: cesium_icon },
