@@ -1,0 +1,57 @@
+# **Mohit Jain**{ .resume-markdown-title }
+
+::div{ .resume-markdown-mainLinks }
+Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@gmail.com) • [www.mohit-jain.com](https://www.mohit-jain.com/) • [LinkedIn](https://www.linkedin.com/in/mohitjain49/) • [GitHub](https://github.com/Mohitjain49)
+::
+
+# **SUMMARY**{ .resume-markdown-section-title }
+
+::div{ .resume-markdown-mainSummary }
+I’m a software developer experienced in web and mobile application development. I work across the stack, combining frontend design, backend systems, and third-party cloud services to build solutions that are intuitive, reliable and help solve everyday problems. I also lead teams and mentor young, emerging developers, fostering growth and collaboration. For more information about me, check out my Personal Website at [www.mohit-jain.com](https://www.mohit-jain.com/).
+::
+
+# **[EXPERIENCE](https://www.mohit-jain.com/experience/)**{ .resume-markdown-section-title }
+
+**[iVue](https://www.ivueworld.com/)**{ .resume-markdown-section-subtitle }  
+::div{ .resume-markdown-subHeader }
+Lead Software Developer
+::
+
+* Defined company standards for web application development by mandating professional coding best practices, writing technical documentation, and creating training programs to help new developers build essential frontend skills at iVue.  
+* Developed a full-stack single-page application called [Worlds iVue](https://www.worldsivue.com/), a geospatial platform that is capable of connecting to and operating advanced drones and other devices. It utilizes Amazon Web Services such as  [Amazon Cognito](https://aws.amazon.com/cognito/) for its user authentication services and Web APIs such as the [Web Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) to enable gamepad compatibility so users can operate their drone directly with a gaming controller.  
+* Led the development of iVue’s company websites, overseeing and personally contributing to its overall design, and improved website performance by lowering overall latency by 75% and improving search engine optimization with Google Analytics.  
+* Built Arduino systems for motor control and data communication and enabled reliable integration with drones and ground stations using the [MAVLink Protocol](https://mavlink.io/en/).  
+* Mentored multiple interns in front-end development by offering guidance and hands-on assistance on modern web development frameworks, responsive UI/UX design, and coding best practices.  
+* Implemented company-wide email services with [Amazon WorkMail](https://aws.amazon.com/workmail/), improving communication and productivity across sales, software development, and engineering teams.
+
+**[Sublo](https://www.sublo.app/)**{ .resume-markdown-section-subtitle }  
+::div{ .resume-markdown-subHeader }
+Intern Mobile Application Developer
+::
+
+* Collaborated with other software developers to create a mobile application with [React Native](https://reactnative.dev/) by taking charge as the primary mobile application developer, integrating [Amazon Cognito](https://aws.amazon.com/cognito/) into their application to create its user authentication system, and utilizing mobile-specific APIs to enhance the app’s capabilities.
+
+# **[PROJECTS](https://www.mohit-jain.com/projects/)**{ .resume-markdown-section-title }
+
+**[Mapping Neurodivergence](https://mnd.mohit-jain.com)**{ .resume-markdown-section-subtitle }  
+::div{ .resume-markdown-subHeader }
+Full-Stack Development
+::
+
+* Developed a web application that helps neurodivergent users easily connect with one another for the Spring 2025 Hackathon for Social Good at Kennesaw State University.  
+* Took charge of frontend development, software testing, and API development with my team.
+
+# **EDUCATION**{ .resume-markdown-section-title }
+
+**Kennesaw State University**
+::div{ .resume-markdown-subHeader }
+Bachelor Degree in Computer Science
+::
+
+* **GPA:** 3.7  
+* **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis, Operating Systems, Linear Algebra, Artificial Intelligence
+
+# **[SKILLS](https://www.mohit-jain.com/skills/)**{ .resume-markdown-section-title }
+
+* **Languages And Frameworks:** Java, JavaScript, Node.js, HTML, CSS, [Vue.js](https://vuejs.org/), Nuxt, React, React Native, Angular, Vite, Vitest, Tauri, TypeScript, NodeJS, Python, [GoLang](https://go.dev/), SQL, [R](https://www.r-project.org/)  
+* **Tools And Platforms:** Amazon Web Services, Git, GitHub, GitLab, NPM, Yarn, MAVLink Protocol, CesiumJS, Arduino
