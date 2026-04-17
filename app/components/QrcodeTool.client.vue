@@ -285,7 +285,8 @@ async function downloadQRCode() {
 async function triggerLenisAutoScroll() {
     lenis.scrollTo("left", { immediate: true });
     await sleep(500);
-    lenis.scrollTo("right", { duration: 3, onComplete: () => { manageLenisScrolling(); }, easing: (x = 0) => { return x; } });
+    const duration = ((lenis.dimensions.scrollWidth / lenis.dimensions.width) * 1.9);
+    lenis.scrollTo("right", { duration, onComplete: () => { manageLenisScrolling(); } });
 }
 
 /** This function starts a loop that enables the link at the top of the popup to autoscroll. */

@@ -34,6 +34,7 @@
                     :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                     :style="getSpecialBtnStyles(contact.color)"
                     @click="(event) => onContactBtnClick(event, contact)"
+                    @dblclick="webData.setQRCodePopup(contact.link)"
                     @pointerenter="setHeartbeatAnimation"
                     @mouseleave="setHeartbeatAnimation">
 
