@@ -394,10 +394,13 @@ const EXTRA_ROUTES = [
         left: 0px;
         width: 100%;
     }
-    .footer-main-icon {
-        grid-column: span 1;
+    .footer-routes-opt {
+        width: 280px;
+        padding: 4px 10px;
+        letter-spacing: 1px;
     }
 
+    .footer-main-icon { grid-column: span 1; }
     .footer-bottom { height: 40px; }
     .copyright-statement { font-size: 18px; }
 

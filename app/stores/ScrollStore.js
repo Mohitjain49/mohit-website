@@ -83,6 +83,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
     async function scrollToId(id = "start", offset = 0, delay = 0) {
+        if(isAutoScrolling.value) { return; }
         return new Promise((resolve, reject) => {
             if(!mounted.value) { reject("Website Not Loaded Yet."); }
             const target = document.getElementById(id);
@@ -110,6 +111,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
     function scrollToTop(instant = false, delay = 0) {
+        if(isAutoScrolling.value) { return; }
         return new Promise((resolve, reject) => {
             if(!mounted.value) { reject("Website Not Loaded Yet."); }
             const duration = Math.max(0.75, Math.min((window.scrollY / 4000), 3));
@@ -130,11 +132,13 @@ export const useScrollStore = defineStore("scroll-store", () => {
      * @param {Number} increment The increment scroll.
      */
     function scrollByIncrement(increment) {
+        if(isAutoScrolling.value) { return; }
         lenis.scrollTo(lenis.scroll + increment, { immediate: true, force: true });
     }
 
     /** This function handles auto scrolling for the gamepad. */
     function gamepadScrollToTop() {
+        if(isAutoScrolling.value) { return; }
         const routerObj = router.currentRoute.value;
         if(routerObj.hash !== "") { router.push(routerObj.path); }
         scrollToTop(false, 10);

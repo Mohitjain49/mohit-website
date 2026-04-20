@@ -173,7 +173,7 @@ useSwipeToCloseMenu(navMenu);
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
 usePulseLoopAnimation(navWidgets);
-const { reset: resetShareWidgetPulse } = usePulseLoopAnimation(shareWidget);
+usePulseLoopAnimation(shareWidget);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });

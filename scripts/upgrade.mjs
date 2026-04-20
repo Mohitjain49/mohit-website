@@ -52,9 +52,9 @@ async function main() {
 
         if(rejectDepsBool) {
             var rejectDepsInput = "";
-            while(rejectDepsInput != "_no_") {
-                rejectDepsInput = await rl.question('Type in the name of a package, or the string \"_no_\" if you would like to stop: ');
-                if(rejectDepsInput != "_no_") { rejectDepsArray.push(rejectDepsInput.toLowerCase()); }
+            while(rejectDepsInput != "_stop_" && rejectDepsInput != "_no_") {
+                rejectDepsInput = await rl.question('Type in the name of a package, or the string \"_stop_\" if you would like to stop: ');
+                if(rejectDepsInput != "_stop_" && rejectDepsInput != "_no_") { rejectDepsArray.push(rejectDepsInput.toLowerCase()); }
             }
             console.log("✅ Packages Recorded.\n\n")
         } else {
@@ -92,14 +92,20 @@ async function main() {
                 versionType = await rl.question('Invalid Input. Please Try Again (M.m.p): ');
             }
 
+            // This uses the "npm version" command to update the project version.
             runCommand(`npm version ${versionType} --no-git-tag-version --allow-same-version`);
-            const versionJsonSpinner = createSpinner("Updating version.json...");
-
             const packageData = JSON.parse(await readFile('./package.json', 'utf-8'));
-            const newVersion = packageData.version;
 
             // Updates the version.json file.
-            await writeFile("./public/version.json", JSON.stringify({ version: newVersion }), 'utf8');
+            const versionJsonSpinner = createSpinner("Updating version.json...");
+            const newVersion = packageData.version;
+
+            const date = new Date();
+            const utcMonth = String(date.getUTCMonth() + 1).padStart(2, '0');
+            const utcDate = String(date.getUTCDate()).padStart(2, '0');
+            const parsedDate = (date.getUTCFullYear() + "-" + utcMonth + "-" + utcDate);
+
+            await writeFile("./public/version.json", JSON.stringify({ version: newVersion, date: parsedDate }, null, 4), 'utf8');
             versionJsonSpinner.succeed("Updated version.json!!");
 
             // Updates the vite.config.js file.

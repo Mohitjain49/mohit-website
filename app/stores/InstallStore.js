@@ -53,7 +53,7 @@ export const useInstallStore = defineStore("install-store", () => {
      * @param {Boolean} status THe new status of the update box.
      */
     function setUpdateBox(status = false) {
-        showUpdateBox.value = status
+        showUpdateBox.value = status;
     }
 
     return { installIcon, installText, showUpdateBox, swRegistered,
