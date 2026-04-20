@@ -1,6 +1,7 @@
 <script setup>
 import fcs_logo from "~/assets/Fulton_County_Schools_Logo.png";
-const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "fcs-certificate-tab"];
+import c_programming_icon from "~/assets/C_Programming_Icon.svg";
+const TAB_IDS = ["resume-tab", "deploy-script-tab", "github-tab", "unix-shell-tab", "fcs-certificate-tab"];
 
 const tabRefs = ref([]);
 const documentsText = ref(null);
@@ -67,6 +68,19 @@ useIntersectionObserver(tabRefs, (entry) => {
             </RouterLink>
         </div>
         <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
+            <RouterLink to="/unix-shell/" id="unix-shell-tab" class="documents-section-tab" pulse-loop>
+                <div class="documents-section-tab-header">
+                    <img :src="c_programming_icon" width="35" draggable="false" />
+                    <span> My Unix Shell </span>
+                </div>
+                <p>
+                    I created a simple Unix Shell using the C programming language. 
+                    It will run on any Unix-based Operating System (or WSL for Windows). 
+                    You can view it by clicking here.
+                </p>
+            </RouterLink>
+        </div>
+        <div class="documents-section-tab-parent" :ref="(el) => {tabRefs[4] = el}">
             <RouterLink :to="FCS_CERTIFICATE_ROUTE" id="fcs-certificate-tab" class="documents-section-tab" pulse-loop>
                 <img :src="fcs_logo" width="110" draggable="false" />
                 <p>
@@ -130,7 +144,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 }
 .documents-section-tabs-container {
     width: 100%;
-    height: 800px;
+    height: 1000px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -203,12 +217,16 @@ useIntersectionObserver(tabRefs, (entry) => {
     box-shadow: 0px 0px 12px 12px rgba(161, 100, 255, 0.5);
 }
 
-.documents-section-tab#sitemap-tab {
-    color: lightgrey;
-    border-color: lightgray;
+.documents-section-tab#unix-shell-tab {
+    color: #A9BACD;
+    border-color: #A9BACD;
 }
-.documents-section-tab#sitemap-tab:hover {
-    box-shadow: 0px 0px 12px 12px rgba(211, 211, 211, 0.25);
+.documents-section-tab#unix-shell-tab img {
+    padding-left: 0px !important;
+    margin-right: 10px;
+}
+.documents-section-tab#unix-shell-tab:hover {
+    box-shadow: 0px 0px 12px 12px #a9bacd79;
 }
 
 .documents-section-tab#github-tab {
@@ -238,7 +256,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     }
     
     .documents-section-tabs-container {
-        height: 800px;
+        height: 1000px;
     }
     .documents-section-tab {
         height: 150px;

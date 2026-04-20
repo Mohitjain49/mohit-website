@@ -13,6 +13,7 @@ import tauri_icon from "../assets/Tauri_Icon.png";
 import vite_pwa_icon from "../assets/Vite_PWA_Icon.png";
 import arduino_icon from "../assets/Arduino_Icon.svg";
 import r_icon from "../assets/R_Project_Icon.png";
+import c_programming_icon from "../assets/C_Programming_Icon.svg";
 import google_colab_icon from "../assets/Google_Colab_Icon.png";
 
 import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
@@ -37,6 +38,7 @@ export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK +
 export const PERSONAL_RESUME_LINK = "https://www.mohit-jain.com/Mohit_Jain_Resume.pdf";
 export const PERSONAL_SITEMAP_LINK = "https://www.mohit-jain.com/sitemap.xml";
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
+export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/mysh.c");
 export const CREATE_GITHUB_REPO_DOC_LINK = "https://www.mohit-jain.com/Create_Github_Repo.pdf";
 
 export const GAMEPAD_ICON_SOURCE = "https://kenney.nl/assets/input-prompts";
@@ -615,6 +617,20 @@ export const LANGUAGES_SKILL_NOTES = [
         }
     },
     {
+        name: "C",
+        link: "https://www.c-language.org/",
+        color: "#A9BACD",
+        desc: "C is a programming language that most modern programming languages like JavaScript and Python are built on top of. " +
+            "It is capable of talking directly to a computer's memory and processor. " +
+            "I learned quite a lot about it in my Operating Systems class at Kennesaw State University and even made my own Unix Shell.",
+
+        icon: {
+            id: c_programming_icon,
+            faIcon: false,
+            size: "100"
+        }
+    },
+    {
         name: "Arduino",
         link: "https://www.arduino.cc/",
         color: "#25c2c7",
@@ -863,7 +879,7 @@ export const FEATURE_ENTITIES = [
     {
         name: "Scripts",
         link: "/aws-deploy-script/",
-        color: "rgb(144, 62, 62)",
+        color: "var(--script-page-main-color)",
         desc: "I use the \"Shiki\" module to display code on my website. " +
             "Currently, I only display my AWS Deployment Script and some of my Web Gamepad API code here.",
 

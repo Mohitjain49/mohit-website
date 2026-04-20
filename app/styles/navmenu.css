@@ -196,6 +196,31 @@
     background-color: rgba(0, 0, 0, 1);
 }
 
+.mohit-navBar-loadingWidget {
+    cursor: default !important;
+    width: fit-content;
+    height: 18px;
+    padding: 0px 3px;
+    border: 2px solid var(--blue-one);
+    color: var(--blue-one);
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    user-select: none;
+}
+.mohit-navBar-loadingWidget.script {
+    color: var(--script-page-main-color);
+    border-color: var(--script-page-main-color);
+}
+
+.mohit-navBar-loadingWidget svg { font-size: 12px; }
+.mohit-navBar-loadingWidget span { margin-left: 3px; }
+
 /**
  * Below are classes that specifically concern the navigation menus.
  */

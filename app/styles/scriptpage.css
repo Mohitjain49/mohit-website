@@ -1,6 +1,6 @@
 .mohit-main-script {
     padding: 10px 20px;
-    margin: 20px auto;
+    margin: 30px auto 20px auto;
     border-radius: 10px;
     max-width: 1250px;
     width: calc(100% - 70px);
@@ -11,6 +11,7 @@
 :fullscreen .mohit-main-script {
     min-width: 0px;
     max-width: none;
+    margin: 10px auto;
 }
 
 #mohit-scriptPage-code {

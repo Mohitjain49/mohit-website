@@ -3,7 +3,7 @@
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar />
         <div class="pdf-page-innerContainer" v-for="(page, index) in docPages" :id="('page_' + page.num)">
-            <div v-if="!documentStore.docLoaded" class="pdf-doc-loadingCover">
+            <div v-if="!documentStore.docLoaded.status" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
             </div>
             <button v-if="showShare" @click="openShare(page.num)" class="pdf-doc-linkBtn" :title="('Get A Link For This Document!')">
@@ -57,13 +57,14 @@ const docPagesRefs = ref([]);
 
 const showShare = computed(() => {
     const goodWidth = (props.shareMinWidth <= windowWidth.value);
-    return (props.addShare && documentStore.docLoaded && !fullScreenSet.value && goodWidth);
+    return (props.addShare && documentStore.docLoaded.status && !fullScreenSet.value && goodWidth);
 });
 
 onBeforeUnmount(() => { cancelAllRendering(); });
-watch(pages, () => {
-    if(pages.value < 1) { return; }
-    docPages.value = Array.from({ length: pages.value }, (_, i) => { return { loaded: false, num: (i + 1) }; });
+watch(pages, (numPages) => {
+    if(numPages < 1) { return; }
+    documentStore.docLoaded.totalPages = numPages;
+    docPages.value = Array.from({ length: numPages }, (_, i) => { return { loaded: false, num: (i + 1) }; });
 });
 
 /**
@@ -72,8 +73,15 @@ watch(pages, () => {
  */
 function setSingleDocLoaded(index = 1) {
     docPages.value[index].loaded = true;
-    const notLoaded = docPages.value.findIndex(item => { return !item.loaded; });
-    if(notLoaded == -1) { documentStore.setDocLoaded(); }
+    const totalPages = documentStore.docLoaded.totalPages;
+    var numPagesLoaded = 0;
+
+    for(let i = 0; i < docPages.value.length; i++) {
+        if(docPages.value[i].loaded) { numPagesLoaded++; }
+    }
+
+    documentStore.docLoaded.loadedPages = numPagesLoaded;
+    if(numPagesLoaded == totalPages) { documentStore.setDocLoaded(); }
 }
 
 /**
@@ -88,7 +96,7 @@ function openShare(pageNum = 1) {
 
 /** This function cancels all pages from rendering fully. Called with "onBeforeUnmount". */
 function cancelAllRendering() {
-    if(documentStore.docLoaded) { return; }
+    if(documentStore.docLoaded.status) { return; }
     for(let i = 0; i < docPagesRefs.value.length; i++) {
         try { docPagesRefs.value[i].cancel(); } catch(e) {}
     }

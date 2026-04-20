@@ -100,12 +100,7 @@ async function main() {
             const versionJsonSpinner = createSpinner("Updating version.json...");
             const newVersion = packageData.version;
 
-            const date = new Date();
-            const utcMonth = String(date.getUTCMonth() + 1).padStart(2, '0');
-            const utcDate = String(date.getUTCDate()).padStart(2, '0');
-            const parsedDate = (date.getUTCFullYear() + "-" + utcMonth + "-" + utcDate);
-
-            await writeFile("./public/version.json", JSON.stringify({ version: newVersion, date: parsedDate }, null, 4), 'utf8');
+            await writeFile("./public/version.json", JSON.stringify({ version: newVersion }), 'utf8');
             versionJsonSpinner.succeed("Updated version.json!!");
 
             // Updates the vite.config.js file.

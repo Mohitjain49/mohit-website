@@ -144,6 +144,13 @@
     </RouterLink>
 </div>
 <div v-show="isMounted" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons right" ref="shareWidget">
+    <div v-if="scriptsStore.scriptLoading" class="mohit-navBar-loadingWidget script" title="Loading Script Page...">
+        <font-awesome-icon icon="fa-spinner" spin-pulse />
+    </div>
+    <div v-if="showLoadingDocsWidget" class="mohit-navBar-loadingWidget" title="Loading Document...">
+        <font-awesome-icon icon="fa-spinner" spin-pulse />
+        <span> {{ documentStore.docLoaded.loadedPages + '/' + documentStore.docLoaded.totalPages }} </span>
+    </div>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" pulse-loop>
         <font-awesome-icon icon="fa-share-from-square" />
     </button>
@@ -183,6 +190,7 @@ const showWakeLockWidget = computed(() => {
     return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
 });
 
+const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); })
 const showNavWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected)); });
 const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
 

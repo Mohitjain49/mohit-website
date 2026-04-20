@@ -105,6 +105,12 @@ const PAGE_METADATA = [
         desc: "This page shows the code that fires and handles the custom gamepad events I made on my website.",
         type: "gamepad-extra"
     },
+    {
+        title: "Mohit Jain | My Unix Shell",
+        route: "unix-shell",
+        desc: "I developed a lightweight Unix shell that uses system calls like \"fork\" and \"pipe\" to run basic user commands like \"ls\", \"cd\", and \"grep\"",
+        type: "default"
+    },
 ];
 
 const CURRENT_METADATA = PAGE_METADATA[props.index];

@@ -1,18 +1,19 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
-import gamepad_store_utility_code from "@/stores/GamepadStore.js?raw";
-import gamepad_component_code from "@/components/GamepadComponent.client.vue?raw";
-import gamepad_events_code from "@/gamepad-events.js?raw";
+import my_unix_shell from "@scripts/mysh.c?raw";
+
+import gamepad_store_utility_code from "~/stores/GamepadStore.js?raw";
+import gamepad_component_code from "~/components/GamepadComponent.client.vue?raw";
+import gamepad_events_code from "~/gamepad-events.js?raw";
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
-    /**
-     * This stores basic object data for each of the scripts hosted on my website.
-     */
+    /** This stores basic object data for each of the scripts hosted on my website. */
     const scripts = [
         useHostedScript("/aws-deploy-script", deploy_code, "deploy", ".mjs", PERSONAL_DEPLOY_SCRIPT_LINK),
         useHostedScript("/gamepad/store-and-utility", gamepad_store_utility_code, "GamepadStore", ".js", GAMEPAD_STORE_FILE),
         useHostedScript("/gamepad/vuejs-component", gamepad_component_code, "GamepadComponent", ".client.vue", GAMEPAD_COMPONENT_FILE),
-        useHostedScript("/gamepad/custom-events", gamepad_events_code, "gamepad-events", ".js", GAMEPAD_EVENTS_FILE)
+        useHostedScript("/gamepad/custom-events", gamepad_events_code, "gamepad-events", ".js", GAMEPAD_EVENTS_FILE),
+        useHostedScript("/unix-shell", my_unix_shell, "mysh", ".c", PERSONAL_UNIX_SHELL_LINK),
     ];
 
     const router = useRouter();
@@ -36,11 +37,13 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
     });
 
-    /** The GitHub Link of the script currently being displayed. */
-    const currentScriptLink = computed(() => { return ((currentScriptRoute.value == -1) ? "" : scripts[currentScriptRoute.value].link) });
     const onScriptRoute = computed(() => { return (currentScriptRoute.value != -1); });
     const onDeployScriptRoute = computed(() => { return scripts[0].onRoute.value; });
     const onGamepadScriptRoute = computed(() => { return (currentScriptLink.value >= 1 || currentScriptLink.value <= 3); });
+
+    /** The GitHub Link of the script currently being displayed. */
+    const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
+    const scriptLoading = computed(() => { return (onScriptRoute.value ? (scripts[currentScriptRoute.value].htmlLoaded.value == 1) : false); });
 
     const downloadIcon = computed(() => {
         const downloadObj = scriptDownloadStatus.value;
@@ -313,8 +316,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute, currentScriptLink,
-        scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
+    return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
+        currentScriptLink, scriptLoading, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, setLineOptionsPlacement, placeLineOptionsOnCode
@@ -326,7 +329,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
  * @param {String} path The path in the website that displays this script.
  * @param {String} code The actual code that this script has.
  * @param {String} name The name of the file.
- * @param {".mjs" | ".js" | ".cjs" | ".vue" | ".client.vue"} suffix The suffix of the file.
+ * @param {".mjs" | ".js" | ".cjs" | ".vue" | ".client.vue" | ".c"} suffix The suffix of the file.
  * @param {String} link A link where this file would be stored online. Most likely a GitHub Link.
  */
 function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link = "") {
