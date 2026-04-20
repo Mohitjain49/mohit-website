@@ -33,7 +33,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value);
     });
 
-    const docLoaded = ref(false);
+    const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
     const customPdfScaleFactor = ref(1.375);
@@ -330,7 +330,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function unmountDocumentPage() {
         document.body.style.overflowY = "";
-        docLoaded.value = false;
+        docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
         fullScreenStore.exitFullScreen();
         
         docAbortController.abort();
@@ -408,7 +408,9 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This sets a boolean to indicate that the document is loaded on the screen. Also handles the automatic scroll to a page.
      */
     function setDocLoaded() {
-        docLoaded.value = true;
+        const totalPages = docLoaded.value.totalPages;
+        docLoaded.value = { status: true, totalPages, loadedPages: totalPages };
+
         const hashStr = router.currentRoute.value.hash.substring(1);
         if(hashStr === "") { return; }
 

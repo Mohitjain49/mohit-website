@@ -20,6 +20,7 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: '/gamepad/store-and-utility', file: SCRIPT_TEMPLATE, props: { index: 1 } },
         { path: '/gamepad/vuejs-component', file: SCRIPT_TEMPLATE, props: { index: 2 } },
         { path: '/gamepad/custom-events', file: SCRIPT_TEMPLATE, props: { index: 3 } },
+        { path: '/unix-shell', file: SCRIPT_TEMPLATE, props: { index: 4 } },
     ];
 
     const REDIRECT_PAGES = [

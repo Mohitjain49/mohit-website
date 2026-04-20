@@ -28,6 +28,7 @@
     --fulton-green: #005941;
     
     --vuejs-green: #41B883;
+    --script-page-main-color: rgb(144, 62, 62);
 
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
@@ -138,19 +139,15 @@ button {
     z-index: 1;
 }
 #script-page:fullscreen {
-    padding: 0px 12px 30px 0px !important;
+    padding: 0px 12px 40px 0px !important;
     width: calc(100% - 12px);
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;
 }
 
-#resume-container:fullscreen::-webkit-scrollbar {
-    display: none;
-}
-#script-page:fullscreen::-webkit-scrollbar {
-    display: none;
-}
+#resume-container:fullscreen::-webkit-scrollbar { display: none; }
+#script-page:fullscreen::-webkit-scrollbar { display: none; }
 
 .webpage-cover {
     margin: 0;

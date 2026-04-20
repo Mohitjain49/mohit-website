@@ -3,10 +3,15 @@
     <div id="start-innerContainer" ref="startContent">
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
-            Lead Software Developer At <span><RouterLink to="/#ivue" style="color: white;" @click="goToIvueSection()">iVue</RouterLink></span>
+            Lead Software Developer At 
+            <span>
+                <RouterLink class="ivue-subtitle" to="/#ivue" @click="goToIvueSection()">
+                    <img :src="ivue_white_text" draggable="false" />
+                </RouterLink>
+            </span>
         </div>
         <div class="start-section-subtitle">
-            Co-creator of <span><a :href="WORLDS_IVUE_LINK" style="color: #48A548;">Worlds iVue</a></span>
+            Co-creator of <span><a :href="WORLDS_IVUE_LINK" class="wiv-subtitle">Worlds iVue</a></span>
         </div>
 
         <div class="start-buttonRow main">
@@ -62,6 +67,9 @@
 </template>
 
 <script setup>
+import ivue_white_text from "~/assets/ivue/iVue_White_Text_Cropped.png";
+import wiv_banner from "~/assets/ivue/Worlds_iVue_Banner.png";
+
 const webData = useWebsiteDataStore();
 const visitorLeftPage = usePageLeave();
 const router = useRouter();
@@ -241,16 +249,33 @@ const MAIN_BTNS = [
     color: var(--website-text);
     text-shadow: var(--website-text) 1px 0 10px;
 }
+.start-section-subtitle span {
+    position: relative;
+    right: 1px;
+}
 
-.start-section-subtitle a {
+.start-section-subtitle a.ivue-subtitle {
+    color: white;
     transition: var(--default-transition);
-    text-decoration: underline;
+    padding: 1px 4px;
+    border-radius: 5px;
+}
+.start-section-subtitle img {
+    position: relative;
+    top: 2px;
+    height: 23px;
+    user-select: none;
+}
+
+.start-section-subtitle a.wiv-subtitle {
+    color: #48A548;
+    transition: var(--default-transition);
     padding: 0px 3px;
-    padding-bottom: 3px;
+    padding-bottom: 2px;
     border-radius: 5px;
 }
 .start-section-subtitle a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.175);
 }
 
 .start-buttonRow {

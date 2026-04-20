@@ -4,6 +4,7 @@
     <div class="mohit-scrollBar-body"> <div :class="innerScrollBarClasses" ref="scrollbar-inner" :style="vScrollbarStyle"></div> </div>
     <button class="bottom" @click="scrollFsElement(10)" title="Click Here To Scroll Down!"> <FontAwesomeIcon icon="fa-caret-down" /> </button>
 </div>
+<div v-else class="mohit-scrollBar-replacement"></div>
 </template>
 
 <script setup>
@@ -47,7 +48,7 @@ function setUserSelect(enable = true) {
     position: fixed;
     z-index: 15;
     width: 12px;
-    height: 100%;
+    height: calc(100% - 2px);
     right: 0px;
     top: 0px;
     background-color: black;
@@ -55,13 +56,25 @@ function setUserSelect(enable = true) {
     border-radius: 0px;
     overflow: hidden;
 }
+.mohit-scrollBar-replacement {
+    position: fixed;
+    z-index: 15;
+    width: 12px;
+    height: calc(100% - 2px);
+    right: 0px;
+    top: 0px;
+    background-color: var(--vibrant-flame);
+    border: 1px solid white;
+    border-radius: 0px;
+    overflow: hidden;
+}
+
 .mohit-scrollBar-body {
     height: calc(100% - 26px);
     width: 100%;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
 }
-
 .mohit-scrollBar-body .inner {
     width: 100% !important;
     background-color: var(--vibrant-flame);
@@ -69,6 +82,7 @@ function setUserSelect(enable = true) {
     position: relative;
     border-radius: 20px;
 }
+
 .mohit-scrollBar-body .inner.active,
 .mohit-scrollBar-body .inner:hover {
     background-color: var(--vibrant-flame-dark);
