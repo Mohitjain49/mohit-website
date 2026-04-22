@@ -88,8 +88,11 @@ async function main() {
             const versionPattern = /^\d+\.\d+\.\d+$/;
             var versionType = await rl.question('Please Enter the Version Number Here (M.m.p): ');
 
-            while(!versionPattern.test(versionType) && versionType != "patch" && versionType != "minor" && versionType != "major") {
+            while(!versionPattern.test(versionType) && versionType != "patch" && versionType != "minor" && versionType != "major" && versionType != "same") {
                 versionType = await rl.question('Invalid Input. Please Try Again (M.m.p): ');
+            }
+            if(versionType === "same") {
+                versionType = JSON.parse(await readFile('./package.json', 'utf-8')).version;
             }
 
             // This uses the "npm version" command to update the project version.

@@ -149,7 +149,9 @@
     </div>
     <div v-if="showLoadingDocsWidget" class="mohit-navBar-loadingWidget" title="Loading Document...">
         <font-awesome-icon icon="fa-spinner" spin-pulse />
-        <span> {{ documentStore.docLoaded.loadedPages + '/' + documentStore.docLoaded.totalPages }} </span>
+        <span v-if="(documentStore.docLoaded.totalPages > 1)">
+            {{ documentStore.docLoaded.loadedPages + '/' + documentStore.docLoaded.totalPages }}
+        </span>
     </div>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" pulse-loop>
         <font-awesome-icon icon="fa-share-from-square" />

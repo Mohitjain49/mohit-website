@@ -64,15 +64,11 @@ const fullScreenStore = useFullScreenStore();
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
 const scriptOptions = useTemplateRef('script-options');
-const { reset: resetPulseLoop } = usePulseLoopAnimation(scriptOptions);
+usePulseLoopAnimation(scriptOptions);
 
 onMounted(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
-
-watch(scriptHTML, () => {
-    if(scriptHTML.value) { scriptsStore.setWrapCodeStyles(); }
-    resetPulseLoop();
-});
+watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
 
 /** This function opens the scripts menu. */
 function openScriptsMenu() {

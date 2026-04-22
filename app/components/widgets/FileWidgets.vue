@@ -71,20 +71,20 @@ function setWidgetAnimations() {
 
 #download-file-widget {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    bottom: 10px;
+    left: 10px;
     background-color: var(--dark-background);
     border: 2px solid var(--website-light-text);
     color: var(--website-light-text);
-    height: 50px;
-    width: 50px;
+    height: 30px;
+    width: 30px;
     border-radius: 50%;
     overflow: hidden;
     z-index: 15;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 25px;
+    font-size: 15px;
     transition: var(--default-transition), scale 0.2s;
 }
 #download-file-widget:hover {

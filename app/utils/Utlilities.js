@@ -74,7 +74,7 @@ export function useScrollPercentage(elementId = "") {
 
 /**
  * This utility sets the necessary event listeners to enable any HTML element to use the pulse loop animation.
- * @param {ShallowRef<HTMLElement>} container This is the main container to which the utility will apply to.
+ * @param {import('vue').ShallowRef<HTMLElement>} container This is the main container to which the utility will apply to.
  */
 export function usePulseLoopAnimation(container = null) {
     /** @type {MutationObserver} */
@@ -148,12 +148,13 @@ export function usePulseLoopAnimation(container = null) {
 
     onMounted(async() => { await enable(); });
     onBeforeUnmount(() => { disable(); });
+    watch(container, () => { reset() });
     return { enabled, numElements, enable, disable, reset, animate }
 }
 
 /**
  * This utility is used by this website's side menus to set the necessary events to close itself with a swipe.
- * @param {ShallowRef<HTMLElement>} menuElement This is the main container to which the utility will apply to.
+ * @param {import('vue').ShallowRef<HTMLElement>} menuElement This is the main container to which the utility will apply to.
  */
 export function useSwipeToCloseMenu(menuElement) {
     const webData = useWebsiteDataStore();
