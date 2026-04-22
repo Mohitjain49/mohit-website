@@ -58,10 +58,11 @@ onMounted(() => { nextTick(() => {
     border-color: var(--blue-one);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 525px) {
     #compass-widget {
-        bottom: 10px;
-        left: 10px;
+        height: 45px;
+        width: 45px;
+        font-size: 23px;
     }
 }
 </style>

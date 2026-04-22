@@ -48,47 +48,47 @@ function setWidgetAnimations() {
 <style scoped>
 #minimizeScreen-widget {
     position: fixed;
-    bottom: 15px;
-    left: 15px;
+    bottom: 12px;
+    left: 12px;
     background-color: var(--dark-background);
     border: 2px solid var(--lightning-yellow);
     color: var(--lightning-yellow);
-    height: 45px;
-    width: 45px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     overflow: hidden;
     z-index: 1100;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 22px;
+    font-size: 20px;
     transition: var(--default-transition), scale 0.2s;
 }
 #minimizeScreen-widget:hover {
-    box-shadow: 0px 0px 20px var(--lightning-yellow);
+    box-shadow: 0px 0px 10px 1px var(--lightning-yellow);
     scale: 1.1;
 }
 
 #download-file-widget {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+    bottom: 12px;
+    left: 12px;
     background-color: var(--dark-background);
     border: 2px solid var(--website-light-text);
     color: var(--website-light-text);
-    height: 30px;
-    width: 30px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     overflow: hidden;
     z-index: 15;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 15px;
+    font-size: 20px;
     transition: var(--default-transition), scale 0.2s;
 }
 #download-file-widget:hover {
-    box-shadow: 0px 0px 20px var(--website-light-text);
+    box-shadow: 0px 0px 10px 1px var(--website-light-text);
     scale: 1.1;
 }
 </style>

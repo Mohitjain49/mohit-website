@@ -45,9 +45,9 @@ const copyrightBodyRef = useTemplateRef('copyright-main-body');
 const updateButtonClicked = ref(false);
 
 const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
-const RELEASE_DATE = ref("Released On: Jan 22, 2026");
-const RELEASE_TIME = ref("(11:59 PM)");
-const PROJECT_VERSION = ref("Version 3.10.0");
+const RELEASE_DATE = ref("Released On: April 21, 2026");
+const RELEASE_TIME = ref("(11:00 PM)");
+const PROJECT_VERSION = ref("Version 3.10.3");
 
 onMounted(() => {
     initWebData();

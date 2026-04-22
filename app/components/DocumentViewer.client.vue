@@ -18,7 +18,7 @@
                 :height="documentStore.customPdfHeight"
                 :page="page.num"
             />
-        </div>>
+        </div>
     </div>
     
     <template v-if="fullScreenSet">
