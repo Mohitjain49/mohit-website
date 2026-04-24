@@ -4,6 +4,8 @@
 .nuxt
 .nitro
 .cache
+.sonda
+.unlighthouse
 dist
 bundle-visualizer
 
