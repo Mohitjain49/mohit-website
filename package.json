@@ -36,6 +36,7 @@
         "better-sqlite3": "^12.9.0",
         "dayjs": "^1.11.20",
         "lenis": "^1.3.23",
+        "libphonenumber-js": "^1.12.42",
         "nuxt": "^4.4.2",
         "ofetch": "^1.5.1",
         "pdf-lib": "^1.17.1",

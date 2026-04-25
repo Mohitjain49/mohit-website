@@ -36,7 +36,7 @@
                     <div class="contact-input-tab-header-container withOptions">
                         <div class="contact-input-tab-header">
                             <span style="margin-right: 10px;"> Your Message </span>
-                            <div class="options">
+                            <div v-if="isMounted" class="options">
                                 <button @click="audioStore.manageTTS(msgMain)" :title="audioStore.ttsTitle">
                                     <font-awesome-icon :icon="audioStore.ttsIcon" />
                                 </button>
@@ -118,7 +118,7 @@
 
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
-                            <button v-if="webData.shareSupported" :title="social.shareBtn"
+                            <button v-if="(webData.shareSupported && isMounted)" :title="social.shareBtn"
                                 @click="shareLink(social.displayLink)"
                                 @pointerenter="setHeadShakeAnimation"
                                 @mouseleave="setHeadShakeAnimation">
@@ -166,6 +166,7 @@ const MIN_MESSAGE_LENGTH = 50;
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const router = useRouter();
+const isMounted = useMounted();
 
 const titleInput = ref();
 const alertBoxText = ref("");

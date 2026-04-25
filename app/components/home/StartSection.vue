@@ -4,11 +4,7 @@
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
             Lead Software Developer At 
-            <span>
-                <RouterLink class="ivue-subtitle" to="/#ivue" @click="goToIvueSection()">
-                    <img :src="ivue_white_text" draggable="false" />
-                </RouterLink>
-            </span>
+            <span> <RouterLink class="ivue-subtitle" to="/#ivue" @click="goToIvueSection()" title="See what I worked on at iVue!"> iVue </RouterLink> </span>
         </div>
         <div class="start-section-subtitle">
             Co-creator of <span><a :href="WORLDS_IVUE_LINK" class="wiv-subtitle">Worlds iVue</a></span>
@@ -67,9 +63,6 @@
 </template>
 
 <script setup>
-import ivue_white_text from "~/assets/ivue/iVue_White_Text_Cropped.png";
-import wiv_banner from "~/assets/ivue/Worlds_iVue_Banner.png";
-
 const webData = useWebsiteDataStore();
 const visitorLeftPage = usePageLeave();
 const router = useRouter();
@@ -257,16 +250,10 @@ const MAIN_BTNS = [
 .start-section-subtitle a.ivue-subtitle {
     color: white;
     transition: var(--default-transition);
-    padding: 1px 4px;
+    padding: 0px 3px;
+    padding-bottom: 2px;
     border-radius: 5px;
 }
-.start-section-subtitle img {
-    position: relative;
-    top: 2px;
-    height: 23px;
-    user-select: none;
-}
-
 .start-section-subtitle a.wiv-subtitle {
     color: #48A548;
     transition: var(--default-transition);
