@@ -9,8 +9,8 @@
             <button v-if="(sharePopupMode == 0)" @click="webData.setQRCodePopup('filter')" class="qrcode-mainPopup-btn light" title="Remove All Hashes">
                 <FontAwesomeIcon icon="fa-filter" />
             </button>
-            <a v-if="showOpenNewTabButton" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn white" title="Open Link In New Tab">
-                <FontAwesomeIcon icon="fa-up-right-from-square" />
+            <a v-if="showOpenNewTabButton" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn white" :title="openNewTabButtonTitle">
+                <FontAwesomeIcon :icon="openNewTabButtonIcon" />
             </a>
 
             <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
@@ -45,6 +45,7 @@
 
 <script setup>
 import QRCodeStyling from 'qr-code-styling';
+import ParsePhoneNumber from 'libphonenumber-js';
 import Lenis from 'lenis';
 
 const router = useRouter();
@@ -72,13 +73,23 @@ const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?
 const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
 
 const qrCodeFormattedLink = computed(() => {
-    if(typeof qrCodeLink.value !== "string") { return qrCodeLink.value; }
-    if(qrCodeLink.value.startsWith("mailto:")) { return qrCodeLink.value.substring(7); }
-    if(qrCodeLink.value.startsWith("tel:")) { return qrCodeLink.value.substring(4); }
-    return qrCodeLink.value;
+    const mainLink = qrCodeLink.value;
+    if(typeof mainLink !== "string") { return mainLink; }
+
+    if(mainLink.startsWith("mailto:")) { return mainLink.substring(7); }
+    if(mainLink.startsWith("tel:")) { return formatPhoneNumber(); }
+    return mainLink;
 });
-const showOpenNewTabButton = computed(() => {
-    return (sharePopupMode.value == 2 && !qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK));
+
+const showOpenNewTabButton = computed(() => { return (sharePopupMode.value == 2 && !qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK)); });
+const openNewTabButtonIcon = computed(() => {
+    const mainLink = qrCodeLink.value;
+    return (mainLink.startsWith("mailto:") ? 'fa-square-envelope' : (mainLink.startsWith("tel:") ? 'fa-square-phone' : 'fa-up-right-from-square'));
+});
+const openNewTabButtonTitle = computed(() => {
+    const mainLink = qrCodeLink.value;
+    const formattedLink = qrCodeFormattedLink.value;
+    return (mainLink.startsWith("mailto:") ? ('Email ' + formattedLink) : (mainLink.startsWith("tel:") ? ('Call ' + formattedLink) : 'Open Link In New Tab'));
 });
 
 const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0 });
@@ -116,9 +127,10 @@ onMounted(async() => {
 });
 onBeforeUnmount(() => {
     qrCodeDisplay.value = false;
+    overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
+
     if(lenis != null) { lenis.destroy(); }
     if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
-    overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
 });
 
 // This watches for changes to the QR Code Data so the popup changes reactively.
@@ -296,6 +308,9 @@ function manageLenisScrolling() {
         autoscrollTimeout = null;
     }, 1500);
 }
+
+/** This function returns a formatted phone number for the share popup to display. */
+function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substring(4), "US").formatNational(); }
 </script>
 
 <style>

@@ -4,7 +4,6 @@
     <div class="mohit-scrollBar-body"> <div :class="innerScrollBarClasses" ref="scrollbar-inner" :style="vScrollbarStyle"></div> </div>
     <button class="bottom" @click="scrollFsElement(10)" title="Click Here To Scroll Down!"> <FontAwesomeIcon icon="fa-caret-down" /> </button>
 </div>
-<div v-else class="mohit-scrollBar-replacement"></div>
 </template>
 
 <script setup>
@@ -20,14 +19,17 @@ const innerScrollBarClasses = computed(() => { return ['inner', (mousePressed.va
 
 watch(mouseY, (newY, oldY) => { if(mousePressed.value) { scrollFsElement((window.innerHeight - 26) / (newY - oldY)); } });
 watch(mousePressed, () => { setUserSelect(!mousePressed.value); });
-onBeforeUnmount(() => { setUserSelect(true); });
+watch(showScrollBar, (newValue) => { manageOverflowClass(!newValue); });
+
+onMounted(() => { manageOverflowClass(!showScrollBar.value); });
+onBeforeUnmount(() => { setUserSelect(true); manageOverflowClass(false); });
 
 /**
  * This function scrolls within the Full Screen element.
  * @param {Number} divisor The number to divide the full screen element's total height by.
  */
 function scrollFsElement(divisor = 10) {
-    const element = document.getElementById(props.fsElementId);
+    const element = getFsElement();
     const newValue = (element.scrollTop + (element.scrollHeight / divisor));
     element.scrollTop = Math.max(0, Math.min(element.scrollHeight, newValue));
 }
@@ -38,9 +40,28 @@ function scrollFsElement(divisor = 10) {
  * @param {Boolean} enable Whether to enable user text selection or not.
  */
 function setUserSelect(enable = true) {
-    const element = document.getElementById(props.fsElementId);
-    if(element) { element.style.userSelect = (enable ? "" : "none"); }
+    const element = getFsElement();
+    if(element != null) { element.style.userSelect = (enable ? "" : "none"); }
 }
+
+/**
+ * This function sets a class for a full screen element based on whether there is vertical overflow or not.
+ * @param {Boolean} noOverflow The status on whether there is no overflow for the full screen element.
+ */
+function manageOverflowClass(noOverflow = false) {
+    const element = getFsElement();
+    const className = "fullscreen-noOverflow";
+    if(element == null) { return; }
+
+    if(noOverflow && !element.classList.contains(className)) {
+        element.classList.add(className);
+    } else if(!noOverflow) {
+        element.classList.remove(className);
+    }
+}
+
+/** This function returns the Full Screen element for it to be adjusted by the Full Screen Element. */
+function getFsElement() { return document.getElementById(props.fsElementId); }
 </script>
 
 <style scoped>

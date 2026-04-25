@@ -2,9 +2,9 @@ import { fileURLToPath } from "node:url";
 import { addComponent } from "@nuxt/kit";
 import { imagetools } from "vite-imagetools";
 
+import Info from "unplugin-info/vite";
 import usePageTemplates from "./page-templates.config";
 import pwaConfig from "./pwa.config";
-import Info from "unplugin-info/vite";
 
 const SITEMAP_EXCLUDED_ROUTES = [
     "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
@@ -64,10 +64,13 @@ export default defineNuxtConfig({
 
     site: { url: "https://www.mohit-jain.com", name: "Mohit Jain | My Portfolio" },
     sitemap: {
+        zeroRuntime: true,
         exclude: SITEMAP_EXCLUDED_ROUTES,
         defaults: { lastmod: new Date().toISOString().split('T')[0] }
     },
-    experimental: { appManifest: true },
+
+    sourcemap: false,
+    experimental: { appManifest: true, typedPages: true },
     pwa: pwaConfig,
 
     vite: {

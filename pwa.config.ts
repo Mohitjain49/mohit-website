@@ -9,7 +9,7 @@ const pwaConfig: PwaModuleOptions = {
 
     client: { periodicSyncForUpdates: 600 },
     workbox: {
-        cacheId: `v3.10.3-${Date.now()}`,
+        cacheId: `v3.10.4-${Date.now()}`,
         globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3,json}', '_fonts/**'],
         ignoreURLParametersMatching: [/.*/],
         globIgnores: ["**\/node_modules\/**\/*", '**/node_modules/**/*'],
@@ -53,4 +53,5 @@ const pwaConfig: PwaModuleOptions = {
     }
 }
 
+// Exports the PWA Configuration Object.
 export default pwaConfig;

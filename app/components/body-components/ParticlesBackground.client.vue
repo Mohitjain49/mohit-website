@@ -3,18 +3,23 @@
 </template>
 
 <script setup>
-// Refer to the tsParticles docs: https://particles.js.org/docs/
-
-/** @type {Ref<import('@tsparticles/engine').Container>} The container representing the background. */
+/**
+ * @type {Ref<import('@tsparticles/engine').Container>} The container representing the background.
+ * Refer to the tsParticles docs: {@link https://particles.js.org/docs/}
+ */
 const tsparticlesContainer = ref(null);
 const props = defineProps({ particlesOptions: { type: Object, required: true } });
 
 const BATTERY_LOW_THRESHOLD = 0.2 // This is a value between 0 and 1 that represents the user having "low battery".
 const visibility = useDocumentVisibility();
 const battery = useBattery();
+const windowSize = useWindowSize();
 
 const batteryLow = ref(false);
 const particlesHalved = ref(false);
+
+const webpageHidden = computed(() => { return (visibility.value === "hidden"); });
+const disableParticleDensity = computed(() => { return (windowSize.height.value >= 2000 || windowSize.width.value >= 2000); });
 
 /**
  * This function runs when the particles are fully loaded on the webpage.
@@ -24,11 +29,10 @@ function onParticlesLoaded(container) {
     tsparticlesContainer.value = container;
 }
 
-/**
- * This function simple resets the particles in the tsparticles container.
- */
+/** This function simple resets the particles in the tsparticles container. */
 function resetParticles() {
-    if(tsparticlesContainer.value != null) { tsparticlesContainer.value.reset(props.particlesOptions); }
+    if(tsparticlesContainer.value == null) { return; }
+    tsparticlesContainer.value.reset(props.particlesOptions);
 }
 
 /**
@@ -55,16 +59,30 @@ function onBatteryStatusChange() {
 // This resets the number of particles and destroys the container before unmounting the page.
 onBeforeUnmount(() => {
     if(particlesHalved.value) { (props.particlesOptions.particles.number.value *= 2); }
+    props.particlesOptions.particles.number.density.enable = true;
     if(tsparticlesContainer.value != null) { tsparticlesContainer.value.destroy(true); }
 });
 
 // This pauses the animations when the website is not visible on the visitor's device.
-watch(visibility, () => {
+watch(webpageHidden, (newValue) => {
     if(tsparticlesContainer.value == null) { return; }
-    if(visibility.value === "hidden") {
+    if(newValue) {
         tsparticlesContainer.value.pause();
     } else {
         tsparticlesContainer.value.play();
+    }
+});
+
+// This disables the "density" property of the TS Particles Background when the viewport size gets too large.
+// If not disabled, the particles lags the user's device.
+watch(disableParticleDensity, (newValue) => {
+    if(props.particlesOptions === FEATURES_BACKGROUND.value) { return; }
+    if(newValue) {
+        props.particlesOptions.particles.number.density.enable = false;
+        resetParticles();
+    } else {
+        props.particlesOptions.particles.number.density.enable = true;
+        resetParticles();
     }
 });
 

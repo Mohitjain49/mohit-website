@@ -11,6 +11,7 @@
 :fullscreen .mohit-main-script {
     min-width: 0px;
     max-width: none;
+    min-height: 0px;
     margin: 10px auto;
 }
 

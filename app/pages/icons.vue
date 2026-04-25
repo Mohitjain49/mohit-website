@@ -64,6 +64,7 @@ const ICON_WIDGETS = [
     { name: "Spaced Icon", img: "_Expanded.png" },
     { name: "Spaced Clear Icon", img: "_Expanded_Transparent.png" },
     { name: "Green Icon", img: "_Green.png" },
+    { name: "Green Rounded Icon", img: "_Green_Expanded_Rounded.png" },
     { name: "Spaced Green Icon", img: "_Green_Expanded.png" },
     { name: "Gold Icon", img: "_Gold.png" },
     { name: "Gold Rounded Icon", img: "_Gold_Expanded_Rounded.png" },

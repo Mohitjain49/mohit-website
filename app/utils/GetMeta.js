@@ -38,12 +38,15 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
                 itemListElement
             })
         }],
-        htmlAttrs: { style: ("background-color: " + bgColor) },
+        htmlAttrs: { lang: "en", style: ("background-color: " + bgColor) },
 
         meta: [
             { name: 'description', content: pageDesc },
             { name: 'author', content: "Mohit Jain" },
             { name: 'robots', content: 'index, follow' },
+
+            { name: 'google-site-verification', content: 'gPlBqbaeyyZv8FAss-9ylFVYoujmn8Xjy9Yd9RMxIug' },
+            { name: 'msvalidate.01', content: '3DA8D6305B8E59C8505A0FF085D71CD0' },
 
             { property: 'og:site:name', content: "Mohit Jain" },
             { property: 'og:type', content: 'website' },
@@ -104,11 +107,14 @@ export function getMetaWithLink(pageTitle = WEBSITE_TITLE, pageLink = PERSONAL_W
     return {
         title: pageTitle,
         link: [{ rel: 'icon', href: og_img }],
-        htmlAttrs: { style: "background-color: rgb(248, 206, 171)" },
+        htmlAttrs: { lang: "en", style: "background-color: rgb(248, 206, 171)" },
 
         meta: [
             { name: 'description', content: pageDesc },
             { name: 'author', content: "Mohit Jain" },
+
+            { name: 'google-site-verification', content: 'gPlBqbaeyyZv8FAss-9ylFVYoujmn8Xjy9Yd9RMxIug' },
+            { name: 'msvalidate.01', content: '3DA8D6305B8E59C8505A0FF085D71CD0' },
 
             { "http-equiv": 'refresh', content: ("0; url=" + pageLink) },
             { name: 'robots', content: 'noindex, nofollow' },
