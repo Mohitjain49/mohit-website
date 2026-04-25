@@ -64,6 +64,7 @@ export default defineNuxtConfig({
 
     site: { url: "https://www.mohit-jain.com", name: "Mohit Jain | My Portfolio" },
     sitemap: {
+        zeroRuntime: true,
         exclude: SITEMAP_EXCLUDED_ROUTES,
         defaults: { lastmod: new Date().toISOString().split('T')[0] }
     },
