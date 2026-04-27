@@ -127,6 +127,13 @@
 </Transition>
 
 <div v-show="showNavWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons" ref="navWidgets">
+    <button v-if="showUpdateWebsiteWidget" class="mohit-navBar-statusIcon yellow" pulse-loop
+        @click="installStore.setUpdateBox(true)"
+        title="This Is An Old Version Of My Website. Click Here To Update It.">
+
+        <font-awesome-icon v-if="!installStore.swUpdating" icon="fa-triangle-exclamation" />
+        <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
+    </button>
     <button v-if="showWakeLockWidget" :title="webData.wakeLockTitle" pulse-loop
         @click="(event) => { onWakeLockButtonClick(event); }"
         class="mohit-navBar-statusIcon wakelock">
@@ -162,12 +169,14 @@
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const { scrollProgress } = storeToRefs(useScrollStore());
+const { $pwa } = useNuxtApp();
 
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
 const gamepadStore = useGamepadStore();
+const installStore = useInstallStore();
 
 const router = useRouter();
 const isMounted = useMounted();
@@ -192,8 +201,10 @@ const showWakeLockWidget = computed(() => {
     return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
 });
 
-const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); })
-const showNavWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected)); });
+const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
+const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
+
+const showNavWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
 const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
 
 // This tracks touch "swipe" events for the navigation bar so that the user can change the page if they swipe left or right.

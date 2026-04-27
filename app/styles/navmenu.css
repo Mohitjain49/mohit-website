@@ -192,6 +192,10 @@
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame);
 }
+.mohit-navBar-statusIcon.yellow {
+    color: var(--lightning-yellow);
+    border-color: var(--lightning-yellow);
+}
 .mohit-navBar-statusIcon.share {
     background-color: rgba(0, 0, 0, 1);
 }

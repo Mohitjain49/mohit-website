@@ -22,22 +22,22 @@ import now from '~build/time';
 
 const { $pwa } = useNuxtApp();
 const installStore = useInstallStore();
-const buttonClicked = ref(false);
+const currentNow = useNow({ scheduler: (fn) => useIntervalFn(fn, 1000) });
 
 const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website version was from ");
 const UPDATE_DATE = ref("10/24/2025");
 
-onMounted(() => { nextTick(() => { calculateDateDifference(); }); });
+onMounted(() => { calculateDateDifference(); });
+watch(currentNow, () => { calculateDateDifference(); });
+
 watch(() => $pwa?.needRefresh, (newValue) => { if(newValue) { installStore.setUpdateBox(true); } });
 watch(() => $pwa?.offlineReady, (newValue) => { if(newValue) { installStore.setPwaCreated(); } });
 watch(() => $pwa?.swActivated, (newValue) => { if(newValue) { installStore.swRegistered = true; } });
 
-/**
- * This button triggers a reload that updates the website to its latest version.
- */
+/** This button triggers a reload that updates the website to its latest version. */
 async function updateWebsite() {
-    if(buttonClicked.value) { return; }
-    buttonClicked.value = true;
+    if(installStore.swUpdating) { return; }
+    installStore.swUpdating = true;
     await $pwa?.updateServiceWorker(true);
 }
 
@@ -46,8 +46,9 @@ async function updateWebsite() {
  * Then, it makes a string for the update box.
  * https://day.js.org/docs/en/display/difference
  */
-function calculateDateDifference() {
-    const currentDate = dayjs(new Date());
+async function calculateDateDifference() {
+    await nextTick();
+    const currentDate = dayjs(currentNow.value);
     const lastUpdateDate = dayjs(now);
 
     const dateDifference = {
@@ -61,21 +62,24 @@ function calculateDateDifference() {
     // console.log(dateDifference);
 
     if(dateDifference.year > 0) {
-        UPDATE_DATE.value = (dateDifference.year + " year" + ((dateDifference.year > 1) ? "s" : "") + " ago");
+        UPDATE_DATE.value = (dateDifference.year + " year" + getPlural(dateDifference.year) + " ago");
     } else if(dateDifference.month > 0) {
-        UPDATE_DATE.value = (dateDifference.month + " month" + ((dateDifference.month > 1) ? "s" : "") + " ago");
+        UPDATE_DATE.value = (dateDifference.month + " month" + getPlural(dateDifference.month) + " ago");
     } else if(dateDifference.week > 0) {
-        UPDATE_DATE.value = (dateDifference.week + " week" + ((dateDifference.week > 1) ? "s" : "") + " ago");
+        UPDATE_DATE.value = (dateDifference.week + " week" + getPlural(dateDifference.week) + " ago");
     } else if(dateDifference.day > 0) {
-        UPDATE_DATE.value = (dateDifference.day + " day" + ((dateDifference.day > 1) ? "s" : "") + " ago");
+        UPDATE_DATE.value = (dateDifference.day + " day" + getPlural(dateDifference.day) + " ago");
     } else if(dateDifference.hour > 0) {
-        UPDATE_DATE.value = (dateDifference.hour + " hour" + ((dateDifference.hour > 1) ? "s" : "") + " ago");
+        UPDATE_DATE.value = (dateDifference.hour + " hour" + getPlural(dateDifference.hour) + " ago");
     } else if(dateDifference.minute > 0) {
-        UPDATE_DATE.value = (dateDifference.minute + " minute" + ((dateDifference.minute > 1) ? "s" : "") + " ago");
+        UPDATE_DATE.value = (dateDifference.minute + " minute" + getPlural(dateDifference.minute) + " ago");
     } else {
         UPDATE_DATE.value = "a moment ago";
     }
 }
+
+/** This function returns a "pluralized" date unit if it has a quantity over 1. */
+function getPlural(num = 1) { return ((num > 1) ? "s" : ""); }
 </script>
 
 <style scoped>

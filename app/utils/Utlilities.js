@@ -158,7 +158,7 @@ export function usePulseLoopAnimation(container = null) {
  */
 export function useSwipeToCloseMenu(menuElement) {
     const webData = useWebsiteDataStore();
-    const menuSwipe = usePointerSwipe(menuElement,
+    let menuSwipe = usePointerSwipe(menuElement,
         { pointerTypes: ['mouse', 'touch', 'pen'], disableTextSelect: true, threshold: 50 }
     );
 
@@ -166,10 +166,25 @@ export function useSwipeToCloseMenu(menuElement) {
     const enabled = ref(true);
 
     // This tracks all "swipe" events for the navigation menu so that the user can close the menu by swiping to the right.
-    watch(menuSwipe.isSwiping, (isSwiping) => {
+    let swipeWatcher = watch(menuSwipe.isSwiping, (isSwiping) => {
         if(!enabled.value || !isSwiping || menuSwipe.direction.value !== 'right') { return; }
         webData.closeNavMenu();
         triggerClickSound();
+    });
+
+    // This watcher resets the "usePointerSwipe" utility and the swipe event watcher when the menu element ref changes.
+    watch(menuElement, () => {
+        if(menuSwipe != null) { menuSwipe.stop(); }
+        menuSwipe = usePointerSwipe(menuElement,
+            { pointerTypes: ['mouse', 'touch', 'pen'], disableTextSelect: true, threshold: 50 }
+        );
+
+        if(swipeWatcher != null) { swipeWatcher.stop(); }
+        swipeWatcher = watch(menuSwipe.isSwiping, (isSwiping) => {
+            if(!enabled.value || !isSwiping || menuSwipe.direction.value !== 'right') { return; }
+            webData.closeNavMenu();
+            triggerClickSound();
+        });
     });
 
     /** This function enables the utility. */

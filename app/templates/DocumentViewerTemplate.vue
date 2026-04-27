@@ -8,9 +8,12 @@
     :id="htmlClass"
     :class="htmlID"
 />
-<div id="resume-container" class="center-flex-display" v-else>
-    <div class="loading-spinner"></div>
-</div>
+<main id="resume-container" v-else>
+    <div class="document-loading-static">
+        <div class="loading-spinner"></div>
+    </div>
+    <WebFooter />
+</main>
 </template>
 
 <script setup>

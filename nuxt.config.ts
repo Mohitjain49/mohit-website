@@ -2,7 +2,6 @@ import { fileURLToPath } from "node:url";
 import { addComponent } from "@nuxt/kit";
 import { imagetools } from "vite-imagetools";
 
-import Info from "unplugin-info/vite";
 import usePageTemplates from "./page-templates.config";
 import pwaConfig from "./pwa.config";
 
@@ -24,7 +23,7 @@ export default defineNuxtConfig({
     devServer: { port: 5000, host: "localhost" },
     modules: [
         '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
-        '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts',
+        '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',
@@ -75,7 +74,6 @@ export default defineNuxtConfig({
 
     vite: {
         plugins: [
-            Info(),
             imagetools({
                 include: /assets\/.*\.(png|jpe?g)$/,
                 defaultDirectives: (url) => { return new URLSearchParams('format=webp&quality=70'); }

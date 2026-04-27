@@ -2,7 +2,7 @@
   // https://nuxt.com/docs/guide/concepts/typescript
     "files": [],
     "compilerOptions": {
-        "types": ["vite-plugin-pwa/vue"]
+        "types": ["vite-plugin-pwa/vue", "unplugin-info/client"]
     },
     "references": [
         {

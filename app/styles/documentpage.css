@@ -1,6 +1,10 @@
-/**
- * These are the styles for markdown components and the tato pdf viewer.
- */
+.document-loading-static {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 #tato-pdf-resume {
     margin: 0px auto;
