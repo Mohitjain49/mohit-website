@@ -1,6 +1,8 @@
 <template>
-<div id="qr-code-popup" class="webpage-cover">
-    <div class="qrcode-mainPopup animate__animated animate__bounceIn">
+<div v-if="showSharePopupImmediate" id="qr-code-popup" class="webpage-cover"></div>
+
+<Transition name="qrcode-popup-transition">
+    <div class="qrcode-mainPopup" v-if="showMainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
         <div id="mohit-qrcode" v-show="qrCodeDisplay"></div>
@@ -40,7 +42,7 @@
             <FontAwesomeIcon icon="fa-xmark" :beat="hoverOverCloseBtn" />
         </button>
     </div>
-</div>
+</Transition>
 </template>
 
 <script setup>
@@ -63,6 +65,7 @@ const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref(false);
 
+const showMainPopup = ref(false);
 const sharePopupMode = ref(0);
 const showImageOptions = ref(false);
 
@@ -70,6 +73,7 @@ const shareCloseRef = useTemplateRef('sharePopup-close');
 const hoverOverCloseBtn = useElementHover(shareCloseRef);
 
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
+const showSharePopupImmediate = computed(() => { return webData.showSharePopupImmediate; });
 const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
 
 const qrCodeFormattedLink = computed(() => {
@@ -115,6 +119,9 @@ const downloadImageIcon = computed(() => {
 onMounted(async() => {
     overflowLocked.value = true;
     await nextTick();
+
+    showMainPopup.value = true;
+    await nextTick();
     setQRCodeLink();
 
     // This creates and starts the Lenis auto scrolling for this popup.
@@ -125,16 +132,22 @@ onMounted(async() => {
     });
     manageLenisScrolling();
 });
-onBeforeUnmount(() => {
-    qrCodeDisplay.value = false;
+
+// This watches for changes to the QR Code Data so the popup changes reactively.
+watch(qrdata, () => { setQRCodeLink(); });
+
+// This watcher closes the main share popup and disables all the JS.
+watch(showSharePopupImmediate, (newValue) => { if(!newValue) { unmountSharePopup(); } });
+
+/** This function is used to unmount the share popup. */
+function unmountSharePopup() {
+    showMainPopup.value = false;
+    showImageOptions.value = false;
     overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
 
     if(lenis != null) { lenis.destroy(); }
     if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
-});
-
-// This watches for changes to the QR Code Data so the popup changes reactively.
-watch(qrdata, () => { setQRCodeLink(); });
+}
 
 /** This function sets the link for the Share Popup. */
 function setQRCodeLink() {
@@ -323,7 +336,12 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     background-color: rgba(0, 0, 0, 0.9);
 }
 .qrcode-mainPopup {
-    position: relative;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -332,6 +350,7 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     height: 575px;
     width: 575px;
     border-radius: 10px;
+    z-index: 1501;
     background: linear-gradient(
         to bottom right,
         var(--blue-cobalt) 0%,
@@ -348,6 +367,11 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     border-radius: 15px;
     overflow: clip;
     border: 2px dashed black;
+    background: #E5E5E5;
+    background-image: url('/qrcode/Homepage_Qrcode.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 #mohit-qrcode canvas {
     width: 100%;
@@ -519,7 +543,7 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     }
 }
 
-@media (max-width: 625px) {
+@media screen and (max-width: 625px), screen and (max-height: 625px) {
     .qrcode-mainPopup {
         width: 325px;
         height: 325px;
@@ -550,5 +574,17 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
         width: 14px;
         height: 14px;
     }
+}
+
+.qrcode-popup-transition-enter-active, .qrcode-popup-transition-leave-active {
+    transition: transform 0.5s, opacity 0.5s;
+}
+.qrcode-popup-transition-enter-from, .qrcode-popup-transition-leave-to {
+    opacity: 0;
+    transform: scale(0.10);
+}
+.qrcode-popup-transition-enter-to, .qrcode-popup-transition-leave-from {
+    opacity: 1;
+    transform: scale(1);
 }
 </style>

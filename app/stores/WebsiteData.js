@@ -35,7 +35,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ((websiteMenuMode.value == 0) ? "navMenu-transition" : "navMenu-smallWidth-transition") });
 
-    const showSharePopup = computed(() => {
+    const showSharePopup = ref(false);
+    const showSharePopupImmediate = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
         return (data != null && typeof data === "string");
     });
@@ -69,6 +70,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(wakeLockTimeout != null) { clearTimeout(wakeLockTimeout); }
         wakeLockChangeFresh.value = true;
         wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000);
+    });
+
+    // This sets how the popup should behave as opposed to the webpage cover.
+    watch(showSharePopupImmediate, (newValue) => {
+        if(newValue) {
+            showSharePopup.value = true;
+        } else {
+            sleep(500).then(() => { showSharePopup.value = false; });
+        }
     });
 
     /**
@@ -375,7 +385,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
-        shareSupported, showSharePopup, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
+        shareSupported, showSharePopup, showSharePopupImmediate, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
