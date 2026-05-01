@@ -67,12 +67,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     });
 
-    // This hides and reveals the main website scrollbar based on if a website menu is open or not.
-    watch(menuOpen, () => {
-        const newWidth = ((menuOpen.value == -1) ? '10px' : '0px');
-        try { document.documentElement.style.setProperty('--main-scrollbar-width', newWidth); } catch(e) {}
-    });
-
     // This is used to track if the wake lock was freshly changed or not.
     watch(wakeLock.isActive, () => {
         if(wakeLockTimeout != null) { clearTimeout(wakeLockTimeout); }
@@ -99,8 +93,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
-        document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
-        document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
         document.body.addEventListener("keydown", onKeyDown, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
 
@@ -311,21 +303,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         setMenuOpen((menuOpen.value == 0) ? -1 : 0);
     }
 
-    /** The toggles the status of the home navigation menu. */
-    function toggleScriptsMenu() {
-        setMenuOpen((menuOpen.value == 2) ? -1 : 2);
-    }
-
     /**
      * This function sets the status of whether a website menu is open or not.
      * @param {Number} index The index of what menu should be open.
+     * @param {Boolean} toggle If true AND the menu to be opened is already open, this function wil then close the menu.
      */
-    function setMenuOpen(index = -1) {
-        menuOpen.value = (scrollStore.isAutoScrolling ? -1 : index);
+    function setMenuOpen(index = -1, toggle = false) {
+        const setMenuClosed = (scrollStore.isAutoScrolling || (toggle && menuOpen.value == index));
+        menuOpen.value = (setMenuClosed ? -1 : index);
     }
 
     /** This function closes any open Navigation Menu. */
-    function closeNavMenu() { setMenuOpen(-1); }
+    function closeNavMenu() { setMenuOpen(-1, false); }
 
     /**
      * This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked.
@@ -403,7 +392,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     return { pageView, openShareOnMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
-        toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
+        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });

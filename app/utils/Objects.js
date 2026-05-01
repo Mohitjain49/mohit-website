@@ -32,14 +32,15 @@ import ses_icon from "../assets/aws/AWS_SES_Icon.svg";
 import api_gateway_icon from "../assets/aws/AWS_API_Gateway_Icon.svg";
 
 export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/";
-export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/mohit-website";
-export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
-export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
 export const PERSONAL_RESUME_LINK = "https://www.mohit-jain.com/Mohit_Jain_Resume.pdf";
 export const PERSONAL_SITEMAP_LINK = "https://www.mohit-jain.com/sitemap.xml";
+export const CREATE_GITHUB_REPO_DOC_LINK = "https://www.mohit-jain.com/Create_Github_Repo.pdf";
+
+export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/mohit-website";
+export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
 export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/mysh.c");
-export const CREATE_GITHUB_REPO_DOC_LINK = "https://www.mohit-jain.com/Create_Github_Repo.pdf";
+export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
 
 export const GAMEPAD_ICON_SOURCE = "https://kenney.nl/assets/input-prompts";
 export const GAMEPAD_EVENTS_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/gamepad-events.js");
@@ -47,6 +48,8 @@ export const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/mai
 export const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.client.vue");
 
 export const MND_PROJECT_LINK = "https://mnd.mohit-jain.com/";
+export const TICTACTOE_PROJECT_LINK = "https://tictactoe.mohit-jain.com/";
+export const EEG_PROJECT_LINK = "https://eeg-ai.mohit-jain.com/";
 export const PERSONAL_GLOBE_LINK = "https://mohitjain49.github.io/globe/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
 
@@ -307,19 +310,6 @@ export const VUEJS_SKILL_NOTES = [
             id: vue_icon,
             faIcon: false,
             size: "105"
-        }
-    },
-    {
-        name: "Vite SSG",
-        link: "https://github.com/antfu-collective/vite-ssg",
-        color: "#9863FE",
-        desc: "Vite-SSG can build any Vue.js application with Static Site Generation, allowing for better Search Engine Optimization. " +
-            "This was created and is currently maintained by Anthony Fu, a core developer of Vue.js, Vite, and Nuxt.",
-
-        icon: {
-            id: awesome_vite_icon,
-            faIcon: false,
-            size: "115"
         }
     }
 ];
@@ -765,6 +755,19 @@ export const PROJECT_ENTITIES = [
             id: mnd_text,
             faIcon: false,
             size: "210"
+        }
+    },
+    {
+        name: "Tic-Tac-Toe",
+        link: TICTACTOE_PROJECT_LINK,
+        color: "#1e7c0a",
+        desc: "This project utiltizes Nuxt and Pyodide (A Python distribution for the browser) to run Tic-Tac-Toe on a website. " +
+            "The Computer Program that plays against you uses a Minimax Algorithm that doesn't lose in any scenario.",
+
+        icon: {
+            id: "fa-table-cells",
+            faIcon: true,
+            size: "110"
         }
     },
     {

@@ -29,16 +29,16 @@
             <RouterLink to="/contact/" title="Contact Me!" @click="(event) => { flashNavOpt(event, '/contact/') }" class="mohit-navBar-icon" pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
-            <button v-if="webData.compassMenuAvailable" class="mohit-navBar-icon light" @click="webData.setMenuOpen(1)" title="Navigate This Page" pulse-loop>
+            <button v-if="webData.compassMenuAvailable" class="mohit-navBar-icon light" @click="webData.setMenuOpen(1, true)" title="Navigate This Page" pulse-loop>
                 <font-awesome-icon icon="fa-compass" />
             </button>
-            <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.toggleScriptsMenu()" title="Script Options" pulse-loop>
+            <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(2, true)" title="Script Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
-            <button v-else-if="documentStore.onDocumentRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3)" title="Document Options" pulse-loop>
+            <button v-else-if="documentStore.onDocumentRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, true)" title="Document Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
-            <button class="mohit-navBar-icon light" @click="webData.toggleNavMenu()" title="Open Navigation Menu" pulse-loop>
+            <button class="mohit-navBar-icon light" @click="webData.setMenuOpen(0, true)" title="Open Navigation Menu" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
             </button>
         </div>
@@ -49,68 +49,61 @@
     <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="navMenu">
         <MenuTop />
 
-        <template v-if="webData.compassMenuAvailable">
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(1)" pulse-loop>
-                    <span> Navigate This Page </span>
-                    <font-awesome-icon icon="fa-compass" />
-                </button>
-            </div>
-            <div class="mohit-navMenu-opt-break"></div>
-        </template>
-        <template v-else-if="scriptsStore.onScriptRoute">
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.toggleScriptsMenu()" pulse-loop>
-                    <span> See Script Options </span>
-                    <font-awesome-icon icon="fa-file-export" />
-                </button>
-            </div>
-            <div class="mohit-navMenu-opt-break"></div>
-        </template>
-        <template v-else-if="documentStore.onDocumentRoute">
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
-                    <span> See Document Options </span>
-                    <font-awesome-icon icon="fa-file-export" />
-                </button>
-            </div>
-            <div class="mohit-navMenu-opt-break"></div>
-        </template>
-
         <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
             <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }" pulse-loop>
-                <span> {{ btn.title }} </span>
                 <font-awesome-icon :icon="btn.icon" />
+                <span> {{ btn.title }} </span>
             </RouterLink>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
         <div v-for="btn in NAV_MENU_EXTRAS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
             <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }" pulse-loop>
-                <span> {{ btn.title }} </span>
                 <font-awesome-icon :icon="btn.icon" />
+                <span> {{ btn.title }} </span>
             </RouterLink>
         </div>
         <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
             <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" @click="webData.scrollToAndFromFooter()" pulse-loop>
-                <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
                 <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
+                <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
             </RouterLink>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
+        <div v-if="webData.compassMenuAvailable" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(1)" pulse-loop>
+                <font-awesome-icon icon="fa-compass" />
+                <span> Navigate This Page </span>
+            </button>
+        </div>
+        <div v-if="scriptsStore.onScriptRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+            <button class="mohit-navMenu-mainOpt" @click="webData.toggleScriptsMenu()" pulse-loop>
+                <font-awesome-icon icon="fa-file-export" />
+                <span> See Script Options </span>
+            </button>
+        </div>
+        <div v-if="documentStore.onDocumentRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
+                <font-awesome-icon icon="fa-file-export" />
+                <span> See Document Options </span>
+            </button>
+        </div>
+
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad" @click="(event) => { flashNavOpt(event, '/gamepad') }" pulse-loop>
-                <span> Gamepad Controls </span>
                 <font-awesome-icon icon="fa-gamepad" />
+                <span> Gamepad Controls </span>
             </RouterLink>
         </div>
         <div v-if="isMounted" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
             <button class="mohit-navMenu-mainOpt" @click="(event) => { onWakeLockButtonClick(event); }" :title="webData.wakeLockTitle" pulse-loop>
-                <span> {{ webData.wakeLockStatement }} </span>
                 <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
+                <span> {{ webData.wakeLockStatement }} </span>
             </button>
         </div>
+        <div class="mohit-navMenu-opt-break"></div>
+
         <div class="mohit-navMenu-opt small-features">
             <div class="mohit-navMenu-volume-meter">
                 <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" pulse-loop>
@@ -126,7 +119,7 @@
     </div>
 </Transition>
 
-<div v-show="showNavWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons" ref="navWidgets">
+<div v-show="showNavLeftWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons" ref="navWidgets">
     <button v-if="showUpdateWebsiteWidget" class="mohit-navBar-statusIcon yellow" pulse-loop
         @click="installStore.setUpdateBox(true)"
         title="This Is An Old Version Of My Website. Click Here To Update It.">
@@ -150,7 +143,7 @@
         <font-awesome-icon icon="fa-gamepad" />
     </RouterLink>
 </div>
-<div v-show="isMounted" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons right" ref="shareWidget">
+<div v-show="showNavRightWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons right" ref="shareWidget">
     <div v-if="scriptsStore.scriptLoading" class="mohit-navBar-loadingWidget script" title="Loading Script Page...">
         <font-awesome-icon icon="fa-spinner" spin-pulse />
     </div>
@@ -204,7 +197,8 @@ const showWakeLockWidget = computed(() => {
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
 
-const showNavWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
+const showNavLeftWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
+const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1)); });
 const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
 
 // This tracks touch "swipe" events for the navigation bar so that the user can change the page if they swipe left or right.
@@ -229,9 +223,7 @@ watch(navBarSwipe.isSwiping, () => {
 function flashNavOpt(event = new MouseEvent("click"), path = "/") {
     path = (path.endsWith("/") ? path.slice(0, -1) : path);
     if(routePath.value !== path && routePath.value !== (path + "/")) { return; }
-
     scrollToTop(false, 0);
-    addFlashAnimation(event);
     webData.closeNavMenu();
 }
 

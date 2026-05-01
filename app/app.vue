@@ -6,7 +6,6 @@
 
 <NuxtPage />
 <VitePwaManifest />
-<div v-if="(webData.menuOpen != -1)" class="webpage-cover"></div>
 </template>
 
 <script setup>

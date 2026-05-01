@@ -73,7 +73,7 @@ watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(
 /** This function opens the scripts menu. */
 function openScriptsMenu() {
     webData.bypassBodyClick();
-    webData.setMenuOpen(2);
+    webData.setMenuOpen(2, true);
 }
 
 const PAGE_METADATA = [

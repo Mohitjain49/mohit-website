@@ -48,6 +48,6 @@ const topBarWidth = computed(() => {
 /** This function opens the document menu. */
 function openDocumentMenu() {
     webData.bypassBodyClick();
-    webData.setMenuOpen(3);
+    webData.setMenuOpen(3, true);
 }
 </script>

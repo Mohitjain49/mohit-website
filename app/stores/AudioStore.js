@@ -1,4 +1,4 @@
-import click_sound from "@/assets/sounds/click_sound_effect.wav";
+import click_sound from "@/assets/sounds/click_sound_effect.mp3";
 import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 
 export const useAudioStore = defineStore("audio-store", () => {
