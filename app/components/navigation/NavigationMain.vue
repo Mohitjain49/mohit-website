@@ -179,7 +179,6 @@ const navMenu = shallowRef(null);
 const navWidgets = shallowRef(null);
 const shareWidget = shallowRef(null);
 
-const navBarSwipe = useSwipe(navBar, { passive: true });
 useSwipeToCloseMenu(navMenu);
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
@@ -198,22 +197,8 @@ const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
 
 const showNavLeftWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
-const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1)); });
+const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1 || webData.websiteMenuMode == 1)); });
 const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
-
-// This tracks touch "swipe" events for the navigation bar so that the user can change the page if they swipe left or right.
-watch(navBarSwipe.isSwiping, () => {
-    if(!navBarSwipe.isSwiping.value) { return; }
-    const direction = navBarSwipe.direction.value;
-
-    if(direction === "right" && webData.navMenuOpen) {
-        webData.menuOpen = -1;
-        triggerClickSound();
-    } else if(direction === "left" && !webData.navMenuOpen) {
-        webData.menuOpen = 0;
-        triggerClickSound();
-    }
-});
 
 /**
  * This function makes a button flash if it will do nothing.

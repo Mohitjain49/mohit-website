@@ -36,6 +36,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const websiteMenuTransition = computed(() => { return ((websiteMenuMode.value == 0) ? "navMenu-transition" : "navMenu-smallWidth-transition") });
 
     const showSharePopup = ref(false);
+    const sharePopupClosing = ref(false);
     const showSharePopupImmediate = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
         return (data != null && typeof data === "string");
@@ -72,12 +73,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000);
     });
 
-    // This sets how the popup should behave as opposed to the webpage cover.
-    watch(showSharePopupImmediate, (newValue) => {
+    // This sets how the share popup should behave as opposed to its webpage cover.
+    watch(showSharePopupImmediate, async (newValue) => {
         if(newValue) {
+            if(sharePopupClosing.value) { return; }
             showSharePopup.value = true;
         } else {
-            sleep(500).then(() => { showSharePopup.value = false; });
+            sharePopupClosing.value = true;
+            await sleep(505);
+            showSharePopup.value = false;
+            sharePopupClosing.value = false;
         }
     });
 
@@ -310,12 +315,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** This function closes any open Navigation Menu. */
     function closeNavMenu() { setMenuOpen(-1, false); }
 
-    /**
-     * This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked.
-     */
-    function bypassBodyClick() {
-        nullifyBodyClick.value = true;
-    }
+    /** This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked. */
+    function bypassBodyClick() { nullifyBodyClick.value = true; }
 
     /**
      * This function sets a new status for the QR Code Popup.
@@ -334,12 +335,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    /**
-     * This function opens the QR Code popup.
-     */
-    function openQRCodePopup() {
-        setQRCodePopup('main');
-    }
+    /** This function opens the QR Code popup. */
+    function openQRCodePopup() { setQRCodePopup('main'); }
 
     /**
      * This function triggers the browser to share text To The User.
