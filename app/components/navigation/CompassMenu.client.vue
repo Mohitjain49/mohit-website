@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<Transition name="navMenu-transition">
+<Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu" ref="compassMenu">
         <MenuTop />
 

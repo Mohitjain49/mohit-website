@@ -234,16 +234,8 @@ export const useAudioStore = defineStore("audio-store", () => {
     }
 });
 
-/**
- * This function triggers the click sound effect.
- */
-export function triggerClickSound() {
-    useAudioStore().playClickSound();
-}
+/** This function triggers the click sound effect. */
+export function triggerClickSound() { useAudioStore().playClickSound(); }
 
-/**
- * This function triggers the scan sound effect.
- */
-export function triggerScanSound() {
-    useAudioStore().playScanSound();
-}
+/** This function triggers the scan sound effect. */
+export function triggerScanSound() { useAudioStore().playScanSound(); }

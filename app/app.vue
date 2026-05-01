@@ -6,6 +6,7 @@
 
 <NuxtPage />
 <VitePwaManifest />
+<div class="webpage-cover" v-if="useWebpageCover"></div>
 </template>
 
 <script setup>
@@ -17,6 +18,8 @@ const documentStore = useDocumentStore();
 const fullScreenSet = getFullScreenSet();
 
 const showShare = computed(() => { return (webData.showSharePopup && !fullScreenSet.value); });
+const useWebpageCover = computed(() => { return (webData.menuOpen != -1 && webData.websiteMenuMode == 1); });
+
 onBeforeUnmount(() => { webData.removeEventListeners(); });
 onMounted(async () => {
     webData.setEventListeners();

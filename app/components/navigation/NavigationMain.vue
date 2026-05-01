@@ -45,7 +45,7 @@
     </div>
 </nav>
 
-<Transition name="navMenu-transition">
+<Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="navMenu">
         <MenuTop />
 

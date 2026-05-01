@@ -12,31 +12,28 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
+    const { width: windowWidth } = useWindowSize();
     const wakeLock = useWakeLock();
 
     /** @type {Ref<HTMLElement>} This represents the website footer. */
     const webFooter = ref(null);
     const webFooterVisibility = useElementVisibility(webFooter);
-    const openShareOnMount = ref(true);
-
-    /**
-     * An reference integer that determines the Mode of the Nav Bar.
-     * If it equals 0, it is on laptop mode, or the screen width is above 825px.
-     * If it equals 1, it is on tablet mode, or the screen width is above 600px.
-     * If it equals 2, it is on phone mode, or the screen width is at most 600px.
-     */
-    const pageView = ref(0);
     const menuOpen = ref(-1);
 
+    const openShareOnMount = ref(true);
     const navFooterPresent = ref(false);
     const compassMenuAvailable = ref(false);
     const wakeLockChangeFresh = ref(false);
     const nullifyBodyClick = ref(false);
 
+    const noMenuOpen = computed(() => { return (menuOpen.value == -1); });
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
     const compassMenuOpen = computed(() => { return (menuOpen.value == 1); });
     const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
+
+    const websiteMenuMode = computed(() => { return ((windowWidth.value > 600) ? 0 : 1); });
+    const websiteMenuTransition = computed(() => { return ((websiteMenuMode.value == 0) ? "navMenu-transition" : "navMenu-smallWidth-transition") });
 
     const showSharePopup = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
@@ -121,17 +118,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This sets the size of crucial components within the website.
      */
     function resizePageComponents() {
-        const windowWidth = window.innerWidth;
         gamepadStore.resetCursorPositions();
         scriptsStore.setLineOptions(-1);
-        
-        if(windowWidth <= 600) {
-            pageView.value = 2;
-        } else if(windowWidth <= 825) {
-            pageView.value = 1;
-        } else {
-            pageView.value = 0;
-        }
     }
 
     /**
@@ -194,12 +182,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         return false;
     }
 
-    /**
-     * This function runs whenever the window scroll event is triggered.
-     */
-    function onWindowScroll() {
-        closeNavMenu();
-    }
+    /** This function runs whenever the window scroll event is triggered. */
+    function onWindowScroll() { closeNavMenu(); }
 
     /**
      * This function runs whenever the user hits a key.
@@ -390,8 +374,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, openShareOnMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
-        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
+    return { menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
+        shareSupported, showSharePopup, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
+        openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }

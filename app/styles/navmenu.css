@@ -404,6 +404,17 @@
 @media (max-width: 700px) {
     .mohit-navBar-mainLinks { display: none; }
 }
+@media (max-width: 600px) {
+    .mohit-navMenu {
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        margin: auto;
+        max-height: calc(100% - 40px);
+    }
+}
+
 @media (max-width: 550px) {
     .mohit-navBar-status-icons {
         height: 16px;
@@ -424,12 +435,22 @@
 .navMenu-transition-enter-from, .navMenu-transition-leave-to {
     opacity: 0;
     top: 50px;
-    overflow-y: hidden;
 }
 .navMenu-transition-enter-to, .navMenu-transition-leave-from {
     opacity: 1;
     top: 60px;
-    overflow-y: hidden;
+}
+
+.navMenu-smallWidth-transition-enter-active, .navMenu-smallWidth-transition-leave-active {
+    transition: transform 0.5s, opacity 0.5s;
+}
+.navMenu-smallWidth-transition-enter-from, .navMenu-smallWidth-transition-leave-to {
+    opacity: 0;
+    transform: scale(0.25);
+}
+.navMenu-smallWidth-transition-enter-to, .navMenu-smallWidth-transition-leave-from {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .mohit-navMenu::-webkit-scrollbar {

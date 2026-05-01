@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<Transition name="navMenu-transition">
+<Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
         <MenuTop />
 
