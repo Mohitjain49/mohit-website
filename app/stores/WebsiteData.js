@@ -82,6 +82,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             sharePopupClosing.value = true;
             await sleep(505);
             showSharePopup.value = false;
+            await sleep(5);
             sharePopupClosing.value = false;
         }
     });
@@ -323,6 +324,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {String} qrdata The URL or mode to pass into the QR Code Popup.
      */
     function setQRCodePopup(qrdata = "") {
+        if(sharePopupClosing.value) { return; }
         const route = router.currentRoute.value;
         closeNavMenu();
 

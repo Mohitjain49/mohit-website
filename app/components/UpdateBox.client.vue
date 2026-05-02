@@ -1,15 +1,15 @@
 <template>
 <div v-if="installStore.showUpdateBox" class="update-box animate__animated animate__fadeInRight">
     <div class="update-box-desc">
-        <FontAwesomeIcon :icon="(buttonClicked ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="buttonClicked" />
+        <FontAwesomeIcon :icon="(installStore.swUpdating ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="installStore.swUpdating" />
         <p class="update-box-desc-text">
             <span v-html="UPDATE_WIDGET_TITLE"></span>
             <span class="version-num" v-html="UPDATE_DATE"></span>.
         </p>
     </div>
 
-    <div :class="['update-box-buttons', (buttonClicked ? 'updating' : '')]">
-        <button class="updateBtn" @click="updateWebsite()"> {{ (buttonClicked ? 'Updating...' : 'Update') }} </button>
+    <div :class="['update-box-buttons', (installStore.swUpdating ? 'updating' : '')]">
+        <button class="updateBtn" @click="updateWebsite()"> {{ (installStore.swUpdating ? 'Updating...' : 'Update') }} </button>
         <button class="closeBtn" @click="installStore.setUpdateBox(false)"> Close </button>
         <RouterLink to="/copyright/" class="copyrightBtn"> Current Version </RouterLink>
     </div>
@@ -18,9 +18,8 @@
 
 <script setup>
 import dayjs from 'dayjs';
-import now from '~build/time';
 
-const { $pwa } = useNuxtApp();
+const { $pwa, $websiteBuild } = useNuxtApp();
 const installStore = useInstallStore();
 const currentNow = useNow({ scheduler: (fn) => useIntervalFn(fn, 1000) });
 
@@ -49,7 +48,7 @@ async function updateWebsite() {
 async function calculateDateDifference() {
     await nextTick();
     const currentDate = dayjs(currentNow.value);
-    const lastUpdateDate = dayjs(now);
+    const lastUpdateDate = $websiteBuild.date;
 
     const dateDifference = {
         year: currentDate.diff(lastUpdateDate, "y"),

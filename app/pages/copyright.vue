@@ -37,30 +37,22 @@
 </template>
 
 <script setup>
-import now from '~build/time';
-import { version } from "~build/package";
-
 const route = useRoute();
+const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 const updateButtonClicked = ref(false);
 
-const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
-const RELEASE_DATE = ref("Released On: April 27, 2026");
-const RELEASE_TIME = ref("(5:15 PM)");
-const PROJECT_VERSION = ref("Version 3.10.5");
+const COPYRIGHT_TEXT = ($websiteBuild.coprightYear + " Mohit Jain");
+const RELEASE_DATE = ("Released On: " + $websiteBuild.releaseDate);
+const RELEASE_TIME = ("(" + $websiteBuild.releaseTime + ")");
+const PROJECT_VERSION = ("Version " + $websiteBuild.version);
 
-onMounted(() => {
-    initWebData();
-    COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
-    RELEASE_DATE.value = ("Released On: " + useDateFormat(now, "MMMM Do, YYYY").value);
-    RELEASE_TIME.value = ("(" + useDateFormat(now, "h:mm A").value + ")");
-    PROJECT_VERSION.value = ("Version " + version);
-});
+usePulseLoopAnimation(copyrightBodyRef);
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website.",
     "rgb(248, 206, 171)"
 ));
-usePulseLoopAnimation(copyrightBodyRef);
 
 /**
  * This function checks for updates and deletes the cache and unregisters service workers.

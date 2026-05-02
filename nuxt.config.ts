@@ -35,11 +35,9 @@ export default defineNuxtConfig({
     components: [{ path: '~/components', pathPrefix: false, extensions: ['vue', 'md'] }],
     imports: { dirs: ['~/stores/**', '~/utils/**'] },
     pinia: { storesDirs: ['./stores/**'] },
-    hooks: { 'pages:extend'(pages) { usePageTemplates(pages); } },
     css: ['@fortawesome/fontawesome-svg-core/styles.css'],
     build: {
         transpile: [
-            'nuxt-site-config',
             '@fortawesome/fontawesome-svg-core',
             '@fortawesome/free-solid-svg-icons',
             '@fortawesome/free-brands-svg-icons',
@@ -61,6 +59,7 @@ export default defineNuxtConfig({
         ]
     },
 
+    hooks: { 'pages:extend'(pages) { usePageTemplates(pages); } },
     site: { url: "https://www.mohit-jain.com", name: "Mohit Jain | My Portfolio" },
     sitemap: {
         zeroRuntime: true,
@@ -80,5 +79,6 @@ export default defineNuxtConfig({
             })
         ]
     },
-    alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) }
+    alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
+    typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client'] } } }
 });
