@@ -371,7 +371,6 @@
 .mohit-navMenu-volume-meter button {
     font-size: 14px;
     width: 35px;
-    margin-left: 20px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -390,11 +389,9 @@
     user-select: none;
     font-family: 'Lexend', sans-serif;
     font-size: 15px;
-    width: 55px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 45px;
+    text-align: left;
+    margin-left: 10px;
 }
 
 /**

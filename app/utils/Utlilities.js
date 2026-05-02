@@ -170,7 +170,7 @@ export function useSwipeToCloseMenu(menuElement) {
      */
     function closeNavMenuWithWatcher(isSwiping = true) {
         const direction = menuSwipe.direction.value;
-        if(!enabled.value || !isSwiping || (direction !== 'right' && direction !== 'up')) { return; }
+        if(!enabled.value || !isSwiping || (direction !== 'up')) { return; }
 
         webData.closeNavMenu();
         triggerClickSound();
