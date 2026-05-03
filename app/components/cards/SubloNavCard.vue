@@ -2,7 +2,7 @@
 <div id="third-nav-card" class="newCard-container">
     <a :href="SUBLO_WEBSITE_LINK" id="sublo-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
-            <img :src="sublo_icon" width="55" />
+            <img :src="sublo_icon" width="40" />
             <div class="nav-newCard-header-text" style="color: #36A1D9"> ublo </div>
         </div>
         <div class="nav-newCard-picture">
@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             I collaborated with other developers to create a 
             subleasing mobile app with React Native and Amazon Web Services.
         </div>
@@ -26,7 +26,6 @@
 </template>
 
 <script setup>
-import "~/styles/navcards.css";
 import sublo_icon from "~/assets/sublo/Sublo_Blue_Transparent.png";
 import sublo_blue_background from "~/assets/sublo/Sublo_Blue_Background.png";
 
@@ -43,3 +42,7 @@ const DEV_STACK = [
     { title: "AWS Amplify", icon: amplify_icon },
 ];
 </script>
+
+<style scoped>
+@import "~/styles/navcards.css";
+</style>

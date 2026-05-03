@@ -1,8 +1,8 @@
 <template>
-<div id="third-nav-card" class="newCard-container">
+<div class="newCard-container">
     <a :href="PERSONAL_GLOBE_LINK" id="globe-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
-            <font-awesome-icon icon="fa-earth-americas" style="font-size: 80px;" />
+            <font-awesome-icon icon="fa-earth-americas" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="globe_page" width="77.5%" draggable="false" />
@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             I created a User Interface using CesiumJS as a "Feature Lab" for Worlds iVue. 
             It can be downloaded as a desktop app via Tauri.
         </div>
@@ -29,7 +29,6 @@
 </template>
 
 <script setup>
-import "~/styles/navcards.css";
 import globe_page from "~/assets/Personal_Globe_Page.png";
 import vuejs_icon from "~/assets/Vuejs_Icon.png";
 import cesium_icon from "~/assets/Cesium_Globe_Icon.svg";
@@ -42,3 +41,7 @@ const DEV_STACK = [
     { title: "Tauri", icon: tauri_icon },
 ];
 </script>
+
+<style scoped>
+@import "~/styles/navcards.css";
+</style>

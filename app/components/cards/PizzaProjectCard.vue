@@ -2,7 +2,7 @@
 <div class="newCard-container">
     <a :href="PIZZA_WEBSITE_LINK" id="pizza-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
-            <font-awesome-icon icon="fa-pizza-slice" style="font-size: 80px;" />
+            <font-awesome-icon icon="fa-pizza-slice" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="main_app_page" width="77.5%" draggable="false" style="border: 2px solid #8B0000;" />
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             I made a mock UI for a pizza ordering and delivery system using Angular. 
             It is hosted online via GitHub Pages.
         </div>
@@ -33,9 +33,12 @@
 </template>
 
 <script setup>
-import "~/styles/navcards.css";
 import main_app_page from "~/assets/Pizza_Project_Main_Page.png";
 import angular_icon from "~/assets/Angular_Icon.webp";
 import ts_icon from "~/assets/TypeScript_Icon.png";
 onMounted(() => { nextTick(() => { setNavCardAnimation("pizza-nav-newCard"); }); });
 </script>
+
+<style scoped>
+@import "~/styles/navcards.css";
+</style>

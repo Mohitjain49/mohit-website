@@ -4,13 +4,13 @@
 
 <template>
 <div class="mohit-navMenu-top">
-    <div class="mohit-navBar-icons left" style="margin-left: 15px;">
+    <div class="mohit-navBar-icons menu-top left">
         <RouterLink to="/" class="mohit-navBar-banner" title="Home Page" @click="manageHomeNav()" pulse-loop>
             <img :src="mkj_text" draggable="false" />
         </RouterLink>
     </div>
 
-    <div class="mohit-navBar-icons right" style="margin-right: 12px;">
+    <div class="mohit-navBar-icons menu-top right">
         <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" pulse-loop>
             <font-awesome-icon icon="fa-share-from-square" />
         </button>
@@ -19,6 +19,7 @@
         </button>
     </div>
 </div>
+<div class="mohit-navMenu-opt-break"></div>
 </template>
 
 <script setup>

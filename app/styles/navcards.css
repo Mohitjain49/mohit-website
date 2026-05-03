@@ -1,6 +1,6 @@
 .newCard-container {
     width: 100%;
-    height: 825px;
+    height: 625px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,10 +12,10 @@
 .nav-newCard {
     cursor: pointer;
     text-decoration: none;
-    width: 90%;
+    width: 330px;
     min-width: 290px;
     max-width: 400px;
-    height: 750px;
+    height: fit-content;
     border: 3px solid var(--nav-bar-border);
     border-radius: 20px;
     transition: var(--default-transition);
@@ -29,7 +29,7 @@
 
 .nav-newCard-header {
     width: 100%;
-    height: 123px;
+    height: 73px;
     border-bottom: 2px solid var(--nav-bar-border);
     transition: var(--default-transition);
     background: transparent;
@@ -38,8 +38,11 @@
     align-items: center;
 }
 .nav-newCard-header-text {
-    font-size: 60px;
+    font-size: 40px;
     font-family: 'Lexend', sans-serif;
+}
+.nav-newCard-header svg {
+    font-size: 55px;
 }
 
 .nav-newCard-picture {
@@ -57,13 +60,14 @@
 
 .newCard-devStack {
     width: 100%;
-    height: 315px;
+    height: fit-content;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     border-color: inherit;
     padding-bottom: 10px;
+    gap: 10px;
 }
 .newCard-devStack-title {
     font-size: 32px;
@@ -73,7 +77,7 @@
 
 .newCard-module {
     width: 90%;
-    height: 45px;
+    height: 25px;
     border: 2px dotted;
     border-radius: 15px;
     display: flex;
@@ -83,19 +87,19 @@
 }
 
 .newCard-module img {
-    height: 30px;
+    height: 18px;
     user-select: none;
     margin-left: 10px;
 }
 .newCard-module span {
     margin-left: 10px;
-    font-size: 18px;
+    font-size: 12px;
     font-family: 'Lexend', sans-serif;
 }
 
 .newCard-module svg {
-    height: 30px;
-    width: 30px;
+    height: 20px;
+    width: 20px;
     margin-left: 10px;
 }
 .newCard-module svg.web-dev {
@@ -104,14 +108,15 @@
 }
 
 .nav-newCard-desc {
-    width: calc(100% - 20px);
-    height: calc(100% - 625px);
-    padding: 0px 10px;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 17px;
+    width: calc(100% - 14px);
+    height: 110px;
+    padding: 5px 7px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
     color: inherit;
     border-top: var(--empty-border);
+    text-shadow: 0px 0px 0px;
 }
 .nav-newCard-personalText {
     padding: 10px 20px;
@@ -208,6 +213,21 @@
     background-color: #8B4513;
 }
 
+.nav-newCard#tictactoe-nav-newCard {
+    border-color: white;
+    color: white;
+    background-color: var(--globe-green-opaque);
+}
+.nav-newCard#tictactoe-nav-newCard .nav-newCard-header {
+    border-color: white;
+}
+.nav-newCard#tictactoe-nav-newCard .nav-newCard-desc {
+    border-color: white;
+}
+.nav-newCard#tictactoe-nav-newCard:hover {   
+    background-color: #073b38;
+}
+
 .nav-newCard#globe-nav-newCard {
     border-color: white;
     color: white;
@@ -255,9 +275,12 @@
     border-color: #F5F5DC;
 }
 
-@media (max-width: 950px) and (min-width: 651px) {
+@media (max-width: 1099px) and (min-width: 651px) {
     #third-nav-card {
         position: relative;
         left: 50%;
     }
+}
+@media (max-width: 400px) {
+    .nav-newCard { width: 315px; }
 }

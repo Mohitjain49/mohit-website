@@ -12,33 +12,32 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
+    const { width: windowWidth } = useWindowSize();
     const wakeLock = useWakeLock();
 
     /** @type {Ref<HTMLElement>} This represents the website footer. */
     const webFooter = ref(null);
     const webFooterVisibility = useElementVisibility(webFooter);
-    const openShareOnMount = ref(true);
-
-    /**
-     * An reference integer that determines the Mode of the Nav Bar.
-     * If it equals 0, it is on laptop mode, or the screen width is above 825px.
-     * If it equals 1, it is on tablet mode, or the screen width is above 600px.
-     * If it equals 2, it is on phone mode, or the screen width is at most 600px.
-     */
-    const pageView = ref(0);
     const menuOpen = ref(-1);
 
+    const openShareOnMount = ref(true);
     const navFooterPresent = ref(false);
     const compassMenuAvailable = ref(false);
     const wakeLockChangeFresh = ref(false);
     const nullifyBodyClick = ref(false);
 
+    const noMenuOpen = computed(() => { return (menuOpen.value == -1); });
     const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
     const compassMenuOpen = computed(() => { return (menuOpen.value == 1); });
     const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
 
-    const showSharePopup = computed(() => {
+    const websiteMenuMode = computed(() => { return ((windowWidth.value > 600) ? 0 : 1); });
+    const websiteMenuTransition = computed(() => { return ((websiteMenuMode.value == 0) ? "navMenu-transition" : "navMenu-smallWidth-transition") });
+
+    const showSharePopup = ref(false);
+    const sharePopupClosing = ref(false);
+    const showSharePopupImmediate = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
         return (data != null && typeof data === "string");
     });
@@ -67,17 +66,25 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     });
 
-    // This hides and reveals the main website scrollbar based on if a website menu is open or not.
-    watch(menuOpen, () => {
-        const newWidth = ((menuOpen.value == -1) ? '10px' : '0px');
-        try { document.documentElement.style.setProperty('--main-scrollbar-width', newWidth); } catch(e) {}
-    });
-
     // This is used to track if the wake lock was freshly changed or not.
     watch(wakeLock.isActive, () => {
         if(wakeLockTimeout != null) { clearTimeout(wakeLockTimeout); }
         wakeLockChangeFresh.value = true;
         wakeLockTimeout = setTimeout(() => { wakeLockChangeFresh.value = false; }, 3000);
+    });
+
+    // This sets how the share popup should behave as opposed to its webpage cover.
+    watch(showSharePopupImmediate, async (newValue) => {
+        if(newValue) {
+            if(sharePopupClosing.value) { return; }
+            showSharePopup.value = true;
+        } else {
+            sharePopupClosing.value = true;
+            await sleep(505);
+            showSharePopup.value = false;
+            await sleep(5);
+            sharePopupClosing.value = false;
+        }
     });
 
     /**
@@ -99,8 +106,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
 
         document.body.addEventListener("click", onDocumentBodyClick, { signal });
-        document.body.addEventListener("mousedown", onDocumentBodyClick, { signal });
-        document.body.addEventListener("touchstart", onDocumentBodyClick, { signal });
         document.body.addEventListener("keydown", onKeyDown, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
 
@@ -129,17 +134,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This sets the size of crucial components within the website.
      */
     function resizePageComponents() {
-        const windowWidth = window.innerWidth;
         gamepadStore.resetCursorPositions();
         scriptsStore.setLineOptions(-1);
-        
-        if(windowWidth <= 600) {
-            pageView.value = 2;
-        } else if(windowWidth <= 825) {
-            pageView.value = 1;
-        } else {
-            pageView.value = 0;
-        }
     }
 
     /**
@@ -202,12 +198,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         return false;
     }
 
-    /**
-     * This function runs whenever the window scroll event is triggered.
-     */
-    function onWindowScroll() {
-        closeNavMenu();
-    }
+    /** This function runs whenever the window scroll event is triggered. */
+    function onWindowScroll() { closeNavMenu(); }
 
     /**
      * This function runs whenever the user hits a key.
@@ -311,34 +303,28 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         setMenuOpen((menuOpen.value == 0) ? -1 : 0);
     }
 
-    /** The toggles the status of the home navigation menu. */
-    function toggleScriptsMenu() {
-        setMenuOpen((menuOpen.value == 2) ? -1 : 2);
-    }
-
     /**
      * This function sets the status of whether a website menu is open or not.
      * @param {Number} index The index of what menu should be open.
+     * @param {Boolean} toggle If true AND the menu to be opened is already open, this function wil then close the menu.
      */
-    function setMenuOpen(index = -1) {
-        menuOpen.value = (scrollStore.isAutoScrolling ? -1 : index);
+    function setMenuOpen(index = -1, toggle = false) {
+        const setMenuClosed = (scrollStore.isAutoScrolling || (toggle && menuOpen.value == index));
+        menuOpen.value = (setMenuClosed ? -1 : index);
     }
 
     /** This function closes any open Navigation Menu. */
-    function closeNavMenu() { setMenuOpen(-1); }
+    function closeNavMenu() { setMenuOpen(-1, false); }
 
-    /**
-     * This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked.
-     */
-    function bypassBodyClick() {
-        nullifyBodyClick.value = true;
-    }
+    /** This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked. */
+    function bypassBodyClick() { nullifyBodyClick.value = true; }
 
     /**
      * This function sets a new status for the QR Code Popup.
      * @param {String} qrdata The URL or mode to pass into the QR Code Popup.
      */
     function setQRCodePopup(qrdata = "") {
+        if(sharePopupClosing.value) { return; }
         const route = router.currentRoute.value;
         closeNavMenu();
 
@@ -351,12 +337,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    /**
-     * This function opens the QR Code popup.
-     */
-    function openQRCodePopup() {
-        setQRCodePopup('main');
-    }
+    /** This function opens the QR Code popup. */
+    function openQRCodePopup() { setQRCodePopup('main'); }
 
     /**
      * This function triggers the browser to share text To The User.
@@ -401,9 +383,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { pageView, openShareOnMount, menuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, shareSupported, showSharePopup,
-        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
-        toggleNavMenu, toggleScriptsMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
+    return { menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
+        shareSupported, showSharePopup, showSharePopupImmediate, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
+        openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
+        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });

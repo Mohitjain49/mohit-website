@@ -1,4 +1,4 @@
-import click_sound from "@/assets/sounds/click_sound_effect.wav";
+import click_sound from "@/assets/sounds/click_sound_effect.mp3";
 import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 
 export const useAudioStore = defineStore("audio-store", () => {
@@ -234,16 +234,8 @@ export const useAudioStore = defineStore("audio-store", () => {
     }
 });
 
-/**
- * This function triggers the click sound effect.
- */
-export function triggerClickSound() {
-    useAudioStore().playClickSound();
-}
+/** This function triggers the click sound effect. */
+export function triggerClickSound() { useAudioStore().playClickSound(); }
 
-/**
- * This function triggers the scan sound effect.
- */
-export function triggerScanSound() {
-    useAudioStore().playScanSound();
-}
+/** This function triggers the scan sound effect. */
+export function triggerScanSound() { useAudioStore().playScanSound(); }

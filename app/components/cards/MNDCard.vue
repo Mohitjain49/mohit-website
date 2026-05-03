@@ -2,7 +2,7 @@
 <div class="newCard-container">
     <a :href="MND_PROJECT_LINK" id="mnd-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
-            <img :src="mnd_text" width="200" class="nav-newCard-personalText" />
+            <img :src="mnd_text" width="100" class="nav-newCard-personalText" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="main_app_page" width="77.5%" draggable="false" />
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             For KSU's Spring 2025 Hackathon, my team and I created an app 
             that connects people through organizing in-person meetings.
         </div>
@@ -25,7 +25,6 @@
 </template>
 
 <script setup>
-import "~/styles/navcards.css";
 import mnd_text from "/static-icons/MND_Icon_Transparent.png";
 import main_app_page from "~/assets/Spring2025_Hackathon_Page.png";
 
@@ -42,3 +41,7 @@ const DEV_STACK = [
     { title: "Amazon API Gateway", icon: api_gateway_icon },
 ];
 </script>
+
+<style scoped>
+@import "~/styles/navcards.css";
+</style>

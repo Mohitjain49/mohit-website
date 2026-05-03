@@ -13,7 +13,7 @@ usePulseLoopAnimation(compassWidgetRef);
 /** This function opens the compass for this page. */
 function openCompass() {
     webData.bypassBodyClick();
-    webData.setMenuOpen(1);
+    webData.setMenuOpen(1, true);
 }
 
 onMounted(() => { nextTick(() => {

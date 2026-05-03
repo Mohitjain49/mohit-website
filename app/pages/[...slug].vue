@@ -38,15 +38,6 @@ onMounted(() => {
         return;
     }
 
-    // This section opens the share popup on the main page.
-    const openSharePopup = (routePath.value === "/qrcode" || routePath.value.startsWith("/qrcode/"));
-    if(openSharePopup) {
-        startRedirect(true);
-        webData.openShareOnMount = true;
-        router.replace("/?qrdata=main");
-        return;
-    }
-
     // This section redirects to another website if the user typed in a particular route.
     const externalRoute = EXTERNAL_REDIRECTS.findIndex(item => checkRedirectRoute(item.routes));
     if(externalRoute != -1) {
@@ -54,7 +45,7 @@ onMounted(() => {
         window.location.replace(EXTERNAL_REDIRECTS[externalRoute].replacement);
         return;
     }
-    if(internalRoute == -1 && externalRoute == -1 && !openSharePopup) { backgroundType.value = 0; }
+    if(internalRoute == -1 && externalRoute == -1) { backgroundType.value = 0; }
 });
 
 /**
@@ -115,7 +106,9 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/mnd"], replacement: MND_PROJECT_LINK },
     { routes: ["/pizza"], replacement: PIZZA_WEBSITE_LINK },
     { routes: ["/globe/**"], replacement: PERSONAL_GLOBE_LINK },
-    { routes: ["/eeg/**", "/eeg-ai/**"], replacement: "https://eeg-ai.mohit-jain.com" },
+
+    { routes: ["/tictactoe/**", "/tic-tac-toe/**"], replacement: TICTACTOE_PROJECT_LINK },    
+    { routes: ["/eeg/**", "/eeg-ai/**"], replacement: EEG_PROJECT_LINK },
 
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
     { routes: ["/sitemap", "/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },

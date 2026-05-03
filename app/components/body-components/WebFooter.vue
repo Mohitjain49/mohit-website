@@ -70,7 +70,7 @@
     <div class="footer-bottom">
         <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Statement" @click="footerScrollToTop('/copyright')" pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
-            <span> {{ COPYRIGHT_TEXT }} </span>
+            <span v-memo="[isMounted]"> {{ COPYRIGHT_TEXT }} </span>
         </RouterLink>
 
         <div class="footer-bottom-buttons">
@@ -91,14 +91,13 @@ import ivue_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 
 const router = useRouter();
 const webData = useWebsiteDataStore();
-const COPYRIGHT_TEXT = ref("2026 Mohit Jain");
+const { $websiteBuild } = useNuxtApp();
 
 const footerRef = useTemplateRef('mohit-footer');
 usePulseLoopAnimation(footerRef);
 
 onMounted(async() => {
     await nextTick();
-    COPYRIGHT_TEXT.value = (new Date().getFullYear() + " Mohit Jain");
     webData.navFooterPresent = true;
     webData.webFooter = document.getElementById("footer");
 });
@@ -106,7 +105,10 @@ onBeforeUnmount(() => {
     webData.navFooterPresent = false;
     webData.webFooter = null;
 });
+
+const isMounted = computed(() => { return webData.navFooterPresent; });
 const routePath = computed(() => { return router.currentRoute.value.path; });
+const COPYRIGHT_TEXT = computed(() => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 
 /**
  * This scrolls to the top of the webpage if the user won't change routes.

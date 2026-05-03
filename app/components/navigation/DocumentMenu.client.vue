@@ -3,55 +3,55 @@
 </style>
 
 <template>
-<Transition name="navMenu-transition">
+<Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
         <MenuTop />
 
         <template v-if="documentStore.onAnyResumeRoute">
             <div v-if="(documentStore.onMarkdownRoute || documentStore.onResumeQrcodeRoute)" class="mohit-navMenu-opt light">
                 <RouterLink to="/resume/" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <span> See My Main Resume </span>
                     <font-awesome-icon icon="fa-file-lines" />
+                    <span> See My Main Resume </span>
                 </RouterLink>
             </div>
             <div v-if="(!documentStore.onResumeQrcodeRoute)" class="mohit-navMenu-opt light">
                 <RouterLink to="/resume/qrcode/" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <span> See My Main Resume (With QR Code) </span>
                     <font-awesome-icon icon="fa-qrcode" />
+                    <span> See My Main Resume (With QR Code) </span>
                 </RouterLink>
             </div>
             <div v-if="(!documentStore.onMarkdownRoute)" class="mohit-navMenu-opt light">
                 <RouterLink to="/resume/markdown/" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <span> See My Main Resume (Markdown) </span>
                     <font-awesome-icon icon="fa-brands fa-markdown" />
+                    <span> See My Main Resume (Markdown) </span>
                 </RouterLink>
             </div>
         </template>
         <template v-else-if="documentStore.onCreateGithubRepoRoute">
             <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.scrollToPage(2)" pulse-loop>
-                    <span> See Table Of Contents </span>
                     <font-awesome-icon icon="fa-list" />
+                    <span> See Table Of Contents </span>
                 </button>
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
                 <a href="https://github.com/" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <span> Go To GitHub </span>
                     <font-awesome-icon icon="fa-brands fa-github" />
+                    <span> Go To GitHub </span>
                 </a>
             </div>
         </template>
         <template v-else-if="documentStore.onFCSCertificateRoute">
             <div class="mohit-navMenu-opt" :style="getColorStyles('#0072B1')">
                 <a :href="FCS_CERTIFICATE_LINKEDIN_POST" target="_blank" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <span> See Certificate On LinkedIn </span>
                     <font-awesome-icon icon="fa-brands fa-linkedin" />
+                    <span> See Certificate On LinkedIn </span>
                 </a>
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('var(--fulton-green)')">
                 <a :href="FCS_CAREER_INTERNSHIP_LINK" target="_blank" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <span> FCS Career Internship Program </span>
                     <font-awesome-icon icon="fa-school-flag" />
+                    <span> FCS Career Internship Program </span>
                 </a>
             </div>
         </template>
@@ -59,40 +59,40 @@
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()" pulse-loop>
-                <span> Download Document </span>
                 <font-awesome-icon :icon="documentStore.downloadIcon"
                     :spin-pulse="documentStore.documentDownloadStatus.pending"
                 />
+                <span> Download Document </span>
             </button>
         </div>
         <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" pulse-loop>
-                <span> Save Document </span>
                 <font-awesome-icon :icon="documentStore.saveDocIcon"
                     :spin-pulse="documentStore.documentSaveStatus.pending"
                 />
+                <span> Save Document </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc()" pulse-loop>
-                <span> Print Document </span>
                 <font-awesome-icon :icon="documentStore.printIcon"
                     :spin-pulse="documentStore.documentPrintStatus.pending"
                 />
+                <span> Print Document </span>
             </button>
         </div>
         <div v-if="webData.shareSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" pulse-loop>
-                <span> Share Document </span>
                 <font-awesome-icon :icon="documentStore.shareIcon"
                     :spin-pulse="documentStore.documentShareStatus.pending"
                 />
+                <span> Share Document </span>
             </button>
         </div>
         <div v-if="(documentStore.documentLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
             <a :href="documentStore.documentLink" target="mohit-document" class="mohit-navMenu-mainOpt" pulse-loop>
-                <span> Open Document In New Tab </span>
                 <font-awesome-icon icon="fa-up-right-from-square" />
+                <span> Open Document In New Tab </span>
             </a>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
@@ -104,14 +104,14 @@
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE" pulse-loop>
-                    <span> Save To Google Drive (Default Folder) </span>
                     <font-awesome-icon icon="fa-folder" />
+                    <span> Save To Google Drive (Default Folder) </span>
                 </button>
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(true)" :title="GOOGLE_CHOOSE_FOLDER_TITLE" pulse-loop>
-                    <span> Save To Google Drive (Choose Folder) </span>
                     <font-awesome-icon :icon="(documentStore.documentUploadToGoogleDriveStatus.cancel ? 'fa-ban' : 'fa-folder-tree')" />
+                    <span> Save To Google Drive (Choose Folder) </span>
                 </button>
             </div>
             <div class="mohit-navMenu-opt-break"></div>
@@ -119,28 +119,28 @@
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.toggleDocumentFullScreen()" pulse-loop>
-                <span> Maximize Document </span>
                 <font-awesome-icon :icon="fullScreenStore.faIcon" />
+                <span> Maximize Document </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0)" pulse-loop>
-                <span> Open Navigation Menu </span>
                 <font-awesome-icon icon="fa-bars" />
+                <span> Open Navigation Menu </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('red')">
             <button class="mohit-navMenu-mainOpt" @click="router.back()" pulse-loop>
-                <span> Leave To Previous Page </span>
                 <font-awesome-icon icon="fa-tent-arrow-turn-left" />
+                <span> Leave To Previous Page </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
             <a :href="PDFJS_LINK" target="_blank" class="mohit-navMenu-mainOpt" :title="PDFJS_TITLE" pulse-loop>
-                <span> PDF.js </span>
                 <img :src="pdfjs_icon" draggable="false" />
+                <span> PDF.js </span>
             </a>
         </div>
     </div>
