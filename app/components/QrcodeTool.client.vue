@@ -1,7 +1,7 @@
 <template>
 <div v-if="showSharePopupImmediate" id="qr-code-popup" class="webpage-cover"></div>
 
-<Transition name="qrcode-popup-transition">
+<Transition name="qrcode-popup-transition" appear fade>
     <div class="qrcode-mainPopup" v-if="showMainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
@@ -33,6 +33,12 @@
                         <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow" title="Download QR Code.">
                             <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
                         </button>
+                        <button @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
+                            <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
+                        </button>
+                        <a v-if="(qrCodeURL != undefined)" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
+                            <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
+                        </a>
                     </div>
                 </Transition>
             </div>
@@ -65,7 +71,7 @@ const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref(false);
 
-/** @type {Ref<blob>} This blob is used for the backgorund image and to download the qr code. */
+/** @type {Ref<Blob>} This blob is used for the backgorund image and to download the qr code. */
 const qrCodeBlob = ref(null);
 const qrCodeURL = useObjectUrl(qrCodeBlob);
 
@@ -102,8 +108,8 @@ const openNewTabButtonTitle = computed(() => {
     return (mainLink.startsWith("mailto:") ? ('Email ' + formattedLink) : (mainLink.startsWith("tel:") ? ('Call ' + formattedLink) : 'Open Link In New Tab'));
 });
 
-const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0 });
-var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null }
+const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0 });
+var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null }
 
 const copyLinkIcon = computed(() => {
     const status = actions.value.copy;
@@ -120,6 +126,10 @@ const shareImageIcon = computed(() => {
 const downloadImageIcon = computed(() => {
     const status = actions.value.downloadImage;
     return ((status == 0) ? 'fa-download' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
+});
+const copyImageIcon = computed(() => {
+    const status = actions.value.copyImage;
+    return ((status == 0) ? 'fa-clone' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
 });
 
 onMounted(async() => {
@@ -209,13 +219,13 @@ function setQRCodeLink() {
 
         qrcode.value.append(document.getElementById("mohit-qrcode"));
         qrCodeDisplay.value = true;
-
-        qrcode.value.getRawData("webp").then((result) => {
-            qrCodeBlob.value = result;
-        }).catch((e) => {
-            console.error(e)
-        });
     }
+
+    qrcode.value.getRawData("png").then((result) => {
+        qrCodeBlob.value = result;
+    }).catch((e) => {
+        console.error(e)
+    });
 }
 
 /**
@@ -272,9 +282,9 @@ async function shareQRCodeLink() {
 function shareQRCode() {
     if(actions.value.shareImage > 0 || qrCodeBlob.value == null) { return; }
     actions.value.shareImage = 1;
-
     const blob = qrCodeBlob.value;
-    webData.shareFile(new File([blob], 'Mohit_Website_QRCode.webp', { type: blob.type })).then(() => {
+
+    webData.shareFile(new File([blob], 'Mohit_Website_QRCode.png', { type: blob.type })).then(() => {
         actions.value.shareImage = 2;
     }).catch((e) => {
         console.error(e)
@@ -288,7 +298,7 @@ function shareQRCode() {
     });
 }
 
-/** This function lets the user download the QR Code as a .webp file. */
+/** This function lets the user download the QR Code as a .png file. */
 function downloadQRCode() {
     if(actions.value.downloadImage > 0 || qrCodeURL.value == undefined) { return; }
     actions.value.downloadImage = 1;
@@ -296,7 +306,7 @@ function downloadQRCode() {
     try {
         const link = document.createElement('a');
         link.href = qrCodeURL.value;
-        link.download = 'Mohit_Website_QRCode.webp';
+        link.download = 'Mohit_Website_QRCode.png';
 
         document.body.appendChild(link);
         link.click();
@@ -309,6 +319,26 @@ function downloadQRCode() {
         timeouts.downloadImage = setTimeout(() => {
             actions.value.downloadImage = 0;
             timeouts.downloadImage = null;
+        }, 3000); 
+    }
+}
+
+/** This function lets the user copy the QR Code. */
+async function copyQRCode() {
+    if(actions.value.copyImage > 0 || qrCodeBlob.value == undefined) { return; }
+    actions.value.copyImage = 1;
+    const blob = qrCodeBlob.value;
+
+    try {
+        await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+        actions.value.copyImage = 2; 
+    } catch(e) {
+        actions.value.copyImage = 3;
+    } finally {
+        if(timeouts.copyImage != null) { clearTimeout(timeouts.copyImage); }
+        timeouts.copyImage = setTimeout(() => {
+            actions.value.copyImage = 0;
+            timeouts.copyImage = null;
         }, 3000); 
     }
 }
