@@ -2,7 +2,7 @@
 <div class="newCard-container">
     <a :href="WORLDS_IVUE_LINK" id="wiv-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
-            <img :src="wiv_banner" width="250" />
+            <img :src="wiv_banner" width="200" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="wiv_page" width="80%" draggable="false" />
@@ -25,7 +25,6 @@
 </template>
 
 <script setup>
-import "~/styles/navcards.css";
 import wiv_banner from "~/assets/ivue/Worlds_iVue_Banner.png";
 import wiv_page from "~/assets/ivue/Worlds_iVue_Main_App.png";
 
@@ -42,3 +41,7 @@ const DEV_STACK = [
     { title: "Amazon Web Services", icon: aws_icon }
 ];
 </script>
+
+<style scoped>
+@import "~/styles/navcards.css";
+</style>

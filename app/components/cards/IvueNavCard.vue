@@ -2,7 +2,7 @@
 <div class="newCard-container">
     <RouterLink to="/#ivue" id="ivue-nav-newCard" class="nav-newCard" pulse-loop>
         <div class="nav-newCard-header">
-            <img :src="ivue_text" width="150" />
+            <img :src="ivue_text" width="100" />
         </div>
         <div class="nav-newCard-picture">
             <img :src="main_webpage" width="77.5%" draggable="false" />
@@ -32,7 +32,6 @@
 </template>
 
 <script setup>
-import "~/styles/navcards.css";
 import ivue_text from "~/assets/ivue/iVue_Black_Text_Cropped.png";
 import main_webpage from "~/assets/ivue/iVue_Main_Website_Home.png";
 
@@ -45,3 +44,7 @@ const DEV_STACK = [
     { title: "Cloud Architecture", icon: aws_icon },
 ];
 </script>
+
+<style scoped>
+@import "~/styles/navcards.css";
+</style>

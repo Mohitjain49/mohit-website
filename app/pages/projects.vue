@@ -8,8 +8,9 @@
             <span> Website Features </span>
         </RouterLink>
 
-        <div class="main-nav-page">
+        <div class="main-nav-page extra-column">
             <MNDCard />
+            <TictactoeNavCard />
             <PizzaProjectCard />
             <GlobeNavCard />
         </div>
@@ -43,9 +44,7 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
     align-items: center;
     flex-direction: row;
     gap: 3px;
-    width: 90%;
-    min-width: 290px;
-    max-width: 400px;
+    width: 340px;
     margin: 20px auto 0px;
     padding: 10px 0px;
     font-size: 25px;
@@ -59,5 +58,9 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
 }
 #main-projects-features-btn:hover {
     box-shadow: 0px 0px 20px var(--lightning-yellow);
+}
+
+@media (max-width: 400px) {
+    #main-projects-features-btn { width: 325px; }
 }
 </style>
