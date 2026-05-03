@@ -38,15 +38,6 @@ onMounted(() => {
         return;
     }
 
-    // This section opens the share popup on the main page.
-    const openSharePopup = (routePath.value === "/qrcode" || routePath.value.startsWith("/qrcode/"));
-    if(openSharePopup) {
-        startRedirect(true);
-        webData.openShareOnMount = true;
-        router.replace("/?qrdata=main");
-        return;
-    }
-
     // This section redirects to another website if the user typed in a particular route.
     const externalRoute = EXTERNAL_REDIRECTS.findIndex(item => checkRedirectRoute(item.routes));
     if(externalRoute != -1) {
@@ -54,7 +45,7 @@ onMounted(() => {
         window.location.replace(EXTERNAL_REDIRECTS[externalRoute].replacement);
         return;
     }
-    if(internalRoute == -1 && externalRoute == -1 && !openSharePopup) { backgroundType.value = 0; }
+    if(internalRoute == -1 && externalRoute == -1) { backgroundType.value = 0; }
 });
 
 /**

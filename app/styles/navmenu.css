@@ -371,6 +371,7 @@
 .mohit-navMenu-volume-meter button {
     font-size: 14px;
     width: 35px;
+    margin-left: 5px;
     text-align: center;
     display: flex;
     justify-content: center;

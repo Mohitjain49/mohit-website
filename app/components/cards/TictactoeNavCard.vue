@@ -24,9 +24,9 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
-            This project utiltizes Nuxt and Pyodide to run Tic-Tac-Toe on a website. 
-            The Computer Program that plays against you doesn't lose in any scenario.
+        <div class="nav-newCard-desc">
+            This project utiltizes Nuxt and Pyodide (A Python distribution for the browser) to run Tic-Tac-Toe on a website. 
+            The Computer Program that plays against you uses a Minimax Algorithm that doesn't lose in any scenario.
         </div>
     </a>
 </div>

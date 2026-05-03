@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             As a lead software developer at iVue, I take charge of the company's full-stack application development.
         </div>
     </RouterLink>

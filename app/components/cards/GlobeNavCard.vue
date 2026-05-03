@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             I created a User Interface using CesiumJS as a "Feature Lab" for Worlds iVue. 
             It can be downloaded as a desktop app via Tauri.
         </div>

@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             For KSU's Spring 2025 Hackathon, my team and I created an app 
             that connects people through organizing in-person meetings.
         </div>

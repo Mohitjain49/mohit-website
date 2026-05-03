@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             I collaborated with other developers to create a 
             subleasing mobile app with React Native and Amazon Web Services.
         </div>

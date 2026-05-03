@@ -109,16 +109,14 @@
 
 .nav-newCard-desc {
     width: calc(100% - 14px);
-    height: 100px;
-    padding: 0px 7px;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
+    height: 110px;
+    padding: 5px 7px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
     font-size: 15px;
     color: inherit;
     border-top: var(--empty-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-shadow: 0px 0px 0px;
 }
 .nav-newCard-personalText {
     padding: 10px 20px;
@@ -284,5 +282,5 @@
     }
 }
 @media (max-width: 400px) {
-    .nav-newCard { width: 325px; }
+    .nav-newCard { width: 315px; }
 }

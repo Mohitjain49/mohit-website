@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             Explore Worlds iVue, a geospatial app that serves as a 
             drone control operator and will serve as a media sharing app in the future.
         </div>

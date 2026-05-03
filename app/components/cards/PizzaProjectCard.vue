@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="nav-newCard-desc center-flex-display">
+        <div class="nav-newCard-desc">
             I made a mock UI for a pizza ordering and delivery system using Angular. 
             It is hosted online via GitHub Pages.
         </div>
