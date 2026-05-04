@@ -6,7 +6,7 @@
             <div v-if="!documentStore.docLoaded.status" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
             </div>
-            <button v-if="showShare" @click="openShare(page.num)" class="pdf-doc-linkBtn" :title="('Get A Link For This Document!')">
+            <button v-if="showDocumentShareWidgets" @click="openShare(page.num)" class="pdf-doc-linkBtn" :title="('Get A Link For This Document!')">
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
@@ -55,9 +55,8 @@ const { width: windowWidth } = useWindowSize();
 const docPages = ref([{ loaded: false, num: 0 }]);
 const docPagesRefs = ref([]);
 
-const showShare = computed(() => {
-    const goodWidth = (props.shareMinWidth <= windowWidth.value);
-    return (props.addShare && documentStore.docLoaded.status && !fullScreenSet.value && goodWidth);
+const showDocumentShareWidgets = computed(() => {
+    return (props.addShare && documentStore.docLoaded.status && (props.shareMinWidth <= windowWidth.value));
 });
 
 onBeforeUnmount(() => { cancelAllRendering(); });

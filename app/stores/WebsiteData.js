@@ -326,14 +326,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function setQRCodePopup(qrdata = "") {
         if(sharePopupClosing.value) { return; }
         const route = router.currentRoute.value;
-        closeNavMenu();
 
         if(qrdata === "quit" || qrdata === "") {
-            router.push({ path: route.path, hash: route.hash });
+            router.push({ path: route.path, hash: route.hash }).then(() => {
+                sleep(10).then(() => { closeNavMenu(); });
+            });
         } else if(qrdata === "toggle") {
             setQRCodePopup(showSharePopup.value ? "quit" : "main");
         } else {
-            router.push({ path: route.path, hash: route.hash, query: { qrdata } });
+            router.push({ path: route.path, hash: route.hash, query: { qrdata } }).then(() => {
+                sleep(10).then(() => { closeNavMenu(); });
+            });
         }
     }
 

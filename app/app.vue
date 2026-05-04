@@ -18,7 +18,8 @@ const documentStore = useDocumentStore();
 const fullScreenSet = getFullScreenSet();
 
 const showShare = computed(() => { return (webData.showSharePopup && !fullScreenSet.value); });
-const useWebpageCover = computed(() => { return (webData.menuOpen != -1 && webData.websiteMenuMode == 1); });
+const showShareImmediate = computed(() => { return (webData.showSharePopupImmediate && !fullScreenSet.value); });
+const useWebpageCover = computed(() => { return (showShareImmediate.value || (webData.menuOpen != -1 && webData.websiteMenuMode == 1)); });
 
 onBeforeUnmount(() => { webData.removeEventListeners(); });
 onMounted(async () => {
@@ -33,5 +34,5 @@ useScriptTag("https://accounts.google.com/gsi/client",
 useScriptTag("https://apis.google.com/js/api.js",
     (el) => { documentStore.initGooglePickerAPI(); },
     { async: true, defer: true }
-)
+);
 </script>
