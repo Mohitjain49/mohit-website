@@ -101,7 +101,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         resizePageComponents();
 
         window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
-        window.addEventListener("scroll", () => { onWindowScroll(); }, { signal });
         window.addEventListener("mousemove", () => { gamepadStore.hideAllCursors(); }, { signal });
         window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
 
@@ -197,9 +196,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         // Returns false if element was not found in any menu.
         return false;
     }
-
-    /** This function runs whenever the window scroll event is triggered. */
-    function onWindowScroll() { closeNavMenu(); }
 
     /**
      * This function runs whenever the user hits a key.

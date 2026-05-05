@@ -1,6 +1,5 @@
 <template>
 <div v-if="(showSharePopupImmediate && fullScreenSet)" id="qr-code-popup" class="webpage-cover"></div>
-
 <Transition name="qrcode-popup-transition" appear fade>
     <div class="qrcode-mainPopup" v-if="showMainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>

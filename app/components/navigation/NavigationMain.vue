@@ -78,7 +78,7 @@
             </button>
         </div>
         <div v-if="scriptsStore.onScriptRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.toggleScriptsMenu()" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(2)" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
                 <span> See Script Options </span>
             </button>

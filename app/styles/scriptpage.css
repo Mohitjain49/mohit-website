@@ -43,8 +43,10 @@
 }
 .mohit-scriptPage-code-line-content {
     width: calc(100% - 45px);
-    height: fit-content;
+    height: auto;
     padding-bottom: 2px;
+    padding-left: 5px;
+    transition: background-color 0.2s;
 }
 
 .mohit-scriptPage-code-lineNum {
@@ -52,9 +54,9 @@
     width: 32px;
     display: inline-block;
     text-align: right;
-    margin-right: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1px 0px;
 }
+
 .mohit-scriptPage-code-lineNum a, .mohit-scriptPage-code-lineNum button {
     width: 27px;
     height: calc(100% - 1px);
@@ -66,12 +68,36 @@
     flex-direction: row;
     padding: 1px 5px 2px 0px;
     border-right: 1px solid lightgray;
+    color: white;
+    font-family: 'Roboto', sans-serif;
     transition: var(--default-transition);
 }
 .mohit-scriptPage-code-lineNum a:hover, .mohit-scriptPage-code-lineNum button:hover {
     color: var(--website-light-text);
-    border-right: 3px solid var(--website-light-text);
+    border-right: 3px solid !important;
+    border-color:  var(--website-light-text);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
     background-color: rgba(255, 255, 255, 0.25);
+}
+
+.mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-line-content,
+.mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-line-content {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-lineNum a,
+.mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-lineNum button {
+    color: var(--vibrant-flame);
+    border-color: var(--vibrant-flame) !important;
+    background-color: rgba(255, 255, 255, 0.15);
+    font-weight: bold;
+}
+.mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum a,
+.mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum button {
+    color: var(--blue-two);
+    border-color: var(--blue-two) !important;
+    background-color: rgba(255, 255, 255, 0.15);
+    font-weight: bold;
 }
 
 .mohit-main-script-top {
@@ -147,7 +173,6 @@
     flex-direction: column;
     transition: top 0.5s, left 0.5s, opacity 0.5s;
 }
-
 .mohit-script-lineOptions-top {
     height: 23px;
     width: calc(100% - 10px);
@@ -157,12 +182,17 @@
     flex-direction: row;
     padding: 0px 5px;
 }
+
 .mohit-script-lineOptions-top > h3 {
     color: var(--blue-one);
     font-size: 14px;
     font-weight: bold;
     font-family: 'Lexend', sans-serif;
     user-select: none;
+}
+.mohit-script-lineOptions-top > h3 > #lineOptions-num {
+    color: white;
+    text-decoration: underline;
 }
 
 .mohit-script-lineOptions-topOpts {
