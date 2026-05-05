@@ -9,6 +9,7 @@ export async function renderCodeScript(code = "", suffix = "", path) {
         const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
         const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
 
+        var numLines = 0;
         var lang = null;
         var highlightLang = "";
 
@@ -37,13 +38,16 @@ export async function renderCodeScript(code = "", suffix = "", path) {
             transformers: [{
                 pre(node) { node.properties.id = "mohit-scriptPage-code"; },
                 code(node) { node.properties.id = "mohit-scriptPage-code-inner"; },
-                line(node, lineNum) { transformCodeLine(this.addClassToHast, node, lineNum, path); }
+                line(node, lineNum) {
+                    transformCodeLine(this.addClassToHast, node, lineNum, path);
+                    if(numLines < lineNum) { numLines = lineNum; }
+                }
             }]
         });
-        return { success: true, html }
+        return { success: true, html, numLines }
     } catch(e) {
         console.error(e);
-        return { success: false, html: "<pre> <div class=\"loading-spinner\"></div> </pre>" }
+        return { success: false, html: "<pre> <div class=\"loading-spinner\"></div> </pre>", numLines: 0 }
     }
 }
 

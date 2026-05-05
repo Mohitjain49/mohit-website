@@ -22,7 +22,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     const mounted = ref(false);
     const wrapCode = ref(false);
-    const lineOptions = ref({ num: -1, style: { left: "0px", top: "0px" }, onTopRight: false, timeout: null, lastCopied: "" });
+    const lineOptions = ref({ num: -1, oldNum: -1, style: { left: "0px", top: "0px", borderRadius: "10px 10px 10px 10px" }, timeout: null, lastCopied: "" });
 
     const scriptDownloadStatus = ref({ pending: false, fresh: false, timeout: null });
     const scriptSaveStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
@@ -44,6 +44,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** The GitHub Link of the script currently being displayed. */
     const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
     const scriptLoading = computed(() => { return (onScriptRoute.value ? (scripts[currentScriptRoute.value].htmlLoaded.value == 1) : false); });
+    const scriptNumLines = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].numLines.value : 0); });
 
     const downloadIcon = computed(() => {
         const downloadObj = scriptDownloadStatus.value;
@@ -70,8 +71,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         return ((lineOptions.value.timeout == null) ? "fa-clone" : ((lastCopied === "error") ? 'fa-ban' : (lastCopied === "link") ? 'fa-check' : 'fa-clone'));
     });
 
-    // This function sets the place of the line options menu to its default state when it is closed.
-    watch(() => lineOptions.value.num, (newValue) => { if(newValue == -1) { setLineOptionsPlacement(false); } });
+    // This function sets the Line that is focused on based on the URL Hash.
+    watch(() => router.currentRoute.value.hash, (newValue, oldValue) => {
+        if(!onScriptRoute.value) { return; }
+        manageLineNumberFocus(parseInt(newValue.substring(2), 10), parseInt(oldValue.substring(2), 10), 0);
+    });
 
     /**
      * ---------------------------------------------------------------------------
@@ -178,9 +182,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         try {
             await nextTick();
             await scripts[currentScriptRoute.value].initCodeScriptElement();
+            await sleep(10);
 
             const hashStr = router.currentRoute.value.hash.substring(1);
-            if(hashStr !== "") { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 80), 10); }
+            manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
+            if(hashStr !== "") { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 80), 0); }
         } catch(e) {
             scrollToTop(true, 0);
         }
@@ -204,25 +210,16 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {Number} lineNum The number of the line to be opened. -1 closes the options menu.
      */
     function setLineOptions(lineNum = -1) {
-        if(lineNum == -1 || !lineNum) {
+        if(lineNum == -1 || !lineNum || lineOptions.value.num == lineNum) {
+            lineOptions.value.oldNum = lineOptions.value.num;
             lineOptions.value.num = -1;
-        } else if(lineNum == lineOptions.value.num && lineOptions.value.onTopRight) {
-            setLineOptionsPlacement(false);
-        } else if(lineNum == lineOptions.value.num && !lineOptions.value.onTopRight) {
-            lineOptions.value.num = -1;
+            manageLineNumberFocus(-1, lineOptions.value.oldNum, 1)
         } else {
+            lineOptions.value.oldNum = lineOptions.value.num;
             lineOptions.value.num = lineNum;
             placeLineOptionsOnCode(lineNum);
+            manageLineNumberFocus(lineNum, lineOptions.value.oldNum, 1)
         }
-    }
-
-    /**
-     * This function sets a boolean that determines whether the code should be wrapped or overflowing.
-     * @param {Boolean | "toggle"} status The new status for wrapping code. If it is set to "toggle", then it just flips the value.
-     */
-    async function setLineOptionsPlacement(status = "toggle") {
-        lineOptions.value.onTopRight = ((status === "toggle") ? !lineOptions.value.onTopRight : status);
-        if(!lineOptions.value.onTopRight) { await placeLineOptionsOnCode(lineOptions.value.num); }
     }
 
     /**
@@ -238,8 +235,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         if(!vertInView) { await scrollToLine(lineNum); }
 
         const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
-        const yNum = (((rect.top + 140) > window.innerHeight) ? (rect.top - 120) : (rect.top + rect.height) );
-        lineOptions.value.style = { left: ((rect.left + rect.width) + "px"), top: (yNum + "px") }
+        const optionsAboveLine = ((rect.top + 140) > window.innerHeight);
+
+        const yNum = (optionsAboveLine ? (rect.top - 122) : (rect.top + rect.height + 2));
+        const borderRadius = (optionsAboveLine ? "10px 10px 10px 0px" : "0px 10px 10px 10px")
+        lineOptions.value.style = { left: ((rect.left + rect.width + 4) + "px"), top: (yNum + "px"), borderRadius }
     }
 
     /**
@@ -294,6 +294,24 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     /**
+     * This function sets the class for line numbers based on which one is focused on.
+     * Line numbers are focused on if the hash in the url is "#L"[LINE_NUMBER].
+     * @param {Number} newLine The new line that is focused on.
+     * @param {Number} oldLine The old line that was focused on.
+     * @param {0 | 1} styleSet The style set that should be applied to the class.
+     */
+    function manageLineNumberFocus(newLine = -1, oldLine = -1, styleSet = 0) {
+        const CLASS_NAME = (styleSet == 0 ? "num-highlight" : "num-highlight-optionsOpen");
+        const numCodeLines = scriptNumLines.value;
+        
+        if(Number.isNaN(newLine) || !Number.isInteger(newLine)) { newLine = -1; }
+        if(Number.isNaN(oldLine) || !Number.isInteger(oldLine)) { oldLine = -1; }
+
+        if(oldLine > 0 && oldLine <= numCodeLines) { document.getElementById("L" + oldLine)?.classList.remove(CLASS_NAME); }
+        if(newLine > 0 && newLine <= numCodeLines) { document.getElementById("L" + newLine)?.classList.add(CLASS_NAME); }
+    }
+
+    /**
      * This function sets a boolean that determines whether the code should be wrapped or overflowing.
      * @param {Boolean | "toggle"} status The new status for wrapping code. If it is set to "toggle", then it just flips the value.
      * @param {Boolean} closeMenu If true, this will also close the navigation menu.
@@ -317,10 +335,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
-        currentScriptLink, scriptLoading, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
+        currentScriptLink, scriptLoading, scriptNumLines, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
-        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, setLineOptionsPlacement, placeLineOptionsOnCode
+        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, placeLineOptionsOnCode
     }
 });
 
@@ -340,13 +358,13 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
     const router = useRouter();
 
     const htmlLoaded = ref(0);
+    const numLines = ref(0);
+
     const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted script. */
-    function initBlob() {
-        blob.value = new Blob([code], { type: "text/javascript" });
-    }
+    function initBlob() { blob.value = new Blob([code], { type: "text/javascript" }); }
 
     /**
      * This function checks whether the path associated with this hosted script is equivalent to another given path.
@@ -362,12 +380,13 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         if(htmlLoaded.value != 0) { return; }
         htmlLoaded.value = 1;
 
-        const { success, html: htmlResult } = await renderCodeScript(code, suffix, path);
+        const { success, html: htmlResult, numLines: numCodeLines } = await renderCodeScript(code, suffix, path);
         htmlLoaded.value = (success ? 2 : 3);
         html.value = htmlResult;
+        numLines.value = numCodeLines;
     }
 
-    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded,
+    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, numLines,
         initBlob, checkPath, initCodeScriptElement
     }
 }

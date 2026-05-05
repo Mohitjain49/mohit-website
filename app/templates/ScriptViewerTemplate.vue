@@ -40,7 +40,7 @@
         <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
     </div>
     <div v-else class="code-file-loading-container">
-        <FontAwesomeIcon class="code-file-loadingSpinner" icon="fa-spinner" :spin-pulse="true" />
+        <FontAwesomeIcon class="code-file-loadingSpinner" icon="fa-spinner" :spin-pulse="isMounted" />
     </div>
 
     <template v-if="fullScreenStore.fullScreenSet">
@@ -60,6 +60,7 @@
 const scriptsStore = useScriptsStore();
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
+const isMounted = useMounted();
 
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');

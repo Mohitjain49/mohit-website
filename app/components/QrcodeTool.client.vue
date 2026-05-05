@@ -1,6 +1,5 @@
 <template>
-<div v-if="showSharePopupImmediate" id="qr-code-popup" class="webpage-cover"></div>
-
+<div v-if="(showSharePopupImmediate && fullScreenSet)" id="qr-code-popup" class="webpage-cover"></div>
 <Transition name="qrcode-popup-transition" appear fade>
     <div class="qrcode-mainPopup" v-if="showMainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
@@ -59,7 +58,9 @@ import Lenis from 'lenis';
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const codeScannerStore = useCodeScannerStore();
+
 const overflowLocked = useScrollLock(document.body);
+const fullScreenSet = getFullScreenSet();
 
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
@@ -365,12 +366,7 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
 
 <style>
 #qr-code-popup.webpage-cover {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     z-index: 1500;
-    background-color: rgba(0, 0, 0, 0.9);
 }
 .qrcode-mainPopup {
     position: fixed;

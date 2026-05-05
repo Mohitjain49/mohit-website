@@ -8,6 +8,9 @@ import dayjs from "dayjs";
  */
 export const useScrollStore = defineStore("scroll-store", () => {
     const router = useRouter();
+    const webData = useWebsiteDataStore();
+    const scriptsStore = useScriptsStore();
+
     const fullScreenSet = getFullScreenSet();
     const mounted = ref(false);
 
@@ -70,10 +73,21 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(fullScreenSet.value) {
             lenis = new Lenis({ wrapper: document.fullscreenElement, autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
             lenis.resize();
+            setScrollEL();
         } else {
             lenis = new Lenis({ wrapper: window, autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
             lenis.resize();
+            setScrollEL();
         }
+    }
+
+    /** This function sets the Lenis scroll event listener. */
+    function setScrollEL() {
+        if(lenis == null) { return; }
+        lenis.on("scroll", (lenisInstance) => {
+            webData.closeNavMenu();
+            scriptsStore.setLineOptions(-1);
+        });
     }
 
     /**
