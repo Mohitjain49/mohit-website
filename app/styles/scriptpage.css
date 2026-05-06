@@ -55,6 +55,7 @@
     display: inline-block;
     text-align: right;
     padding: 1px 0px;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .mohit-scriptPage-code-lineNum a, .mohit-scriptPage-code-lineNum button {
@@ -89,14 +90,14 @@
 .mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-lineNum button {
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame) !important;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.2);
     font-weight: bold;
 }
 .mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum a,
 .mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum button {
     color: var(--blue-two);
     border-color: var(--blue-two) !important;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.2);
     font-weight: bold;
 }
 

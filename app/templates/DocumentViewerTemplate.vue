@@ -1,5 +1,4 @@
 <template>
-<DocumentMenu />
 <DocumentViewer v-if="documentStore.hostedDocuments[index].blobCreated"
     :url="documentStore.hostedDocuments[index].objectUrl"
     :shareMinWidth="0"

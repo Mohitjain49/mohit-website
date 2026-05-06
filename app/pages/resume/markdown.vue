@@ -1,5 +1,4 @@
 <template>
-<DocumentMenu />
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar v-if="documentStore.hostedDocuments[0].blobCreated" />
@@ -15,6 +14,7 @@
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
     <FileWidgets />
+    <DocumentMenu />
 </main>
 </template>
 

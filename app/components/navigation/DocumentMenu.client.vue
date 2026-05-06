@@ -3,6 +3,7 @@
 </style>
 
 <template>
+<div class="webpage-cover" v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)"></div>
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
         <MenuTop />
@@ -120,10 +121,10 @@
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.toggleDocumentFullScreen()" pulse-loop>
                 <font-awesome-icon :icon="fullScreenStore.faIcon" />
-                <span> Maximize Document </span>
+                <span> {{ (fullScreenStore.fullScreenSet ? 'Minimize Document' : 'Maximize Document') }} </span>
             </button>
         </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+        <div v-if="!fullScreenStore.fullScreenSet" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0)" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
                 <span> Open Navigation Menu </span>
