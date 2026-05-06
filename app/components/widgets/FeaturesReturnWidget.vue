@@ -16,7 +16,6 @@ onMounted(async() => {
     await sleep(1100);
     document.getElementById("features-return-widget")?.classList.remove("animate__animated", "animate__fadeInUp");
 });
-compass-widget
 </script>
 
 <style scoped>
