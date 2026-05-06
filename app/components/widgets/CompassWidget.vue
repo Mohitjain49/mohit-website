@@ -16,10 +16,12 @@ function openCompass() {
     webData.setMenuOpen(1, true);
 }
 
-onMounted(() => { nextTick(() => {
+onMounted(async() => {
+    await nextTick();
     document.getElementById("compass-widget")?.classList.add("animate__animated", "animate__fadeInUp");
-    setTimeout(() => { document.getElementById("compass-widget")?.classList.remove("animate__animated", "animate__fadeInUp"); }, 1100);
-}); });
+    await sleep(1100);
+    document.getElementById("compass-widget")?.classList.remove("animate__animated", "animate__fadeInUp");
+});
 </script>
 
 <style scoped>

@@ -10,10 +10,13 @@
 const featuresWidgetRef = useTemplateRef('features-widget');
 usePulseLoopAnimation(featuresWidgetRef);
 
-onMounted(() => { nextTick(() => {
+onMounted(async() => {
+    await nextTick();
     document.getElementById("features-return-widget")?.classList.add("animate__animated", "animate__fadeInUp");
-    setTimeout(() => { document.getElementById("features-return-widget")?.classList.remove("animate__animated", "animate__fadeInUp"); }, 1100);
-}); });
+    await sleep(1100);
+    document.getElementById("features-return-widget")?.classList.remove("animate__animated", "animate__fadeInUp");
+});
+compass-widget
 </script>
 
 <style scoped>
