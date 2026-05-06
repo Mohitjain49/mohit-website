@@ -34,6 +34,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     });
 
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
+    const fsStateChanging = ref(false);
+
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
     const customPdfScaleFactor = ref(1.375);
@@ -399,9 +401,16 @@ export const useDocumentStore = defineStore("document-store", () => {
     /**
      * This function sets the full screen for the element containing the document or script.
      */
-    function toggleDocumentFullScreen() {
-        fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+    async function toggleDocumentFullScreen() {
+        if(fsStateChanging.value) { return; }
+        fsStateChanging.value = true;
+
+        await fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+        await sleep(50);
+        await nextTick();
+
         webData.closeNavMenu();
+        fsStateChanging.value = false;
     }
 
     /**

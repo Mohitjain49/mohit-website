@@ -167,6 +167,7 @@
     justify-content: center;
     align-items: center;
     padding: 4px;
+    transition: background-color 0.2s;
 }
 
 .contact-input-tab-header .options button:hover {

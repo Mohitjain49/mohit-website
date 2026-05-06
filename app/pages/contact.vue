@@ -9,8 +9,8 @@
 
 <main id="contact-page" class="personal-web-body">
     <div class="contact-boxes-container">
-        <div class="contact-me-box web-service" id="form">
-            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE">
+        <div class="contact-me-box web-service" id="form" ref="contact-form-box">
+            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE" pulse-loop>
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
 
@@ -80,10 +80,7 @@
                 </div>
                 <div class="contact-box-buttons-container">
                     <div class="contact-input-tab-btn-container">
-                        <button class="contact-input-tab-btn" @click="sendEmail()"
-                            @pointerenter="setPulseLoopAnimation"
-                            @mouseleave="setPulseLoopAnimation">
-
+                        <button class="contact-input-tab-btn" @click="sendEmail()" pulse-loop>
                             <span> Send Message </span>
                             <FontAwesomeIcon :icon="sendMessageIcon" :spinPulse="sendMessageState.pending" />
                         </button>
@@ -170,6 +167,8 @@ const isMounted = useMounted();
 
 const titleInput = ref();
 const alertBoxText = ref("");
+const contactFormRef = useTemplateRef('contact-form-box');
+usePulseLoopAnimation(contactFormRef);
 
 var alertBoxTimeout = null;
 var sendMessageTimeout = null;

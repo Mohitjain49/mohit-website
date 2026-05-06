@@ -32,7 +32,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
 
-    const websiteMenuMode = computed(() => { return ((windowWidth.value > 600) ? 0 : 1); });
+    const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ((websiteMenuMode.value == 0) ? "navMenu-transition" : "navMenu-smallWidth-transition") });
 
     const showSharePopup = ref(false);

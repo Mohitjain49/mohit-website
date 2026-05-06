@@ -7,19 +7,19 @@ export const useFullScreenStore = defineStore("screen-store", () => {
      * This function sets whether a specific element takes up the whole screen or not.
      * @param {HTMLElement} element The element to expand to full screen.
      */
-    function setFullScreen(element = new HTMLElement()) {
+    async function setFullScreen(element = new HTMLElement()) {
         const fullScreenInactive = !fullScreenSet.value;
         try {
             if((element.requestFullscreen != undefined) && fullScreenInactive) {
-                element.requestFullscreen();
+                await element.requestFullscreen();
             } else if((element.webkitRequestFullscreen != undefined) && fullScreenInactive) {
-                element.webkitRequestFullscreen();
+                await element.webkitRequestFullscreen();
             } else if((element.mozRequestFullscreen != undefined) && fullScreenInactive) {
-                element.mozRequestFullscreen();
+                await element.mozRequestFullscreen();
             } else if((element.msRequestFullscreen != undefined) && fullScreenInactive) {
-                element.msRequestFullscreen();
+                await element.msRequestFullscreen();
             } else if(!fullScreenInactive) {
-                exitFullScreen();
+                await exitFullScreen();
             }
         } catch(e) {
             console.error(e);

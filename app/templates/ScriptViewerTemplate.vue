@@ -3,7 +3,6 @@
 </style>
 
 <template>
-<ScriptsMenu />
 <main id="script-page" class="personal-web-body transparent">
     <div v-if="(scriptsStore.scripts[index].htmlLoaded == 2)" class="mohit-main-script" id="mohit-main-script">
         <div ref="script-options" class="mohit-main-script-top">
@@ -22,7 +21,7 @@
                 </a>
             </div>
             <div class="mohit-main-script-top-sideSection">
-                <button v-if="!fullScreenStore.fullScreenSet" @click="openScriptsMenu()" title="Open Script Options" pulse-loop>
+                <button @click="openScriptsMenu()" title="Open Script Options" pulse-loop>
                     <FontAwesomeIcon icon="fa-file-export" />
                 </button>
                 <button class="flame" @click="scriptsStore.setCodeWrapping('toggle')" :title="scriptsStore.wrapStatement" pulse-loop>
@@ -53,6 +52,7 @@
     <WebFooter v-if="!fullScreenStore.fullScreenSet" />
     <FileWidgets />
     <ScriptLineOptions />
+    <ScriptsMenu />
 </main>
 </template>
 

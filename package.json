@@ -2,7 +2,7 @@
     "name": "mohit-website",
     "type": "module",
     "private": true,
-    "version": "3.11.1",
+    "version": "3.11.2",
     "scripts": {
         "dev": "nuxt dev",
         "build": "nuxt generate && node scripts/postbuild.mjs",
@@ -42,13 +42,13 @@
         "pdf-lib": "^1.17.1",
         "pinia": "^3.0.4",
         "qr-code-styling": "^1.9.2",
-        "vue": "^3.5.33",
+        "vue": "^3.5.34",
         "vue-qrcode-reader": "^5.7.3",
         "vue-router": "^5.0.6"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1043.0",
-        "@aws-sdk/client-s3": "^3.1043.0",
+        "@aws-sdk/client-cloudfront": "^3.1044.0",
+        "@aws-sdk/client-s3": "^3.1044.0",
         "@types/node": "^25.6.0",
         "dotenv": "^17.4.2",
         "mime-types": "^3.0.2",

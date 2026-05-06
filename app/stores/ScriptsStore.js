@@ -22,6 +22,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     const mounted = ref(false);
     const wrapCode = ref(false);
+    const fsStateChanging = ref(false);
     const lineOptions = ref({ num: -1, oldNum: -1, style: { left: "0px", top: "0px", borderRadius: "10px 10px 10px 10px" }, timeout: null, lastCopied: "" });
 
     const scriptDownloadStatus = ref({ pending: false, fresh: false, timeout: null });
@@ -288,9 +289,16 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     /** This function sets the full screen for the element containing the document or script. */
-    function toggleScriptFullScreen() {
-        fullScreenStore.setFullScreen(document.getElementById('script-page'));
+    async function toggleScriptFullScreen() {
+        if(fsStateChanging.value) { return; }
+        fsStateChanging.value = true;
+
+        await fullScreenStore.setFullScreen(document.getElementById('script-page'));
+        await sleep(50);
+        await nextTick();
+
         webData.closeNavMenu();
+        fsStateChanging.value = false;
     }
 
     /**

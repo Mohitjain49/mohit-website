@@ -30,6 +30,7 @@
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
     <FileWidgets />
+    <DocumentMenu />
 </main>
 </template>
 

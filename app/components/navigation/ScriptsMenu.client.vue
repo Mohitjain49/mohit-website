@@ -3,6 +3,7 @@
 </style>
 
 <template>
+<div class="webpage-cover" v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)"></div>
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
         <MenuTop />
@@ -45,15 +46,21 @@
                 <span> {{ scriptsStore.wrapStatement }} </span>
             </button>
         </div>
+        <div class="mohit-navMenu-opt">
+            <RouterLink :to="routePath" class="mohit-navMenu-mainOpt" @click="scrollToTop(false, 0)" pulse-loop>
+                <font-awesome-icon icon="fa-turn-up" />
+                <span> Scroll To The Top </span>
+            </RouterLink>
+        </div>
         <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="scriptsStore.toggleScriptFullScreen()" pulse-loop>
                 <font-awesome-icon :icon="fullScreenStore.faIcon" />
-                <span> Maximize Script </span>
+                <span> {{ (fullScreenStore.fullScreenSet ? 'Minimize Script' : 'Maximize Script') }} </span>
             </button>
         </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+        <div v-if="!fullScreenStore.fullScreenSet" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0)" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
                 <span> Open Navigation Menu </span>
@@ -90,5 +97,6 @@ const scriptsMenu = shallowRef(null);
 useSwipeToCloseMenu(scriptsMenu);
 usePulseLoopAnimation(scriptsMenu);
 
+const routePath = computed(() => { return router.currentRoute.value.path; });
 const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my documents on this website. Click here to see more about Shiki.";
 </script>

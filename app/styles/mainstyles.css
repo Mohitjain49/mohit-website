@@ -51,6 +51,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 body {
     margin: 0;
@@ -229,10 +230,9 @@ button {
     border-color: var(--globe-green-opaque);
 }
 
+.animate__slowLess { --animate-duration: 1.5s !important; }
 @media (max-width: 375px) {
-    body {
-        overflow-x: auto;
-    }
+    body, html { overflow-x: auto; }
 }
 
 /**
