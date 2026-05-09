@@ -41,6 +41,7 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
 .install-body {
     width: 100%;
     height: calc(100vh + 10px);
+    height: calc(100dvh + 10px);
     min-height: 400px;
     display: flex;
     justify-content: center;

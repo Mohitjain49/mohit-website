@@ -5,6 +5,7 @@
 
 :root {
     --body-height: calc(100vh - 50px);
+    --body-height: calc(100dvh - 50px);
     --main-scrollbar-width: 10px;
 
     --blue-cobalt: #0047ab;

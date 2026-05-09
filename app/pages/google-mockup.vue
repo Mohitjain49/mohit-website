@@ -83,6 +83,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 .gMockup-center {
     height: fit-content;
     min-height: calc(100vh - 100px);
+    min-height: calc(100dvh - 100px);
     display: flex;
     flex-direction: column;
     align-items: center;

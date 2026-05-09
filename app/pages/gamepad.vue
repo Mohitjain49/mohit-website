@@ -193,7 +193,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
 <style scoped>
 .gamepad-controls-body {
     height: 650px;
-    min-height: calc(100vh - 50px);
+    min-height: var(--body-height);
     width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
