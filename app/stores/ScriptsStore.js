@@ -195,7 +195,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function unmounts a page that hosts a script. */
     function unmountScriptPage() {
-        document.body.style.overflowY = "";
         fullScreenStore.exitFullScreen();
     }
 

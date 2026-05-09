@@ -24,13 +24,23 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     const webpageHeight = ref(0);
     const scrollProgress = ref({ pct: 0, duration: 0, show: false, targetElement: null });
+    const hideOverflowArray = ref([false, false, false]);
+
     const isAutoScrolling = computed(() => { return scrollProgress.value.show; });
+    const hideOverflow = computed(() => { return (-1 != hideOverflowArray.value.findIndex((item) => { return item; })); });
 
     // If the height of the main element changed, lenis resizes itself.
     watch(webpageHeight, () => { if(mounted.value && lenis) { lenis.resize(); } });
 
     // As the user switches between full screen mode and a normal mode, this makes sure that the lenis instance is properly set.
     watch(fullScreenSet, () => { sleep(10).then(() => { setLenisInstance(); }); });
+
+    // This manages the document overflow. If any website component needs the overflow css property to be set to hidden,
+    // this watch function does that.
+    watch(hideOverflow, (newValue) => {
+        if(!import.meta.client || !document) { return; }
+        document.documentElement.style.overflow = (newValue ? "hidden" : "");
+    });
 
     /** This function mounts the scroll store. */
     function mountScrollStore() {
@@ -184,8 +194,20 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This easing function is used by Lenis to make cool animations. */
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
-    return { mounted, scrollProgress, isAutoScrolling,
-        mountScrollStore, unmountScrollStore, scrollToId, scrollToTop, scrollByIncrement, gamepadScrollToTop
+    /**
+     * This function sets whether or not a specific element needs the webpage overflow to be hidden.
+     * @param {Number} index The specific field to set for the array. 
+     * @param {Boolean} status The status of whether or not to hide the webpage overflow.
+     */
+    function setHideOverflowArray(index = 0, status = false) {
+        if(index < 0 || index >= hideOverflowArray.value.length) { return; }
+        if(typeof status !== "boolean") { return; }
+        hideOverflowArray.value[index] = status;
+    }
+
+    return { mounted, scrollProgress, isAutoScrolling, hideOverflow,
+        mountScrollStore, unmountScrollStore, scrollToId, scrollToTop, scrollByIncrement,
+        gamepadScrollToTop, setHideOverflowArray
     }
 });
 

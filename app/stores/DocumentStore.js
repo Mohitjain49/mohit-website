@@ -21,6 +21,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
+    const scrollStore = useScrollStore();
     const fullScreenStore = useFullScreenStore();
 
     var docAbortController = new AbortController();
@@ -246,15 +247,15 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function googleDrivePickerCallback(data = { action: "loaded" }) {
         if(data.action === "loaded") {
-            document.body.style.overflowY = "hidden";
+            scrollStore.setHideOverflowArray(2, true);
         } else if(data.action === "cancel") {
-            document.body.style.overflowY = "";
+            scrollStore.setHideOverflowArray(2, false);
             webData.setMenuOpen(3);
 
             documentUploadToGoogleDriveStatus.value.cancel = true;
             setTimeout(() => { documentUploadToGoogleDriveStatus.value.cancel = false; }, 3000);
         } else if(data.action === "picked") {
-            document.body.style.overflowY = "";
+            scrollStore.setHideOverflowArray(2, false);
             const firstFolder = data.docs[0];
 
             if(firstFolder.type === "folder" && typeof firstFolder.id === "string") {
@@ -331,7 +332,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function unmounts a page that hosts a document.
      */
     function unmountDocumentPage() {
-        document.body.style.overflowY = "";
+        scrollStore.setHideOverflowArray(2, false);
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
         fullScreenStore.exitFullScreen();
         

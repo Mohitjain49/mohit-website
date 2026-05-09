@@ -38,7 +38,10 @@
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
+
 const { width: windowWidth } = useWindowSize();
+const pdfViewerOptionsBar = useTemplateRef('document-options');
+usePulseLoopAnimation(pdfViewerOptionsBar);
 
 const topBarWidth = computed(() => {
     if(!documentStore.onMarkdownRoute) { return ('width:' + documentStore.customPdfWidth + 'px'); }

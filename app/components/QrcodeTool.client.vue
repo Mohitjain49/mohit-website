@@ -58,8 +58,7 @@ import Lenis from 'lenis';
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const codeScannerStore = useCodeScannerStore();
-
-const overflowLocked = useScrollLock(document.body);
+const scrollStore = useScrollStore();
 const fullScreenSet = getFullScreenSet();
 
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
@@ -134,7 +133,7 @@ const copyImageIcon = computed(() => {
 });
 
 onMounted(async() => {
-    overflowLocked.value = true;
+    scrollStore.setHideOverflowArray(0, true);
     await nextTick();
 
     showMainPopup.value = true;
@@ -160,7 +159,7 @@ watch(showSharePopupImmediate, (newValue) => { if(!newValue) { unmountSharePopup
 function unmountSharePopup() {
     showMainPopup.value = false;
     showImageOptions.value = false;
-    overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
+    scrollStore.setHideOverflowArray(0, false);
 
     if(lenis != null) { lenis.destroy(); }
     if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
