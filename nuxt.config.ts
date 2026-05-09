@@ -16,7 +16,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    compatibilityDate: '2025-07-15',
+    compatibilityDate: '2026-05-08',
     devtools: { enabled: false },
     ssr: true,
     app: { baseURL: "/" },
@@ -80,5 +80,5 @@ export default defineNuxtConfig({
         ]
     },
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
-    typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client'] } } }
+    typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client', '@types/node'] } } }
 });

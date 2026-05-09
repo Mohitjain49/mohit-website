@@ -94,7 +94,6 @@ const scriptsStore = useScriptsStore();
 const router = useRouter();
 
 const scriptsMenu = shallowRef(null);
-useSwipeToCloseMenu(scriptsMenu);
 usePulseLoopAnimation(scriptsMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });

@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import "~/styles/navpage.css";
 const router = useRouter();
 const webData = useWebsiteDataStore();
 
@@ -120,3 +119,35 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/sublo"], replacement: SUBLO_WEBSITE_LINK },
 ];
 </script>
+
+<style>
+.personal-web-body#invalid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    height: calc(100vh - 70px);
+    padding: 0px 20px;
+    padding-top: 60px;
+    background: transparent;
+}
+.incomplete-title {
+    font-size: 60px;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid;
+    width: fit-content;
+    height: fit-content;
+    margin-bottom: 5px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-shadow: 0px 0px 5px var(--website-dark-text);
+    background-color: rgba(248, 206, 171, 0.9);
+}
+
+@media (max-width: 600px) {
+    .incomplete-title { font-size: 42px; }
+}
+</style>

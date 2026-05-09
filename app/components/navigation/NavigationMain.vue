@@ -179,7 +179,6 @@ const navMenu = shallowRef(null);
 const navWidgets = shallowRef(null);
 const shareWidget = shallowRef(null);
 
-useSwipeToCloseMenu(navMenu);
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
 usePulseLoopAnimation(navWidgets);

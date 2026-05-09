@@ -159,7 +159,6 @@ const documentStore = useDocumentStore();
 const router = useRouter();
 
 const docMenu = shallowRef(null);
-useSwipeToCloseMenu(docMenu);
 usePulseLoopAnimation(docMenu);
 
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";

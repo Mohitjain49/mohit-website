@@ -56,7 +56,6 @@ const router = useRouter();
 const webData = useWebsiteDataStore();
 
 const compassMenu = shallowRef(null);
-useSwipeToCloseMenu(compassMenu);
 usePulseLoopAnimation(compassMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
