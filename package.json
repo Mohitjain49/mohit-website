@@ -2,7 +2,7 @@
     "name": "mohit-website",
     "type": "module",
     "private": true,
-    "version": "3.11.3",
+    "version": "3.12.0",
     "scripts": {
         "dev": "nuxt dev",
         "build": "nuxt generate && node scripts/postbuild.mjs",

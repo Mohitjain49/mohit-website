@@ -202,8 +202,7 @@ const MAIN_BTNS = [
 .start-section {
     position: relative;
     height: 640px;
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: var(--true-100vh, 100vh);
     width: 100%;
     padding-bottom: 10px;
     color: var(--website-text);

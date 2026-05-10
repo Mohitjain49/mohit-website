@@ -81,8 +81,7 @@ async function checkForUpdates() {
 <style scoped>
 .copyright-body-exterior {
     height: fit-content;
-    min-height: calc(100vh - 90px);
-    min-height: calc(100dvh - 90px);
+    min-height: calc(var(--true-100vh, 100vh) - 90px);
     padding: 20px;
     width: calc(100% - 40px);
     display: flex;

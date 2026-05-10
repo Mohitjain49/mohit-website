@@ -1,8 +1,7 @@
 .main-nav-page-container {
     width: 100%;
     height: fit-content;
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: var(--true-100vh, 100vh);
     display: flex;
     justify-content: left;
     align-items: center;

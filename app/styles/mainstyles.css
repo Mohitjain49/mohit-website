@@ -4,9 +4,10 @@
 @import "./documentpage.css";
 
 :root {
-    --body-height: calc(100vh - 50px);
-    --body-height: calc(100dvh - 50px);
     --main-scrollbar-width: 10px;
+    --webpage-zoom-factor: 1.0;
+    --true-100vh: 100vh;
+    --body-height: calc(var(--true-100vh, 100vh) - 50px);
 
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
@@ -53,6 +54,7 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    zoom: var(--webpage-zoom-factor);
 }
 body {
     margin: 0;

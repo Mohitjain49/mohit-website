@@ -9,6 +9,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
     const scrollStore = useScrollStore();
+    const styleStore = useStyleStore();
 
     const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
@@ -96,6 +97,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
+        styleStore.mountStyleStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();

@@ -180,8 +180,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
 }
 .skills-body {
     height: fit-content;
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: var(--true-100vh, 100vh);
     width: 100%;
 }
 

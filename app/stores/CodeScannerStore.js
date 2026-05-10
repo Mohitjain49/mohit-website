@@ -1,6 +1,6 @@
 export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const SCANNED_ITEMS_KEY = "mohit-codeScanner-items";
-    const scrollStore = useScrollStore();
+    const styleStore = useStyleStore();
 
     /**
      * @type {Ref<Array<{ value: String, format: String, onlineLink: Boolean }>>}
@@ -134,7 +134,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      */
     function setScannedItemMenu(index = -1, toggle = false) {
         scannedItemMenu.value = ((toggle && index == scannedItemMenu.value) ? -1 : index);
-        scrollStore.setHideOverflowArray(1, (scannedItemMenu.value != -1));
+        styleStore.setHideOverflowArray(1, (scannedItemMenu.value != -1));
     }
 
     /**

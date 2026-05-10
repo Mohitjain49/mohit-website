@@ -127,8 +127,7 @@ const EXTERNAL_REDIRECTS = [
     align-items: center;
     flex-direction: column;
     width: calc(100% - 40px);
-    height: calc(100vh - 70px);
-    height: calc(100dvh - 70px);
+    height: calc(var(--true-100vh, 100vh) - 70px);
     padding: 0px 20px;
     padding-top: 60px;
     background: transparent;
