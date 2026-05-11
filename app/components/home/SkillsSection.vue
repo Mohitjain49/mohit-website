@@ -132,8 +132,15 @@ function setSkillsTransitions(isVisible = false) {
         min-width: 0px;
         height: 500px;
     }
+
     .skills-main-textContainer {
         grid-column: span 1;
+        width: 325px;
+        position: relative;
+        left: calc(50% - 162.5px);
+    }
+    .skills-main-desc {
+        width: 325px;
     }
 
     .skills-main-header a {

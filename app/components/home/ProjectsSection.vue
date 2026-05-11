@@ -163,8 +163,17 @@ function setProjectsTransitions(isVisible) {
         min-width: 0px;
         height: 500px;
     }
+
     .projects-main-textContainer, .projects-features-btn {
         grid-column: span 1;
+    }
+    .projects-main-textContainer {
+        width: 500px;
+        position: relative;
+        left: calc(50% - 250px);
+    }
+    .projects-main-desc {
+        width: 470px;
     }
 
     .projects-main-header a {
@@ -182,6 +191,14 @@ function setProjectsTransitions(isVisible) {
 }
 
 @media (max-width: 500px) {
+    .projects-main-textContainer {
+        width: 340px;
+        position: relative;
+        left: calc(50% - 170px);
+    }
+    .projects-main-desc {
+        width: 340px;
+    }
     .projects-main-header a {
         font-size: 52px;
     }
