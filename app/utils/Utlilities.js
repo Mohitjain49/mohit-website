@@ -148,6 +148,6 @@ export function usePulseLoopAnimation(container = null) {
 
     onMounted(async() => { await enable(); });
     onBeforeUnmount(() => { disable(); });
-    watch(container, () => { reset() });
+    watch(container, () => { reset(); });
     return { enabled, numElements, enable, disable, reset, animate }
 }

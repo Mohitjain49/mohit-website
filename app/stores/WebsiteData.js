@@ -1,6 +1,6 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
-    const controller = new AbortController();
+    var controller = new AbortController();
     var wakeLockTimeout = null;
 
     const gamepadStore = useGamepadStore();
@@ -19,6 +19,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** @type {Ref<HTMLElement>} This represents the website footer. */
     const webFooter = ref(null);
     const webFooterVisibility = useElementVisibility(webFooter);
+
+    const mounted = ref(0);
     const menuOpen = ref(-1);
 
     const openShareOnMount = ref(true);
@@ -91,7 +93,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
-    function setEventListeners() {
+    async function setEventListeners() {
+        if(mounted.value != 0) { return; }
+        mounted.value = 1;
+
+        await nextTick();
         const signal = controller.signal;
         history.scrollRestoration = "manual";
 
@@ -113,22 +119,21 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         // This sets a new function in the window object to let static HTML elements access the share popup.
         window.openShareMenu = (param = "") => { setQRCodePopup(param); }
 
-        // This makes sure that the website doesn't scroll with the swipe events made for the navigation bar.
-        const mohitNavBar = document.getElementById("mohit-navBar");
-        if(mohitNavBar == null) { return; }
-
-        mohitNavBar.addEventListener("touchmove", (e) => {
-            const target = e.target;
-            if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
-        }, { passive: false, signal });
+        // This imports the gamepad-events JS file to make sure gamepads work on the website.
+        await import("~/gamepad-events.js");
+        mounted.value = 2;
     }
 
     /**
      * This function removes event listeners to the website as soon as its loaded.
      */
     function removeEventListeners() {
+        if(mounted.value != 2) { return; }
         controller.abort();
+        controller = new AbortController();
+
         gamepadStore.stopAllCursors();
+        mounted.value = 0;
     }
 
     /**
@@ -384,7 +389,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
+    return { mounted, menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
         shareSupported, showSharePopup, showSharePopupImmediate, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,

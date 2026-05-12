@@ -51,9 +51,8 @@ export const useStyleStore = defineStore("style-store", () => {
     /**
      * This function changes the zoom factor for the webpage.
      * @param {Number} newFactor This is the new zoom factor for the webpage.
-     * @param {Number} oldFactor This is the old zoom factor to reverse changes for the webpage.
      */
-    function changeZoomFactor(newFactor = 1.0, oldFactor = 1.0) {
+    function changeZoomFactor(newFactor = 1.0) {
         if(!validateClientMode()) { return; }
         document.documentElement.style.setProperty(ZOOM_CSS_PROPERTY, newFactor);
         zoomFactor.value = newFactor;

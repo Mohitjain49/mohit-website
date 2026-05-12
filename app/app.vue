@@ -21,11 +21,8 @@ const showShare = computed(() => { return (webData.showSharePopup && !fullScreen
 const showShareImmediate = computed(() => { return (webData.showSharePopupImmediate && !fullScreenSet.value); });
 const useWebpageCover = computed(() => { return (showShareImmediate.value || (webData.menuOpen != -1 && webData.websiteMenuMode == 1)); });
 
+onMounted(() => { webData.setEventListeners(); });
 onBeforeUnmount(() => { webData.removeEventListeners(); });
-onMounted(async () => {
-    webData.setEventListeners();
-    await import("./gamepad-events.js");
-});
 
 useScriptTag("https://accounts.google.com/gsi/client",
     (el) => { documentStore.initGoogleTokenClient(); },
