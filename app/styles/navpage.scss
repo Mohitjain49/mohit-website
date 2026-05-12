@@ -31,7 +31,7 @@
     text-shadow: var(--globe-green) 1px 0 30px;
 }
 
-@media (max-width: 1099px) and (min-width: 651px) {
+@media (max-width: 1100px) and (min-width: 650px) {
     .main-nav-page {
         width: 750px;
         grid-template-columns: repeat(2, 1fr);
@@ -41,7 +41,7 @@
         left: 50%;
     }
 }
-@media (max-width: 749px) {
+@media (max-width: 750px) {
     .main-nav-page {
         width: 100%;
         grid-template-columns: 1fr;

@@ -154,7 +154,7 @@ function setSkillsTransitions(isVisible = false) {
     }
 }
 
-@media (max-width: 370px) {
+@media (max-width: 375px) {
     .skills-main-header a {
         font-size: 68px;
     }

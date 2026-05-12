@@ -469,7 +469,7 @@
     }
 }
 
-@media (max-width: 1050px) and (min-width: 526px) {
+@media (max-width: 1050px) {
     .contact-boxes-container {
         grid-template-columns: 1fr;
     }
@@ -491,7 +491,7 @@
 
     .contact-me-box {
         width: 100%;
-        left: 0 !important;
+        left: 0px !important;
         padding: 30px 0px;
         border: none;
         border-radius: 0px;
