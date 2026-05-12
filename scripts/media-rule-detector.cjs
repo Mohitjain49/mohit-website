@@ -61,6 +61,4 @@ async function getMediaStrings() {
 }
 
 // Executing and logging the result
-getMediaStrings().then(res => {
-  console.log(res);
-});
+getMediaStrings().then(res => { console.log(res); });

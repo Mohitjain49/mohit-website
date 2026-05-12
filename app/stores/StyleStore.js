@@ -7,7 +7,7 @@ export const useStyleStore = defineStore("style-store", () => {
     const mounted = ref(false);
     const zoomFactor = ref(1.0);
 
-    const hideOverflowArray = ref([false, false, false]);
+    const hideOverflowArray = ref([false, false, false, false]);
     const hideOverflow = computed(() => { return (-1 != hideOverflowArray.value.findIndex((item) => { return item; })); });
 
     // This manages the document overflow. If any website component needs the overflow css property to be set to hidden,

@@ -409,6 +409,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         await fullScreenStore.setFullScreen(document.getElementById("resume-container"));
         await sleep(50);
         await nextTick();
+        await sleep(50);
 
         webData.closeNavMenu();
         fsStateChanging.value = false;

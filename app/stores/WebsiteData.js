@@ -36,7 +36,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
-    const websiteMenuTransition = computed(() => { return ((websiteMenuMode.value == 0) ? "navMenu-transition" : "navMenu-smallWidth-transition") });
+    const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
+    const websiteMenuHideOverflow = computed(() => { return (!noMenuOpen.value && websiteMenuMode.value == 1); });
 
     const showSharePopup = ref(false);
     const sharePopupClosing = ref(false);
@@ -67,6 +68,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         } else {
             return (wakeLockChangeFresh.value ? "Wake Lock Released!" : "Set Screen Wake Lock");
         }
+    });
+
+    // This hides the screen overflow if a website menu is open and it uses it's second mode.
+    watch(websiteMenuHideOverflow, (newValue) => {
+        styleStore.setHideOverflowArray(3, newValue);
     });
 
     // This is used to track if the wake lock was freshly changed or not.

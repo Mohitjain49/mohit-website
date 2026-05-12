@@ -295,6 +295,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         await fullScreenStore.setFullScreen(document.getElementById('script-page'));
         await sleep(50);
         await nextTick();
+        await sleep(50);
 
         webData.closeNavMenu();
         fsStateChanging.value = false;

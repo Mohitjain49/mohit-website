@@ -437,26 +437,26 @@
     }
 }
 
-.navMenu-transition-enter-active, .navMenu-transition-leave-active {
+.navMenu-transition_1-enter-active, .navMenu-transition_1-leave-active {
     transition: opacity 0.5s, top 0.5s;
 }
-.navMenu-transition-enter-from, .navMenu-transition-leave-to {
+.navMenu-transition_1-enter-from, .navMenu-transition_1-leave-to {
     opacity: 0;
     top: 50px;
 }
-.navMenu-transition-enter-to, .navMenu-transition-leave-from {
+.navMenu-transition_1-enter-to, .navMenu-transition_1-leave-from {
     opacity: 1;
     top: 60px;
 }
 
-.navMenu-smallWidth-transition-enter-active, .navMenu-smallWidth-transition-leave-active {
+.navMenu-transition_2-enter-active, .navMenu-transition_2-leave-active {
     transition: transform 0.5s, opacity 0.5s;
 }
-.navMenu-smallWidth-transition-enter-from, .navMenu-smallWidth-transition-leave-to {
+.navMenu-transition_2-enter-from, .navMenu-transition_2-leave-to {
     opacity: 0;
     transform: scale(0.25);
 }
-.navMenu-smallWidth-transition-enter-to, .navMenu-smallWidth-transition-leave-from {
+.navMenu-transition_2-enter-to, .navMenu-transition_2-leave-from {
     opacity: 1;
     transform: scale(1);
 }
