@@ -1,7 +1,7 @@
-@import "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
-@import "@tato30/vue-pdf/style.css";
-@import 'lenis/dist/lenis.css';
-@import "./documentpage.css";
+@use "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
+@use "@tato30/vue-pdf/style.css";
+@use 'lenis/dist/lenis.css';
+@use "./documentpage";
 
 :root {
     --main-scrollbar-width: 10px;

@@ -143,7 +143,7 @@
 </template>
 
 <script setup>
-import "~/styles/navpage.css";
+import "~/styles/navpage.scss";
 import vuejs_icon from "~/assets/Vuejs_Icon.png";
 import aws_icon from "~/assets/aws/AWS_Icon.png";
 
@@ -172,7 +172,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
 ));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #skills-page {
     background: transparent;
     padding-top: 0px;

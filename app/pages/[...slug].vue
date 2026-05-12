@@ -120,7 +120,7 @@ const EXTERNAL_REDIRECTS = [
 ];
 </script>
 
-<style>
+<style lang="scss">
 .personal-web-body#invalid {
     display: flex;
     justify-content: center;

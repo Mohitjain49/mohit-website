@@ -93,7 +93,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .documents-section {
     background: transparent;
     height: fit-content;

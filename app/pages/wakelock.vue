@@ -7,8 +7,15 @@
         <div :class="['wakeLock-box', ((menuState == 1) ? 'keybinds' : '')]">
             <template v-if="menuState == 0">
                 <button class="wakeLock-button" @click="webData.toggleWakeLock()">
-                    <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
-                    <span> {{ webData.wakeLockStatement }} </span>
+                    <ClientOnly>
+                        <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
+                        <span> {{ webData.wakeLockStatement }} </span>
+
+                        <template #fallback>
+                            <font-awesome-icon icon="fa-ban" />
+                            <span> {{ "Feature Unavailable" }} </span>
+                        </template>
+                    </ClientOnly>
                 </button>
                 <a :href="WAKE_LOCK_MDN_DOCS" class="wakeLock-mdn-docs">
                     This page uses the Screen Wake Lock Web API to keep the screen on when enabled, 
@@ -65,7 +72,7 @@ function toggleMenuState() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #wakeLock-page {
     background: rgba(0, 0, 0, 0.25);
     padding-top: 0px;

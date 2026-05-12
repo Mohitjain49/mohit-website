@@ -104,7 +104,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
 </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .ivue-section {
     background: transparent;
     height: fit-content;

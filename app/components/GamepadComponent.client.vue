@@ -41,7 +41,7 @@ const audioStore = useAudioStore();
 </Transition>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .mohit-custom-cursor {
     font-size: 27px;
     color: var(--vibrant-flame);

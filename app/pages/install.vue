@@ -32,7 +32,7 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
 ));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #install-page {
     background: rgba(0, 0, 0, 0.25);
     padding-top: 0px;

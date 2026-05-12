@@ -61,7 +61,7 @@ useHead(getMeta("Mohit Jain | Features", "features",
 ));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .personal-web-body#features-page {
     background-color: rgba(0, 0, 0, 0.4);
 }

@@ -198,7 +198,7 @@ const MAIN_BTNS = [
 ]
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .start-section {
     position: relative;
     height: 640px;

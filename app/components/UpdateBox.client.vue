@@ -81,7 +81,7 @@ async function calculateDateDifference() {
 function getPlural(num = 1) { return ((num > 1) ? "s" : ""); }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .update-box {
     position: fixed;
     bottom: 20px;

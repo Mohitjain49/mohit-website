@@ -103,7 +103,7 @@ function cancelAllRendering() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .pdf-doc-linkBtn {
     position: absolute;
     top: 10px;

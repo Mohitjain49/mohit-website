@@ -68,7 +68,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 ));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #google-mockup-page {
     background-color: white;
     color: #121212;

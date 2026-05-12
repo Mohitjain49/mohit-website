@@ -62,7 +62,7 @@ function setProjectsTransitions(isVisible) {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .projects-section {
     background: transparent;
     display: grid;

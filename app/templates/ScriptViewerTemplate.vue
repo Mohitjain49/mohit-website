@@ -1,5 +1,5 @@
-<style>
-@import "@/styles/scriptpage.css";
+<style lang="scss">
+@use "@/styles/scriptpage";
 </style>
 
 <template>

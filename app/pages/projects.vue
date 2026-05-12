@@ -36,8 +36,8 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
 ));
 </script>
 
-<style scoped>
-@import "~/styles/navpage.css";
+<style scoped lang="scss">
+@use "~/styles/navpage";
 #main-projects-features-btn {
     display: flex;
     justify-content: center;

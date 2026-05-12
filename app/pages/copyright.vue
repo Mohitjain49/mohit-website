@@ -78,7 +78,7 @@ async function checkForUpdates() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .copyright-body-exterior {
     height: fit-content;
     min-height: calc(var(--true-100vh, 100vh) - 90px);

@@ -53,7 +53,7 @@ function setSkillsTransitions(isVisible = false) {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .skills-section {
     background: transparent;
     display: grid;

@@ -64,7 +64,7 @@ function manageOverflowClass(noOverflow = false) {
 function getFsElement() { return document.getElementById(props.fsElementId); }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .mohit-scrollBar {
     position: fixed;
     z-index: 15;

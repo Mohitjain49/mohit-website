@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import "~/styles/mainstyles.css";
+import "~/styles/mainstyles.scss";
 import '~build/console';
 
 const webData = useWebsiteDataStore();

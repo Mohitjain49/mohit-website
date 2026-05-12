@@ -95,7 +95,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .personal-web-body#code-reader-page {
     background: rgba(0, 0, 0, 0.6);
 }

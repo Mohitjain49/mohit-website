@@ -18,7 +18,7 @@ onMounted(async() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #ksu-widget {
     position: fixed;
     bottom: 15px;

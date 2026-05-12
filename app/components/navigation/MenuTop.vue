@@ -1,5 +1,5 @@
-<style scoped>
-@import "~/styles/navmenu.css";
+<style scoped lang="scss">
+@use "~/styles/navmenu";
 </style>
 
 <template>

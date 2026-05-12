@@ -45,7 +45,7 @@ function setWidgetAnimations() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #minimizeScreen-widget {
     position: fixed;
     bottom: 12px;

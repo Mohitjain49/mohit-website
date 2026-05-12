@@ -18,7 +18,7 @@ onMounted(async() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #features-return-widget {
     position: fixed;
     bottom: 20px;

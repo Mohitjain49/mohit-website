@@ -24,7 +24,7 @@ onMounted(async() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #compass-widget {
     position: fixed;
     cursor: pointer;

@@ -1,5 +1,5 @@
-<style scoped>
-@import "~/styles/contactpage.css";
+<style scoped lang="scss">
+@use "~/styles/contactpage";
 </style>
 
 <template>

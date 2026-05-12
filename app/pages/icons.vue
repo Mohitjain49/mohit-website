@@ -74,7 +74,7 @@ const ICON_WIDGETS = [
 ];
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #icons-body {
     background-color: var(--blue-zero);
     padding-top: 0px;

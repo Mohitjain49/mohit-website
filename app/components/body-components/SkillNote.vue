@@ -82,7 +82,7 @@ function getFAIconStyle() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .skills-note {
     height: 400px;
     width: 360px;

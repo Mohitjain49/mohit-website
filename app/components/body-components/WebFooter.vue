@@ -145,7 +145,7 @@ const EXTRA_ROUTES = [
 ];
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #footer {
     position: relative;
     background-color: black;

@@ -362,7 +362,7 @@ function manageLenisScrolling() {
 function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substring(4), "US").formatNational(); }
 </script>
 
-<style>
+<style lang="scss">
 #qr-code-popup.webpage-cover {
     z-index: 1500;
 }
