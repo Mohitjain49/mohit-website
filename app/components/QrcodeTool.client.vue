@@ -1,7 +1,7 @@
 <template>
 <div v-if="(showSharePopupImmediate && fullScreenSet)" id="qr-code-popup" class="webpage-cover"></div>
 <Transition name="qrcode-popup-transition" appear fade>
-    <div class="qrcode-mainPopup" v-if="showMainPopup">
+    <div v-if="showMainPopup" class="qrcode-mainPopup" ref="main-share-popup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
         <div id="mohit-qrcode" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
@@ -78,8 +78,10 @@ const showMainPopup = ref(false);
 const sharePopupMode = ref(0);
 const showImageOptions = ref(false);
 
+const sharePopupRef = useTemplateRef('main-share-popup');
 const shareCloseRef = useTemplateRef('sharePopup-close');
 const hoverOverCloseBtn = useElementHover(shareCloseRef);
+useMohitBreakpoints(sharePopupRef, ['<-w-625', '<-h-625']);
 
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
 const qrcodeBg = computed(() => { return { 'background-image': ((qrCodeURL.value != undefined) ? 'url(' + qrCodeURL.value + ')' : '') }});
@@ -565,17 +567,8 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     filter: var(--filter-drop-shadow);
 }
 
-@keyframes stadium-scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(calc(-100%));
-    }
-}
-
-@media screen and (max-width: 625px), screen and (max-height: 625px) {
-    .qrcode-mainPopup {
+@mixin qrcode-mainPopup-small-viewport {
+    &.qrcode-mainPopup {
         width: 325px;
         height: 325px;
     }
@@ -605,6 +598,15 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
         width: 14px;
         height: 14px;
     }
+}
+
+html:not(.js__active) {
+    @media screen and (max-width: 625px), screen and (max-height: 625px) {
+        @include qrcode-mainPopup-small-viewport();
+    }
+}
+.less-equal__width__625px, .less-equal__height__625px {
+    @include qrcode-mainPopup-small-viewport();
 }
 
 .qrcode-popup-transition-enter-active, .qrcode-popup-transition-leave-active {

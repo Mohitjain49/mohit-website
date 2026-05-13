@@ -34,6 +34,7 @@ export const useStyleStore = defineStore("style-store", () => {
 
             setTrue100vh(windowHeight, startZoomFactor);
             changeZoomFactor(startZoomFactor);
+            if(validateClientMode()) { document.documentElement.classList.add("js__active"); }
         });
     }
 
