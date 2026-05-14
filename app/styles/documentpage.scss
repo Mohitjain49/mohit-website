@@ -1,3 +1,5 @@
+@use "@/styles/_dynamicrules.scss" as *;
+
 .document-loading-static {
     height: var(--true-100vh, 100vh);
     width: 100%;
@@ -116,23 +118,6 @@
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
 }
 
-@media (max-width: 850px) {
-    .markdown-body h1 {
-        font-size: 20px;
-    }
-    .markdown-body p, .markdown-body li {
-        font-size: 13px;
-    }
-}
-@media (max-width: 600px) {
-    .markdown-body h1 {
-        font-size: 17px;
-    }
-    .markdown-body p, .markdown-body li {
-        font-size: 11px;
-    }
-}
-
 .mohit-document-topBar {
     width: calc(100% - 70px);
     height: 30px;
@@ -188,4 +173,13 @@
 .mohit-document-topBar button.blue, .mohit-document-topBar a.blue {
     color: var(--blue-three);
     border-color: var(--blue-three);
+}
+
+@include dynamic-less-equal-width-rule(850) {
+    .markdown-body h1 { font-size: 20px; }
+    .markdown-body p, .markdown-body li { font-size: 13px; }
+}
+@include dynamic-less-equal-width-rule(600) {
+    .markdown-body h1 { font-size: 17px; }
+    .markdown-body p, .markdown-body li { font-size: 11px; }
 }

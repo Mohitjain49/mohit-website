@@ -93,7 +93,6 @@ export function useMohitBreakpoints(element, breakpoints) {
         for(let i = 0; i < numBreakpoints; i++) {
             const bpFields = breakpoints[i].split("-");
             const vDimension = (((bpFields[1] === "w") ? window.innerWidth : window.innerHeight) / zoomFactor.value);
-            console.log(vDimension);
             const conditionSatisfied = ((bpFields[0] === "<") ? (parseInt(bpFields[2]) >= vDimension) : (parseInt(bpFields[2]) <= vDimension));
 
             if(conditionSatisfied) {

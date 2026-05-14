@@ -1,3 +1,5 @@
+@use "@/styles/_dynamicrules.scss" as *;
+
 /**
  * This section defines the styles for the navigation bar at the top of every page.
  */
@@ -409,10 +411,10 @@
  * Below contain specific styles like transitions and @media sections.
  */
 
-@media (max-width: 700px) {
+@include dynamic-less-equal-width-rule(700) {
     .mohit-navBar-mainLinks { display: none; }
 }
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .mohit-navMenu {
         left: 0px;
         top: 0px;
@@ -422,19 +424,15 @@
         max-height: calc(100% - 40px);
     }
 }
-
-@media (max-width: 550px) {
-    .mohit-navBar-status-icons {
-        height: 16px;
-    }
+@include dynamic-less-equal-width-rule(550) {
     .mohit-navBar-statusIcon {
         width: 16px;
         height: 16px;
         font-size: 10px;
     }
-    .mohit-navBar-statusIcon svg {
-        width: 12px;
-    }
+
+    .mohit-navBar-status-icons { height: 16px; }
+    .mohit-navBar-statusIcon svg { width: 12px; }
 }
 
 .navMenu-transition_1-enter-active, .navMenu-transition_1-leave-active {

@@ -1,3 +1,5 @@
+@use "@/styles/_dynamicrules.scss" as *;
+
 #contact-page {
     background: transparent;
 }
@@ -463,22 +465,14 @@
     bottom: 30px;
 }
 
-@media (min-width: 750px) {
-    .contact-alert-box {
-        left: calc(50% - 300px);
-    }
+@include dynamic-greater-equal-width-rule(750) {
+    .contact-alert-box { left: calc(50% - 300px); }
 }
-
-@media (max-width: 1050px) {
-    .contact-boxes-container {
-        grid-template-columns: 1fr;
-    }
-    .contact-me-box {
-        left: calc(50% - 237px) !important;
-    }
+@include dynamic-less-equal-width-rule(1100) {
+    .contact-boxes-container { grid-template-columns: 1fr; }
+    .contact-me-box { left: calc(50% - 237px) !important; }
 }
-
-@media (max-width: 525px) {
+@include dynamic-less-equal-width-rule(525) {
     #contact-page {
         padding-top: 50px;
     }

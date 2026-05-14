@@ -85,7 +85,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function setScrollEL() {
         if(lenis == null) { return; }
         lenis.on("scroll", (lenisInstance) => {
-            webData.closeNavMenu();
+            if(webData.websiteMenuMode == 0) { webData.closeNavMenu(); }
             scriptsStore.setLineOptions(-1);
         });
     }

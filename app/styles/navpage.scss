@@ -1,3 +1,5 @@
+@use "@/styles/_dynamicrules.scss" as *;
+
 .main-nav-page-container {
     width: 100%;
     height: fit-content;
@@ -31,7 +33,7 @@
     text-shadow: var(--globe-green) 1px 0 30px;
 }
 
-@media (max-width: 1100px) and (min-width: 650px) {
+@include dynamic-less-equal-width-rule(1100) {
     .main-nav-page {
         width: 750px;
         grid-template-columns: repeat(2, 1fr);
@@ -41,7 +43,7 @@
         left: 50%;
     }
 }
-@media (max-width: 750px) {
+@include dynamic-less-equal-width-rule(750) {
     .main-nav-page {
         width: 100%;
         grid-template-columns: 1fr;
@@ -49,8 +51,11 @@
     .nav-page-title {
         font-size: 42px;
     }
+    #third-nav-card {
+        left: 0%;
+    }
 }
-@media (min-width: 1450px) {
+@include dynamic-greater-equal-width-rule(1450) {
     .main-nav-page.extra-column {
         grid-template-columns: repeat(4, 1fr);
         width: 1450px;

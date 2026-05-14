@@ -21,7 +21,18 @@ const showShare = computed(() => { return (webData.showSharePopup && !fullScreen
 const showShareImmediate = computed(() => { return (webData.showSharePopupImmediate && !fullScreenSet.value); });
 const useWebpageCover = computed(() => { return (showShareImmediate.value || (webData.menuOpen != -1 && webData.websiteMenuMode == 1)); });
 
-onMounted(() => { webData.setEventListeners(); });
+const documentElementRef = shallowRef(null);
+useMohitBreakpoints(documentElementRef, [
+    '<-w-1200', '<-w-1100', '<-w-1050', '<-w-975', '<-w-940', '<-w-850',
+    '<-w-825', '<-w-750', '<-w-700', '<-w-680', '<-w-640', '<-w-625',
+    '<-w-600', '<-w-550', '<-w-525', '<-w-500', '<-w-450', '<-w-400',
+    '<-w-375', '>-w-1450', '>-w-650', '>-w-750', '<-h-625'
+]);
+
+onMounted(async() => {
+    await webData.setEventListeners();
+    documentElementRef.value = document.documentElement;
+});
 onBeforeUnmount(() => { webData.removeEventListeners(); });
 
 useScriptTag("https://accounts.google.com/gsi/client",

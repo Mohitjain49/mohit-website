@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     compatibilityDate: '2026-05-08',
     devtools: { enabled: false },
     ssr: true,
-    app: { baseURL: "/" },
+    app: { baseURL: "/", head: { meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }] } },
     devServer: { port: 5000, host: "localhost" },
     modules: [
         '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
@@ -77,7 +77,8 @@ export default defineNuxtConfig({
                 include: /assets\/.*\.(png|jpe?g)$/,
                 defaultDirectives: (url) => { return new URLSearchParams('format=webp&quality=70'); }
             })
-        ]
+        ],
+        css: { preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;' }}}
     },
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
     typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client', '@types/node'] } } }
