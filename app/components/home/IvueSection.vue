@@ -293,17 +293,17 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
     border-color: #5865f2;
 }
 
-@media (max-width: 850px) {
+@include dynamic-less-equal-width-rule(850) {
     .ivue-section-tab p {
         font-size: 16px;
     }
 }
-@media (max-width: 825px) {
+@include dynamic-less-equal-width-rule(825) {
     #ivue-section-desc {
         text-align: left;
     }
 }
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     #ivue-section-title {
         height: 90px;
     }
@@ -321,7 +321,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
         font-size: 15px;
     }
 }
-@media (max-width: 500px) {
+@include dynamic-less-equal-width-rule(500) {
     .ivue-section-tab {
         width: 87.5%;
     }

@@ -206,12 +206,10 @@ const ICON_WIDGETS = [
     box-shadow: 0px 0px 9px 1px var(--blue-cobalt);
 }
 
-@media (max-width: 940px) {
-    .icon-text {
-        font-size: 200px;
-    }
+@include dynamic-less-equal-width-rule(940) {
+    .icon-text { font-size: 200px; }
 }
-@media (max-width: 625px) {
+@include dynamic-less-equal-width-rule(625) {
     .icon-start-widgets {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -234,7 +232,7 @@ const ICON_WIDGETS = [
         width: 45px;
     }
 }
-@media (max-width: 500px) {
+@include dynamic-less-equal-width-rule(500) {
     .icon-text {
         font-size: 100px;
     }

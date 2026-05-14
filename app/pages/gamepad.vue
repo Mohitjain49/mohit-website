@@ -368,7 +368,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     color: darkred;
 }
 
-@media (max-width: 1100px) {
+@include dynamic-less-equal-width-rule(1100) {
     .gamepad-controls-body {
         grid-template-columns: 1fr;
         height: 1400px;
@@ -389,7 +389,8 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
         margin-right: 0px;
     }
 }
-@media (max-width: 500px) {
+
+@include dynamic-less-equal-width-rule(500) {
     .gamepad-controls, .gamepad-desc, .gamepad-connections {
         width: 300px;
         padding: 20px;

@@ -111,7 +111,7 @@ function setSkillsTransitions(isVisible = false) {
     align-items: center;
 }
 
-@media (max-width: 1200px) {
+@include dynamic-less-equal-width-rule(1200) {
     .skills-section {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
@@ -122,7 +122,7 @@ function setSkillsTransitions(isVisible = false) {
     }
 }
 
-@media (max-width: 825px) {
+@include dynamic-less-equal-width-rule(825) {
     .skills-section {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
@@ -154,9 +154,7 @@ function setSkillsTransitions(isVisible = false) {
     }
 }
 
-@media (max-width: 375px) {
-    .skills-main-header a {
-        font-size: 68px;
-    }
+@include dynamic-less-equal-width-rule(375) {
+    .skills-main-header a { font-size: 68px; }
 }
 </style>

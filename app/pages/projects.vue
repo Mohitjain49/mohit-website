@@ -60,7 +60,7 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
     box-shadow: 0px 0px 20px var(--lightning-yellow);
 }
 
-@media (max-width: 400px) {
+@include dynamic-less-equal-width-rule(400) {
     #main-projects-features-btn { width: 325px; }
 }
 </style>

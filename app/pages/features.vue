@@ -122,7 +122,7 @@ useHead(getMeta("Mohit Jain | Features", "features",
     align-items: center;
 }
 
-@media (max-width: 1200px) {
+@include dynamic-less-equal-width-rule(1200) {
     .features-section {
         width: 800px;
         padding: 0px calc(50% - 400px);
@@ -136,7 +136,7 @@ useHead(getMeta("Mohit Jain | Features", "features",
     }
 }
 
-@media (max-width: 825px) {
+@include dynamic-less-equal-width-rule(825) {
     .features-section {
         width: calc(100% - 20px);
         padding: 0px 10px;
@@ -165,7 +165,7 @@ useHead(getMeta("Mohit Jain | Features", "features",
     }
 }
 
-@media (max-width: 500px) {
+@include dynamic-less-equal-width-rule(500) {
     .features-main-header h1 {
         font-size: 52px;
     }

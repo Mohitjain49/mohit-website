@@ -233,9 +233,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     box-shadow: 0px 0px 10px red;
 }
 
-@media (max-width: 500px) {
-    .gMockup-title {
-        font-size: 70px;
-    }
+@include dynamic-less-equal-width-rule(500) {
+    .gMockup-title { font-size: 70px; }
 }
 </style>

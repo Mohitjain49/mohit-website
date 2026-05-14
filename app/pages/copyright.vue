@@ -180,12 +180,12 @@ async function checkForUpdates() {
     scale: 1.05;
 }
 
-@media (max-width: 680px) {
+@include dynamic-less-equal-width-rule(680) {
     .copyright-body-header {
         font-size: 40px;
     }
 }
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .copyright-body-header {
         font-size: 28px;
     }
@@ -212,7 +212,7 @@ async function checkForUpdates() {
         font-size: 17px;
     }
 }
-@media (max-width: 450px) {
+@include dynamic-less-equal-width-rule(450) {
     .copyright-body-header {
         font-size: 24px;
         gap: 3px;

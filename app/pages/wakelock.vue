@@ -192,7 +192,7 @@ function toggleMenuState() {
     border-radius: 5px;
 }
 
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .wakeLock-box {
         width: 300px;
         height: 250px;

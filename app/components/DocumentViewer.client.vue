@@ -142,7 +142,7 @@ function cancelAllRendering() {
     align-items: center;
 }
 
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .pdf-doc-linkBtn {
         width: 25px;
         height: 25px;

@@ -370,7 +370,7 @@ const MAIN_BTNS = [
     border-bottom: none;
 }
 
-@media (max-width: 640px) {
+@include dynamic-less-equal-width-rule(640) {
     .start-buttonRow.main {
         width: 100%;
     }
@@ -378,7 +378,7 @@ const MAIN_BTNS = [
         width: calc(100% - 120px)
     }
 }
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .start-section {
         height: 450px;
     }
@@ -408,7 +408,7 @@ const MAIN_BTNS = [
     }
 }
 
-@media (max-width: 450px) {
+@include dynamic-less-equal-width-rule(450) {
     .start-section-title {
         font-size: 62px;
         margin-bottom: 10px;

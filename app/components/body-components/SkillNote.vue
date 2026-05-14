@@ -156,9 +156,7 @@ function getFAIconStyle() {
     color: inherit;
 }
 
-@media (max-width: 450px) {
-    .skills-note {
-        width: 325px;
-    }
+@include dynamic-less-equal-width-rule(450) {
+    .skills-note { width: 325px; }
 }
 </style>

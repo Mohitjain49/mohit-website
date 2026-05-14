@@ -60,7 +60,7 @@ onMounted(async() => {
     border-color: var(--blue-one);
 }
 
-@media (max-width: 525px) {
+@include dynamic-less-equal-width-rule(525) {
     #compass-widget {
         height: 45px;
         width: 45px;

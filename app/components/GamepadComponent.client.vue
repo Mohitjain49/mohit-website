@@ -199,7 +199,7 @@ const audioStore = useAudioStore();
     opacity: 1;
 }
 
-@media (max-width: 500px) {
+@include dynamic-less-equal-width-rule(500) {
     .custom-cursor-sensitivity {
         left: calc(50% - 150px);
         top: calc(50% - 75px);
