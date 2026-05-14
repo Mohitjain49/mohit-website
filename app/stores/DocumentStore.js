@@ -394,7 +394,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf.
      */
     function setPdfSize() {
-        const innerWidth = (document.getElementById("footer")?.getBoundingClientRect().width ?? window.innerWidth)
+        const innerWidth = (document.getElementById("footer")?.getBoundingClientRect().width ?? getMohitInnerWidth())
         customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (innerWidth - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
     }

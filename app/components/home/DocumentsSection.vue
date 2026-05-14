@@ -7,7 +7,7 @@ const tabRefs = ref([]);
 const documentsText = ref(null);
 
 useIntersectionObserver(documentsText, ([{ isIntersecting }]) => {
-    if(window.innerWidth < 450) { return; }
+    if(getMohitInnerWidth() < 450) { return; }
     setHomeTabAnimation(document.getElementById('documents-section-title'), true, isIntersecting);
     setHomeTabAnimation(document.getElementById('documents-section-desc'), true, isIntersecting);
 });

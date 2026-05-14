@@ -86,6 +86,8 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();
     const scrollStore = useScrollStore();
+    const windowSize = useMohitWindowSize();
+    const zoomFactor = getCurrentZoomFactor();
 
     const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
@@ -186,7 +188,6 @@ function useGamepadCursor(index = 0) {
             document.body.click(); // Clicks on the document body if there is no button detected.
         } else {
             (onInputElement.value ? element.focus() : element.click());
-            triggerClickSound();
             nextTick(() => { setClickElement(); });
         }
     }
@@ -244,7 +245,7 @@ function useGamepadCursor(index = 0) {
         }
 
         // This section finds the clickable element the custom cursor is on.
-        const foundElement = document.elementFromPoint((x.value + 15), (y.value + 15));
+        const foundElement = document.elementFromPoint(((x.value + 15) * zoomFactor.value), ((y.value + 15) * zoomFactor.value));
         const usuableLink = foundElement?.closest('a');
         const usuableButton = foundElement?.closest('button');
         const usuableTextArea = foundElement?.closest('textarea');
@@ -267,8 +268,8 @@ function useGamepadCursor(index = 0) {
         const xOffset = 30 * ((index % 2 == 1) ? -1 : 1);
         const yOffset = 30 * ((index < 3) ? -1 : 1);
 
-        x.value = (window.innerWidth / 2) + xOffset;
-        y.value = (window.innerHeight / 2) + yOffset;
+        x.value = (windowSize.width.value / 2) + xOffset;
+        y.value = (windowSize.height.value / 2) + yOffset;
         if(showCursor.value) { setClickElement(); }
     }
 
@@ -283,11 +284,11 @@ function useGamepadCursor(index = 0) {
         if(event.axisIndex == 0) {
             x.value += (maxSpeed.value * event.movement);
             if(x.value < -5) { x.value = -5; }
-            if(x.value > (window.innerWidth - 20)) { x.value = (window.innerWidth - 20); }
+            if(x.value > (windowSize.width.value - 20)) { x.value = (windowSize.width.value - 20); }
         } else {
             y.value += (maxSpeed.value * event.movement);
             if(y.value < -5) { y.value = -5; }
-            if(y.value > (window.innerHeight - 20)) { y.value = (window.innerHeight - 20); }
+            if(y.value > (windowSize.height.value - 20)) { y.value = (windowSize.height.value - 20); }
         }
         setClickElement();
     }
@@ -301,11 +302,11 @@ function useGamepadCursor(index = 0) {
         if(directionIndex > 1) {
             x.value += (maxSpeed.value * ((directionIndex == 2) ? -0.75 : 0.75));
             if(x.value < 0) { x.value = 0; }
-            if(x.value > (window.innerWidth - 35)) { x.value = (window.innerWidth - 35); }
+            if(x.value > (windowSize.width.value - 35)) { x.value = (windowSize.width.value - 35); }
         } else {
             y.value += (maxSpeed.value * ((directionIndex == 0) ? -0.75 : 0.75));
             if(y.value < 0) { y.value = 0; }
-            if(y.value > (window.innerHeight - 35)) { y.value = (window.innerHeight - 35); }
+            if(y.value > (windowSize.height.value - 35)) { y.value = (windowSize.height.value - 35); }
         }
         setClickElement();
     }

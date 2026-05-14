@@ -40,7 +40,7 @@ useIntersectionObserver(cardRefs, (entry) => {
 onMounted(() => {
     initWebData();
     nextTick(() => {
-        if(window.innerWidth <= 450) { return; }
+        if(getMohitInnerWidth() <= 450) { return; }
         const elements = [
             document.getElementsByClassName('features-main-header').item(0),
             document.getElementsByClassName('features-main-desc').item(0)

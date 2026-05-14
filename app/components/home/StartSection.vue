@@ -24,41 +24,45 @@
         </div>
         <div class="start-buttonRow contact-links" ref="startSocialsContainer">
             <template v-for="(contact, index) in SOCIALS">
-                <a v-if="(!isMounted && index != 2 && index != 4)" :href="contact.link" class="start-buttonRow-btn"
-                    :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
-                    :style="getSpecialBtnStyles(contact.color)">
+                <div class="start-buttonRow-btn-container" v-if="(index != 2 && index != 4)" :style="getColorStyles(contact.color)">
+                    <a v-if="!isMounted" :href="contact.link" class="start-buttonRow-btn"
+                        :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
+                        :style="getSpecialBtnStyles(contact.color)">
 
-                    <font-awesome-icon :icon="contact.linkIcon" />
-                </a>
-                <button v-if="(isMounted && index != 2 && index != 4)" class="start-buttonRow-btn"
-                    :ref="(el) => {startSocialBtns[index] = ref(el)}"
-                    :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
-                    :style="getSpecialBtnStyles(contact.color)"
-                    @click="(event) => onContactBtnClick(event, contact)"
-                    @dblclick="webData.setQRCodePopup(contact.link)"
-                    @pointerenter="setHeartbeatAnimation"
-                    @mouseleave="setHeartbeatAnimation">
+                        <font-awesome-icon :icon="contact.linkIcon" />
+                    </a>
+                    <button v-else class="start-buttonRow-btn"
+                        :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
+                        :style="getSpecialBtnStyles(contact.color)"
+                        @click="(event) => onContactBtnClick(event, contact)"
+                        @dblclick="webData.setQRCodePopup(contact.link)"
+                        @pointerenter="setHeartbeatAnimation"
+                        @mouseleave="setHeartbeatAnimation">
 
-                    <font-awesome-icon :icon="contact.linkIcon" />
-                </button>
+                        <font-awesome-icon :icon="contact.linkIcon" />
+                    </button>
+
+                    <Transition name="fade-transition">
+                        <div v-if="(startContactObj === contact.id)" class="start-contactBtn-dropdown" :style="getContactDropdownStyles(contact.color)">
+                            <button class="start-contactBtn-dropdown-button top" @click="webData.setQRCodePopup(contact.link)" :title="contact.shareBtn">
+                                Share <FontAwesomeIcon icon="fa-share-from-square" />
+                            </button>
+                            <RouterLink class="start-contactBtn-dropdown-button" :to="('/contact/#' + contact.id)" title="Go To Contact Page">
+                                Go To Contact Page <FontAwesomeIcon icon="fa-link" />
+                            </RouterLink>
+                            <a :href="contact.link" :title="contact.linkBtn"
+                                :target="(contact.link.startsWith('mailto:') ? '_blank' : '_self')"
+                                class="start-contactBtn-dropdown-button bottom">
+
+                                {{ ((contact.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + contact.name)) }}
+                                <FontAwesomeIcon icon="fa-up-right-from-square" />
+                            </a>
+                        </div>
+                    </Transition>
+                </div>
             </template>
         </div>
     </div>
-
-    <Transition name="fade-transition">
-        <div v-if="(startContactObj != null)" class="start-contactBtn-dropdown" :style="dropdownCoords">
-            <button class="start-contactBtn-dropdown-button top" @click="webData.setQRCodePopup(startContactObj.link)" :title="startContactObj.shareBtn">
-                Share <FontAwesomeIcon icon="fa-share-from-square" />
-            </button>
-            <RouterLink class="start-contactBtn-dropdown-button" :to="('/contact/#' + startContactObj.id)" title="Go To Contact Page">
-                Go To Contact Page <FontAwesomeIcon icon="fa-link" />
-            </RouterLink>
-            <a :href="startContactObj.link" :target="dropdownLinkTarget" class="start-contactBtn-dropdown-button bottom":title="startContactObj.linkBtn">
-                {{ ((startContactObj.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + startContactObj.name)) }}
-                <FontAwesomeIcon icon="fa-up-right-from-square" />
-            </a>
-        </div>
-    </Transition>
 </div>
 </template>
 
@@ -70,67 +74,16 @@ const isMounted = useMounted();
 
 const startContent = ref(null);
 const startSocialsContainer = ref(null);
-const startContactObj = ref(null);
+const startContactObj = ref("");
 
-const startSocialBtns = ref([]);
-const boxes = ref([]);
-
-useIntersectionObserver(startContent, ([{ isIntersecting }]) => {
-    setNameTransitions(isIntersecting);
-});
-watch(visitorLeftPage, () => {
-    if(visitorLeftPage.value) { hideStartContactDropdown(); }
-});
-
-onMounted(async() => {
-    await nextTick();
-    const emailRect = useElementBounding(startSocialBtns.value[0]);
-    const linkedinRect = useElementBounding(startSocialBtns.value[1]);
-    const githubRect = useElementBounding(startSocialBtns.value[3]);
-    const steamRect = useElementBounding(startSocialBtns.value[5]);
-    boxes.value.push(emailRect, linkedinRect, githubRect, steamRect);
-
-    onClickOutside(startSocialsContainer.value, (event) => {
-        if(event.target?.closest(".start-contactBtn-dropdown") == null) { hideStartContactDropdown(); }
-    });
-})
-
-// This states the target for the dropdown link button
-const dropdownLinkTarget = computed(() => {
-    if(startContactObj.value == null) { return "_blank"; }
-    return (startContactObj.value.link.startsWith('mailto:') ? '_blank' : '_self');
-});
-
-// This returns custom styles for the contact button dropdown so that it looks unique.
-const dropdownCoords = computed(() => {
-    if(import.meta.env.SSR || startContactObj.value === null) {
-        return { left: "0px", top: "0px", color: "white", "--filter-drop-shadow": "drop-shadow(0 -2px 0 white)" }
-    }
-
-    /** @type {DOMRectReadOnly} */
-    let box = null;
-    const id = startContactObj.value.id;
-    const color = startContactObj.value.color;
-
-    if(id === "work_email") {
-        box = boxes.value[0];
-    } else if(id === "linkedin") {
-        box = boxes.value[1];
-    } else if(id === "github") {
-        box = boxes.value[2];
-    } else if(id === "steam") {
-        box = boxes.value[3];
-    }
-
-    const left = (String(((box.right + box.left) / 2) - 77 + window.scrollX) + "px");
-    const top = (String(box.bottom + ((window.innerWidth > 600) ? 15 : 0) + window.scrollY) + "px");
-    return { left, top, color, "--filter-drop-shadow": ("drop-shadow(0 -2px 0 " + color + ")") };
-});
+useIntersectionObserver(startContent, ([{ isIntersecting }]) => { setNameTransitions(isIntersecting); });
+watch(visitorLeftPage, (newValue) => { if(newValue) { hideStartContactDropdown(); } });
+onMounted(() => { nextTick(() => { onClickOutside(startSocialsContainer.value, () => { hideStartContactDropdown(); }); }); });
 
 /**
  * This function triggers whenever the a button for a social media link is clicked.
  * @param {PointerEvent} event The pointer event from the contact button.
- * @param { { link: String } } obj The custom object sent by the contact button.
+ * @param {{ link: String, id: String }} obj The custom object sent by the contact button.
  */
 function onContactBtnClick(event = new PointerEvent('click'), obj) {
     if(event.altKey) {
@@ -140,13 +93,11 @@ function onContactBtnClick(event = new PointerEvent('click'), obj) {
     } else if(event.shiftKey) {
         router.push('/contact/#' + obj.id); // If the Shift key is pressed, the key opens up the social tab on the contact page for the button.
     } else {
-        startContactObj.value = ((startContactObj.value?.id === obj.id) ? null : obj); // If no special key is pressed, this sets the Start Contact Dropdown.
+        startContactObj.value = ((startContactObj.value === obj.id) ? "" : obj.id); // If no special key is pressed, this sets the Start Contact Dropdown.
     }
 }
 
-/**
- * This function sets the transitions for the left half of the start section.
- */
+/** This function sets the transitions for the left half of the start section. */
 function setNameTransitions(isVisible) {
     if(!isVisible) {
         hideStartContactDropdown();
@@ -159,7 +110,7 @@ function setNameTransitions(isVisible) {
         return;
     }
 
-    if(window.innerWidth <= 450) {
+    if(getMohitInnerWidth() <= 450) {
         document.getElementById("start-innerContainer")?.classList.add("animate__animated", "animate__fadeIn");
     } else {
         document.getElementsByClassName("start-section-title").item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
@@ -170,23 +121,20 @@ function setNameTransitions(isVisible) {
     }
 }
 
-/**
- * This function hides the contact dropdown on this section.
- */
-function hideStartContactDropdown() {
-    startContactObj.value = null;
-}
+/** This function hides the contact dropdown on this section. */
+function hideStartContactDropdown() { startContactObj.value = ""; }
 
-/**
- * This function returns the styles for a special button.
- */
+/** This function takes the visitor to the ivue section of my website. */
+function goToIvueSection() { try { goToPageSection('ivue'); } catch(e) {} }
+
+/** This function returns the styles for a special button. */
 function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
     return { color, borderColor: color, boxShadow: ("0px 0px 10px 1px " + color) }
 }
 
-/** This function takes the visitor to the ivue section of my website. */
-function goToIvueSection() {
-    try { goToPageSection('ivue'); } catch(e) {}
+/** This function returns the styles for the contact dropdown. */
+function getContactDropdownStyles(color = "rgb(126, 90, 0)") {
+    return { color, borderColor: color, "--filter-drop-shadow": "drop-shadow(0px -2px 0px " + color + ")" }
 }
 
 const MAIN_BTNS = [
@@ -315,15 +263,26 @@ const MAIN_BTNS = [
     user-select: none;
 }
 
+.start-buttonRow-btn-container {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .start-contactBtn-dropdown {
     position: absolute;
     height: fit-content;
     width: 150px;
     background-color: #000000;
-    top: 0;
-    left: 0;
+    top: calc(100% + 15px);
+    right: calc(50% - 75px);
     color: white;
+    color: inherit;
     border: 2px solid;
+    border-color: inherit;
     border-radius: 10px;
     transition: left 0.2s, opacity 0.5s, color 0.2s;
     --filter-drop-shadow: drop-shadow(0 -2px 0 white);
@@ -371,17 +330,11 @@ const MAIN_BTNS = [
 }
 
 @include dynamic-less-equal-width-rule(640) {
-    .start-buttonRow.main {
-        width: 100%;
-    }
-    .start-buttonRow.contact-links {
-        width: calc(100% - 120px)
-    }
+    .start-buttonRow.main { width: 100%; }
+    .start-buttonRow.contact-links { width: calc(100% - 120px); }
 }
 @include dynamic-less-equal-width-rule(600) {
-    .start-section {
-        height: 450px;
-    }
+    .start-section { height: 450px; }
     .start-section-title {
         font-size: 70px;
         margin-bottom: 10px;
@@ -399,13 +352,9 @@ const MAIN_BTNS = [
         height: 28px;
         font-size: 23px;
     }
-    .start-btn-caption {
-        font-size: 9.5px;
-    }
 
-    .start-contactBtn-dropdown {
-        scale: 0.75;
-    }
+    .start-btn-caption { font-size: 9.5px; }
+    .start-contactBtn-dropdown { scale: 0.75; }
 }
 
 @include dynamic-less-equal-width-rule(450) {

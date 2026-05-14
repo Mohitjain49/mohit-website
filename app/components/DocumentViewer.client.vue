@@ -51,7 +51,7 @@ const props = defineProps({
 });
 
 const { pdf, pages } = usePDF(props.url);
-const { width: windowWidth } = useWindowSize();
+const { width: windowWidth } = useMohitWindowSize();
 
 const docPages = ref([{ loaded: false, num: 0 }]);
 const docPagesRefs = ref([]);

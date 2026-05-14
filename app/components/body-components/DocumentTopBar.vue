@@ -39,7 +39,7 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 
-const { width: windowWidth } = useWindowSize();
+const { width: windowWidth } = useMohitWindowSize();
 const pdfViewerOptionsBar = useTemplateRef('document-options');
 usePulseLoopAnimation(pdfViewerOptionsBar);
 

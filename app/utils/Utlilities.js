@@ -151,3 +151,13 @@ export function useScrollPercentage(elementId = "") {
     onBeforeUnmount(() => { stop(); });
     return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate, start, stop, toggle }
 }
+
+/** This returns a element similar to "useWindowSize", but the zoom factor is applied to it. */
+export function useMohitWindowSize() {
+    const rawWindowSize = useWindowSize();
+    const zoomFactor = getCurrentZoomFactor();
+
+    const width = computed(() => { return (rawWindowSize.width.value / zoomFactor.value); });
+    const height = computed(() => { return (rawWindowSize.height.value / zoomFactor.value); });
+    return { width, height }
+}

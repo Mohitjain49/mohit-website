@@ -19,6 +19,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
+    const zoomFactor = getCurrentZoomFactor();
 
     const mounted = ref(false);
     const wrapCode = ref(false);
@@ -231,15 +232,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         if(element == null) { return; }
 
         const mainRect = element.getBoundingClientRect();
-        const vertInView = (mainRect.top <= window.innerHeight) && ((mainRect.top + mainRect.height) >= 60);
+        const vertInView = (mainRect.top <= getMohitInnerHeight()) && ((mainRect.top + mainRect.height) >= 60);
         if(!vertInView) { await scrollToLine(lineNum); }
 
         const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
-        const optionsAboveLine = ((rect.top + 140) > window.innerHeight);
+        const optionsAboveLine = (((rect.top / zoomFactor.value) + 140) > getMohitInnerHeight());
 
-        const yNum = (optionsAboveLine ? (rect.top - 122) : (rect.top + rect.height + 2));
+        const yNum = ((optionsAboveLine ? (rect.top / zoomFactor.value - 122) : ((rect.top + rect.height + 2) / zoomFactor.value)));
         const borderRadius = (optionsAboveLine ? "10px 10px 10px 0px" : "0px 10px 10px 10px")
-        lineOptions.value.style = { left: ((rect.left + rect.width + 4) + "px"), top: (yNum + "px"), borderRadius }
+        lineOptions.value.style = { left: (((rect.left + rect.width + 4) / zoomFactor.value) + "px"), top: (yNum + "px"), borderRadius }
     }
 
     /**

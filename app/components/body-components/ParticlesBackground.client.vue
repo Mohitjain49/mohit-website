@@ -13,7 +13,7 @@ const props = defineProps({ particlesOptions: { type: Object, required: true } }
 const BATTERY_LOW_THRESHOLD = 0.2 // This is a value between 0 and 1 that represents the user having "low battery".
 const visibility = useDocumentVisibility();
 const battery = useBattery();
-const windowSize = useWindowSize();
+const windowSize = useMohitWindowSize();
 
 const batteryLow = ref(false);
 const particlesHalved = ref(false);

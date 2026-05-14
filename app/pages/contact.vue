@@ -202,7 +202,7 @@ onMounted(() => {
     manageSocialTabGlow();
 
     audioStore.changeSTTUpdateFunc((str) => { updateMainMsg(str); });
-    if(window.innerWidth <= 525 || routeHash.value !== "") { return; }
+    if(getMohitInnerWidth() <= 525 || routeHash.value !== "") { return; }
 
     const contactBoxes = [
         document.getElementsByClassName("contact-me-box").item(0),

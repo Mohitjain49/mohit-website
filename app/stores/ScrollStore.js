@@ -12,6 +12,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     const scriptsStore = useScriptsStore();
 
     const fullScreenSet = getFullScreenSet();
+    const zoomFactor = getCurrentZoomFactor();
     const mounted = ref(false);
 
     /** @type {Lenis} This contains the Lenis object for autoscrolling. */
@@ -104,7 +105,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
             if(target == null) { reject("Element with id \"\""); }
 
             const initDuration = (Math.abs((target.getBoundingClientRect().top + window.scrollY) - window.scrollY) / 4000);
-            const finalDuration = Math.max(0.75, Math.min(initDuration, 3));
+            const finalDuration = Math.max(0.75, Math.min((initDuration / zoomFactor.value), 3));
 
             scrollProgress.value.targetElement = target;
             scrollProgress.value.duration = finalDuration;
@@ -128,7 +129,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(isAutoScrolling.value) { return; }
         return new Promise((resolve, reject) => {
             if(!mounted.value) { reject("Website Not Loaded Yet."); }
-            const duration = Math.max(0.75, Math.min((window.scrollY / 4000), 3));
+            const duration = Math.max(0.75, Math.min((window.scrollY / (4000 * zoomFactor.value)), 3));
 
             scrollProgress.value.duration = duration;
             scrollStartTime = dayjs(new Date());

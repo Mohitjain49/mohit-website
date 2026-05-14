@@ -11,7 +11,7 @@ const contactTabRef = useTemplateRef("ivue-contact-tabRef");
 const TAB_IDS = ["wiv-tab", "main-tab", "media-tab", "robotics-tab"];
 
 useIntersectionObserver(ivueText, ([{ isIntersecting }]) => {
-    if(window.innerWidth < 450) { return; }
+    if(getMohitInnerWidth() < 450) { return; }
     setHomeTabAnimation(document.getElementById('ivue-section-title'), true, isIntersecting);
     setHomeTabAnimation(document.getElementById('ivue-section-desc'), true, isIntersecting);
 });

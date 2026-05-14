@@ -52,7 +52,7 @@ useIntersectionObserver(cardRefs, (entry) => {
  * It adds transitions to the description text upon entry.
  */
 function setProjectsTransitions(isVisible) {
-    if(isVisible && window.innerWidth > 450) {
+    if(isVisible && getMohitInnerWidth() > 450) {
         document.getElementsByClassName('projects-main-header').item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('projects-main-desc').item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
     } else if(!isVisible) {

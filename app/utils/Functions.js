@@ -48,3 +48,13 @@ export function truncate(str = "", maxLength = 80) {
 export function getColorStyles(color = "var(--website-text)") {
     return { color, borderColor: color }
 }
+
+/** This returns the window inner width with the zoom factor applied to it. */
+export function getMohitInnerWidth() {
+    return ((import.meta.client && window) ? (window.innerWidth / getCurrentZoomFactor().value) : 0)
+}
+
+/** This returns the window inner height with the zoom factor applied to it. */
+export function getMohitInnerHeight() {
+    return ((import.meta.client && window) ? (window.innerHeight / getCurrentZoomFactor().value) : 0)
+}
