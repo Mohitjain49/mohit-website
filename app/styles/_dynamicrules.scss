@@ -1,7 +1,7 @@
 // This rule is a dynamic version of the "max-width" rule that accounts for the "zoom" css property.
 @mixin dynamic-less-equal-width-rule($value) {
-    :root { --less-equal-width-bp_#{$value}: #{$value}; }
-    html.less-equal__width__#{$value}px { @content; }
+    @at-root { html { &:global(html), & { --less-equal-width-bp_#{$value}: #{$value}; }}}
+    html[less-equal-width-bp-#{$value}] { @content; }
     
     html:not(.js__active) {
         @media (max-width: #{$value}px) { @content; }
@@ -10,8 +10,8 @@
 
 // This rule is a dynamic version of the "min-width" rule that accounts for the "zoom" css property.
 @mixin dynamic-greater-equal-width-rule($value) {
-    :root { --greater-equal-width-bp_#{$value}: #{$value}; }
-    html.greater-equal__width__#{$value}px { @content; }
+    @at-root { html { &:global(html), & { --greater-equal-width-bp_#{$value}: #{$value}; }}}
+    html[greater-equal-width-bp-#{$value}] { @content; }
 
     html:not(.js__active) {
         @media (min-width: #{$value}px) { @content; }
@@ -20,8 +20,8 @@
 
 // This rule is a dynamic version of the "max-height" rule that can account for the "zoom" css property.
 @mixin dynamic-less-equal-height-rule($value) {
-    :root { --less-equal-height-bp_#{$value}: #{$value}; }
-    html.less-equal__height__#{$value}px { @content; }
+    @at-root { html { &:global(html), & { --less-equal-height-bp_#{$value}: #{$value}; }}}
+    html[less-equal-height-bp-#{$value}] { @content; }
     
     html:not(.js__active) {
         @media (max-height: #{$value}px) { @content; }
@@ -30,8 +30,8 @@
 
 // This rule is a dynamic version of the "min-height" rule that can account for the "zoom" css property.
 @mixin dynamic-greater-equal-height-rule($value) {
-    :root { --greater-equal-height-bp_#{$value}: #{$value}; }
-    html.greater-equal__height__#{$value}px { @content; }
+    @at-root { html { &:global(html), & { --greater-equal-height-bp_#{$value}: #{$value}; }}}
+    html[greater-equal-height-bp-#{$value}] { @content; }
     
     html:not(.js__active) {
         @media (min-height: #{$value}px) { @content; }
