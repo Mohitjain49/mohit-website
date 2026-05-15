@@ -1,6 +1,7 @@
 // This rule is a dynamic version of the "max-width" rule that accounts for the "zoom" css property.
 @mixin dynamic-less-equal-width-rule($value) {
-    @at-root { html { &:global(html), & { --less-equal-width-bp_#{$value}: #{$value}; }}}
+    @at-root :global(html) { --less-equal-width-bp_#{$value}: #{$value}; }
+    @at-root html { --less-equal-width-bp_#{$value}: #{$value}; }
     html[less-equal-width-bp-#{$value}] { @content; }
     
     html:not(.js__active) {
@@ -10,7 +11,8 @@
 
 // This rule is a dynamic version of the "min-width" rule that accounts for the "zoom" css property.
 @mixin dynamic-greater-equal-width-rule($value) {
-    @at-root { html { &:global(html), & { --greater-equal-width-bp_#{$value}: #{$value}; }}}
+    @at-root :global(html) { --greater-equal-width-bp_#{$value}: #{$value}; }
+    @at-root html { --greater-equal-width-bp_#{$value}: #{$value}; }
     html[greater-equal-width-bp-#{$value}] { @content; }
 
     html:not(.js__active) {
@@ -20,7 +22,8 @@
 
 // This rule is a dynamic version of the "max-height" rule that can account for the "zoom" css property.
 @mixin dynamic-less-equal-height-rule($value) {
-    @at-root { html { &:global(html), & { --less-equal-height-bp_#{$value}: #{$value}; }}}
+    @at-root :global(html) { --less-equal-height-bp_#{$value}: #{$value}; }
+    @at-root html { --less-equal-height-bp_#{$value}: #{$value}; }
     html[less-equal-height-bp-#{$value}] { @content; }
     
     html:not(.js__active) {
@@ -30,7 +33,8 @@
 
 // This rule is a dynamic version of the "min-height" rule that can account for the "zoom" css property.
 @mixin dynamic-greater-equal-height-rule($value) {
-    @at-root { html { &:global(html), & { --greater-equal-height-bp_#{$value}: #{$value}; }}}
+    @at-root :global(html) { --greater-equal-height-bp_#{$value}: #{$value}; }
+    @at-root html { --greater-equal-height-bp_#{$value}: #{$value}; }
     html[greater-equal-height-bp-#{$value}] { @content; }
     
     html:not(.js__active) {

@@ -92,7 +92,7 @@ export const useStyleStore = defineStore("style-store", () => {
         if(breakpointsEnabled.value) { return; }
         await setDynamicBreakpointsEventListener();
 
-        if(cssVarObserver == null) { cssVarObserver = new MutationObserver(() => { setDynamicBreakpointsEventListener(); }); }
+        if(cssVarObserver == null) { cssVarObserver = new MutationObserver(() => { setDynamicBreakpoints(); }); }
         cssVarObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
         breakpointsEnabled.value = true;
     }
