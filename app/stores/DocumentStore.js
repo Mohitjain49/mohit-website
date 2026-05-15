@@ -23,6 +23,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const webData = useWebsiteDataStore();
     const styleStore = useStyleStore();
     const fullScreenStore = useFullScreenStore();
+    const windowSize = useMohitWindowSize();
 
     var docAbortController = new AbortController();
     var googleTokenClient = { requestAccessToken: () => {} };
@@ -390,12 +391,9 @@ export const useDocumentStore = defineStore("document-store", () => {
      * ----------------------------------------------------------------------------------------------
      */
 
-    /**
-     * Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf.
-     */
+    /** Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf. */
     function setPdfSize() {
-        const innerWidth = (document.getElementById("footer")?.getBoundingClientRect().width ?? getMohitInnerWidth())
-        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (innerWidth - 30)));
+        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (windowSize.width.value - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
     }
 

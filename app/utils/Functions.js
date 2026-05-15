@@ -49,12 +49,12 @@ export function getColorStyles(color = "var(--website-text)") {
     return { color, borderColor: color }
 }
 
-/** This returns the window inner width with the zoom factor applied to it. */
+/** This returns the css inner width. */
 export function getMohitInnerWidth() {
-    return ((import.meta.client && window) ? (window.innerWidth / getCurrentZoomFactor().value) : 0)
+    return ((import.meta.client && document) ? document.getElementById("invisible-css-layout").clientWidth : 0)
 }
 
-/** This returns the window inner height with the zoom factor applied to it. */
+/** This returns the css inner height. */
 export function getMohitInnerHeight() {
-    return ((import.meta.client && window) ? (window.innerHeight / getCurrentZoomFactor().value) : 0)
+    return ((import.meta.client && document) ? document.getElementById("invisible-css-layout").clientHeight : 0)
 }

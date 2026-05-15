@@ -152,12 +152,36 @@ export function useScrollPercentage(elementId = "") {
     return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate, start, stop, toggle }
 }
 
-/** This returns a element similar to "useWindowSize", but the zoom factor is applied to it. */
+/** This returns an object similar to "useWindowSize", but it records the css layout over the inner layout dimensions. */
 export function useMohitWindowSize() {
-    const rawWindowSize = useWindowSize();
-    const zoomFactor = getCurrentZoomFactor();
+    const CSS_LAYOUT_ID = "invisible-css-layout";
+    const width = shallowRef(Number.POSITIVE_INFINITY);
+    const height = shallowRef(Number.POSITIVE_INFINITY);
 
-    const width = computed(() => { return (rawWindowSize.width.value / zoomFactor.value); });
-    const height = computed(() => { return (rawWindowSize.height.value / zoomFactor.value); });
-    return { width, height }
+    const cssToWindowWidthRatio = shallowRef(1.0);
+    const cssToWindowHeightRatio = shallowRef(1.0);
+
+    // This interval runs until the document is rendered and the element can be read properly.
+    const interval = useIntervalFn(() => { if(updateDimensions()) { interval.pause(); }}, 50);
+
+    /**
+     * This function sets the true width and height of the website, even with a custom zoom property enabled.
+     * @returns A boolean on whether or not the dimensions could be updated.
+     */
+    function updateDimensions() {
+        if(!document || !window) { return false; }
+        width.value = document.getElementById(CSS_LAYOUT_ID).clientWidth;
+        height.value = document.getElementById(CSS_LAYOUT_ID).clientHeight;
+
+        cssToWindowWidthRatio.value = (width.value / window.innerWidth);
+        cssToWindowHeightRatio.value = (height.value / window.innerHeight);
+        return true;
+    }
+
+    updateDimensions();
+    tryOnMounted(() => { updateDimensions(); });
+
+    useEventListener('resize', () => { updateDimensions(); }, { passive: true });
+    useEventListener('orientationchange', () => { updateDimensions(); }, { passive: true });
+    return { width, height, cssToWindowWidthRatio, cssToWindowHeightRatio, updateDimensions }
 }

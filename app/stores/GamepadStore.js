@@ -87,7 +87,6 @@ function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();
     const scrollStore = useScrollStore();
     const windowSize = useMohitWindowSize();
-    const zoomFactor = getCurrentZoomFactor();
 
     const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
@@ -245,7 +244,10 @@ function useGamepadCursor(index = 0) {
         }
 
         // This section finds the clickable element the custom cursor is on.
-        const foundElement = document.elementFromPoint(((x.value + 15) * zoomFactor.value), ((y.value + 15) * zoomFactor.value));
+        const xVal = ((x.value + 15) / windowSize.cssToWindowWidthRatio.value);
+        const yVal = ((y.value + 15) / windowSize.cssToWindowHeightRatio.value);
+
+        const foundElement = document.elementFromPoint(xVal, yVal);
         const usuableLink = foundElement?.closest('a');
         const usuableButton = foundElement?.closest('button');
         const usuableTextArea = foundElement?.closest('textarea');

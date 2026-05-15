@@ -123,7 +123,10 @@ export const useStyleStore = defineStore("style-store", () => {
         await sleep(10);
         if(!validateClientMode()) { return; }
 
-        window.addEventListener("resize", () => { setDynamicBreakpoints(); }, { signal: styleController.signal });
+        const signal = styleController.signal;
+        window.addEventListener("resize", () => { setDynamicBreakpoints(); }, { signal });
+        window.addEventListener("orientationchange", () => { setDynamicBreakpoints(); }, { signal });
+
         await sleep(50);
         setDynamicBreakpoints();
     }

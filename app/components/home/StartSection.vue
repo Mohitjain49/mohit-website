@@ -254,7 +254,7 @@ const MAIN_BTNS = [
 }
 
 .start-buttonRow-btn.inner-path {
-    height: 47px;
+    height: 47px !important;
 }
 .start-btn-caption {
     position: relative;

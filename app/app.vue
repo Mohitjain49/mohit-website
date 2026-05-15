@@ -6,7 +6,9 @@
 
 <NuxtPage />
 <VitePwaManifest />
+
 <div class="webpage-cover" v-if="useWebpageCover"></div>
+<div id="invisible-css-layout"></div>
 </template>
 
 <script setup>
@@ -24,12 +26,6 @@ const useWebpageCover = computed(() => { return (showShareImmediate.value || (we
 onMounted(async() => { await webData.setEventListeners(); });
 onBeforeUnmount(() => { webData.removeEventListeners(); });
 
-useScriptTag("https://accounts.google.com/gsi/client",
-    (el) => { documentStore.initGoogleTokenClient(); },
-    { async: true, defer: true }
-);
-useScriptTag("https://apis.google.com/js/api.js",
-    (el) => { documentStore.initGooglePickerAPI(); },
-    { async: true, defer: true }
-);
+useScriptTag("https://accounts.google.com/gsi/client", (el) => { documentStore.initGoogleTokenClient(); }, { async: true, defer: true });
+useScriptTag("https://apis.google.com/js/api.js", (el) => { documentStore.initGooglePickerAPI(); }, { async: true, defer: true });
 </script>
