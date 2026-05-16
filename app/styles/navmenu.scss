@@ -392,9 +392,6 @@
     bottom: 0.5px;
     transition: scale 0.2s;
 }
-.mohit-navMenu-volume-meter button:hover {
-    scale: 1.1;
-}
 .mohit-navMenu-volume-meter span {
     position: relative;
     bottom: 0.5px;
@@ -406,6 +403,31 @@
     text-align: left;
     margin-left: 10px;
 }
+
+.mohit-navMenu-reload-webpage {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 25px;
+    height: 25px;
+    color: var(--website-light-text);
+    border-top: 1px solid var(--website-light-text);
+    border-right: 1px solid var(--website-light-text);
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--default-transition);
+}
+.mohit-navMenu-reload-webpage svg {
+    width: 12px;
+    height: 12px;
+    --fa-beat-scale: 1.1;
+}
+
+.mohit-navMenu-volume-meter button:hover { scale: 1.1; }
+.mohit-navMenu-reload-webpage:hover { background-color: var(--dark-background); }
 
 /**
  * Below contain specific styles like transitions and dynamic dimension rules.

@@ -91,9 +91,6 @@ export const useStyleStore = defineStore("style-store", () => {
     async function enableBreakpoints() {
         if(breakpointsEnabled.value) { return; }
         await setDynamicBreakpointsEventListener();
-
-        if(cssVarObserver == null) { cssVarObserver = new MutationObserver(() => { setDynamicBreakpoints(); }); }
-        cssVarObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
         breakpointsEnabled.value = true;
     }
 
@@ -101,9 +98,9 @@ export const useStyleStore = defineStore("style-store", () => {
     function disableBreakpoints() {
         if(!breakpointsEnabled.value) { return; }
         if(styleController != null) { styleController.abort(); }
+        if(cssVarObserver != null) { cssVarObserver.disconnect(); }
 
         styleController = null;
-        cssVarObserver.disconnect();
         cssVarObserver = null;
         breakpointsEnabled.value = false;
     }
@@ -117,6 +114,7 @@ export const useStyleStore = defineStore("style-store", () => {
     /** This sets the resize event listener that sets all the breakpoint attributes for the website's document element. */
     async function setDynamicBreakpointsEventListener() {
         if(styleController != null) { styleController.abort(); }
+        if(cssVarObserver != null) { cssVarObserver.disconnect(); }
         styleController = new AbortController();
 
         await nextTick();
@@ -126,6 +124,9 @@ export const useStyleStore = defineStore("style-store", () => {
         const signal = styleController.signal;
         window.addEventListener("resize", () => { setDynamicBreakpoints(); }, { signal });
         window.addEventListener("orientationchange", () => { setDynamicBreakpoints(); }, { signal });
+
+        cssVarObserver = new MutationObserver(() => { setDynamicBreakpoints(); });
+        cssVarObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
 
         await sleep(50);
         setDynamicBreakpoints();

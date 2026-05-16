@@ -55,6 +55,7 @@ function startRedirect(internal = true) {
     PAGE_TITLE.value = "Mohit Jain | Redirecting...";
     PAGE_DESC.value = "Redirecting...";
     backgroundType.value = (internal ? -1 : 1);
+    webData.openShareOnMount = true;
 }
 
 /**
@@ -79,6 +80,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/exp"], replacement: "/experience/" },
     { routes: ["/icon", "/static-icons"], replacement: "/icons" },
     { routes: ["/version", "/v"], replacement: "/copyright/" },
+    { routes: ["/share/**", "/qrcode/**"], replacement: "/?qrdata=main" },
 
     { routes: ["/documents"], replacement: "/#documents" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },

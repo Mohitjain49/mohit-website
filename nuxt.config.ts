@@ -5,6 +5,7 @@ import { imagetools } from "vite-imagetools";
 import usePageTemplates from "./page-templates.config";
 import pwaConfig from "./pwa.config";
 
+const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
 const SITEMAP_EXCLUDED_ROUTES = [
     "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
     "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
@@ -24,6 +25,7 @@ export default defineNuxtConfig({
     modules: [
         '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
         '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',
+        '@stefanobartoletti/nuxt-social-share',
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',
@@ -60,7 +62,7 @@ export default defineNuxtConfig({
     },
 
     hooks: { 'pages:extend'(pages) { usePageTemplates(pages); } },
-    site: { url: "https://www.mohit-jain.com", name: "Mohit Jain | My Portfolio" },
+    site: { url: PERSONAL_MAIN_WEBSITE, name: "Mohit Jain | My Portfolio" },
     sitemap: {
         zeroRuntime: true,
         exclude: SITEMAP_EXCLUDED_ROUTES,
@@ -70,6 +72,7 @@ export default defineNuxtConfig({
     sourcemap: false,
     experimental: { appManifest: true, typedPages: true },
     pwa: pwaConfig,
+    socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
 
     vite: {
         plugins: [

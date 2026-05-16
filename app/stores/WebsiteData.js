@@ -396,7 +396,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { mounted, menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
-        shareSupported, showSharePopup, showSharePopupImmediate, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
+        shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick

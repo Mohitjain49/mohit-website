@@ -6,7 +6,6 @@ import vite_icon from "../assets/Vite_Icon.svg";
 import vitest_icon from "../assets/Vitest_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
 import pinia_icon from "../assets/Pinia_Icon.svg";
-import awesome_vite_icon from "../assets/Awesome_Vite_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
 import fontsource_icon from "../assets/FontSource_Icon.png";
 import tauri_icon from "../assets/Tauri_Icon.png";

@@ -26,9 +26,11 @@ export function usePulseLoopAnimation(container = null) {
     function disable() {
         if(!enabled.value) { return; }
         if(controller != null) { controller.abort(); }
+        if(observer != null) { observer.disconnect(); }
 
         controller = null;
-        observer.disconnect();
+        observer = null;
+
         numElements.value = 0;
         enabled.value = false;
     }
@@ -161,9 +163,6 @@ export function useMohitWindowSize() {
     const cssToWindowWidthRatio = shallowRef(1.0);
     const cssToWindowHeightRatio = shallowRef(1.0);
 
-    // This interval runs until the document is rendered and the element can be read properly.
-    const interval = useIntervalFn(() => { if(updateDimensions()) { interval.pause(); }}, 50);
-
     /**
      * This function sets the true width and height of the website, even with a custom zoom property enabled.
      * @returns A boolean on whether or not the dimensions could be updated.
@@ -178,10 +177,6 @@ export function useMohitWindowSize() {
         return true;
     }
 
-    updateDimensions();
-    tryOnMounted(() => { updateDimensions(); });
-
-    useEventListener('resize', () => { updateDimensions(); }, { passive: true });
-    useEventListener('orientationchange', () => { updateDimensions(); }, { passive: true });
+    useRafFn(() => { updateDimensions(); }, { immediate: true, fpsLimit: 30, once: false });
     return { width, height, cssToWindowWidthRatio, cssToWindowHeightRatio, updateDimensions }
 }
