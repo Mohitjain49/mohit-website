@@ -85,9 +85,6 @@ export function usePulseLoopAnimation(container = null) {
  * @param {String} elementId The id of the element.
  */
 export function useScrollPercentage(elementId = "") {
-    var animationFrame = null;
-    const active = ref(false);
-
     const horizontal = ref({ main: 0, inView: 0 });
     const vertical = ref({ main: 0, inView: 0 });
 
@@ -122,36 +119,8 @@ export function useScrollPercentage(elementId = "") {
         return { horizontal: horizontal.value, vertical: vertical.value }
     }
 
-    /** This function is used by the start function to call the "calculate" function repeatedly. */
-    function calculateWithAnimation() {
-        calculate();
-        animationFrame = requestAnimationFrame(() => { calculateWithAnimation(); });
-    }
-
-    /** This starts the animation frame loop to calculate the scroll percentages. */
-    function start() {
-        if(animationFrame != null || active.value) { return; }
-        active.value = true;
-        animationFrame = requestAnimationFrame(() => { calculateWithAnimation(); });
-    }
-
-    /** This stops the animation frame loop. */
-    function stop() {
-        if(animationFrame == null || !active.value) { return; }
-        active.value = false;
-        cancelAnimationFrame(animationFrame);
-        animationFrame = null;
-    }
-
-    /** This toggles whether the animation frame loop is running or not. */
-    function toggle() {
-        if(active.value) { stop(); } else { start(); }
-    }
-
-    // This mounts and unmounts the necessary event listeners for this utility.
-    onMounted(() => { nextTick().then(() => { calculate(); start(); }); });
-    onBeforeUnmount(() => { stop(); });
-    return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate, start, stop, toggle }
+    useRafFn(() => { calculate(); }, { immediate: true, fpsLimit: 30, once: false });
+    return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate }
 }
 
 /** This returns an object similar to "useWindowSize", but it records the css layout over the inner layout dimensions. */
@@ -169,8 +138,11 @@ export function useMohitWindowSize() {
      */
     function updateDimensions() {
         if(!document || !window) { return false; }
-        width.value = document.getElementById(CSS_LAYOUT_ID).clientWidth;
-        height.value = document.getElementById(CSS_LAYOUT_ID).clientHeight;
+        const element = document.getElementById(CSS_LAYOUT_ID);
+        if(element == null) { return false; }
+
+        width.value = element.clientWidth;
+        height.value = element.clientHeight;
 
         cssToWindowWidthRatio.value = (width.value / window.innerWidth);
         cssToWindowHeightRatio.value = (height.value / window.innerHeight);
