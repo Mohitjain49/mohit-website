@@ -171,40 +171,32 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
-     * This function returns whether an element is in any navigation menu within the website.
+     * This function returns whether an element is in any navigation menu or webpage cover within the website.
      * @param {HTMLElement} element The element.
      */
-    function checkNavigationElement(element) {
+    function checkNavigationElement(element = null) {
         if(nullifyBodyClick.value) {
             nullifyBodyClick.value = false;
             return true;
         }
 
+        if(element == null) { return false; }
+        if(element.classList.contains("webpage-cover")) { return true; }
+
         const navBar = document.getElementById("mohit-navBar");
-        const navBarElements = Array.from(navBar.querySelectorAll('*'));
-        if(navBar === element || navBarElements.includes(element)) { return true; }
+        if(navBar != null && (navBar === element || navBar.contains(element))) { return true; }
 
         const navMenu = document.getElementById("mohit-navMenu");
-        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        if(navMenu === element || navMenuElements.includes(element)) { return true; }
+        if(navMenu != null && (navMenu === element || navMenu.contains(element))) { return true; }
 
         const compassMenu = document.getElementById("mohit-compassMenu");
-        if(compassMenu != null) {
-            const compassMenuElements = Array.from(compassMenu.querySelectorAll('*'));
-            if(compassMenu === element || compassMenuElements.includes(element)) { return true; }
-        }
+        if(compassMenu != null && (compassMenu === element || compassMenu.contains(element))) { return true; }
 
         const scriptsMenu = document.getElementById("mohit-scriptsMenu");
-        if(scriptsMenu != null) {
-            const scriptsMenuElements = Array.from(scriptsMenu.querySelectorAll('*'));
-            if(scriptsMenu === element || scriptsMenuElements.includes(element)) { return true; }
-        }
+        if(scriptsMenu != null && (scriptsMenu === element || scriptsMenu.contains(element))) { return true; }
 
         const docMenu = document.getElementById("mohit-docMenu");
-        if(docMenu != null) {
-            const docMenuElements = Array.from(docMenu.querySelectorAll('*'));
-            if(docMenu === element || docMenuElements.includes(element)) { return true; }
-        }
+        if(docMenu != null && (docMenu === element || docMenu.contains(element))) { return true; }
 
         // Returns false if element was not found in any menu.
         return false;

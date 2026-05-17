@@ -23,7 +23,7 @@
     
     <template v-if="fullScreenSet">
         <GamepadComponent />
-        <WebScrollBar :fs-element-id="'resume-container'" />
+        <FullScreenScrollBar :fs-element-id="'resume-container'" />
         <QrcodeTool v-if="webData.showSharePopup" />
     </template>
 

@@ -77,7 +77,7 @@
             <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
-            <RouterLink :to="routePath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
+            <RouterLink v-show="isMounted" :to="routePath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />
             </RouterLink>
         </div>

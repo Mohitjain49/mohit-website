@@ -1,7 +1,7 @@
 <template>
 <div class="file-widgets-container" ref="file-widgets-container">
-    <button v-if="fullScreenSet" id="minimizeScreen-widget" @click="fullScreenStore.exitFullScreen()" :title="minimizeTitle" pulse-loop>
-        <FontAwesomeIcon :icon="fullScreenStore.faIcon" />
+    <button v-if="fullScreenSet" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" pulse-loop>
+        <FontAwesomeIcon icon="fa-compress" />
     </button>
     <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" pulse-loop>
         <FontAwesomeIcon icon="fa-file-export" />
@@ -11,10 +11,12 @@
 
 <script setup>
 const webData = useWebsiteDataStore();
-const fullScreenStore = useFullScreenStore();
-const fullScreenSet = getFullScreenSet();
+const documentStore = useDocumentStore();
+const scriptsStore = useScriptsStore();
 
-const { onDocumentRoute } = storeToRefs(useDocumentStore());
+const fullScreenSet = getFullScreenSet();
+const { onDocumentRoute } = storeToRefs(documentStore);
+
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
 
@@ -29,6 +31,15 @@ usePulseLoopAnimation(fileWidgets);
 function openOptions() {
     webData.bypassBodyClick();
     webData.setMenuOpen((onDocumentRoute.value ? 3 : 2), true);
+}
+
+/** This function exits out of full screen mode for a hosted file. */
+function exitFS() {
+    if(onDocumentRoute.value) {
+        documentStore.toggleDocumentFullScreen();
+    } else {
+        scriptsStore.toggleScriptFullScreen();
+    }
 }
 
 /** This function manages the string animations for both widgets. */

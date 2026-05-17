@@ -44,7 +44,7 @@
 
     <template v-if="fullScreenStore.fullScreenSet">
         <QrcodeTool v-if="(webData.showSharePopup)" />
-        <WebScrollBar :fs-element-id="'script-page'" />
+        <FullScreenScrollBar :fs-element-id="'script-page'" />
         <GamepadComponent />
     </template>
 

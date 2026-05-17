@@ -7,7 +7,7 @@
 <NuxtPage />
 <VitePwaManifest />
 
-<div class="webpage-cover" v-if="useWebpageCover"></div>
+<WebCover v-if="useWebpageCover" :zIndex="500" />
 <div id="invisible-css-layout"></div>
 </template>
 

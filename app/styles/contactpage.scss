@@ -473,15 +473,9 @@
     .contact-me-box { left: calc(50% - 237px) !important; }
 }
 @include dynamic-less-equal-width-rule(525) {
-    #contact-page {
-        padding-top: 50px;
-    }
-    .contact-boxes-container {
-        grid-template-columns: 1fr;
-    }
-    .contact-share-btn {
-        display: none;
-    }
+    #contact-page { padding-top: 50px; }
+    .contact-boxes-container { grid-template-columns: 1fr; }
+    .contact-share-btn { display: none; }
 
     .contact-me-box {
         width: 100%;
@@ -495,13 +489,7 @@
         border-bottom: 2px dashed var(--website-text);
     }
 
-    .social-tab-link {
-        font-size: 13px;
-    }
-    .social-tab-btn {
-        font-size: 14px;
-    }
-    .contact-alert-box-text {
-        font-size: 14px;
-    }
+    .social-tab-link { font-size: 13px; }
+    .social-tab-btn { font-size: 14px; }
+    .contact-alert-box-text { font-size: 14px; }
 }

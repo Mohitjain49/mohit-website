@@ -1,5 +1,5 @@
 <template>
-<div v-if="(showSharePopupImmediate && fullScreenSet)" id="qr-code-popup" class="webpage-cover"></div>
+<WebCover v-if="(showSharePopupImmediate && fullScreenSet)" :zIndex="1500" />
 <Transition name="qrcode-popup-transition" appear fade>
     <div v-if="showMainPopup" class="qrcode-mainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
@@ -645,8 +645,8 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     }
 }
 
-@include dynamic-less-equal-width-rule(625) { @include qrcode-mainPopup-small-viewport(); }
-@include dynamic-less-equal-height-rule(625) { @include qrcode-mainPopup-small-viewport(); }
+@include dynamic-less-equal-width-rule(650) { @include qrcode-mainPopup-small-viewport(); }
+@include dynamic-less-equal-height-rule(650) { @include qrcode-mainPopup-small-viewport(); }
 
 .qrcode-popup-transition-enter-active, .qrcode-popup-transition-leave-active {
     transition: transform 0.5s, opacity 0.5s;
