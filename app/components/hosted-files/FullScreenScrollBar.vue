@@ -7,6 +7,7 @@
 </template>
 
 <script setup>
+const styleStore = useStyleStore();
 const props = defineProps({ fsElementId: { type: String, required: true } });
 const { vScrollbarStyle, vertical } = useScrollPercentage(props.fsElementId);
 
@@ -18,11 +19,11 @@ const showScrollBar = computed(() => { return (vertical.value.inView < 100); });
 const innerScrollBarClasses = computed(() => { return ['inner', (mousePressed.value ? 'active' : '')]; });
 
 watch(mouseY, (newY, oldY) => { if(mousePressed.value) { scrollFsElement((window.innerHeight - 26) / (newY - oldY)); } });
-watch(mousePressed, () => { setUserSelect(!mousePressed.value); });
+watch(mousePressed, () => { setUserSelect(mousePressed.value); });
 watch(showScrollBar, (newValue) => { manageOverflowClass(!newValue); });
 
 onMounted(() => { manageOverflowClass(!showScrollBar.value); });
-onBeforeUnmount(() => { setUserSelect(true); manageOverflowClass(false); });
+onBeforeUnmount(() => { onExitFS(); });
 
 /**
  * This function scrolls within the Full Screen element.
@@ -37,11 +38,12 @@ function scrollFsElement(divisor = 10) {
 /**
  * This function enables and disables vistors from selecting text on the full screen element.
  * @warn This has no effect if there isn't a full screen element active.
- * @param {Boolean} enable Whether to enable user text selection or not.
+ * @param {Boolean} disable Whether to disable user text selection or not.
  */
-function setUserSelect(enable = true) {
+function setUserSelect(disable = true) {
+    styleStore.setDisableUserSelectArray(0, disable);
     const element = getFsElement();
-    if(element != null) { element.style.userSelect = (enable ? "" : "none"); }
+    if(element != null) { element.style.userSelect = (disable ? 'none' : ''); }
 }
 
 /**
@@ -58,6 +60,13 @@ function manageOverflowClass(noOverflow = false) {
     } else if(!noOverflow) {
         element.classList.remove(className);
     }
+}
+
+/** This function runs when the user exits full screen mode. */
+function onExitFS() {
+    setUserSelect(false);
+    manageOverflowClass(false);
+    getFsElement()?.scrollTo({ top: 0, left: 0, behavior: "instant" });
 }
 
 /** This function returns the Full Screen element for it to be adjusted by the Full Screen Element. */

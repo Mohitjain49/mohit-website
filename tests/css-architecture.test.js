@@ -12,12 +12,15 @@ describe('CSS Architecture Guardrails', () => {
     it('should find files to scan', () => { expect(targetFiles.length).toBeGreaterThan(0); });
 
     // This tests each file to ensure that there are no @media queries in any fetched file.
-    test.each(targetFiles)('File "%s" should not contain standard @media queries', (filePath) => {
+    test.each(targetFiles)('File "%s" should not contain standard @media queries or improper style tags.', (filePath) => {
         const fullPath = path.resolve(filePath);
         const fileContent = fs.readFileSync(fullPath, 'utf8');
 
         const mediaQueryRegex = /@media\b/i;
+        const styleTagRegex = /<style(?:\s+scoped)?\s*>/i
+
         const hasMediaQuery = mediaQueryRegex.test(fileContent);
-        expect(hasMediaQuery).toBe(false);
+        const hasStyleTag = styleTagRegex.test(fileContent);
+        expect(hasMediaQuery || hasStyleTag).toBe(false);
     });
 });

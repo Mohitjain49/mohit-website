@@ -75,7 +75,8 @@
 
         <div class="footer-bottom-buttons">
             <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
-                <FontAwesomeIcon icon="fa-share-from-square" />
+                <FontAwesomeIcon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
+                <FontAwesomeIcon v-else icon="fa-spinner" :spin-pulse="true" />
             </button>
             <RouterLink v-show="isMounted" :to="routePath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />

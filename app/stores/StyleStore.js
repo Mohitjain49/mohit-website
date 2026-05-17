@@ -15,7 +15,10 @@ export const useStyleStore = defineStore("style-store", () => {
     const zoomFactor = ref(1.0);
 
     const hideOverflowArray = ref([false, false, false, false]);
+    const disableUserSelectArray = ref([false, false]);
+
     const hideOverflow = computed(() => { return (-1 != hideOverflowArray.value.findIndex((item) => { return item; })); });
+    const disableUserSelect = computed(() => { return (-1 != disableUserSelectArray.value.findIndex((item) => { return item; })); });
 
     // This manages the document overflow. If any website component needs the overflow css property to be set to hidden,
     // this watch function does that.
@@ -24,9 +27,16 @@ export const useStyleStore = defineStore("style-store", () => {
         document.documentElement.style.overflow = (newValue ? "hidden" : "");
     });
 
+    // This manages the body user select. If any website component needs to disable the user from selecting or dragging text or elements,
+    // this watch function does that.
+    watch(disableUserSelect, (newValue) => {
+        if(!validateClientMode()) { return; }
+        document.body.style.userSelect = (newValue ? "none" : "");
+    });
+
     // This changes the Zoom CSS Property for the webpage when the viewport height changes properly.
     watch(vHeight, (newValue) => {
-        changeZoomFactor(((newValue > 450) ? 1.0 : 0.55));
+        changeZoomFactor(((newValue > 450) ? 1.0 : 0.5));
         setTrue100vh(newValue, zoomFactor.value);
     });
 
@@ -58,6 +68,17 @@ export const useStyleStore = defineStore("style-store", () => {
         if(index < 0 || index >= hideOverflowArray.value.length) { return; }
         if(typeof status !== "boolean") { return; }
         hideOverflowArray.value[index] = status;
+    }
+
+    /**
+     * This function sets whether or not a specific element needs to disable user select.
+     * @param {Number} index The specific field to set for the array. 
+     * @param {Boolean} status The status of whether or not to disable user select.
+     */
+    function setDisableUserSelectArray(index = 0, status = false) {
+        if(index < 0 || index >= disableUserSelectArray.value.length) { return; }
+        if(typeof status !== "boolean") { return; }
+        disableUserSelectArray.value[index] = status;
     }
 
     /**
@@ -209,8 +230,9 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, zoomFactor, breakpointsEnabled,
-        mountStyleStore, setHideOverflowArray, enableBreakpoints, disableBreakpoints, resetBreakpoints
+    return { mounted, hideOverflow, disableUserSelect, zoomFactor, breakpointsEnabled,
+        mountStyleStore, setHideOverflowArray, setDisableUserSelectArray,
+        enableBreakpoints, disableBreakpoints, resetBreakpoints
     }
 });
 

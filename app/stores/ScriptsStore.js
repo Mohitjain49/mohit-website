@@ -293,7 +293,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         if(fsStateChanging.value) { return; }
         fsStateChanging.value = true;
 
+        webData.bypassBodyClick();
         await fullScreenStore.setFullScreen(document.getElementById('script-page'));
+
         await sleep(50);
         await nextTick();
         await sleep(50);

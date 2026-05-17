@@ -404,7 +404,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(fsStateChanging.value) { return; }
         fsStateChanging.value = true;
 
+        webData.bypassBodyClick();
         await fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+
         await sleep(50);
         await nextTick();
         await sleep(50);
