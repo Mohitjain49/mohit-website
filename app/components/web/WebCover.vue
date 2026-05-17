@@ -1,12 +1,21 @@
 <template>
-<div ref="mohit-website-cover" class="webpage-cover" :style="webpageCoverStyle"></div>
+<div ref="mohit-website-cover" class="webpage-cover" :style="webpageCoverStyle">
+    <Transition name="fade-transition" appear>
+        <div v-if="!showProgressRing" class="webpage-cover-closeMsg"> Hold Cover To Close </div>
+    </Transition>
+    <Transition name="fade-transition" appear>
+        <div v-if="showProgressRing" class="webpage-cover-progressBar">
+            <div class="inner" :style="{ 'width': ((counter * 100 / FINAL_COUNT) + '%') }"></div>
+        </div>
+    </Transition>
 
-<div v-if="showProgressRing" class="webpage-cover-progressRing-container" :style="progressRingPosition">
-    <svg class="webpage-cover-progressRing" viewBox="0 0 30 30">
-        <circle class="webpage-cover-progressRing-track" cx="15" cy="15" r="13.5"></circle>
-        <circle class="webpage-cover-progressRing-indicator" :style="progressRingInnerFill" cx="15" cy="15" r="13.5"></circle>
-    </svg>
-    <FontAwesomeIcon icon="fa-xmark" :beat="(counter > (FINAL_COUNT / 4))" class="webpage-cover-progressRing-xmark" />
+    <div v-if="showProgressRing" class="webpage-cover-progressRing-container" :style="progressRingPosition">
+        <svg class="webpage-cover-progressRing" viewBox="0 0 30 30">
+            <circle class="webpage-cover-progressRing-track" cx="15" cy="15" r="13.5"></circle>
+            <circle class="webpage-cover-progressRing-indicator" :style="progressRingInnerFill" cx="15" cy="15" r="13.5"></circle>
+        </svg>
+        <FontAwesomeIcon icon="fa-xmark" :beat="(counter > (FINAL_COUNT / 4))" class="webpage-cover-progressRing-xmark" />
+    </div>
 </div>
 </template>
 
@@ -76,6 +85,43 @@ function resetCounter() {
 </script>
 
 <style scoped lang="scss">
+.webpage-cover-progressBar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 3px;
+    background-color: black;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+}
+.webpage-cover-progressBar > .inner {
+    height: 100%;
+    width: 100%;
+    background-color: red;
+}
+
+.webpage-cover-closeMsg {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    color: white;
+    padding: 5px 0px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
 .webpage-cover-progressRing-container {
     position: fixed;
     top: 0px;

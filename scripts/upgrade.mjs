@@ -119,7 +119,7 @@ async function main() {
             console.log("🛑 Will Not Update Version Number.\n\n");
         }
 
-        // This section handles recreating node_modules and package-lock.json.
+        // This section handles recreating node_modules and package-lock.json with a fresh dependency install.
         const confirmInstall = await rl.question('Confirm Install Dependencies? (y/n): ');
         const confirmInstallBool = (confirmInstall.toLowerCase() === "y" || confirmInstall.toLowerCase() === "yes");
         
@@ -152,6 +152,17 @@ async function main() {
             runCommand("npm install");
         } else {
             console.log("🛑 Will Not Reinstall dependencies.\n\n");
+        }
+
+        // This section handles updating the Git Hooks.
+        const updateGitHooks = await rl.question('Update Git Hooks (y/n): ');
+        const updateGitHooksBool = (confirmInstall.toLowerCase() === "y" || confirmInstall.toLowerCase() === "yes");
+
+        if(updateGitHooksBool) {
+            runCommand('npm run update-git-hooks');
+            console.log("✅ Updated Git Hooks!")
+        } else {
+            console.log("🛑 Will Not Update Git Hooks.");
         }
 
         // This section marks the end of the upgrade script and ends the process.

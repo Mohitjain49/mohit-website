@@ -104,7 +104,7 @@
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
-        <div class="mohit-navMenu-opt small-features">
+        <div class="mohit-navMenu-opt small-features" style="position: relative;">
             <div class="mohit-navMenu-volume-meter">
                 <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" pulse-loop>
                     <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
@@ -115,10 +115,10 @@
                 />
                 <span> {{ (audioStore.volumeInput + '%') }} </span>
             </div>
+            <button @click="reloadNuxtApp({ force: true })" ref="reload-btn" class="mohit-navMenu-reload-webpage" title="Reload Website">
+                <font-awesome-icon icon="fa-rotate-right" :beat="onReloadHover" />
+            </button>
         </div>
-        <button @click="reloadNuxtApp({ force: true })" ref="reload-btn" class="mohit-navMenu-reload-webpage" title="Reload Website">
-            <font-awesome-icon icon="fa-rotate-right" :beat="onReloadHover" />
-        </button>
     </div>
 </Transition>
 
