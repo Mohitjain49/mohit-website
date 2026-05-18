@@ -8,14 +8,14 @@
             <div class="inner" :style="{ 'width': ((counter * 100 / FINAL_COUNT) + '%') }"></div>
         </div>
     </Transition>
+</div>
 
-    <div v-if="showProgressRing" class="webpage-cover-progressRing-container" :style="progressRingPosition">
-        <svg class="webpage-cover-progressRing" viewBox="0 0 30 30">
-            <circle class="webpage-cover-progressRing-track" cx="15" cy="15" r="13.5"></circle>
-            <circle class="webpage-cover-progressRing-indicator" :style="progressRingInnerFill" cx="15" cy="15" r="13.5"></circle>
-        </svg>
-        <FontAwesomeIcon icon="fa-xmark" :beat="(counter > (FINAL_COUNT / 4))" class="webpage-cover-progressRing-xmark" />
-    </div>
+<div v-if="showProgressRing" class="webpage-cover-progressRing-container" :style="progressRingPosition">
+    <svg class="webpage-cover-progressRing" viewBox="0 0 30 30">
+        <circle class="webpage-cover-progressRing-track" cx="15" cy="15" r="13.5"></circle>
+        <circle class="webpage-cover-progressRing-indicator" :style="progressRingInnerFill" cx="15" cy="15" r="13.5"></circle>
+    </svg>
+    <FontAwesomeIcon icon="fa-xmark" :beat="(counter > (FINAL_COUNT / 4))" class="webpage-cover-progressRing-xmark" />
 </div>
 </template>
 
@@ -113,6 +113,7 @@ function setStyles(ringActive = true) {
 }
 
 .webpage-cover-closeMsg {
+    cursor: default;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -154,6 +155,8 @@ function setStyles(ringActive = true) {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: black;
+    border-radius: 15px;
 }
 .webpage-cover-progressRing-xmark {
     position: relative;
