@@ -1,6 +1,6 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
-import { faCopyright, faStar, faCertificate, faQuestion, faDiamondTurnRight, faCode, faGamepad, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import { faCopyright, faStar, faCertificate, faQuestion, faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst } from '@fortawesome/free-solid-svg-icons';
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const HOME_BACKGROUND = ref({
@@ -8,7 +8,6 @@ export const HOME_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        // paint: { fill: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163", "#E92A60"] }},
         move: {
             direction: "bottom",
             enable: true,
@@ -48,7 +47,7 @@ export const BLUE_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        paint: { fill: { value: ["rgb(187, 210, 255)"] }},
+        // paint: { fill: { enable: true, color: { value: "rgb(187, 210, 255)" }}},
         move: {
             direction: "none",
             enable: true,
@@ -85,7 +84,7 @@ export const ORANGE_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        paint: { fill: { value: ["rgb(126, 90, 0)"] }},
+        paint: { fill: { enable: true, color: { value: "rgb(126, 90, 0)" }}},
         move: {
             direction: "none",
             enable: true,
@@ -119,7 +118,7 @@ export const GREEN_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        paint: { fill: { value: ["rgb(144, 238, 144)"] }},
+        paint: { fill: { enable: true, color: { value: "rgb(144, 238, 144)" }}},
         move: {
             direction: "none",
             enable: true,
@@ -153,7 +152,10 @@ export const INSTALL_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        paint: { fill: { value: ["rgba(126, 90, 0, 0.9)", "#E8E163"] }},
+        paint: [
+            { fill: { enable: true, color: { value: "rgba(126, 90, 0, 0.9)" }}},
+            { fill: { enable: true, color: { value: "#E8E163" }}}
+        ],
         move: {
             direction: "",
             enable: true,
@@ -186,7 +188,7 @@ export const WAKE_LOCK_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        paint: { fill: { value: ["#E92A60"] }},
+        paint: { fill: { enable: true, color: { value: "#E92A60" }}},
         move: {
             direction: "",
             enable: true,
@@ -217,33 +219,36 @@ export const WAKE_LOCK_BACKGROUND = ref({
 export const FEATURES_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    sounds: { enable: false },
-    preset: "fireworks",
+    fpsLimit: 40,
     particles: {
-        paint: { fill: { value: ["#E8E163", "rgb(159, 191, 255)", "#E92A60"] }},
-        shape: { type: "star" },
-        size: { value: { min: 0.001, max: 20 }, },
-        move: { speed: { min: 1, max: 1 }, },
-        life: { count: 0, },
-    },
-    emitters: {
-        direction: "top",
-        rate: {
-            delay: 0.2,
-            quantity: 1
+        // paint: { fill: { enable: true, color: { value: "#FFD700" }}},
+        move: {
+            direction: "",
+            enable: true,
+            outModes: { default: "out" },
+            speed: 1.0,
+            straight: false,
         },
-        life: {
-            count: 1,
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 200
+        },
+        opacity: {
+            value: { min: 0.1, max: 0.7 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "image",
+            options: {
+                image: { src: getFontAwesomeSvg(faBurst, "#FFD700"), width: 100, height: 100 }
+            }
         },
         size: {
-            width: 90,
-            height: 100
+            value: { min: 7, max: 8 },
         },
-        position: {
-            y: 50,
-            x: 50
-        }
-    }
+    },
+    detectRetina: true,
+    tRetina: true,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
@@ -252,7 +257,7 @@ export const CODE_SCANNER_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     particles: {
         number: { value: 150 },
-        paint: { fill: { value: "rgb(159, 191, 255)" }},
+        paint: { fill: { enable: true, color: { value: "rgb(159, 191, 255)" }}},
         shape: { type: "square" },
         opacity: {
             value: { min: 0.7, max: 1 }, // Twinkling effect
@@ -322,7 +327,7 @@ export const GAMEPAD_CONTROLS_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        // paint: { fill: { value: ["#DFC5FE"] }},
+        // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
             direction: "none",
             enable: true,
@@ -361,7 +366,7 @@ export const INVALID_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        // paint: { fill: { value: ["#DFC5FE"] }},
+        // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
             direction: "none",
             enable: true,
@@ -400,7 +405,7 @@ export const REDIRECT_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        // paint: { fill: { value: ["#DFC5FE"] }},
+        // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
             direction: "none",
             enable: true,
@@ -439,7 +444,7 @@ export const DOCUMENT_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        // paint: { fill: { value: ["white"] }},
+        // paint: { fill: { enable: true, color: { value: "white" }}},
         move: {
             direction: "none",
             enable: true,
@@ -478,7 +483,7 @@ export const CODE_ICON_BACKGROUND = ref({
     fullScreen: { enable: true, zIndex: -1 },
     fpsLimit: 40,
     particles: {
-        // paint: { fill: { value: ["white"] }},
+        // paint: { fill: { enable: true, color: { value: "white" }}},
         move: {
             direction: "none",
             enable: true,

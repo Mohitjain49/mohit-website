@@ -61,8 +61,8 @@ watch(mouseOutsideCover, (newValue) => { if(newValue) { resetCounter(); } });
 watch(counter, (newValue) => { if(newValue == FINAL_COUNT) { closePopup(); } });
 
 // This disables user select whenever the progress ring is open.
-watch(showProgressRing, (newValue) => { styleStore.setDisableUserSelectArray(1, newValue); });
-onBeforeUnmount(() => { styleStore.setDisableUserSelectArray(1, false); });
+watch(showProgressRing, (newValue) => { setStyles(newValue); });
+onBeforeUnmount(() => { setStyles(false); });
 
 /** This closes any active popup that is on the screen at the moment. */
 function closePopup() {
@@ -81,6 +81,15 @@ function closePopup() {
 function resetCounter() {
     interval.reset();
     interval.pause();
+}
+
+/**
+ * This function sets universal styles that the progress ring needs to be set when active.
+ * @param {Boolean} ringActive If true, the ring is active and the styles should be set.
+ */
+function setStyles(ringActive = true) {
+    styleStore.setHideCursorArray(0, ringActive);
+    styleStore.setDisableUserSelectArray(1, ringActive);
 }
 </script>
 

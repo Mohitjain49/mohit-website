@@ -2,6 +2,9 @@
 export const useStyleStore = defineStore("style-store", () => {
     const ZOOM_CSS_PROPERTY = "--webpage-zoom-factor";
     const TRUE_100VH_CSS_PROPERTY = "--true-100vh";
+
+    const fullScreenStore = useFullScreenStore();
+    const fullScreenSet = getFullScreenSet();
     const { height: vHeight } = useWindowSize();
 
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the document element's CSS Variables. */
@@ -15,24 +18,22 @@ export const useStyleStore = defineStore("style-store", () => {
     const zoomFactor = ref(1.0);
 
     const hideOverflowArray = ref([false, false, false, false]);
+    const hideCursorArray = ref([false, false]);
     const disableUserSelectArray = ref([false, false]);
 
     const hideOverflow = computed(() => { return (-1 != hideOverflowArray.value.findIndex((item) => { return item; })); });
+    const hideCursor = computed(() => { return (-1 != hideCursorArray.value.findIndex((item) => { return item; })); });
     const disableUserSelect = computed(() => { return (-1 != disableUserSelectArray.value.findIndex((item) => { return item; })); });
 
-    // This manages the document overflow. If any website component needs the overflow css property to be set to hidden,
-    // this watch function does that.
-    watch(hideOverflow, (newValue) => {
-        if(!validateClientMode()) { return; }
-        document.documentElement.style.overflow = (newValue ? "hidden" : "");
-    });
+    // This watcher manages hiding or enabling the document overflow if a website component needs it.
+    watch(hideOverflow, (newValue) => { setHideOverflowClass(newValue); });
 
-    // This manages the body user select. If any website component needs to disable the user from selecting or dragging text or elements,
-    // this watch function does that.
-    watch(disableUserSelect, (newValue) => {
-        if(!validateClientMode()) { return; }
-        document.body.style.userSelect = (newValue ? "none" : "");
-    });
+    // This watcher manages hiding or showing the website cursor if a website component needs it.
+    watch(hideCursor, (newValue) => { setHideCursorClass(newValue); });
+
+    // This watcher manages disabling and enabling user select across the website if a component needs it.
+    watch(disableUserSelect, (newValue) => { setDisableUserSelectClass(newValue); });
+    watch(fullScreenSet, () => { setDisableUserSelectClass(disableUserSelect.value); });
 
     // This changes the Zoom CSS Property for the webpage when the viewport height changes properly.
     watch(vHeight, (newValue) => {
@@ -60,28 +61,6 @@ export const useStyleStore = defineStore("style-store", () => {
     }
 
     /**
-     * This function sets whether or not a specific element needs the webpage overflow to be hidden.
-     * @param {Number} index The specific field to set for the array. 
-     * @param {Boolean} status The status of whether or not to hide the webpage overflow.
-     */
-    function setHideOverflowArray(index = 0, status = false) {
-        if(index < 0 || index >= hideOverflowArray.value.length) { return; }
-        if(typeof status !== "boolean") { return; }
-        hideOverflowArray.value[index] = status;
-    }
-
-    /**
-     * This function sets whether or not a specific element needs to disable user select.
-     * @param {Number} index The specific field to set for the array. 
-     * @param {Boolean} status The status of whether or not to disable user select.
-     */
-    function setDisableUserSelectArray(index = 0, status = false) {
-        if(index < 0 || index >= disableUserSelectArray.value.length) { return; }
-        if(typeof status !== "boolean") { return; }
-        disableUserSelectArray.value[index] = status;
-    }
-
-    /**
      * This function changes the zoom factor for the webpage.
      * @param {Number} newFactor This is the new zoom factor for the webpage.
      */
@@ -100,6 +79,90 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
         const vhNum = (Math.round((vHeight * 100) / zoomFactor) / 100);
         document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, (String(vhNum) + "px"));
+    }
+
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * These functions are responsible for setting certain styles that are universal across the website.
+     * -------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * This function sets whether or not a specific element needs the webpage overflow to be hidden.
+     * @param {Number} index The specific field to set for the array.
+     * @param {Boolean} status The status of whether or not to hide the webpage overflow.
+     */
+    function setHideOverflowArray(index = 0, status = false) {
+        if(index < 0 || index >= hideOverflowArray.value.length) { return; }
+        if(typeof status !== "boolean") { return; }
+        hideOverflowArray.value[index] = status;
+    }
+
+    /**
+     * This function sets whether or not a specific element needs the website cursor to be hidden.
+     * @param {Number} index The specific field to set for the array.
+     * @param {Boolean} status The status of whether or not to hide the website cursor.
+     */
+    function setHideCursorArray(index = 0, status = false) {
+        if(index < 0 || index >= hideCursorArray.value.length) { return; }
+        if(typeof status !== "boolean") { return; }
+        hideCursorArray.value[index] = status;
+    }
+
+    /**
+     * This function sets whether or not a specific element needs to disable user select.
+     * @param {Number} index The specific field to set for the array.
+     * @param {Boolean} status The status of whether or not to disable user select.
+     */
+    function setDisableUserSelectArray(index = 0, status = false) {
+        if(index < 0 || index >= disableUserSelectArray.value.length) { return; }
+        if(typeof status !== "boolean") { return; }
+        disableUserSelectArray.value[index] = status;
+    }
+
+    /**
+     * This function sets a class for the document element that hides the webpage overflow.
+     * @param {Boolean} hide If true, it hides the overflow, else it enables it.
+     */
+    function setHideOverflowClass(hide = false) {
+        if(!validateClientMode()) { return; }
+        if(hide) {
+            document.documentElement.classList.add('hide-overflow');
+        } else {
+            document.documentElement.classList.remove('hide-overflow');
+        }
+    }
+
+    /**
+     * This function sets a class for the document element that hides the webpage cursor.
+     * @param {Boolean} hide If true, it hides the cursor, else it enables it.
+     */
+    function setHideCursorClass(hide = false) {
+        if(!validateClientMode()) { return; }
+        if(hide) {
+            document.documentElement.classList.add('hide-cursor');
+        } else {
+            document.documentElement.classList.remove('hide-cursor');
+        }
+    }
+
+    /**
+     * This function sets a class for the document body that disables the user from selecting text, images, etc.
+     * @param {Boolean} hide If true, it disables user select, else it enables it.
+     */
+    function setDisableUserSelectClass(hide = false) {
+        if(!validateClientMode()) { return; }
+        if(hide) {
+            document.body.classList.add('disable-user-select');
+            if(fullScreenSet.value) { fullScreenStore.element.classList.add('disable-user-select'); }
+        } else {
+            document.body.classList.remove('disable-user-select');
+            if(fullScreenSet.value) { fullScreenStore.element.classList.remove('disable-user-select'); }
+        }
+
+        if(!fullScreenSet.value && fullScreenStore.oldElement != null) {
+            fullScreenStore.oldElement.classList.remove('disable-user-select');
+        }
     }
 
     /**
@@ -145,6 +208,7 @@ export const useStyleStore = defineStore("style-store", () => {
         const signal = styleController.signal;
         window.addEventListener("resize", () => { setDynamicBreakpoints(); }, { signal });
         window.addEventListener("orientationchange", () => { setDynamicBreakpoints(); }, { signal });
+        document.addEventListener("fullscreenchange", () => { setDynamicBreakpoints }, { signal });
 
         cssVarObserver = new MutationObserver(() => { setDynamicBreakpoints(); });
         cssVarObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
@@ -230,8 +294,8 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, disableUserSelect, zoomFactor, breakpointsEnabled,
-        mountStyleStore, setHideOverflowArray, setDisableUserSelectArray,
+    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, breakpointsEnabled,
+        mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,
         enableBreakpoints, disableBreakpoints, resetBreakpoints
     }
 });

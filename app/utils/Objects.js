@@ -678,7 +678,7 @@ export const LANGUAGES_SKILL_NOTES = [
         desc: "Through my experience with frontend frameworks, I have learned how to develop visually appealing styles with CSS.",
 
         icon: {
-            id: "fa-brands fa-css3-alt",
+            id: "fa-brands fa-css",
             faIcon: true,
             size: "110"
         }

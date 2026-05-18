@@ -42,8 +42,6 @@ function scrollFsElement(divisor = 10) {
  */
 function setUserSelect(disable = true) {
     styleStore.setDisableUserSelectArray(0, disable);
-    const element = getFsElement();
-    if(element != null) { element.style.userSelect = (disable ? 'none' : ''); }
 }
 
 /**

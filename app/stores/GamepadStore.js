@@ -1,4 +1,5 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
+    const styleStore = useStyleStore();
     const fullScreenSet = getFullScreenSet();
     var cursorSpeedTimeout = null;
 
@@ -15,10 +16,10 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         return ((index == -1) ? "" : getCursor(index).elementTitle.value);
     });
 
-    watch(cursorVisible, () => {
-        if(checkSSR() || !document) { return; }
-        document.body.style.cursor = (cursorVisible.value ? "none" : "");
-    });
+    // This hides the website cursor when a gamepad is being used.
+    watch(cursorVisible, (newValue) => { styleStore.setHideCursorArray(1, newValue); });
+
+    // This adds a delay when the cursor speed menu is closing.
     watch(maxSpeedChanging, () => {
         if(cursorSpeedTimeout != null) { clearTimeout(cursorSpeedTimeout); }
         if(maxSpeedChanging.value) {
@@ -30,8 +31,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     /** This returns an object representing a gamepad cursor. */
     function getCursor(index) {
-        if(index < 0 || index >= gamepadCursors.length) { return null; }
-        return gamepadCursors[index];
+        return ((index < 0 || index >= gamepadCursors.length) ? null : gamepadCursors[index]);
     }
 
     /** This function runs whenever the visitor clicks on a typical gamepad "menu" button. */
@@ -47,31 +47,23 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         triggerClickSound();
     }
 
-    /**
-     * This function hides all the gamepad cursors on the website.
-     */
+    /** This function hides all the gamepad cursors on the website. */
     function resetCursorPositions() {
         for(let i = 0; i < gamepadCursors.length; i++) {
             gamepadCursors[i].initCursorPosition();
         }
     }
 
-    /**
-     * This function hides all the gamepad cursors on the website.
-     */
+    /** This function hides all the gamepad cursors on the website. */
     function hideAllCursors() {
         for(let i = 0; i < gamepadCursors.length; i++) {
             gamepadCursors[i].setCustomCursor(false);
         }
     }
 
-    /**
-     * This function fully stops all the gamepad cursors on the website.
-     */
+    /** This function fully stops all the gamepad cursors on the website. */
     function stopAllCursors() {
-        for(let i = 0; i < gamepadCursors.length; i++) {
-            gamepadCursors[i].stop();
-        }
+        for(let i = 0; i < gamepadCursors.length; i++) { gamepadCursors[i].stop(); }
     }
 
     return { gamepadCursors, gamepadConnected, cursorElementTitle, showCursorSpeedMenu,

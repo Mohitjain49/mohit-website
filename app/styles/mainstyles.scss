@@ -56,6 +56,7 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    overflow-y: auto;
     zoom: var(--webpage-zoom-factor);
 }
 body {
@@ -72,6 +73,18 @@ body {
 }
 #app {
     height: fit-content;
+}
+
+.hide-overflow {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    overflow: hidden !important;
+}
+.hide-cursor {
+    cursor: none !important;
+}
+.disable-user-select {
+    user-select: none !important;
 }
 
 a, RouterLink {
