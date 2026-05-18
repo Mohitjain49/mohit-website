@@ -23,7 +23,7 @@
     
     <template v-if="fullScreenSet">
         <GamepadComponent />
-        <WebScrollBar :fs-element-id="'resume-container'" />
+        <FullScreenScrollBar :fs-element-id="'resume-container'" />
         <QrcodeTool v-if="webData.showSharePopup" />
     </template>
 
@@ -51,7 +51,7 @@ const props = defineProps({
 });
 
 const { pdf, pages } = usePDF(props.url);
-const { width: windowWidth } = useWindowSize();
+const { width: windowWidth } = useMohitWindowSize();
 
 const docPages = ref([{ loaded: false, num: 0 }]);
 const docPagesRefs = ref([]);
@@ -103,7 +103,7 @@ function cancelAllRendering() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .pdf-doc-linkBtn {
     position: absolute;
     top: 10px;
@@ -142,7 +142,7 @@ function cancelAllRendering() {
     align-items: center;
 }
 
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .pdf-doc-linkBtn {
         width: 25px;
         height: 25px;

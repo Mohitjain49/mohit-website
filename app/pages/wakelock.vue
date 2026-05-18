@@ -7,8 +7,15 @@
         <div :class="['wakeLock-box', ((menuState == 1) ? 'keybinds' : '')]">
             <template v-if="menuState == 0">
                 <button class="wakeLock-button" @click="webData.toggleWakeLock()">
-                    <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
-                    <span> {{ webData.wakeLockStatement }} </span>
+                    <ClientOnly>
+                        <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
+                        <span> {{ webData.wakeLockStatement }} </span>
+
+                        <template #fallback>
+                            <font-awesome-icon icon="fa-ban" />
+                            <span> {{ "Feature Unavailable" }} </span>
+                        </template>
+                    </ClientOnly>
                 </button>
                 <a :href="WAKE_LOCK_MDN_DOCS" class="wakeLock-mdn-docs">
                     This page uses the Screen Wake Lock Web API to keep the screen on when enabled, 
@@ -65,7 +72,7 @@ function toggleMenuState() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #wakeLock-page {
     background: rgba(0, 0, 0, 0.25);
     padding-top: 0px;
@@ -73,7 +80,7 @@ function toggleMenuState() {
 }
 .wakeLock-body {
     width: 100%;
-    height: calc(100vh + 10px);
+    height: calc(var(--true-100vh, 100vh) + 10px);
     min-height: 400px;
     display: flex;
     justify-content: center;
@@ -185,7 +192,7 @@ function toggleMenuState() {
     border-radius: 5px;
 }
 
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .wakeLock-box {
         width: 300px;
         height: 250px;

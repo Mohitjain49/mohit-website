@@ -1,6 +1,6 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
-    const controller = new AbortController();
+    var controller = new AbortController();
     var wakeLockTimeout = null;
 
     const gamepadStore = useGamepadStore();
@@ -9,15 +9,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
     const scrollStore = useScrollStore();
+    const styleStore = useStyleStore();
 
     const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
-    const { width: windowWidth } = useWindowSize();
+    const { width: windowWidth } = useMohitWindowSize();
     const wakeLock = useWakeLock();
 
     /** @type {Ref<HTMLElement>} This represents the website footer. */
     const webFooter = ref(null);
     const webFooterVisibility = useElementVisibility(webFooter);
+
+    const mounted = ref(0);
     const menuOpen = ref(-1);
 
     const openShareOnMount = ref(true);
@@ -33,7 +36,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
-    const websiteMenuTransition = computed(() => { return ((websiteMenuMode.value == 0) ? "navMenu-transition" : "navMenu-smallWidth-transition") });
+    const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
+    const websiteMenuHideOverflow = computed(() => { return (!noMenuOpen.value && websiteMenuMode.value == 1); });
 
     const showSharePopup = ref(false);
     const sharePopupClosing = ref(false);
@@ -66,6 +70,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     });
 
+    // This hides the screen overflow if a website menu is open and it uses it's second mode.
+    watch(websiteMenuHideOverflow, (newValue) => {
+        styleStore.setHideOverflowArray(3, newValue);
+    });
+
     // This is used to track if the wake lock was freshly changed or not.
     watch(wakeLock.isActive, () => {
         if(wakeLockTimeout != null) { clearTimeout(wakeLockTimeout); }
@@ -90,12 +99,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /**
      * This function adds event listeners to the website as soon as its loaded.
      */
-    function setEventListeners() {
+    async function setEventListeners() {
+        if(mounted.value != 0) { return; }
+        mounted.value = 1;
+
+        await nextTick();
         const signal = controller.signal;
         history.scrollRestoration = "manual";
 
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
+        await styleStore.mountStyleStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();
@@ -111,22 +125,21 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         // This sets a new function in the window object to let static HTML elements access the share popup.
         window.openShareMenu = (param = "") => { setQRCodePopup(param); }
 
-        // This makes sure that the website doesn't scroll with the swipe events made for the navigation bar.
-        const mohitNavBar = document.getElementById("mohit-navBar");
-        if(mohitNavBar == null) { return; }
-
-        mohitNavBar.addEventListener("touchmove", (e) => {
-            const target = e.target;
-            if(!(target instanceof HTMLInputElement) || target.type !== "range") { e.preventDefault(); }
-        }, { passive: false, signal });
+        // This imports the gamepad-events JS file to make sure gamepads work on the website.
+        await import("~/gamepad-events.js");
+        mounted.value = 2;
     }
 
     /**
      * This function removes event listeners to the website as soon as its loaded.
      */
     function removeEventListeners() {
+        if(mounted.value != 2) { return; }
         controller.abort();
+        controller = new AbortController();
+
         gamepadStore.stopAllCursors();
+        mounted.value = 0;
     }
 
     /**
@@ -158,40 +171,32 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
-     * This function returns whether an element is in any navigation menu within the website.
+     * This function returns whether an element is in any navigation menu or webpage cover within the website.
      * @param {HTMLElement} element The element.
      */
-    function checkNavigationElement(element) {
+    function checkNavigationElement(element = null) {
         if(nullifyBodyClick.value) {
             nullifyBodyClick.value = false;
             return true;
         }
 
+        if(element == null) { return false; }
+        if(element.classList.contains("webpage-cover")) { return true; }
+
         const navBar = document.getElementById("mohit-navBar");
-        const navBarElements = Array.from(navBar.querySelectorAll('*'));
-        if(navBar === element || navBarElements.includes(element)) { return true; }
+        if(navBar != null && (navBar === element || navBar.contains(element))) { return true; }
 
         const navMenu = document.getElementById("mohit-navMenu");
-        const navMenuElements = Array.from(navMenu.querySelectorAll('*'));
-        if(navMenu === element || navMenuElements.includes(element)) { return true; }
+        if(navMenu != null && (navMenu === element || navMenu.contains(element))) { return true; }
 
         const compassMenu = document.getElementById("mohit-compassMenu");
-        if(compassMenu != null) {
-            const compassMenuElements = Array.from(compassMenu.querySelectorAll('*'));
-            if(compassMenu === element || compassMenuElements.includes(element)) { return true; }
-        }
+        if(compassMenu != null && (compassMenu === element || compassMenu.contains(element))) { return true; }
 
         const scriptsMenu = document.getElementById("mohit-scriptsMenu");
-        if(scriptsMenu != null) {
-            const scriptsMenuElements = Array.from(scriptsMenu.querySelectorAll('*'));
-            if(scriptsMenu === element || scriptsMenuElements.includes(element)) { return true; }
-        }
+        if(scriptsMenu != null && (scriptsMenu === element || scriptsMenu.contains(element))) { return true; }
 
         const docMenu = document.getElementById("mohit-docMenu");
-        if(docMenu != null) {
-            const docMenuElements = Array.from(docMenu.querySelectorAll('*'));
-            if(docMenu === element || docMenuElements.includes(element)) { return true; }
-        }
+        if(docMenu != null && (docMenu === element || docMenu.contains(element))) { return true; }
 
         // Returns false if element was not found in any menu.
         return false;
@@ -382,8 +387,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
-        shareSupported, showSharePopup, showSharePopupImmediate, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
+    return { mounted, menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
+        shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick

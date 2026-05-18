@@ -95,7 +95,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .personal-web-body#code-reader-page {
     background: rgba(0, 0, 0, 0.6);
 }
@@ -345,8 +345,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
     color: white;
 }
 
-
-@media (max-width: 1050px) {
+@include dynamic-less-equal-width-rule(1050) {
     .code-scanner-main {
         flex-direction: column-reverse;
         min-height: 1200px;
@@ -358,7 +357,7 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
         width: calc(90% - 4px);
     }
 }
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .scanner-itemMenu {
         width: 300px;
         height: 200px;

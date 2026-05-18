@@ -1,9 +1,9 @@
-<style scoped>
-@import "~/styles/navmenu.css";
+<style scoped lang="scss">
+@use "~/styles/navmenu";
 </style>
 
 <template>
-<div class="webpage-cover" v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)"></div>
+<WebCover v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)" />
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
         <MenuTop />
@@ -159,7 +159,6 @@ const documentStore = useDocumentStore();
 const router = useRouter();
 
 const docMenu = shallowRef(null);
-useSwipeToCloseMenu(docMenu);
 usePulseLoopAnimation(docMenu);
 
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";

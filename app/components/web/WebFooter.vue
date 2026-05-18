@@ -75,9 +75,10 @@
 
         <div class="footer-bottom-buttons">
             <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
-                <FontAwesomeIcon icon="fa-share-from-square" />
+                <FontAwesomeIcon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
+                <FontAwesomeIcon v-else icon="fa-spinner" :spin-pulse="true" />
             </button>
-            <RouterLink :to="routePath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
+            <RouterLink v-show="isMounted" :to="routePath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />
             </RouterLink>
         </div>
@@ -145,7 +146,7 @@ const EXTRA_ROUTES = [
 ];
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #footer {
     position: relative;
     background-color: black;
@@ -369,7 +370,7 @@ const EXTRA_ROUTES = [
     scale: 1.1;
 }
 
-@media (max-width: 1200px) {
+@include dynamic-less-equal-width-rule(1200) {
     .footer-body {
         grid-template-columns: repeat(3, 1fr);
         left: calc(50% - 375px);
@@ -380,7 +381,7 @@ const EXTRA_ROUTES = [
         margin-bottom: 20px;
     }
 }
-@media (max-width: 750px) {
+@include dynamic-less-equal-width-rule(750) {
     .footer-body {
         grid-template-columns: repeat(2, 1fr);
         left: calc(50% - 275px);
@@ -390,7 +391,7 @@ const EXTRA_ROUTES = [
         grid-column: span 2;
     }
 }
-@media (max-width: 550px) {
+@include dynamic-less-equal-width-rule(550) {
     .footer-body {
         grid-template-columns: repeat(1, 1fr);
         left: 0px;

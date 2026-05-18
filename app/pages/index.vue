@@ -43,7 +43,7 @@ function changePageTitle() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #homepage {
     background: rgba(0, 0, 0, 0.25);
     padding-top: 0px;

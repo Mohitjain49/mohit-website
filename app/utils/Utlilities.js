@@ -1,78 +1,4 @@
 /**
- * This function returns how much an element has scrolled from its starting point to its end both horizontally and vertically.
- * @param {String} elementId The id of the element.
- */
-export function useScrollPercentage(elementId = "") {
-    var animationFrame = null;
-    const active = ref(false);
-
-    const horizontal = ref({ main: 0, inView: 0 });
-    const vertical = ref({ main: 0, inView: 0 });
-
-    /** A simple object that can be used by vertical custom scrollbars. */
-    const vScrollbarStyle = computed(() => {
-        const topNum = ((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / 100) * (100 - vertical.value.inView)));
-        return { height: (vertical.value.inView + "%"), top: (topNum + "%") }
-    });
-    /** A simple object that can be used by horizontal custom scrollbars. */
-    const hScrollbarStyle = computed(() => {
-        const leftNum = ((horizontal.value.inView >= 100) ? 0 : ((horizontal.value.main / 100) * (100 - horizontal.value.inView)));
-        return { width: (horizontal.value.inView + "%"), left: (leftNum + "%") }
-    });
-
-    /** This function calculates both the horizontal and vertical percentages. */
-    function calculate() {
-        if(!document || !document.getElementById) { return; }
-        const element = document.getElementById(elementId);
-        if(element == null) { return; }
-
-        // This section calculates how far the user scrolled from the top of the element.
-        vertical.value.main = (element.scrollTop / (element.scrollHeight - element.clientHeight));
-        horizontal.value.main = (element.scrollLeft / (element.scrollWidth - element.clientWidth));
-
-        // This section simplifies the calculations into "clean" numbers for other JS code.
-        vertical.value.main = (Number.isNaN(vertical.value.main) ? 100 : (Math.round(vertical.value.main * 10000) / 100));
-        horizontal.value.main = (Number.isNaN(horizontal.value.main) ? 100 : (Math.round(horizontal.value.main * 10000) / 100));
-
-        // This calculates what percentage of the element is viewable on the viewport.
-        vertical.value.inView = (Math.round((element.clientHeight / element.scrollHeight) * 10000) / 100);
-        horizontal.value.inView = (Math.round((element.clientWidth / element.scrollWidth) * 10000) / 100);
-        return { horizontal: horizontal.value, vertical: vertical.value }
-    }
-
-    /** This function is used by the start function to call the "calculate" function repeatedly. */
-    function calculateWithAnimation() {
-        calculate();
-        animationFrame = requestAnimationFrame(() => { calculateWithAnimation(); });
-    }
-
-    /** This starts the animation frame loop to calculate the scroll percentages. */
-    function start() {
-        if(animationFrame != null || active.value) { return; }
-        active.value = true;
-        animationFrame = requestAnimationFrame(() => { calculateWithAnimation(); });
-    }
-
-    /** This stops the animation frame loop. */
-    function stop() {
-        if(animationFrame == null || !active.value) { return; }
-        active.value = false;
-        cancelAnimationFrame(animationFrame);
-        animationFrame = null;
-    }
-
-    /** This toggles whether the animation frame loop is running or not. */
-    function toggle() {
-        if(active.value) { stop(); } else { start(); }
-    }
-
-    // This mounts and unmounts the necessary event listeners for this utility.
-    onMounted(() => { nextTick().then(() => { calculate(); start(); }); });
-    onBeforeUnmount(() => { stop(); });
-    return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate, start, stop, toggle }
-}
-
-/**
  * This utility sets the necessary event listeners to enable any HTML element to use the pulse loop animation.
  * @param {import('vue').ShallowRef<HTMLElement>} container This is the main container to which the utility will apply to.
  */
@@ -100,9 +26,11 @@ export function usePulseLoopAnimation(container = null) {
     function disable() {
         if(!enabled.value) { return; }
         if(controller != null) { controller.abort(); }
+        if(observer != null) { observer.disconnect(); }
 
         controller = null;
-        observer.disconnect();
+        observer = null;
+
         numElements.value = 0;
         enabled.value = false;
     }
@@ -148,54 +76,79 @@ export function usePulseLoopAnimation(container = null) {
 
     onMounted(async() => { await enable(); });
     onBeforeUnmount(() => { disable(); });
-    watch(container, () => { reset() });
+    watch(container, () => { reset(); });
     return { enabled, numElements, enable, disable, reset, animate }
 }
 
 /**
- * This utility is used by this website's side menus to set the necessary events to close itself with a swipe.
- * @param {import('vue').ShallowRef<HTMLElement>} menuElement This is the main container to which the utility will apply to.
+ * This function returns how much an element has scrolled from its starting point to its end both horizontally and vertically.
+ * @param {String} elementId The id of the element.
  */
-export function useSwipeToCloseMenu(menuElement) {
-    const webData = useWebsiteDataStore();
-    const swipeConfig = { pointerTypes: ['mouse', 'touch', 'pen'], disableTextSelect: true, threshold: 50 }
-    let menuSwipe = usePointerSwipe(menuElement, swipeConfig);
+export function useScrollPercentage(elementId = "") {
+    const horizontal = ref({ main: 0, inView: 0 });
+    const vertical = ref({ main: 0, inView: 0 });
 
-    /** This determines whether the utility is enabled or not. */
-    const enabled = ref(true);
-
-    /**
-     * This function is used by the watcher to close a navigation menu.
-     * @param {Boolean} isSwiping Whether the user is swiping or not.
-     */
-    function closeNavMenuWithWatcher(isSwiping = true) {
-        const direction = menuSwipe.direction.value;
-        if(!enabled.value || !isSwiping || (direction !== 'up')) { return; }
-
-        webData.closeNavMenu();
-        triggerClickSound();
-    }
-
-    // This tracks all "swipe" events for the navigation menu so that the user can close the menu by swiping to the right.
-    let swipeWatcher = watch(menuSwipe.isSwiping, (isSwiping) => { closeNavMenuWithWatcher(isSwiping); });
-
-    // This watcher resets the "usePointerSwipe" utility and the swipe event watcher when the menu element ref changes.
-    watch(menuElement, () => {
-        if(menuSwipe != null) { menuSwipe.stop(); }
-        if(swipeWatcher != null) { swipeWatcher.stop(); }
-
-        menuSwipe = usePointerSwipe(menuElement, swipeConfig);
-        swipeWatcher = watch(menuSwipe.isSwiping, (isSwiping) => { closeNavMenuWithWatcher(isSwiping); });
+    /** A simple object that can be used by vertical custom scrollbars. */
+    const vScrollbarStyle = computed(() => {
+        const topNum = ((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / 100) * (100 - vertical.value.inView)));
+        return { height: (vertical.value.inView + "%"), top: (topNum + "%") }
+    });
+    /** A simple object that can be used by horizontal custom scrollbars. */
+    const hScrollbarStyle = computed(() => {
+        const leftNum = ((horizontal.value.inView >= 100) ? 0 : ((horizontal.value.main / 100) * (100 - horizontal.value.inView)));
+        return { width: (horizontal.value.inView + "%"), left: (leftNum + "%") }
     });
 
-    /** This function enables the utility. */
-    function enable() { enabled.value = true; }
+    /** This function calculates both the horizontal and vertical percentages. */
+    function calculate() {
+        if(!document || !document.getElementById) { return; }
+        const element = document.getElementById(elementId);
+        if(element == null) { return; }
 
-    /** This function disables the utility. */
-    function disable() { enabled.value = false; }
+        // This section calculates how far the user scrolled from the top of the element.
+        vertical.value.main = (element.scrollTop / (element.scrollHeight - element.clientHeight));
+        horizontal.value.main = (element.scrollLeft / (element.scrollWidth - element.clientWidth));
 
-    /** This function toggles whether the utility is enabled or not. */
-    function toggle() { enabled.value = !enabled.value; }
+        // This section simplifies the calculations into "clean" numbers for other JS code.
+        vertical.value.main = (Number.isNaN(vertical.value.main) ? 100 : (Math.round(vertical.value.main * 10000) / 100));
+        horizontal.value.main = (Number.isNaN(horizontal.value.main) ? 100 : (Math.round(horizontal.value.main * 10000) / 100));
 
-    return { enabled, enable, disable, toggle }
+        // This calculates what percentage of the element is viewable on the viewport.
+        vertical.value.inView = (Math.round((element.clientHeight / element.scrollHeight) * 10000) / 100);
+        horizontal.value.inView = (Math.round((element.clientWidth / element.scrollWidth) * 10000) / 100);
+        return { horizontal: horizontal.value, vertical: vertical.value }
+    }
+
+    useRafFn(() => { calculate(); }, { immediate: true, fpsLimit: 30, once: false });
+    return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate }
+}
+
+/** This returns an object similar to "useWindowSize", but it records the css layout over the inner layout dimensions. */
+export function useMohitWindowSize() {
+    const CSS_LAYOUT_ID = "invisible-css-layout";
+    const width = shallowRef(Number.POSITIVE_INFINITY);
+    const height = shallowRef(Number.POSITIVE_INFINITY);
+
+    const cssToWindowWidthRatio = shallowRef(1.0);
+    const cssToWindowHeightRatio = shallowRef(1.0);
+
+    /**
+     * This function sets the true width and height of the website, even with a custom zoom property enabled.
+     * @returns A boolean on whether or not the dimensions could be updated.
+     */
+    function updateDimensions() {
+        if(!document || !window) { return false; }
+        const element = document.getElementById(CSS_LAYOUT_ID);
+        if(element == null) { return false; }
+
+        width.value = element.clientWidth;
+        height.value = element.clientHeight;
+
+        cssToWindowWidthRatio.value = (width.value / window.innerWidth);
+        cssToWindowHeightRatio.value = (height.value / window.innerHeight);
+        return true;
+    }
+
+    useRafFn(() => { updateDimensions(); }, { immediate: true, fpsLimit: 30, once: false });
+    return { width, height, cssToWindowWidthRatio, cssToWindowHeightRatio, updateDimensions }
 }

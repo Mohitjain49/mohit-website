@@ -52,7 +52,7 @@ useIntersectionObserver(cardRefs, (entry) => {
  * It adds transitions to the description text upon entry.
  */
 function setProjectsTransitions(isVisible) {
-    if(isVisible && window.innerWidth > 450) {
+    if(isVisible && getMohitInnerWidth() > 450) {
         document.getElementsByClassName('projects-main-header').item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('projects-main-desc').item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
     } else if(!isVisible) {
@@ -62,7 +62,7 @@ function setProjectsTransitions(isVisible) {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .projects-section {
     background: transparent;
     display: grid;
@@ -142,7 +142,7 @@ function setProjectsTransitions(isVisible) {
     box-shadow: 0px 0px 20px var(--lightning-yellow);
 }
 
-@media (max-width: 1200px) {
+@include dynamic-less-equal-width-rule(1200) {
     .projects-section {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
@@ -153,7 +153,7 @@ function setProjectsTransitions(isVisible) {
     }
 }
 
-@media (max-width: 825px) {
+@include dynamic-less-equal-width-rule(825) {
     .projects-section {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
@@ -163,8 +163,17 @@ function setProjectsTransitions(isVisible) {
         min-width: 0px;
         height: 500px;
     }
+
     .projects-main-textContainer, .projects-features-btn {
         grid-column: span 1;
+    }
+    .projects-main-textContainer {
+        width: 500px;
+        position: relative;
+        left: calc(50% - 250px);
+    }
+    .projects-main-desc {
+        width: 470px;
     }
 
     .projects-main-header a {
@@ -181,7 +190,15 @@ function setProjectsTransitions(isVisible) {
     }
 }
 
-@media (max-width: 500px) {
+@include dynamic-less-equal-width-rule(500) {
+    .projects-main-textContainer {
+        width: 340px;
+        position: relative;
+        left: calc(50% - 170px);
+    }
+    .projects-main-desc {
+        width: 340px;
+    }
     .projects-main-header a {
         font-size: 52px;
     }

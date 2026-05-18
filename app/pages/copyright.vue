@@ -78,10 +78,10 @@ async function checkForUpdates() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .copyright-body-exterior {
     height: fit-content;
-    min-height: calc(100vh - 90px);
+    min-height: calc(var(--true-100vh, 100vh) - 90px);
     padding: 20px;
     width: calc(100% - 40px);
     display: flex;
@@ -180,12 +180,12 @@ async function checkForUpdates() {
     scale: 1.05;
 }
 
-@media (max-width: 680px) {
+@include dynamic-less-equal-width-rule(680) {
     .copyright-body-header {
         font-size: 40px;
     }
 }
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .copyright-body-header {
         font-size: 28px;
     }
@@ -212,7 +212,7 @@ async function checkForUpdates() {
         font-size: 17px;
     }
 }
-@media (max-width: 450px) {
+@include dynamic-less-equal-width-rule(450) {
     .copyright-body-header {
         font-size: 24px;
         gap: 3px;

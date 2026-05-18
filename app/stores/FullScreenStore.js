@@ -1,5 +1,12 @@
 export const useFullScreenStore = defineStore("screen-store", () => {
     const fullScreenSet = ref(false);
+
+    /** @type {import("vue").ShallowRef<HTMLElement>} This tracks the element that IS in full screen mode. */
+    const element = shallowRef(null);
+
+    /** @type {import("vue").ShallowRef<HTMLElement>} This tracks the element that WAS in full screen mode. */
+    const oldElement = shallowRef(null)
+
     const faIcon = computed(() => { return (fullScreenSet.value ? 'fa-compress' : 'fa-expand'); });
     const elementTitle = computed(() => { return (fullScreenSet.value ? 'Exit Full Screen' : 'Full Screen'); });
 
@@ -26,21 +33,21 @@ export const useFullScreenStore = defineStore("screen-store", () => {
         }
     }
 
-    /**
-     * This function returns the status of whether or not the app is in full screen mode.
-     */
+    /** This function returns the status of whether or not the app is in full screen mode. */
     function setFullScreenStatus() {
         fullScreenSet.value = (document.fullscreenElement != null);
+        oldElement.value = element.value;
+        element.value = (fullScreenSet.value ? document.fullscreenElement : null);
     }
 
-    /**
-     * This function exits the full screen for any element.
-     */
+    /** This function exits the full screen for any element. */
     async function exitFullScreen() {
         if(fullScreenSet.value) { return document.exitFullscreen(); }
     }
 
-    return { fullScreenSet, faIcon, elementTitle, setFullScreen, setFullScreenStatus, exitFullScreen }
+    return { fullScreenSet, faIcon, elementTitle, element, oldElement,
+        setFullScreen, setFullScreenStatus, exitFullScreen
+    }
 });
 
 /** This function returns a computed value that returns whether the website is in full screen mode or not. */

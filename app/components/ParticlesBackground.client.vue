@@ -13,7 +13,7 @@ const props = defineProps({ particlesOptions: { type: Object, required: true } }
 const BATTERY_LOW_THRESHOLD = 0.2 // This is a value between 0 and 1 that represents the user having "low battery".
 const visibility = useDocumentVisibility();
 const battery = useBattery();
-const windowSize = useWindowSize();
+const windowSize = useMohitWindowSize();
 
 const batteryLow = ref(false);
 const particlesHalved = ref(false);
@@ -35,15 +35,12 @@ function resetParticles() {
     tsparticlesContainer.value.reset(props.particlesOptions);
 }
 
-/** This function returns whether the website is using a fireworks background or not. */
-function onFireworksBackground() { return (props.particlesOptions.preset === "fireworks"); }
-
 /**
  * This function is responsible for changing the intensity of tsparticles depending on the battery status.
  * It's main purpose is to have the app take up less operating power if the user's laptop battery is low.
  */
 function onBatteryStatusChange() {
-    if(!battery.isSupported.value || onFireworksBackground()) { return; }
+    if(!battery.isSupported.value) { return; }
     const prevStatus = batteryLow.value;
     batteryLow.value = (battery.level.value <= BATTERY_LOW_THRESHOLD && !battery.charging.value);
 
@@ -62,7 +59,7 @@ function onBatteryStatusChange() {
 // This resets the number of particles and destroys the container before unmounting the page.
 onBeforeUnmount(() => {
     if(particlesHalved.value) { (props.particlesOptions.particles.number.value *= 2); }
-    if(!onFireworksBackground()) { props.particlesOptions.particles.number.density.enable = true; }
+    props.particlesOptions.particles.number.density.enable = true;
     if(tsparticlesContainer.value != null) { tsparticlesContainer.value.destroy(true); }
 });
 
@@ -79,7 +76,6 @@ watch(webpageHidden, (newValue) => {
 // This disables the "density" property of the TS Particles Background when the viewport size gets too large.
 // If not disabled, the particles lags the user's device.
 watch(disableParticleDensity, (newValue) => {
-    if(onFireworksBackground()) { return; }
     if(newValue) {
         props.particlesOptions.particles.number.density.enable = false;
         resetParticles();

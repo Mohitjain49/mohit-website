@@ -6,11 +6,13 @@
 
 <NuxtPage />
 <VitePwaManifest />
-<div class="webpage-cover" v-if="useWebpageCover"></div>
+
+<WebCover v-if="useWebpageCover" :zIndex="500" />
+<div id="invisible-css-layout"></div>
 </template>
 
 <script setup>
-import "~/styles/mainstyles.css";
+import "~/styles/mainstyles.scss";
 import '~build/console';
 
 const webData = useWebsiteDataStore();
@@ -21,18 +23,9 @@ const showShare = computed(() => { return (webData.showSharePopup && !fullScreen
 const showShareImmediate = computed(() => { return (webData.showSharePopupImmediate && !fullScreenSet.value); });
 const useWebpageCover = computed(() => { return (showShareImmediate.value || (webData.menuOpen != -1 && webData.websiteMenuMode == 1)); });
 
+onMounted(async() => { await webData.setEventListeners(); });
 onBeforeUnmount(() => { webData.removeEventListeners(); });
-onMounted(async () => {
-    webData.setEventListeners();
-    await import("./gamepad-events.js");
-});
 
-useScriptTag("https://accounts.google.com/gsi/client",
-    (el) => { documentStore.initGoogleTokenClient(); },
-    { async: true, defer: true }
-);
-useScriptTag("https://apis.google.com/js/api.js",
-    (el) => { documentStore.initGooglePickerAPI(); },
-    { async: true, defer: true }
-);
+useScriptTag("https://accounts.google.com/gsi/client", (el) => { documentStore.initGoogleTokenClient(); }, { async: true, defer: true });
+useScriptTag("https://apis.google.com/js/api.js", (el) => { documentStore.initGooglePickerAPI(); }, { async: true, defer: true });
 </script>

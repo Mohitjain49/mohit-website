@@ -32,7 +32,7 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
 ));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #install-page {
     background: rgba(0, 0, 0, 0.25);
     padding-top: 0px;
@@ -40,7 +40,7 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
 }
 .install-body {
     width: 100%;
-    height: calc(100vh + 10px);
+    height: calc(var(--true-100vh, 100vh) + 10px);
     min-height: 400px;
     display: flex;
     justify-content: center;
@@ -97,7 +97,7 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
     color: var(--lightning-yellow);
 }
 
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .install-box {
         width: 300px;
         height: 250px;

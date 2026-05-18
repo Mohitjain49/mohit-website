@@ -1,5 +1,5 @@
-<style scoped>
-@import "~/styles/navmenu.css";
+<style scoped lang="scss">
+@use "~/styles/navmenu";
 </style>
 
 <template>
@@ -56,7 +56,6 @@ const router = useRouter();
 const webData = useWebsiteDataStore();
 
 const compassMenu = shallowRef(null);
-useSwipeToCloseMenu(compassMenu);
 usePulseLoopAnimation(compassMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });

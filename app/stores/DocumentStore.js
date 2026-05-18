@@ -21,7 +21,9 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
+    const styleStore = useStyleStore();
     const fullScreenStore = useFullScreenStore();
+    const windowSize = useMohitWindowSize();
 
     var docAbortController = new AbortController();
     var googleTokenClient = { requestAccessToken: () => {} };
@@ -246,15 +248,15 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function googleDrivePickerCallback(data = { action: "loaded" }) {
         if(data.action === "loaded") {
-            document.body.style.overflowY = "hidden";
+            styleStore.setHideOverflowArray(2, true);
         } else if(data.action === "cancel") {
-            document.body.style.overflowY = "";
+            styleStore.setHideOverflowArray(2, false);
             webData.setMenuOpen(3);
 
             documentUploadToGoogleDriveStatus.value.cancel = true;
             setTimeout(() => { documentUploadToGoogleDriveStatus.value.cancel = false; }, 3000);
         } else if(data.action === "picked") {
-            document.body.style.overflowY = "";
+            styleStore.setHideOverflowArray(2, false);
             const firstFolder = data.docs[0];
 
             if(firstFolder.type === "folder" && typeof firstFolder.id === "string") {
@@ -331,7 +333,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function unmounts a page that hosts a document.
      */
     function unmountDocumentPage() {
-        document.body.style.overflowY = "";
+        styleStore.setHideOverflowArray(2, false);
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
         fullScreenStore.exitFullScreen();
         
@@ -389,12 +391,9 @@ export const useDocumentStore = defineStore("document-store", () => {
      * ----------------------------------------------------------------------------------------------
      */
 
-    /**
-     * Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf.
-     */
+    /** Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf. */
     function setPdfSize() {
-        const innerWidth = (document.getElementById("footer")?.getBoundingClientRect().width ?? window.innerWidth)
-        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (innerWidth - 30)));
+        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (windowSize.width.value - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
     }
 
@@ -405,9 +404,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(fsStateChanging.value) { return; }
         fsStateChanging.value = true;
 
+        webData.bypassBodyClick();
         await fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+
         await sleep(50);
         await nextTick();
+        await sleep(50);
 
         webData.closeNavMenu();
         fsStateChanging.value = false;

@@ -5,6 +5,7 @@ import { imagetools } from "vite-imagetools";
 import usePageTemplates from "./page-templates.config";
 import pwaConfig from "./pwa.config";
 
+const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
 const SITEMAP_EXCLUDED_ROUTES = [
     "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
     "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
@@ -16,14 +17,15 @@ const SITEMAP_EXCLUDED_ROUTES = [
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    compatibilityDate: '2025-07-15',
+    compatibilityDate: '2026-05-08',
     devtools: { enabled: false },
     ssr: true,
-    app: { baseURL: "/" },
+    app: { baseURL: "/", head: { meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }] } },
     devServer: { port: 5000, host: "localhost" },
     modules: [
         '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
         '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',
+        '@stefanobartoletti/nuxt-social-share',
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',
@@ -60,7 +62,7 @@ export default defineNuxtConfig({
     },
 
     hooks: { 'pages:extend'(pages) { usePageTemplates(pages); } },
-    site: { url: "https://www.mohit-jain.com", name: "Mohit Jain | My Portfolio" },
+    site: { url: PERSONAL_MAIN_WEBSITE, name: "Mohit Jain | My Portfolio" },
     sitemap: {
         zeroRuntime: true,
         exclude: SITEMAP_EXCLUDED_ROUTES,
@@ -70,6 +72,7 @@ export default defineNuxtConfig({
     sourcemap: false,
     experimental: { appManifest: true, typedPages: true },
     pwa: pwaConfig,
+    socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
 
     vite: {
         plugins: [
@@ -77,8 +80,9 @@ export default defineNuxtConfig({
                 include: /assets\/.*\.(png|jpe?g)$/,
                 defaultDirectives: (url) => { return new URLSearchParams('format=webp&quality=70'); }
             })
-        ]
+        ],
+        css: { preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;' }}}
     },
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
-    typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client'] } } }
+    typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client', '@types/node'] } } }
 });

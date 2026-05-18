@@ -68,7 +68,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 ));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #google-mockup-page {
     background-color: white;
     color: #121212;
@@ -82,7 +82,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 
 .gMockup-center {
     height: fit-content;
-    min-height: calc(100vh - 100px);
+    min-height: calc(var(--true-100vh, 100vh) - 100px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -233,9 +233,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     box-shadow: 0px 0px 10px red;
 }
 
-@media (max-width: 500px) {
-    .gMockup-title {
-        font-size: 70px;
-    }
+@include dynamic-less-equal-width-rule(500) {
+    .gMockup-title { font-size: 70px; }
 }
 </style>

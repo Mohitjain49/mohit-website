@@ -1,4 +1,5 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
+    const styleStore = useStyleStore();
     const fullScreenSet = getFullScreenSet();
     var cursorSpeedTimeout = null;
 
@@ -15,10 +16,10 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         return ((index == -1) ? "" : getCursor(index).elementTitle.value);
     });
 
-    watch(cursorVisible, () => {
-        if(checkSSR() || !document) { return; }
-        document.body.style.cursor = (cursorVisible.value ? "none" : "");
-    });
+    // This hides the website cursor when a gamepad is being used.
+    watch(cursorVisible, (newValue) => { styleStore.setHideCursorArray(1, newValue); });
+
+    // This adds a delay when the cursor speed menu is closing.
     watch(maxSpeedChanging, () => {
         if(cursorSpeedTimeout != null) { clearTimeout(cursorSpeedTimeout); }
         if(maxSpeedChanging.value) {
@@ -30,8 +31,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     /** This returns an object representing a gamepad cursor. */
     function getCursor(index) {
-        if(index < 0 || index >= gamepadCursors.length) { return null; }
-        return gamepadCursors[index];
+        return ((index < 0 || index >= gamepadCursors.length) ? null : gamepadCursors[index]);
     }
 
     /** This function runs whenever the visitor clicks on a typical gamepad "menu" button. */
@@ -47,31 +47,23 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         triggerClickSound();
     }
 
-    /**
-     * This function hides all the gamepad cursors on the website.
-     */
+    /** This function hides all the gamepad cursors on the website. */
     function resetCursorPositions() {
         for(let i = 0; i < gamepadCursors.length; i++) {
             gamepadCursors[i].initCursorPosition();
         }
     }
 
-    /**
-     * This function hides all the gamepad cursors on the website.
-     */
+    /** This function hides all the gamepad cursors on the website. */
     function hideAllCursors() {
         for(let i = 0; i < gamepadCursors.length; i++) {
             gamepadCursors[i].setCustomCursor(false);
         }
     }
 
-    /**
-     * This function fully stops all the gamepad cursors on the website.
-     */
+    /** This function fully stops all the gamepad cursors on the website. */
     function stopAllCursors() {
-        for(let i = 0; i < gamepadCursors.length; i++) {
-            gamepadCursors[i].stop();
-        }
+        for(let i = 0; i < gamepadCursors.length; i++) { gamepadCursors[i].stop(); }
     }
 
     return { gamepadCursors, gamepadConnected, cursorElementTitle, showCursorSpeedMenu,
@@ -86,6 +78,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 function useGamepadCursor(index = 0) {
     const webData = useWebsiteDataStore();
     const scrollStore = useScrollStore();
+    const windowSize = useMohitWindowSize();
 
     const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
@@ -186,7 +179,6 @@ function useGamepadCursor(index = 0) {
             document.body.click(); // Clicks on the document body if there is no button detected.
         } else {
             (onInputElement.value ? element.focus() : element.click());
-            triggerClickSound();
             nextTick(() => { setClickElement(); });
         }
     }
@@ -244,7 +236,10 @@ function useGamepadCursor(index = 0) {
         }
 
         // This section finds the clickable element the custom cursor is on.
-        const foundElement = document.elementFromPoint((x.value + 15), (y.value + 15));
+        const xVal = ((x.value + 15) / windowSize.cssToWindowWidthRatio.value);
+        const yVal = ((y.value + 15) / windowSize.cssToWindowHeightRatio.value);
+
+        const foundElement = document.elementFromPoint(xVal, yVal);
         const usuableLink = foundElement?.closest('a');
         const usuableButton = foundElement?.closest('button');
         const usuableTextArea = foundElement?.closest('textarea');
@@ -267,8 +262,8 @@ function useGamepadCursor(index = 0) {
         const xOffset = 30 * ((index % 2 == 1) ? -1 : 1);
         const yOffset = 30 * ((index < 3) ? -1 : 1);
 
-        x.value = (window.innerWidth / 2) + xOffset;
-        y.value = (window.innerHeight / 2) + yOffset;
+        x.value = (windowSize.width.value / 2) + xOffset;
+        y.value = (windowSize.height.value / 2) + yOffset;
         if(showCursor.value) { setClickElement(); }
     }
 
@@ -283,11 +278,11 @@ function useGamepadCursor(index = 0) {
         if(event.axisIndex == 0) {
             x.value += (maxSpeed.value * event.movement);
             if(x.value < -5) { x.value = -5; }
-            if(x.value > (window.innerWidth - 20)) { x.value = (window.innerWidth - 20); }
+            if(x.value > (windowSize.width.value - 20)) { x.value = (windowSize.width.value - 20); }
         } else {
             y.value += (maxSpeed.value * event.movement);
             if(y.value < -5) { y.value = -5; }
-            if(y.value > (window.innerHeight - 20)) { y.value = (window.innerHeight - 20); }
+            if(y.value > (windowSize.height.value - 20)) { y.value = (windowSize.height.value - 20); }
         }
         setClickElement();
     }
@@ -301,11 +296,11 @@ function useGamepadCursor(index = 0) {
         if(directionIndex > 1) {
             x.value += (maxSpeed.value * ((directionIndex == 2) ? -0.75 : 0.75));
             if(x.value < 0) { x.value = 0; }
-            if(x.value > (window.innerWidth - 35)) { x.value = (window.innerWidth - 35); }
+            if(x.value > (windowSize.width.value - 35)) { x.value = (windowSize.width.value - 35); }
         } else {
             y.value += (maxSpeed.value * ((directionIndex == 0) ? -0.75 : 0.75));
             if(y.value < 0) { y.value = 0; }
-            if(y.value > (window.innerHeight - 35)) { y.value = (window.innerHeight - 35); }
+            if(y.value > (windowSize.height.value - 35)) { y.value = (windowSize.height.value - 35); }
         }
         setClickElement();
     }

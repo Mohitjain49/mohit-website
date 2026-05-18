@@ -12,6 +12,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     const scriptsStore = useScriptsStore();
 
     const fullScreenSet = getFullScreenSet();
+    const { cssToWindowHeightRatio } = useMohitWindowSize();
     const mounted = ref(false);
 
     /** @type {Lenis} This contains the Lenis object for autoscrolling. */
@@ -21,6 +22,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** @type {dayjs.Dayjs} This represents the start time when the scrollTo function was successfully called. */
     var scrollStartTime = null;
     var calculateScrollInterval = null;
+    var cancelScrollTimeout = null;
 
     const webpageHeight = ref(0);
     const scrollProgress = ref({ pct: 0, duration: 0, show: false, targetElement: null });
@@ -31,6 +33,19 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     // As the user switches between full screen mode and a normal mode, this makes sure that the lenis instance is properly set.
     watch(fullScreenSet, () => { sleep(10).then(() => { setLenisInstance(); }); });
+
+    // This sets a timeout to remotely cancel the autoscroll after 5 seconds to prevent errors in the website.
+    watch(isAutoScrolling, (newValue) => {
+        if(cancelScrollTimeout != null) { clearTimeout(cancelScrollTimeout); }
+        if(!newValue) { return; }
+
+        cancelScrollTimeout = setTimeout(() => {
+            clearInterval(calculateScrollInterval);
+            calculateScrollInterval = null;
+            cancelScrollTimeout = null;
+            scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null }
+        }, 5000);
+    });
 
     /** This function mounts the scroll store. */
     function mountScrollStore() {
@@ -85,7 +100,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function setScrollEL() {
         if(lenis == null) { return; }
         lenis.on("scroll", (lenisInstance) => {
-            webData.closeNavMenu();
+            if(webData.websiteMenuMode == 0) { webData.closeNavMenu(); }
             scriptsStore.setLineOptions(-1);
         });
     }
@@ -104,7 +119,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
             if(target == null) { reject("Element with id \"\""); }
 
             const initDuration = (Math.abs((target.getBoundingClientRect().top + window.scrollY) - window.scrollY) / 4000);
-            const finalDuration = Math.max(0.75, Math.min(initDuration, 3));
+            const finalDuration = Math.max(0.75, Math.min((initDuration * cssToWindowHeightRatio.value), 3));
 
             scrollProgress.value.targetElement = target;
             scrollProgress.value.duration = finalDuration;
@@ -128,7 +143,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(isAutoScrolling.value) { return; }
         return new Promise((resolve, reject) => {
             if(!mounted.value) { reject("Website Not Loaded Yet."); }
-            const duration = Math.max(0.75, Math.min((window.scrollY / 4000), 3));
+            const duration = Math.max(0.75, Math.min(((window.scrollY / 4000) * cssToWindowHeightRatio.value), 3));
 
             scrollProgress.value.duration = duration;
             scrollStartTime = dayjs(new Date());
@@ -139,6 +154,14 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 onComplete: () => { setScrollInterval(false); resolve("Scroll Complete!"); }
             }); });
         });
+    }
+
+    /** This function cancels any ongoing autoscroll. */
+    function cancelAutoscroll() {
+        if(lenis == null) { return; }
+        setScrollInterval(false);
+        lenis.stop();
+        lenis.start();
     }
 
     /**
@@ -185,7 +208,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
     return { mounted, scrollProgress, isAutoScrolling,
-        mountScrollStore, unmountScrollStore, scrollToId, scrollToTop, scrollByIncrement, gamepadScrollToTop
+        mountScrollStore, unmountScrollStore, scrollToId, scrollToTop, cancelAutoscroll,
+        scrollByIncrement, gamepadScrollToTop
     }
 });
 

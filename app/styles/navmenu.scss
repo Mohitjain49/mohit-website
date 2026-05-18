@@ -1,3 +1,5 @@
+@use "@/styles/_dynamicrules.scss" as *;
+
 /**
  * This section defines the styles for the navigation bar at the top of every page.
  */
@@ -390,9 +392,6 @@
     bottom: 0.5px;
     transition: scale 0.2s;
 }
-.mohit-navMenu-volume-meter button:hover {
-    scale: 1.1;
-}
 .mohit-navMenu-volume-meter span {
     position: relative;
     bottom: 0.5px;
@@ -405,14 +404,39 @@
     margin-left: 10px;
 }
 
+.mohit-navMenu-reload-webpage {
+    position: absolute;
+    bottom: -10px;
+    left: 0px;
+    width: 25px;
+    height: 25px;
+    color: var(--website-light-text);
+    border-top: 1px solid var(--website-light-text);
+    border-right: 1px solid var(--website-light-text);
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--default-transition);
+}
+.mohit-navMenu-reload-webpage svg {
+    width: 12px;
+    height: 12px;
+    --fa-beat-scale: 1.1;
+}
+
+.mohit-navMenu-volume-meter button:hover { scale: 1.1; }
+.mohit-navMenu-reload-webpage:hover { background-color: var(--dark-background); }
+
 /**
- * Below contain specific styles like transitions and @media sections.
+ * Below contain specific styles like transitions and dynamic dimension rules.
  */
 
-@media (max-width: 700px) {
+@include dynamic-less-equal-width-rule(700) {
     .mohit-navBar-mainLinks { display: none; }
 }
-@media (max-width: 600px) {
+@include dynamic-less-equal-width-rule(600) {
     .mohit-navMenu {
         left: 0px;
         top: 0px;
@@ -422,41 +446,37 @@
         max-height: calc(100% - 40px);
     }
 }
-
-@media (max-width: 550px) {
-    .mohit-navBar-status-icons {
-        height: 16px;
-    }
+@include dynamic-less-equal-width-rule(550) {
     .mohit-navBar-statusIcon {
         width: 16px;
         height: 16px;
         font-size: 10px;
     }
-    .mohit-navBar-statusIcon svg {
-        width: 12px;
-    }
+
+    .mohit-navBar-status-icons { height: 16px; }
+    .mohit-navBar-statusIcon svg { width: 12px; }
 }
 
-.navMenu-transition-enter-active, .navMenu-transition-leave-active {
+.navMenu-transition_1-enter-active, .navMenu-transition_1-leave-active {
     transition: opacity 0.5s, top 0.5s;
 }
-.navMenu-transition-enter-from, .navMenu-transition-leave-to {
+.navMenu-transition_1-enter-from, .navMenu-transition_1-leave-to {
     opacity: 0;
     top: 50px;
 }
-.navMenu-transition-enter-to, .navMenu-transition-leave-from {
+.navMenu-transition_1-enter-to, .navMenu-transition_1-leave-from {
     opacity: 1;
     top: 60px;
 }
 
-.navMenu-smallWidth-transition-enter-active, .navMenu-smallWidth-transition-leave-active {
+.navMenu-transition_2-enter-active, .navMenu-transition_2-leave-active {
     transition: transform 0.5s, opacity 0.5s;
 }
-.navMenu-smallWidth-transition-enter-from, .navMenu-smallWidth-transition-leave-to {
+.navMenu-transition_2-enter-from, .navMenu-transition_2-leave-to {
     opacity: 0;
     transform: scale(0.25);
 }
-.navMenu-smallWidth-transition-enter-to, .navMenu-smallWidth-transition-leave-from {
+.navMenu-transition_2-enter-to, .navMenu-transition_2-leave-from {
     opacity: 1;
     transform: scale(1);
 }

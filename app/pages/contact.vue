@@ -1,5 +1,5 @@
-<style scoped>
-@import "~/styles/contactpage.css";
+<style scoped lang="scss">
+@use "~/styles/contactpage";
 </style>
 
 <template>
@@ -115,12 +115,11 @@
 
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
-                            <button v-if="(webData.shareSupported && isMounted)" :title="social.shareBtn"
-                                @click="shareLink(social.displayLink)"
+                            <button @click="openSocialQrcode(social.link)" :title="social.shareBtn"
                                 @pointerenter="setHeadShakeAnimation"
                                 @mouseleave="setHeadShakeAnimation">
 
-                                <font-awesome-icon icon="fa-share" />
+                                <font-awesome-icon icon="fa-share-from-square" />
                             </button>
                             <a :href="social.link" target="_blank" :title="social.linkBtn"
                                 @pointerenter="setHeadShakeAnimation"
@@ -202,7 +201,7 @@ onMounted(() => {
     manageSocialTabGlow();
 
     audioStore.changeSTTUpdateFunc((str) => { updateMainMsg(str); });
-    if(window.innerWidth <= 525 || routeHash.value !== "") { return; }
+    if(getMohitInnerWidth() <= 525 || routeHash.value !== "") { return; }
 
     const contactBoxes = [
         document.getElementsByClassName("contact-me-box").item(0),
@@ -404,21 +403,7 @@ function copyUsername(name = "") {
     });
 }
 
-/**
- * This function lets the user share a link with someone else.
- * @param {String} link The link to share.
- */
-async function shareLink(link = "") {
-    if(link === SOCIALS[0].displayLink) {
-        await webData.shareText(link);
-    } else {
-        await webData.shareLink(link);
-    }
-}
-
-/**
- * This simply calls the "openQRCodePopupWithData" function.
- */
+/** This simply calls the "openQRCodePopupWithData" function. */
 function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
     webData.setQRCodePopup(link);
 }

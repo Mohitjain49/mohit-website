@@ -1,9 +1,9 @@
-<style scoped>
-@import "~/styles/navmenu.css";
+<style scoped lang="scss">
+@use "~/styles/navmenu";
 </style>
 
 <template>
-<div class="webpage-cover" v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)"></div>
+<WebCover v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)" />
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
         <MenuTop />
@@ -94,7 +94,6 @@ const scriptsStore = useScriptsStore();
 const router = useRouter();
 
 const scriptsMenu = shallowRef(null);
-useSwipeToCloseMenu(scriptsMenu);
 usePulseLoopAnimation(scriptsMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });

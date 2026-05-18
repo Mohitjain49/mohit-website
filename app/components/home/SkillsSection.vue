@@ -42,7 +42,7 @@ useIntersectionObserver(cardRefs, (entry) => {
  * It adds transitions to the description text upon entry.
  */
 function setSkillsTransitions(isVisible = false) {
-    if(isVisible && window.innerWidth > 450) {
+    if(isVisible && getMohitInnerWidth() > 450) {
         document.getElementsByClassName('skills-main-header').item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName('skills-main-desc').item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
         return;
@@ -53,7 +53,7 @@ function setSkillsTransitions(isVisible = false) {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .skills-section {
     background: transparent;
     display: grid;
@@ -111,7 +111,7 @@ function setSkillsTransitions(isVisible = false) {
     align-items: center;
 }
 
-@media (max-width: 1200px) {
+@include dynamic-less-equal-width-rule(1200) {
     .skills-section {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
@@ -122,7 +122,7 @@ function setSkillsTransitions(isVisible = false) {
     }
 }
 
-@media (max-width: 825px) {
+@include dynamic-less-equal-width-rule(825) {
     .skills-section {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
@@ -132,8 +132,15 @@ function setSkillsTransitions(isVisible = false) {
         min-width: 0px;
         height: 500px;
     }
+
     .skills-main-textContainer {
         grid-column: span 1;
+        width: 325px;
+        position: relative;
+        left: calc(50% - 162.5px);
+    }
+    .skills-main-desc {
+        width: 325px;
     }
 
     .skills-main-header a {
@@ -147,9 +154,7 @@ function setSkillsTransitions(isVisible = false) {
     }
 }
 
-@media (max-width: 370px) {
-    .skills-main-header a {
-        font-size: 68px;
-    }
+@include dynamic-less-equal-width-rule(375) {
+    .skills-main-header a { font-size: 68px; }
 }
 </style>

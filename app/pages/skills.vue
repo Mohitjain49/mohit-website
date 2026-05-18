@@ -143,7 +143,7 @@
 </template>
 
 <script setup>
-import "~/styles/navpage.css";
+import "~/styles/navpage.scss";
 import vuejs_icon from "~/assets/Vuejs_Icon.png";
 import aws_icon from "~/assets/aws/AWS_Icon.png";
 
@@ -172,7 +172,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
 ));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #skills-page {
     background: transparent;
     padding-top: 0px;
@@ -180,7 +180,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
 }
 .skills-body {
     height: fit-content;
-    min-height: 100vh;
+    min-height: var(--true-100vh, 100vh);
     width: 100%;
 }
 
@@ -252,7 +252,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
     color: #D3B62A;
 }
 
-@media (max-width: 1200px) {
+@include dynamic-less-equal-width-rule(1200) {
     .skills-category {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
@@ -264,7 +264,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
     }
 }
 
-@media (max-width: 825px) {
+@include dynamic-less-equal-width-rule(825) {
     .skills-category {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
@@ -282,7 +282,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/",
     }
 }
 
-@media (max-width: 450px) {
+@include dynamic-less-equal-width-rule(450) {
     .skills-category-header {
         width: 325px;
         left: calc((100% - 325px) / 2);

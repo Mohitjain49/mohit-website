@@ -1,11 +1,15 @@
-@import "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
-@import "@tato30/vue-pdf/style.css";
-@import 'lenis/dist/lenis.css';
-@import "./documentpage.css";
+@use "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
+@use "@tato30/vue-pdf/style.css";
+@use 'lenis/dist/lenis.css';
+
+@use "@/styles/_dynamicrules.scss" as *;
+@use "./documentpage";
 
 :root {
-    --body-height: calc(100vh - 50px);
     --main-scrollbar-width: 10px;
+    --webpage-zoom-factor: 1.0;
+    --true-100vh: 100vh;
+    --body-height: calc(var(--true-100vh, 100vh) - 50px);
 
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
@@ -52,6 +56,8 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    overflow-y: auto;
+    zoom: var(--webpage-zoom-factor);
 }
 body {
     margin: 0;
@@ -67,6 +73,18 @@ body {
 }
 #app {
     height: fit-content;
+}
+
+.hide-overflow {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    overflow: hidden !important;
+}
+.hide-cursor {
+    cursor: none !important;
+}
+.disable-user-select {
+    user-select: none !important;
 }
 
 a, RouterLink {
@@ -169,6 +187,18 @@ button {
     z-index: 500;
     background-color: rgba(0, 0, 0, 0.75);
 }
+#invisible-css-layout {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    padding: 0px;
+    margin: 0px;
+    z-index: -1;
+}
+
 .loading-spinner {
     width: 50px;
     height: 50px;
@@ -231,8 +261,8 @@ button {
 }
 
 .animate__slowLess { --animate-duration: 1.5s !important; }
-@media (max-width: 375px) {
-    body, html { overflow-x: auto; }
+@include dynamic-less-equal-width-rule(375) {
+    body, & { overflow-x: auto; }
 }
 
 /**
@@ -248,11 +278,8 @@ button {
     color: var(--website-text);
     text-align: center;
 }
-
-@media (max-width: 700px) {
-    .redirect-statement {
-        font-size: 15px;
-    }
+@include dynamic-less-equal-width-rule(700) {
+    .redirect-statement { font-size: 15px; }
 }
 
 /**

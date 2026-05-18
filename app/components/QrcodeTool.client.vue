@@ -1,7 +1,7 @@
 <template>
-<div v-if="(showSharePopupImmediate && fullScreenSet)" id="qr-code-popup" class="webpage-cover"></div>
+<WebCover v-if="(showSharePopupImmediate && fullScreenSet)" :zIndex="1500" />
 <Transition name="qrcode-popup-transition" appear fade>
-    <div class="qrcode-mainPopup" v-if="showMainPopup">
+    <div v-if="showMainPopup" class="qrcode-mainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
         <div id="mohit-qrcode" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
@@ -17,15 +17,41 @@
             <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
                 <FontAwesomeIcon :icon="copyLinkIcon" :spin-pulse="(actions.copy == 1)" />
             </button>
-            <button v-if="webData.shareSupported" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Webpage Link">
+            <button v-if="(webData.shareSupported && sharePopupMode == 2)" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
                 <FontAwesomeIcon :icon="shareLinkIcon" :spin-pulse="(actions.share == 1)" />
             </button>
+            
+            <div v-if="(sharePopupMode != 2)" class="qrcode-mainPopup-btn_v2">
+                <button @click="setSocialMediaOptions('toggle')" class="qrcode-mainPopup-btn" title="Share Webpage Link!">
+                    <FontAwesomeIcon icon="fa-comment-nodes" />
+                </button>
+                <Transition name="fade-transition">
+                    <div v-if="(showShareOptions == 1)" class="qrcode-image-options">
+                        <button v-if="webData.shareSupported" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
+                            <FontAwesomeIcon :icon="shareLinkIcon" :spin-pulse="(actions.share == 1)" />
+                        </button>
+                        <a :href="shareEmail" class="qrcode-mainPopup-btn" title="Share This Link By Email!">
+                            <FontAwesomeIcon icon="fa-envelope" />
+                        </a>
+                        <a :href="shareLinkedIn" target="_blank" class="qrcode-mainPopup-btn" title="Share This Link On LinkedIn!" :style="getColorStyles('#0072B1')">
+                            <FontAwesomeIcon icon="fa-brands fa-linkedin" />
+                        </a>
+                        <a :href="shareWhatsApp" target="_blank" class="qrcode-mainPopup-btn" title="Share This Link On WhatsApp!" :style="getColorStyles('#2DED64')">
+                            <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
+                        </a>
+                        <a :href="shareFacebook" target="_blank" class="qrcode-mainPopup-btn" title="Share This Link On Facebook!" :style="getColorStyles('#0A65FE')">
+                            <FontAwesomeIcon icon="fa-brands fa-facebook" />
+                        </a>
+                    </div>
+                </Transition>
+            </div>
+
             <div class="qrcode-mainPopup-btn_v2">
-                <button @click="setImageOptions('toggle')" class="qrcode-mainPopup-btn" :title="((showImageOptions ? 'Close' : 'See') + ' Image Options')">
+                <button @click="setImageOptions('toggle')" class="qrcode-mainPopup-btn" :title="(((showShareOptions == 0) ? 'Close' : 'See') + ' Image Options')">
                     <FontAwesomeIcon icon="fa-image" />
                 </button>
                 <Transition name="fade-transition">
-                    <div v-if="showImageOptions" class="qrcode-image-options">
+                    <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
                         <button v-if="webData.shareSupported" @click="shareQRCode()" class="qrcode-mainPopup-btn yellow" title="Share QR Code">
                             <FontAwesomeIcon :icon="shareImageIcon" :spin-pulse="(actions.shareImage == 1)" />
                         </button>
@@ -57,9 +83,7 @@ import Lenis from 'lenis';
 
 const router = useRouter();
 const webData = useWebsiteDataStore();
-const codeScannerStore = useCodeScannerStore();
-
-const overflowLocked = useScrollLock(document.body);
+const styleStore = useStyleStore();
 const fullScreenSet = getFullScreenSet();
 
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
@@ -77,8 +101,13 @@ const qrCodeBlob = ref(null);
 const qrCodeURL = useObjectUrl(qrCodeBlob);
 
 const showMainPopup = ref(false);
+const showShareOptions = ref(-1);
 const sharePopupMode = ref(0);
-const showImageOptions = ref(false);
+
+const shareLinkedIn = ref("");
+const shareFacebook = ref("");
+const shareWhatsApp = ref("");
+const shareEmail = ref("");
 
 const shareCloseRef = useTemplateRef('sharePopup-close');
 const hoverOverCloseBtn = useElementHover(shareCloseRef);
@@ -111,30 +140,31 @@ const openNewTabButtonTitle = computed(() => {
 
 const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0 });
 var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null }
+const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
 
 const copyLinkIcon = computed(() => {
     const status = actions.value.copy;
-    return ((status == 0) ? 'fa-copy' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
+    return ((status == 0) ? 'fa-copy' : STATUS_ICONS[status]);
 });
 const shareLinkIcon = computed(() => {
     const status = actions.value.share;
-    return ((status == 0) ? 'fa-share-nodes' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
+    return ((status == 0) ? 'fa-share' : STATUS_ICONS[status]);
 });
 const shareImageIcon = computed(() => {
     const status = actions.value.shareImage;
-    return ((status == 0) ? 'fa-share' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
+    return ((status == 0) ? 'fa-share' : STATUS_ICONS[status]);
 });
 const downloadImageIcon = computed(() => {
     const status = actions.value.downloadImage;
-    return ((status == 0) ? 'fa-download' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
+    return ((status == 0) ? 'fa-download' : STATUS_ICONS[status]);
 });
 const copyImageIcon = computed(() => {
     const status = actions.value.copyImage;
-    return ((status == 0) ? 'fa-clone' : ((status == 1) ? 'fa-spinner' : ((status == 2) ? 'fa-check' : 'fa-ban')));
+    return ((status == 0) ? 'fa-clone' : STATUS_ICONS[status]);
 });
 
 onMounted(async() => {
-    overflowLocked.value = true;
+    styleStore.setHideOverflowArray(0, true);
     await nextTick();
 
     showMainPopup.value = true;
@@ -159,8 +189,8 @@ watch(showSharePopupImmediate, (newValue) => { if(!newValue) { unmountSharePopup
 /** This function is used to unmount the share popup. */
 function unmountSharePopup() {
     showMainPopup.value = false;
-    showImageOptions.value = false;
-    overflowLocked.value = (codeScannerStore.scannedItemMenu != -1);
+    showShareOptions.value = -1;
+    styleStore.setHideOverflowArray(0, false);
 
     if(lenis != null) { lenis.destroy(); }
     if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
@@ -180,6 +210,13 @@ function setQRCodeLink() {
     } else {
         qrCodeLink.value = route.query.qrdata;
         sharePopupMode.value = 2;
+    }
+
+    if(sharePopupMode.value != 2) {
+        shareLinkedIn.value = useSocialShare({ network: 'linkedin', url: qrCodeLink.value }).value.shareUrl;
+        shareFacebook.value = useSocialShare({ network: 'facebook', url: qrCodeLink.value }).value.shareUrl;
+        shareWhatsApp.value = useSocialShare({ network: 'whatsapp', url: qrCodeLink.value }).value.shareUrl;
+        shareEmail.value = useSocialShare({ network: 'email', url: qrCodeLink.value }).value.shareUrl;
     }
 
     if(qrcode.value != null) {
@@ -234,7 +271,15 @@ function setQRCodeLink() {
  * @param {Boolean | "toggle"} status The new status for the image options. If it is set to "toggle", then it just flips the value.
  */
 function setImageOptions(status = "toggle") {
-    showImageOptions.value = ((status === "toggle") ? !showImageOptions.value : status);
+    showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 0) ? -1 : 0) : (status ? 0 : -1));
+}
+
+/**
+ * This function sets a boolean that sets whether to show the social media options.
+ * @param {Boolean | "toggle"} status The new status for the social media options. If it is set to "toggle", then it just flips the value.
+ */
+function setSocialMediaOptions(status = "toggle") {
+    showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 1) ? -1 : 1) : (status ? 1 : -1));
 }
 
 /** This function copies the QR Code Link currently visible. */
@@ -364,7 +409,7 @@ function manageLenisScrolling() {
 function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substring(4), "US").formatNational(); }
 </script>
 
-<style>
+<style lang="scss">
 #qr-code-popup.webpage-cover {
     z-index: 1500;
 }
@@ -567,16 +612,7 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     filter: var(--filter-drop-shadow);
 }
 
-@keyframes stadium-scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(calc(-100%));
-    }
-}
-
-@media screen and (max-width: 625px), screen and (max-height: 625px) {
+@mixin qrcode-mainPopup-small-viewport {
     .qrcode-mainPopup {
         width: 325px;
         height: 325px;
@@ -608,6 +644,9 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
         height: 14px;
     }
 }
+
+@include dynamic-less-equal-width-rule(650) { @include qrcode-mainPopup-small-viewport(); }
+@include dynamic-less-equal-height-rule(650) { @include qrcode-mainPopup-small-viewport(); }
 
 .qrcode-popup-transition-enter-active, .qrcode-popup-transition-leave-active {
     transition: transform 0.5s, opacity 0.5s;

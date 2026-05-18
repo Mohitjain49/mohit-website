@@ -18,7 +18,7 @@ onMounted(async() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #ksu-widget {
     position: fixed;
     bottom: 15px;
@@ -45,7 +45,7 @@ onMounted(async() => {
     user-select: none;
 }
 
-@media (max-width: 525px) {
+@include dynamic-less-equal-width-rule(525) {
     #ksu-widget {
         height: 45px;
         width: 45px;

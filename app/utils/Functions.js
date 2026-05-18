@@ -48,3 +48,13 @@ export function truncate(str = "", maxLength = 80) {
 export function getColorStyles(color = "var(--website-text)") {
     return { color, borderColor: color }
 }
+
+/** This returns the css inner width. */
+export function getMohitInnerWidth() {
+    return ((import.meta.client && document) ? document.getElementById("invisible-css-layout").clientWidth : 0)
+}
+
+/** This returns the css inner height. */
+export function getMohitInnerHeight() {
+    return ((import.meta.client && document) ? document.getElementById("invisible-css-layout").clientHeight : 0)
+}

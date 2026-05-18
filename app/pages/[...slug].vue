@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import "~/styles/navpage.css";
 const router = useRouter();
 const webData = useWebsiteDataStore();
 
@@ -56,6 +55,7 @@ function startRedirect(internal = true) {
     PAGE_TITLE.value = "Mohit Jain | Redirecting...";
     PAGE_DESC.value = "Redirecting...";
     backgroundType.value = (internal ? -1 : 1);
+    webData.openShareOnMount = true;
 }
 
 /**
@@ -80,6 +80,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/exp"], replacement: "/experience/" },
     { routes: ["/icon", "/static-icons"], replacement: "/icons" },
     { routes: ["/version", "/v"], replacement: "/copyright/" },
+    { routes: ["/share/**", "/qrcode/**"], replacement: "/?qrdata=main" },
 
     { routes: ["/documents"], replacement: "/#documents" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
@@ -120,3 +121,35 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/sublo"], replacement: SUBLO_WEBSITE_LINK },
 ];
 </script>
+
+<style lang="scss">
+.personal-web-body#invalid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    height: calc(var(--true-100vh, 100vh) - 70px);
+    padding: 0px 20px;
+    padding-top: 60px;
+    background: transparent;
+}
+.incomplete-title {
+    font-size: 60px;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid;
+    width: fit-content;
+    height: fit-content;
+    margin-bottom: 5px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-shadow: 0px 0px 5px var(--website-dark-text);
+    background-color: rgba(248, 206, 171, 0.9);
+}
+
+@include dynamic-less-equal-width-rule(600) {
+    .incomplete-title { font-size: 42px; }
+}
+</style>

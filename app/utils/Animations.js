@@ -63,7 +63,7 @@ export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
 export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
     if(!isVisible || (findHomeTabTarget(target) != -1)) { return; }
     const animationClassList = ["animate__animated", "animate__fadeInLeft", "animate__fadeInRight", "animate__zoomIn"];
-    const animationClass = animationClassList[(window.innerWidth > 450) ? (fromLeft ? 1 : 2) : 3];
+    const animationClass = animationClassList[(getMohitInnerWidth() > 450) ? (fromLeft ? 1 : 2) : 3];
 
     target.classList.add("animate__animated", animationClass);
     homeTabTargets.unshift(target);

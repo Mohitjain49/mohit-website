@@ -1,5 +1,5 @@
-<style scoped>
-@import "~/styles/navmenu.css";
+<style scoped lang="scss">
+@use "~/styles/navmenu";
 </style>
 
 <template>
@@ -104,7 +104,7 @@
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
-        <div class="mohit-navMenu-opt small-features">
+        <div class="mohit-navMenu-opt small-features" style="position: relative;">
             <div class="mohit-navMenu-volume-meter">
                 <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" pulse-loop>
                     <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
@@ -115,6 +115,9 @@
                 />
                 <span> {{ (audioStore.volumeInput + '%') }} </span>
             </div>
+            <button @click="reloadNuxtApp({ force: true })" ref="reload-btn" class="mohit-navMenu-reload-webpage" title="Reload Website">
+                <font-awesome-icon icon="fa-rotate-right" :beat="onReloadHover" />
+            </button>
         </div>
     </div>
 </Transition>
@@ -154,7 +157,8 @@
         </span>
     </div>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" pulse-loop>
-        <font-awesome-icon icon="fa-share-from-square" />
+        <font-awesome-icon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
+        <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
     </button>
 </div>
 </template>
@@ -179,7 +183,9 @@ const navMenu = shallowRef(null);
 const navWidgets = shallowRef(null);
 const shareWidget = shallowRef(null);
 
-useSwipeToCloseMenu(navMenu);
+const reloadBtnRef = useTemplateRef('reload-btn');
+const onReloadHover = useElementHover(reloadBtnRef);
+
 usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
 usePulseLoopAnimation(navWidgets);
