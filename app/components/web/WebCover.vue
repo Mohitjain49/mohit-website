@@ -115,6 +115,7 @@ function setStyles(ringActive = true) {
 .webpage-cover-closeMsg {
     cursor: default;
     position: absolute;
+    user-select: none;
     top: 0px;
     left: 0px;
     width: 100%;
