@@ -25,7 +25,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const fullScreenStore = useFullScreenStore();
     const windowSize = useMohitWindowSize();
 
-    var docAbortController = new AbortController();
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
@@ -37,6 +36,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const fsStateChanging = ref(false);
+    const windowSizeWatchersEnabled = ref(false);
 
     const customPdfWidth = ref(800);
     const customPdfHeight = ref(1100);
@@ -93,6 +93,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         const uploadObj = documentUploadToGoogleDriveStatus.value;
         return (uploadObj.fresh ? "fa-check" : (uploadObj.pending ? "fa-spinner" : "fa-brands fa-google-drive"));
     });
+
+    const wHeightWatcher = watch(windowSize.height, () => { setPdfSize(); });
+    const wWidthWatcher = watch(windowSize.width, () => { setPdfSize(); });
+
+    wHeightWatcher.pause();
+    wWidthWatcher.pause();
 
     /**
      * ---------------------------------------------------------------------------
@@ -336,9 +342,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         styleStore.setHideOverflowArray(2, false);
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
         fullScreenStore.exitFullScreen();
-        
-        docAbortController.abort();
-        docAbortController = new AbortController();
+        setWindowSizeWatchers(false, false);
     }
 
     /**
@@ -353,7 +357,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfScaleFactor.value = scaleFactor;
 
         setPdfSize();
-        window.addEventListener("resize", setPdfSize, { signal: docAbortController.signal });
+        setWindowSizeWatchers(true, false);
     }
 
     /**
@@ -395,6 +399,24 @@ export const useDocumentStore = defineStore("document-store", () => {
     function setPdfSize() {
         customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (windowSize.width.value - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
+    }
+
+    /**
+     * This function sets the window size watchers that set the PDF size.
+     * @param {Boolean | "toggle"} status The new status of the watchers. If "toggle", it flips the current state.
+     * @param {Boolean} force If true, the function will ignore the current state of the watchers when pausing or resuming them.
+     */
+    function setWindowSizeWatchers(status = false, force = false) {
+        if(status === "toggle") { status = !windowSizeWatchersEnabled.value; }
+        if(status && (force || !windowSizeWatchersEnabled.value)) {
+            windowSizeWatchersEnabled.value = true;
+            wHeightWatcher.resume();
+            wWidthWatcher.resume();
+        } else if(!status && (force || windowSizeWatchersEnabled.value)) {
+            windowSizeWatchersEnabled.value = false;
+            wHeightWatcher.pause();
+            wWidthWatcher.pause();
+        }
     }
 
     /**

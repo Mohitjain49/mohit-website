@@ -233,6 +233,7 @@ const MAIN_BTNS = [
 .start-buttonRow-btn {
     cursor: pointer;
     text-decoration: none;
+    touch-action: manipulation;
     color: var(--website-text);
     background-color: rgba(0, 0, 0, 1);
     font-size: 27px;
@@ -335,6 +336,8 @@ const MAIN_BTNS = [
 }
 @include dynamic-less-equal-width-rule(600) {
     .start-section { height: 450px; }
+    .start-btn-caption { font-size: 9.5px; }
+
     .start-section-title {
         font-size: 70px;
         margin-bottom: 10px;
@@ -352,11 +355,11 @@ const MAIN_BTNS = [
         height: 28px;
         font-size: 23px;
     }
-
-    .start-btn-caption { font-size: 9.5px; }
-    .start-contactBtn-dropdown { scale: 0.75; }
+    .start-contactBtn-dropdown {
+        top: calc(75% + 10px);
+        scale: 0.75;
+    }
 }
-
 @include dynamic-less-equal-width-rule(450) {
     .start-section-title {
         font-size: 62px;
