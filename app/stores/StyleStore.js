@@ -2,10 +2,14 @@
 export const useStyleStore = defineStore("style-store", () => {
     const ZOOM_CSS_PROPERTY = "--webpage-zoom-factor";
     const TRUE_100VH_CSS_PROPERTY = "--true-100vh";
+    var windowSizeAnimationFrame = null;
 
     const fullScreenStore = useFullScreenStore();
     const fullScreenSet = getFullScreenSet();
-    const { height: vHeight } = useWindowSize();
+
+    const viewportRafEnabled = shallowRef(false);
+    const viewportWidth = shallowRef(Number.POSITIVE_INFINITY);
+    const viewportHeight = shallowRef(Number.POSITIVE_INFINITY);
 
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the document element's CSS Variables. */
     var cssVarObserver = null;
@@ -36,7 +40,7 @@ export const useStyleStore = defineStore("style-store", () => {
     watch(fullScreenSet, () => { setDisableUserSelectClass(disableUserSelect.value); });
 
     // This changes the Zoom CSS Property for the webpage when the viewport height changes properly.
-    watch(vHeight, (newValue) => {
+    watch(viewportHeight, (newValue) => {
         changeZoomFactor(((newValue > 450) ? 1.0 : 0.5));
         setTrue100vh(newValue, zoomFactor.value);
     });
@@ -50,10 +54,12 @@ export const useStyleStore = defineStore("style-store", () => {
         await nextTick();
 
         const windowHeight = window.innerHeight;
-        const startZoomFactor = ((windowHeight > 450) ? 1.0 : 0.55);
+        const startZoomFactor = ((windowHeight > 450) ? 1.0 : 0.5);
 
         setTrue100vh(windowHeight, startZoomFactor);
         changeZoomFactor(startZoomFactor);
+
+        startViewportRaf();
         await enableBreakpoints();
 
         if(validateClientMode()) { document.documentElement.classList.add("js__active"); }
@@ -153,6 +159,7 @@ export const useStyleStore = defineStore("style-store", () => {
     function setDisableUserSelectClass(hide = false) {
         if(!validateClientMode()) { return; }
         if(hide) {
+            window.getSelection()?.removeAllRanges();
             document.body.classList.add('disable-user-select');
             if(fullScreenSet.value) { fullScreenStore.element.classList.add('disable-user-select'); }
         } else {
@@ -163,6 +170,48 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!fullScreenSet.value && fullScreenStore.oldElement != null) {
             fullScreenStore.oldElement.classList.remove('disable-user-select');
         }
+    }
+
+    /**
+     * ---------------------------------------------------------------------------------------------------
+     * These functions manage an animation frame loop that records the JS viewport inner width and height.
+     * ---------------------------------------------------------------------------------------------------
+     */
+
+    /** This function records the viewport's inner width and inner height (its dimensions). */
+    function recordViewportDimensions() {
+        if(!window) { return; }
+        const oldViewportWidth = viewportWidth.value;
+        const oldViewportHeight = viewportHeight.value;
+
+        viewportWidth.value = window.innerWidth;
+        viewportHeight.value = window.innerHeight;
+
+        if(viewportWidth.value !== oldViewportWidth || viewportHeight.value !== oldViewportHeight) {
+            window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
+        }
+    }
+
+    /** This function records the viewport's dimensions and sets the animation frame loop. */
+    function recordViewportDimensionsWithRaf() {
+        recordViewportDimensions();
+        windowSizeAnimationFrame = requestAnimationFrame(() => { recordViewportDimensionsWithRaf(); });
+    }
+
+    /** This function starts the animation frame loop that records the viewport's dimensions. */
+    function startViewportRaf() {
+        if(viewportRafEnabled.value) { return; }
+        if(windowSizeAnimationFrame != null) { cancelAnimationFrame(windowSizeAnimationFrame); }
+        viewportRafEnabled.value = true;
+        recordViewportDimensionsWithRaf();
+    }
+
+    /** This function stops the animation frame loop that records the viewport's dimensions. */
+    function stopViewportRaf() {
+        if(!viewportRafEnabled.value) { return; }
+        if(windowSizeAnimationFrame != null) { cancelAnimationFrame(windowSizeAnimationFrame); }
+        windowSizeAnimationFrame = null;
+        viewportRafEnabled.value = false;
     }
 
     /**
@@ -206,9 +255,9 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
 
         const signal = styleController.signal;
-        window.addEventListener("resize", () => { setDynamicBreakpoints(); }, { signal });
-        window.addEventListener("orientationchange", () => { setDynamicBreakpoints(); }, { signal });
-        document.addEventListener("fullscreenchange", () => { setDynamicBreakpoints }, { signal });
+        window.addEventListener("animation-resize", () => { setDynamicBreakpoints(); }, { signal });
+        window.addEventListener("router-before-change", () => { setDynamicBreakpoints(); }, { signal });
+        window.addEventListener("router-after-change", () => { setDynamicBreakpoints(); }, { signal });
 
         cssVarObserver = new MutationObserver(() => { setDynamicBreakpoints(); });
         cssVarObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
@@ -294,9 +343,9 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, breakpointsEnabled,
+    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, breakpointsEnabled, viewportRafEnabled,
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,
-        enableBreakpoints, disableBreakpoints, resetBreakpoints
+        enableBreakpoints, disableBreakpoints, resetBreakpoints, startViewportRaf, stopViewportRaf
     }
 });
 
