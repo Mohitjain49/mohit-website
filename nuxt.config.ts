@@ -1,6 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { addComponent } from "@nuxt/kit";
 import { imagetools } from "vite-imagetools";
+import type { Plugin } from "vite";
 
 import usePageTemplates from "./page-templates.config";
 import pwaConfig from "./pwa.config";
@@ -15,6 +16,18 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/gamepad/store-and-utility", "/gamepad/vuejs-component", "/gamepad/custom-events",
 ];
 
+/** This plugin adds a null "alt" attribute to any image tag that doesn't already have an "alt" attribute. */
+const AUTO_ALT_PLUGIN: Plugin = {
+    name: 'vite-plugin-auto-null-alt',
+    enforce: 'pre', 
+    transform(code, id) {
+        if(!id.endsWith('.vue') && !id.endsWith('.md')) { return; }
+        const missingAltRegex = /<img\s+(?![^>]*\balt\b)([^>]+)>/g;
+        const updatedCode = code.replace(missingAltRegex, (match, attributes) => { return `<img alt="" ${attributes}>`; })
+        return { code: updatedCode, map: null }
+    }
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: '2026-05-08',
@@ -22,10 +35,9 @@ export default defineNuxtConfig({
     ssr: true,
     app: { baseURL: "/", head: { meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }] } },
     devServer: { port: 5000, host: "localhost" },
-    modules: [
-        '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
+    modules: ['@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
         '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',
-        '@stefanobartoletti/nuxt-social-share',
+        '@stefanobartoletti/nuxt-social-share', "nuxt-vitalizer",
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',
@@ -61,6 +73,13 @@ export default defineNuxtConfig({
         ]
     },
 
+    features: { inlineStyles: true },
+    vitalizer: {
+        disableStylesheets: 'entry',
+        disablePrefetchLinks: true,
+        disablePreloadLinks: true
+    },
+
     hooks: { 'pages:extend'(pages) { usePageTemplates(pages); } },
     site: { url: PERSONAL_MAIN_WEBSITE, name: "Mohit Jain | My Portfolio" },
     sitemap: {
@@ -79,7 +98,8 @@ export default defineNuxtConfig({
             imagetools({
                 include: /assets\/.*\.(png|jpe?g)$/,
                 defaultDirectives: (url) => { return new URLSearchParams('format=webp&quality=70'); }
-            })
+            }),
+            AUTO_ALT_PLUGIN
         ],
         css: { preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;' }}}
     },

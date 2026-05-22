@@ -92,3 +92,14 @@ watch(battery.charging, () => { onBatteryStatusChange(); });
 watch(tsparticlesContainer, () => { onBatteryStatusChange(); });
 watch(() => props.particlesOptions, () => { resetParticles(); });
 </script>
+
+<style lang="scss">
+#particlests {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    height: 0px;
+    z-index: -10;
+}
+</style>

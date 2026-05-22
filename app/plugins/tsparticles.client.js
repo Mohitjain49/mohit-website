@@ -1,6 +1,8 @@
 import VueParticles from "@tsparticles/vue3";
-import { loadSlim } from "@tsparticles/slim";
 
 export default defineNuxtPlugin((nuxtApp) => {
-    nuxtApp.vueApp.use(VueParticles, { init: async engine => { await loadSlim(engine); }});
+    nuxtApp.vueApp.use(VueParticles, { init: async(engine) => {
+        const { loadSlim } = await import('@tsparticles/slim');
+        await loadSlim(engine);
+    }});
 });

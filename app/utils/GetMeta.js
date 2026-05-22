@@ -45,9 +45,6 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
             { name: 'author', content: "Mohit Jain" },
             { name: 'robots', content: 'index, follow' },
 
-            { name: 'google-site-verification', content: 'gPlBqbaeyyZv8FAss-9ylFVYoujmn8Xjy9Yd9RMxIug' },
-            { name: 'msvalidate.01', content: '3DA8D6305B8E59C8505A0FF085D71CD0' },
-
             { property: 'og:site:name', content: "Mohit Jain" },
             { property: 'og:type', content: 'website' },
             { property: 'og:url', content: WEBSITE_PATH },
@@ -112,9 +109,6 @@ export function getMetaWithLink(pageTitle = WEBSITE_TITLE, pageLink = PERSONAL_W
         meta: [
             { name: 'description', content: pageDesc },
             { name: 'author', content: "Mohit Jain" },
-
-            { name: 'google-site-verification', content: 'gPlBqbaeyyZv8FAss-9ylFVYoujmn8Xjy9Yd9RMxIug' },
-            { name: 'msvalidate.01', content: '3DA8D6305B8E59C8505A0FF085D71CD0' },
 
             { "http-equiv": 'refresh', content: ("0; url=" + pageLink) },
             { name: 'robots', content: 'noindex, nofollow' },
