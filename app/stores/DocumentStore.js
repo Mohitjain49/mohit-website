@@ -6,9 +6,11 @@ import { ofetch } from 'ofetch';
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import QRCodeStyling from "qr-code-styling";
 
-/** 
- * This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website.
- */
+const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
+const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
+const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
+
+/** This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website. */
 export const useDocumentStore = defineStore("document-store", () => {
     const hostedDocuments = [
         useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
@@ -25,14 +27,17 @@ export const useDocumentStore = defineStore("document-store", () => {
     const fullScreenStore = useFullScreenStore();
     const windowSize = useMohitWindowSize();
 
+    const SCRIPT_TAG_OPTIONS = { async: true, defer: true, immediate: false, manual: true }
+    const googleAccountsTag = useScriptTag("https://accounts.google.com/gsi/client", (el) => { initGoogleTokenClient(); }, SCRIPT_TAG_OPTIONS);
+    const googleApiTag = useScriptTag("https://apis.google.com/js/api.js", (el) => { initGooglePickerAPI(); }, SCRIPT_TAG_OPTIONS);
+
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
+    const googleDriveOptAvailable = ref(0);
     const googleDriveUploadSupported = ref(false);
     const googleDrivePickerAPILoaded = ref(false);
-    const googleDriveOptionAvailable = computed(() => {
-        return (googleDriveUploadSupported.value && googleDrivePickerAPILoaded.value);
-    });
+    const googleDriveOptionAvailable = computed(() => { return (googleDriveOptAvailable.value >= 0); });
 
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const fsStateChanging = ref(false);
@@ -91,7 +96,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     });
     const uploadToGoogleDriveIcon = computed(() => {
         const uploadObj = documentUploadToGoogleDriveStatus.value;
-        return (uploadObj.fresh ? "fa-check" : (uploadObj.pending ? "fa-spinner" : "fa-brands fa-google-drive"));
+        const uploadPending = (uploadObj.pending || googleDriveOptAvailable.value == 1)
+        return (uploadObj.fresh ? "fa-check" : (uploadPending ? "fa-spinner" : "fa-brands fa-google-drive"));
     });
 
     const wHeightWatcher = watch(windowSize.height, () => { setPdfSize(); });
@@ -240,9 +246,9 @@ export const useDocumentStore = defineStore("document-store", () => {
             .addView(docsView)
             .setTitle("Select A Folder (Or Click Cancel To Save This Document To Your Drive's Root)")
             .setOAuthToken(googleAPIAccessToken)
-            .setDeveloperKey(import.meta.env.VITE_GOOGLE_CLOUD_API_KEY)
+            .setDeveloperKey(GOOGLE_CLOUD_API_KEY)
             .setCallback((data) => { googleDrivePickerCallback(data); })
-            .setAppId(import.meta.env.VITE_GOOGLE_CLOUD_APP_ID)
+            .setAppId(GOOGLE_CLOUD_APP_ID)
             .build();
         picker.setVisible(true);
     }
@@ -308,10 +314,24 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /**
      * This function requests the google token client to upload their document to google drive.
-     * @param {Boolean} chooseFolder IF true, this function will activate the Google Picker API to let a user choose the folder on their drive.
+     * @param {Boolean} chooseFolder If true, this function will activate the Google Picker API to let a user choose the folder on their drive.
      */
-    function requestGoogleToUploadDoc(chooseFolder = false) {
-        if(!googleDriveOptionAvailable.value || documentUploadToGoogleDriveStatus.value.pending) { return; }
+    async function requestGoogleToUploadDoc(chooseFolder = false) {
+        if(documentUploadToGoogleDriveStatus.value.pending || googleDriveOptAvailable.value == 1 || googleDriveOptAvailable.value < 0) { return; }
+        if(googleDriveOptAvailable.value == 0) {
+            googleDriveOptAvailable.value = 1;
+            await googleAccountsTag.load(true);
+            await googleApiTag.load(true);
+
+            var secondsPassed = 0;
+            while((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) && secondsPassed < 10) {
+                await sleep(1000);
+                secondsPassed++;
+            }
+            googleDriveOptAvailable.value = ((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) ? -2 : 2);
+        }
+
+        if(googleDriveOptAvailable.value < 0) { return; }
         chooseGoogleDriveFolderForUpload = chooseFolder;
         googleTokenClient.requestAccessToken();
     }
@@ -321,6 +341,13 @@ export const useDocumentStore = defineStore("document-store", () => {
      * These functions are for initializing and disabling certain features provided by the store.
      * ------------------------------------------------------------------------------------------
      */
+
+    /** This checks to ensure that the Google IDs and Keys are properly passed in. */
+    function mountDocumentStore() {
+        if(!GOOGLE_CLOUD_CLIENT_ID || GOOGLE_CLOUD_CLIENT_ID === "") { googleDriveOptAvailable.value = -1; }
+        if(!GOOGLE_CLOUD_API_KEY || GOOGLE_CLOUD_API_KEY === "") { googleDriveOptAvailable.value = -1; }
+        if(!GOOGLE_CLOUD_APP_ID || GOOGLE_CLOUD_APP_ID === "") { googleDriveOptAvailable.value = -1; }
+    }
 
     /** This function mounts a page that hosts a document. */
     async function mountDocumentPage() {
@@ -365,7 +392,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function initGoogleTokenClient() {
         googleTokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID,
+            client_id: GOOGLE_CLOUD_CLIENT_ID,
             scope: 'https://www.googleapis.com/auth/drive.file',
             callback: (response) => {
                 if(response.access_token) {
@@ -485,7 +512,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink,
         onDocumentRoute, onAnyResumeRoute, onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
-        mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
+        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });
 

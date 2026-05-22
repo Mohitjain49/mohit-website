@@ -101,7 +101,7 @@
         <template v-if="documentStore.googleDriveOptionAvailable">
             <div class="mohit-navMenu-sectionheader" :style="getColorStyles('#34A853')">
                 <span> Google Drive </span>
-                <font-awesome-icon :icon="documentStore.uploadToGoogleDriveIcon" :spin-pulse="documentStore.documentUploadToGoogleDriveStatus.pending" />
+                <font-awesome-icon :icon="documentStore.uploadToGoogleDriveIcon" :spin-pulse="(documentStore.uploadToGoogleDriveIcon === 'fa-spinner')" />
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE" pulse-loop>

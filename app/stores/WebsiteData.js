@@ -5,6 +5,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const gamepadStore = useGamepadStore();
     const scriptsStore = useScriptsStore();
+    const documentStore = useDocumentStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
@@ -109,6 +110,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
+        documentStore.mountDocumentStore();
         await styleStore.mountStyleStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
