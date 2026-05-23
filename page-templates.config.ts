@@ -14,6 +14,7 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: '/resume/qrcode', file: DOC_TEMPLATE, props: { index: 1 } },
         { path: '/create-github-repo', file: DOC_TEMPLATE, props: { index: 2 } },
         { path: '/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025', file: DOC_TEMPLATE, props: { index: 3 } },
+        { path: '/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper', file: DOC_TEMPLATE, props: { index: 4 } },
     ];
     const routesToScriptTemplate = [
         { path: '/aws-deploy-script', file: SCRIPT_TEMPLATE, props: { index: 0 } },
@@ -21,6 +22,8 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: '/gamepad/vuejs-component', file: SCRIPT_TEMPLATE, props: { index: 2 } },
         { path: '/gamepad/custom-events', file: SCRIPT_TEMPLATE, props: { index: 3 } },
         { path: '/unix-shell', file: SCRIPT_TEMPLATE, props: { index: 4 } },
+        { path: '/upgrade-script', file: SCRIPT_TEMPLATE, props: { index: 5 } },
+        { path: '/threadpool', file: SCRIPT_TEMPLATE, props: { index: 6 } },
     ];
 
     const REDIRECT_PAGES = [

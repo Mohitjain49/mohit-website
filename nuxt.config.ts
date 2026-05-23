@@ -92,6 +92,7 @@ export default defineNuxtConfig({
     experimental: { appManifest: true, typedPages: true },
     pwa: pwaConfig,
     socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
+    watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],
 
     vite: {
         plugins: [

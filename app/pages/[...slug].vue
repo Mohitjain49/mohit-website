@@ -82,7 +82,9 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/version", "/v"], replacement: "/copyright/" },
     { routes: ["/share/**", "/qrcode/**"], replacement: "/?qrdata=main" },
 
-    { routes: ["/documents"], replacement: "/#documents" },
+    { routes: ["/documents", "/library/documents"], replacement: "/library/#documents" },
+    { routes: ["/scripts", "/library/scripts"], replacement: "/library/#scripts" },
+    { routes: ["/files/**"], replacement: "/library/" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
     { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" },
 

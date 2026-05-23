@@ -105,7 +105,19 @@ const PAGE_METADATA = [
     {
         title: "Mohit Jain | My Unix Shell",
         route: "unix-shell",
-        desc: "I developed a lightweight Unix shell that uses system calls like \"fork\" and \"pipe\" to run basic user commands like \"ls\", \"cd\", and \"grep\"",
+        desc: "I developed a lightweight Unix shell that uses system calls like \"fork\" and \"pipe\" to run basic user commands like \"ls\", \"cd\", and \"grep\".",
+        type: "default"
+    },
+    {
+        title: "Mohit Jain | My Upgrade Script",
+        route: "upgrade-script",
+        desc: "This page shows my upgrade script that I use manage my web projects.",
+        type: "default"
+    },
+    {
+        title: "Mohit Jain | My Thread Pool Implementation",
+        route: "threadpool",
+        desc: "I developed a lightweight Unix shell that uses concepts like Mutexes to create a functioning thread pool.",
         type: "default"
     },
 ];

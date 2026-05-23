@@ -56,6 +56,14 @@
                 </a>
             </div>
         </template>
+        <template v-else-if="documentStore.onResearchPaperRoute">
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.scrollToPage(1)" pulse-loop>
+                    <font-awesome-icon icon="fa-book-open" />
+                    <span> Scroll To Title Page </span>
+                </button>
+            </div>
+        </template>
         <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">

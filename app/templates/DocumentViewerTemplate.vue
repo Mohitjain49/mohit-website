@@ -19,8 +19,8 @@
 const documentStore = useDocumentStore();
 const props = defineProps({ index: { type: Number, required: true } });
 
-const htmlClass = computed(() => { return ((props.index != 2) ? '' : CURRENT_METADATA.class); });
-const htmlID = computed(() => { return ((props.index == 2) ? '' : CURRENT_METADATA.id); });
+const htmlClass = computed(() => { return ((!CURRENT_METADATA.class) ? '' : CURRENT_METADATA.class); });
+const htmlID = computed(() => { return ((!CURRENT_METADATA.id) ? '' : CURRENT_METADATA.id); });
 
 onMounted(() => { documentStore.mountDocumentPage(); });
 onBeforeUnmount(() => { documentStore.unmountDocumentPage(); });
@@ -55,8 +55,15 @@ const PAGE_METADATA = [
         type: "default",
         id: 'tato-pdf-certificate'
     },
+    {
+        title: "Mohit Jain | Generative Artificial Intelligence Transforming Industries Research Paper",
+        route: "Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper",
+        desc: "This is a research paper that I contributed to. " +
+            "It talks about the Applications of Generative Artificial Intelligence in the workplace.",
+        type: "default",
+        class: 'tato-pdf-github-instructions'
+    }
 ];
-
 
 const CURRENT_METADATA = PAGE_METADATA[props.index];
 useHead(getMeta(CURRENT_METADATA.title, CURRENT_METADATA.route, CURRENT_METADATA.desc, "#464646", CURRENT_METADATA.type));

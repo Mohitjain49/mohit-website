@@ -241,13 +241,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    /**
-     * This function handles unhandled rejections.
-     */
+    /** This function handles unhandled rejections. */
     function onUnhandledRejection(event) {
-        if(event.reason?.name === "AbortException") {
-            event.preventDefault();
-        }
+        if(event.reason?.name === "AbortException") { event.preventDefault(); }
     }
 
     /**
@@ -264,7 +260,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
-            window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
             if(hashStr === "" || onHostedFileRoute.value) { return; }
 
             allImagesReady().then(() => {

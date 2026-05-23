@@ -131,7 +131,7 @@ const MAIN_ROUTES = [
 ]
 
 const SECONDARY_ROUTES = [
-    { name: "My Documents", path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)" },
+    { name: "My Library", path: "/library/", icon: "fa-book-open-reader", color: "var(--website-light-text)" },
     { name: "Website Features", path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)" },
     { name: "Copyright Statement", path: "/copyright/", icon: "fa-copyright", color: "var(--blue-cobalt)" },
     { name: "My Icons", path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-two)" },
