@@ -317,23 +317,27 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Boolean} chooseFolder If true, this function will activate the Google Picker API to let a user choose the folder on their drive.
      */
     async function requestGoogleToUploadDoc(chooseFolder = false) {
-        if(documentUploadToGoogleDriveStatus.value.pending || googleDriveOptAvailable.value == 1 || googleDriveOptAvailable.value < 0) { return; }
-        if(googleDriveOptAvailable.value == 0) {
-            googleDriveOptAvailable.value = 1;
-            await googleAccountsTag.load(true);
-            await googleApiTag.load(true);
+        try {
+            if(documentUploadToGoogleDriveStatus.value.pending || googleDriveOptAvailable.value == 1 || googleDriveOptAvailable.value < 0) { return; }
+            if(googleDriveOptAvailable.value == 0) {
+                googleDriveOptAvailable.value = 1;
+                await googleAccountsTag.load(true);
+                await googleApiTag.load(true);
 
-            var secondsPassed = 0;
-            while((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) && secondsPassed < 10) {
-                await sleep(1000);
-                secondsPassed++;
+                var secondsPassed = 0;
+                while((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) && secondsPassed < 10) {
+                    await sleep(1000);
+                    secondsPassed++;
+                }
+                googleDriveOptAvailable.value = ((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) ? -2 : 2);
             }
-            googleDriveOptAvailable.value = ((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) ? -2 : 2);
-        }
 
-        if(googleDriveOptAvailable.value < 0) { return; }
-        chooseGoogleDriveFolderForUpload = chooseFolder;
-        googleTokenClient.requestAccessToken();
+            if(googleDriveOptAvailable.value < 0) { return; }
+            chooseGoogleDriveFolderForUpload = chooseFolder;
+            googleTokenClient.requestAccessToken();
+        } catch(e) {
+            googleDriveOptAvailable.value = -3;
+        }
     }
 
     /**

@@ -116,7 +116,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         installStore.mountInstallStore();
         resizePageComponents();
 
-        window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
+        window.addEventListener("animation-resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("mousemove", () => { gamepadStore.hideAllCursors(); }, { signal });
         window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
 

@@ -87,7 +87,7 @@ function getPutObjectCommands() {
             Key: filename,
             ContentType: ((mimeType === "text/javascript") ? "application/javascript" : mimeType),
             CacheControl: ((filename.startsWith(assetFolders[0]) || filename.startsWith(assetFolders[1])) ?
-                "public, max-age=84600, must-revalidate" :
+                "public, max-age=2592000, no-cache" :
                 "no-cache, no-store, must-revalidate"
             )
         }));
