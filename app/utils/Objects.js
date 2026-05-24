@@ -889,7 +889,7 @@ export const FEATURE_ENTITIES = [
             "Currently, I only display my AWS Deployment Script and some of my Web Gamepad API code here.",
 
         icon: {
-            id: "fa-laptop-code",
+            id: "fa-file-code",
             faIcon: true,
             size: "100"
         }
@@ -927,7 +927,7 @@ export const HOME_COMPASS = [
     { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code", offset: 0 },
     { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon, offset: 0 },
     { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes", offset: 0 },
-    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 }
+    { title: "My Library", id: "library", color: "var(--website-light-text)", faIcon: true, icon: "fa-book-open-reader", offset: 0 }
 ];
 
 export const SKILLS_COMPASS = [
@@ -947,4 +947,9 @@ export const CONTACT_COMPASS = [
     { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 70 },
     { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 70 },
     { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 70 }
+];
+
+export const LIBRARY_COMPASS = [
+    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 },
+    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code", offset: 0 }
 ];

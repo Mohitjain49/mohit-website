@@ -156,6 +156,8 @@
 
 <script setup>
 import { ofetch } from 'ofetch';
+import isEmail from 'validator/es/lib/isEmail';
+
 const AWS_API_LINK = "https://contact-api.mohit-jain.com/sendEmail";
 const MIN_MESSAGE_LENGTH = 50;
 
@@ -325,6 +327,8 @@ function checkAPIParameters(message) {
         setAlertBox("Please enter your name that I can refer to you as.");
     } else if(message.emailAddress === "") {
         setAlertBox("Please enter your email address so I can stay in touch with you.");
+    } else if(!isEmail(message.emailAddress)) {
+        setAlertBox("The email address you entered in is invalid. Please Try Again.");
     } else {
         setAlertBox("Sending Message. Please Wait...");
         msgTitle.value = "";
