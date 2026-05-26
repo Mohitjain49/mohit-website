@@ -1,31 +1,12 @@
 /** This returns an object similar to "useWindowSize", but it records the css layout over the inner layout dimensions. */
 export function useMohitWindowSize() {
-    const CSS_LAYOUT_ID = "invisible-css-layout";
-    const width = shallowRef(Number.POSITIVE_INFINITY);
-    const height = shallowRef(Number.POSITIVE_INFINITY);
+    const styleStoreRefs = storeToRefs(useStyleStore());
+    const width = computed(() => { return styleStoreRefs.cssViewportWidth.value });
+    const height = computed(() => { return styleStoreRefs.cssViewportHeight.value });
 
-    const cssToWindowWidthRatio = shallowRef(1.0);
-    const cssToWindowHeightRatio = shallowRef(1.0);
-
-    /**
-     * This function sets the true width and height of the website, even with a custom zoom property enabled.
-     * @returns A boolean on whether or not the dimensions could be updated.
-     */
-    function updateDimensions() {
-        if(!document || !window) { return false; }
-        const element = document.getElementById(CSS_LAYOUT_ID);
-        if(element == null) { return false; }
-
-        width.value = element.clientWidth;
-        height.value = element.clientHeight;
-
-        cssToWindowWidthRatio.value = (width.value / window.innerWidth);
-        cssToWindowHeightRatio.value = (height.value / window.innerHeight);
-        return true;
-    }
-
-    useRafFn(() => { updateDimensions(); }, { immediate: true, fpsLimit: 30, once: false });
-    return { width, height, cssToWindowWidthRatio, cssToWindowHeightRatio, updateDimensions }
+    const cssToWindowWidthRatio = computed(() => { return styleStoreRefs.cssToWindowWidthRatio.value });
+    const cssToWindowHeightRatio = computed(() => { return styleStoreRefs.cssToWindowHeightRatio.value });
+    return { width, height, cssToWindowWidthRatio, cssToWindowHeightRatio }
 }
 
 /**

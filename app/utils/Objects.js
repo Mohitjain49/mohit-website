@@ -39,7 +39,7 @@ export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/
 export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
 export const PERSONAL_UPGRADE_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/upgrade.mjs");
-export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/mysh.c");
+export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/mysh.c");
 export const PERSONAL_THREADPOOL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/threadpool.c");
 export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
 

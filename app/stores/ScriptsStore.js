@@ -1,7 +1,7 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
 import upgrade_code from "@scripts/upgrade.mjs?raw";
 
-import my_unix_shell from "@scripts/mysh.c?raw";
+import my_unix_shell from "@scripts/c/mysh.c?raw";
 import my_threadpool from "@scripts/c/threadpool.c?raw";
 
 import gamepad_store_utility_code from "~/stores/GamepadStore.js?raw";

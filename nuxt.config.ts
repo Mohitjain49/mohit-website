@@ -105,5 +105,5 @@ export default defineNuxtConfig({
         css: { preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;' }}}
     },
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
-    typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client', '@types/node'] } } }
+    typescript: { tsConfig: { compilerOptions: { types: ['unplugin-info/client', '@types/node', '@types/validator'] } } }
 });
