@@ -17,7 +17,7 @@ describe('CSS Architecture Guardrails', () => {
         const fileContent = fs.readFileSync(fullPath, 'utf8');
 
         const mediaQueryRegex = /@media\b/i;
-        const styleTagRegex = /<style(?:\s+scoped)?\s*>/i
+        const styleTagRegex = /<style(?:\s+scoped)?\s*>/i;
 
         const hasMediaQuery = mediaQueryRegex.test(fileContent);
         const hasStyleTag = styleTagRegex.test(fileContent);

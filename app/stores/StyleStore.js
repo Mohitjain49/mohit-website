@@ -18,6 +18,9 @@ export const useStyleStore = defineStore("style-store", () => {
     const cssToWindowWidthRatio = shallowRef(1.0);
     const cssToWindowHeightRatio = shallowRef(1.0);
 
+    const mouseX = shallowRef(0);
+    const mouseY = shallowRef(0);
+
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the document element's CSS Variables. */
     var cssVarObserver = null;
 
@@ -27,9 +30,13 @@ export const useStyleStore = defineStore("style-store", () => {
     /** @type {AbortController} This abort controller is designed to properly disable the viewport variables' event listeners. */
     var trueViewportVariablesController = null;
 
+    /** @type {AbortController} This abort controller is designed to properly disable the mouse position event listeners. */
+    var mousePositionController = null;
+
     const mounted = ref(false);
     const breakpointsEnabled = ref(false);
     const trueViewportVariablesEnabled = ref(false);
+    const mousePositionRecorderEnabled = ref(false);
     const zoomFactor = ref(1.0);
 
     const hideOverflowArray = ref([false, false, false, false]);
@@ -66,6 +73,7 @@ export const useStyleStore = defineStore("style-store", () => {
 
         await enableBreakpoints();
         await enableTrueViewportVariables();
+        await enableMousePositionRecorder();
 
         if(validateClientMode()) { document.documentElement.classList.add("js__active"); }
         mounted.value = true;
@@ -289,6 +297,85 @@ export const useStyleStore = defineStore("style-store", () => {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------
+     * These functions are specifically made for properly recording the user's mouse position.
+     * ---------------------------------------------------------------------------------------
+     */
+
+    /** This function enables the mouse position's recorder. */
+    async function enableMousePositionRecorder() {
+        if(mousePositionRecorderEnabled.value) { return; }
+        setMousePositionEventListeners();
+        mousePositionRecorderEnabled.value = true;
+    }
+
+    /** This function sets the mouse position's event listeners. */
+    async function setMousePositionEventListeners() {
+        if(mousePositionController != null) { mousePositionController.abort(); }
+        mousePositionController = new AbortController();
+
+        await nextTick();
+        await sleep(10);
+        if(!validateClientMode()) { return; }
+
+        const signal = mousePositionController.signal;
+        window.addEventListener('click', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('contextmenu', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('pointermove', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('pointerdown', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('pointerup', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('dragover', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('dragstart', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('dragend', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('mousemove', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('mousedown', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('mouseup', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('touchmove', (event) => { recordMousePositionWithTouch(event); }, { signal });
+        window.addEventListener('touchstart', (event) => { recordMousePositionWithTouch(event); }, { signal });
+        window.addEventListener('touchend', (event) => { recordMousePositionWithTouch(event); }, { signal });
+    }
+
+    /** This function disables the mouse position's event listeners. */
+    function disableMousePositionRecorder() {
+        if(!mousePositionRecorderEnabled.value) { return; }
+        if(mousePositionController != null) { mousePositionController.abort(); }
+        mousePositionController = null;
+
+        mouseX.value = 0;
+        mouseY.value = 0;
+        mousePositionRecorderEnabled.value = false;
+    }
+
+    /** This function runs the disableMousePositionRecorder and then the enableMousePositionRecorder function. */
+    async function resetMousePositionRecorder() {
+        disableMousePositionRecorder();
+        await enableMousePositionRecorder();
+    }
+
+    /**
+     * This function records the mouse's current position.
+     * @param {PointerEvent} event The new position of the mouse.
+     */
+    function recordMousePosition(event) {
+        if(!event || typeof event.clientX !== 'number' || typeof event.clientY !== 'number') { return; }
+        mouseX.value = event.clientX;
+        mouseY.value = event.clientY;
+    }
+
+    /**
+     * This function records the mouse's current position with a touch event.
+     * @param {TouchEvent} event The new position of the mouse.
+     */
+    function recordMousePositionWithTouch(event) {
+        if(!event.touches) { return; }
+        const firstTouch = event.touches.item(0);
+        if(typeof firstTouch?.clientX !== 'number' || typeof firstTouch?.clientY !== 'number') { return; }
+
+        mouseX.value = firstTouch.clientX;
+        mouseY.value = firstTouch.clientY;
+    }
+
+    /**
      * -----------------------------------------------------------------------------------------
      * These functions are specifically made for setting the dynamic breakpoints on the website.
      * -----------------------------------------------------------------------------------------
@@ -434,10 +521,12 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, breakpointsEnabled, trueViewportVariablesEnabled, viewportRafEnabled,
-        viewportWidth, viewportHeight, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio,
+    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY,
+        breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled,
+        viewportWidth, viewportHeight, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,
         enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
+        enableMousePositionRecorder, disableMousePositionRecorder, resetMousePositionRecorder,
         enableBreakpoints, disableBreakpoints, resetBreakpoints, startViewportRaf, stopViewportRaf
     }
 });
