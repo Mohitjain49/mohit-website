@@ -5,6 +5,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const gamepadStore = useGamepadStore();
     const scriptsStore = useScriptsStore();
+    const documentStore = useDocumentStore();
     const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
@@ -96,9 +97,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     });
 
-    /**
-     * This function adds event listeners to the website as soon as its loaded.
-     */
+    /** This function adds event listeners to the website as soon as its loaded. */
     async function setEventListeners() {
         if(mounted.value != 0) { return; }
         mounted.value = 1;
@@ -109,17 +108,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
+        documentStore.mountDocumentStore();
         await styleStore.mountStyleStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();
 
-        window.addEventListener("resize", () => { resizePageComponents(); }, { signal });
+        window.addEventListener("animation-resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("mousemove", () => { gamepadStore.hideAllCursors(); }, { signal });
-        window.addEventListener("unhandledrejection", onUnhandledRejection, { signal });
+        window.addEventListener("unhandledrejection", (event) => { onUnhandledRejection(event); }, { signal });
 
-        document.body.addEventListener("click", onDocumentBodyClick, { signal });
-        document.body.addEventListener("keydown", onKeyDown, { signal });
+        document.body.addEventListener("click", (event) => { onDocumentBodyClick(event); }, { signal });
+        document.body.addEventListener("keydown", (event) => { onKeyDown(event); }, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
 
         // This sets a new function in the window object to let static HTML elements access the share popup.
@@ -130,9 +130,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         mounted.value = 2;
     }
 
-    /**
-     * This function removes event listeners to the website as soon as its loaded.
-     */
+    /** This function removes event listeners to the website as soon as its loaded. */
     function removeEventListeners() {
         if(mounted.value != 2) { return; }
         controller.abort();
@@ -142,9 +140,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         mounted.value = 0;
     }
 
-    /**
-     * This sets the size of crucial components within the website.
-     */
+    /** This sets the size of crucial components within the website. */
     function resizePageComponents() {
         gamepadStore.resetCursorPositions();
         scriptsStore.setLineOptions(-1);
@@ -239,13 +235,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    /**
-     * This function handles unhandled rejections.
-     */
+    /** This function handles unhandled rejections. */
     function onUnhandledRejection(event) {
-        if(event.reason?.name === "AbortException") {
-            event.preventDefault();
-        }
+        if(event.reason?.name === "AbortException") { event.preventDefault(); }
     }
 
     /**
@@ -262,7 +254,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
-            window.scrollTo({ top: ((hashStr === "documents") ? document.body.scrollHeight : 0), left: 0, behavior: "instant" });
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
             if(hashStr === "" || onHostedFileRoute.value) { return; }
 
             allImagesReady().then(() => {
@@ -285,9 +277,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         return Promise.all(promises);
     };
 
-    /**
-     * This function scrolls to the footer of the webpage if it exists.
-     */
+    /** This function scrolls to the footer of the webpage if it exists. */
     function scrollToAndFromFooter() {
         if(!navFooterPresent.value) { return; }
         closeNavMenu();
@@ -371,9 +361,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         await share({ files: [file], text: ("Sharing File From " + PERSONAL_WEBSITE_LINK), title: "Sharing File..." })
     }
 
-    /**
-     * This function toggles the wake lock for the website.
-     */
+    /** This function toggles the wake lock for the website. */
     async function toggleWakeLock() {
         if(!wakeLock.isSupported.value) { return; }
         if(wakeLock.isActive.value) {
@@ -403,11 +391,9 @@ export function initWebData(pixelOffset = 0) {
     useWebsiteDataStore().mountWebData(pixelOffset);
 }
 
-/**
- * This function returns a reactive computed value on whether the user is on a hosted file page or not.
- */
+/** This function returns a reactive computed value on whether the user is on a hosted file page or not. */
 export function getOnHostedFileRoute() {
     const { onDocumentRoute } = storeToRefs(useDocumentStore());
     const { onScriptRoute } = storeToRefs(useScriptsStore());
-    return computed(() => { return (onDocumentRoute.value || onScriptRoute.value) })
+    return computed(() => { return (onDocumentRoute.value || onScriptRoute.value); });
 }

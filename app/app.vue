@@ -16,7 +16,6 @@ import "~/styles/mainstyles.scss";
 import '~build/console';
 
 const webData = useWebsiteDataStore();
-const documentStore = useDocumentStore();
 const fullScreenSet = getFullScreenSet();
 
 const showShare = computed(() => { return (webData.showSharePopup && !fullScreenSet.value); });
@@ -25,7 +24,4 @@ const useWebpageCover = computed(() => { return (showShareImmediate.value || (we
 
 onMounted(async() => { await webData.setEventListeners(); });
 onBeforeUnmount(() => { webData.removeEventListeners(); });
-
-useScriptTag("https://accounts.google.com/gsi/client", (el) => { documentStore.initGoogleTokenClient(); }, { async: true, defer: true });
-useScriptTag("https://apis.google.com/js/api.js", (el) => { documentStore.initGooglePickerAPI(); }, { async: true, defer: true });
 </script>

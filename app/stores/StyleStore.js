@@ -2,19 +2,41 @@
 export const useStyleStore = defineStore("style-store", () => {
     const ZOOM_CSS_PROPERTY = "--webpage-zoom-factor";
     const TRUE_100VH_CSS_PROPERTY = "--true-100vh";
+    const TRUE_100VW_CSS_PROPERTY = "--true-100vw";
+    const CSS_LAYOUT_ID = "invisible-css-layout";
+    var windowSizeAnimationFrame = null;
 
     const fullScreenStore = useFullScreenStore();
     const fullScreenSet = getFullScreenSet();
-    const { height: vHeight } = useWindowSize();
+
+    const viewportRafEnabled = shallowRef(false);
+    const viewportWidth = shallowRef(Number.POSITIVE_INFINITY);
+    const viewportHeight = shallowRef(Number.POSITIVE_INFINITY);
+
+    const cssViewportWidth = shallowRef(Number.POSITIVE_INFINITY);
+    const cssViewportHeight = shallowRef(Number.POSITIVE_INFINITY);
+    const cssToWindowWidthRatio = shallowRef(1.0);
+    const cssToWindowHeightRatio = shallowRef(1.0);
+
+    const mouseX = shallowRef(0);
+    const mouseY = shallowRef(0);
 
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the document element's CSS Variables. */
     var cssVarObserver = null;
 
-    /** @type {AbortController} This abort controller is designed to properly disable this pinia store's resize event listener. */
-    var styleController = null;
+    /** @type {AbortController} This abort controller is designed to properly disable the dynamic breakpoints' event listeners. */
+    var breakpointsAbortController = null;
+
+    /** @type {AbortController} This abort controller is designed to properly disable the viewport variables' event listeners. */
+    var trueViewportVariablesController = null;
+
+    /** @type {AbortController} This abort controller is designed to properly disable the mouse position event listeners. */
+    var mousePositionController = null;
 
     const mounted = ref(false);
     const breakpointsEnabled = ref(false);
+    const trueViewportVariablesEnabled = ref(false);
+    const mousePositionRecorderEnabled = ref(false);
     const zoomFactor = ref(1.0);
 
     const hideOverflowArray = ref([false, false, false, false]);
@@ -36,10 +58,7 @@ export const useStyleStore = defineStore("style-store", () => {
     watch(fullScreenSet, () => { setDisableUserSelectClass(disableUserSelect.value); });
 
     // This changes the Zoom CSS Property for the webpage when the viewport height changes properly.
-    watch(vHeight, (newValue) => {
-        changeZoomFactor(((newValue > 450) ? 1.0 : 0.5));
-        setTrue100vh(newValue, zoomFactor.value);
-    });
+    watch(viewportHeight, (newValue) => { changeZoomFactor(((newValue > 450) ? 1.0 : 0.5)); });
 
     /** This function returns whether the website is able to use client-only features like the DOM. */
     function validateClientMode() { return (import.meta.client && document && document.documentElement); }
@@ -49,12 +68,12 @@ export const useStyleStore = defineStore("style-store", () => {
         if(mounted.value) { return; }
         await nextTick();
 
-        const windowHeight = window.innerHeight;
-        const startZoomFactor = ((windowHeight > 450) ? 1.0 : 0.55);
+        changeZoomFactor((window.innerHeight > 450) ? 1.0 : 0.5);
+        startViewportRaf();
 
-        setTrue100vh(windowHeight, startZoomFactor);
-        changeZoomFactor(startZoomFactor);
         await enableBreakpoints();
+        await enableTrueViewportVariables();
+        await enableMousePositionRecorder();
 
         if(validateClientMode()) { document.documentElement.classList.add("js__active"); }
         mounted.value = true;
@@ -68,17 +87,6 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
         document.documentElement.style.setProperty(ZOOM_CSS_PROPERTY, newFactor);
         zoomFactor.value = newFactor;
-    }
-
-    /**
-     * This function sets the "true" 100% viewport height of the screen in pixels.
-     * @param {Number} vHeight The new viewport height.
-     * @param {Number} zoomFactor The zoom factor to divide the viewport height by.
-     */
-    function setTrue100vh(vHeight = 0, zoomFactor = 1.0) {
-        if(!validateClientMode()) { return; }
-        const vhNum = (Math.round((vHeight * 100) / zoomFactor) / 100);
-        document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, (String(vhNum) + "px"));
     }
 
     /**
@@ -153,6 +161,7 @@ export const useStyleStore = defineStore("style-store", () => {
     function setDisableUserSelectClass(hide = false) {
         if(!validateClientMode()) { return; }
         if(hide) {
+            window.getSelection()?.removeAllRanges();
             document.body.classList.add('disable-user-select');
             if(fullScreenSet.value) { fullScreenStore.element.classList.add('disable-user-select'); }
         } else {
@@ -166,9 +175,210 @@ export const useStyleStore = defineStore("style-store", () => {
     }
 
     /**
-     * ----------------------------------------------------------------------------------------
-     * These function are specifically made for setting the dynamic breakpoints on the website.
-     * ----------------------------------------------------------------------------------------
+     * -----------------------------------------------------------------------------------------------------------
+     * These functions manage an animation frame loop that records the JS and CSS viewport inner width and height.
+     * -----------------------------------------------------------------------------------------------------------
+     */
+
+    /** This function records the viewports' inner width and inner height (its dimensions). */
+    function recordViewportDimensions() {
+        if(!window) { return; }
+        const oldViewportWidth = viewportWidth.value;
+        const oldViewportHeight = viewportHeight.value;
+
+        viewportWidth.value = window.innerWidth;
+        viewportHeight.value = window.innerHeight;
+
+        if(viewportWidth.value !== oldViewportWidth || viewportHeight.value !== oldViewportHeight) {
+            window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
+        }
+
+        if(!document || !document.getElementById) { return; }
+        const cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
+        if(!cssLayoutElement) { return; }
+
+        const oldCssViewportWidth = cssViewportWidth.value;
+        const oldCssViewportHeight = cssViewportHeight.value;
+
+        cssViewportWidth.value = cssLayoutElement.clientWidth;
+        cssViewportHeight.value = cssLayoutElement.clientHeight;
+        cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
+        cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
+
+        if(cssViewportWidth.value !== oldCssViewportWidth || cssViewportHeight.value !== oldCssViewportHeight) {
+            window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
+        }
+    }
+
+    /** This function records the viewport's dimensions and sets the animation frame loop. */
+    function recordViewportDimensionsWithRaf() {
+        recordViewportDimensions();
+        windowSizeAnimationFrame = requestAnimationFrame(() => { recordViewportDimensionsWithRaf(); });
+    }
+
+    /** This function starts the animation frame loop that records the viewport's dimensions. */
+    function startViewportRaf() {
+        if(viewportRafEnabled.value) { return; }
+        if(windowSizeAnimationFrame != null) { cancelAnimationFrame(windowSizeAnimationFrame); }
+        viewportRafEnabled.value = true;
+        recordViewportDimensionsWithRaf();
+    }
+
+    /** This function stops the animation frame loop that records the viewport's dimensions. */
+    function stopViewportRaf() {
+        if(!viewportRafEnabled.value) { return; }
+        if(windowSizeAnimationFrame != null) { cancelAnimationFrame(windowSizeAnimationFrame); }
+        windowSizeAnimationFrame = null;
+        viewportRafEnabled.value = false;
+    }
+
+    /**
+     * ----------------------------------------------------------------------------------
+     * These functions are specifically made for setting the true viewport CSS variables.
+     * ----------------------------------------------------------------------------------
+     */
+
+    /** This function enables the "true viewport" variables for the CSS to use. */
+    async function enableTrueViewportVariables() {
+        if(trueViewportVariablesEnabled.value) { return; }
+        await setTrueViewportVariablesEventListener();
+        trueViewportVariablesEnabled.value = true;
+    }
+
+    /** This function disables the website's dynamic breakpoints. */
+    function disableTrueViewportVariables() {
+        if(!trueViewportVariablesEnabled.value) { return; }
+        if(trueViewportVariablesController != null) { trueViewportVariablesController.abort(); }
+
+        trueViewportVariablesController = null;
+        unsetTrueViewportVariables();
+        trueViewportVariablesEnabled.value = false;
+    }
+
+    /** This function runs the disableTrueViewportVariables and then the enableTrueViewportVariables function. */
+    async function resetTrueViewportVariables() {
+        disableTrueViewportVariables();
+        await enableTrueViewportVariables();
+    }
+
+    /** This function sets all the event listeners for the true viewport CSS variables so that they are set as the window changes. */
+    async function setTrueViewportVariablesEventListener() {
+        if(trueViewportVariablesController != null) { trueViewportVariablesController.abort(); }
+        trueViewportVariablesController = new AbortController();
+
+        await nextTick();
+        await sleep(10);
+        if(!validateClientMode()) { return; }
+
+        const signal = trueViewportVariablesController.signal;
+        window.addEventListener("animation-resize", () => { setTrueViewportVariables(); }, { signal });
+        window.addEventListener("router-before-change", () => { setTrueViewportVariables(); }, { signal });
+        window.addEventListener("router-after-change", () => { setTrueViewportVariables(); }, { signal });
+
+        await sleep(50);
+        setTrueViewportVariables();
+    }
+
+    /** This function sets the true viewport CSS variables. */
+    function setTrueViewportVariables() {
+        if(!validateClientMode()) { return; }
+        const vhNum = (Math.round(cssViewportHeight.value * 100) / 100);
+        const vwNum = (Math.round(cssViewportWidth.value * 100) / 100);
+
+        document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, (String(vhNum) + "px"));
+        document.documentElement.style.setProperty(TRUE_100VW_CSS_PROPERTY, (String(vwNum) + "px"));
+    }
+
+    /** This function unsets the true viewport CSS variables and reverts them back to the css viewport values. */
+    function unsetTrueViewportVariables() {
+        if(!validateClientMode()) { return; }
+        document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, "100vh");
+        document.documentElement.style.setProperty(TRUE_100VW_CSS_PROPERTY, "100vw");
+    }
+
+    /**
+     * ---------------------------------------------------------------------------------------
+     * These functions are specifically made for properly recording the user's mouse position.
+     * ---------------------------------------------------------------------------------------
+     */
+
+    /** This function enables the mouse position's recorder. */
+    async function enableMousePositionRecorder() {
+        if(mousePositionRecorderEnabled.value) { return; }
+        setMousePositionEventListeners();
+        mousePositionRecorderEnabled.value = true;
+    }
+
+    /** This function sets the mouse position's event listeners. */
+    async function setMousePositionEventListeners() {
+        if(mousePositionController != null) { mousePositionController.abort(); }
+        mousePositionController = new AbortController();
+
+        await nextTick();
+        await sleep(10);
+        if(!validateClientMode()) { return; }
+
+        const signal = mousePositionController.signal;
+        window.addEventListener('click', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('contextmenu', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('pointermove', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('pointerdown', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('pointerup', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('dragover', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('dragstart', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('dragend', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('mousemove', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('mousedown', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('mouseup', (event) => { recordMousePosition(event); }, { signal });
+        window.addEventListener('touchmove', (event) => { recordMousePositionWithTouch(event); }, { signal });
+        window.addEventListener('touchstart', (event) => { recordMousePositionWithTouch(event); }, { signal });
+        window.addEventListener('touchend', (event) => { recordMousePositionWithTouch(event); }, { signal });
+    }
+
+    /** This function disables the mouse position's event listeners. */
+    function disableMousePositionRecorder() {
+        if(!mousePositionRecorderEnabled.value) { return; }
+        if(mousePositionController != null) { mousePositionController.abort(); }
+        mousePositionController = null;
+
+        mouseX.value = 0;
+        mouseY.value = 0;
+        mousePositionRecorderEnabled.value = false;
+    }
+
+    /** This function runs the disableMousePositionRecorder and then the enableMousePositionRecorder function. */
+    async function resetMousePositionRecorder() {
+        disableMousePositionRecorder();
+        await enableMousePositionRecorder();
+    }
+
+    /**
+     * This function records the mouse's current position.
+     * @param {PointerEvent} event The new position of the mouse.
+     */
+    function recordMousePosition(event) {
+        if(!event || typeof event.clientX !== 'number' || typeof event.clientY !== 'number') { return; }
+        mouseX.value = event.clientX;
+        mouseY.value = event.clientY;
+    }
+
+    /**
+     * This function records the mouse's current position with a touch event.
+     * @param {TouchEvent} event The new position of the mouse.
+     */
+    function recordMousePositionWithTouch(event) {
+        if(!event.touches) { return; }
+        const firstTouch = event.touches.item(0);
+        if(typeof firstTouch?.clientX !== 'number' || typeof firstTouch?.clientY !== 'number') { return; }
+
+        mouseX.value = firstTouch.clientX;
+        mouseY.value = firstTouch.clientY;
+    }
+
+    /**
+     * -----------------------------------------------------------------------------------------
+     * These functions are specifically made for setting the dynamic breakpoints on the website.
+     * -----------------------------------------------------------------------------------------
      */
 
     /** This function enables the website's dynamic breakpoints. */
@@ -181,11 +391,12 @@ export const useStyleStore = defineStore("style-store", () => {
     /** This function disables the website's dynamic breakpoints. */
     function disableBreakpoints() {
         if(!breakpointsEnabled.value) { return; }
-        if(styleController != null) { styleController.abort(); }
+        if(breakpointsAbortController != null) { breakpointsAbortController.abort(); }
         if(cssVarObserver != null) { cssVarObserver.disconnect(); }
 
-        styleController = null;
+        breakpointsAbortController = null;
         cssVarObserver = null;
+        unsetDynamicBreakpoints();
         breakpointsEnabled.value = false;
     }
 
@@ -197,18 +408,18 @@ export const useStyleStore = defineStore("style-store", () => {
 
     /** This sets the resize event listener that sets all the breakpoint attributes for the website's document element. */
     async function setDynamicBreakpointsEventListener() {
-        if(styleController != null) { styleController.abort(); }
+        if(breakpointsAbortController != null) { breakpointsAbortController.abort(); }
         if(cssVarObserver != null) { cssVarObserver.disconnect(); }
-        styleController = new AbortController();
+        breakpointsAbortController = new AbortController();
 
         await nextTick();
         await sleep(10);
         if(!validateClientMode()) { return; }
 
-        const signal = styleController.signal;
-        window.addEventListener("resize", () => { setDynamicBreakpoints(); }, { signal });
-        window.addEventListener("orientationchange", () => { setDynamicBreakpoints(); }, { signal });
-        document.addEventListener("fullscreenchange", () => { setDynamicBreakpoints }, { signal });
+        const signal = breakpointsAbortController.signal;
+        window.addEventListener("animation-resize", () => { setDynamicBreakpoints(); }, { signal });
+        window.addEventListener("router-before-change", () => { setDynamicBreakpoints(); }, { signal });
+        window.addEventListener("router-after-change", () => { setDynamicBreakpoints(); }, { signal });
 
         cssVarObserver = new MutationObserver(() => { setDynamicBreakpoints(); });
         cssVarObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
@@ -228,9 +439,8 @@ export const useStyleStore = defineStore("style-store", () => {
         const lessEqualHeightVars = [-1];
         const greaterEqualHeightVars = [-1];
 
-        const scalar = zoomFactor.value;
-        var windowWidth = (window.innerWidth / scalar);
-        var windowHeight = (window.innerHeight / scalar);
+        var windowWidth = (window.innerWidth * cssToWindowWidthRatio.value);
+        var windowHeight = (window.innerHeight * cssToWindowHeightRatio.value);
         
         for(let i = 0; i < htmlStyles.length; i++) {
             const property = htmlStyles.item(i);
@@ -294,9 +504,30 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, breakpointsEnabled,
+    /** This function unsets any dynamic breakpoints as attributes on the website. */
+    function unsetDynamicBreakpoints() {
+        if(!validateClientMode()) { return; }
+        const allDocumentElementAttrs = document.documentElement.attributes;
+        const documentElementBpAttrs = [""];
+        const BpAttrsPrefixes = ["less-equal-width-bp-", "greater-equal-width-bp-", "less-equal-height-bp-", "greater-equal-height-bp-"];
+
+        for(let i = 0; i < allDocumentElementAttrs.length; i++) {
+            const unparsedAttr = allDocumentElementAttrs.item(i).value;
+            if(-1 == BpAttrsPrefixes.findIndex((item) => { return unparsedAttr.startsWith(item); })) { continue; }
+            documentElementBpAttrs.push(documentElementBpAttrs);
+        }
+        for(let j = 1; j < documentElementBpAttrs.length; j++) {
+            document.documentElement.removeAttribute(documentElementBpAttrs[j]);
+        }
+    }
+
+    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY,
+        breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled,
+        viewportWidth, viewportHeight, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,
-        enableBreakpoints, disableBreakpoints, resetBreakpoints
+        enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
+        enableMousePositionRecorder, disableMousePositionRecorder, resetMousePositionRecorder,
+        enableBreakpoints, disableBreakpoints, resetBreakpoints, startViewportRaf, stopViewportRaf
     }
 });
 

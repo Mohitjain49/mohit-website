@@ -1,5 +1,8 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
-import my_unix_shell from "@scripts/mysh.c?raw";
+import upgrade_code from "@scripts/upgrade.mjs?raw";
+
+import my_unix_shell from "@scripts/c/mysh.c?raw";
+import my_threadpool from "@scripts/c/threadpool.c?raw";
 
 import gamepad_store_utility_code from "~/stores/GamepadStore.js?raw";
 import gamepad_component_code from "~/components/GamepadComponent.client.vue?raw";
@@ -14,6 +17,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         useHostedScript("/gamepad/vuejs-component", gamepad_component_code, "GamepadComponent", ".client.vue", GAMEPAD_COMPONENT_FILE),
         useHostedScript("/gamepad/custom-events", gamepad_events_code, "gamepad-events", ".js", GAMEPAD_EVENTS_FILE),
         useHostedScript("/unix-shell", my_unix_shell, "mysh", ".c", PERSONAL_UNIX_SHELL_LINK),
+        useHostedScript("/upgrade-script", upgrade_code, "upgrade", ".mjs", PERSONAL_UPGRADE_SCRIPT_LINK),
+        useHostedScript("/threadpool", my_threadpool, "threadpool", ".c", PERSONAL_THREADPOOL_LINK),
     ];
 
     const router = useRouter();

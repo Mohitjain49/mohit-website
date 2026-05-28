@@ -38,7 +38,9 @@ export const CREATE_GITHUB_REPO_DOC_LINK = "https://www.mohit-jain.com/Create_Gi
 export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/mohit-website";
 export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
-export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/mysh.c");
+export const PERSONAL_UPGRADE_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/upgrade.mjs");
+export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/mysh.c");
+export const PERSONAL_THREADPOOL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/threadpool.c");
 export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
 
 export const GAMEPAD_ICON_SOURCE = "https://kenney.nl/assets/input-prompts";
@@ -53,7 +55,6 @@ export const PERSONAL_GLOBE_LINK = "https://mohitjain49.github.io/globe/";
 export const PIZZA_WEBSITE_LINK = "https://mohitjain49.github.io/pizza/";
 
 export const KSU_LINK = "https://kennesaw.edu/"
-const GEN_AI_APPLICATIONS_PAPER_LINK = "https://www.americanscholarspress.us/journals/IMR/pdf/IMR-1-2026/IMRv22N12026-art7.pdf"
 export const SUBLO_WEBSITE_LINK = "https://www.sublo.app/";
 
 export const MAIN_IVUE_WEBSITE_LINK = "https://www.ivueworld.com/";
@@ -73,6 +74,8 @@ export const FCS_CERTIFICATE_LINK = "https://www.mohit-jain.com/Fulton_Internshi
 export const FCS_CERTIFICATE_LINKEDIN_POST = "https://www.linkedin.com/posts/mohitjain49_sharing-my-certificate-of-appreciation-from-activity-7331780981911080960-W_aN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-tIy0BLb0spd_jNR2x-8zVBRSshOre_lI";
 export const FCS_CAREER_INTERNSHIP_LINK = "https://www.fultonschools.org/all-departments/academics/learning-teaching/academic-programs/accelerated-extended-programming/advanced-studies/talented-and-gifted-tag/career-internship-program";
 
+export const GEN_AI_APPLICATIONS_PAPER_ROUTE = "/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper/";
+export const GEN_AI_APPLICATIONS_PAPER_LINK = "https://www.americanscholarspress.us/journals/IMR/pdf/IMR-1-2026/IMRv22N12026-art7.pdf";
 export const SHARE_PAGE_TITLE = "Share This Page With Someone Else!";
 
 export const SOCIALS = [
@@ -866,7 +869,7 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Documents",
-        link: "/documents/",
+        link: "/library/#documents",
         color: "var(--website-text)",
         desc: "I used multiple modules to display my resume and other documents on this website. " +
             "This includes using PDF.js to natively display the PDF as a whole and the \"unplugin-vue-markdown\" " +
@@ -880,13 +883,13 @@ export const FEATURE_ENTITIES = [
     },
     {
         name: "Scripts",
-        link: "/aws-deploy-script/",
+        link: "/library/#scripts",
         color: "var(--script-page-main-color)",
         desc: "I use the \"Shiki\" module to display code on my website. " +
             "Currently, I only display my AWS Deployment Script and some of my Web Gamepad API code here.",
 
         icon: {
-            id: "fa-laptop-code",
+            id: "fa-file-code",
             faIcon: true,
             size: "100"
         }
@@ -924,7 +927,7 @@ export const HOME_COMPASS = [
     { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code", offset: 0 },
     { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon, offset: 0 },
     { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes", offset: 0 },
-    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 }
+    { title: "My Library", id: "library", color: "var(--website-light-text)", faIcon: true, icon: "fa-book-open-reader", offset: 0 }
 ];
 
 export const SKILLS_COMPASS = [
@@ -944,4 +947,9 @@ export const CONTACT_COMPASS = [
     { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 70 },
     { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 70 },
     { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 70 }
+];
+
+export const LIBRARY_COMPASS = [
+    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 },
+    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code", offset: 0 }
 ];

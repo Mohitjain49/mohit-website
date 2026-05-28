@@ -1,6 +1,9 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
-import { faCopyright, faStar, faCertificate, faQuestion, faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCopyright, faStar, faCertificate, faQuestion, faBookBookmark,
+    faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst
+} from '@fortawesome/free-solid-svg-icons';
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const HOME_BACKGROUND = ref({
@@ -30,6 +33,45 @@ export const HOME_BACKGROUND = ref({
                     { src: getFontAwesomeSvg(faStar, "rgba(126, 90, 0, 0.9)"), width: 100, height: 100 },
                     { src: getFontAwesomeSvg(faStar, "#E8E163"), width: 100, height: 100 },
                     { src: getFontAwesomeSvg(faStar, "#E92A60"), width: 100, height: 100 },
+                ]
+            }
+        },
+        size: {
+            value: { min: 5, max: 6 },
+        },
+    },
+    detectRetina: true,
+    tRetina: true,
+});
+
+/** @type {Ref<import('@tsparticles/engine').IOptions>} */
+export const LIBRARY_BACKGROUND = ref({
+    background: { color: "#000000" },
+    fullScreen: { enable: true, zIndex: -1 },
+    fpsLimit: 40,
+    particles: {
+        move: {
+            direction: "outside",
+            enable: true,
+            outModes: { default: "out" },
+            speed: 1.5,
+            straight: false,
+        },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 400
+        },
+        opacity: {
+            value: { min: 0.1, max: 0.75 },
+            animation: { enable: true, speed: 1.5, sync: false },
+        },
+        shape: {
+            type: "image",
+            options: {
+                image: [
+                    { src: getFontAwesomeSvg(faBookBookmark, "rgba(126, 90, 0, 0.9)"), width: 100, height: 100 },
+                    { src: getFontAwesomeSvg(faBookBookmark, "#E8E163"), width: 100, height: 100 },
+                    { src: getFontAwesomeSvg(faBookBookmark, "#E92A60"), width: 100, height: 100 },
                 ]
             }
         },

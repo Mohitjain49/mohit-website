@@ -7,7 +7,7 @@
     <SkillsSection />
     <IvueSection />
     <ProjectsSection />
-    <DocumentsSection />
+    <LibrarySection />
 
     <HomeWidgets />
     <WebFooter />
@@ -33,8 +33,6 @@ function changePageTitle() {
     const hash = routerHash.value;
     if(hash === "#ivue") {
         pageTitle.value = "Mohit Jain | My Role Within iVue"
-    } else if(hash === "#documents") {
-        pageTitle.value = "Mohit Jain | My Documents"
     } else if(hash === "#footer") {
         pageTitle.value = "Mohit Jain | WebPages"
     } else {

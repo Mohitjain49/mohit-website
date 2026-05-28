@@ -67,23 +67,33 @@ async function sendS3Command(command) {
  * This function returns all the put object commands that will be sent by the S3 client.
  */
 function getPutObjectCommands() {
-    const allFiles = fs.readdirSync(outDir, { recursive: true }); // All the filenames from the build output.
+    /** @type {Array<String>} All the filenames from the build output. */
+    const allFiles = fs.readdirSync(outDir, { recursive: true });
+
+    const assetFolders = ["_nuxt/", "_fonts/"];
     const commands = [];
 
     for(let i = 0; i < allFiles.length; i++) {
         const filename = allFiles[i].replaceAll("\\", "/");
         const mimeType = lookup(filename);
+        const filePath = path.join(outDir, filename);
 
-        if(mimeType && mimeType !== "application/x-install-instructions") {
-            commands.push(new PutObjectCommand({
-                Body: fs.createReadStream(path.join(outDir, filename)),
-                Bucket: AWS_BUCKET,
-                Key: filename,
-                ContentType: ((mimeType === "text/javascript") ? "application/javascript" : mimeType),
-                CacheControl: ((filename.endsWith("index.html") || filename === "sw.js") ? "no-cache, no-store, must-revalidate" : undefined)
-            }));
-        }
+        if(!fs.statSync(filePath).isFile()) { continue; }
+        if(!mimeType || mimeType === "application/x-install-instructions") { continue; }
+
+        commands.push(new PutObjectCommand({
+            Body: fs.createReadStream(filePath),
+            Bucket: AWS_BUCKET,
+            Key: filename,
+            ContentType: ((mimeType === "text/javascript") ? "application/javascript" : mimeType),
+            CacheControl: ((filename.startsWith(assetFolders[0]) || filename.startsWith(assetFolders[1])) ?
+                "public, max-age=2592000, no-cache" :
+                "no-cache, no-store, must-revalidate"
+            )
+        }));
     }
+
+    // Returns all the "Put Object" commands for use.
     return commands;
 }
 
@@ -127,7 +137,6 @@ const cloudfrontClient = new CloudFrontClient({
         accessKeyId: AWS_ACCESS_KEY_ID,
         secretAccessKey: AWS_SECRET_ACCESS_KEY
     }
-
 });
 
 /**
@@ -151,29 +160,37 @@ async function sendCloudfrontInvalidation() {
 
 /** This is the main function to run at the end once all objects are initialized. */
 async function main() {
-    // Unless an argument is passed in, this deletes all current files in the bucket.
-    if(!NO_DELETION) {
-        const deleteCommands = await getDeleteObjectCommands();
-        for(let j = 0; j < deleteCommands.length; j++) { await sendS3Command(deleteCommands[j]); }
-        console.log(`✅ Deleted All Files From Bucket!\n`);
-    }
+    try {
+        // Unless an argument is passed in, this deletes all current files in the bucket.
+        if(!NO_DELETION) {
+            const deleteCommands = await getDeleteObjectCommands();
+            for(let j = 0; j < deleteCommands.length; j++) { await sendS3Command(deleteCommands[j]); }
+            console.log(`✅ Deleted All Files From Bucket!\n`);
+        }
 
-    const commands = getPutObjectCommands();
-    const length = commands.length;
+        const commands = getPutObjectCommands();
+        const length = commands.length;
 
-    // This sends all the files in the build output to the bucket, replacing any files with the same key.
-    for(let i = 0; i < length; i++) {
-        await sendS3Command(commands[i]);
-        console.log(`✅ Uploaded file ${i + 1} of ${length}: ${commands[i].input.Key}`);
-    }
-    console.log(`✅ Uploaded All Files To Your Bucket!\n`);
+        // This sends all the files in the build output to the bucket, replacing any files with the same key.
+        for(let i = 0; i < length; i++) {
+            await sendS3Command(commands[i]);
+            console.log(`✅ Uploaded file ${i + 1} of ${length}: ${commands[i].input.Key}`);
+        }
+        console.log(`✅ Uploaded All Files To Your Bucket!\n`);
 
-    // Unless an argument is passed in, this invalidates a cloudfront cache.
-    if(!NO_INVALIDATION) {
-        await sendCloudfrontInvalidation();
-        console.log("✅ Completed CloudFront Cache Invalidation!");
+        // Unless an argument is passed in, this invalidates a cloudfront cache.
+        if(!NO_INVALIDATION) {
+            await sendCloudfrontInvalidation();
+            console.log("✅ Completed CloudFront Cache Invalidation!");
+        }
+
+        // This marks the deployment as complete.
+        console.log("🏁 Script Complete!");
+        process.exit(0);
+    } catch(err) {
+        console.error(err);
+        process.exit(1);
     }
-    console.log("Script Complete!");
 }
 
 // Runs The Main Function.

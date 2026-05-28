@@ -1,69 +1,55 @@
 <script setup>
-import fcs_logo from "~/assets/Fulton_County_Schools_Logo.png";
-
-const DOCUMENT_TABS = [
+const LIBRARY_TABS = [
     {
-        id: "resume-tab",
-        link: "/resume/",
-        header: { faIcon: true, img: "fa-file-lines", size: 0, title: "My Resume" },
+        id: "documents-section-tab",
+        link: "/library/#documents",
+        header: { faIcon: true, img: "fa-folder-open", size: 0, title: "My Documents" },
         desc: "I regularly update my resume as I learn more skills and gain more experience in software development. " +
             "Feel Free to take a look at it!"
     },
     {
-        id: "research-paper-tab",
-        link: GEN_AI_APPLICATIONS_PAPER_ROUTE,
-        header: { faIcon: true, img: "fa-brain", size: 0, title: "AI Research Paper" },
+        id: "scripts-section-tab",
+        link: "/library/#scripts",
+        header: { faIcon: true, img: "fa-file-code", size: 0, title: "My Code" },
         desc: "I regularly update my resume as I learn more skills and gain more experience in software development. " +
             "Feel Free to take a look at it!"
-    },
-    {
-        id: "github-tab",
-        link: "/create-github-repo/",
-        header: { faIcon: true, img: "fa-brands fa-github", size: 0, title: "Create A Github Repo" },
-        desc: "This is an instructions guide to how to create and clone a Repository with GitHub. " +
-            "It'll walk anyone through creating an account with GitHub as well."
-    },
-    {
-        id: "fcs-certificate-tab",
-        link: FCS_CERTIFICATE_ROUTE,
-        header: { faIcon: false, img: fcs_logo, size: 110, title: "" },
-        desc: "iVue takes in a few interns through the Fulton County Schools Internship Program. " +
-            "We teach website design and development skills to these interns via interactive learning."
     },
 ]
 
-const NUM_DOCUMENT_TABS = DOCUMENT_TABS.length;
+const NUM_LIBRARY_TABS = LIBRARY_TABS.length;
 const tabRefs = ref([]);
-const documentsText = ref(null);
+const libraryText = ref(null);
 
-useIntersectionObserver(documentsText, ([{ isIntersecting }]) => {
+useIntersectionObserver(libraryText, ([{ isIntersecting }]) => {
     if(getMohitInnerWidth() < 450) { return; }
-    setHomeTabAnimation(document.getElementById('documents-section-title'), true, isIntersecting);
-    setHomeTabAnimation(document.getElementById('documents-section-desc'), true, isIntersecting);
+    setHomeTabAnimation(document.getElementById('library-section-title'), true, isIntersecting);
+    setHomeTabAnimation(document.getElementById('library-section-desc'), true, isIntersecting);
 });
 useIntersectionObserver(tabRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const observed = entry[i];
         const observedChild = observed.target.firstElementChild;
-        const observedIdIndex = DOCUMENT_TABS.findIndex((item) => { return (observedChild.id === item.id); });
+        const observedIdIndex = LIBRARY_TABS.findIndex((item) => { return (observedChild.id === item.id); });
         setHomeTabAnimation(observedChild, (observedIdIndex % 2 == 1), observed.isIntersecting);
     }
 });
 </script>
 
 <template>
-<div id="documents" class="documents-section">
-    <div class="documents-section-mainText" ref="documentsText">
-        <div id="documents-section-title"> My Docs </div>
-        <p id="documents-section-desc">
-            These are a few documents I have put together that help showcase my professional expertise. 
+<div id="library" class="library-section">
+    <div class="library-section-mainText" ref="libraryText">
+        <div id="library-section-title">
+            <RouterLink to="/library/" title="See My Library" pulse-loop> My Library </RouterLink>
+        </div>
+        <p id="library-section-desc">
+            I host a few documents and scripts on my website to showcase my expertise in software development and engineering. 
             Whether you are here to take a quick look or want to keep a copy for yourself, feel free to grab whatever helps you out!
         </p>
     </div>
-    <div class="documents-section-tabs-container">
-        <div v-for="(docTab, index) in DOCUMENT_TABS" class="documents-section-tab-parent" :ref="(el) => {tabRefs[index] = el}">
-            <RouterLink :to="docTab.link" :id="docTab.id" class="documents-section-tab" pulse-loop>
-                <div v-if="(docTab.header.title !== '')" class="documents-section-tab-header">
+    <div class="library-section-tabs-container">
+        <div v-for="(docTab, index) in LIBRARY_TABS" class="library-section-tab-parent" :ref="(el) => {tabRefs[index] = el}">
+            <RouterLink :to="docTab.link" :id="docTab.id" class="library-section-tab" pulse-loop>
+                <div v-if="(docTab.header.title !== '')" class="library-section-tab-header">
                     <FontAwesomeIcon v-if="docTab.header.faIcon" :icon="docTab.header.img" />
                     <img v-else :src="docTab.header.img" :width="docTab.header.size" draggable="false" />
                     <span> {{ docTab.header.title }} </span>
@@ -78,20 +64,18 @@ useIntersectionObserver(tabRefs, (entry) => {
 </template>
 
 <style scoped lang="scss">
-.documents-section {
+.library-section {
     background: transparent;
     height: fit-content;
-    min-height: var(--true-100vh, 100vh);
     width: 100%;
-    scroll-margin-top: 70px;
-    padding-bottom: 70px;
+    padding: 70px 0px;
 }
-.documents-section-mainText {
+.library-section-mainText {
     width: 100%;
     height: fit-content;
 }
 
-#documents-section-desc {
+#library-section-desc {
     width: 90%;
     max-width: 1100px;
     height: fit-content;
@@ -104,7 +88,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     text-shadow: 1px 0px 20px var(--website-light-text);
     --animate-duration: 1.2s;
 }
-#documents-section-title {
+#library-section-title {
     width: 100%;
     height: 125px;
     padding-top: 20px;
@@ -120,23 +104,23 @@ useIntersectionObserver(tabRefs, (entry) => {
     text-shadow: var(--website-light-text) 1px 0 30px;
 }
 
-.documents-section-tab-parent {
+.library-section-tab-parent {
     width: 100%;
     height: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.documents-section-tabs-container {
+.library-section-tabs-container {
     width: 100%;
-    height: calc(v-bind(NUM_DOCUMENT_TABS) * 200px);
+    height: calc(v-bind(NUM_LIBRARY_TABS) * 200px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
 }
 
-.documents-section-tab {
+.library-section-tab {
     cursor: pointer;
     width: 90%;
     max-width: 1100px;
@@ -152,11 +136,11 @@ useIntersectionObserver(tabRefs, (entry) => {
     flex-direction: column;
     --animate-duration: 1.2s;
 }
-.documents-section-tab:hover {
+.library-section-tab:hover {
     box-shadow: 0px 0px 12px 12px #005941bb;
 }
 
-.documents-section-tab-header {
+.library-section-tab-header {
     padding-left: 15px;
     display: flex;
     justify-content: center;
@@ -166,17 +150,17 @@ useIntersectionObserver(tabRefs, (entry) => {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
 }
-.documents-section-tab-header svg {
+.library-section-tab-header svg {
     position: relative;
     bottom: 1px;
     margin-right: 7px;
 }
 
-.documents-section-tab img {
+.library-section-tab img {
     padding-left: 15px;
     user-select: none;
 }
-.documents-section-tab p {
+.library-section-tab p {
     color: inherit;
     height: fit-content;
     width: calc(100% - 30px);
@@ -186,51 +170,39 @@ useIntersectionObserver(tabRefs, (entry) => {
     text-align: left;
 }
 
-.documents-section-tab#resume-tab {
+.library-section-tab#documents-section-tab {
     color: var(--website-text);
     border-color: var(--website-text);
 }
-.documents-section-tab#resume-tab:hover {
+.library-section-tab#documents-section-tab:hover {
     box-shadow: 0px 0px 12px 12px rgba(126, 90, 0, 0.25);
 }
 
-.documents-section-tab#research-paper-tab {
-    color: #FEC52E;
-    border-color: #FEC52E;
+.library-section-tab#scripts-section-tab {
+    color: var(--script-page-main-color);
+    border-color: var(--script-page-main-color);
 }
-.documents-section-tab#research-paper-tab:hover {
-    box-shadow: 0px 0px 20px 5px #FEC52E;
-}
-
-.documents-section-tab#github-tab {
-    color: white;
-    border-color: white;
-}
-.documents-section-tab#github-tab:hover {
-    box-shadow: 0px 0px 12px 12px rgba(211, 211, 211, 0.25);
+.library-section-tab#scripts-section-tab:hover {
+    box-shadow: 0px 0px 20px 5px var(--script-page-main-color);
 }
 
 @include dynamic-less-equal-width-rule(975) {
-    .documents-section-tab p {
-        font-size: 17px;
-    }
+    .library-section-tab p { font-size: 17px; }
 }
 @include dynamic-less-equal-width-rule(825) {
-    #documents-section-desc { text-align: left; }
+    #library-section-desc { text-align: left; }
 }
 @include dynamic-less-equal-width-rule(600) {
-    #documents-section-title { height: 90px; }
-    #documents-section-title { font-size: 80px; }
-    .documents-section-tabs-container { height: calc(v-bind(NUM_DOCUMENT_TABS) * 200px); }
-    .documents-section-tab { height: 150px; }
+    #library-section-title { height: 90px; }
+    #library-section-title { font-size: 70px; }
+    .library-section-tabs-container { height: calc(v-bind(NUM_LIBRARY_TABS) * 200px); }
+    .library-section-tab { height: 150px; }
 }
 @include dynamic-less-equal-width-rule(500) {
-    #documents-section-title { font-size: 70px; }
-    #github-tab .documents-section-tab-header { font-size: 22px; }
-    #research-paper-tab .documents-section-tab-header { font-size: 22px; }
-    .documents-section-tab { width: 87.5%; }
+    #library-section-title { font-size: 55px; }
+    .library-section-tab { width: 87.5%; }
 
-    .documents-section-tab p {
+    .library-section-tab p {
         width: calc(100% - 20px);
         padding: 0px 10px;
         font-size: 14px;

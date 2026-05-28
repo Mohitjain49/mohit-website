@@ -91,7 +91,7 @@
         </div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad" @click="(event) => { flashNavOpt(event, '/gamepad') }" pulse-loop>
+            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad/" @click="(event) => { flashNavOpt(event, '/gamepad') }" pulse-loop>
                 <font-awesome-icon icon="fa-gamepad" />
                 <span> Gamepad Controls </span>
             </RouterLink>
@@ -251,7 +251,7 @@ const CENTER_LINKS = [
 ];
 
 const NAV_MENU_EXTRAS = [
-    { path: "/documents/", icon: "fa-folder-open", color: "var(--website-light-text)", title: "My Documents" },
+    { path: "/library/", icon: "fa-book-open-reader", color: "var(--website-light-text)", title: "My Library" },
     { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
     { path: "/copyright/", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
 ];

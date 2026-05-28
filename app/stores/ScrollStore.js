@@ -99,10 +99,16 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This function sets the Lenis scroll event listener. */
     function setScrollEL() {
         if(lenis == null) { return; }
-        lenis.on("scroll", (lenisInstance) => {
-            if(webData.websiteMenuMode == 0) { webData.closeNavMenu(); }
-            scriptsStore.setLineOptions(-1);
-        });
+        lenis.on("scroll", (lenisInstance) => { onLenisScroll(lenisInstance); });
+    }
+
+    /**
+     * This function runs everytime a lenis instance occurs.
+     * @param {Lenis} lenisInstance The current instance of Lenis.
+     */
+    function onLenisScroll(lenisInstance) {
+        if(webData.websiteMenuMode == 0) { webData.closeNavMenu(); }
+        scriptsStore.setLineOptions(-1);
     }
 
     /**
@@ -118,7 +124,14 @@ export const useScrollStore = defineStore("scroll-store", () => {
             const target = document.getElementById(id);
             if(target == null) { reject("Element with id \"\""); }
 
-            const initDuration = (Math.abs((target.getBoundingClientRect().top + window.scrollY) - window.scrollY) / 4000);
+            const targetY = (target.getBoundingClientRect().top + window.scrollY);
+            if(Math.abs(window.scrollY - targetY) < 1) {
+                onLenisScroll(lenis);
+                resolve("Scroll Complete!");
+                return;
+            }
+
+            const initDuration = (Math.abs(targetY - window.scrollY) / 4000);
             const finalDuration = Math.max(0.75, Math.min((initDuration * cssToWindowHeightRatio.value), 3));
 
             scrollProgress.value.targetElement = target;
@@ -143,6 +156,11 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(isAutoScrolling.value) { return; }
         return new Promise((resolve, reject) => {
             if(!mounted.value) { reject("Website Not Loaded Yet."); }
+            if(window.scrollY < 1) {
+                onLenisScroll(lenis);
+                resolve("Scroll Complete!");
+                return;
+            }
             const duration = Math.max(0.75, Math.min(((window.scrollY / 4000) * cssToWindowHeightRatio.value), 3));
 
             scrollProgress.value.duration = duration;
