@@ -4,7 +4,11 @@
     <div v-if="showMainPopup" class="qrcode-mainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
+
         <div id="mohit-qrcode" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
+        <div id="mohit-qrcode-waiting" v-if="!qrCodeDisplay">
+            <div class="cover"> <FontAwesomeIcon icon="fa-spinner" :spin-pulse="true" /> </div>
+        </div>
 
         <div class="qrcode-mainPopup-options">
             <button v-if="(sharePopupMode == 0)" @click="webData.setQRCodePopup('filter')" class="qrcode-mainPopup-btn light" title="Remove All Hashes">
@@ -438,7 +442,7 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     );
 }
 
-#mohit-qrcode {
+#mohit-qrcode, #mohit-qrcode-waiting {
     margin: 10px 0px 7px 0px;
     width: 450px;
     height: 450px;
@@ -451,8 +455,23 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     background-position: center;
     background-repeat: no-repeat;
 }
+#mohit-qrcode-waiting > .cover {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
 #mohit-qrcode canvas {
     width: 100%;
+}
+#mohit-qrcode-waiting svg {
+    font-size: 100px;
+    color: var(--vibrant-flame);
+    user-select: none;
 }
 
 .popup-qr-text {
@@ -617,14 +636,11 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
         width: 325px;
         height: 325px;
     }
-    #mohit-qrcode {
+    #mohit-qrcode, #mohit-qrcode-waiting {
         width: 225px !important;
         height: 225px !important;
     }
 
-    #mohit-qrcode {
-        width: 100%;
-    }
     .popup-qr-text {
         padding: 5px;
         max-width: 215px;
