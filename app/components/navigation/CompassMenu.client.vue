@@ -57,6 +57,7 @@ const webData = useWebsiteDataStore();
 
 const compassMenu = shallowRef(null);
 usePulseLoopAnimation(compassMenu);
+useNavMenuScrollableManager(compassMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });

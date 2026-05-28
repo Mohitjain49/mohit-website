@@ -95,6 +95,7 @@ const router = useRouter();
 
 const scriptsMenu = shallowRef(null);
 usePulseLoopAnimation(scriptsMenu);
+useNavMenuScrollableManager(scriptsMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my documents on this website. Click here to see more about Shiki.";

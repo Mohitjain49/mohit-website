@@ -497,9 +497,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
         const type = event.type;
-        if(type === "link") {
-            window.open(event.data.url, "_blank");
-        } else if(type === "internal-link") {
+        if(type === "internal-link") {
             scrollToPage(event.data.referencedPage);
         }
     }

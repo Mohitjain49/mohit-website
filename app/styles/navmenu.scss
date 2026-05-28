@@ -244,12 +244,14 @@
     z-index: 516;
     border: 1px solid var(--website-light-text);
     border-radius: 10px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
     padding-bottom: 10px;
     box-shadow: 0px 0px 10px 1px black;
     overscroll-behavior: contain;
 }
+.mohit-navMenu.vertical-overflow {
+    border-radius: 5px;
+}
+
 :fullscreen .mohit-navMenu {
     left: 0px;
     top: 0px;

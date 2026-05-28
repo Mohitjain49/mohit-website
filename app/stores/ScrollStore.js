@@ -99,15 +99,16 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This function sets the Lenis scroll event listener. */
     function setScrollEL() {
         if(lenis == null) { return; }
-        lenis.on("scroll", (lenisInstance) => { onLenisScroll(lenisInstance); });
+        lenis.on("scroll", (lenisInstance) => { onLenisScroll(lenisInstance, "default"); });
     }
 
     /**
      * This function runs everytime a lenis instance occurs.
      * @param {Lenis} lenisInstance The current instance of Lenis.
+     * @param {"default" | "no-scroll"} customEventType The event type
      */
-    function onLenisScroll(lenisInstance) {
-        if(webData.websiteMenuMode == 0) { webData.closeNavMenu(); }
+    function onLenisScroll(lenisInstance, customEventType = "default") {
+        if(webData.websiteMenuMode == 0 || customEventType === "no-scroll") { webData.closeNavMenu(); }
         scriptsStore.setLineOptions(-1);
     }
 
@@ -126,7 +127,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
             const targetY = (target.getBoundingClientRect().top + window.scrollY);
             if(Math.abs(window.scrollY - targetY) < 1) {
-                onLenisScroll(lenis);
+                onLenisScroll(lenis, "no-scroll");
                 resolve("Scroll Complete!");
                 return;
             }
@@ -157,7 +158,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
         return new Promise((resolve, reject) => {
             if(!mounted.value) { reject("Website Not Loaded Yet."); }
             if(window.scrollY < 1) {
-                onLenisScroll(lenis);
+                onLenisScroll(lenis, "no-scroll");
                 resolve("Scroll Complete!");
                 return;
             }

@@ -26,6 +26,7 @@ export function usePulseLoopAnimation(container = null) {
     /** This function enables the pulse loop HTML Attribute. */
     async function enable() {
         if(enabled.value || container.value == null) { return; }
+        await sleep(750);
         await setEventListeners();
         
         if(observer == null) { observer = new MutationObserver(() => { setEventListeners(); }); }
@@ -132,4 +133,31 @@ export function useScrollPercentage(elementId = "") {
 
     useRafFn(() => { calculate(); }, { immediate: true, fpsLimit: 30, once: false });
     return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate }
+}
+
+/**
+ * This utility tracks a navigation menu's dimensions to modify its styles based on whether it is scrollable or not.
+ * @param {import('vue').ShallowRef<HTMLElement>} menu This is the main container to which the utility will apply to.
+ */
+export function useNavMenuScrollableManager(menu) {
+    const OVERFLOW_CLASS = "vertical-overflow";
+    const menuScrollable = shallowRef(false);
+
+    /** This function checks whether the menu is scrollable or not and sets the overflow class accordingly. */
+    function checkMenu() {
+        const element = menu.value;
+        const noElementPresent = (element == null);
+
+        menuScrollable.value = (noElementPresent ? false : (element.scrollHeight > element.clientHeight));
+        if(noElementPresent) { return; }
+
+        if(menuScrollable.value) {
+            element.classList.add(OVERFLOW_CLASS);
+        } else {
+            element.classList.remove(OVERFLOW_CLASS);
+        }
+    }
+
+    useRafFn(() => { checkMenu(); }, { immediate: true, fpsLimit: 30, once: false });
+    return { menuScrollable, checkMenu }
 }

@@ -168,6 +168,7 @@ const router = useRouter();
 
 const docMenu = shallowRef(null);
 usePulseLoopAnimation(docMenu);
+useNavMenuScrollableManager(docMenu);
 
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";
 const GOOGLE_CHOOSE_FOLDER_TITLE = "Choose The Folder In Your Google Drive Where You Would Like To Keep My Document.";
