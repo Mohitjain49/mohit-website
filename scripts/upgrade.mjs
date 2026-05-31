@@ -156,13 +156,13 @@ async function main() {
 
         // This section handles updating the Git Hooks.
         const updateGitHooks = await rl.question('Update Git Hooks (y/n): ');
-        const updateGitHooksBool = (confirmInstall.toLowerCase() === "y" || confirmInstall.toLowerCase() === "yes");
+        const updateGitHooksBool = (updateGitHooks.toLowerCase() === "y" || updateGitHooks.toLowerCase() === "yes");
 
         if(updateGitHooksBool) {
             runCommand('npm run update-git-hooks');
             console.log("✅ Updated Git Hooks!")
         } else {
-            console.log("🛑 Will Not Update Git Hooks.");
+            console.log("🛑 Will Not Update Git Hooks.\n\n");
         }
 
         // This section marks the end of the upgrade script and ends the process.

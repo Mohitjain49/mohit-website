@@ -70,6 +70,7 @@ export function usePulseLoopAnimation(container = null) {
         controller = new AbortController();
 
         await nextTick();
+        await sleep(5);
         if(!container.value) { return; }
 
         const signal = controller.signal;
@@ -136,12 +137,28 @@ export function useScrollPercentage(elementId = "") {
 }
 
 /**
- * This utility tracks a navigation menu's dimensions to modify its styles based on whether it is scrollable or not.
+ * This utility adds a few extra features to a Website Menu.
  * @param {import('vue').ShallowRef<HTMLElement>} menu This is the main container to which the utility will apply to.
  */
-export function useNavMenuScrollableManager(menu) {
+export function useWebsiteMenuUtility(menu) {
     const OVERFLOW_CLASS = "vertical-overflow";
+    const SWIPE_THRESHOLD = 50;
+
     const menuScrollable = shallowRef(false);
+    const swipeEnabled = shallowRef(false);
+
+    const overflowClassAdded = shallowRef(false);
+    const menuTouched = shallowRef(false);
+
+    /** @type {AbortController} This abort controller can disable the swipe event listeners for a website menu. */
+    var controller = null;
+    var startY = 0;
+
+    /** This function closes the website menu. */
+    function closeMenu() {
+        useWebsiteDataStore().closeNavMenu();
+        triggerClickSound();
+    }
 
     /** This function checks whether the menu is scrollable or not and sets the overflow class accordingly. */
     function checkMenu() {
@@ -153,11 +170,88 @@ export function useNavMenuScrollableManager(menu) {
 
         if(menuScrollable.value) {
             element.classList.add(OVERFLOW_CLASS);
+            overflowClassAdded.value = true;
         } else {
             element.classList.remove(OVERFLOW_CLASS);
+            overflowClassAdded.value = false;
+        }
+    }
+
+    /** This function enables the swipe feature. */
+    async function enableSwipe() {
+        if(swipeEnabled.value) { return; }
+        if(controller != null) { controller.abort(); }
+
+        await nextTick();
+        await sleep(5);
+
+        controller = new AbortController();
+        const element = menu.value;
+        if(!element || !window || element == null) { return; }
+
+        const signal = controller.signal;
+        element.addEventListener("pointerdown", (event) => { onMenuPointerEvent(event); }, { signal });
+        window.addEventListener("pointerup", (event) => { onMenuPointerEvent(event); }, { signal });
+
+        element.addEventListener("touchstart", (event) => { onMenuTouchEvent(event); }, { signal });
+        window.addEventListener("touchend", (event) => { onMenuTouchEvent(event); }, { signal });
+        swipeEnabled.value = true;
+    }
+
+    /** This function disables the swipe feature. */
+    function disableSwipe() {
+        if(!swipeEnabled.value) { return; }
+        if(controller != null) { controller.abort(); }
+
+        controller = null;
+        swipeEnabled.value = false;
+    }
+
+    /** This function resets the swipe feature. */
+    async function resetSwipe() {
+        disableSwipe();
+        await enableSwipe();
+    }
+
+    /**
+     * This function is triggered when the user enacts a pointer event on a website menu.
+     * @param {PointerEvent} event The Pointer Event. 
+     */
+    function onMenuPointerEvent(event = new PointerEvent()) {
+        if(typeof event.clientY !== "number") { return; }
+        if(event.type === "pointerdown" && !menuTouched.value) {
+            startY = event.clientY;
+            menuTouched.value = true;
+        } else if(event.type === "pointerup" && menuTouched.value) {
+            if((startY - event.clientY) > SWIPE_THRESHOLD) { closeMenu(); }
+            menuTouched.value = false;
+        }
+    }
+
+    /**
+     * This function is triggered when the user enacts a touch event on a website menu.
+     * @param {TouchEvent} event The Touch Event. 
+     */
+    function onMenuTouchEvent(event = new TouchEvent()) {
+        if(event.type === "touchstart" && !menuTouched.value) {
+            const firstTouch = event.touches.item(0);
+            if(typeof firstTouch?.clientY !== 'number') { return; }
+            startY = firstTouch.clientY;
+            menuTouched.value = true;
+        } else if(event.type === "touchend" && menuTouched.value) {
+            const firstTouch = event.changedTouches.item(0);
+            if(typeof firstTouch?.clientY !== 'number') { return; }
+            if((startY - firstTouch.clientY) > SWIPE_THRESHOLD) { closeMenu(); }
+            menuTouched.value = false;
         }
     }
 
     useRafFn(() => { checkMenu(); }, { immediate: true, fpsLimit: 30, once: false });
-    return { menuScrollable, checkMenu }
+    onMounted(() => { enableSwipe(); });
+    onBeforeUnmount(() => { disableSwipe(); });
+    watch(menu, () => { resetSwipe(); });
+
+    return { menuScrollable, swipeEnabled, overflowClassAdded, menuTouched,
+        checkMenu, enableSwipe, disableSwipe, resetSwipe
+    }
 }
