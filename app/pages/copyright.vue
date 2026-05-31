@@ -48,7 +48,13 @@ const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuil
 const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
 usePulseLoopAnimation(copyrightBodyRef);
-onMounted(() => { initWebData(); });
+onMounted(() => {
+    initWebData();
+    COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
+    RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);
+    RELEASE_TIME.value = ("(" + $websiteBuild.releaseTime + ")");
+    PROJECT_VERSION.value = ("Version " + $websiteBuild.version);
+});
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website.",
     "rgb(248, 206, 171)"
