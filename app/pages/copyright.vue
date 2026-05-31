@@ -5,12 +5,24 @@
         <div class="copyright-body" ref="copyright-main-body">
             <h1 class="copyright-body-header">
                 <font-awesome-icon icon="fa-copyright" />
-                <span v-memo="[isMounted]"> {{ COPYRIGHT_TEXT }} </span>
+                <ClientOnly>
+                    <template v-if="isMounted"> <span> {{ COPYRIGHT_TEXT }} </span> </template>
+                    <template #fallback> <span> {{ COPYRIGHT_TEXT }} </span> </template>
+                </ClientOnly>
             </h1>
 
-            <h2 v-memo="[isMounted]" class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
-            <h2 v-memo="[isMounted]" class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
-            <h2 v-memo="[isMounted]" class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
+            <ClientOnly>
+                <template v-if="isMounted">
+                    <h2 v-memo="[isMounted]" class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
+                    <h2 v-memo="[isMounted]" class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
+                    <h2 v-memo="[isMounted]" class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
+                </template>
+                <template #fallback>
+                    <h2 v-memo="[isMounted]" class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
+                    <h2 v-memo="[isMounted]" class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
+                    <h2 v-memo="[isMounted]" class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
+                </template>
+            </ClientOnly>
 
             <div class="copyright-body-desc">
                 I'm glad you're here and hope you find inspiration in my work.
