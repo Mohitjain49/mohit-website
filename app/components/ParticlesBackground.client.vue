@@ -3,6 +3,8 @@
 </template>
 
 <script setup>
+import { has } from "lodash-es";
+
 /**
  * @type {Ref<import('@tsparticles/engine').Container>} The container representing the background.
  * Refer to the tsParticles docs: {@link https://particles.js.org/docs/}
@@ -35,12 +37,18 @@ function resetParticles() {
     tsparticlesContainer.value.reset(props.particlesOptions);
 }
 
+/** This returns whether the density property for a particles background exists. */
+function checkDensityExists() { return has(props.particlesOptions, 'particles.number.density.enable'); }
+
+/** This returns whether the number's "value" property for a particles background exists. */
+function checkParticlesNumberExists() { return has(props.particlesOptions, 'particles.number.value'); }
+
 /**
  * This function is responsible for changing the intensity of tsparticles depending on the battery status.
  * It's main purpose is to have the app take up less operating power if the user's laptop battery is low.
  */
 function onBatteryStatusChange() {
-    if(!battery.isSupported.value) { return; }
+    if(!battery.isSupported.value || !checkParticlesNumberExists()) { return; }
     const prevStatus = batteryLow.value;
     batteryLow.value = (battery.level.value <= BATTERY_LOW_THRESHOLD && !battery.charging.value);
 
@@ -58,8 +66,8 @@ function onBatteryStatusChange() {
 
 // This resets the number of particles and destroys the container before unmounting the page.
 onBeforeUnmount(() => {
-    if(particlesHalved.value) { (props.particlesOptions.particles.number.value *= 2); }
-    props.particlesOptions.particles.number.density.enable = true;
+    if(particlesHalved.value && checkParticlesNumberExists()) { (props.particlesOptions.particles.number.value *= 2); }
+    if(checkDensityExists()) { props.particlesOptions.particles.number.density.enable = true; }
     if(tsparticlesContainer.value != null) { tsparticlesContainer.value.destroy(true); }
 });
 
@@ -76,6 +84,7 @@ watch(webpageHidden, (newValue) => {
 // This disables the "density" property of the TS Particles Background when the viewport size gets too large.
 // If not disabled, the particles lags the user's device.
 watch(disableParticleDensity, (newValue) => {
+    if(!checkDensityExists()) { return; }
     if(newValue) {
         props.particlesOptions.particles.number.density.enable = false;
         resetParticles();

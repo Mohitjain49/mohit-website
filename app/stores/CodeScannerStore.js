@@ -25,7 +25,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
 
     const scanModeIcon = computed(() => { return ((scanMode.value == 0) ? "fa-file-arrow-up" : "fa-video"); });
     const scanModeBtnTitle = computed(() => { return ((scanMode.value == 0) ? "Switch To Drag and Drop" : "Switch to Video"); });
-    const draggingImageText = computed(() => { return (!draggingImage.value ? "Drag Your Image Here..." : "Drop Your Image."); });
+    const draggingImageText = computed(() => { return (!draggingImage.value ? "Click Here or Drag Your Image Here To Find Its QR Codes." : "Drop Your Image Here."); });
 
     /**
      * This function mounts the page hosting the code scanner.
