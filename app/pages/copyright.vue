@@ -6,21 +6,20 @@
             <h1 class="copyright-body-header">
                 <font-awesome-icon icon="fa-copyright" />
                 <ClientOnly>
-                    <template v-if="isMounted"> <span> {{ COPYRIGHT_TEXT }} </span> </template>
+                    <span> {{ COPYRIGHT_TEXT }} </span>
                     <template #fallback> <span> {{ COPYRIGHT_TEXT }} </span> </template>
                 </ClientOnly>
             </h1>
 
             <ClientOnly>
-                <template v-if="isMounted">
-                    <h2 v-memo="[isMounted]" class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
-                    <h2 v-memo="[isMounted]" class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
-                    <h2 v-memo="[isMounted]" class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
-                </template>
+                <h2 class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
+                <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
+                <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
+
                 <template #fallback>
-                    <h2 v-memo="[isMounted]" class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
-                    <h2 v-memo="[isMounted]" class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
-                    <h2 v-memo="[isMounted]" class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
+                    <h2 class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
+                    <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
+                    <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
                 </template>
             </ClientOnly>
 
@@ -54,18 +53,13 @@ const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
 const updateButtonClicked = ref(false);
-const isMounted = ref(false);
-
 const COPYRIGHT_TEXT = computed(() => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 const RELEASE_DATE = computed(() => { return ("Released On: " + $websiteBuild.releaseDate); });
 const RELEASE_TIME = computed(() => { return ("(" + $websiteBuild.releaseTime + ")"); });
 const PROJECT_VERSION = computed(() => { return ("Version " + $websiteBuild.version); });
 
 usePulseLoopAnimation(copyrightBodyRef);
-onMounted(() => {
-    initWebData();
-    nextTick(() => { isMounted.value = true; })
-});
+onMounted(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website.",
     "rgb(248, 206, 171)"

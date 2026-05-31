@@ -6,10 +6,10 @@
 import { has } from "lodash-es";
 
 /**
- * @type {Ref<import('@tsparticles/engine').Container>} The container representing the background.
+ * @type {import('vue').ShallowRef<import('@tsparticles/engine').Container>} The container representing the background.
  * Refer to the tsParticles docs: {@link https://particles.js.org/docs/}
  */
-const tsparticlesContainer = ref(null);
+const tsparticlesContainer = shallowRef(null);
 const props = defineProps({ particlesOptions: { type: Object, required: true } });
 
 const BATTERY_LOW_THRESHOLD = 0.2 // This is a value between 0 and 1 that represents the user having "low battery".
