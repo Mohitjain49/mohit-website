@@ -5,23 +5,12 @@
         <div class="copyright-body" ref="copyright-main-body">
             <h1 class="copyright-body-header">
                 <font-awesome-icon icon="fa-copyright" />
-                <ClientOnly>
-                    <span> {{ COPYRIGHT_TEXT }} </span>
-                    <template #fallback> <span> {{ COPYRIGHT_TEXT }} </span> </template>
-                </ClientOnly>
+                <span> {{ COPYRIGHT_TEXT }} </span>
             </h1>
 
-            <ClientOnly>
-                <h2 class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
-                <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
-                <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
-
-                <template #fallback>
-                    <h2 class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
-                    <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
-                    <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
-                </template>
-            </ClientOnly>
+            <h2 class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
+            <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
+            <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
 
             <div class="copyright-body-desc">
                 I'm glad you're here and hope you find inspiration in my work.
@@ -53,10 +42,10 @@ const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
 const updateButtonClicked = ref(false);
-const COPYRIGHT_TEXT = computed(() => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
-const RELEASE_DATE = computed(() => { return ("Released On: " + $websiteBuild.releaseDate); });
-const RELEASE_TIME = computed(() => { return ("(" + $websiteBuild.releaseTime + ")"); });
-const PROJECT_VERSION = computed(() => { return ("Version " + $websiteBuild.version); });
+const COPYRIGHT_TEXT = useState("copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
+const RELEASE_DATE = useState("release-date", () => { return ("Released On: " + $websiteBuild.releaseDate); });
+const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuild.releaseTime + ")"); });
+const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
 usePulseLoopAnimation(copyrightBodyRef);
 onMounted(() => { initWebData(); });
