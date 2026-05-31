@@ -190,7 +190,7 @@ usePulseLoopAnimation(navBar);
 usePulseLoopAnimation(navMenu);
 usePulseLoopAnimation(navWidgets);
 usePulseLoopAnimation(shareWidget);
-useNavMenuScrollableManager(navMenu);
+useWebsiteMenuUtility(navMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });

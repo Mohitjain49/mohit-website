@@ -298,7 +298,10 @@ export const CODE_SCANNER_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
     particles: {
-        number: { value: 150 },
+        number: {
+            density: { enable: true, area: 1200 },
+            value: 150
+        },
         paint: { fill: { enable: true, color: { value: "rgb(159, 191, 255)" }}},
         shape: { type: "square" },
         opacity: {

@@ -243,13 +243,16 @@
     background-color: black;
     z-index: 516;
     border: 1px solid var(--website-light-text);
-    border-radius: 10px;
+    border-radius: 15px;
     padding-bottom: 10px;
     box-shadow: 0px 0px 10px 1px black;
     overscroll-behavior: contain;
+    user-select: none;
 }
 .mohit-navMenu.vertical-overflow {
-    border-radius: 5px;
+    border-radius: 15px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 :fullscreen .mohit-navMenu {
@@ -269,6 +272,7 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    user-select: none;
 }
 .mohit-navMenu-opt {
     width: 100%;

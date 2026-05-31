@@ -5,12 +5,12 @@
         <div class="copyright-body" ref="copyright-main-body">
             <h1 class="copyright-body-header">
                 <font-awesome-icon icon="fa-copyright" />
-                <span v-memo="[isMounted]"> {{ COPYRIGHT_TEXT }} </span>
+                <span> {{ COPYRIGHT_TEXT }} </span>
             </h1>
 
-            <h2 v-memo="[isMounted]" class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
-            <h2 v-memo="[isMounted]" class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
-            <h2 v-memo="[isMounted]" class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
+            <h2 class="copyright-body-subheader version"> {{ PROJECT_VERSION }} </h2>
+            <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
+            <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
 
             <div class="copyright-body-desc">
                 I'm glad you're here and hope you find inspiration in my work.
@@ -42,17 +42,18 @@ const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
 const updateButtonClicked = ref(false);
-const isMounted = ref(false);
-
-const COPYRIGHT_TEXT = computed(() => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
-const RELEASE_DATE = computed(() => { return ("Released On: " + $websiteBuild.releaseDate); });
-const RELEASE_TIME = computed(() => { return ("(" + $websiteBuild.releaseTime + ")"); });
-const PROJECT_VERSION = computed(() => { return ("Version " + $websiteBuild.version); });
+const COPYRIGHT_TEXT = useState("copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
+const RELEASE_DATE = useState("release-date", () => { return ("Released On: " + $websiteBuild.releaseDate); });
+const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuild.releaseTime + ")"); });
+const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
 usePulseLoopAnimation(copyrightBodyRef);
 onMounted(() => {
     initWebData();
-    nextTick(() => { isMounted.value = true; })
+    COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
+    RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);
+    RELEASE_TIME.value = ("(" + $websiteBuild.releaseTime + ")");
+    PROJECT_VERSION.value = ("Version " + $websiteBuild.version);
 });
 useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website.",

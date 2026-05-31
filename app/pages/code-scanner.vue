@@ -1,5 +1,5 @@
 <script setup>
-import { QrcodeStream, QrcodeDropZone } from 'vue-qrcode-reader';
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader';
 const VUE_QRCODE_READER_GITHUB = "https://github.com/gruhn/vue-qrcode-reader";
 
 const codeScanner = useCodeScannerStore();
@@ -9,6 +9,13 @@ onBeforeUnmount(() => { codeScanner.deactivateCamera(); });
 useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner",
     "This page is capable of scanning and reading the values of Barcodes and QR Codes."
 ));
+
+/** This simulates a click on the QR Code Capture Element. */
+function clickOnQrcodeCapture() {
+    if(!document || !document.getElementById) { return; }
+    const element = document.getElementById("qrcode-capture-input");
+    if(element != null) { element.click(); }
+}
 </script>
 
 <template>
@@ -19,9 +26,9 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
     <div class="code-scanner-main">
         <div class="scanner-component-container">
             <QrcodeStream v-if="codeScanner.scanMode == 0"
-                @detect="(event) => {codeScanner.onDetectCode(event)}"
-                @camera-on="(event) => {codeScanner.onCameraActive(event)}"
-                @camera-off="(event) => {codeScanner.deactivateCamera(event)}"
+                @detect="(event) => { codeScanner.onDetectCode(event); }"
+                @camera-on="(event) => { codeScanner.onCameraActive(event); }"
+                @camera-off="(event) => { codeScanner.deactivateCamera(event); }"
                 :formats="codeScanner.BARCODE_FORMATS"
                 :style="{ 'display': (!codeScanner.cameraActive ? 'none' : '') }"
             />
@@ -29,13 +36,16 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
                 v-html="'Waiting On Camera...'"
                 v-if="!codeScanner.cameraActive && codeScanner.scanMode == 0">
             </div>
-            <QrcodeDropZone v-if="codeScanner.scanMode == 1" class="scanner-component-dropZone"
-                @dragover="(e) => { codeScanner.setDraggingImage(e); }"
-                @detect="(event) => {codeScanner.onDetectCode(event)}"
-                :formats="codeScanner.BARCODE_FORMATS">
-                
-                {{ codeScanner.draggingImageText }}
-            </QrcodeDropZone>
+            <div v-if="codeScanner.scanMode == 1" class="scanner-component-dropZone">
+                <QrcodeDropZone v-if="codeScanner.scanMode == 1" class="scanner-component-dropZone-overlay"
+                    @dragover="(e) => { codeScanner.setDraggingImage(e); }"
+                    @detect="(event) => { codeScanner.onDetectCode(event); }"
+                    @click="() => { clickOnQrcodeCapture(); }"
+                    :formats="codeScanner.BARCODE_FORMATS"
+                />
+                <span> {{ codeScanner.draggingImageText }} </span>
+                <QrcodeCapture id="qrcode-capture-input" @detect="(event) => { codeScanner.onDetectCode(event); }" />
+            </div>
         </div>
         <div class="code-scanner-console">
             <div class="scanner-console-top">
@@ -138,18 +148,33 @@ useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner"
 
 .scanner-component-dropZone {
     position: relative;
-    cursor: default;
+    cursor: pointer;
     user-select: none;
-    width: 100%;
+    width: calc(100% - 10px);
     height: 100%;
     background-color: var(--dark-background);
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     z-index: 0;
+    padding: 0px 5px;
     font-family: 'Lexend', sans-serif;
     font-size: 28px;
+    overflow: hidden;
+}
+.scanner-component-dropZone-overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 10;
+}
+#qrcode-capture-input {
+    display: none;
 }
 
 .code-scanner-console {
