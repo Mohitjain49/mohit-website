@@ -29,6 +29,7 @@ export function usePulseLoopAnimation(container = null) {
         await sleep(750);
         await setEventListeners();
         
+        if(container.value == null) { return; }
         if(observer == null) { observer = new MutationObserver(() => { setEventListeners(); }); }
         observer.observe(container.value, { childList: true, subtree: true })
         enabled.value = true;
@@ -143,6 +144,7 @@ export function useScrollPercentage(elementId = "") {
 export function useWebsiteMenuUtility(menu) {
     const OVERFLOW_CLASS = "vertical-overflow";
     const SWIPE_THRESHOLD = 50;
+    const { cssToWindowHeightRatio } = useMohitWindowSize();
 
     const menuScrollable = shallowRef(false);
     const swipeEnabled = shallowRef(false);
@@ -223,7 +225,7 @@ export function useWebsiteMenuUtility(menu) {
             startY = event.clientY;
             menuTouched.value = true;
         } else if(event.type === "pointerup" && menuTouched.value) {
-            if((startY - event.clientY) > SWIPE_THRESHOLD) { closeMenu(); }
+            if((startY - event.clientY) > (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)) { closeMenu(); }
             menuTouched.value = false;
         }
     }
@@ -241,7 +243,7 @@ export function useWebsiteMenuUtility(menu) {
         } else if(event.type === "touchend" && menuTouched.value) {
             const firstTouch = event.changedTouches.item(0);
             if(typeof firstTouch?.clientY !== 'number') { return; }
-            if((startY - firstTouch.clientY) > SWIPE_THRESHOLD) { closeMenu(); }
+            if((startY - firstTouch.clientY) > (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)) { closeMenu(); }
             menuTouched.value = false;
         }
     }

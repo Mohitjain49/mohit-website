@@ -83,7 +83,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     height: fit-content;
     min-height: var(--true-100vh, 100vh);
     width: 100%;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
     padding-bottom: 70px;
 }
 .documents-section-mainText {

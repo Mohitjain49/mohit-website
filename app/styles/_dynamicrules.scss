@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // This rule is a dynamic version of the "max-width" rule that accounts for the "zoom" css property.
 @mixin dynamic-less-equal-width-rule($value) {
     @at-root :global(html) { --less-equal-width-bp_#{$value}: #{$value}; }
@@ -39,5 +41,14 @@
     
     html:not(.js__active) {
         @media (min-height: #{$value}px) { @content; }
+    }
+}
+
+// This function applies the zoom factor to any numeric value.
+@function apply-zoom-factor($value) {
+    @if math.is-unitless($value) {
+        @return calc($value * 1px * var(--webpage-zoom-factor));
+    } @else {
+        @return calc($value * var(--webpage-zoom-factor));
     }
 }
