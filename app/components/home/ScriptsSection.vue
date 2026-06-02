@@ -92,8 +92,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     height: fit-content;
     min-height: var(--true-100vh, 100vh);
     width: 100%;
-    scroll-margin-top: 70px;
-    padding-bottom: 70px;
+    padding: 70px 0px;
 }
 .scripts-section-mainText {
     width: 100%;
@@ -116,7 +115,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 #scripts-section-title {
     width: 100%;
     height: 125px;
-    padding-top: 20px;
+    padding-top: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -250,8 +249,10 @@ useIntersectionObserver(tabRefs, (entry) => {
     #scripts-section-desc { text-align: left; }
 }
 @include dynamic-less-equal-width-rule(600) {
-    #scripts-section-title { height: 90px; }
-    #scripts-section-title { font-size: 80px; }
+    #scripts-section-title {
+        height: 90px;
+        font-size: 80px;
+    }
     .scripts-section-tabs-container { height: calc(v-bind(NUM_SCRIPTS_TABS) * 200px); }
     .scripts-section-tab { height: 150px; }
 }
