@@ -255,7 +255,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         nextTick(() => {
             const hashStr = router.currentRoute.value.hash.substring(1);
             window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            if(hashStr === "" || onHostedFileRoute.value) { return; }
+            if(hashStr === "" || documentStore.onDocumentRoute) { return; }
 
             allImagesReady().then(() => {
                 try {

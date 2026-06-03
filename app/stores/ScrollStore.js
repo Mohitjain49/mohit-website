@@ -119,11 +119,11 @@ export const useScrollStore = defineStore("scroll-store", () => {
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
     async function scrollToId(id = "start", offset = 0, delay = 0) {
-        if(isAutoScrolling.value) { return; }
+        if(isAutoScrolling.value || !lenis) { return; }
         return new Promise((resolve, reject) => {
             if(!mounted.value) { reject("Website Not Loaded Yet."); }
             const target = document.getElementById(id);
-            if(target == null) { reject("Element with id \"\""); }
+            if(target == null) { reject("Element with id \"" + id + "\" does not exist."); }
 
             const targetY = (target.getBoundingClientRect().top + window.scrollY);
             if(Math.abs(window.scrollY - targetY) < 1) {
@@ -156,7 +156,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function scrollToTop(instant = false, delay = 0) {
         if(isAutoScrolling.value) { return; }
         return new Promise((resolve, reject) => {
-            if(!mounted.value) { reject("Website Not Loaded Yet."); }
+            if(!mounted.value || !lenis) { reject("Website Not Loaded Yet."); }
             if(window.scrollY < 1) {
                 onLenisScroll(lenis, "no-scroll");
                 resolve("Scroll Complete!");

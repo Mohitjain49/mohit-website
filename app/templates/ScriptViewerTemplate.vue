@@ -4,13 +4,13 @@
 
 <template>
 <main id="script-page" class="personal-web-body transparent">
-    <div v-if="(scriptsStore.scripts[index].htmlLoaded == 2)" class="mohit-main-script" id="mohit-main-script">
+    <div class="mohit-main-script" id="mohit-main-script">
         <div ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
                 <button class="lightblue" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
                     <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.scriptDownloadStatus.pending" />
                 </button>
-                <button class="blue" v-if="scriptsStore.saveAsSupported" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
+                <button class="blue" v-if="(scriptsStore.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
                         <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.scriptSaveStatus.pending" />
                 </button>
                 <button class="lightblue" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>
@@ -32,14 +32,7 @@
                 </button>
             </div>
         </div>
-        <div ref="script-html" class="code-file-inHTML" v-html="scriptsStore.scripts[index].html"></div>
-    </div>
-
-    <div v-else-if="(scriptsStore.scripts[index].htmlLoaded == 3)" class="code-file-loading-container">
-        <FontAwesomeIcon class="code-file-loadingError" icon="fa-square-xmark" />
-    </div>
-    <div v-else class="code-file-loading-container">
-        <FontAwesomeIcon class="code-file-loadingSpinner" icon="fa-spinner" :spin-pulse="isMounted" />
+        <div ref="script-html" class="code-file-inHTML" v-html="html"></div>
     </div>
 
     <template v-if="fullScreenStore.fullScreenSet">
@@ -70,6 +63,9 @@ usePulseLoopAnimation(scriptOptions);
 onMounted(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
+
+const script = scriptsStore.scripts[props.index];
+const { html } = await renderCodeScript(script.code, script.suffix, script.path);
 
 /** This function opens the scripts menu. */
 function openScriptsMenu() {

@@ -165,7 +165,6 @@ function manageGamepadTabGlow(oldValue = "") {
     const hash = router.currentRoute.value.hash;
     if(hash !== "" && hash.length > 0) {
         const newIndex = GAMEPAD_PAGE_TABS.findIndex(item => item === hash.substring(1));
-        console.log(hash, newIndex)
         if(newIndex != -1) {
             const newTab = document.getElementById(GAMEPAD_PAGE_TABS[newIndex]);
             if(newTab && typeof (newTab.classList !== "undefined") && (newTab.classList instanceof DOMTokenList)) {

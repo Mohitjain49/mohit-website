@@ -11,12 +11,6 @@
     --true-100vh: 100vh;
     --true-100vw: 100vw;
     --body-height: calc(var(--true-100vh, 100vh) - 50px);
-
-    --safe-top: env(safe-area-inset-top);
-    --safe-right: env(safe-area-inset-right);
-    --safe-bottom: env(safe-area-inset-bottom);
-    --safe-left: env(safe-area-inset-left);
-
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
 
