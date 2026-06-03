@@ -1,8 +1,11 @@
 // This fires a window event for every route change.
 export default defineNuxtPlugin((nuxtApp) => {
     const router = useRouter();
+    const scrollStore = useScrollStore();
+
     router.beforeEach((to, from) => {
         if(window) { window.dispatchEvent(new Event("router-before-change", { cancelable: false })); }
+        scrollStore.cancelAutoscroll();
         return true;
     });
     router.afterEach((to, from) => {
