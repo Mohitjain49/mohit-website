@@ -165,7 +165,6 @@ function manageGamepadTabGlow(oldValue = "") {
     const hash = router.currentRoute.value.hash;
     if(hash !== "" && hash.length > 0) {
         const newIndex = GAMEPAD_PAGE_TABS.findIndex(item => item === hash.substring(1));
-        console.log(hash, newIndex)
         if(newIndex != -1) {
             const newTab = document.getElementById(GAMEPAD_PAGE_TABS[newIndex]);
             if(newTab && typeof (newTab.classList !== "undefined") && (newTab.classList instanceof DOMTokenList)) {
@@ -226,7 +225,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     border-radius: 15px;
     font-family: "Lexend", sans-serif;
     margin-left: 20px;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 .gamepad-controls h2 {
     font-size: 30px;
@@ -283,7 +282,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     background-color: var(--dark-background);
     border-radius: 20px;
     font-family: 'Montserrat', sans-serif;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 .gamepad-desc-icon {
     position: absolute;
@@ -320,7 +319,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
     justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 .gamepad-connection-statusBar {
     width: 396px;

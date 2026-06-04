@@ -206,7 +206,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     margin-top: 30px;
     border: 2px solid #3d3d3d;
     background-color: lightgray;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 .dark-mode #directions {
     border-color: transparent;

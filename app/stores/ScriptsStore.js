@@ -51,7 +51,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** The GitHub Link of the script currently being displayed. */
     const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
     const scriptLoading = computed(() => { return (onScriptRoute.value ? (scripts[currentScriptRoute.value].htmlLoaded.value == 1) : false); });
-    const scriptNumLines = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].numLines.value : 0); });
 
     const downloadIcon = computed(() => {
         const downloadObj = scriptDownloadStatus.value;
@@ -186,17 +185,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         webData.mountWebData();
         if(!onScriptRoute.value) { return; }
 
-        try {
-            await nextTick();
-            await scripts[currentScriptRoute.value].initCodeScriptElement();
-            await sleep(10);
+        await nextTick();
+        await sleep(10);
 
-            const hashStr = router.currentRoute.value.hash.substring(1);
-            manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
-            if(hashStr !== "") { goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 80), 0); }
-        } catch(e) {
-            scrollToTop(true, 0);
-        }
+        const hashStr = router.currentRoute.value.hash.substring(1);
+        manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
     }
 
     /** This function unmounts a page that hosts a script. */
@@ -318,7 +311,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function manageLineNumberFocus(newLine = -1, oldLine = -1, styleSet = 0) {
         const CLASS_NAME = (styleSet == 0 ? "num-highlight" : "num-highlight-optionsOpen");
-        const numCodeLines = scriptNumLines.value;
+        const numCodeLines = Number.POSITIVE_INFINITY;
         
         if(Number.isNaN(newLine) || !Number.isInteger(newLine)) { newLine = -1; }
         if(Number.isNaN(oldLine) || !Number.isInteger(oldLine)) { oldLine = -1; }
@@ -351,7 +344,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
-        currentScriptLink, scriptLoading, scriptNumLines, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
+        currentScriptLink, scriptLoading, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, placeLineOptionsOnCode
@@ -372,9 +365,7 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
     /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = ref(null);
     const router = useRouter();
-
     const htmlLoaded = ref(0);
-    const numLines = ref(0);
 
     const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
@@ -391,18 +382,5 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         return (path === pathname || (path + "/") === pathname);
     }
 
-    /** This function manages creating a string consisting of HTML that can be displayed to a user. */
-    async function initCodeScriptElement() {
-        if(htmlLoaded.value != 0) { return; }
-        htmlLoaded.value = 1;
-
-        const { success, html: htmlResult, numLines: numCodeLines } = await renderCodeScript(code, suffix, path);
-        htmlLoaded.value = (success ? 2 : 3);
-        html.value = htmlResult;
-        numLines.value = numCodeLines;
-    }
-
-    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, numLines,
-        initBlob, checkPath, initCodeScriptElement
-    }
+    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, initBlob, checkPath }
 }

@@ -157,7 +157,7 @@ const EXTRA_ROUTES = [
     padding-top: 25px;
     z-index: 20;
     border-top: 2px solid var(--website-light-text);
-    scroll-margin-top: 50px;
+    scroll-margin-top: apply-zoom-factor(50);
 }
 
 .footer-body {

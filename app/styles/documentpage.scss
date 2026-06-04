@@ -12,20 +12,20 @@
     margin: 0px auto;
     width: calc(var(--total-scale-factor) * 612px) !important;
     height: calc(var(--total-scale-factor) * 792px) !important;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 .tato-pdf-github-instructions {
     margin: 0px auto;
     margin-bottom: 20px;
     width: calc(var(--total-scale-factor) * 612px) !important;
     height: calc(var(--total-scale-factor) * 792px) !important;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 #tato-pdf-certificate {
     margin: 0 auto;
     width: fit-content;
     height: fit-content;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 
 .markdown-body {
@@ -57,7 +57,7 @@
 }
 
 .pdf-page-innerContainer {
-    scroll-margin-top: 67px;
+    scroll-margin-top: apply-zoom-factor(67);
     position: relative;
     height: fit-content;
     width: fit-content;

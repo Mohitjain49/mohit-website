@@ -27,11 +27,11 @@
 }
 .contact-me-box.web-service {
     left: calc(100% - 525px);
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 .contact-me-box.socials {
     left: 50px;
-    scroll-margin-top: 70px;
+    scroll-margin-top: apply-zoom-factor(70);
 }
 
 .contact-box-line {
@@ -299,7 +299,7 @@
     margin-bottom: 13px;
     background-color: var(--silver-light);
     transition: box-shadow 0.4s;
-    scroll-margin-top: 85px;
+    scroll-margin-top: apply-zoom-factor(85);
 }
 .social-tab.glowing {
     box-shadow: 0px 0px 12px 3px;

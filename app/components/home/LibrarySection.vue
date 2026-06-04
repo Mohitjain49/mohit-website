@@ -1,18 +1,24 @@
 <script setup>
 const LIBRARY_TABS = [
     {
+        id: "resume-tab",
+        link: "/resume/",
+        header: { faIcon: true, img: "fa-file-lines", size: 0, title: "My Resume" },
+        desc: "I regularly update my resume as I learn more skills and gain more experience in software development. " +
+            "Feel Free to take a look at it!"
+    },
+    {
         id: "documents-section-tab",
         link: "/library/#documents",
         header: { faIcon: true, img: "fa-folder-open", size: 0, title: "My Documents" },
-        desc: "I regularly update my resume as I learn more skills and gain more experience in software development. " +
-            "Feel Free to take a look at it!"
+        desc: "I have earned certificates, made an instruction guide, and even worked on a research paper through my University and iVue."
     },
     {
         id: "scripts-section-tab",
         link: "/library/#scripts",
         header: { faIcon: true, img: "fa-file-code", size: 0, title: "My Code" },
-        desc: "I regularly update my resume as I learn more skills and gain more experience in software development. " +
-            "Feel Free to take a look at it!"
+        desc: "I have developed special code for this website and many other projects and applications " +
+            "that I have worked on for my college classes and iVue."
     },
 ]
 
@@ -170,9 +176,17 @@ useIntersectionObserver(tabRefs, (entry) => {
     text-align: left;
 }
 
-.library-section-tab#documents-section-tab {
+.library-section-tab#resume-tab {
     color: var(--website-text);
     border-color: var(--website-text);
+}
+.library-section-tab#resume-tab:hover {
+    box-shadow: 0px 0px 12px 12px rgba(126, 90, 0, 0.25);
+}
+
+.library-section-tab#documents-section-tab {
+    color: var(--website-light-text);
+    border-color: var(--website-light-text);
 }
 .library-section-tab#documents-section-tab:hover {
     box-shadow: 0px 0px 12px 12px rgba(126, 90, 0, 0.25);

@@ -41,7 +41,7 @@
     justify-content: flex-start;
     align-items: stretch;
     flex-direction: row;
-    scroll-margin-top: 90px;
+    scroll-margin-top: apply-zoom-factor(90);
 }
 .mohit-scriptPage-code-line-content {
     width: calc(100% - 45px);
