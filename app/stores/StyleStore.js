@@ -186,8 +186,11 @@ export const useStyleStore = defineStore("style-store", () => {
      * ------------------------------------------------------------------------------------------------------------------------
      */
 
-    /** This function regenerates the CSS Layout Element should it be removed externally. */
-    async function regenerateCssLayoutElement() {
+    /**
+     * This function regenerates the CSS Layout Element should it be removed externally.
+     * @param {Boolean} resetObserver If true, this function resets the observer after regenrating the CSS Layout Element.
+     */
+    async function regenerateCssLayoutElement(resetObserver = true) {
         if(!validateClientMode()) { return; }
         const cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
         if(cssLayoutElement != null && cssLayoutElement.isConnected) { return; }
@@ -197,26 +200,26 @@ export const useStyleStore = defineStore("style-store", () => {
 
         document.body.appendChild(newCssLayoutElement);
         recordViewportDimensions();
-        await resetCssLayoutObserver();
+        if(resetObserver) { await resetCssLayoutObserver(); }
     }
 
     /** This function enables the mutation observer that observes changes to the CSS Layout Element. */
     async function enableCssLayoutObserver() {
-        if(cssLayoutObserverEnabled.value) { return; }
+        await nextTick();
+        await sleep(10);
+
+        if(cssLayoutObserverEnabled.value || !validateClientMode()) { return; }
         var cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
         
         if(cssLayoutElement == null) {
-            regenerateCssLayoutElement();
+            await sleep(5);
+            regenerateCssLayoutElement(false);
             cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
             if(cssLayoutElement == null) { throw new Error("CSS Layout Element Does Not Exist."); }
         }
 
-        await nextTick();
-        await sleep(10);
-        if(!validateClientMode()) { return; }
-
         if(cssLayoutElementObserver != null) { cssLayoutElementObserver.disconnect(); }
-        cssLayoutElementObserver = new MutationObserver(() => { regenerateCssLayoutElement(); });
+        cssLayoutElementObserver = new MutationObserver(() => { regenerateCssLayoutElement(true); });
 
         const cssLayoutParentElement = cssLayoutElement.parentElement;
         cssLayoutElementObserver.observe(cssLayoutParentElement, { childList: true });

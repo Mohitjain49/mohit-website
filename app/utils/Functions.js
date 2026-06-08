@@ -51,10 +51,14 @@ export function getColorStyles(color = "var(--website-text)") {
 
 /** This returns the css inner width. */
 export function getMohitInnerWidth() {
-    return ((import.meta.client && document) ? document.getElementById("invisible-css-layout").clientWidth : 0)
+    if(!import.meta.client || !document) { return 0; }
+    const element = document.getElementById("invisible-css-layout");
+    return (element == null ? 0 : element.clientWidth);
 }
 
 /** This returns the css inner height. */
 export function getMohitInnerHeight() {
-    return ((import.meta.client && document) ? document.getElementById("invisible-css-layout").clientHeight : 0)
+    if(!import.meta.client || !document) { return 0; }
+    const element = document.getElementById("invisible-css-layout");
+    return (element == null ? 0 : element.clientHeight);
 }

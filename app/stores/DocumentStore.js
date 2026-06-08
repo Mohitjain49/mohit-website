@@ -4,7 +4,7 @@ import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { ofetch } from 'ofetch';
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib/es";
+import { PDF, StandardFonts, rgb } from "@libpdf/core";
 import QRCodeStyling from "qr-code-styling";
 
 const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
@@ -573,7 +573,7 @@ async function createQrcodeResume() {
     try {
         // This fetches and loads the PDF file.
         const existingPdfBytes = await fetch(Mohit_Jain_Resume).then(res => res.arrayBuffer());
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
+        const pdfDoc = await PDF.load(new Uint8Array(existingPdfBytes));
 
         // This generates the QR Code and makes into a usuable image for pdf-lib.
         const qrCode = new QRCodeStyling({
@@ -605,14 +605,13 @@ async function createQrcodeResume() {
         const arrayBuffer = await qrData.arrayBuffer();
 
         // This embeds the Qrcode as an image into the PDF file and places it accordingly.
-        const qrImage = await pdfDoc.embedPng(arrayBuffer);
-        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        const qrImage = pdfDoc.embedPng(new Uint8Array(arrayBuffer));
         const page = pdfDoc.getPage(0);
 
         const NULL_COLOR = rgb(0.2665, 0.3143, 0.4191);
-        const BLUE_COLOR = rgb(0.184, 0.325, 0.792);
+        // const BLUE_COLOR = rgb(0.184, 0.325, 0.792);
 
-        const { width, height } = page.getSize();
+        const { width, height } = page;
         page.drawImage(qrImage, {
             x: (width - 70),
             y: (height - 70),
@@ -625,7 +624,7 @@ async function createQrcodeResume() {
             y: (height - 82),
             size: 10,
             color: NULL_COLOR,
-            font
+            font: StandardFonts.HelveticaBold
         });
 
         // This saves the PDF and returns a blob representing the new PDF.
