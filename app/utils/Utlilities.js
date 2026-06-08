@@ -144,7 +144,9 @@ export function useScrollPercentage(elementId = "") {
 export function useWebsiteMenuUtility(menu) {
     const OVERFLOW_CLASS = "vertical-overflow";
     const SWIPE_THRESHOLD = 50;
+
     const { cssToWindowHeightRatio } = useMohitWindowSize();
+    const webData = useWebsiteDataStore();
 
     const menuScrollable = shallowRef(false);
     const swipeEnabled = shallowRef(false);
@@ -223,6 +225,7 @@ export function useWebsiteMenuUtility(menu) {
         if(typeof event.clientY !== "number") { return; }
         if(event.type === "pointerdown" && !menuTouched.value) {
             startY = event.clientY;
+            webData.bypassBodyClick();
             menuTouched.value = true;
         } else if(event.type === "pointerup" && menuTouched.value) {
             if((startY - event.clientY) > (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)) { closeMenu(); }
@@ -239,6 +242,8 @@ export function useWebsiteMenuUtility(menu) {
             const firstTouch = event.touches.item(0);
             if(typeof firstTouch?.clientY !== 'number') { return; }
             startY = firstTouch.clientY;
+
+            webData.bypassBodyClick();
             menuTouched.value = true;
         } else if(event.type === "touchend" && menuTouched.value) {
             const firstTouch = event.changedTouches.item(0);

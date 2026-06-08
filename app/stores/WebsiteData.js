@@ -12,7 +12,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const scrollStore = useScrollStore();
     const styleStore = useStyleStore();
 
-    const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
     const { width: windowWidth } = useMohitWindowSize();
     const wakeLock = useWakeLock();

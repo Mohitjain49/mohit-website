@@ -4,7 +4,7 @@ import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { ofetch } from 'ofetch';
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib/es";
 import QRCodeStyling from "qr-code-styling";
 
 const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
