@@ -27,6 +27,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
+    const resumeStore = useResumeStore();
     const styleStore = useStyleStore();
     const fullScreenStore = useFullScreenStore();
     const windowSize = useMohitWindowSize();
@@ -363,7 +364,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         webData.mountWebData();
         await nextTick();
 
-        if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
+        if(onResumeRoute.value && !onMarkdownRoute.value) {
+            await resumeStore.initBlob();
+        } else if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
             await hostedDocuments[currentDocumentRoute.value].initBlob();
         }
 
@@ -536,8 +539,8 @@ export const useDocumentStore = defineStore("document-store", () => {
 function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false, withMd = false) {
     path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
 
-    /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
-    const blob = ref(null);
+    /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
+    const blob = shallowRef(null);
     const objectUrl = useObjectUrl(blob);
     const router = useRouter();
 

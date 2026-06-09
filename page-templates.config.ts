@@ -10,7 +10,7 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
     const REDIRECT_TEMPLATE = "~/templates/RedirectTemplate.vue";
 
     const routesToDocumentTemplate = [
-        { path: '/resume', file: DOC_TEMPLATE, props: { index: 0 } },
+        // { path: '/resume', file: DOC_TEMPLATE, props: { index: 0 } },
         { path: '/resume/qrcode', file: DOC_TEMPLATE, props: { index: 1 } },
         { path: '/create-github-repo', file: DOC_TEMPLATE, props: { index: 2 } },
         { path: '/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025', file: DOC_TEMPLATE, props: { index: 3 } },
