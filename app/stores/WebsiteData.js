@@ -34,6 +34,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const compassMenuOpen = computed(() => { return (menuOpen.value == 1); });
     const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
+    const resumeMenuOpen = computed(() => { return (menuOpen.value == 3.1); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
@@ -374,7 +375,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { mounted, menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
+    return { mounted, menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, websiteMenuMode, websiteMenuTransition,
         shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,

@@ -6,6 +6,7 @@
     :annontations="(index != 3)"
     :id="htmlClass"
     :class="htmlID"
+    :templateIndex="index"
 />
 <main id="resume-container" v-else>
     <div class="document-loading-static">

@@ -9,6 +9,12 @@
         <MenuTop />
 
         <template v-if="documentStore.onAnyResumeRoute">
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.1)" pulse-loop>
+                    <font-awesome-icon icon="fa-gears" />
+                    <span> Edit Resume Components </span>
+                </button>
+            </div>
             <div v-if="(documentStore.onMarkdownRoute || documentStore.onResumeQrcodeRoute)" class="mohit-navMenu-opt light">
                 <RouterLink to="/resume/" class="mohit-navMenu-mainOpt" pulse-loop>
                     <font-awesome-icon icon="fa-file-lines" />

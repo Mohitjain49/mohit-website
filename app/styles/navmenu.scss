@@ -341,6 +341,59 @@
     user-select: none;
 }
 
+.mohit-navMenu-opt.checkbox-opt {
+    height: 35px;
+}
+.mohit-navMenu-checkbox {
+    position: relative;
+    cursor: pointer;
+    width: calc(100% - 50px);
+    height: 25px;
+    padding: 0px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    color: inherit;
+    border: 1px solid;
+    border-radius: 5px;
+    font-family: 'Lexend', sans-serif;
+    font-size: 13px;
+    transition: background-color 0.2s, scale 0.2s;
+}
+.mohit-navMenu-checkbox:hover {
+    background-color: rgba(40, 40, 40);
+    scale: 1.05;
+}
+
+.mohit-navMenu-checkbox-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+}
+.mohit-navMenu-checkbox-box {
+    height: 14px;
+    width: 14px;
+    border: 2px solid #04ba04;
+    border-radius: 5px;
+    color: #04ba04;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.25s;
+}
+
+.mohit-navMenu-checkbox-box.checked {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.mohit-navMenu-checkbox-box svg {
+    height: 14px;
+    width: 14px;
+}
+
 .mohit-navMenu-opt-break {
     position: relative;
     left: 10px;
@@ -485,6 +538,16 @@
 .navMenu-transition_2-enter-to, .navMenu-transition_2-leave-from {
     opacity: 1;
     transform: scale(1);
+}
+
+.navMenu-checkbox-fade-transition-enter-active, .navMenu-checkbox-fade-transition-leave-active {
+    transition: opacity 0.25s;
+}
+.navMenu-checkbox-fade-transition-enter-from, .navMenu-checkbox-fade-transition-leave-to {
+    opacity: 0;
+}
+.navMenu-checkbox-fade-transition-enter-to, .navMenu-checkbox-fade-transition-leave-from {
+    opacity: 1;
 }
 
 .mohit-navMenu::-webkit-scrollbar {

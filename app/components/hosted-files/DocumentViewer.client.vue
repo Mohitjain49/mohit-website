@@ -30,7 +30,9 @@
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
     <FileWidgets />
+
     <DocumentMenu />
+    <ResumeMenu v-if="templateIndex < 2" />
 </main>
 </template>
 
@@ -42,6 +44,7 @@ const documentStore = useDocumentStore();
 const router = useRouter();
 
 const props = defineProps({
+    templateIndex: { type: Number, required: true },
     url: { type: String, required: true },
     annontations: { type: Boolean, default: true },
     addShare: { type: Boolean, default: true },
