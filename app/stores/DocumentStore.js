@@ -532,7 +532,7 @@ export const useDocumentStore = defineStore("document-store", () => {
  * @param {String} file The imported file to display.
  * @param {String} name The name of the file.
  * @param {".pdf" | ".docx"} suffix The suffix of the file being displayed.
- * @param {String | "custom"} originLink The link where that file is stored online.
+ * @param {String} originLink The link where that file is stored online.
  * @param {Boolean} useBlobLink If true, this utility uses the blob object url as the link instead of the passed in link.
  * @param {Boolean} withMd If true, this utility treats (path + "/markdown") as a viable route as well.
  */
@@ -541,12 +541,13 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
 
     /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = shallowRef(null);
-    const objectUrl = useObjectUrl(blob);
+    const objectUrl = shallowRef("");
     const router = useRouter();
 
-    const blobCreated = computed(() => { return (blob.value != null); });
-    const link = computed(() => { return (useBlobLink ? objectUrl.value : originLink); });
+    const blobCreated = shallowRef(false);
+    const link = shallowRef("");
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
+
 
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {
@@ -555,6 +556,22 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
             blob.value = await createQrcodeResume();
         } else {
             blob.value = await fetch(file).then((res) => res.blob());
+        }
+
+        objectUrl.value = URL.createObjectURL(blob.value);
+        blobCreated.value = true;
+        changeLink("default");
+    }
+
+    /**
+     * This function sets the link for this hosted document.
+     * @param {String} newLink The new link or "default" if the website should set it itself.
+     */
+    function changeLink(newLink = "") {
+        if(newLink === "default") {
+            link.value = (useBlobLink ? objectUrl.value : originLink);
+        } else {
+            link.value = newLink;
         }
     }
 
@@ -568,7 +585,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd, initBlob, checkPath }
+    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd, initBlob, checkPath, changeLink }
 }
 
 /** This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right. */

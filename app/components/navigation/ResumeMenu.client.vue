@@ -51,6 +51,10 @@ const resumeOptions = ref([
 ]);
 const newResumeState = ref(false);
 
+/**
+ * This function toggles whether an option to modify te rendered resume should be made or not.
+ * @param {Number} index The index of the option to toggle.
+ */
 function toggleResumeOption(index = 0) {
     resumeOptions.value[index].status = !resumeOptions.value[index].status;
 }

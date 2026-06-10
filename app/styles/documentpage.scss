@@ -1,7 +1,7 @@
 @use "@/styles/_dynamicrules.scss" as *;
 
 .document-loading-static {
-    height: var(--true-100vh, 100vh);
+    height: var(--body-height);
     width: 100%;
     display: flex;
     justify-content: center;
