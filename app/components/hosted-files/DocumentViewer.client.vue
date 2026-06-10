@@ -13,7 +13,7 @@
             <VuePDF :class="id" :id="class" :pdf="pdf" :ref="(el) => {docPagesRefs[index] = el}"
                 :text-layer="annontations" :annotation-layer="annontations"
                 @loaded="() => {setSingleDocLoaded(index)}"
-                @annotation="(event) => {documentStore.onAnnotationClick(event)}"
+                @annotation="(event) => { documentStore.onAnnotationClick(event); }"
                 :width="documentStore.customPdfWidth"
                 :height="documentStore.customPdfHeight"
                 :page="page.num"
@@ -32,7 +32,7 @@
     <FileWidgets />
 
     <DocumentMenu />
-    <ResumeMenu v-if="templateIndex < 2" />
+    <slot></slot>
 </main>
 </template>
 

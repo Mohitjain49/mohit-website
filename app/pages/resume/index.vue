@@ -5,8 +5,11 @@
     :addShare="false"
     :annontations="true"
     :class="'tato-pdf-resume'"
-    :templateIndex="0"
-/>
+    :templateIndex="0">
+
+    <ResumeMenu />
+</DocumentViewer>
+
 <main id="resume-container" v-else>
     <div class="document-loading-static">
         <div class="loading-spinner"></div>
