@@ -58,8 +58,10 @@ export const useResumeStore = defineStore("resume-store", () => {
     async function resetBlob(options) {
         deleteCurrentBlob();
         documentStore.unmountDocumentPage();
+
         await sleep(100);
         await initBlob(options);
+        documentStore.mountCustomDocumentPage(800, 320, 1.375);
     }
 
     /**
