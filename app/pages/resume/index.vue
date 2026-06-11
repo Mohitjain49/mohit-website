@@ -19,11 +19,9 @@
 </template>
 
 <script setup>
-const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
-
-onMounted(() => { documentStore.mountDocumentPage(); });
-onBeforeUnmount(() => { documentStore.unmountDocumentPage(); });
+onMounted(() => { resumeStore.mountResumePage(); });
+onBeforeUnmount(() => { resumeStore.unmountResumePage(); });
 
 useHead(getMeta("Mohit Jain | My Resume", "resume",
     "Feel free to take a look at my resume.",

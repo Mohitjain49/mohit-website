@@ -23,10 +23,11 @@ const { data: home } = await useAsyncData(() => queryCollection('content').path(
 
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
+const resumeStore = useResumeStore();
 const fullScreenSet = getFullScreenSet();
 
 onMounted(() => { documentStore.mountDocumentPage(); });
-onBeforeUnmount(() => { documentStore.unmountDocumentPage(); });
+onBeforeUnmount(() => { resumeStore.unmountResumePage(); });
 
 useHead(getMeta("Mohit Jain | My Resume (Markdown Format)", "resume/markdown",
     "Feel free to take a look at my resume. This is in markdown format.",

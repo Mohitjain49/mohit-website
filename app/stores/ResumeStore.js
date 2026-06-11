@@ -6,7 +6,9 @@ import QRCodeStyling from "qr-code-styling";
 export const useResumeStore = defineStore("resume-store", () => {
     const documentStore = useDocumentStore();
     const router = useRouter();
+
     const blobCreated = ref(0);
+    const mountedOnce = ref(false);
 
     const qrcodeAdded = ref(false);
     const linksRemoved = ref(false);
@@ -16,6 +18,34 @@ export const useResumeStore = defineStore("resume-store", () => {
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
 
+    /** This function mounts the resume page. */
+    async function mountResumePage() {
+        initWebData();
+        await nextTick();
+
+        if(!mountedOnce.value) {
+            const routeQuery = router.currentRoute.value.query;
+            const onMainResumeRoute = (documentStore.onResumeRoute && !documentStore.onMarkdownRoute);
+
+            qrcodeAdded.value = (routeQuery.qrcodeAdded && onMainResumeRoute && routeQuery.qrcodeAdded === "true");
+            linksRemoved.value = (routeQuery.linksRemoved && onMainResumeRoute && routeQuery.linksRemoved === "true");
+            fontFlattened.value = (routeQuery.fontFlattened && onMainResumeRoute && routeQuery.fontFlattened === "true");
+        }
+        mountedOnce.value = true;
+
+        await initBlob({ addQrcode: qrcodeAdded.value,
+            removeLinks: linksRemoved.value,
+            flattenFont: fontFlattened.value
+        });
+        documentStore.mountCustomDocumentPage(800, 320, 1.375);
+    }
+
+    /** This function unmounts the resume page. */
+    function unmountResumePage() {
+        deleteCurrentBlob();
+        documentStore.unmountDocumentPage();
+    }
+
     /**
      * This function initializes a blob and its object url for my resume.
      * @param {Object} options The options to set to render the blob.
@@ -23,7 +53,7 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Boolean} options.removeLinks If true, this removes all links from my resume.
      * @param {Boolean} options.flattenFont If true, this turns all text to black.
      */
-    async function initBlob(options) {
+    async function initBlob(options = {}) {
         if(blobCreated.value != 0) { return; }
         blobCreated.value = 1;
 
@@ -170,6 +200,6 @@ export const useResumeStore = defineStore("resume-store", () => {
     }
    
     return { blob, objectUrl, blobCreated, qrcodeAdded, linksRemoved, fontFlattened,
-        initBlob, deleteCurrentBlob, resetBlob
+        mountResumePage, unmountResumePage, initBlob, deleteCurrentBlob, resetBlob, setResumeQuery
     }
 });
