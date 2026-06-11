@@ -5,6 +5,7 @@ import QRCodeStyling from "qr-code-styling";
 /** This pinia store is used to customize my resume. */
 export const useResumeStore = defineStore("resume-store", () => {
     const documentStore = useDocumentStore();
+    const router = useRouter();
     const blobCreated = ref(0);
 
     const qrcodeAdded = ref(false);
@@ -62,6 +63,17 @@ export const useResumeStore = defineStore("resume-store", () => {
         await sleep(100);
         await initBlob(options);
         documentStore.mountCustomDocumentPage(800, 320, 1.375);
+    }
+
+    /** This function updates the query based on the resume customization options. */
+    async function setResumeQuery() {
+        const route = router.currentRoute.value;
+        await router.push({ path: route.path, hash: route.hash, query: {
+            ...route.query,
+            qrcodeAdded: (qrcodeAdded.value ? "true" : undefined),
+            linksRemoved: (linksRemoved.value ? "true" : undefined),
+            fontFlattened: (fontFlattened.value ? "true" : undefined)
+        }});
     }
 
     /**
@@ -152,6 +164,8 @@ export const useResumeStore = defineStore("resume-store", () => {
         qrcodeAdded.value = options.addQrcode;
         linksRemoved.value = options.removeLinks;
         fontFlattened.value = options.flattenFont;
+
+        await setResumeQuery();
         return newResumeBlob;
     }
    
