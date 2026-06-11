@@ -35,13 +35,6 @@ const PAGE_METADATA = [
         id: 'tato-pdf-resume'
     },
     {
-        title: "Mohit Jain | My Resume (With QR Code)",
-        route: "resume/qrcode",
-        desc: "Feel free to take a look at my resume. This version has a QR Code at the top right.",
-        type: "resume-extra",
-        id: 'tato-pdf-resume'
-    },
-    {
         title: "Mohit Jain | Create A GitHub Repository",
         route: "create-github-repo",
         desc: ("This is an instructions guide on how to create and clone a Repository with GitHub. " +

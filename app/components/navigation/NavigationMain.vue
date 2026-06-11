@@ -35,7 +35,7 @@
             <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(2, true)" title="Script Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
-            <button v-else-if="documentStore.onDocumentRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, true)" title="Document Options" pulse-loop>
+            <button v-else-if="showDocumentOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, true)" title="Document Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
             <button class="mohit-navBar-icon light" @click="webData.setMenuOpen(0, true)" title="Open Navigation Menu" pulse-loop>
@@ -83,7 +83,7 @@
                 <span> See Script Options </span>
             </button>
         </div>
-        <div v-if="documentStore.onDocumentRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+        <div v-if="showDocumentOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
                 <span> See Document Options </span>
@@ -91,7 +91,7 @@
         </div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad/" @click="(event) => { flashNavOpt(event, '/gamepad') }" pulse-loop>
+            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad/" @click="(event) => { flashNavOpt(event, '/gamepad'); }" pulse-loop>
                 <font-awesome-icon icon="fa-gamepad" />
                 <span> Gamepad Controls </span>
             </RouterLink>
@@ -200,6 +200,7 @@ const showWakeLockWidget = computed(() => {
     return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
 });
 
+const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
 

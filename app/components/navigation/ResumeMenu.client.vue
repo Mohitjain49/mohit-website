@@ -3,9 +3,9 @@
 </style>
 
 <template>
-<WebCover v-if="(webData.resumeMenuOpen && fullScreenStore.fullScreenSet)" />
+<WebCover v-if="(resumeMenuOpen && fullScreenSet)" />
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.resumeMenuOpen" class="mohit-navMenu" id="mohit-resumeMenu" ref="resumeMenu">
+    <div v-show="resumeMenuOpen" class="mohit-navMenu" id="mohit-resumeMenu" ref="resumeMenu">
         <MenuTop />
 
         <div v-for="(checkbox, index) in resumeOptions" class="mohit-navMenu-opt checkbox-opt" :style="getColorStyles(checkbox.color)">
@@ -41,9 +41,11 @@
 
 <script setup>
 const webData = useWebsiteDataStore();
-const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
+
+const fullScreenSet = getFullScreenSet();
+const { resumeMenuOpen } = storeToRefs(webData);
 
 const resumeOptions = ref([
     { name: "qrcode", title: "Add QR Code", faIcon: "fa-qrcode", color: 'var(--blue-one)', status: false },
@@ -57,12 +59,9 @@ const newResumeState = computed(() => {
     return false;
 });
 
-// This sets the initial state of the resume menu.
-onMounted(() => {
-    resumeOptions.value[0].status = resumeStore.qrcodeAdded;
-    resumeOptions.value[1].status = resumeStore.linksRemoved;
-    resumeOptions.value[2].status = resumeStore.fontFlattened;
-});
+// This makes sure that the initial resume menu status is set every time the visitor opens it.
+onMounted(() => { setInitResumeMenuStatus(); });
+watch(resumeMenuOpen, () => { if(resumeMenuOpen.value) { setInitResumeMenuStatus(); }});
 
 /**
  * This function toggles whether an option to modify te rendered resume should be made or not.
@@ -76,10 +75,19 @@ function toggleResumeOption(index = 0) {
 async function editResumeState() {
     await resumeStore.resetBlob({
         addQrcode: resumeOptions.value[0].status,
-        removeLinks: false,
-        flattenFont: false
+        removeLinks: resumeOptions.value[1].status,
+        flattenFont: resumeOptions.value[2].status
     });
     webData.closeNavMenu();
+}
+
+/** This function sets the initial state of the resume menu options available to the user. */
+function setInitResumeMenuStatus() {
+    try {
+        resumeOptions.value[0].status = resumeStore.qrcodeAdded;
+        resumeOptions.value[1].status = resumeStore.linksRemoved;
+        resumeOptions.value[2].status = resumeStore.fontFlattened;
+    } catch(e) {}
 }
 
 const resumeMenu = shallowRef(null);

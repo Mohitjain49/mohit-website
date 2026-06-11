@@ -29,7 +29,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         blob.value = await createNewBlob(options);
         objectUrl.value = URL.createObjectURL(blob.value);
 
-        documentStore.hostedDocuments[0].blob = blob.value
+        documentStore.hostedDocuments[0].setNewBlob(blob.value);
         const newLink = ((qrcodeAdded.value || linksRemoved.value || fontFlattened.value) ? objectUrl.value : PERSONAL_RESUME_LINK);
         documentStore.hostedDocuments[0].changeLink(newLink);
 
@@ -43,7 +43,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         blobCreated.value = 1.1;
 
         blob.value = null;
-        documentStore.hostedDocuments[0].blob = null;
+        documentStore.hostedDocuments[0].deleteBlob();
         objectUrl.value = "";
         blobCreated.value = 0;
     }
@@ -76,11 +76,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         if(options?.addQrcode == undefined) { options.addQrcode = false; }
         if(options?.removeLinks == undefined) { options.removeLinks = false; }
         if(options?.flattenFont == undefined) { options.flattenFont = false; }
-
         var newResumeBlob = await fetch(Mohit_Jain_Resume).then((res) => res.blob());
-        if(!options.addQrcode && !options.flattenFont && !options.removeLinks) {
-            return newResumeBlob;
-        }
 
         // This section adds a QR Code to my resume if requested.
         if(options.addQrcode) {

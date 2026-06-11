@@ -9,28 +9,24 @@
         <MenuTop />
 
         <template v-if="documentStore.onAnyResumeRoute">
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.1)" pulse-loop>
-                    <font-awesome-icon icon="fa-gears" />
-                    <span> Edit Resume Components </span>
-                </button>
-            </div>
-            <div v-if="(documentStore.onMarkdownRoute || documentStore.onResumeQrcodeRoute)" class="mohit-navMenu-opt light">
+            <template v-if="(!documentStore.onMarkdownRoute)">
+                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                    <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.1)" pulse-loop>
+                        <font-awesome-icon icon="fa-gears" />
+                        <span> Edit Resume Components </span>
+                    </button>
+                </div>
+                <div class="mohit-navMenu-opt light">
+                    <RouterLink to="/resume/markdown/" class="mohit-navMenu-mainOpt" pulse-loop>
+                        <font-awesome-icon icon="fa-brands fa-markdown" />
+                        <span> See My Main Resume (Markdown) </span>
+                    </RouterLink>
+                </div>
+            </template>
+            <div v-else class="mohit-navMenu-opt light">
                 <RouterLink to="/resume/" class="mohit-navMenu-mainOpt" pulse-loop>
                     <font-awesome-icon icon="fa-file-lines" />
                     <span> See My Main Resume </span>
-                </RouterLink>
-            </div>
-            <div v-if="(!documentStore.onResumeQrcodeRoute)" class="mohit-navMenu-opt light">
-                <RouterLink to="/resume/qrcode/" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <font-awesome-icon icon="fa-qrcode" />
-                    <span> See My Main Resume (With QR Code) </span>
-                </RouterLink>
-            </div>
-            <div v-if="(!documentStore.onMarkdownRoute)" class="mohit-navMenu-opt light">
-                <RouterLink to="/resume/markdown/" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <font-awesome-icon icon="fa-brands fa-markdown" />
-                    <span> See My Main Resume (Markdown) </span>
                 </RouterLink>
             </div>
         </template>

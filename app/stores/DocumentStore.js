@@ -4,9 +4,6 @@ import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { ofetch } from 'ofetch';
-import { PDF, StandardFonts, rgb } from "@libpdf/core";
-import QRCodeStyling from "qr-code-styling";
-
 const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
@@ -15,7 +12,6 @@ const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 export const useDocumentStore = defineStore("document-store", () => {
     const hostedDocuments = [
         useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
-        useHostedDocument("/resume/qrcode", Mohit_Jain_Resume, "Mohit_Jain_Resume_With_QR_Code", ".pdf", PERSONAL_RESUME_LINK, true, false),
         useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false, false),
         useHostedDocument(FCS_CERTIFICATE_ROUTE, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025,
             "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", ".pdf", FCS_CERTIFICATE_LINK, false, false
@@ -71,15 +67,15 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const onDocumentRoute = computed(() => { return (-1 != currentDocumentRoute.value); });
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
+    const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
-    const onResumeQrcodeRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
-    const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
-    const onFCSCertificateRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
-    const onResearchPaperRoute = computed(() => { return hostedDocuments[4].onRoute.value; });
+    const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
+    const onFCSCertificateRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
+    const onResearchPaperRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
 
-    const onAnyResumeRoute = computed(() => { return (onResumeRoute.value || onResumeQrcodeRoute.value); });
+    const onAnyResumeRoute = computed(() => { return (onResumeRoute.value); });
     const saveAsSupported = computed(() => {
         return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
     });
@@ -516,11 +512,11 @@ export const useDocumentStore = defineStore("document-store", () => {
         try { goToPageSection(id, 70); } catch(e) {}
     }
 
-    return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported,
+    return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported, currentDocumentBlobCreated,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onAnyResumeRoute,
-        onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
+        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
@@ -552,15 +548,31 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {
         if(blobCreated.value) { return; }
-        if(path.includes("/resume/qrcode")) {
-            blob.value = await createQrcodeResume();
-        } else {
-            blob.value = await fetch(file).then((res) => res.blob());
-        }
+        blob.value = await fetch(file).then((res) => res.blob());
 
         objectUrl.value = URL.createObjectURL(blob.value);
         blobCreated.value = true;
         changeLink("default");
+    }
+
+    /** This function deletes the current blob used by the website. */
+    function deleteBlob() {
+        if(!blobCreated.value) { return; }
+        blob.value = null;
+        objectUrl.value = "";
+
+        blobCreated.value = false;
+        changeLink("default");
+    }
+
+    /**
+     * This function lets external stores and components set the blob itself for the hosted document.
+     * @param {Blob} newBlob The new Blob that represents the hosted document.
+     */
+    function setNewBlob(newBlob) {
+        blob.value = newBlob;
+        objectUrl.value = URL.createObjectURL(blob.value);
+        blobCreated.value = true;
     }
 
     /**
@@ -585,72 +597,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd, initBlob, checkPath, changeLink }
-}
-
-/** This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right. */
-async function createQrcodeResume() {
-    try {
-        // This fetches and loads the PDF file.
-        const existingPdfBytes = await fetch(Mohit_Jain_Resume).then(res => res.arrayBuffer());
-        const pdfDoc = await PDF.load(new Uint8Array(existingPdfBytes));
-
-        // This generates the QR Code and makes into a usuable image for pdf-lib.
-        const qrCode = new QRCodeStyling({
-            width: 300,
-            height: 300,
-            margin: 5,
-            data: PERSONAL_WEBSITE_LINK,
-            type: "canvas",
-            dotsOptions: {
-                color: 'black',
-                type: "rounded"
-            },
-            cornersSquareOptions: {
-                color: 'black',
-                type: 'extra-rounded'
-            },
-            cornersDotOptions: {
-                color: 'black',
-                type: 'dot'
-            },
-            qrOptions: {
-                typeNumber: 0,
-                mode: 'Byte',
-                errorCorrectionLevel: 'Q',
-            },
-            backgroundOptions: { color: '#FFFFFF' },
-        });
-        const qrData = await qrCode.getRawData("png");
-        const arrayBuffer = await qrData.arrayBuffer();
-
-        // This embeds the Qrcode as an image into the PDF file and places it accordingly.
-        const qrImage = pdfDoc.embedPng(new Uint8Array(arrayBuffer));
-        const page = pdfDoc.getPage(0);
-
-        const NULL_COLOR = rgb(0.2665, 0.3143, 0.4191);
-        // const BLUE_COLOR = rgb(0.184, 0.325, 0.792);
-
-        const { width, height } = page;
-        page.drawImage(qrImage, {
-            x: (width - 70),
-            y: (height - 70),
-            width: 60,
-            height: 60,
-        });
-
-        page.drawText("My Website!", {
-            x: (width - 70),
-            y: (height - 82),
-            size: 10,
-            color: NULL_COLOR,
-            font: StandardFonts.HelveticaBold
-        });
-
-        // This saves the PDF and returns a blob representing the new PDF.
-        const modifiedPdfBytes = await pdfDoc.save();
-        return new Blob([modifiedPdfBytes], { type: "application/pdf" });
-    } catch(e) {
-        return new Blob([new Uint8Array(), { type: "application/pdf" }]);
+    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd,
+        initBlob, setNewBlob, deleteBlob, checkPath, changeLink
     }
 }
