@@ -128,6 +128,10 @@ async function main() {
             await rm("./package-lock.json", { recursive: true, force: true });
             packageLockSpinner.succeed("Deleted package-lock.json.");
 
+            const buildInfoSpinner = createSpinner("Deleting build-info.json...");
+            await rm("./build-info.json", { recursive: true, force: true });
+            buildInfoSpinner.succeed("Deleted build-info.json.");
+
             const dataSpinner = createSpinner("Deleting the \".data\" folder...");
             await rm("./.data", { recursive: true, force: true });
             dataSpinner.succeed("Deleted the \".data\" folder.");
