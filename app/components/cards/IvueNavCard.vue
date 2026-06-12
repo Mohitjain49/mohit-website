@@ -34,11 +34,10 @@
 <script setup>
 import ivue_text from "~/assets/ivue/iVue_Black_Text_Cropped.png";
 import main_webpage from "~/assets/ivue/iVue_Main_Website_Home.png";
-
 import wiv_icon from "~/assets/ivue/Worlds_iVue_Icon.png";
 import aws_icon from "~/assets/aws/AWS_Icon.png";
 
-onMounted(() => { nextTick(() => { setNavCardAnimation("ivue-nav-newCard"); }); });
+onMountedAdvanced(() => { setNavCardAnimation("ivue-nav-newCard"); });
 const DEV_STACK = [
     { title: "Worlds iVue", icon: wiv_icon },
     { title: "Cloud Architecture", icon: aws_icon },

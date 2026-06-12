@@ -22,7 +22,7 @@ const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open 
 
 var animationTimeout = null;
 watch(fullScreenSet, () => { setWidgetAnimations(); });
-onMounted(() => { setWidgetAnimations(); })
+onMountedAdvanced(() => { setWidgetAnimations(); })
 
 const fileWidgets = useTemplateRef('file-widgets-container');
 usePulseLoopAnimation(fileWidgets);
@@ -47,12 +47,10 @@ function setWidgetAnimations() {
     if(animationTimeout != null) { clearTimeout(animationTimeout); }
     const id = (fullScreenSet.value ? "minimizeScreen-widget" : "download-file-widget");
 
-    nextTick(() => {
-        document.getElementById(id)?.classList.add("animate__animated", "animate__fadeInUp");
-        animationTimeout = setTimeout(() => {
-            document.getElementById(id)?.classList.remove("animate__animated", "animate__fadeInUp");
-        }, 1100);
-    });
+    document.getElementById(id)?.classList.add("animate__animated", "animate__fadeInUp");
+    animationTimeout = setTimeout(() => {
+        document.getElementById(id)?.classList.remove("animate__animated", "animate__fadeInUp");
+    }, 1100);
 }
 </script>
 

@@ -3,7 +3,7 @@ import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader';
 const VUE_QRCODE_READER_GITHUB = "https://github.com/gruhn/vue-qrcode-reader";
 
 const codeScanner = useCodeScannerStore();
-onMounted(() => { codeScanner.mountCodeScanner(); });
+onMountedAdvanced(() => { codeScanner.mountCodeScanner(); });
 onBeforeUnmount(() => { codeScanner.deactivateCamera(); });
 
 useHead(getMeta("Mohit Jain | Barcode & Qrcode Scanner & Reader", "code-scanner",

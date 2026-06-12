@@ -163,7 +163,7 @@ useIntersectionObserver(cardRefs, (entry) => {
     }
 });
 
-onMounted(() => { initWebData(); });
+onMountedAdvanced(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Skills", "skills/",
     "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
     "web applications, and projects by utilizing multiple programming languages, " +

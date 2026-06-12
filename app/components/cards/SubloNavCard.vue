@@ -34,7 +34,7 @@ import expo_icon from "~/assets/sublo/Expo_Icon.svg";
 import cognito_icon from "~/assets/aws/AWS_Cognito_Icon.svg";
 import amplify_icon from "~/assets/aws/AWS_Amplify_Icon.svg";
 
-onMounted(() => { nextTick(() => { setNavCardAnimation("sublo-nav-newCard"); }); });
+onMountedAdvanced(() => { setNavCardAnimation("sublo-nav-newCard"); });
 const DEV_STACK = [
     { title: "React Native", icon: react_icon },
     { title: "Expo", icon: expo_icon },

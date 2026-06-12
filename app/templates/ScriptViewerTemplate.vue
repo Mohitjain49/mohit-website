@@ -60,7 +60,7 @@ const scriptHTML = useTemplateRef('script-html');
 const scriptOptions = useTemplateRef('script-options');
 usePulseLoopAnimation(scriptOptions);
 
-onMounted(() => { scriptsStore.mountScriptPage(); });
+onMountedAdvanced(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
 

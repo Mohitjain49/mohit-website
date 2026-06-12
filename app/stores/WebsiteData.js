@@ -1,5 +1,7 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
+    const nuxtReady = ref(false);
+
     var controller = new AbortController();
     var wakeLockTimeout = null;
 
@@ -44,7 +46,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const sharePopupClosing = ref(false);
     const showSharePopupImmediate = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
-        return (data != null && typeof data === "string");
+        return (nuxtReady.value && data != null && typeof data === "string");
     });
 
     const wakeLockIcon = computed(() => {
@@ -103,6 +105,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         mounted.value = 1;
 
         await nextTick();
+        await onNuxtReadyAdvanced();
+
+        nuxtReady.value = true;
         const signal = controller.signal;
         history.scrollRestoration = "manual";
 
@@ -248,6 +253,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         closeNavMenu();
         if(openShareOnMount.value) {
             openShareOnMount.value = false;
+            sleep(50).then(() => { if(showSharePopupImmediate.value) { showSharePopup.value = true; }});
         } else {
             setQRCodePopup("quit");
         }

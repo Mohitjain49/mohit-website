@@ -26,7 +26,7 @@ const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
 const fullScreenSet = getFullScreenSet();
 
-onMounted(() => { documentStore.mountDocumentPage(); });
+onMountedAdvanced(() => { documentStore.mountDocumentPage(); });
 onBeforeUnmount(() => { resumeStore.unmountResumePage(); });
 
 useHead(getMeta("Mohit Jain | My Resume (Markdown Format)", "resume/markdown",

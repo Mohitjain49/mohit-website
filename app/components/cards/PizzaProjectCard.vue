@@ -36,7 +36,7 @@
 import main_app_page from "~/assets/Pizza_Project_Main_Page.png";
 import angular_icon from "~/assets/Angular_Icon.webp";
 import ts_icon from "~/assets/TypeScript_Icon.png";
-onMounted(() => { nextTick(() => { setNavCardAnimation("pizza-nav-newCard"); }); });
+onMountedAdvanced(() => { setNavCardAnimation("pizza-nav-newCard"); });
 </script>
 
 <style scoped lang="scss">

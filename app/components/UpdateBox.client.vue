@@ -26,7 +26,7 @@ const currentNow = useNow({ scheduler: (fn) => useIntervalFn(fn, 1000) });
 const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website version was from ");
 const UPDATE_DATE = ref("10/24/2025");
 
-onMounted(() => { calculateDateDifference(); });
+onMountedAdvanced(() => { calculateDateDifference(); });
 watch(currentNow, () => { calculateDateDifference(); });
 
 watch(() => $pwa?.needRefresh, (newValue) => { if(newValue) { installStore.setUpdateBox(true); } });
@@ -46,7 +46,6 @@ async function updateWebsite() {
  * https://day.js.org/docs/en/display/difference
  */
 async function calculateDateDifference() {
-    await nextTick();
     const currentDate = dayjs(currentNow.value);
     const lastUpdateDate = $websiteBuild.date;
 

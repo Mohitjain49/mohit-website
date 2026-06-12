@@ -16,8 +16,7 @@ function openCompass() {
     webData.setMenuOpen(1, true);
 }
 
-onMounted(async() => {
-    await nextTick();
+onMountedAdvanced(async() => {
     document.getElementById("compass-widget")?.classList.add("animate__animated", "animate__fadeInUp");
     await sleep(1100);
     document.getElementById("compass-widget")?.classList.remove("animate__animated", "animate__fadeInUp");

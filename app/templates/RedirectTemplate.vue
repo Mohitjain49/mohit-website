@@ -12,7 +12,7 @@ const props = defineProps({
 });
 
 useHead(getMetaWithLink(props.title, props.link, props.desc));
-onMounted(() => {
+onMountedAdvanced(() => {
     initWebData();
     window.location.replace(props.link);
 });

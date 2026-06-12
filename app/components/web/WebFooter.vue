@@ -97,8 +97,7 @@ const { $websiteBuild } = useNuxtApp();
 const footerRef = useTemplateRef('mohit-footer');
 usePulseLoopAnimation(footerRef);
 
-onMounted(async() => {
-    await nextTick();
+onMountedAdvanced(() => {
     webData.navFooterPresent = true;
     webData.webFooter = document.getElementById("footer");
 });

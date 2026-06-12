@@ -58,7 +58,7 @@ const menuState = ref(0);
 const WAKE_LOCK_MDN_DOCS = "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API";
 const menuBtnTitle = computed(() => { return ((menuState.value == 0) ? "See Keybinds" : "Back To Main"); });
 
-onMounted(() => { initWebData(); });
+onMountedAdvanced(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | Wake Lock", "wakelock",
     "This page uses the Wake Lock Web API to keep the screen on when enabled, " +
     "preventing the screen from closing naturally."

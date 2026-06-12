@@ -195,10 +195,8 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple 
  * ----------------------------------------------------------------------------
  */
 
-/**
- * This adds a transition to the contact boxes if the screen width is large enough.
- */
-onMounted(() => {
+/** This adds a transition to the contact boxes if the screen width is large enough. */
+onMountedAdvanced(() => {
     initWebData(70);
     manageSocialTabGlow();
 

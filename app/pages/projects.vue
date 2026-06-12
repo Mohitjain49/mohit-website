@@ -26,7 +26,7 @@
 const projectsRef = useTemplateRef('mohit-projects-page');
 usePulseLoopAnimation(projectsRef);
 
-onMounted(() => {
+onMountedAdvanced(() => {
     initWebData();
     setNavCardAnimation("main-projects-features-btn");
 });

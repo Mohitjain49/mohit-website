@@ -88,7 +88,7 @@ export function usePulseLoopAnimation(container = null) {
         });
     }
 
-    onMounted(async() => { await enable(); });
+    onMountedAdvanced(async() => { await enable(); });
     onBeforeUnmount(() => { disable(); });
     watch(container, () => { reset(); });
     return { enabled, numElements, enable, disable, reset, animate }
@@ -254,11 +254,40 @@ export function useWebsiteMenuUtility(menu) {
     }
 
     useRafFn(() => { checkMenu(); }, { immediate: true, fpsLimit: 30, once: false });
-    onMounted(() => { enableSwipe(); });
+    onMountedAdvanced(() => { enableSwipe(); });
     onBeforeUnmount(() => { disableSwipe(); });
     watch(menu, () => { resetSwipe(); });
 
     return { menuScrollable, swipeEnabled, overflowClassAdded, menuTouched,
         checkMenu, enableSwipe, disableSwipe, resetSwipe
     }
+}
+
+/**
+ * This function returns void only when Nuxt is ready for the website. It takes in a function as well.
+ * @param {Function} callback The callback function that is triggered when Nuxt is ready.
+ */
+export async function onNuxtReadyAdvanced(callback = () => {}) {
+    return new Promise((resolve, reject) => {
+        try {
+            onNuxtReady(() => { callback(); });
+            onNuxtReady(() => { resolve(null); });
+        } catch(e) {
+            reject(e);
+        }
+    })
+}
+
+/**
+ * This function awaits the Next Tick and for Nuxt to be ready before running the callback function.
+ * @param {Function} callback The callback function that is triggered.
+ */
+export async function onMountedAdvanced(callback = () => {}) {
+    onMounted(async () => {
+        try {
+            await onNuxtReadyAdvanced();
+            await nextTick();   
+        } catch(e) {}
+        callback();
+    });
 }

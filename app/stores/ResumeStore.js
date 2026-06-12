@@ -22,6 +22,7 @@ export const useResumeStore = defineStore("resume-store", () => {
     async function mountResumePage() {
         initWebData();
         await nextTick();
+        await onNuxtReadyAdvanced();
 
         if(!mountedOnce.value) {
             const routeQuery = router.currentRoute.value.query;
@@ -35,7 +36,8 @@ export const useResumeStore = defineStore("resume-store", () => {
 
         await initBlob({ addQrcode: qrcodeAdded.value,
             removeLinks: linksRemoved.value,
-            flattenFont: fontFlattened.value
+            flattenFont: fontFlattened.value,
+            updateQuery: false
         });
         documentStore.mountCustomDocumentPage(800, 320, 1.375);
     }
@@ -52,6 +54,7 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Boolean} options.addQrcode If true, this adds a QR Code to the top-right of my resume.
      * @param {Boolean} options.removeLinks If true, this removes all links from my resume.
      * @param {Boolean} options.flattenFont If true, this turns all text to black.
+     * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      */
     async function initBlob(options = {}) {
         if(blobCreated.value != 0) { return; }
@@ -85,6 +88,7 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Boolean} options.addQrcode If true, this adds a QR Code to the top-right of my resume.
      * @param {Boolean} options.removeLinks If true, this removes all links from my resume.
      * @param {Boolean} options.flattenFont If true, this turns all text to black.
+     * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      */
     async function resetBlob(options) {
         deleteCurrentBlob();
@@ -112,12 +116,14 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Boolean} options.addQrcode If true, this adds a QR Code to the top-right of my resume.
      * @param {Boolean} options.removeLinks If true, this removes all links from my resume.
      * @param {Boolean} options.flattenFont If true, this turns all text to black.
+     * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      * @returns The blob of the new resume.
      */
     async function createNewBlob(options = {}) {
         if(options?.addQrcode == undefined) { options.addQrcode = false; }
         if(options?.removeLinks == undefined) { options.removeLinks = false; }
         if(options?.flattenFont == undefined) { options.flattenFont = false; }
+        if(options?.updateQuery == undefined) { options.updateQuery = true; }
         var newResumeBlob = await fetch(Mohit_Jain_Resume).then((res) => res.blob());
 
         // This section adds a QR Code to my resume if requested.
@@ -195,7 +201,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         linksRemoved.value = options.removeLinks;
         fontFlattened.value = options.flattenFont;
 
-        await setResumeQuery();
+        if(options.updateQuery) { await setResumeQuery(); }
         return newResumeBlob;
     }
    

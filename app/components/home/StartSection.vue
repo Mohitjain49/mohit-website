@@ -78,7 +78,7 @@ const startContactObj = ref("");
 
 useIntersectionObserver(startContent, ([{ isIntersecting }]) => { setNameTransitions(isIntersecting); });
 watch(visitorLeftPage, (newValue) => { if(newValue) { hideStartContactDropdown(); } });
-onMounted(() => { nextTick(() => { onClickOutside(startSocialsContainer.value, () => { hideStartContactDropdown(); }); }); });
+onMountedAdvanced(() => { onClickOutside(startSocialsContainer.value, () => { hideStartContactDropdown(); }); });
 
 /**
  * This function triggers whenever the a button for a social media link is clicked.

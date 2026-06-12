@@ -23,7 +23,7 @@ const props = defineProps({ index: { type: Number, required: true } });
 const htmlClass = computed(() => { return ((!CURRENT_METADATA.class) ? '' : CURRENT_METADATA.class); });
 const htmlID = computed(() => { return ((!CURRENT_METADATA.id) ? '' : CURRENT_METADATA.id); });
 
-onMounted(() => { documentStore.mountDocumentPage(); });
+onMountedAdvanced(() => { documentStore.mountDocumentPage(); });
 onBeforeUnmount(() => { documentStore.unmountDocumentPage(); });
 
 const PAGE_METADATA = [

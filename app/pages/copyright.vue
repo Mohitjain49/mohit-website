@@ -48,7 +48,7 @@ const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuil
 const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
 usePulseLoopAnimation(copyrightBodyRef);
-onMounted(() => {
+onMountedAdvanced(() => {
     initWebData();
     COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);
