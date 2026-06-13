@@ -55,8 +55,8 @@
         "vue-router": "^5.1.0"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1067.0",
-        "@aws-sdk/client-s3": "^3.1067.0",
+        "@aws-sdk/client-cloudfront": "^3.1068.0",
+        "@aws-sdk/client-s3": "^3.1068.0",
         "@stefanobartoletti/nuxt-social-share": "^3.0.3",
         "@types/lodash-es": "^4.17.12",
         "@types/node": "^25.9.3",
@@ -73,5 +73,8 @@
     },
     "simple-git-hooks": {
         "pre-commit": "npm.cmd run test"
+    },
+    "overrides": {
+        "esbuild": "^0.28.1"
     }
 }

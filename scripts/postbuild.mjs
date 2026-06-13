@@ -53,7 +53,7 @@ function main() {
     console.log("\n\n");
     try { editSitemapXsl(); } catch(e) { onError(e); }
     try { createBuildInfoFile(); } catch(e) { onError(e); }
-    console.log("🏁 Postbuild Complete!\n\n");
+    console.log("\n\n🏁 Postbuild Complete!");
 }
 
 // Runs the Main Function.
