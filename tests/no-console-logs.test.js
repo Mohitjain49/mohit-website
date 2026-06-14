@@ -3,7 +3,7 @@ const path = require('path');
 const { globSync } = require('glob');
 
 /** This fetches every .vue and .scss file except for the dynamic scss rules file. */
-const targetFiles = globSync('./app/**/*.{vue,js}');
+const targetFiles = globSync('./app/**/*.{vue,js,ts}');
 
 describe('No Console Logs', () => {
     // This makes sure that there is at least one .vue or .js file to scan.

@@ -10,6 +10,9 @@ const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
 /** This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website. */
 export const useDocumentStore = defineStore("document-store", () => {
+    const PDF_WIDTH_CSS_PROPERTY = "--mohit-custom-pdf-width";
+    const PDF_HEIGHT_CSS_PROPERTY = "--mohit-custom-pdf-height";
+
     const hostedDocuments = [
         useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
         useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false, false),
@@ -32,6 +35,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleAccountsTag = useScriptTag("https://accounts.google.com/gsi/client", (el) => { initGoogleTokenClient(); }, SCRIPT_TAG_OPTIONS);
     const googleApiTag = useScriptTag("https://apis.google.com/js/api.js", (el) => { initGooglePickerAPI(); }, SCRIPT_TAG_OPTIONS);
 
+    /** @type {AbortController} This abort controller manages the event listeners fired when the page resizes. */
+    var pdfDimensionsController = null;
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
@@ -99,12 +104,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         const uploadPending = (uploadObj.pending || googleDriveOptAvailable.value == 1)
         return (uploadObj.fresh ? "fa-check" : (uploadPending ? "fa-spinner" : "fa-brands fa-google-drive"));
     });
-
-    const wHeightWatcher = watch(windowSize.height, () => { setPdfSize(); });
-    const wWidthWatcher = watch(windowSize.width, () => { setPdfSize(); });
-
-    wHeightWatcher.pause();
-    wWidthWatcher.pause();
 
     /**
      * ---------------------------------------------------------------------------
@@ -432,6 +431,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     function setPdfSize() {
         customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (windowSize.width.value - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
+
+        if(!document || !document.documentElement) { return; }
+        document.documentElement.style.setProperty(PDF_WIDTH_CSS_PROPERTY, (String(customPdfWidth.value) + "px"));
+        document.documentElement.style.setProperty(PDF_HEIGHT_CSS_PROPERTY, (String(customPdfHeight.value) + "px"));
     }
 
     /**
@@ -443,12 +446,15 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(status === "toggle") { status = !windowSizeWatchersEnabled.value; }
         if(status && (force || !windowSizeWatchersEnabled.value)) {
             windowSizeWatchersEnabled.value = true;
-            wHeightWatcher.resume();
-            wWidthWatcher.resume();
+            if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
+
+            pdfDimensionsController = new AbortController();
+            const signal = pdfDimensionsController.signal;
+            window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal });
         } else if(!status && (force || windowSizeWatchersEnabled.value)) {
             windowSizeWatchersEnabled.value = false;
-            wHeightWatcher.pause();
-            wWidthWatcher.pause();
+            if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
+            pdfDimensionsController = null;
         }
     }
 

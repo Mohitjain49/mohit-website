@@ -10,10 +10,12 @@
     --webpage-zoom-factor: 1.0;
     --true-100vh: 100vh;
     --true-100vw: 100vw;
+    --mohit-custom-pdf-width: 800px;
+    --mohit-custom-pdf-height: 1100px;
     --body-height: calc(var(--true-100vh, 100vh) - 50px);
+
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
-
     --blue-one: rgb(159, 191, 255);
     --blue-two: rgb(117, 163, 255);
     --blue-three: rgb(67, 130, 255);
@@ -151,8 +153,7 @@ button {
     background: transparent;
 }
 #resume-container:fullscreen {
-    padding: 20px 12px 30px 0px;
-    padding-top: 20px;
+    padding: 0px 12px 30px 0px;
     width: calc(100% - 12px);
     overflow-y: auto;
     overflow-x: hidden;

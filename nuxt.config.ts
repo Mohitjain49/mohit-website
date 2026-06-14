@@ -16,6 +16,9 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/gamepad/store-and-utility", "/gamepad/vuejs-component", "/gamepad/custom-events",
 ];
 
+/** This function prevents any auto-scrolling before the website's internal JS can kick in. */
+const NO_SCROLL_FUNCTION = "if(\'scrollRestoration\' in history) { history.scrollRestoration = \'manual\'; }";
+
 /** This plugin adds a null "alt" attribute to any image tag that doesn't already have an "alt" attribute. */
 const AUTO_ALT_PLUGIN: Plugin = {
     name: 'vite-plugin-auto-null-alt',
@@ -33,7 +36,10 @@ export default defineNuxtConfig({
     compatibilityDate: '2026-05-08',
     devtools: { enabled: false },
     ssr: true,
-    app: { baseURL: "/", head: { meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]}},
+    app: { baseURL: "/", head: {
+        script: [{ type: 'text/javascript', tagPosition: 'head', innerHTML: NO_SCROLL_FUNCTION }],
+        meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
+    }},
     devServer: { port: 5000, host: "localhost" },
     modules: ['@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
         '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',

@@ -32,7 +32,9 @@
                 </button>
             </div>
         </div>
+
         <div ref="script-html" class="code-file-inHTML" v-html="html"></div>
+        <HostedFileBottomBar v-if="fullScreenStore.fullScreenSet" />
     </div>
 
     <template v-if="fullScreenStore.fullScreenSet">
@@ -41,8 +43,8 @@
         <GamepadComponent />
     </template>
 
-    <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <WebFooter v-if="!fullScreenStore.fullScreenSet" />
+    <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <FileWidgets />
     <ScriptLineOptions />
     <ScriptsMenu />

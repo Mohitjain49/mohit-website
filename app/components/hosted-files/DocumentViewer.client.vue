@@ -19,6 +19,7 @@
                 :page="page.num"
             />
         </div>
+        <HostedFileBottomBar v-if="fullScreenSet" />
     </div>
     
     <template v-if="fullScreenSet">

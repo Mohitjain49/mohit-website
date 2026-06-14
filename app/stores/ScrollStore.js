@@ -78,7 +78,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function unmountScrollStore() {
         if(!mounted.value) { return; }
         if(animationFrame != null) { cancelAnimationFrame(animationFrame); }
+
         lenis.destroy();
+        lenis = null;
         mounted.value = false;
     }
 
@@ -125,14 +127,16 @@ export const useScrollStore = defineStore("scroll-store", () => {
             const target = document.getElementById(id);
             if(target == null) { reject("Element with id \"" + id + "\" does not exist."); }
 
-            const targetY = (target.getBoundingClientRect().top + window.scrollY);
-            if(Math.abs(window.scrollY - targetY) < 1) {
+            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
+            const targetY = (target.getBoundingClientRect().top + scrollY);
+
+            if(Math.abs(scrollY - targetY) < 1) {
                 onLenisScroll(lenis, "no-scroll");
                 resolve("Scroll Complete!");
                 return;
             }
 
-            const initDuration = (Math.abs(targetY - window.scrollY) / 4000);
+            const initDuration = (Math.abs(targetY - scrollY) / 4000);
             const finalDuration = Math.max(0.75, Math.min((initDuration * cssToWindowHeightRatio.value), 3));
 
             scrollProgress.value.targetElement = target;
@@ -157,12 +161,14 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(isAutoScrolling.value) { return; }
         return new Promise((resolve, reject) => {
             if(!mounted.value || !lenis) { reject("Website Not Loaded Yet."); }
-            if(window.scrollY < 1) {
+            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
+
+            if(scrollY < 1) {
                 onLenisScroll(lenis, "no-scroll");
                 resolve("Scroll Complete!");
                 return;
             }
-            const duration = Math.max(0.75, Math.min(((window.scrollY / 4000) * cssToWindowHeightRatio.value), 3));
+            const duration = Math.max(0.75, Math.min(((scrollY / 4000) * cssToWindowHeightRatio.value), 3));
 
             scrollProgress.value.duration = duration;
             scrollStartTime = dayjs(new Date());

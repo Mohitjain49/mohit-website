@@ -103,13 +103,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     async function setEventListeners() {
         if(mounted.value != 0) { return; }
         mounted.value = 1;
+        window.history.scrollRestoration = "manual";
 
         await nextTick();
         await onNuxtReadyAdvanced();
 
         nuxtReady.value = true;
         const signal = controller.signal;
-        history.scrollRestoration = "manual";
 
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
@@ -249,28 +249,30 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This runs whenever a page is opened.
      * @param {Number} pixelOffset The offset for scrolling to a particular section.
      */
-    function mountWebData(pixelOffset = 0) {
+    async function mountWebData(pixelOffset = 0) {
         closeNavMenu();
         if(openShareOnMount.value) {
             openShareOnMount.value = false;
-            sleep(50).then(() => { if(showSharePopupImmediate.value) { showSharePopup.value = true; }});
+            await sleep(50);
+            if(showSharePopupImmediate.value) { showSharePopup.value = true; }
         } else {
             setQRCodePopup("quit");
         }
 
-        nextTick(() => {
-            const hashStr = router.currentRoute.value.hash.substring(1);
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            if(hashStr === "" || documentStore.onDocumentRoute) { return; }
+        // await nextTick();
+        // while(!scrollStore.mounted) {}
 
-            allImagesReady().then(() => {
-                try {
-                    goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset), 10);
-                } catch(e) {
-                    scrollToTop(true, 0);
-                }
-            });
-        });
+        // const hashStr = router.currentRoute.value.hash.substring(1);
+        // await scrollToTop(true, 0);
+        // if(hashStr === "" || documentStore.onDocumentRoute) { return; }
+
+        // await allImagesReady();
+        // try {
+        //     console.log("hello")
+        //     goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset), 10);
+        // } catch(e) {
+        //     scrollToTop(true, 0);
+        // }
     }
 
     /** This function runs to ensure that all the images in a webpage are loaded before the scroll event takes place. */
@@ -287,12 +289,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function scrollToAndFromFooter() {
         if(!navFooterPresent.value) { return; }
         closeNavMenu();
-
-        if(webFooterVisibility.value) {
-            scrollToTop(false, 0);
-        } else {
-            goToFooter();
-        }
+        if(webFooterVisibility.value) { scrollToTop(false, 0); }
     }
 
     /** The toggles the status of the home navigation menu. */

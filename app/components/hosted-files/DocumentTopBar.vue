@@ -1,5 +1,5 @@
 <template>
-<div ref="document-options" class="mohit-document-topBar" :style="topBarWidth">
+<div ref="document-options" :class="['mohit-document-topBar', (documentStore.onMarkdownRoute ? 'markdown' : '')]">
     <div class="mohit-document-topBar-sideSection">
         <button class="lightblue" @click="documentStore.downloadDoc()" title="Download Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.documentDownloadStatus.pending" />
@@ -42,14 +42,8 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 
-const { width: windowWidth } = useMohitWindowSize();
 const pdfViewerOptionsBar = useTemplateRef('document-options');
 usePulseLoopAnimation(pdfViewerOptionsBar);
-
-const topBarWidth = computed(() => {
-    if(!documentStore.onMarkdownRoute) { return ('width:' + documentStore.customPdfWidth + 'px'); }
-    return ("width:" + ((fullScreenStore.fullScreenSet || windowWidth.value < 1075) ? "calc(100% - 40px)" : "1030px"));
-});
 
 /** This function opens the document menu. */
 function openWebsiteMenu(index = 3) {

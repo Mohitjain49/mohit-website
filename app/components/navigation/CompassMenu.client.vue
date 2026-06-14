@@ -9,7 +9,7 @@
 
         <div v-for="section in routes" class="mohit-navMenu-opt" :style="getColorStyles(section.color)">
             <RouterLink class="mohit-navMenu-mainOpt" pulse-loop
-                @click="scrollToSection(section.id, section.offset)"
+                @click="webData.closeNavMenu()"
                 :title="('Scroll To The ' + section.title + ' Section')"
                 :to="getSectionLink(section.id)">
 
@@ -73,11 +73,5 @@ function getSectionLink(id) {
     const routerPath = routePath.value;
     const suffix = ("/#" + id);
     return (routerPath.endsWith("/") ? (routerPath.substring(0, routerPath.length - 1) + suffix) : (routerPath + suffix));
-}
-
-/** This function scrolls to a section on the page. */
-function scrollToSection(id, offset) {
-    goToPageSection(id, offset);
-    webData.closeNavMenu();
 }
 </script>

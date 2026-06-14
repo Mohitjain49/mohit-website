@@ -4,7 +4,7 @@
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
             Lead Software Developer At 
-            <span> <RouterLink class="ivue-subtitle" to="/#ivue" @click="goToIvueSection()" title="See what I worked on at iVue!"> iVue </RouterLink> </span>
+            <span> <RouterLink class="ivue-subtitle" to="/#ivue" title="See what I worked on at iVue!"> iVue </RouterLink> </span>
         </div>
         <div class="start-section-subtitle">
             Co-creator of <span><a :href="WORLDS_IVUE_LINK" class="wiv-subtitle">Worlds iVue</a></span>
@@ -123,9 +123,6 @@ function setNameTransitions(isVisible) {
 
 /** This function hides the contact dropdown on this section. */
 function hideStartContactDropdown() { startContactObj.value = ""; }
-
-/** This function takes the visitor to the ivue section of my website. */
-function goToIvueSection() { try { goToPageSection('ivue'); } catch(e) {} }
 
 /** This function returns the styles for a special button. */
 function getSpecialBtnStyles(color = "rgb(126, 90, 0)") {
