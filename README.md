@@ -1,9 +1,3 @@
 # Mohit's Website
 
-This repository hosts my personal website that I use to show my portfolio of skills and experiences, market companies I work in, and test certain libraries and web services for certain web applications I'm working on.
-
-## Links
-  
-Main Website - https://www.mohit-jain.com/  
-Repository - https://github.com/Mohitjain49/mohit-website/  
-Code Sandbox - https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website/
+My personal website showcases all of my professional skills and experience as a software engineer. I work on this website constantly, whether it be for personal satisfaction or to see how exactly I can improve my designs. I also use my website to test out numerous Node Package Manager (NPM) packages and other works of mine like my Amazon Web Service Deployment Script before I use them in production-level web applications. Feel free to explore my website at [www.mohit-jain.com](https://www.mohit-jain.com/)!

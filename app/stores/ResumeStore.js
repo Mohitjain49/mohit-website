@@ -26,11 +26,11 @@ export const useResumeStore = defineStore("resume-store", () => {
 
         if(!mountedOnce.value) {
             const routeQuery = router.currentRoute.value.query;
-            const onMainResumeRoute = (documentStore.onResumeRoute && !documentStore.onMarkdownRoute);
+            const onMainResumeRoute = documentStore.onMainResumeRoute;
 
-            qrcodeAdded.value = (routeQuery.qrcodeAdded && onMainResumeRoute && routeQuery.qrcodeAdded === "true");
-            linksRemoved.value = (routeQuery.linksRemoved && onMainResumeRoute && routeQuery.linksRemoved === "true");
-            fontFlattened.value = (routeQuery.fontFlattened && onMainResumeRoute && routeQuery.fontFlattened === "true");
+            qrcodeAdded.value = (onMainResumeRoute && routeQuery.qrcodeAdded && routeQuery.qrcodeAdded === "true");
+            linksRemoved.value = (onMainResumeRoute && routeQuery.linksRemoved && routeQuery.linksRemoved === "true");
+            fontFlattened.value = (onMainResumeRoute && routeQuery.fontFlattened && routeQuery.fontFlattened === "true");
         }
         mountedOnce.value = true;
 

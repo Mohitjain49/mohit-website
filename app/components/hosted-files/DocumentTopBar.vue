@@ -21,10 +21,13 @@
         </a>
     </div>
     <div class="mohit-document-topBar-sideSection">
+        <button class="flame" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(3.1)" title="Edit Resume Components" pulse-loop>
+            <FontAwesomeIcon icon="fa-gears" />
+        </button>
         <button class="flame" v-if="documentStore.onCreateGithubRepoRoute" @click="documentStore.scrollToPage(2)" title="Scroll To Table Of Contents" pulse-loop>
             <FontAwesomeIcon icon="fa-list" />
         </button>
-        <button @click="openDocumentMenu()" title="Open Document Options" pulse-loop>
+        <button @click="openWebsiteMenu(3)" title="Open Document Options" pulse-loop>
             <FontAwesomeIcon icon="fa-file-export" />
         </button>
         <button @click="documentStore.toggleDocumentFullScreen()" :title="fullScreenStore.elementTitle" pulse-loop>
@@ -49,8 +52,8 @@ const topBarWidth = computed(() => {
 });
 
 /** This function opens the document menu. */
-function openDocumentMenu() {
+function openWebsiteMenu(index = 3) {
     webData.bypassBodyClick();
-    webData.setMenuOpen(3, true);
+    webData.setMenuOpen(index, true);
 }
 </script>

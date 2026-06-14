@@ -1,7 +1,10 @@
 import og_img from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 export const WEBSITE_TITLE = "Mohit Jain | My Portfolio";
-export const WEBSITE_DESC = "Hello! My name is Mohit Jain, and I use my portfolio to showcase " +
-    "my skills and as a \"Feature Lab\" for other projects of mine. Made With Vue.js.";
+export const WEBSITE_DESC = "My personal website showcases all of my professional skills and experience as a software engineer. " +
+    "I work on this website constantly, whether it be for personal satisfaction or to see how exactly I can improve my designs. " +
+    "I also use my website to test out numerous Node Package Manager (NPM) packages and other works of mine " +
+    "like my Amazon Web Service Deployment Script before I use them in production-level web applications. " +
+    "Feel free to explore my website!";
 
 /**
  * This function returns the meta tags for the website for Search Engine Optimization.

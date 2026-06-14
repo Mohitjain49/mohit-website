@@ -8,9 +8,9 @@
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
         <MenuTop />
 
-        <template v-if="documentStore.onAnyResumeRoute">
-            <template v-if="(!documentStore.onMarkdownRoute)">
-                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+        <template v-if="documentStore.onResumeRoute">
+            <template v-if="documentStore.onMainResumeRoute">
+                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
                     <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.1)" pulse-loop>
                         <font-awesome-icon icon="fa-gears" />
                         <span> Edit Resume Components </span>

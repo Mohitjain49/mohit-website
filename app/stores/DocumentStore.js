@@ -75,10 +75,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onFCSCertificateRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
     const onResearchPaperRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
 
-    const onAnyResumeRoute = computed(() => { return (onResumeRoute.value); });
-    const saveAsSupported = computed(() => {
-        return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
-    });
+    const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
+    const saveAsSupported = computed(() => { return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
 
     const downloadIcon = computed(() => {
         const downloadObj = documentDownloadStatus.value;
@@ -515,7 +513,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported, currentDocumentBlobCreated,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onAnyResumeRoute,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
         onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
