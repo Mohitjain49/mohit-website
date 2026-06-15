@@ -1,11 +1,11 @@
 <template>
 <div class="file-widgets-container" ref="file-widgets-container">
-    <Transition name="fade-transition" appear>
+    <Transition name="file-widgets-transition" appear>
         <button v-if="(fullScreenSet && !hfBottomBarVisible)" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" pulse-loop>
             <FontAwesomeIcon icon="fa-compress" />
         </button>
     </Transition>
-    <Transition name="fade-transition" appear>
+    <Transition name="file-widgets-transition" appear>
         <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" pulse-loop>
             <FontAwesomeIcon icon="fa-file-export" />
         </button>
@@ -89,5 +89,17 @@ function exitFS() {
 #download-file-widget:hover {
     box-shadow: 0px 0px 10px 1px var(--website-light-text);
     scale: 1.1;
+}
+
+.file-widgets-transition-enter-active, .file-widgets-transition-leave-active {
+    transition: opacity 0.5s, bottom 0.5s !important;
+}
+.file-widgets-transition-enter-from, .file-widgets-transition-leave-to {
+    opacity: 0;
+    bottom: -64px !important;
+}   
+.file-widgets-transition-enter-to, .file-widgets-transition-leave-from {
+    opacity: 1;
+    bottom: 12px !important;
 }
 </style>

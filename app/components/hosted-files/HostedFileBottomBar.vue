@@ -16,7 +16,10 @@
                 :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
             />
         </button>
-        <button @click="scrollToTop(false, 0)" title="Scroll To The Top" pulse-loop>
+        <button @click="openWebsiteMenu()" :title="fileOptionsTitle" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
+            <FontAwesomeIcon icon="fa-file-export" />
+        </button>
+        <button v-if="!wholeFileInView" @click="scrollToTop(false, 0)" title="Scroll To The Top" pulse-loop>
             <font-awesome-icon icon="fa-turn-up" />
         </button>
     </div>
@@ -32,17 +35,19 @@ const router = useRouter();
 
 const { onDocumentRoute, onMarkdownRoute } = storeToRefs(documentStore);
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
+const wholeFileInView = useState("whole-hosted-file-in-view", () => { return false; });
 
 const bottomOptionsBar = useTemplateRef('hosted-file-bottom-options');
 const barVisible = useElementVisibility(bottomOptionsBar);
 usePulseLoopAnimation(bottomOptionsBar);
 
 // These two functions update the state on whether the hosted file bottom bar is visible or not.
-onMountedAdvanced(() => { hfBottomBarVisible.value = barVisible.value });
-watch(barVisible, (newValue) => { hfBottomBarVisible.value = newValue });
+onMountedAdvanced(() => { hfBottomBarVisible.value = barVisible.value; });
+watch(barVisible, (newValue) => { hfBottomBarVisible.value = newValue; });
 
 const hostedFileClass = computed(() => { return (onDocumentRoute.value ? (onMarkdownRoute.value ? "document-markdown" : "document") : "script"); });
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
+const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
 
 /** This function sets the full screen mode for a hosted file. */
 function setFS() {
@@ -51,6 +56,12 @@ function setFS() {
     } else {
         scriptsStore.toggleScriptFullScreen();
     }
+}
+
+/** This function opens the options for the file. */
+function openWebsiteMenu() {
+    webData.bypassBodyClick();
+    webData.setMenuOpen((onDocumentRoute.value ? 3 : 2), true);
 }
 
 /**
