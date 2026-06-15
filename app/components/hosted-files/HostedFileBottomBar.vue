@@ -19,8 +19,15 @@ const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
 
 const { onDocumentRoute, onMarkdownRoute } = storeToRefs(documentStore);
+const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
+
 const bottomOptionsBar = useTemplateRef('hosted-file-bottom-options');
+const barVisible = useElementVisibility(bottomOptionsBar);
 usePulseLoopAnimation(bottomOptionsBar);
+
+// These two functions update the state on whether the hosted file bottom bar is visible or not.
+onMountedAdvanced(() => { hfBottomBarVisible.value = barVisible.value });
+watch(barVisible, (newValue) => { hfBottomBarVisible.value = newValue });
 
 const hostedFileClass = computed(() => { return (onDocumentRoute.value ? (onMarkdownRoute.value ? "document-markdown" : "document") : "script"); });
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });

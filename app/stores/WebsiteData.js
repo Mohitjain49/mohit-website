@@ -245,45 +245,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(event.reason?.name === "AbortException") { event.preventDefault(); }
     }
 
-    /**
-     * This runs whenever a page is opened.
-     * @param {Number} pixelOffset The offset for scrolling to a particular section.
-     */
-    async function mountWebData(pixelOffset = 0) {
+    /** This runs whenever a page is opened. */
+    function mountWebData() {
         closeNavMenu();
         if(openShareOnMount.value) {
             openShareOnMount.value = false;
-            await sleep(50);
-            if(showSharePopupImmediate.value) { showSharePopup.value = true; }
+            sleep(50).then(() => { if(showSharePopupImmediate.value) { showSharePopup.value = true; }});
         } else {
             setQRCodePopup("quit");
         }
-
-        // await nextTick();
-        // while(!scrollStore.mounted) {}
-
-        // const hashStr = router.currentRoute.value.hash.substring(1);
-        // await scrollToTop(true, 0);
-        // if(hashStr === "" || documentStore.onDocumentRoute) { return; }
-
-        // await allImagesReady();
-        // try {
-        //     console.log("hello")
-        //     goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset), 10);
-        // } catch(e) {
-        //     scrollToTop(true, 0);
-        // }
     }
-
-    /** This function runs to ensure that all the images in a webpage are loaded before the scroll event takes place. */
-    async function allImagesReady() {
-        const images = Array.from(document.documentElement.querySelectorAll('img'));
-        const promises = images.map(async(img) => {
-            if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
-            try { return await img.decode(); } catch (err) {}
-        });
-        return Promise.all(promises);
-    };
 
     /** This function scrolls to the footer of the webpage if it exists. */
     function scrollToAndFromFooter() {
@@ -386,13 +357,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 });
 
-/**
- * This function mounts the website data pinia store on a page.
- * @param {Number} pixelOffset The offset for scrolling to a particular section.
- */
-export function initWebData(pixelOffset = 0) {
-    useWebsiteDataStore().mountWebData(pixelOffset);
-}
+/** This function mounts the website data pinia store on a page. */
+export function initWebData() { useWebsiteDataStore().mountWebData(); }
 
 /** This function returns a reactive computed value on whether the user is on a hosted file page or not. */
 export function getOnHostedFileRoute() {

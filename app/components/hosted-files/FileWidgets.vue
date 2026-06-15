@@ -1,11 +1,15 @@
 <template>
 <div class="file-widgets-container" ref="file-widgets-container">
-    <button v-if="fullScreenSet" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" pulse-loop>
-        <FontAwesomeIcon icon="fa-compress" />
-    </button>
-    <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" pulse-loop>
-        <FontAwesomeIcon icon="fa-file-export" />
-    </button>
+    <Transition name="fade-transition" appear>
+        <button v-if="(fullScreenSet && !hfBottomBarVisible)" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" pulse-loop>
+            <FontAwesomeIcon icon="fa-compress" />
+        </button>
+    </Transition>
+    <Transition name="fade-transition" appear>
+        <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" pulse-loop>
+            <FontAwesomeIcon icon="fa-file-export" />
+        </button>
+    </Transition>
 </div>
 </template>
 
@@ -17,12 +21,9 @@ const scriptsStore = useScriptsStore();
 const fullScreenSet = getFullScreenSet();
 const { onDocumentRoute } = storeToRefs(documentStore);
 
+const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
-
-var animationTimeout = null;
-watch(fullScreenSet, () => { setWidgetAnimations(); });
-onMountedAdvanced(() => { setWidgetAnimations(); })
 
 const fileWidgets = useTemplateRef('file-widgets-container');
 usePulseLoopAnimation(fileWidgets);
@@ -40,17 +41,6 @@ function exitFS() {
     } else {
         scriptsStore.toggleScriptFullScreen();
     }
-}
-
-/** This function manages the string animations for both widgets. */
-function setWidgetAnimations() {
-    if(animationTimeout != null) { clearTimeout(animationTimeout); }
-    const id = (fullScreenSet.value ? "minimizeScreen-widget" : "download-file-widget");
-
-    document.getElementById(id)?.classList.add("animate__animated", "animate__fadeInUp");
-    animationTimeout = setTimeout(() => {
-        document.getElementById(id)?.classList.remove("animate__animated", "animate__fadeInUp");
-    }, 1100);
 }
 </script>
 
@@ -71,7 +61,7 @@ function setWidgetAnimations() {
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    transition: var(--default-transition), scale 0.2s;
+    transition: var(--default-transition), scale 0.2s, opacity 0.25s, bottom 0.25s;
 }
 #minimizeScreen-widget:hover {
     box-shadow: 0px 0px 10px 1px var(--lightning-yellow);
@@ -94,7 +84,7 @@ function setWidgetAnimations() {
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    transition: var(--default-transition), scale 0.2s;
+    transition: var(--default-transition), scale 0.2s, opacity 0.5s, bottom 0.5s;
 }
 #download-file-widget:hover {
     box-shadow: 0px 0px 10px 1px var(--website-light-text);
