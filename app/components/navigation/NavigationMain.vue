@@ -3,10 +3,12 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" :style="{ 'height': navBarHeight }" ref="navBar">
-    <div class="mohit-main-progressBar" v-if="scrollProgress.show">
-        <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
-    </div>
+<nav id="mohit-navBar" ref="navBar">
+    <Transition name="fade-exit-transition" fade>
+        <div class="mohit-main-progressBar" v-if="scrollProgress.show">
+            <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
+        </div>
+    </Transition>
 
     <div class="mohit-navBar-top">
         <div class="mohit-navBar-icons left">
@@ -122,7 +124,7 @@
     </div>
 </Transition>
 
-<div v-show="showNavLeftWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons" ref="navWidgets">
+<div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
     <button v-if="showUpdateWebsiteWidget" class="mohit-navBar-statusIcon yellow" pulse-loop
         @click="installStore.setUpdateBox(true)"
         title="This Is An Old Version Of My Website. Click Here To Update It.">
@@ -146,7 +148,7 @@
         <font-awesome-icon icon="fa-gamepad" />
     </RouterLink>
 </div>
-<div v-show="showNavRightWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons right" ref="shareWidget">
+<div v-show="showNavRightWidgets" class="mohit-navBar-status-icons right" ref="shareWidget">
     <div v-if="scriptsStore.scriptLoading" class="mohit-navBar-loadingWidget script" title="Loading Script Page...">
         <font-awesome-icon icon="fa-spinner" spin-pulse />
     </div>
@@ -206,7 +208,6 @@ const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdat
 
 const showNavLeftWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1 || webData.websiteMenuMode == 1)); });
-const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
 
 /**
  * This function makes a button flash if it will do nothing.

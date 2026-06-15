@@ -313,3 +313,7 @@ button {
 .fade-transition-enter-to, .fade-transition-leave-from {
     opacity: 1;
 }
+
+.fade-exit-transition-leave-active { transition: opacity 0.5s; }
+.fade-exit-transition-leave-to { opacity: 0; }   
+.fade-exit-transition-leave-from { opacity: 1; }

@@ -5,7 +5,17 @@
             <font-awesome-icon :icon="fullScreenStore.faIcon" />
         </button>
     </div>
+
     <div class="mohit-document-topBar-sideSection">
+        <button v-show="(webData.wakeLock.isActive || webData.wakeLockChangeFresh)" pulse-loop
+            @click="(event) => { onWakeLockButtonClick(event); }"
+            :style="getColorStyles('var(--vibrant-flame)')"
+            :title="webData.wakeLockTitle">
+
+            <font-awesome-icon :flip="webData.wakeLockChangeFresh"
+                :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
+            />
+        </button>
         <button @click="scrollToTop(false, 0)" title="Scroll To The Top" pulse-loop>
             <font-awesome-icon icon="fa-turn-up" />
         </button>
@@ -14,9 +24,11 @@
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
+const router = useRouter();
 
 const { onDocumentRoute, onMarkdownRoute } = storeToRefs(documentStore);
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
@@ -38,6 +50,19 @@ function setFS() {
         documentStore.toggleDocumentFullScreen();
     } else {
         scriptsStore.toggleScriptFullScreen();
+    }
+}
+
+/**
+ * This function triggers whenever someone clicks on the Wake Lock Button.
+ * @param {PointerEvent} event The Click event to draw from.
+ */
+function onWakeLockButtonClick(event) {
+    const routePath = router.currentRoute.value.path;
+    if(event.ctrlKey && routePath !== "/wakelock" && routePath !== "/wakelock/") {
+        router.push("/wakelock/");
+    } else {
+        webData.toggleWakeLock();
     }
 }
 </script>

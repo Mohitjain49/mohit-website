@@ -23,6 +23,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     var scrollStartTime = null;
     var calculateScrollInterval = null;
     var cancelScrollTimeout = null;
+    var hideScrollProgressTimeout = null;
 
     const webpageHeight = ref(0);
     const scrollProgress = ref({ pct: 0, duration: 0, show: false, targetElement: null });
@@ -213,8 +214,13 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function setScrollInterval(start = true) {
         if(!start && calculateScrollInterval != null) {
             clearInterval(calculateScrollInterval);
+            if(hideScrollProgressTimeout != null) { clearTimeout(hideScrollProgressTimeout); }
+
             calculateScrollInterval = null;
-            scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null }
+            hideScrollProgressTimeout = setTimeout(() => {
+                scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
+                hideScrollProgressTimeout = null;
+            }, 250);
         } else if(start && calculateScrollInterval == null) {
             calculateScrollInterval = setInterval(() => { calculateScrollProgress(); }, 10);
             scrollProgress.value.show = true;

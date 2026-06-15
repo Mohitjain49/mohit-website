@@ -23,21 +23,23 @@
 }
 
 .mohit-main-progressBar {
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;
-    height: 3px;
+    height: 2px;
     background-color: black;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
+    border-radius: 2px;
+    overflow: hidden;
 }
 .mohit-main-progressBar > .inner {
     height: 100%;
     width: 100%;
-    background-color: var(--vibrant-flame);
+    background: linear-gradient(to right, white 0%, var(--vibrant-flame) 100%);
 }
 
 .mohit-navBar-top {
