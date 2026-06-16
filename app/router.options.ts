@@ -6,7 +6,6 @@ const SCROLL_STORE_WAIT_SECONDS = 1.5;
 export default {
     async scrollBehavior(to, from, savedPosition) {
         // console.log({ to, from, savedPosition });
-        if(to.fullPath === from.fullPath) { return false; }
         window.history.scrollRestoration = "manual";
 
         // Initialize Stores, Variables, and Conditions.
@@ -33,7 +32,7 @@ export default {
 
         // Wait for all elements and itself to be properly rendered in.
         await nextTick();
-        await onNuxtReadyAdvanced();
+        if(differentPage) { await onNuxtReadyAdvanced(); }
 
         /** An array of conditions where if one is true, no smooth auto-scroll takes place. */
         const NO_SCROLL_CONDITIONS = [

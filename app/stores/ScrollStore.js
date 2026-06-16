@@ -122,9 +122,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
     async function scrollToId(id = "start", offset = 0, delay = 0) {
-        if(isAutoScrolling.value || !lenis) { return; }
         return new Promise((resolve, reject) => {
-            if(!mounted.value) { reject("Website Not Loaded Yet."); }
+            if(!verifyAutoscroll()) { reject("Autoscroll Unavailable."); }
             const target = document.getElementById(id);
             if(target == null) { reject("Element with id \"" + id + "\" does not exist."); }
 
@@ -145,10 +144,12 @@ export const useScrollStore = defineStore("scroll-store", () => {
             scrollStartTime = dayjs(new Date());
 
             if(parseFloat(window.getComputedStyle(target).getPropertyValue('scroll-margin-top')) != 0) { offset = 0; }
+            sleep(delay + finalDuration + 1000).then(() => { resolve("timed out."); });
+
             sleep(delay).then(() => { lenis.scrollTo(target, {
                 offset, duration: finalDuration, lock: true,
-                onStart: () => { setScrollInterval(true); },
-                onComplete: () => { setScrollInterval(false); resolve("Scroll Complete!"); }
+                onStart: () => { setScrollInterval(0); },
+                onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
             }); });
         });
     }
@@ -158,10 +159,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
      * @param {Boolean} instant If true, this function skips the animation and instantly takes the user to the top.
      * @param {Number} delay How much time to delay the scroll before starting it.
      */
-    function scrollToTop(instant = false, delay = 0) {
-        if(isAutoScrolling.value) { return; }
+    async function scrollToTop(instant = false, delay = 0) {
         return new Promise((resolve, reject) => {
-            if(!mounted.value || !lenis) { reject("Website Not Loaded Yet."); }
+            if(!verifyAutoscroll()) { reject("Autoscroll Unavailable"); }
             const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
 
             if(scrollY < 1) {
@@ -169,23 +169,27 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 resolve("Scroll Complete!");
                 return;
             }
-            const duration = Math.max(0.75, Math.min(((scrollY / 4000) * cssToWindowHeightRatio.value), 3));
 
+            const duration = Math.max(0.75, Math.min(((scrollY / 4000) * cssToWindowHeightRatio.value), 3));
             scrollProgress.value.duration = duration;
             scrollStartTime = dayjs(new Date());
 
             sleep(delay).then(() => { lenis.scrollTo("top", {
                 duration, lock: true, immediate: instant,
-                onStart: () => { setScrollInterval(true); },
-                onComplete: () => { setScrollInterval(false); resolve("Scroll Complete!"); }
+                onStart: () => { setScrollInterval(0); },
+                onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
             }); });
+            sleep(delay + duration + 1000).then(() => { resolve("timed out."); });
         });
     }
+
+    /** This function returns a Boolean that if true confirms that the website is ready for an autoscroll. */
+    function verifyAutoscroll() { return (mounted.value && !isAutoScrolling.value && lenis); }
 
     /** This function cancels any ongoing autoscroll. */
     function cancelAutoscroll() {
         if(lenis == null) { return; }
-        setScrollInterval(false);
+        setScrollInterval(2);
         lenis.stop();
         lenis.start();
     }
@@ -209,19 +213,26 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     /**
      * This function sets the scroll calculation interval.
-     * @param {Boolean} start If true, this function should start the interval, else it should stop it.
+     * @param {0 | 1 | 2} start If true, this function should start the interval, else it should stop it.
      */
-    function setScrollInterval(start = true) {
-        if(!start && calculateScrollInterval != null) {
+    function setScrollInterval(start = 0) {
+        if(start > 0 && calculateScrollInterval != null) {
             clearInterval(calculateScrollInterval);
             if(hideScrollProgressTimeout != null) { clearTimeout(hideScrollProgressTimeout); }
 
             calculateScrollInterval = null;
-            hideScrollProgressTimeout = setTimeout(() => {
+            scrollProgress.value.pct = 150;
+
+            if(start == 1) {
+                hideScrollProgressTimeout = setTimeout(() => {
+                    scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
+                    hideScrollProgressTimeout = null;
+                }, 250);
+            } else if(start == 2) {
                 scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
                 hideScrollProgressTimeout = null;
-            }, 250);
-        } else if(start && calculateScrollInterval == null) {
+            }
+        } else if(start == 0 && calculateScrollInterval == null) {
             calculateScrollInterval = setInterval(() => { calculateScrollProgress(); }, 10);
             scrollProgress.value.show = true;
         }
@@ -261,11 +272,6 @@ export async function goToPageSection(id = "start", offset = 0, delay = 0) {
  */
 export async function scrollToTop(instant = false, delay = 0) {
     return useScrollStore().scrollToTop(instant, delay);
-}
-
-/** This function scrolls to the footer and applies the proper offset. */
-export function goToFooter() {
-    try { goToPageSection('footer', 50); } catch(e) {}
 }
 
 /** This function returns a computed object that determines if the website is auto scrolling or not. */

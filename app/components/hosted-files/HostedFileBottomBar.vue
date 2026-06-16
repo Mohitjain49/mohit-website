@@ -105,6 +105,7 @@ function onWakeLockButtonClick(event) {
 .mohit-hostedFile-bottom.document-markdown {
     width: calc(100% - 40px);
     max-width: 1030px;
+    background-color: rgb(28, 28, 28);
 }
 :fullscreen .mohit-hostedFile-bottom.document-markdown {
     max-width: none;

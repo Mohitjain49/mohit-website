@@ -3,6 +3,7 @@
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar v-if="documentStore.hostedDocuments[0].blobCreated" />
         <ContentRenderer class="markdown-body" v-if="home" :value="home" />
+        <HostedFileBottomBar v-if="fullScreenSet" />
     </div>
 
     <template v-if="fullScreenSet">
