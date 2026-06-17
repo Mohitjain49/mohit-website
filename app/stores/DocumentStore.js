@@ -243,7 +243,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         const picker = new google.picker.PickerBuilder()
             .addView(docsView)
-            .setTitle("Select A Folder (Or Click Cancel To Save This Document To Your Drive's Root)")
+            .setTitle("Select A Folder Where You Would Like To Save This Document To.")
             .setOAuthToken(googleAPIAccessToken)
             .setDeveloperKey(GOOGLE_CLOUD_API_KEY)
             .setCallback((data) => { googleDrivePickerCallback(data); })
