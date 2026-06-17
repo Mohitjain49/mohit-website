@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import { readFile, writeFile, rm } from 'node:fs/promises';
 import readline from 'node:readline/promises';
 
-/** This function contains the arguments taht can be passed in for this script. */
+/** This array contains the arguments that can be passed in for this script. */
 const args = process.argv.slice(2);
 
 /** This records user input in the terminal so users can choose options as they progress through the function. */

@@ -1,0 +1,32 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+.sonda
+.unlighthouse
+dist
+bundle-visualizer
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+build-info.json
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Local env files
+.env
+.env.*
+!.env.example

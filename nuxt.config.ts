@@ -40,7 +40,7 @@ export default defineNuxtConfig({
         script: [{ type: 'text/javascript', tagPosition: 'head', innerHTML: NO_SCROLL_FUNCTION }],
         meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
     }},
-    devServer: { port: 5000, host: "localhost" },
+    devServer: { port: 5000, host: "0.0.0.0" },
     modules: ['@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
         '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',
         '@stefanobartoletti/nuxt-social-share', "nuxt-vitalizer",
