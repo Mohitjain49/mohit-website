@@ -29,6 +29,7 @@ function onError(error) {
 /** This function runs the main logic for this script. */
 function main() {
     var dockerBuilt = false;
+    var dockerBuildCommandComplete = false;
 
     // This figures out if the docker instance needs to be built.
     try {
@@ -52,6 +53,9 @@ function main() {
     }
 
     // This runs the docker instance.
+    dockerBuildCommandComplete = true;
+    console.log("Starting Docker Instance...");
+
     const platform = os.platform();
     const openBrowserCommand = (platform === "darwin" ? 'open' : (platform === "win32" ? 'start' : 'xdg-open'));
 
@@ -63,10 +67,11 @@ function main() {
     startProcess.on("error", (err) => { onError(err); });
 
     process.stdin.resume();
+    process.on("SIGINT", () => {}); // Neutralizes Ctrl + C.
+
     process.stdin.on("keypress", (chunk = "", key) => {
-        /** @type {String} The name of the key that was pressed. */
-        const name = key.name;
-        if(key.name !== "c" || !key.ctrl) { return; }
+        if(!dockerBuildCommandComplete) { return; }
+        if((key.name !== "c" || !key.ctrl) && key.name !== "q") { return; }
 
         // Shuts down the docker instance.
         console.log("\n\nGracefully shutting down Docker container...");
