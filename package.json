@@ -23,7 +23,7 @@
         "upgrade:nuxt": "npx nuxt upgrade",
         "docker:run": "node scripts/use-docker.mjs",
         "docker:build": "docker build -t mohit_website .",
-        "docker:start": "docker run --env-file .env -p 5000:5000 --name mohit_website_main_docker_container mohit_website",
+        "docker:start": "docker run --env-file .env --env PORT=5700 --env HOST=0.0.0.0 -p 5700:5700 --name mohit_website_main_docker_container mohit_website",
         "docker:stop": "docker stop mohit_website_main_docker_container",
         "docker:rm": "docker rm mohit_website_main_docker_container",
         "test": "npx jest"

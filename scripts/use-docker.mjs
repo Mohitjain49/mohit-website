@@ -5,10 +5,12 @@ import os from "node:os";
 /** This array contains the arguments that can be passed in for this script. */
 const args = process.argv.slice(2);
 
+const PORT_NUM = "5700";
+const PORT_URL = ("http://localhost:" + PORT_NUM);
+
 const DOCKER_IMAGE = "mohit_website";
 const DOCKER_CONTAINER = "mohit_website_main_docker_container";
-const DOCKER_START_ARGS = "--env-file .env --env PORT=5000 --env HOST=0.0.0.0 -p 5000:5000"
-const PORT_URL = "http://localhost:5000";
+const DOCKER_START_ARGS = ("--env-file .env --env PORT=" + PORT_NUM + " --env HOST=0.0.0.0 -p " + PORT_NUM + ":" + PORT_NUM);
 
 const DOCKER_BUILD_COMMAND = ("docker build -t " + DOCKER_IMAGE + " .");
 const DOCKER_START_COMMAND = ("docker run " + DOCKER_START_ARGS + " --name " + DOCKER_CONTAINER + " " + DOCKER_IMAGE);
@@ -68,26 +70,35 @@ function main() {
     startProcess.on("error", (err) => { onError(err); });
 
     process.stdin.resume();
-    process.on("SIGINT", () => {}); // Neutralizes Ctrl + C.
+    process.on("SIGINT", () => {
+        if(!dockerBuildCommandComplete) { return; }
+        try {
+            console.log("\n\nGracefully shutting down Docker container...");
+            execSync(DOCKER_STOP_COMMAND, { stdio: 'inherit' });
+            execSync(DOCKER_REMOVE_COMMAND, { stdio: 'inherit' });
+
+            console.log("Docker Container Shut Down!");
+            process.exit(0);
+        } catch(err) {
+            onError(err);
+        }
+    });
 
     process.stdin.on("keypress", (chunk = "", key) => {
         if(!dockerBuildCommandComplete) { return; }
         if((key.name !== "c" || !key.ctrl) && key.name !== "q") { return; }
 
         // Shuts down the docker instance.
-        console.log("\n\nGracefully shutting down Docker container...");
-        const stopProcess = exec(DOCKER_STOP_COMMAND);
-        stopProcess.on("error", (err) => { onError(err); });
+        try {
+            console.log("\n\nGracefully shutting down Docker container...");
+            execSync(DOCKER_STOP_COMMAND, { stdio: 'inherit' });
+            execSync(DOCKER_REMOVE_COMMAND, { stdio: 'inherit' });
 
-        stopProcess.on("close", async() => {
-            await new Promise((resolve, reject) => setTimeout(() => { resolve("Timeout complete."); }, 250));
-            const rmProcess = exec(DOCKER_REMOVE_COMMAND, (err) => {
-                if(err) { onError(err); }
-                console.log("Docker Container Shut Down!");
-                process.stdout.write('\r\n');
-                process.exit(0);
-            });
-        });
+            console.log("Docker Container Shut Down!");
+            process.exit(0);
+        } catch(err) {
+            onError(err);
+        }
     });
 }
 

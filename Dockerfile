@@ -17,10 +17,10 @@ RUN npm ci
 COPY . .
 
 # This defines the port for the docker instance.
-ENV port=5000
+ENV port=5700
 
-# Exposes "http://localhost:5000" so any laptop can use it.
-EXPOSE 5000
+# Exposes "http://localhost:5700" so any laptop can use it.
+EXPOSE 5700
 
 # This opens the dev version of my website.
 CMD ["npm", "run", "dev"]
