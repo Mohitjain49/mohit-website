@@ -39,6 +39,7 @@ export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/
 export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
 export const PERSONAL_UPGRADE_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/upgrade.mjs");
+export const PERSONAL_USE_DOCKER_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/use-docker.mjs");
 export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/mysh.c");
 export const PERSONAL_THREADPOOL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/threadpool.c");
 export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
@@ -941,15 +942,16 @@ export const SKILLS_COMPASS = [
 ];
 
 export const CONTACT_COMPASS = [
-    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square", offset: 70 },
-    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope", offset: 70 },
-    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin", offset: 70 },
-    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 70 },
-    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 70 },
-    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 70 }
+    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square", offset: 0 },
+    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope", offset: 0 },
+    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin", offset: 0 },
+    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 0 },
+    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 0 },
+    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 0 }
 ];
 
 export const LIBRARY_COMPASS = [
     { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 },
-    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code", offset: 0 }
+    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code", offset: 0 },
+    { title: "My C Scripts", id: "c", color: "var(--c-color)", faIcon: false, icon: c_programming_icon, offset: 0 }
 ];

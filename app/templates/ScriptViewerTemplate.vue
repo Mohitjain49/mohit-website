@@ -118,6 +118,12 @@ const PAGE_METADATA = [
         desc: "I developed a lightweight Unix shell that uses concepts like Mutexes to create a functioning thread pool.",
         type: "default"
     },
+    {
+        title: "Mohit Jain | My Docker Utility Script",
+        route: "use-docker-script",
+        desc: "I developed a script that allows me and other users to easily use Docker with my website and other web applications.",
+        type: "default"
+    },
 ];
 
 const CURRENT_METADATA = PAGE_METADATA[props.index];

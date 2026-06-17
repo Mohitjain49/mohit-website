@@ -23,6 +23,7 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: '/unix-shell', file: SCRIPT_TEMPLATE, props: { index: 4 } },
         { path: '/upgrade-script', file: SCRIPT_TEMPLATE, props: { index: 5 } },
         { path: '/threadpool', file: SCRIPT_TEMPLATE, props: { index: 6 } },
+        { path: '/use-docker-script', file: SCRIPT_TEMPLATE, props: { index: 7 } },
     ];
 
     const REDIRECT_PAGES = [

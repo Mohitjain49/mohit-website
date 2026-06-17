@@ -1,5 +1,6 @@
 import deploy_code from "@scripts/deploy.mjs?raw";
 import upgrade_code from "@scripts/upgrade.mjs?raw";
+import use_docker_code from "@scripts/use-docker.mjs?raw";
 
 import my_unix_shell from "@scripts/c/mysh.c?raw";
 import my_threadpool from "@scripts/c/threadpool.c?raw";
@@ -19,6 +20,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         useHostedScript("/unix-shell", my_unix_shell, "mysh", ".c", PERSONAL_UNIX_SHELL_LINK),
         useHostedScript("/upgrade-script", upgrade_code, "upgrade", ".mjs", PERSONAL_UPGRADE_SCRIPT_LINK),
         useHostedScript("/threadpool", my_threadpool, "threadpool", ".c", PERSONAL_THREADPOOL_LINK),
+        useHostedScript("/use-docker-script", use_docker_code, "use-docker", ".mjs", PERSONAL_USE_DOCKER_SCRIPT_LINK),
     ];
 
     const router = useRouter();

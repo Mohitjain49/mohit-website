@@ -7,10 +7,11 @@ const args = process.argv.slice(2);
 
 const DOCKER_IMAGE = "mohit_website";
 const DOCKER_CONTAINER = "mohit_website_main_docker_container";
+const DOCKER_START_ARGS = "--env-file .env --env PORT=5000 --env HOST=0.0.0.0 -p 5000:5000"
 const PORT_URL = "http://localhost:5000";
 
 const DOCKER_BUILD_COMMAND = ("docker build -t " + DOCKER_IMAGE + " .");
-const DOCKER_START_COMMAND = ("docker run --env-file .env -p 5000:5000 --name " + DOCKER_CONTAINER + " " + DOCKER_IMAGE);
+const DOCKER_START_COMMAND = ("docker run " + DOCKER_START_ARGS + " --name " + DOCKER_CONTAINER + " " + DOCKER_IMAGE);
 const DOCKER_STOP_COMMAND = ("docker stop " + DOCKER_CONTAINER);
 const DOCKER_REMOVE_COMMAND = ("docker rm " + DOCKER_CONTAINER);
 
