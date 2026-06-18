@@ -12,7 +12,6 @@ export const useResumeStore = defineStore("resume-store", () => {
 
     const qrcodeAdded = ref(false);
     const linksRemoved = ref(false);
-    const fontFlattened = ref(false);
 
     /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = shallowRef(null);
@@ -24,19 +23,19 @@ export const useResumeStore = defineStore("resume-store", () => {
         await nextTick();
         await onNuxtReadyAdvanced();
 
-        if(!mountedOnce.value) {
+        if(mountedOnce.value) {
+            await setResumeQuery();
+        } else {
+            mountedOnce.value = true;
             const routeQuery = router.currentRoute.value.query;
             const onMainResumeRoute = documentStore.onMainResumeRoute;
 
             qrcodeAdded.value = (onMainResumeRoute && routeQuery.qrcodeAdded && routeQuery.qrcodeAdded === "true");
             linksRemoved.value = (onMainResumeRoute && routeQuery.linksRemoved && routeQuery.linksRemoved === "true");
-            fontFlattened.value = (onMainResumeRoute && routeQuery.fontFlattened && routeQuery.fontFlattened === "true");
         }
-        mountedOnce.value = true;
 
         await initBlob({ addQrcode: qrcodeAdded.value,
             removeLinks: linksRemoved.value,
-            flattenFont: fontFlattened.value,
             updateQuery: false
         });
         documentStore.mountCustomDocumentPage(800, 320, 1.375);
@@ -53,7 +52,6 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Object} options The options to set to render the blob.
      * @param {Boolean} options.addQrcode If true, this adds a QR Code to the top-right of my resume.
      * @param {Boolean} options.removeLinks If true, this removes all links from my resume.
-     * @param {Boolean} options.flattenFont If true, this turns all text to black.
      * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      */
     async function initBlob(options = {}) {
@@ -64,7 +62,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         objectUrl.value = URL.createObjectURL(blob.value);
 
         documentStore.hostedDocuments[0].setNewBlob(blob.value);
-        const newLink = ((qrcodeAdded.value || linksRemoved.value || fontFlattened.value) ? objectUrl.value : PERSONAL_RESUME_LINK);
+        const newLink = ((qrcodeAdded.value || linksRemoved.value) ? objectUrl.value : PERSONAL_RESUME_LINK);
         documentStore.hostedDocuments[0].changeLink(newLink);
 
         await sleep(5);
@@ -87,7 +85,6 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Object} options The options to set to render the blob.
      * @param {Boolean} options.addQrcode If true, this adds a QR Code to the top-right of my resume.
      * @param {Boolean} options.removeLinks If true, this removes all links from my resume.
-     * @param {Boolean} options.flattenFont If true, this turns all text to black.
      * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      */
     async function resetBlob(options) {
@@ -105,8 +102,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         await router.push({ path: route.path, hash: route.hash, query: {
             ...route.query,
             qrcodeAdded: (qrcodeAdded.value ? "true" : undefined),
-            linksRemoved: (linksRemoved.value ? "true" : undefined),
-            fontFlattened: (fontFlattened.value ? "true" : undefined)
+            linksRemoved: (linksRemoved.value ? "true" : undefined)
         }});
     }
 
@@ -115,14 +111,12 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Object} options The options to set to render the blob.
      * @param {Boolean} options.addQrcode If true, this adds a QR Code to the top-right of my resume.
      * @param {Boolean} options.removeLinks If true, this removes all links from my resume.
-     * @param {Boolean} options.flattenFont If true, this turns all text to black.
      * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      * @returns The blob of the new resume.
      */
     async function createNewBlob(options = {}) {
         if(options?.addQrcode == undefined) { options.addQrcode = false; }
         if(options?.removeLinks == undefined) { options.removeLinks = false; }
-        if(options?.flattenFont == undefined) { options.flattenFont = false; }
         if(options?.updateQuery == undefined) { options.updateQuery = true; }
         var newResumeBlob = await fetch(Mohit_Jain_Resume).then((res) => res.blob());
 
@@ -189,23 +183,38 @@ export const useResumeStore = defineStore("resume-store", () => {
             newResumeBlob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
         }
 
+        // If desired, this section removes all the links from my resume.
         if(options.removeLinks) {
-            // If desired, this section removes all the links from my resume.
-        }
+            const existingPdfBytes = await newResumeBlob.arrayBuffer();
+            const pdfDoc = await PDF.load(new Uint8Array(existingPdfBytes));
+            const page = pdfDoc.getPage(0);
 
-        if(options.flattenFont) {
-            // If desired, this section flatten the fonts to black for the entire resume.
+            page.removeAnnotations();
+            const findT = page.findText("• LinkedIn • GitHub");
+
+            if(findT.length > 0) {
+                const newBgBox = findT[0].bbox;
+                page.drawRectangle({
+                    x: (newBgBox.x - 2),
+                    y: (newBgBox.y - 1),
+                    width: (newBgBox.width + 4),
+                    height: (newBgBox.height + 2),
+                    color: rgb(1, 1, 1)
+                });
+            }
+
+            const modifiedPdfBytes = await pdfDoc.save();
+            newResumeBlob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
         }
 
         qrcodeAdded.value = options.addQrcode;
         linksRemoved.value = options.removeLinks;
-        fontFlattened.value = options.flattenFont;
 
         if(options.updateQuery) { await setResumeQuery(); }
         return newResumeBlob;
     }
    
-    return { blob, objectUrl, blobCreated, qrcodeAdded, linksRemoved, fontFlattened,
+    return { blob, objectUrl, blobCreated, qrcodeAdded, linksRemoved,
         mountResumePage, unmountResumePage, initBlob, deleteCurrentBlob, resetBlob, setResumeQuery
     }
 });

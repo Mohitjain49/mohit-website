@@ -52,7 +52,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** The GitHub Link of the script currently being displayed. */
     const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
-    const scriptLoading = computed(() => { return (onScriptRoute.value ? (scripts[currentScriptRoute.value].htmlLoaded.value == 1) : false); });
 
     const downloadIcon = computed(() => {
         const downloadObj = scriptDownloadStatus.value;
@@ -346,7 +345,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
-        currentScriptLink, scriptLoading, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
+        currentScriptLink, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, placeLineOptionsOnCode
@@ -367,7 +366,6 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
     /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = ref(null);
     const router = useRouter();
-    const htmlLoaded = ref(0);
 
     const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
@@ -384,5 +382,5 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         return (path === pathname || (path + "/") === pathname);
     }
 
-    return { path, code, onRoute, name, suffix, link, blob, html, htmlLoaded, initBlob, checkPath }
+    return { path, code, onRoute, name, suffix, link, blob, html, initBlob, checkPath }
 }

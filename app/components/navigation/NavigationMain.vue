@@ -149,9 +149,9 @@
     </RouterLink>
 </div>
 <div v-show="showNavRightWidgets" class="mohit-navBar-status-icons right" ref="shareWidget">
-    <div v-if="scriptsStore.scriptLoading" class="mohit-navBar-loadingWidget script" title="Loading Script Page...">
+    <!-- <div v-if="scriptsStore.scriptLoading" class="mohit-navBar-loadingWidget script" title="Loading Script Page...">
         <font-awesome-icon icon="fa-spinner" spin-pulse />
-    </div>
+    </div> -->
     <div v-if="showLoadingDocsWidget" class="mohit-navBar-loadingWidget" title="Loading Document...">
         <font-awesome-icon icon="fa-spinner" spin-pulse />
         <span v-if="(documentStore.docLoaded.totalPages > 1)">

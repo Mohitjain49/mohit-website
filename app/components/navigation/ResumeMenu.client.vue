@@ -60,12 +60,10 @@ const { resumeMenuOpen } = storeToRefs(webData);
 const resumeOptions = ref([
     { name: "qrcode", title: "Add QR Code", faIcon: "fa-qrcode", color: 'var(--blue-one)', status: false },
     { name: "remove-links", title: "Remove Hyperlinks", faIcon: "fa-link-slash", color: 'var(--blue-three)', status: false },
-    { name: "flatten-font", title: "Flatten Font To Black", faIcon: "fa-square-pen", color: 'white', status: false }
 ]);
 const newResumeState = computed(() => {
     if(resumeOptions.value[0].status !== resumeStore.qrcodeAdded) { return true; }
     if(resumeOptions.value[1].status !== resumeStore.linksRemoved) { return true; }
-    if(resumeOptions.value[2].status !== resumeStore.fontFlattened) { return true; }
     return false;
 });
 const allSelected = computed(() => { return (-1 == resumeOptions.value.findIndex((item) => { return !item.status; })); });
@@ -86,8 +84,7 @@ function toggleResumeOption(index = 0) {
 async function editResumeState() {
     await resumeStore.resetBlob({
         addQrcode: resumeOptions.value[0].status,
-        removeLinks: resumeOptions.value[1].status,
-        flattenFont: resumeOptions.value[2].status
+        removeLinks: resumeOptions.value[1].status
     });
     webData.closeNavMenu();
 }
@@ -97,7 +94,6 @@ function setInitResumeMenuStatus() {
     try {
         resumeOptions.value[0].status = resumeStore.qrcodeAdded;
         resumeOptions.value[1].status = resumeStore.linksRemoved;
-        resumeOptions.value[2].status = resumeStore.fontFlattened;
     } catch(e) {}
 }
 
