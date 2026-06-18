@@ -9,6 +9,7 @@ export const useResumeStore = defineStore("resume-store", () => {
 
     const blobCreated = ref(0);
     const mountedOnce = ref(false);
+    const queryOutOfSync = ref(false);
 
     const qrcodeAdded = ref(false);
     const linksRemoved = ref(false);
@@ -16,6 +17,9 @@ export const useResumeStore = defineStore("resume-store", () => {
     /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
+
+    // This watcher runs a function to check if the resume customization options are in sync or not.
+    watch(() => router.currentRoute.value.query, () => { checkQueryOutOfSync(); }, { deep: true });
 
     /** This function mounts the resume page. */
     async function mountResumePage() {
@@ -104,6 +108,16 @@ export const useResumeStore = defineStore("resume-store", () => {
             qrcodeAdded: (qrcodeAdded.value ? "true" : undefined),
             linksRemoved: (linksRemoved.value ? "true" : undefined)
         }});
+    }
+
+    /** This function sets a flag that tells if the URL query parameters reflect the state of the resume. */
+    function checkQueryOutOfSync() {
+        queryOutOfSync.value = false;
+        if(blobCreated.value != 2 || !documentStore.onMainResumeRoute) { return; }
+
+        const routeQuery = router.currentRoute.value.query;
+        if(qrcodeAdded.value !== (routeQuery?.qrcodeAdded === "true")) { queryOutOfSync.value = true; }
+        if(linksRemoved.value !== (routeQuery?.linksRemoved === "true")) { queryOutOfSync.value = true; }
     }
 
     /**
@@ -214,7 +228,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         return newResumeBlob;
     }
    
-    return { blob, objectUrl, blobCreated, qrcodeAdded, linksRemoved,
+    return { blob, objectUrl, blobCreated, queryOutOfSync, qrcodeAdded, linksRemoved,
         mountResumePage, unmountResumePage, initBlob, deleteCurrentBlob, resetBlob, setResumeQuery
     }
 });

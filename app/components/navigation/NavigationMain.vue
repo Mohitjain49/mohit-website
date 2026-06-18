@@ -147,11 +147,15 @@
 
         <font-awesome-icon icon="fa-gamepad" />
     </RouterLink>
+    <button v-if="resumeStore.queryOutOfSync" :title="RESUME_QUERY_UNSYNC_TITLE"
+        @click="() => { reloadNuxtApp({ force: true }); }"
+        :style="getColorStyles('var(--blue-one)')"
+        class="mohit-navBar-statusIcon" pulse-loop>
+
+        <font-awesome-icon icon="fa-rotate-right" />
+    </button>
 </div>
 <div v-show="showNavRightWidgets" class="mohit-navBar-status-icons right" ref="shareWidget">
-    <!-- <div v-if="scriptsStore.scriptLoading" class="mohit-navBar-loadingWidget script" title="Loading Script Page...">
-        <font-awesome-icon icon="fa-spinner" spin-pulse />
-    </div> -->
     <div v-if="showLoadingDocsWidget" class="mohit-navBar-loadingWidget" title="Loading Document...">
         <font-awesome-icon icon="fa-spinner" spin-pulse />
         <span v-if="(documentStore.docLoaded.totalPages > 1)">
@@ -175,6 +179,7 @@ const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
 const gamepadStore = useGamepadStore();
+const resumeStore = useResumeStore();
 const installStore = useInstallStore();
 
 const router = useRouter();
@@ -258,4 +263,6 @@ const NAV_MENU_EXTRAS = [
     { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
     { path: "/copyright/", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
 ];
+
+const RESUME_QUERY_UNSYNC_TITLE = "Please reload this page here to apply your changes to customizing my resume.";
 </script>

@@ -39,6 +39,17 @@
                 <span> Back To Document Options </span>
             </button>
         </div>
+
+        <div v-if="(newResumeState && resumeStore.queryOutOfSync)" class="mohit-navMenu-opt-break"></div>
+        <div v-if="resumeStore.queryOutOfSync" class="mohit-navMenu-opt">
+            <button class="mohit-navMenu-mainOpt" pulse-loop
+                @click="() => { reloadNuxtApp({ force: true }); }"
+                :style="getColorStyles('#996e03')">
+
+                <font-awesome-icon icon="fa-rotate-right" />
+                <span> Reload Webpage </span>
+            </button>
+        </div>
         <div v-if="newResumeState" class="mohit-navMenu-opt" :style="getColorStyles('#03ad03')">
             <button class="mohit-navMenu-mainOpt" @click="editResumeState()" pulse-loop>
                 <font-awesome-icon icon="fa-file-pen" />
