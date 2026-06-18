@@ -92,7 +92,7 @@ function toggleMenuState() {
     position: relative;
     width: 500px;
     height: 250px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 1);
     border-radius: 20px;
     border: 2px solid var(--vibrant-flame);
     display: flex;
