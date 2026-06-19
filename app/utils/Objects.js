@@ -1,9 +1,9 @@
 import vue_icon from "../assets/Vuejs_Icon.png";
 import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_Icon.png";
+import jest_icon from "../assets/jest_icon.png";
 import expo_icon from "../assets/sublo/Expo_Icon.svg";
 import vite_icon from "../assets/Vite_Icon.svg";
-import vitest_icon from "../assets/Vitest_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
 import pinia_icon from "../assets/Pinia_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
@@ -383,20 +383,7 @@ export const FRONTEND_SKILL_NOTES = [
             faIcon: false,
             size: "105"
         }
-    },
-    {
-        name: "Vitest",
-        link: "https://vitest.dev/",
-        color: "#749b24",
-        desc: "Vitest is Vite's main testing module. This module is designed for Vite as it has support for glob imports, " +
-            "its Server Side Rendering primitives, and more.",
-
-        icon: {
-            id: vitest_icon,
-            faIcon: false,
-            size: "115"
-        }
-    },
+    }
 ];
 
 export const AWS_SKILL_NOTES = [
@@ -539,6 +526,19 @@ export const MODULES_SKILL_NOTES = [
             id: "fa-brands fa-github",
             faIcon: true,
             size: "110"
+        }
+    },
+    {
+        name: "Jest",
+        link: "https://jestjs.io/",
+        color: "#99425B",
+        desc: "Jest is a JavaScript Testing Framework that can work with pretty much any JS-Based app, frontend or backend. " +
+            "It is extremely reliable for ensuring that code actually works as intended when it needs to the most.",
+
+        icon: {
+            id: jest_icon,
+            faIcon: false,
+            size: "105"
         }
     },
     {

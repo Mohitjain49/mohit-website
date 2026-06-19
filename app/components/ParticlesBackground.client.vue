@@ -75,12 +75,15 @@ function setParticlesBackgroundColor() {
     const element = document.getElementById(BACKGROUND_PARTICLES_ID);
     if(!element) { return; }
 
-    if(checkParticlesBgColorExists()) {
-        element.style.setProperty(BACKGROUND_COLOR_PROPERTY, props.particlesOptions.background.color);
-    } else if(document.documentElement) {
+    if(document.documentElement) {
         element.style.setProperty(BACKGROUND_COLOR_PROPERTY, window.getComputedStyle(document.documentElement).backgroundColor);
+    } else if(checkParticlesBgColorExists()) {
+        element.style.setProperty(BACKGROUND_COLOR_PROPERTY, props.particlesOptions.background.color);
     }
 }
+
+// This sets the Particles Background Color when the component mounts.
+onMountedAdvanced(() => { setParticlesBackgroundColor(); });
 
 // This resets the number of particles and destroys the container before unmounting the page.
 onBeforeUnmount(() => {
