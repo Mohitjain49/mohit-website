@@ -41,7 +41,10 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
                 itemListElement
             })
         }],
-        htmlAttrs: { lang: "en", style: ("background-color: " + bgColor) },
+        htmlAttrs: {
+            lang: "en",
+            style: ("background-color: " + bgColor + "; --webpage-html-bg-color: " + bgColor)
+        },
 
         meta: [
             { name: 'description', content: pageDesc },

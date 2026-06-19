@@ -1,7 +1,7 @@
 <template>
 <div class="file-widgets-container" ref="file-widgets-container">
     <Transition name="file-widgets-transition" appear>
-        <button v-if="(fullScreenSet && !hfBottomBarVisible)" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" pulse-loop>
+        <button v-if="showMinimizeWidget" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" pulse-loop>
             <FontAwesomeIcon icon="fa-compress" />
         </button>
     </Transition>
@@ -19,11 +19,17 @@ const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
 
 const fullScreenSet = getFullScreenSet();
+const { width: windowWidth } = useMohitWindowSize();
 const { onDocumentRoute } = storeToRefs(documentStore);
 
-const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
+
+const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
+const showMinimizeWidget = computed(() => { return (fullScreenSet.value && (!hfBottomBarVisible.value || largeWindowWidth.value)); });
+const largeWindowWidth = computed(() => {
+    return (onDocumentRoute.value && !documentStore.onMarkdownRoute && (windowWidth.value > documentStore.customPdfWidth + 125));
+});
 
 const fileWidgets = useTemplateRef('file-widgets-container');
 usePulseLoopAnimation(fileWidgets);
@@ -36,6 +42,7 @@ function openOptions() {
 
 /** This function exits out of full screen mode for a hosted file. */
 function exitFS() {
+    if(!fullScreenSet.value) { return; }
     if(onDocumentRoute.value) {
         documentStore.toggleDocumentFullScreen();
     } else {
