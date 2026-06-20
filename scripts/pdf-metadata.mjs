@@ -100,7 +100,7 @@ async function main() {
         console.log("Language:\t\t", metadata.language);
         console.log("\n\n");
 
-        if(findCommandArgument(["-ro", "--read-only"]).found) { return; }
+        if(findCommandArgument(["-ro", "--read-only"]).found) { process.exit(0); }
         console.log("For the following sections, please enter \"" + EDIT_SKIP_STRING +"\" to not set the metadata for that section.\n");
 
         // Sets the PDF's Title.
@@ -121,12 +121,12 @@ async function main() {
         // Sets the PDF's Keywords.
         const newKeywords = [""];
         newKeywords.splice(0, 1);
-        var keyboardInput = "";
+        var keywordInput = "";
 
         console.log("Enter Keywords Below...");
-        while(keyboardInput !== EDIT_SKIP_STRING) {
-            keyboardInput = await rl.question("Enter A New Keyword For Your PDF, or \"" + EDIT_SKIP_STRING + "\" to stop: ");
-            if(keyboardInput !== EDIT_SKIP_STRING) { newKeywords.push(keyboardInput); }
+        while(keywordInput !== EDIT_SKIP_STRING) {
+            keywordInput = await rl.question("Enter A New Keyword For Your PDF, or \"" + EDIT_SKIP_STRING + "\" to stop: ");
+            if(keywordInput !== EDIT_SKIP_STRING) { newKeywords.push(keywordInput.trim().replaceAll(" ", "_")); }
         }
 
         if(newKeywords.length > 0) { pdfObject.setKeywords(newKeywords); }
@@ -228,7 +228,7 @@ async function setResumeMetadata() {
         pdfObject.setTitle("Mohit Jain's Resume", { showInWindowTitleBar: true });
         pdfObject.setAuthor("Mohit Jain");
         pdfObject.setSubject("Mohit Jain's Resume");
-        pdfObject.setKeywords(["Resume", "Tech Resume"]);
+        pdfObject.setKeywords(["Resume"]);
         pdfObject.setCreator("Google Docs");
         pdfObject.setCreationDate(date);
         pdfObject.setModificationDate(date);
@@ -248,7 +248,7 @@ async function setResumeMetadata() {
 }
 
 // If a certain argument is passed in, this sets the resume metadata. Otherwise, it runs the main function.
-if(findCommandArgument(["-a", "--auto", "-ra", "--resume-auto", "-ar", "--auto-resume"])) {
+if(findCommandArgument(["-a", "--auto", "-ra", "--resume-auto", "-ar", "--auto-resume"]).found) {
     await setResumeMetadata();
 } else {
     await main();

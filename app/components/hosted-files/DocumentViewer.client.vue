@@ -33,6 +33,7 @@
     <FileWidgets />
 
     <DocumentMenu />
+    <DocMetadataMenu :objectUrl="url" />
     <slot></slot>
 </main>
 </template>
