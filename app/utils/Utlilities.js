@@ -282,12 +282,20 @@ export async function onNuxtReadyAdvanced(callback = () => {}) {
  * This function awaits the Next Tick and for Nuxt to be ready before running the callback function.
  * @param {Function} callback The callback function that is triggered.
  */
-export async function onMountedAdvanced(callback = () => {}) {
-    onMounted(async () => {
+export function onMountedAdvanced(callback = () => {}) {
+    /** A boolean that tells the developer if the component is fully mounted. */
+    const isMounted = shallowRef(false);
+
+    onMounted(async() => {
         try {
             await onNuxtReadyAdvanced();
-            await nextTick();   
+            await nextTick();
         } catch(e) {}
+
+        isMounted.value = true;
         callback();
     });
+
+    // Returns a boolean that tracks if the component is mounted.
+    return isMounted;
 }

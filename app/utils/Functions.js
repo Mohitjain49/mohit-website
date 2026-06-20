@@ -20,23 +20,7 @@ export async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * This function reloads the website.
- */
-export function reloadPage() {
-    window.location.reload();
-}
-
-/**
- * This function returns whether or not the app is rendering on the server or not.
- */
-export function checkSSR() {
-    return import.meta.server;
-}
-
-/**
- * This function cuts a string to ensure it has the max length of characters.
- */
+/** This function cuts a string to ensure it has the max length of characters. */
 export function truncate(str = "", maxLength = 80) {
     return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);
 }

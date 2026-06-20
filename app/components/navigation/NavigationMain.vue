@@ -183,7 +183,7 @@ const resumeStore = useResumeStore();
 const installStore = useInstallStore();
 
 const router = useRouter();
-const isMounted = useMounted();
+const isMounted = onMountedAdvanced();
 
 const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
@@ -211,7 +211,7 @@ const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocument
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
 
-const showNavLeftWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
+const showNavLeftWidgets = computed(() => { return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1 || webData.websiteMenuMode == 1)); });
 
 /**

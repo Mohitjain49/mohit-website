@@ -70,7 +70,6 @@
 const webData = useWebsiteDataStore();
 const visitorLeftPage = usePageLeave();
 const router = useRouter();
-const isMounted = useMounted();
 
 const startContent = ref(null);
 const startSocialsContainer = ref(null);
@@ -78,7 +77,7 @@ const startContactObj = ref("");
 
 useIntersectionObserver(startContent, ([{ isIntersecting }]) => { setNameTransitions(isIntersecting); });
 watch(visitorLeftPage, (newValue) => { if(newValue) { hideStartContactDropdown(); } });
-onMountedAdvanced(() => { onClickOutside(startSocialsContainer.value, () => { hideStartContactDropdown(); }); });
+const isMounted = onMountedAdvanced(() => { onClickOutside(startSocialsContainer.value, () => { hideStartContactDropdown(); }); });
 
 /**
  * This function triggers whenever the a button for a social media link is clicked.

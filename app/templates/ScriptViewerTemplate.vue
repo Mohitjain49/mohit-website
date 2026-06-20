@@ -55,14 +55,13 @@
 const scriptsStore = useScriptsStore();
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
-const isMounted = useMounted();
 
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
 const scriptOptions = useTemplateRef('script-options');
 usePulseLoopAnimation(scriptOptions);
 
-onMountedAdvanced(() => { scriptsStore.mountScriptPage(); });
+const isMounted = onMountedAdvanced(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
 

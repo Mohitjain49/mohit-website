@@ -43,7 +43,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         return scripts.findIndex((item) => { return item.checkPath(routePath); });
     });
     const saveAsSupported = computed(() => {
-        return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
+        return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
     });
 
     const onScriptRoute = computed(() => { return (currentScriptRoute.value != -1); });

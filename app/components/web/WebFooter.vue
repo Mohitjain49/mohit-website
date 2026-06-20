@@ -70,7 +70,7 @@
     <div class="footer-bottom">
         <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Statement" @click="footerScrollToTop('/copyright')" pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
-            <span v-memo="[isMounted]"> {{ COPYRIGHT_TEXT }} </span>
+            <span> {{ copyrightText }} </span>
         </RouterLink>
 
         <div class="footer-bottom-buttons">
@@ -100,6 +100,7 @@ usePulseLoopAnimation(footerRef);
 onMountedAdvanced(() => {
     webData.navFooterPresent = true;
     webData.webFooter = document.getElementById("footer");
+    copyrightText.value = ($websiteBuild.coprightYear + " Mohit Jain");
 });
 onBeforeUnmount(() => {
     webData.navFooterPresent = false;
@@ -108,7 +109,7 @@ onBeforeUnmount(() => {
 
 const isMounted = computed(() => { return webData.navFooterPresent; });
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const COPYRIGHT_TEXT = computed(() => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
+const copyrightText = ref($websiteBuild.coprightYear + " Mohit Jain");
 
 /**
  * This scrolls to the top of the webpage if the user won't change routes.

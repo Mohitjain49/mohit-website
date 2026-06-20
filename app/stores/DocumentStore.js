@@ -81,7 +81,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onResearchPaperRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
 
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
-    const saveAsSupported = computed(() => { return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
+    const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
 
     const downloadIcon = computed(() => {
         const downloadObj = documentDownloadStatus.value;
