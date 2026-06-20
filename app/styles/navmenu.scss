@@ -23,21 +23,23 @@
 }
 
 .mohit-main-progressBar {
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;
-    height: 3px;
+    height: 2px;
     background-color: black;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
+    border-radius: 2px;
+    overflow: hidden;
 }
 .mohit-main-progressBar > .inner {
     height: 100%;
     width: 100%;
-    background-color: var(--vibrant-flame);
+    background: linear-gradient(to right, white 0%, var(--vibrant-flame) 100%);
 }
 
 .mohit-navBar-top {
@@ -249,12 +251,19 @@
     overscroll-behavior: contain;
     user-select: none;
 }
+.mohit-navMenu.flame {
+    border-color: var(--vibrant-flame);
+}
+.mohit-navMenu.doc-metadata {
+    border-color: var(--c-color);
+    background-color: var(--dark-background);
+}
+
 .mohit-navMenu.vertical-overflow {
     border-radius: 15px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
-
 :fullscreen .mohit-navMenu {
     left: 0px;
     top: 0px;
@@ -341,6 +350,95 @@
     user-select: none;
 }
 
+.mohit-navMenu-opt.checkbox-opt {
+    height: 35px;
+}
+.mohit-navMenu-checkbox {
+    position: relative;
+    cursor: pointer;
+    width: calc(100% - 50px);
+    height: 25px;
+    padding: 0px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    color: inherit;
+    border: 1px solid;
+    border-radius: 5px;
+    font-family: 'Lexend', sans-serif;
+    font-size: 13px;
+    transition: background-color 0.2s, scale 0.2s;
+}
+.mohit-navMenu-checkbox:hover {
+    background-color: rgba(40, 40, 40);
+    scale: 1.05;
+}
+
+.mohit-navMenu-checkbox-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+}
+.mohit-navMenu-checkbox-box {
+    height: 14px;
+    width: 14px;
+    border: 2px solid #04ba04;
+    border-radius: 5px;
+    color: #04ba04;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.25s;
+}
+
+.mohit-navMenu-checkbox-box.checked {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.mohit-navMenu-checkbox-box svg {
+    height: 14px;
+    width: 14px;
+}
+
+.mohit-navMenu-info {
+    position: relative;
+    cursor: default;
+    width: calc(100% - 30px);
+    height: fit-content;
+    padding: 2px 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    color: white;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    white-space: pre-wrap;
+    margin-top: 1px;
+    user-select: none;
+}
+.mohit-navMenu-info span.content {
+    font-weight: normal;
+    letter-spacing: normal;
+    color: rgb(221, 221, 221);
+    width: 175px;
+    max-width: 175px;
+    text-align: left;
+    text-wrap: nowrap;
+    overflow: hidden;
+    user-select: none;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0.25) 100%);
+}
+
+.mohit-navMenu-info.clickable { cursor: pointer; }
+.mohit-navMenu-info.clickable:hover { text-decoration: underline; }
+
 .mohit-navMenu-opt-break {
     position: relative;
     left: 10px;
@@ -350,6 +448,17 @@
     margin: 10px 0px;
     border-radius: 10px;
 }
+.mohit-navMenu.flame .mohit-navMenu-opt-break {
+    background-color: var(--vibrant-flame);
+}
+.mohit-navMenu.doc-metadata .mohit-navMenu-opt-break {
+    background-color: var(--c-color);
+}
+
+/**
+ * This section consist of CSS for specialized sections on the website menus.
+ */
+
 .mohit-navMenu-sectionheader {
     position: relative;
     left: 25px;
@@ -435,6 +544,75 @@
 .mohit-navMenu-volume-meter button:hover { scale: 1.1; }
 .mohit-navMenu-reload-webpage:hover { background-color: var(--dark-background); }
 
+.metadata-docMenu-focused {
+    position: relative;
+    margin: 0px auto;
+    height: 45px;
+    width: calc(100% - 24px);
+    border: 2px solid var(--blue-one);
+    border-radius: 7px;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+.metadata-docMenu-focused .top-section {
+    height: 24px;
+    width: calc(100% - 10px);
+    padding: 0px 5px;
+    border-bottom: 1px solid var(--blue-one);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.metadata-docMenu-focused h3 {
+    font-size: 15px;
+    color: white;
+    margin: 0px;
+    padding: 0px;
+}
+.metadata-docMenu-focused p {
+    height: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(221, 221, 221);
+}
+
+.metadata-docMenu-focused-options {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+}
+.metadata-docMenu-focused-options button {
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 14px;
+    width: 14px;
+    border: 1px solid red;
+    border-radius: 4px;
+    transition: var(--default-transition);
+    user-select: none;
+}
+
+.metadata-docMenu-focused-options button.copy {
+    color: var(--blue-two);
+    border-color: var(--blue-two);
+}
+.metadata-docMenu-focused-options button > svg {
+    width: 10px;
+    height: 10px;
+}
+
 /**
  * Below contain specific styles like transitions and dynamic dimension rules.
  */
@@ -464,7 +642,7 @@
 }
 
 .navMenu-transition_1-enter-active, .navMenu-transition_1-leave-active {
-    transition: opacity 0.5s, top 0.5s;
+    transition: opacity 0.5s, top 0.5s !important;
 }
 .navMenu-transition_1-enter-from, .navMenu-transition_1-leave-to {
     opacity: 0;
@@ -476,7 +654,7 @@
 }
 
 .navMenu-transition_2-enter-active, .navMenu-transition_2-leave-active {
-    transition: transform 0.5s, opacity 0.5s;
+    transition: transform 0.5s, opacity 0.5s !important;
 }
 .navMenu-transition_2-enter-from, .navMenu-transition_2-leave-to {
     opacity: 0;
@@ -485,6 +663,16 @@
 .navMenu-transition_2-enter-to, .navMenu-transition_2-leave-from {
     opacity: 1;
     transform: scale(1);
+}
+
+.navMenu-checkbox-fade-transition-enter-active, .navMenu-checkbox-fade-transition-leave-active {
+    transition: opacity 0.25s;
+}
+.navMenu-checkbox-fade-transition-enter-from, .navMenu-checkbox-fade-transition-leave-to {
+    opacity: 0;
+}
+.navMenu-checkbox-fade-transition-enter-to, .navMenu-checkbox-fade-transition-leave-from {
+    opacity: 1;
 }
 
 .mohit-navMenu::-webkit-scrollbar {

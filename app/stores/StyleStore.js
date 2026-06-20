@@ -24,6 +24,9 @@ export const useStyleStore = defineStore("style-store", () => {
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the document element's CSS Variables. */
     var cssVarObserver = null;
 
+    /** @type {MutationObserver} This observer is designed to read any changes that occur to the element that records the website's true CSS viewport dimensions. */
+    var cssLayoutElementObserver = null;
+
     /** @type {AbortController} This abort controller is designed to properly disable the dynamic breakpoints' event listeners. */
     var breakpointsAbortController = null;
 
@@ -34,10 +37,12 @@ export const useStyleStore = defineStore("style-store", () => {
     var mousePositionController = null;
 
     const mounted = ref(false);
+    const zoomFactor = ref(1.0);
+
     const breakpointsEnabled = ref(false);
+    const cssLayoutObserverEnabled = ref(false);
     const trueViewportVariablesEnabled = ref(false);
     const mousePositionRecorderEnabled = ref(false);
-    const zoomFactor = ref(1.0);
 
     const hideOverflowArray = ref([false, false, false, false]);
     const hideCursorArray = ref([false, false]);
@@ -71,6 +76,7 @@ export const useStyleStore = defineStore("style-store", () => {
         changeZoomFactor((window.innerHeight > 450) ? 1.0 : 0.5);
         startViewportRaf();
 
+        await enableCssLayoutObserver();
         await enableBreakpoints();
         await enableTrueViewportVariables();
         await enableMousePositionRecorder();
@@ -172,6 +178,67 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!fullScreenSet.value && fullScreenStore.oldElement != null) {
             fullScreenStore.oldElement.classList.remove('disable-user-select');
         }
+    }
+
+    /**
+     * ------------------------------------------------------------------------------------------------------------------------
+     * These functions manage a mutation observer that regenerates a specific element that records the CSS viewport dimensions.
+     * ------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * This function regenerates the CSS Layout Element should it be removed externally.
+     * @param {Boolean} resetObserver If true, this function resets the observer after regenrating the CSS Layout Element.
+     */
+    async function regenerateCssLayoutElement(resetObserver = true) {
+        if(!validateClientMode()) { return; }
+        const cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
+        if(cssLayoutElement != null && cssLayoutElement.isConnected) { return; }
+
+        const newCssLayoutElement = document.createElement("div");
+        newCssLayoutElement.id = CSS_LAYOUT_ID;
+
+        document.body.appendChild(newCssLayoutElement);
+        recordViewportDimensions();
+        if(resetObserver) { await resetCssLayoutObserver(); }
+    }
+
+    /** This function enables the mutation observer that observes changes to the CSS Layout Element. */
+    async function enableCssLayoutObserver() {
+        await nextTick();
+        await sleep(10);
+
+        if(cssLayoutObserverEnabled.value || !validateClientMode()) { return; }
+        var cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
+        
+        if(cssLayoutElement == null) {
+            await sleep(5);
+            regenerateCssLayoutElement(false);
+            cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
+            if(cssLayoutElement == null) { throw new Error("CSS Layout Element Does Not Exist."); }
+        }
+
+        if(cssLayoutElementObserver != null) { cssLayoutElementObserver.disconnect(); }
+        cssLayoutElementObserver = new MutationObserver(() => { regenerateCssLayoutElement(true); });
+
+        const cssLayoutParentElement = cssLayoutElement.parentElement;
+        cssLayoutElementObserver.observe(cssLayoutParentElement, { childList: true });
+        cssLayoutObserverEnabled.value = true;
+    }
+
+    /** This function disables the mutation observer that observes changes to the CSS Layout Element. */
+    function disableCssLayoutObserver() {
+        if(!cssLayoutObserverEnabled.value) { return; }
+        if(cssLayoutElementObserver != null) { cssLayoutElementObserver.disconnect(); }
+
+        cssLayoutElementObserver = null;
+        cssLayoutObserverEnabled.value = false;
+    }
+
+    /** This function runs the disable and then the enable function for the CSS Layout Observer element. */
+    async function resetCssLayoutObserver() {
+        disableCssLayoutObserver();
+        await enableCssLayoutObserver();
     }
 
     /**
@@ -522,11 +589,12 @@ export const useStyleStore = defineStore("style-store", () => {
     }
 
     return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY,
-        breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled,
+        breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled, cssLayoutObserverEnabled,
         viewportWidth, viewportHeight, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,
         enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
         enableMousePositionRecorder, disableMousePositionRecorder, resetMousePositionRecorder,
+        enableCssLayoutObserver, disableCssLayoutObserver, resetCssLayoutObserver,
         enableBreakpoints, disableBreakpoints, resetBreakpoints, startViewportRaf, stopViewportRaf
     }
 });

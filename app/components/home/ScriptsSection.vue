@@ -17,6 +17,20 @@ const SCRIPTS_TABS = [
             "It's made with Node.js and uses a few dependencies, but it is highly customizable."
     },
     {
+        id: "use-docker-script-tab",
+        link: "/use-docker-script/",
+        header: { faIcon: true, img: "fa-brands fa-docker", size: 0, title: "Use Docker Script" },
+        desc: "I developed a script that allows me and other users to easily use Docker with my website and other web applications. " +
+            "It's made with Node.js and uses a few dependencies, but it is highly customizable."
+    },
+    {
+        id: "gamepad-tab",
+        link: "/gamepad/#scripts",
+        header: { faIcon: true, img: "fa-gamepad", size: 0, title: "Web Gamepad Code" },
+        desc: "This website uses the Web Gamepad API to allow visitors to navigate through its pages " +
+            "using any standard gaming controller. You can view the code for this controller by clicking here."
+    },
+    {
         id: "unix-shell-tab",
         link: "/unix-shell/",
         header: { faIcon: false, img: c_programming_icon, size: 35, title: "My Unix Shell" },
@@ -31,15 +45,8 @@ const SCRIPTS_TABS = [
         desc: "I implemented a functioning Thread Pool the C programming language. " +
             "It will run on any Unix-based Operating System (or WSL for Windows). " +
             "You can view it by clicking here."
-    },
-    {
-        id: "gamepad-tab",
-        link: "/gamepad/#scripts",
-        header: { faIcon: true, img: "fa-gamepad", size: 0, title: "Web Gamepad Code" },
-        desc: "This website uses the Web Gamepad API to allow visitors to navigate through its pages " +
-            "using any standard gaming controller. You can view the code for this controller by clicking here."
     }
-]
+];
 
 const NUM_SCRIPTS_TABS = SCRIPTS_TABS.length;
 const tabRefs = ref([]);
@@ -81,6 +88,7 @@ useIntersectionObserver(tabRefs, (entry) => {
                 <img v-else :src="docTab.header.img" :width="docTab.header.size" draggable="false" />
                 <p> {{ docTab.desc }} </p>
             </RouterLink>
+            <div v-if="docTab.id === 'unix-shell-tab'" id="c" class="c-scripts-break"></div>
         </div>
     </div>
 </div>
@@ -97,6 +105,15 @@ useIntersectionObserver(tabRefs, (entry) => {
 .scripts-section-mainText {
     width: 100%;
     height: fit-content;
+}
+
+#c.c-scripts-break {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    scroll-margin-top: apply-zoom-factor(90);
+    height: 0px;
+    width: 100%;
 }
 
 #scripts-section-desc {
@@ -134,6 +151,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 .scripts-section-tabs-container {
     width: 100%;
@@ -210,9 +228,17 @@ useIntersectionObserver(tabRefs, (entry) => {
     box-shadow: 0px 0px 20px 5px #CB3837;
 }
 
+.scripts-section-tab#use-docker-script-tab {
+    color: var(--docker-blue);
+    border-color: var(--docker-blue);
+}
+.scripts-section-tab#use-docker-script-tab:hover {
+    box-shadow: 0px 0px 20px 5px var(--docker-blue);
+}
+
 .scripts-section-tab#unix-shell-tab {
-    color: #A9BACD;
-    border-color: #A9BACD;
+    color: var(--c-color);
+    border-color: var(--c-color);
 }
 .scripts-section-tab#unix-shell-tab img {
     padding-left: 0px !important;
@@ -223,8 +249,8 @@ useIntersectionObserver(tabRefs, (entry) => {
 }
 
 .scripts-section-tab#threadpool-tab {
-    color: #A9BACD;
-    border-color: #A9BACD;
+    color: var(--c-color);
+    border-color: var(--c-color);
 }
 .scripts-section-tab#threadpool-tab img {
     padding-left: 0px !important;
@@ -253,12 +279,14 @@ useIntersectionObserver(tabRefs, (entry) => {
         height: 90px;
         font-size: 80px;
     }
+
     .scripts-section-tabs-container { height: calc(v-bind(NUM_SCRIPTS_TABS) * 200px); }
     .scripts-section-tab { height: 150px; }
 }
 @include dynamic-less-equal-width-rule(500) {
     #scripts-section-title { font-size: 70px; }
     #gamepad-tab .scripts-section-tab-header { font-size: 22px; }
+    #use-docker-script-tab .scripts-section-tab-header { font-size: 22px; }
     .scripts-section-tab { width: 87.5%; }
 
     .scripts-section-tab p {

@@ -32,7 +32,9 @@
                 </button>
             </div>
         </div>
+
         <div ref="script-html" class="code-file-inHTML" v-html="html"></div>
+        <HostedFileBottomBar v-if="fullScreenStore.fullScreenSet" />
     </div>
 
     <template v-if="fullScreenStore.fullScreenSet">
@@ -41,8 +43,8 @@
         <GamepadComponent />
     </template>
 
-    <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <WebFooter v-if="!fullScreenStore.fullScreenSet" />
+    <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
     <FileWidgets />
     <ScriptLineOptions />
     <ScriptsMenu />
@@ -53,14 +55,13 @@
 const scriptsStore = useScriptsStore();
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
-const isMounted = useMounted();
 
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
 const scriptOptions = useTemplateRef('script-options');
 usePulseLoopAnimation(scriptOptions);
 
-onMounted(() => { scriptsStore.mountScriptPage(); });
+const isMounted = onMountedAdvanced(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
 
@@ -114,6 +115,12 @@ const PAGE_METADATA = [
         title: "Mohit Jain | My Thread Pool Implementation",
         route: "threadpool",
         desc: "I developed a lightweight Unix shell that uses concepts like Mutexes to create a functioning thread pool.",
+        type: "default"
+    },
+    {
+        title: "Mohit Jain | My Docker Utility Script",
+        route: "use-docker-script",
+        desc: "I developed a script that allows me and other users to easily use Docker with my website and other web applications.",
         type: "default"
     },
 ];

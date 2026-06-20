@@ -33,7 +33,7 @@ import cognito_icon from "~/assets/aws/AWS_Cognito_Icon.svg";
 import dynamodb_icon from "~/assets/aws/AWS_DynamoDB_Icon.svg";
 import api_gateway_icon from "~/assets/aws/AWS_API_Gateway_Icon.svg";
 
-onMounted(() => { nextTick(() => { setNavCardAnimation("mnd-nav-newCard"); }); });
+onMountedAdvanced(() => { setNavCardAnimation("mnd-nav-newCard"); });
 const DEV_STACK = [
     { title: "Vue.js", icon: vuejs_icon },
     { title: "Amazon DynamoDB", icon: dynamodb_icon },

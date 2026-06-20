@@ -25,7 +25,7 @@ const routerHash = computed(() => { return router.currentRoute.value.hash; });
 const filesPageRef = useTemplateRef('mohit-files-page');
 usePulseLoopAnimation(filesPageRef);
 
-onMounted(() => { initWebData(); changePageTitle(); });
+onMountedAdvanced(() => { initWebData(); changePageTitle(); });
 watch(routerHash, () => { changePageTitle(); })
 useHead(headTags);
 
@@ -36,6 +36,8 @@ function changePageTitle() {
         pageTitle.value = "Mohit Jain | My Documents";
     } else if(hash === "#scripts") {
         pageTitle.value = "Mohit Jain | My Code";
+    } else if(hash === "#c") {
+        pageTitle.value = "Mohit Jain | My Code (C)";
     } else {
         pageTitle.value = DEFAULT_TITLE;
     }

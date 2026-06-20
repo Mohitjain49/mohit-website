@@ -1,5 +1,5 @@
 <template>
-<div ref="document-options" class="mohit-document-topBar" :style="topBarWidth">
+<div ref="document-options" :class="['mohit-document-topBar', (documentStore.onMarkdownRoute ? 'markdown' : '')]">
     <div class="mohit-document-topBar-sideSection">
         <button class="lightblue" @click="documentStore.downloadDoc()" title="Download Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.documentDownloadStatus.pending" />
@@ -19,12 +19,18 @@
 
             <font-awesome-icon icon="fa-up-right-from-square" />
         </a>
+        <button @click="openWebsiteMenu(3.2)" title="See Document Properties" :style="getColorStyles('var(--c-color)')" pulse-loop>
+            <font-awesome-icon icon="fa-database" />
+        </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
+        <button class="flame" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(3.1)" title="Edit Resume Components" pulse-loop>
+            <FontAwesomeIcon icon="fa-gears" />
+        </button>
         <button class="flame" v-if="documentStore.onCreateGithubRepoRoute" @click="documentStore.scrollToPage(2)" title="Scroll To Table Of Contents" pulse-loop>
             <FontAwesomeIcon icon="fa-list" />
         </button>
-        <button @click="openDocumentMenu()" title="Open Document Options" pulse-loop>
+        <button @click="openWebsiteMenu(3)" title="Open Document Options" pulse-loop>
             <FontAwesomeIcon icon="fa-file-export" />
         </button>
         <button @click="documentStore.toggleDocumentFullScreen()" :title="fullScreenStore.elementTitle" pulse-loop>
@@ -39,18 +45,12 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 
-const { width: windowWidth } = useMohitWindowSize();
 const pdfViewerOptionsBar = useTemplateRef('document-options');
 usePulseLoopAnimation(pdfViewerOptionsBar);
 
-const topBarWidth = computed(() => {
-    if(!documentStore.onMarkdownRoute) { return ('width:' + documentStore.customPdfWidth + 'px'); }
-    return ("width:" + ((fullScreenStore.fullScreenSet || windowWidth.value < 1075) ? "calc(100% - 40px)" : "1030px"));
-});
-
 /** This function opens the document menu. */
-function openDocumentMenu() {
+function openWebsiteMenu(index = 3) {
     webData.bypassBodyClick();
-    webData.setMenuOpen(3, true);
+    webData.setMenuOpen(index, true);
 }
 </script>

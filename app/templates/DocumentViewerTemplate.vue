@@ -6,6 +6,7 @@
     :annontations="(index != 3)"
     :id="htmlClass"
     :class="htmlID"
+    :templateIndex="index"
 />
 <main id="resume-container" v-else>
     <div class="document-loading-static">
@@ -22,7 +23,7 @@ const props = defineProps({ index: { type: Number, required: true } });
 const htmlClass = computed(() => { return ((!CURRENT_METADATA.class) ? '' : CURRENT_METADATA.class); });
 const htmlID = computed(() => { return ((!CURRENT_METADATA.id) ? '' : CURRENT_METADATA.id); });
 
-onMounted(() => { documentStore.mountDocumentPage(); });
+onMountedAdvanced(() => { documentStore.mountDocumentPage(); });
 onBeforeUnmount(() => { documentStore.unmountDocumentPage(); });
 
 const PAGE_METADATA = [
@@ -31,13 +32,6 @@ const PAGE_METADATA = [
         route: "resume",
         desc: "Feel free to take a look at my resume.",
         type: "default",
-        id: 'tato-pdf-resume'
-    },
-    {
-        title: "Mohit Jain | My Resume (With QR Code)",
-        route: "resume/qrcode",
-        desc: "Feel free to take a look at my resume. This version has a QR Code at the top right.",
-        type: "resume-extra",
         id: 'tato-pdf-resume'
     },
     {

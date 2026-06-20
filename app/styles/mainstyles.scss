@@ -10,10 +10,12 @@
     --webpage-zoom-factor: 1.0;
     --true-100vh: 100vh;
     --true-100vw: 100vw;
+    --mohit-custom-pdf-width: 800px;
+    --mohit-custom-pdf-height: 1100px;
     --body-height: calc(var(--true-100vh, 100vh) - 50px);
+
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
-
     --blue-one: rgb(159, 191, 255);
     --blue-two: rgb(117, 163, 255);
     --blue-three: rgb(67, 130, 255);
@@ -33,6 +35,8 @@
     
     --vuejs-green: #41B883;
     --script-page-main-color: rgb(144, 62, 62);
+    --c-color: #A9BACD;
+    --docker-blue: #1D63ED;
 
     --website-text: rgb(126, 90, 0);
     --website-light-text: rgb(198, 147, 19);
@@ -151,16 +155,14 @@ button {
     background: transparent;
 }
 #resume-container:fullscreen {
-    padding: 20px 12px 30px 0px;
-    padding-top: 20px;
+    padding: 0px 12px 10px 0px;
     width: calc(100% - 12px);
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;
 }
 #script-page:fullscreen {
-    padding: 0px 12px 40px 0px;
-    padding-top: 0px;
+    padding: 0px 12px 0px 0px;
     width: calc(100% - 12px);
     overflow-y: auto;
     overflow-x: hidden;
@@ -313,3 +315,7 @@ button {
 .fade-transition-enter-to, .fade-transition-leave-from {
     opacity: 1;
 }
+
+.fade-exit-transition-leave-active { transition: opacity 0.5s; }
+.fade-exit-transition-leave-to { opacity: 0; }   
+.fade-exit-transition-leave-from { opacity: 1; }

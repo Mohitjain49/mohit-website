@@ -1,5 +1,7 @@
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
+    const nuxtReady = ref(false);
+
     var controller = new AbortController();
     var wakeLockTimeout = null;
 
@@ -12,7 +14,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const scrollStore = useScrollStore();
     const styleStore = useStyleStore();
 
-    const onHostedFileRoute = getOnHostedFileRoute();
     const { share, isSupported: shareSupported } = useShare();
     const { width: windowWidth } = useMohitWindowSize();
     const wakeLock = useWakeLock();
@@ -35,6 +36,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const compassMenuOpen = computed(() => { return (menuOpen.value == 1); });
     const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
+    const resumeMenuOpen = computed(() => { return (menuOpen.value == 3.1); });
+    const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == 3.2); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
@@ -44,7 +47,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const sharePopupClosing = ref(false);
     const showSharePopupImmediate = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
-        return (data != null && typeof data === "string");
+        return (nuxtReady.value && data != null && typeof data === "string");
     });
 
     const wakeLockIcon = computed(() => {
@@ -101,10 +104,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     async function setEventListeners() {
         if(mounted.value != 0) { return; }
         mounted.value = 1;
+        window.history.scrollRestoration = "manual";
 
         await nextTick();
+        await onNuxtReadyAdvanced();
+
+        nuxtReady.value = true;
         const signal = controller.signal;
-        history.scrollRestoration = "manual";
 
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
@@ -179,20 +185,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(element == null) { return false; }
         if(element.classList.contains("webpage-cover")) { return true; }
 
-        const navBar = document.getElementById("mohit-navBar");
-        if(navBar != null && (navBar === element || navBar.contains(element))) { return true; }
+        // A list of website menu IDs where the menu should not close when normally clicked.
+        const WEBSITE_MENU_IDS = [
+            "mohit-navBar", "mohit-navMenu", "mohit-compassMenu",
+            "mohit-scriptsMenu", "mohit-docMenu", "mohit-resumeMenu",
+            "mohit-metadata-docMenu"
+        ];
 
-        const navMenu = document.getElementById("mohit-navMenu");
-        if(navMenu != null && (navMenu === element || navMenu.contains(element))) { return true; }
-
-        const compassMenu = document.getElementById("mohit-compassMenu");
-        if(compassMenu != null && (compassMenu === element || compassMenu.contains(element))) { return true; }
-
-        const scriptsMenu = document.getElementById("mohit-scriptsMenu");
-        if(scriptsMenu != null && (scriptsMenu === element || scriptsMenu.contains(element))) { return true; }
-
-        const docMenu = document.getElementById("mohit-docMenu");
-        if(docMenu != null && (docMenu === element || docMenu.contains(element))) { return true; }
+        for(let i = 0; i < WEBSITE_MENU_IDS.length; i++) {
+            const webMenu = document.getElementById(WEBSITE_MENU_IDS[i]);
+            if(webMenu != null && (webMenu === element || webMenu.contains(element))) { return true; }
+        }
 
         // Returns false if element was not found in any menu.
         return false;
@@ -240,53 +243,22 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(event.reason?.name === "AbortException") { event.preventDefault(); }
     }
 
-    /**
-     * This runs whenever a page is opened.
-     * @param {Number} pixelOffset The offset for scrolling to a particular section.
-     */
-    function mountWebData(pixelOffset = 0) {
+    /** This runs whenever a page is opened. */
+    function mountWebData() {
         closeNavMenu();
         if(openShareOnMount.value) {
             openShareOnMount.value = false;
+            sleep(50).then(() => { if(showSharePopupImmediate.value) { showSharePopup.value = true; }});
         } else {
             setQRCodePopup("quit");
         }
-
-        nextTick(() => {
-            const hashStr = router.currentRoute.value.hash.substring(1);
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            if(hashStr === "" || documentStore.onDocumentRoute) { return; }
-
-            allImagesReady().then(() => {
-                try {
-                    goToPageSection(hashStr, ((hashStr === "footer") ? 50 : pixelOffset), 10);
-                } catch(e) {
-                    scrollToTop(true, 0);
-                }
-            });
-        });
     }
-
-    /** This function runs to ensure that all the images in a webpage are loaded before the scroll event takes place. */
-    async function allImagesReady() {
-        const images = Array.from(document.documentElement.querySelectorAll('img'));
-        const promises = images.map(async(img) => {
-            if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
-            try { return await img.decode(); } catch (err) {}
-        });
-        return Promise.all(promises);
-    };
 
     /** This function scrolls to the footer of the webpage if it exists. */
     function scrollToAndFromFooter() {
         if(!navFooterPresent.value) { return; }
         closeNavMenu();
-
-        if(webFooterVisibility.value) {
-            scrollToTop(false, 0);
-        } else {
-            goToFooter();
-        }
+        if(webFooterVisibility.value) { scrollToTop(false, 0); }
     }
 
     /** The toggles the status of the home navigation menu. */
@@ -319,13 +291,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const route = router.currentRoute.value;
 
         if(qrdata === "quit" || qrdata === "") {
-            router.push({ path: route.path, hash: route.hash }).then(() => {
+            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata: undefined } }).then(() => {
                 sleep(10).then(() => { closeNavMenu(); });
             });
         } else if(qrdata === "toggle") {
             setQRCodePopup(showSharePopup.value ? "quit" : "main");
         } else {
-            router.push({ path: route.path, hash: route.hash, query: { qrdata } }).then(() => {
+            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata } }).then(() => {
                 sleep(10).then(() => { closeNavMenu(); });
             });
         }
@@ -375,21 +347,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { mounted, menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, websiteMenuMode, websiteMenuTransition,
-        shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing, wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
-        openShareOnMount, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
+    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
+        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
+        openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
+        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });
 
-/**
- * This function mounts the website data pinia store on a page.
- * @param {Number} pixelOffset The offset for scrolling to a particular section.
- */
-export function initWebData(pixelOffset = 0) {
-    useWebsiteDataStore().mountWebData(pixelOffset);
-}
+/** This function mounts the website data pinia store on a page. */
+export function initWebData() { useWebsiteDataStore().mountWebData(); }
 
 /** This function returns a reactive computed value on whether the user is on a hosted file page or not. */
 export function getOnHostedFileRoute() {

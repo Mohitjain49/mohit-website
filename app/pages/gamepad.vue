@@ -141,7 +141,7 @@ import right_trigger from "~/assets/gamepad-buttons/right_trigger.png";
 const gamepadStore = useGamepadStore();
 const router = useRouter();
 
-onMounted(() => { initWebData(); manageGamepadTabGlow(); });
+onMountedAdvanced(() => { initWebData(); manageGamepadTabGlow(); });
 useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad", "These are the gamepad controls on my website." ));
 watch(() => router.currentRoute.value.hash, (newValue, oldValue) => { manageGamepadTabGlow(oldValue); });
 
@@ -191,7 +191,7 @@ const NON_STANDARD_MAPPING_MESSAGE = ("Special Gamepad Detected. " +
 
 <style scoped lang="scss">
 .gamepad-controls-body {
-    height: 650px;
+    height: 700px;
     min-height: var(--body-height);
     width: 100%;
     display: grid;

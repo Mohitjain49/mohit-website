@@ -1,9 +1,12 @@
 <template>
-<vue-particles id="particlests" :options="particlesOptions" @particlesLoaded="(e) => {onParticlesLoaded(e)}" />
+<vue-particles :id="BACKGROUND_PARTICLES_ID" :options="particlesOptions" @particlesLoaded="(e) => { onParticlesLoaded(e); }" />
 </template>
 
 <script setup>
 import { has } from "lodash-es";
+const BATTERY_LOW_THRESHOLD = 0.2;
+const BACKGROUND_PARTICLES_ID = "mohit-website-particlests";
+const BACKGROUND_COLOR_PROPERTY = "--particles-bg-color";
 
 /**
  * @type {import('vue').ShallowRef<import('@tsparticles/engine').Container>} The container representing the background.
@@ -12,7 +15,6 @@ import { has } from "lodash-es";
 const tsparticlesContainer = shallowRef(null);
 const props = defineProps({ particlesOptions: { type: Object, required: true } });
 
-const BATTERY_LOW_THRESHOLD = 0.2 // This is a value between 0 and 1 that represents the user having "low battery".
 const visibility = useDocumentVisibility();
 const battery = useBattery();
 const windowSize = useMohitWindowSize();
@@ -29,6 +31,7 @@ const disableParticleDensity = computed(() => { return (windowSize.height.value 
  */
 function onParticlesLoaded(container) {
     tsparticlesContainer.value = container;
+    setParticlesBackgroundColor();
 }
 
 /** This function simple resets the particles in the tsparticles container. */
@@ -42,6 +45,9 @@ function checkDensityExists() { return has(props.particlesOptions, 'particles.nu
 
 /** This returns whether the number's "value" property for a particles background exists. */
 function checkParticlesNumberExists() { return has(props.particlesOptions, 'particles.number.value'); }
+
+/** This returns whether the number's "value" property for a particles background exists. */
+function checkParticlesBgColorExists() { return has(props.particlesOptions, 'background.color'); }
 
 /**
  * This function is responsible for changing the intensity of tsparticles depending on the battery status.
@@ -61,8 +67,23 @@ function onBatteryStatusChange() {
         particlesHalved.value = false;
         resetParticles();
     }
-    // if(import.meta.env.DEV) { console.log(props.particlesOptions.particles.number) };
 }
+
+/** This function sets the particles background color. */
+function setParticlesBackgroundColor() {
+    if(!import.meta.client || !document) { return; }
+    const element = document.getElementById(BACKGROUND_PARTICLES_ID);
+    if(!element) { return; }
+
+    if(document.documentElement) {
+        element.style.setProperty(BACKGROUND_COLOR_PROPERTY, window.getComputedStyle(document.documentElement).backgroundColor);
+    } else if(checkParticlesBgColorExists()) {
+        element.style.setProperty(BACKGROUND_COLOR_PROPERTY, props.particlesOptions.background.color);
+    }
+}
+
+// This sets the Particles Background Color when the component mounts.
+onMountedAdvanced(() => { setParticlesBackgroundColor(); });
 
 // This resets the number of particles and destroys the container before unmounting the page.
 onBeforeUnmount(() => {
@@ -103,12 +124,16 @@ watch(() => props.particlesOptions, () => { resetParticles(); });
 </script>
 
 <style lang="scss">
-#particlests {
+#mohit-website-particlests {
     position: fixed;
     top: 0px;
     left: 0px;
     width: 0px;
     height: 0px;
     z-index: -10;
+    --particles-bg-color: var(--webpage-html-bg-color, #000000);
+}
+#mohit-website-particlests canvas {
+    background-color: var(--particles-bg-color) !important;
 }
 </style>

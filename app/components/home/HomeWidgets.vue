@@ -10,8 +10,7 @@ import ksu_logo from "~/assets/Kennesaw_Logo.png";
 const KSU_CCSE_LINK = "https://www.kennesaw.edu/ccse/";
 const KSU_WIDGET_TITLE = "I'm A Proud Computer Science Student Of Kennesaw State University!";
 
-onMounted(async() => {
-    await nextTick();
+onMountedAdvanced(async() => {
     document.getElementById("ksu-widget")?.classList.add("animate__animated", "animate__fadeInUp");
     await sleep(1100);
     document.getElementById("ksu-widget")?.classList.remove("animate__animated", "animate__fadeInUp");

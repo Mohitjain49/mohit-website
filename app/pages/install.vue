@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-onMounted(() => { initWebData(); });
+onMountedAdvanced(() => { initWebData(); });
 const installStore = useInstallStore();
 const VITE_PWA_WEBSITE = "https://vite-pwa-org.netlify.app/";
 

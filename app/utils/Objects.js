@@ -1,9 +1,9 @@
 import vue_icon from "../assets/Vuejs_Icon.png";
 import angular_icon from "../assets/Angular_Icon.webp";
 import react_icon from "../assets/React_Icon.png";
+import jest_icon from "../assets/jest_icon.png";
 import expo_icon from "../assets/sublo/Expo_Icon.svg";
 import vite_icon from "../assets/Vite_Icon.svg";
-import vitest_icon from "../assets/Vitest_Icon.svg";
 import nuxt_icon from "../assets/Nuxt_Icon.png";
 import pinia_icon from "../assets/Pinia_Icon.svg";
 import unjs_icon from "../assets/UnJS_Icon.png";
@@ -39,6 +39,7 @@ export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/
 export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
 export const PERSONAL_UPGRADE_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/upgrade.mjs");
+export const PERSONAL_USE_DOCKER_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/use-docker.mjs");
 export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/mysh.c");
 export const PERSONAL_THREADPOOL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/threadpool.c");
 export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
@@ -382,20 +383,7 @@ export const FRONTEND_SKILL_NOTES = [
             faIcon: false,
             size: "105"
         }
-    },
-    {
-        name: "Vitest",
-        link: "https://vitest.dev/",
-        color: "#749b24",
-        desc: "Vitest is Vite's main testing module. This module is designed for Vite as it has support for glob imports, " +
-            "its Server Side Rendering primitives, and more.",
-
-        icon: {
-            id: vitest_icon,
-            faIcon: false,
-            size: "115"
-        }
-    },
+    }
 ];
 
 export const AWS_SKILL_NOTES = [
@@ -538,6 +526,19 @@ export const MODULES_SKILL_NOTES = [
             id: "fa-brands fa-github",
             faIcon: true,
             size: "110"
+        }
+    },
+    {
+        name: "Jest",
+        link: "https://jestjs.io/",
+        color: "#99425B",
+        desc: "Jest is a JavaScript Testing Framework that can work with pretty much any JS-Based app, frontend or backend. " +
+            "It is extremely reliable for ensuring that code actually works as intended when it needs to the most.",
+
+        icon: {
+            id: jest_icon,
+            faIcon: false,
+            size: "105"
         }
     },
     {
@@ -872,7 +873,7 @@ export const FEATURE_ENTITIES = [
         link: "/library/#documents",
         color: "var(--website-text)",
         desc: "I used multiple modules to display my resume and other documents on this website. " +
-            "This includes using PDF.js to natively display the PDF as a whole and the \"unplugin-vue-markdown\" " +
+            "This includes using PDF.js to natively display the PDF as a whole and the \"@nuxt/content\" " +
             "plugin to display my resume in a markdown format.",
 
         icon: {
@@ -941,15 +942,16 @@ export const SKILLS_COMPASS = [
 ];
 
 export const CONTACT_COMPASS = [
-    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square", offset: 70 },
-    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope", offset: 70 },
-    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin", offset: 70 },
-    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 70 },
-    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 70 },
-    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 70 }
+    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square", offset: 0 },
+    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope", offset: 0 },
+    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin", offset: 0 },
+    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 0 },
+    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 0 },
+    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 0 }
 ];
 
 export const LIBRARY_COMPASS = [
     { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 },
-    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code", offset: 0 }
+    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code", offset: 0 },
+    { title: "My C Scripts", id: "c", color: "var(--c-color)", faIcon: false, icon: c_programming_icon, offset: 0 }
 ];

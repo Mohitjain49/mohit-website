@@ -13,12 +13,13 @@
             <VuePDF :class="id" :id="class" :pdf="pdf" :ref="(el) => {docPagesRefs[index] = el}"
                 :text-layer="annontations" :annotation-layer="annontations"
                 @loaded="() => {setSingleDocLoaded(index)}"
-                @annotation="(event) => {documentStore.onAnnotationClick(event)}"
+                @annotation="(event) => { documentStore.onAnnotationClick(event); }"
                 :width="documentStore.customPdfWidth"
                 :height="documentStore.customPdfHeight"
                 :page="page.num"
             />
         </div>
+        <HostedFileBottomBar v-if="fullScreenSet" />
     </div>
     
     <template v-if="fullScreenSet">
@@ -30,7 +31,10 @@
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <WebFooter v-if="!fullScreenSet" />
     <FileWidgets />
+
     <DocumentMenu />
+    <DocMetadataMenu :objectUrl="url" />
+    <slot></slot>
 </main>
 </template>
 
@@ -42,6 +46,7 @@ const documentStore = useDocumentStore();
 const router = useRouter();
 
 const props = defineProps({
+    templateIndex: { type: Number, required: true },
     url: { type: String, required: true },
     annontations: { type: Boolean, default: true },
     addShare: { type: Boolean, default: true },

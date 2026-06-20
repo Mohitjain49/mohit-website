@@ -1,8 +1,8 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
 import {
-    faCopyright, faStar, faCertificate, faQuestion, faBookBookmark,
-    faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst
+    faCopyright, faStar, faCertificate, faQuestion, faBookBookmark, faCube,
+    faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst, faSquare
 } from '@fortawesome/free-solid-svg-icons';
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
@@ -137,14 +137,17 @@ export const ORANGE_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1000
+            value: 400
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "square"
+            type: "image",
+            options: {
+                image: { src: getFontAwesomeSvg(faSquare, "rgb(126, 90, 0)"), width: 100, height: 100 }
+            }
         },
         size: {
             value: { min: 2, max: 3 },
@@ -171,17 +174,20 @@ export const GREEN_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 1000
+            value: 350
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "square"
+            type: "image",
+            options: {
+                image: { src: getFontAwesomeSvg(faCube, "rgb(144, 238, 144)"), width: 100, height: 100 }
+            }
         },
         size: {
-            value: { min: 2, max: 3 },
+            value: { min: 3, max: 5 },
         },
     },
     detectRetina: true,
@@ -232,10 +238,10 @@ export const WAKE_LOCK_BACKGROUND = ref({
     particles: {
         paint: { fill: { enable: true, color: { value: "#E92A60" }}},
         move: {
-            direction: "",
+            direction: "outside",
             enable: true,
             outModes: { default: "out" },
-            speed: 1.0,
+            speed: 1.5,
             straight: false,
         },
         number: {
@@ -247,10 +253,13 @@ export const WAKE_LOCK_BACKGROUND = ref({
             animation: { enable: true, speed: 1.5, sync: false },
         },
         shape: {
-            type: "star"
+            type: "image",
+            options: {
+                image: { src: getFontAwesomeSvg(faStar, "#E92A60"), width: 100, height: 100 }
+            }
         },
         size: {
-            value: { min: 2, max: 3 },
+            value: { min: 3, max: 4 },
         },
     },
     detectRetina: true,
@@ -352,11 +361,7 @@ export const COPYRIGHT_BACKGROUND = ref({
         shape: {
             type: "image",
             options: {
-                image: {
-                    src: getFontAwesomeSvg(faCopyright, "rgb(126, 90, 0)"),
-                    width: 30, 
-                    height: 30
-                }
+                image: { src: getFontAwesomeSvg(faCopyright, "rgb(126, 90, 0)"), width: 30, height: 30 }
             }
         },
         size: {

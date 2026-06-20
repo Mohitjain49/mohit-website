@@ -88,7 +88,7 @@ export function usePulseLoopAnimation(container = null) {
         });
     }
 
-    onMounted(async() => { await enable(); });
+    onMountedAdvanced(async() => { await enable(); });
     onBeforeUnmount(() => { disable(); });
     watch(container, () => { reset(); });
     return { enabled, numElements, enable, disable, reset, animate }
@@ -144,7 +144,9 @@ export function useScrollPercentage(elementId = "") {
 export function useWebsiteMenuUtility(menu) {
     const OVERFLOW_CLASS = "vertical-overflow";
     const SWIPE_THRESHOLD = 50;
+
     const { cssToWindowHeightRatio } = useMohitWindowSize();
+    const webData = useWebsiteDataStore();
 
     const menuScrollable = shallowRef(false);
     const swipeEnabled = shallowRef(false);
@@ -223,6 +225,7 @@ export function useWebsiteMenuUtility(menu) {
         if(typeof event.clientY !== "number") { return; }
         if(event.type === "pointerdown" && !menuTouched.value) {
             startY = event.clientY;
+            webData.bypassBodyClick();
             menuTouched.value = true;
         } else if(event.type === "pointerup" && menuTouched.value) {
             if((startY - event.clientY) > (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)) { closeMenu(); }
@@ -239,6 +242,8 @@ export function useWebsiteMenuUtility(menu) {
             const firstTouch = event.touches.item(0);
             if(typeof firstTouch?.clientY !== 'number') { return; }
             startY = firstTouch.clientY;
+
+            webData.bypassBodyClick();
             menuTouched.value = true;
         } else if(event.type === "touchend" && menuTouched.value) {
             const firstTouch = event.changedTouches.item(0);
@@ -249,11 +254,48 @@ export function useWebsiteMenuUtility(menu) {
     }
 
     useRafFn(() => { checkMenu(); }, { immediate: true, fpsLimit: 30, once: false });
-    onMounted(() => { enableSwipe(); });
+    onMountedAdvanced(() => { enableSwipe(); });
     onBeforeUnmount(() => { disableSwipe(); });
     watch(menu, () => { resetSwipe(); });
 
     return { menuScrollable, swipeEnabled, overflowClassAdded, menuTouched,
         checkMenu, enableSwipe, disableSwipe, resetSwipe
     }
+}
+
+/**
+ * This function returns void only when Nuxt is ready for the website. It takes in a function as well.
+ * @param {Function} callback The callback function that is triggered when Nuxt is ready.
+ */
+export async function onNuxtReadyAdvanced(callback = () => {}) {
+    return new Promise((resolve, reject) => {
+        try {
+            onNuxtReady(() => { callback(); });
+            onNuxtReady(() => { resolve(null); });
+        } catch(e) {
+            reject(e);
+        }
+    })
+}
+
+/**
+ * This function awaits the Next Tick and for Nuxt to be ready before running the callback function.
+ * @param {Function} callback The callback function that is triggered.
+ */
+export function onMountedAdvanced(callback = () => {}) {
+    /** A boolean that tells the developer if the component is fully mounted. */
+    const isMounted = shallowRef(false);
+
+    onMounted(async() => {
+        try {
+            await onNuxtReadyAdvanced();
+            await nextTick();
+        } catch(e) {}
+
+        isMounted.value = true;
+        callback();
+    });
+
+    // Returns a boolean that tracks if the component is mounted.
+    return isMounted;
 }

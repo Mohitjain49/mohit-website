@@ -10,8 +10,7 @@
 const featuresWidgetRef = useTemplateRef('features-widget');
 usePulseLoopAnimation(featuresWidgetRef);
 
-onMounted(async() => {
-    await nextTick();
+onMountedAdvanced(async() => {
     document.getElementById("features-return-widget")?.classList.add("animate__animated", "animate__fadeInUp");
     await sleep(1100);
     document.getElementById("features-return-widget")?.classList.remove("animate__animated", "animate__fadeInUp");

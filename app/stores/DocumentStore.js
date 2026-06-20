@@ -4,18 +4,17 @@ import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { ofetch } from 'ofetch';
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import QRCodeStyling from "qr-code-styling";
-
 const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
 /** This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website. */
 export const useDocumentStore = defineStore("document-store", () => {
+    const PDF_WIDTH_CSS_PROPERTY = "--mohit-custom-pdf-width";
+    const PDF_HEIGHT_CSS_PROPERTY = "--mohit-custom-pdf-height";
+
     const hostedDocuments = [
         useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
-        useHostedDocument("/resume/qrcode", Mohit_Jain_Resume, "Mohit_Jain_Resume_With_QR_Code", ".pdf", PERSONAL_RESUME_LINK, true, false),
         useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false, false),
         useHostedDocument(FCS_CERTIFICATE_ROUTE, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025,
             "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", ".pdf", FCS_CERTIFICATE_LINK, false, false
@@ -27,6 +26,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
+    const resumeStore = useResumeStore();
     const styleStore = useStyleStore();
     const fullScreenStore = useFullScreenStore();
     const windowSize = useMohitWindowSize();
@@ -35,6 +35,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleAccountsTag = useScriptTag("https://accounts.google.com/gsi/client", (el) => { initGoogleTokenClient(); }, SCRIPT_TAG_OPTIONS);
     const googleApiTag = useScriptTag("https://apis.google.com/js/api.js", (el) => { initGooglePickerAPI(); }, SCRIPT_TAG_OPTIONS);
 
+    /** @type {AbortController} This abort controller manages the event listeners fired when the page resizes. */
+    var pdfDimensionsController = null;
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
@@ -70,18 +72,16 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const onDocumentRoute = computed(() => { return (-1 != currentDocumentRoute.value); });
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
+    const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
-    const onResumeQrcodeRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
-    const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
-    const onFCSCertificateRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
-    const onResearchPaperRoute = computed(() => { return hostedDocuments[4].onRoute.value; });
+    const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
+    const onFCSCertificateRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
+    const onResearchPaperRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
 
-    const onAnyResumeRoute = computed(() => { return (onResumeRoute.value || onResumeQrcodeRoute.value); });
-    const saveAsSupported = computed(() => {
-        return (!checkSSR() && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
-    });
+    const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
+    const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
 
     const downloadIcon = computed(() => {
         const downloadObj = documentDownloadStatus.value;
@@ -104,12 +104,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         const uploadPending = (uploadObj.pending || googleDriveOptAvailable.value == 1)
         return (uploadObj.fresh ? "fa-check" : (uploadPending ? "fa-spinner" : "fa-brands fa-google-drive"));
     });
-
-    const wHeightWatcher = watch(windowSize.height, () => { setPdfSize(); });
-    const wWidthWatcher = watch(windowSize.width, () => { setPdfSize(); });
-
-    wHeightWatcher.pause();
-    wWidthWatcher.pause();
 
     /**
      * ---------------------------------------------------------------------------
@@ -249,7 +243,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         const picker = new google.picker.PickerBuilder()
             .addView(docsView)
-            .setTitle("Select A Folder (Or Click Cancel To Save This Document To Your Drive's Root)")
+            .setTitle("Select A Folder Where You Would Like To Save This Document To.")
             .setOAuthToken(googleAPIAccessToken)
             .setDeveloperKey(GOOGLE_CLOUD_API_KEY)
             .setCallback((data) => { googleDrivePickerCallback(data); })
@@ -363,7 +357,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         webData.mountWebData();
         await nextTick();
 
-        if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
+        if(onResumeRoute.value && !onMarkdownRoute.value) {
+            await resumeStore.initBlob();
+        } else if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
             await hostedDocuments[currentDocumentRoute.value].initBlob();
         }
 
@@ -435,6 +431,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     function setPdfSize() {
         customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (windowSize.width.value - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
+
+        if(!document || !document.documentElement) { return; }
+        document.documentElement.style.setProperty(PDF_WIDTH_CSS_PROPERTY, (String(customPdfWidth.value) + "px"));
+        document.documentElement.style.setProperty(PDF_HEIGHT_CSS_PROPERTY, (String(customPdfHeight.value) + "px"));
     }
 
     /**
@@ -446,12 +446,15 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(status === "toggle") { status = !windowSizeWatchersEnabled.value; }
         if(status && (force || !windowSizeWatchersEnabled.value)) {
             windowSizeWatchersEnabled.value = true;
-            wHeightWatcher.resume();
-            wWidthWatcher.resume();
+            if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
+
+            pdfDimensionsController = new AbortController();
+            const signal = pdfDimensionsController.signal;
+            window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal });
         } else if(!status && (force || windowSizeWatchersEnabled.value)) {
             windowSizeWatchersEnabled.value = false;
-            wHeightWatcher.pause();
-            wWidthWatcher.pause();
+            if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
+            pdfDimensionsController = null;
         }
     }
 
@@ -513,13 +516,13 @@ export const useDocumentStore = defineStore("document-store", () => {
         try { goToPageSection(id, 70); } catch(e) {}
     }
 
-    return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported,
+    return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported, currentDocumentBlobCreated,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
         downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onAnyResumeRoute,
-        onResumeRoute, onMarkdownRoute, onResumeQrcodeRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
+        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
-        mountDocumentStore, mountDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
+        mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });
 
@@ -529,29 +532,62 @@ export const useDocumentStore = defineStore("document-store", () => {
  * @param {String} file The imported file to display.
  * @param {String} name The name of the file.
  * @param {".pdf" | ".docx"} suffix The suffix of the file being displayed.
- * @param {String | "custom"} originLink The link where that file is stored online.
+ * @param {String} originLink The link where that file is stored online.
  * @param {Boolean} useBlobLink If true, this utility uses the blob object url as the link instead of the passed in link.
  * @param {Boolean} withMd If true, this utility treats (path + "/markdown") as a viable route as well.
  */
 function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false, withMd = false) {
     path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
 
-    /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
-    const blob = ref(null);
-    const objectUrl = useObjectUrl(blob);
+    /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
+    const blob = shallowRef(null);
+    const objectUrl = shallowRef("");
     const router = useRouter();
 
-    const blobCreated = computed(() => { return (blob.value != null); });
-    const link = computed(() => { return (useBlobLink ? objectUrl.value : originLink); });
+    const blobCreated = shallowRef(false);
+    const link = shallowRef("");
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
+
 
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {
         if(blobCreated.value) { return; }
-        if(path.includes("/resume/qrcode")) {
-            blob.value = await createQrcodeResume();
+        blob.value = await fetch(file).then((res) => res.blob());
+
+        objectUrl.value = URL.createObjectURL(blob.value);
+        blobCreated.value = true;
+        changeLink("default");
+    }
+
+    /** This function deletes the current blob used by the website. */
+    function deleteBlob() {
+        if(!blobCreated.value) { return; }
+        blob.value = null;
+        objectUrl.value = "";
+
+        blobCreated.value = false;
+        changeLink("default");
+    }
+
+    /**
+     * This function lets external stores and components set the blob itself for the hosted document.
+     * @param {Blob} newBlob The new Blob that represents the hosted document.
+     */
+    function setNewBlob(newBlob) {
+        blob.value = newBlob;
+        objectUrl.value = URL.createObjectURL(blob.value);
+        blobCreated.value = true;
+    }
+
+    /**
+     * This function sets the link for this hosted document.
+     * @param {String} newLink The new link or "default" if the website should set it itself.
+     */
+    function changeLink(newLink = "") {
+        if(newLink === "default") {
+            link.value = (useBlobLink ? objectUrl.value : originLink);
         } else {
-            blob.value = await fetch(file).then((res) => res.blob());
+            link.value = newLink;
         }
     }
 
@@ -565,73 +601,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd, initBlob, checkPath }
-}
-
-/** This function creates and returns a document using pdf-lib where my resume has a QR Code embedded on its top right. */
-async function createQrcodeResume() {
-    try {
-        // This fetches and loads the PDF file.
-        const existingPdfBytes = await fetch(Mohit_Jain_Resume).then(res => res.arrayBuffer());
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-
-        // This generates the QR Code and makes into a usuable image for pdf-lib.
-        const qrCode = new QRCodeStyling({
-            width: 300,
-            height: 300,
-            margin: 5,
-            data: PERSONAL_WEBSITE_LINK,
-            type: "canvas",
-            dotsOptions: {
-                color: 'black',
-                type: "rounded"
-            },
-            cornersSquareOptions: {
-                color: 'black',
-                type: 'extra-rounded'
-            },
-            cornersDotOptions: {
-                color: 'black',
-                type: 'dot'
-            },
-            qrOptions: {
-                typeNumber: 0,
-                mode: 'Byte',
-                errorCorrectionLevel: 'Q',
-            },
-            backgroundOptions: { color: '#FFFFFF' },
-        });
-        const qrData = await qrCode.getRawData("png");
-        const arrayBuffer = await qrData.arrayBuffer();
-
-        // This embeds the Qrcode as an image into the PDF file and places it accordingly.
-        const qrImage = await pdfDoc.embedPng(arrayBuffer);
-        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-        const page = pdfDoc.getPage(0);
-
-        const NULL_COLOR = rgb(0.2665, 0.3143, 0.4191);
-        const BLUE_COLOR = rgb(0.184, 0.325, 0.792);
-
-        const { width, height } = page.getSize();
-        page.drawImage(qrImage, {
-            x: (width - 70),
-            y: (height - 70),
-            width: 60,
-            height: 60,
-        });
-
-        page.drawText("My Website!", {
-            x: (width - 70),
-            y: (height - 82),
-            size: 10,
-            color: NULL_COLOR,
-            font
-        });
-
-        // This saves the PDF and returns a blob representing the new PDF.
-        const modifiedPdfBytes = await pdfDoc.save();
-        return new Blob([modifiedPdfBytes], { type: "application/pdf" });
-    } catch(e) {
-        return new Blob([new Uint8Array(), { type: "application/pdf" }]);
+    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd,
+        initBlob, setNewBlob, deleteBlob, checkPath, changeLink
     }
 }

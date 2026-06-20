@@ -1,21 +1,63 @@
 import type { RouterConfig } from "nuxt/schema";
+const SCROLL_STORE_WAIT_SECONDS = 1.5;
 
-// This accounts for any url changes not triggered by the website itself, 
-// such as clicking on the browser back and forward buttons.
+// This accounts for the majority of all auto-scrolling functionality across the website.
+// Anytime the route changes, this function runs and has the app maually scroll to the next section.
 export default {
     async scrollBehavior(to, from, savedPosition) {
-        const { $pinia } = useNuxtApp();
+        // console.log({ to, from, savedPosition });
+        window.history.scrollRestoration = "manual";
+
+        // Initialize Stores, Variables, and Conditions.
+        const hash = to.hash.substring(1);
+        const hashExists = (hash.length > 0);
+        const differentPage = (to.name !== from.name);
+
+        const { $pinia, hooks } = useNuxtApp();
         const scrollStore = useScrollStore($pinia);
-        const queryChanged = (JSON.stringify(to.query) !== JSON.stringify(from.query));
+        const documentStore = useDocumentStore($pinia);
 
-        await sleep(50);
-        if(scrollStore.isAutoScrolling || queryChanged) { return; }
-        const hash = to.hash;
+        // This waits for the page to load before triggering any scroll.
+        await new Promise<void>((resolve, reject) => {
+            hooks.hookOnce('page:loading:end', () => { resolve(); });
+            sleep(300).then(() => { resolve(); });
+        });
 
-        if(hash.length > 0) {
-            try { goToPageSection(hash.substring(1), 0, 0) } catch(e) {}
-        } else if(to.name === from.name) {
-            scrollToTop(false, 0);
+        // This function instant scrolls to the top of the page if certain conditions are met. 
+        if(!hashExists && differentPage) {
+            return { top: 0, left: 0, behavior: "instant" };
+        } else if(differentPage) {
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+
+        // Wait for all elements and itself to be properly rendered in.
+        await nextTick();
+        if(differentPage) { await onNuxtReadyAdvanced(); }
+
+        /** An array of conditions where if one is true, no smooth auto-scroll takes place. */
+        const NO_SCROLL_CONDITIONS = [
+            scrollStore.isAutoScrolling,
+            (documentStore.onDocumentRoute && !documentStore.onMarkdownRoute && !documentStore.docLoaded.status),
+            (JSON.stringify(to.query) !== JSON.stringify(from.query))
+        ];
+
+        // Checks the conditions and waits for the scroll store to be mounted.
+        if(-1 != NO_SCROLL_CONDITIONS.findIndex((item) => { return item; })) { return; }
+        var secondsScrollStoreNotMounted = 0;
+
+        while(!scrollStore.mounted && secondsScrollStoreNotMounted < SCROLL_STORE_WAIT_SECONDS) {
+            await sleep(50);
+            secondsScrollStoreNotMounted += 0.05;
+        }
+
+        // If the scroll store takes too long to mount, the function stops.
+        // Smooth scrolls to a section if there is a hash, else it smooth scrolls to the top of the page.
+        if(!scrollStore.mounted) {
+            return false;
+        } else if(hashExists) {
+            try { await scrollStore.scrollToId(hash, 0, 0); } catch(e) {}
+        } else if(!differentPage) {
+            try { await scrollStore.scrollToTop(false, 0); } catch(e) {}
         }
     }
 } satisfies RouterConfig

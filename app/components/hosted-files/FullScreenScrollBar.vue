@@ -9,12 +9,13 @@
 <script setup>
 const styleStore = useStyleStore();
 const props = defineProps({ fsElementId: { type: String, required: true } });
-const { vScrollbarStyle, vertical } = useScrollPercentage(props.fsElementId);
-
 const interactiveScroll = useTemplateRef('scrollbar-inner');
+
+const { vScrollbarStyle, vertical } = useScrollPercentage(props.fsElementId);
 const { pressed: mousePressed } = useMousePressed({ target: interactiveScroll, touch: false });
 const { mouseY } = storeToRefs(styleStore);
 
+const wholeFileInView = useState("whole-hosted-file-in-view", () => { return false; });
 const showScrollBar = computed(() => { return (vertical.value.inView < 100); });
 const innerScrollBarClasses = computed(() => { return ['inner', (mousePressed.value ? 'active' : '')]; });
 
@@ -49,6 +50,9 @@ function setUserSelect(disable = true) {
  * @param {Boolean} noOverflow The status on whether there is no overflow for the full screen element.
  */
 function manageOverflowClass(noOverflow = false) {
+    // Also sets the website state variable.
+    wholeFileInView.value = noOverflow;
+
     const element = getFsElement();
     const className = "fullscreen-noOverflow";
     if(element == null) { return; }

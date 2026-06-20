@@ -164,7 +164,6 @@ const MIN_MESSAGE_LENGTH = 50;
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const router = useRouter();
-const isMounted = useMounted();
 
 const titleInput = ref();
 const alertBoxText = ref("");
@@ -195,11 +194,10 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple 
  * ----------------------------------------------------------------------------
  */
 
-/**
- * This adds a transition to the contact boxes if the screen width is large enough.
- */
-onMounted(() => {
-    initWebData(70);
+// This adds a transition to the contact boxes if the screen width is large enough.
+/** */
+const isMounted = onMountedAdvanced(() => {
+    initWebData();
     manageSocialTabGlow();
 
     audioStore.changeSTTUpdateFunc((str) => { updateMainMsg(str); });

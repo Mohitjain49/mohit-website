@@ -52,7 +52,7 @@ const ICON_IMPORT_START = "/static-icons/Personal_Icon";
 const ICON_IMPORT_START_LINK = (PERSONAL_WEBSITE_LINK + "static-icons/Personal_Icon");
 const MND_LINK = (PERSONAL_WEBSITE_LINK + 'static-icons/MND_Icon_Transparent.png');
 
-onMounted(() => { initWebData(); });
+onMountedAdvanced(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Icons", "icons",
     "I created my icons by using gradients and the Google Lexend Font. You can view them on this page."
 ));

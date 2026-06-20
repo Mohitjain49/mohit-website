@@ -20,7 +20,7 @@
 const experienceRef = useTemplateRef('mohit-exp-page');
 usePulseLoopAnimation(experienceRef);
 
-onMounted(() => { initWebData(); });
+onMountedAdvanced(() => { initWebData(); });
 useHead(getMeta("Mohit Jain | My Experience", "experience/",
     "On this page, I go into depth about my work experience.",
     "rgb(248, 206, 171)"

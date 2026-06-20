@@ -11,6 +11,9 @@
     </div>
 
     <div class="mohit-navBar-icons menu-top right">
+        <button v-if="props.showDocOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3)" title="Back To Document Options" pulse-loop>
+            <font-awesome-icon icon="fa-file-export" />
+        </button>
         <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" pulse-loop>
             <font-awesome-icon icon="fa-share-from-square" />
         </button>
@@ -25,11 +28,12 @@
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const webData = useWebsiteDataStore();
-const route = useRoute();
+const router = useRouter();
+const props = defineProps({ showDocOptionsBtn: { type: Boolean, default: false }});
 
 /** This function manages the home button on a website menu. */
 function manageHomeNav() {
-    if(route.path !== "/") { return; }
+    if(router.currentRoute.value.path !== "/") { return; }
     scrollToTop(false, 0);
     webData.closeNavMenu();
 }

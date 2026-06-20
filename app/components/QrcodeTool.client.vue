@@ -206,8 +206,11 @@ function setQRCodeLink() {
     const route = router.currentRoute.value;
 
     if(data === "main") {
-        qrCodeLink.value = (PERSONAL_WEBSITE_LINK + (route.path.substring(1) + route.hash));
-        sharePopupMode.value = ((route.hash === "") ? 1 : 0);
+        const linkUrl = new URL(route.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
+        linkUrl.searchParams.delete('qrdata');
+
+        qrCodeLink.value = (PERSONAL_WEBSITE_LINK + linkUrl.pathname.substring(1) + linkUrl.search + linkUrl.hash);
+        sharePopupMode.value = ((route.hash !== "" || Object.keys(route.query).length > 0) ? 0 : 1);
     } else if(data === "filter") {
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.path.substring(1));
         sharePopupMode.value = 1;

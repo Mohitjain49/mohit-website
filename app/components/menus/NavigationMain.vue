@@ -3,10 +3,12 @@
 </style>
 
 <template>
-<nav id="mohit-navBar" :style="{ 'height': navBarHeight }" ref="navBar">
-    <div class="mohit-main-progressBar" v-if="scrollProgress.show">
-        <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
-    </div>
+<nav id="mohit-navBar" ref="navBar">
+    <Transition name="fade-exit-transition" fade>
+        <div class="mohit-main-progressBar" v-if="scrollProgress.show">
+            <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
+        </div>
+    </Transition>
 
     <div class="mohit-navBar-top">
         <div class="mohit-navBar-icons left">
@@ -35,7 +37,7 @@
             <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(2, true)" title="Script Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
-            <button v-else-if="documentStore.onDocumentRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, true)" title="Document Options" pulse-loop>
+            <button v-else-if="showDocumentOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, true)" title="Document Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
             <button class="mohit-navBar-icon light" @click="webData.setMenuOpen(0, true)" title="Open Navigation Menu" pulse-loop>
@@ -83,7 +85,7 @@
                 <span> See Script Options </span>
             </button>
         </div>
-        <div v-if="documentStore.onDocumentRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+        <div v-if="showDocumentOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
                 <span> See Document Options </span>
@@ -91,7 +93,7 @@
         </div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad/" @click="(event) => { flashNavOpt(event, '/gamepad') }" pulse-loop>
+            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad/" @click="(event) => { flashNavOpt(event, '/gamepad'); }" pulse-loop>
                 <font-awesome-icon icon="fa-gamepad" />
                 <span> Gamepad Controls </span>
             </RouterLink>
@@ -122,7 +124,7 @@
     </div>
 </Transition>
 
-<div v-show="showNavLeftWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons" ref="navWidgets">
+<div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
     <button v-if="showUpdateWebsiteWidget" class="mohit-navBar-statusIcon yellow" pulse-loop
         @click="installStore.setUpdateBox(true)"
         title="This Is An Old Version Of My Website. Click Here To Update It.">
@@ -145,11 +147,15 @@
 
         <font-awesome-icon icon="fa-gamepad" />
     </RouterLink>
+    <button v-if="resumeStore.queryOutOfSync" :title="RESUME_QUERY_UNSYNC_TITLE"
+        @click="() => { reloadNuxtApp({ force: true }); }"
+        :style="getColorStyles('var(--blue-one)')"
+        class="mohit-navBar-statusIcon" pulse-loop>
+
+        <font-awesome-icon icon="fa-rotate-right" />
+    </button>
 </div>
-<div v-show="showNavRightWidgets" :style="{ 'top': navBarHeight }" class="mohit-navBar-status-icons right" ref="shareWidget">
-    <div v-if="scriptsStore.scriptLoading" class="mohit-navBar-loadingWidget script" title="Loading Script Page...">
-        <font-awesome-icon icon="fa-spinner" spin-pulse />
-    </div>
+<div v-show="showNavRightWidgets" class="mohit-navBar-status-icons right" ref="shareWidget">
     <div v-if="showLoadingDocsWidget" class="mohit-navBar-loadingWidget" title="Loading Document...">
         <font-awesome-icon icon="fa-spinner" spin-pulse />
         <span v-if="(documentStore.docLoaded.totalPages > 1)">
@@ -173,10 +179,11 @@ const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
 const gamepadStore = useGamepadStore();
+const resumeStore = useResumeStore();
 const installStore = useInstallStore();
 
 const router = useRouter();
-const isMounted = useMounted();
+const isMounted = onMountedAdvanced();
 
 const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
@@ -200,12 +207,12 @@ const showWakeLockWidget = computed(() => {
     return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
 });
 
+const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
 
-const showNavLeftWidgets = computed(() => { return (!checkSSR() && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
+const showNavLeftWidgets = computed(() => { return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1 || webData.websiteMenuMode == 1)); });
-const navBarHeight = computed(() => { return (scrollProgress.value.show ? '53px' : '50px'); });
 
 /**
  * This function makes a button flash if it will do nothing.
@@ -256,4 +263,6 @@ const NAV_MENU_EXTRAS = [
     { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
     { path: "/copyright/", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
 ];
+
+const RESUME_QUERY_UNSYNC_TITLE = "Please reload this page here to apply your changes to customizing my resume.";
 </script>

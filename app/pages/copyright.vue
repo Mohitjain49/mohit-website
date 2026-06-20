@@ -20,7 +20,7 @@
                 If you would like to collaborate or discuss using any part of my work, 
                 I'd love to hear from you! You'll find some links to contact me on the footer 
                 <span style="text-decoration: underline;">
-                    <RouterLink :to="{ path: route.path, hash: '#footer' }" @click="goToFooter()">below.</RouterLink>
+                    <RouterLink :to="{ path: route.path, hash: '#footer' }">below.</RouterLink>
                 </span>
             </div>
 
@@ -48,7 +48,7 @@ const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuil
 const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
 usePulseLoopAnimation(copyrightBodyRef);
-onMounted(() => {
+onMountedAdvanced(() => {
     initWebData();
     COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);

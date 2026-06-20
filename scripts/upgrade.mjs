@@ -2,6 +2,9 @@ import { execSync } from 'node:child_process';
 import { readFile, writeFile, rm } from 'node:fs/promises';
 import readline from 'node:readline/promises';
 
+/** This array contains the arguments that can be passed in for this script. */
+const args = process.argv.slice(2);
+
 /** This records user input in the terminal so users can choose options as they progress through the function. */
 const rl = readline.createInterface({
     input: process.stdin,
@@ -16,7 +19,15 @@ function runCommand(command) {
     console.log("Running Command \"" + command + "\"...");
     execSync(command, { stdio: 'inherit' });
     console.log("\n\n");
-};
+}
+
+/**
+ * This function checks to see if an argument exists in the "args" array and returns the result.
+ * @param {String} mainArg The argument passed into the command.
+ */
+function checkForArg(mainArg = "") {
+    return (args.findIndex(item => item === mainArg) != -1)
+}
 
 /**
  * This function returns a spinner to show while the script is running to mimic loading.
@@ -39,13 +50,32 @@ function createSpinner(text) {
     }}
 }
 
+/**
+ * This function removes a file or directory from this project.
+ * @param {String} path The path to the file or directory.
+ * @param {Boolean} directory If true, the path leads to a directory.
+ */
+async function removeFileOrDirectory(path = "", directory = false) {
+    const innerRmMessage = (directory ? ("the \"" + path + "\" folder") : ("\"" + path + "\""));
+    const removeSpinner = createSpinner("Deleting " + innerRmMessage + "...");
+    await rm(path, { recursive: true, force: true });
+    removeSpinner.succeed("Deleted " + innerRmMessage + "!");
+}
+
 /** This function is the core of the file and handles all the upgrade requirements. */
 async function main() {
     try {
         // This section handles asking for and dependencies to reject for the next step.
-        runCommand('npx npm-check-updates');
-        const rejectDeps = await rl.question('Do you want to exclude any dependencies from being updated? (y/n): ');
-        const rejectDepsBool = (rejectDeps.toLowerCase() === "y" || rejectDeps.toLowerCase() === "yes");
+        var rejectDepsBool = (checkForArg("--exclude-deps") ? true : (checkForArg("--skip-exclude-deps") ? false : null));
+        const rejectDepsQuestion = 'Do you want to exclude any dependencies from being updated? (y/n): ';
+
+        if(rejectDepsBool == null) {
+            runCommand('npx npm-check-updates');
+            const rejectDeps = await rl.question(rejectDepsQuestion);
+            rejectDepsBool = (rejectDeps.toLowerCase() === "y" || rejectDeps.toLowerCase() === "yes");
+        } else {
+            console.log(rejectDepsQuestion + (rejectDepsBool ? 'yes' : 'no'));
+        }
 
         /** @type {Array<String>} An array that stores all the dependencies to not update. */
         const rejectDepsArray = [];
@@ -69,9 +99,16 @@ async function main() {
         }
 
         // This section handles updating the current dependencies on the Vue.js project.
-        if(rejectDepsCommandOption !== "") { runCommand('npx npm-check-updates' + rejectDepsCommandOption); }
-        const updateDeps = await rl.question('Do you want to update the dependencies? (y/n): ');
-        const updateDepsBool = (updateDeps.toLowerCase() === "y" || updateDeps.toLowerCase() === "yes");
+        var updateDepsBool = (checkForArg("--update-deps") ? true : checkForArg("--skip-update-deps") ? false : null);
+        const updateDepsQuestion = 'Do you want to update the dependencies? (y/n): ';
+
+        if(updateDepsBool == null) {
+            if(rejectDepsCommandOption !== "") { runCommand('npx npm-check-updates' + rejectDepsCommandOption); }
+            const updateDeps = await rl.question(updateDepsQuestion);
+            updateDepsBool = (updateDeps.toLowerCase() === "y" || updateDeps.toLowerCase() === "yes");
+        } else {
+            console.log(updateDepsQuestion + (updateDepsBool ? 'yes' : 'no'));
+        }
 
         if(updateDepsBool) {
             runCommand('npx npm-check-updates --upgrade' + rejectDepsCommandOption);
@@ -81,8 +118,15 @@ async function main() {
         }
 
         // This section handles updating the Version Number.
-        const updateVersion = await rl.question('Do you want to update Your Website\'s version number? (y/n): ');
-        const updateVersionBool = (updateVersion.toLowerCase() === "y" || updateVersion.toLowerCase() === "yes");
+        var updateVersionBool = (checkForArg("--update-version") ? true : (checkForArg("--skip-update-version") ? false : null));
+        const updateVersionQuestion = 'Do you want to update Your Website\'s version number? (y/n): ';
+
+        if(updateVersionBool == null) {
+            const updateVersion = await rl.question(updateVersionQuestion);
+            updateVersionBool = (updateVersion.toLowerCase() === "y" || updateVersion.toLowerCase() === "yes");
+        } else {
+            console.log(updateVersionQuestion + (updateVersionBool ? 'yes' : 'no'));
+        }
 
         if(updateVersionBool) {
             const versionPattern = /^\d+\.\d+\.\d+$/;
@@ -120,43 +164,49 @@ async function main() {
         }
 
         // This section handles recreating node_modules and package-lock.json with a fresh dependency install.
-        const confirmInstall = await rl.question('Confirm Install Dependencies? (y/n): ');
-        const confirmInstallBool = (confirmInstall.toLowerCase() === "y" || confirmInstall.toLowerCase() === "yes");
+        var confirmInstallBool = (checkForArg("--install-deps") ? true : (checkForArg("--skip-install-deps") ? false : null));
+        const confirmInstallQuestion = 'Confirm Install Dependencies? (y/n): ';
+
+        if(confirmInstallBool == null) {
+            const confirmInstall = await rl.question(confirmInstallQuestion);
+            confirmInstallBool = (confirmInstall.toLowerCase() === "y" || confirmInstall.toLowerCase() === "yes");
+        } else {
+            console.log(confirmInstallQuestion + (confirmInstallBool ? 'yes' : 'no'));
+        }
         
         if(confirmInstallBool) {
-            const packageLockSpinner = createSpinner("Deleting package-lock.json...");
-            await rm("./package-lock.json", { recursive: true, force: true });
-            packageLockSpinner.succeed("Deleted package-lock.json.");
+            const TO_BE_REMOVED = [
+                { path: "./package-lock.json", directory: false },
+                { path: "./build-info.json", directory: false },
+                { path: "./.data", directory: true },
+                { path: "./.nuxt", directory: true },
+                { path: "./.output", directory: true },
+                { path: "./dist", directory: true },
+                { path: "./node_modules", directory: true },
+            ];
 
-            const dataSpinner = createSpinner("Deleting the \".data\" folder...");
-            await rm("./.data", { recursive: true, force: true });
-            dataSpinner.succeed("Deleted the \".data\" folder.");
-
-            const nuxtSpinner = createSpinner("Deleting the \".nuxt\" folder...");
-            await rm("./.nuxt", { recursive: true, force: true });
-            nuxtSpinner.succeed("Deleted the \".nuxt\" folder.");
-
-            const outputSpinner = createSpinner("Deleting the \".output\" folder...");
-            await rm("./.output", { recursive: true, force: true });
-            outputSpinner.succeed("Deleted the \".output\" folder.");
-
-            const distSpinner = createSpinner("Deleting the \"dist\" folder...");
-            await rm("./dist", { recursive: true, force: true });
-            distSpinner.succeed("Deleted the \"dist\" folder.");
-
-            const nodeModulesSpinner = createSpinner("Deleting the \"node_modules\" folder...");
-            await rm("./node_modules", { recursive: true, force: true });
-            nodeModulesSpinner.succeed("Deleted the \"node_modules\" folder.");
+            for(let i = 0; i < TO_BE_REMOVED.length; i++) {
+                const itemToBeRemoved = TO_BE_REMOVED[i];
+                await removeFileOrDirectory(itemToBeRemoved.path, itemToBeRemoved.directory);
+            }
 
             // Installs all dependencies again.
+            console.log("\n\n");
             runCommand("npm install");
         } else {
             console.log("🛑 Will Not Reinstall dependencies.\n\n");
         }
 
         // This section handles updating the Git Hooks.
-        const updateGitHooks = await rl.question('Update Git Hooks (y/n): ');
-        const updateGitHooksBool = (updateGitHooks.toLowerCase() === "y" || updateGitHooks.toLowerCase() === "yes");
+        var updateGitHooksBool = (checkForArg("--update-git-hooks") ? true : (checkForArg("--skip-update-git-hooks") ? false : null));
+        const updateGitHooksQuestion = 'Update Git Hooks (y/n): ';
+
+        if(updateGitHooksBool == null) {
+            const updateGitHooks = await rl.question(updateGitHooksQuestion);
+            updateGitHooksBool = (updateGitHooks.toLowerCase() === "y" || updateGitHooks.toLowerCase() === "yes");
+        } else {
+            console.log(updateGitHooksQuestion + (updateGitHooksBool ? 'yes' : 'no'));
+        }
 
         if(updateGitHooksBool) {
             runCommand('npm run update-git-hooks');

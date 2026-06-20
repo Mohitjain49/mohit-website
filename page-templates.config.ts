@@ -10,11 +10,10 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
     const REDIRECT_TEMPLATE = "~/templates/RedirectTemplate.vue";
 
     const routesToDocumentTemplate = [
-        { path: '/resume', file: DOC_TEMPLATE, props: { index: 0 } },
-        { path: '/resume/qrcode', file: DOC_TEMPLATE, props: { index: 1 } },
-        { path: '/create-github-repo', file: DOC_TEMPLATE, props: { index: 2 } },
-        { path: '/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025', file: DOC_TEMPLATE, props: { index: 3 } },
-        { path: '/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper', file: DOC_TEMPLATE, props: { index: 4 } },
+        // { path: '/resume', file: DOC_TEMPLATE, props: { index: 0 } },
+        { path: '/create-github-repo', file: DOC_TEMPLATE, props: { index: 1 } },
+        { path: '/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025', file: DOC_TEMPLATE, props: { index: 2 } },
+        { path: '/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper', file: DOC_TEMPLATE, props: { index: 3 } },
     ];
     const routesToScriptTemplate = [
         { path: '/aws-deploy-script', file: SCRIPT_TEMPLATE, props: { index: 0 } },
@@ -24,6 +23,7 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: '/unix-shell', file: SCRIPT_TEMPLATE, props: { index: 4 } },
         { path: '/upgrade-script', file: SCRIPT_TEMPLATE, props: { index: 5 } },
         { path: '/threadpool', file: SCRIPT_TEMPLATE, props: { index: 6 } },
+        { path: '/use-docker-script', file: SCRIPT_TEMPLATE, props: { index: 7 } },
     ];
 
     const REDIRECT_PAGES = [
