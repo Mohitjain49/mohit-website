@@ -185,20 +185,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(element == null) { return false; }
         if(element.classList.contains("webpage-cover")) { return true; }
 
-        const navBar = document.getElementById("mohit-navBar");
-        if(navBar != null && (navBar === element || navBar.contains(element))) { return true; }
+        // A list of website menu IDs where the menu should not close when normally clicked.
+        const WEBSITE_MENU_IDS = [
+            "mohit-navBar", "mohit-navMenu", "mohit-compassMenu",
+            "mohit-scriptsMenu", "mohit-docMenu", "mohit-resumeMenu",
+            "mohit-metadata-docMenu"
+        ];
 
-        const navMenu = document.getElementById("mohit-navMenu");
-        if(navMenu != null && (navMenu === element || navMenu.contains(element))) { return true; }
-
-        const compassMenu = document.getElementById("mohit-compassMenu");
-        if(compassMenu != null && (compassMenu === element || compassMenu.contains(element))) { return true; }
-
-        const scriptsMenu = document.getElementById("mohit-scriptsMenu");
-        if(scriptsMenu != null && (scriptsMenu === element || scriptsMenu.contains(element))) { return true; }
-
-        const docMenu = document.getElementById("mohit-docMenu");
-        if(docMenu != null && (docMenu === element || docMenu.contains(element))) { return true; }
+        for(let i = 0; i < WEBSITE_MENU_IDS.length; i++) {
+            const webMenu = document.getElementById(WEBSITE_MENU_IDS[i]);
+            if(webMenu != null && (webMenu === element || webMenu.contains(element))) { return true; }
+        }
 
         // Returns false if element was not found in any menu.
         return false;

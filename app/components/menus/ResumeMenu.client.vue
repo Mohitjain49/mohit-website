@@ -33,7 +33,7 @@
                 <span> {{ (allSelected ? 'Clear All Options' : 'Select All Options') }} </span>
             </button>
         </div>
-        <div v-if="documentStore.onDocumentRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
                 <span> Back To Document Options </span>

@@ -254,6 +254,10 @@
 .mohit-navMenu.flame {
     border-color: var(--vibrant-flame);
 }
+.mohit-navMenu.doc-metadata {
+    border-color: var(--c-color);
+    background-color: var(--dark-background);
+}
 
 .mohit-navMenu.vertical-overflow {
     border-radius: 15px;
@@ -399,6 +403,42 @@
     width: 14px;
 }
 
+.mohit-navMenu-info {
+    position: relative;
+    cursor: default;
+    width: calc(100% - 30px);
+    height: fit-content;
+    padding: 2px 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    color: white;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    white-space: pre-wrap;
+    margin-top: 1px;
+    user-select: none;
+}
+.mohit-navMenu-info span.content {
+    font-weight: normal;
+    letter-spacing: normal;
+    color: rgb(221, 221, 221);
+    width: 175px;
+    max-width: 175px;
+    text-align: left;
+    text-wrap: nowrap;
+    overflow: hidden;
+    user-select: none;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0.25) 100%);
+}
+
+.mohit-navMenu-info.clickable { cursor: pointer; }
+.mohit-navMenu-info.clickable:hover { text-decoration: underline; }
+
 .mohit-navMenu-opt-break {
     position: relative;
     left: 10px;
@@ -411,6 +451,13 @@
 .mohit-navMenu.flame .mohit-navMenu-opt-break {
     background-color: var(--vibrant-flame);
 }
+.mohit-navMenu.doc-metadata .mohit-navMenu-opt-break {
+    background-color: var(--c-color);
+}
+
+/**
+ * This section consist of CSS for specialized sections on the website menus.
+ */
 
 .mohit-navMenu-sectionheader {
     position: relative;
@@ -496,6 +543,75 @@
 
 .mohit-navMenu-volume-meter button:hover { scale: 1.1; }
 .mohit-navMenu-reload-webpage:hover { background-color: var(--dark-background); }
+
+.metadata-docMenu-focused {
+    position: relative;
+    margin: 0px auto;
+    height: 45px;
+    width: calc(100% - 24px);
+    border: 2px solid var(--blue-one);
+    border-radius: 7px;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+.metadata-docMenu-focused .top-section {
+    height: 24px;
+    width: calc(100% - 10px);
+    padding: 0px 5px;
+    border-bottom: 1px solid var(--blue-one);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.metadata-docMenu-focused h3 {
+    font-size: 15px;
+    color: white;
+    margin: 0px;
+    padding: 0px;
+}
+.metadata-docMenu-focused p {
+    height: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(221, 221, 221);
+}
+
+.metadata-docMenu-focused-options {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+}
+.metadata-docMenu-focused-options button {
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 14px;
+    width: 14px;
+    border: 1px solid red;
+    border-radius: 4px;
+    transition: var(--default-transition);
+    user-select: none;
+}
+
+.metadata-docMenu-focused-options button.copy {
+    color: var(--blue-two);
+    border-color: var(--blue-two);
+}
+.metadata-docMenu-focused-options button > svg {
+    width: 10px;
+    height: 10px;
+}
 
 /**
  * Below contain specific styles like transitions and dynamic dimension rules.

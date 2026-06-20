@@ -13,8 +13,11 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
     const application = shallowRef("");
     const producer = shallowRef("");
     const keywords = ref([""]);
+    const keywordsAsOne = shallowRef("");
 
     const pageCount = shallowRef(0);
+    const pageCountAsString = shallowRef("");
+
     const pageWidth = shallowRef(0);
     const pageHeight = shallowRef(0);
     const pageOrientation = shallowRef("");
@@ -23,7 +26,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
     const dateCreated = shallowRef("");
     const dateModified = shallowRef("");
 
-    const pdfVersion = ref("");
+    const pdfVersion = shallowRef("");
     const fileSize = shallowRef("");
     const fileSizeInBytes = shallowRef(0);
 
@@ -45,8 +48,10 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
             application.value = (pdf.getCreator() ?? "");
             producer.value = (pdf.getProducer() ?? "");
             keywords.value = (pdf.getKeywords() ?? []);
+            keywordsAsOne.value = keywords.value.join(', ');
 
             pageCount.value = pdf.getPageCount();
+            pageCountAsString.value = String(pageCount.value);
             pageWidth.value = ((pageCount.value <= 0) ? 0 : (pdf.getPage(0).width / 72));
             pageHeight.value = ((pageCount.value <= 0) ? 0 : (pdf.getPage(0).height / 72));
             pageOrientation.value = ((pageCount.value <= 0) ? "" : (pdf.getPage(0).isPortrait ? "Portrait" : "Landscape"));
@@ -76,7 +81,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
     watch(objectUrl, () => { parsePdf(); });
     onMountedAdvanced(() => { parsePdf(); });
 
-    return { parsePdf, title, author, subject, dateCreated, dateModified, application, producer, keywords,
-        pdfVersion, pageCount, pageWidth, pageHeight, pageSize, fileSize, fileSizeInBytes
+    return { parsePdf, title, author, subject, dateCreated, dateModified, application, producer, keywords, keywordsAsOne,
+        pdfVersion, pageCount, pageCountAsString, pageWidth, pageHeight, pageOrientation, pageSize, fileSize, fileSizeInBytes
     }
 }

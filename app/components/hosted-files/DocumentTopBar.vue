@@ -19,6 +19,9 @@
 
             <font-awesome-icon icon="fa-up-right-from-square" />
         </a>
+        <button @click="openWebsiteMenu(3.2)" title="See Document Properties" :style="getColorStyles('var(--c-color)')" pulse-loop>
+            <font-awesome-icon icon="fa-database" />
+        </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
         <button class="flame" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(3.1)" title="Edit Resume Components" pulse-loop>
