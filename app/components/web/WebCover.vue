@@ -88,8 +88,8 @@ function resetCounter() {
  * @param {Boolean} ringActive If true, the ring is active and the styles should be set.
  */
 function setStyles(ringActive = true) {
-    styleStore.setHideCursorArray(0, ringActive);
-    styleStore.setDisableUserSelectArray(1, ringActive);
+    styleStore.setHideCursorArray(HideCursor.WEBSITE_COVER, ringActive);
+    styleStore.setDisableUserSelectArray(DisableUserSelect.WEBSITE_COVER, ringActive);
 }
 </script>
 

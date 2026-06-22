@@ -76,7 +76,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     // This hides the screen overflow if a website menu is open and it uses it's second mode.
     watch(websiteMenuHideOverflow, (newValue) => {
-        styleStore.setHideOverflowArray(3, newValue);
+        styleStore.setHideOverflowArray(HideOverflow.WEBSITE_MENU, newValue);
     });
 
     // This is used to track if the wake lock was freshly changed or not.
