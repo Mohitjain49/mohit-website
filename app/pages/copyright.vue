@@ -13,15 +13,17 @@
             <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
 
             <div class="copyright-body-desc">
-                I'm glad you're here and hope you find inspiration in my work.
-                Feel free to explore the site, take ideas, and use them to spark your own creativity.
-                However, please abide by the MIT License associated with this website 
-                if you plan to use my code for your own work
+                I'm glad you're here and hope you find inspiration in my work. Feel free to explore the site, 
+                take ideas, and use them to spark your own creativity. However, please abide by the 
+                <span style="text-decoration: underline;">
+                    <a :href="PERSONAL_WEBSITE_LICENSE_LINK" target="mohit-jain-web-license">MIT License</a>
+                </span>
+                associated with this website if you plan to use my code for your own work.
                 <br> <br>
                 If you would like to collaborate or discuss using any part of my work, 
-                I'd love to hear from you! You'll find some links to contact me on the footer 
+                I'd love to hear from you! You'll find some links to contact me in the footer 
                 <span style="text-decoration: underline;">
-                    <RouterLink :to="{ path: route.path, hash: '#footer' }">below.</RouterLink>
+                    <RouterLink :to="footerLink">below.</RouterLink>
                 </span>
             </div>
 
@@ -38,11 +40,13 @@
 </template>
 
 <script setup>
-const route = useRoute();
+const router = useRouter();
 const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
 const updateButtonClicked = ref(false);
+const footerLink = computed(() => { return (router.currentRoute.value.path + '#footer'); });
+
 const COPYRIGHT_TEXT = useState("copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 const RELEASE_DATE = useState("release-date", () => { return ("Released On: " + $websiteBuild.releaseDate); });
 const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuild.releaseTime + ")"); });

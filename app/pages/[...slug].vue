@@ -115,6 +115,7 @@ const EXTERNAL_REDIRECTS = [
 
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
     { routes: ["/sitemap", "/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
+    { routes: ["/mit/**", "/mit-license/**", "/license/**"], replacement: PERSONAL_WEBSITE_LICENSE_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },
     { routes: ["/ivuemedia", "/ivue/media"], replacement: IVUE_MEDIA_WEBSITE_LINK },
