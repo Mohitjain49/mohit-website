@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<WebCover v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)" />
+<!-- <WebCover v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
         <MenuTop />
@@ -106,7 +106,7 @@
                 <span> Open Document In New Tab </span>
             </a>
         </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
+        <div v-if="!documentStore.onMarkdownRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.2)" pulse-loop>
                 <font-awesome-icon icon="fa-database" />
                 <span> See Document Properties </span>

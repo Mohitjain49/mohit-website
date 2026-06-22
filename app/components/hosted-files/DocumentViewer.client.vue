@@ -28,10 +28,11 @@
         <QrcodeTool v-if="webData.showSharePopup" />
     </template>
 
-    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
+    <WebCover v-if="showFsWebCover" :zIndex="500" />
     <WebFooter v-if="!fullScreenSet" />
-    <FileWidgets />
+    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
 
+    <FileWidgets />
     <DocumentMenu />
     <DocMetadataMenu :objectUrl="url" />
     <slot></slot>
@@ -63,6 +64,10 @@ const docPagesRefs = ref([]);
 
 const showDocumentShareWidgets = computed(() => {
     return (props.addShare && documentStore.docLoaded.status && (props.shareMinWidth <= windowWidth.value));
+});
+const showFsWebCover = computed(() => {
+    if(!fullScreenSet.value) { return false; }
+    return (webData.showSharePopupImmediate || (webData.menuOpen >= 3 && webData.menuOpen < 4));
 });
 
 onBeforeUnmount(() => { cancelAllRendering(); });

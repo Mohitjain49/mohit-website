@@ -12,8 +12,10 @@
         <QrcodeTool v-if="webData.showSharePopup" />
     </template>
 
-    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
+    <WebCover v-if="showFsWebCover" :zIndex="500" />
     <WebFooter v-if="!fullScreenSet" />
+    <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
+
     <FileWidgets />
     <DocumentMenu />
 </main>
@@ -29,6 +31,12 @@ const fullScreenSet = getFullScreenSet();
 
 onMountedAdvanced(() => { documentStore.mountDocumentPage(); });
 onBeforeUnmount(() => { resumeStore.unmountResumePage(); });
+
+/** This determines if the Full Screen Web Cover should be visible or not. */
+const showFsWebCover = computed(() => {
+    if(!fullScreenSet.value) { return false; }
+    return (webData.showSharePopupImmediate || (webData.menuOpen >= 3 && webData.menuOpen < 4));
+});
 
 useHead(getMeta("Mohit Jain | My Resume (Markdown Format)", "resume/markdown",
     "Feel free to take a look at my resume. This is in markdown format.",

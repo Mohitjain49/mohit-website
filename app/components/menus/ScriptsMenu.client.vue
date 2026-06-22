@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<WebCover v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)" />
+<!-- <WebCover v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
         <MenuTop />

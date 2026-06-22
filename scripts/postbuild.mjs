@@ -21,7 +21,7 @@ function editSitemapXsl() {
         );
 
         fs.writeFileSync(sitemapPath, newContent, 'utf8');
-        console.log('✅ Successfully modified sitemap.xsl!');
+        console.log('✅ Successfully modified \"__sitemap__/style.xsl\"!');
     } else {
         console.warn(`⚠️ sitemap.xml not found at ${sitemapPath}`);
     }
@@ -50,7 +50,14 @@ function createBuildInfoFile() {
         if(fileStats.isFile()) { totalBuildSizeInBytes += fileStats.size; }
     }
 
-    const jsonObj = { now: localNow.format(), utc: utcNow.format(), size: prettyBytes(totalBuildSizeInBytes) }
+    /** The JSON Object that makes up the build information. */
+    const jsonObj = {
+        now_local: localNow.format(),
+        now_utc: utcNow.format(),
+        size_decimal: prettyBytes(totalBuildSizeInBytes),
+        size_binary: prettyBytes(totalBuildSizeInBytes, { binary: true })
+    }
+
     fs.writeFileSync(path, JSON.stringify(jsonObj, null, 4), 'utf8');
     console.log('✅ Successfully created \"build-info.json\"!');
 }
@@ -66,7 +73,7 @@ function main() {
     console.log("\n\n");
     try { editSitemapXsl(); } catch(e) { onError(e); }
     try { createBuildInfoFile(); } catch(e) { onError(e); }
-    console.log("\n\n🏁 Postbuild Complete!");
+    console.log("\n\n🏁 Website Build Complete!");
 }
 
 // Runs the Main Function.

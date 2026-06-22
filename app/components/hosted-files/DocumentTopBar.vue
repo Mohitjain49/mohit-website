@@ -19,7 +19,10 @@
 
             <font-awesome-icon icon="fa-up-right-from-square" />
         </a>
-        <button @click="openWebsiteMenu(3.2)" title="See Document Properties" :style="getColorStyles('var(--c-color)')" pulse-loop>
+        <button v-if="!documentStore.onMarkdownRoute" @click="openWebsiteMenu(3.2)"
+            :style="getColorStyles('var(--c-color)')"
+            title="See Document Properties" pulse-loop>
+
             <font-awesome-icon icon="fa-database" />
         </button>
     </div>

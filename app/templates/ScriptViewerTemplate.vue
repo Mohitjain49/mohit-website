@@ -43,8 +43,10 @@
         <GamepadComponent />
     </template>
 
+    <WebCover v-if="showFsWebCover" :zIndex="500" />
     <WebFooter v-if="!fullScreenStore.fullScreenSet" />
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
+
     <FileWidgets />
     <ScriptLineOptions />
     <ScriptsMenu />
@@ -67,6 +69,12 @@ watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(
 
 const script = scriptsStore.scripts[props.index];
 const { html } = await renderCodeScript(script.code, script.suffix, script.path);
+
+/** This determines if the Full Screen Web Cover should be visible or not. */
+const showFsWebCover = computed(() => {
+    if(!fullScreenStore.fullScreenSet) { return false; }
+    return (webData.scriptsMenuOpen || webData.showSharePopupImmediate);
+})
 
 /** This function opens the scripts menu. */
 function openScriptsMenu() {
