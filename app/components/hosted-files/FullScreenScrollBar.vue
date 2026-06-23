@@ -42,7 +42,7 @@ function scrollFsElement(divisor = 10) {
  * @param {Boolean} disable Whether to disable user text selection or not.
  */
 function setUserSelect(disable = true) {
-    styleStore.setDisableUserSelectArray(0, disable);
+    styleStore.setDisableUserSelectArray(DisableUserSelect.FS_SCROLL_BAR, disable);
 }
 
 /**

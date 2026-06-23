@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<WebCover v-if="(documentMetadataMenuOpen && fullScreenStore.fullScreenSet)" />
+<!-- <WebCover v-if="(documentMetadataMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu" ref="docMetadataMenu">
         <MenuTop :show-doc-options-btn="true" />

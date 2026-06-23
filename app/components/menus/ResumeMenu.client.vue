@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<WebCover v-if="(resumeMenuOpen && fullScreenSet)" />
+<!-- <WebCover v-if="(resumeMenuOpen && fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="resumeMenuOpen" class="mohit-navMenu flame" id="mohit-resumeMenu" ref="resumeMenu">
         <MenuTop />

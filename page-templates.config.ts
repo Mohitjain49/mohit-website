@@ -1,4 +1,5 @@
 import type { NuxtPage } from '@nuxt/schema';
+const REPOSITORY = "https://github.com/Mohitjain49/mohit-website";
 
 /**
  * This function is run by the "pages:extend" hook. It adds pages to the website by using "templates" in the app folder.
@@ -32,7 +33,8 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: "/gitlab", link: "https://gitlab.com/mohitkjain49", title: "Mohit Jain | Gitlab", desc: "This link will redirect you to my Gitlab Profile." },
         { path: "/steam", link: "https://steamcommunity.com/id/mohit-jain/", title: "Mohit Jain | Steam", desc: "This link will redirect you to my Steam Profile." },
 
-        { path: "/repository", link: "https://github.com/Mohitjain49/mohit-website", title: "Mohit Jain | Website Repository", desc: "This link will redirect you to this website's github repository." },
+        { path: "/repository", link: REPOSITORY, title: "Mohit Jain | Website Repository", desc: "This link will redirect you to this website's github repository." },
+        { path: "/license", link: (REPOSITORY + "/blob/main/LICENSE"), title: "Mohit Jain | Website Repository", desc: "This link will redirect you to this website's MIT License." },
         { path: "/ivue", link: "https://www.ivueworld.com/", title: "iVue - iVue The World", desc: "This link will redirect you to the Main iVue Website." },
         { path: "/worldsivue", link: "https://www.worldsivue.com/", title: "Mohit Jain | Worlds iVue", desc: "This link will redirect you to Worlds iVue." },
     ];

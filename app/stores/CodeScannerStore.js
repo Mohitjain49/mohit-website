@@ -134,7 +134,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      */
     function setScannedItemMenu(index = -1, toggle = false) {
         scannedItemMenu.value = ((toggle && index == scannedItemMenu.value) ? -1 : index);
-        styleStore.setHideOverflowArray(1, (scannedItemMenu.value != -1));
+        styleStore.setHideOverflowArray(HideOverflow.SCANNED_ITEM_POPUP, (scannedItemMenu.value != -1));
     }
 
     /**

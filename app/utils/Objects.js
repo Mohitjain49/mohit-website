@@ -37,12 +37,12 @@ export const CREATE_GITHUB_REPO_DOC_LINK = "https://www.mohit-jain.com/Create_Gi
 
 export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/mohit-website";
 export const PERSONAL_WEBSITE_COMMITS_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/commits");
+export const PERSONAL_WEBSITE_LICENSE_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/LICENSE");
 export const PERSONAL_DEPLOY_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/deploy.mjs");
 export const PERSONAL_UPGRADE_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/upgrade.mjs");
 export const PERSONAL_USE_DOCKER_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/use-docker.mjs");
 export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/mysh.c");
 export const PERSONAL_THREADPOOL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/threadpool.c");
-export const PERSONAL_WEBSITE_CODE_SANDBOX = "https://codesandbox.io/p/sandbox/github/Mohitjain49/mohit-website";
 
 export const GAMEPAD_ICON_SOURCE = "https://kenney.nl/assets/input-prompts";
 export const GAMEPAD_EVENTS_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/gamepad-events.js");

@@ -17,7 +17,7 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
     });
 
     // This hides the website cursor when a gamepad is being used.
-    watch(cursorVisible, (newValue) => { styleStore.setHideCursorArray(1, newValue); });
+    watch(cursorVisible, (newValue) => { styleStore.setHideCursorArray(HideCursor.GAMEPAD, newValue); });
 
     // This adds a delay when the cursor speed menu is closing.
     watch(maxSpeedChanging, () => {
