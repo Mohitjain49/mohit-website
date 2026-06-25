@@ -46,6 +46,7 @@ const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";
 
 var resizeAbortController = new AbortController();
 var renderTasks = { canvas: null, text: null, annontation: null }
+var pdfDocLoadingTask = null;
 const { width: windowWidth } = useMohitWindowSize();
 
 const webData = useWebsiteDataStore();
@@ -81,6 +82,7 @@ onMountedAdvanced(async() => {
 })
 onBeforeUnmount(() => {
     cancelRenders();
+    if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
     resizeAbortController.abort();
 });
 
@@ -92,7 +94,8 @@ async function renderPDF() {
         documentStore.workerSrcAdded = true;
     }
 
-    pdfDoc.value = await getDocument({ url: props.url }).promise;
+    pdfDocLoadingTask = getDocument({ url: props.url });
+    pdfDoc.value = await pdfDocLoadingTask.promise;
     const numPages = pdfDoc.value.numPages;
 
     pages.value = numPages;
@@ -109,7 +112,8 @@ async function renderPDF() {
         const defaultViewport = page.getViewport({ scale: 1 });
 
         docPages.value[i - 1].rawWidth = defaultViewport.width;
-        const viewport = page.getViewport({ scale: (documentStore.customPdfWidth / defaultViewport.width) });
+        const viewport = page.getViewport({ scale: (documentStore.customPdfMaxWidth / defaultViewport.width) });
+        resizePdfViewer(i);
 
         var canvas = document.getElementById("pdf_canvas_" + i);
         var context = canvas.getContext("2d");
@@ -171,16 +175,24 @@ function cancelRenders() {
     renderTasks = { canvas: null, text: null, annontation: null }
 }
 
-/** This function resizes all necessary styles for the PDF Viewer when called. */
-function resizePdfViewer() {
-    for(let i = 1; i <= pages.value; i++) {
-        try {
-            const newScaleFactor = (documentStore.customPdfWidth / docPages.value[i - 1].rawWidth);
-            if(newScaleFactor < 0) { continue; }
-            document.getElementById("page_" + i).style.setProperty( PDFJS_SCALE_CSS_PROPERTY, newScaleFactor);
-        } catch(e) {
-            continue;
+/**
+ * This function resizes all necessary styles for the PDF Viewer when called.
+ * @param {Number} index "null" if the user wants to update ALL the pages, or the index of the page.
+ */
+function resizePdfViewer(index = null) {
+    if(!index || index < 1 || index > pages.value) {
+        for(let i = 1; i <= pages.value; i++) {
+            try {
+                const newScaleFactor = (documentStore.customPdfWidth / docPages.value[i - 1].rawWidth);
+                if(newScaleFactor < 0) { continue; }
+                document.getElementById("page_" + i).style.setProperty(PDFJS_SCALE_CSS_PROPERTY, newScaleFactor);
+            } catch(e) {
+                continue;
+            }
         }
+    } else {
+        const newScaleFactor = (documentStore.customPdfWidth / docPages.value[index - 1].rawWidth);
+        if(newScaleFactor >= 0) { document.getElementById("page_" + index).style.setProperty( PDFJS_SCALE_CSS_PROPERTY, newScaleFactor); }
     }
 }
 
