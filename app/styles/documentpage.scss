@@ -7,25 +7,19 @@
     justify-content: center;
     align-items: center;
 }
-
-#tato-pdf-resume {
-    margin: 0px auto;
-    width: calc(var(--total-scale-factor) * 612px) !important;
-    height: calc(var(--total-scale-factor) * 792px) !important;
-    scroll-margin-top: apply-zoom-factor(70);
-}
-.tato-pdf-github-instructions {
-    margin: 0px auto;
-    margin-bottom: 20px;
-    width: calc(var(--total-scale-factor) * 612px) !important;
-    height: calc(var(--total-scale-factor) * 792px) !important;
-    scroll-margin-top: apply-zoom-factor(70);
-}
-#tato-pdf-certificate {
-    margin: 0 auto;
-    width: fit-content;
-    height: fit-content;
-    scroll-margin-top: apply-zoom-factor(70);
+.pdf-doc-loadingCover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    font-size: 90px;
+    color: var(--blue-two);
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .markdown-body {
@@ -65,6 +59,46 @@
 }
 .linkAnnotation {
     cursor: pointer;
+}
+
+.mohit-rendered-pdf {
+    position: relative;
+    width: var(--mohit-custom-pdf-width);
+    height: var(--mohit-custom-pdf-height);
+    margin: 0px auto;
+    scroll-margin-top: apply-zoom-factor(70);
+}
+.mohit-rendered-pdf.multi-page {
+    margin-bottom: 20px;
+}
+
+.mohit-rendered-pdf .annotationLayer {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.mohit-rendered-pdf .textLayer {
+    color-scheme: only light;
+    position: absolute;
+    text-align: initial;
+    inset: 0;
+    overflow: clip;
+    opacity: 1;
+    line-height: 1;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+    caret-color: CanvasText;
+    z-index: 0;
+    --min-font-size: 1;
+    --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+    --min-font-size-inv: calc(1 / var(--min-font-size));
+}
+.mohit-rendered-pdf .textLayer ::selection {
+    background: #0000ff40 !important;
+    color: transparent !important;
 }
 
 #resume-container:fullscreen .pdf-doc-mohit-container {
@@ -183,6 +217,29 @@
     border-color: var(--blue-three);
 }
 
+.pdf-doc-linkBtn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgb(225, 225, 225);
+    height: 40px;
+    width: 40px;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--website-light-text);
+    border: 2px solid;
+    border-radius: 15px;
+    font-size: 22px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, scale 0.2s;
+}
+.pdf-doc-linkBtn:hover {
+    box-shadow: 0px 0px 10px 1px;
+    scale: 1.1;
+}
+
 @include dynamic-less-equal-width-rule(850) {
     .markdown-body h1 { font-size: 20px; }
     .markdown-body p, .markdown-body li { font-size: 13px; }
@@ -190,4 +247,11 @@
 @include dynamic-less-equal-width-rule(600) {
     .markdown-body h1 { font-size: 17px; }
     .markdown-body p, .markdown-body li { font-size: 11px; }
+
+    .pdf-doc-linkBtn {
+        width: 25px;
+        height: 25px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
 }

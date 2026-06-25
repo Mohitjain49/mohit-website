@@ -8,11 +8,17 @@ const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
+export const DEFAULT_PDF_MAX_WIDTH = 850;
+export const DEFAULT_PDF_MIN_WIDTH = 320;
+export const PDF_LETTER_SCALE = 1.295;
+export const PDF_CERTIFICATE_SCALE = 0.79875;
+
 /** This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website. */
 export const useDocumentStore = defineStore("document-store", () => {
     const PDF_WIDTH_CSS_PROPERTY = "--mohit-custom-pdf-width";
     const PDF_HEIGHT_CSS_PROPERTY = "--mohit-custom-pdf-height";
 
+    /** These are the hosted documents used to set the document pages. */
     const hostedDocuments = [
         useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
         useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false, false),
@@ -46,15 +52,15 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDriveOptionAvailable = computed(() => { return (googleDriveOptAvailable.value >= 0); });
 
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
+    const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
     const windowSizeWatchersEnabled = ref(false);
 
-    const customPdfWidth = ref(800);
-    const customPdfHeight = ref(1100);
-    const customPdfScaleFactor = ref(1.375);
-
-    const customPdfMaxWidth = ref(800);
-    const customPdfMinWidth = ref(320);
+    const customPdfWidth = ref(DEFAULT_PDF_MAX_WIDTH);
+    const customPdfMaxWidth = ref(DEFAULT_PDF_MAX_WIDTH);
+    const customPdfMinWidth = ref(DEFAULT_PDF_MIN_WIDTH);
+    const customPdfHeight = ref(1035);
+    const customPdfScaleFactor = ref(1.295);
 
     /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing a document. */
     var printIframe = null;
@@ -364,7 +370,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
 
         if(onMarkdownRoute.value) { return; }
-        mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
+        mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, (onFCSCertificateRoute.value ? PDF_CERTIFICATE_SCALE : PDF_LETTER_SCALE));
     }
 
     /**
@@ -383,7 +389,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Number} maxWidth The Maximum width for the custom pdf.
      * @param {Number} scaleFactor the scale factor to get height pixels.
      */
-    function mountCustomDocumentPage(maxWidth = 800, minWidth = 320, scaleFactor = 1.375) {
+    function mountCustomDocumentPage(maxWidth = DEFAULT_PDF_MAX_WIDTH, minWidth = DEFAULT_PDF_MIN_WIDTH, scaleFactor = 1.375) {
         customPdfMaxWidth.value = maxWidth;
         customPdfMinWidth.value = minWidth;
         customPdfScaleFactor.value = scaleFactor;
@@ -494,18 +500,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
-     * This function is triggered whenever someone clicks on an annotation on the custom PDF.
-     * @param event The object returned from clicking on an annotation. Go to the following link for more:
-     * @see {@link https://tato30.github.io/vue-pdf/guide/events.html#annotation}
-     */
-    function onAnnotationClick(event = { type: "link", data: { url: "", unsafeUrl: "" } }) {
-        const type = event.type;
-        if(type === "internal-link") {
-            scrollToPage(event.data.referencedPage);
-        }
-    }
-
-    /**
      * This function scrolls to any page on a document webpage.
      * @param {Number} pageNum The number of the specified page.
      */
@@ -518,10 +512,10 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported, currentDocumentBlobCreated,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
-        downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
+        downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, workerSrcAdded,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
         onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
+        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
     }
 });
