@@ -4,7 +4,6 @@
     :shareMinWidth="0"
     :addShare="false"
     :annontations="true"
-    :class="'tato-pdf-resume'"
     :templateIndex="0">
 
     <ResumeMenu />

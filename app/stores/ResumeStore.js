@@ -38,11 +38,8 @@ export const useResumeStore = defineStore("resume-store", () => {
             linksRemoved.value = (onMainResumeRoute && routeQuery.linksRemoved && routeQuery.linksRemoved === "true");
         }
 
-        await initBlob({ addQrcode: qrcodeAdded.value,
-            removeLinks: linksRemoved.value,
-            updateQuery: false
-        });
-        documentStore.mountCustomDocumentPage(800, 320, 1.375);
+        await initBlob({ addQrcode: qrcodeAdded.value, removeLinks: linksRemoved.value, updateQuery: false });
+        documentStore.mountCustomDocumentPage(800, 320, PDF_LETTER_SCALE);
     }
 
     /** This function unmounts the resume page. */
@@ -97,7 +94,7 @@ export const useResumeStore = defineStore("resume-store", () => {
 
         await sleep(100);
         await initBlob(options);
-        documentStore.mountCustomDocumentPage(800, 320, 1.375);
+        documentStore.mountCustomDocumentPage(800, 320, PDF_LETTER_SCALE);
     }
 
     /** This function updates the query based on the resume customization options. */

@@ -8,6 +8,9 @@ const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
+export const PDF_LETTER_SCALE = 1.295;
+export const PDF_CERTIFICATE_SCALE = 0.79875;
+
 /** This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website. */
 export const useDocumentStore = defineStore("document-store", () => {
     const PDF_WIDTH_CSS_PROPERTY = "--mohit-custom-pdf-width";
@@ -46,12 +49,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDriveOptionAvailable = computed(() => { return (googleDriveOptAvailable.value >= 0); });
 
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
+    const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
     const windowSizeWatchersEnabled = ref(false);
 
     const customPdfWidth = ref(800);
-    const customPdfHeight = ref(1100);
-    const customPdfScaleFactor = ref(1.375);
+    const customPdfHeight = ref(1035);
+    const customPdfScaleFactor = ref(1.295);
 
     const customPdfMaxWidth = ref(800);
     const customPdfMinWidth = ref(320);
@@ -364,7 +368,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
 
         if(onMarkdownRoute.value) { return; }
-        mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? 0.79875 : 1.375));
+        mountCustomDocumentPage(800, 320, (onFCSCertificateRoute.value ? PDF_CERTIFICATE_SCALE : PDF_LETTER_SCALE));
     }
 
     /**
@@ -518,7 +522,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { hostedDocuments, docLoaded, googleDriveOptionAvailable, saveAsSupported, currentDocumentBlobCreated,
         documentDownloadStatus, documentSaveStatus, documentPrintStatus, documentShareStatus, documentUploadToGoogleDriveStatus,
-        downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon,
+        downloadIcon, saveDocIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, workerSrcAdded,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
         onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, onAnnotationClick, scrollToPage,
