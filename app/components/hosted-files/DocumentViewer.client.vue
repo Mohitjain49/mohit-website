@@ -1,3 +1,7 @@
+<style lang="scss">
+@use "pdfjs-dist/web/pdf_viewer.css";
+</style>
+
 <template>
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
@@ -39,7 +43,7 @@
 <script setup>
 import { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } from "pdfjs-dist";
 import { PDFLinkService, EventBus } from "pdfjs-dist/web/pdf_viewer.mjs";
-import workerSrcUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
+import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
 const DEFAULT_OUTPUT_SCALE = 2;
 const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";

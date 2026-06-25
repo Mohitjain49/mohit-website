@@ -1,7 +1,5 @@
 @use "animate.css"; /* This website uses the "animate.css" dependency (https://animate.style/) */
-@use "pdfjs-dist/web/pdf_viewer.css";
 @use 'lenis/dist/lenis.css';
-
 @use "@/styles/_dynamicrules.scss" as *;
 @use "./documentpage";
 
