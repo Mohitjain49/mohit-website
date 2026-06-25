@@ -6,6 +6,7 @@ import QRCodeStyling from "qr-code-styling";
 export const useResumeStore = defineStore("resume-store", () => {
     const documentStore = useDocumentStore();
     const router = useRouter();
+    const fullScreenSet = getFullScreenSet();
 
     const blobCreated = ref(0);
     const mountedOnce = ref(false);
@@ -39,7 +40,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         }
 
         await initBlob({ addQrcode: qrcodeAdded.value, removeLinks: linksRemoved.value, updateQuery: false });
-        documentStore.mountCustomDocumentPage(800, 320, PDF_LETTER_SCALE);
+        documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
     }
 
     /** This function unmounts the resume page. */
@@ -89,12 +90,15 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      */
     async function resetBlob(options) {
+        const fullScreenSetBeforeReset = fullScreenSet.value;
         deleteCurrentBlob();
         documentStore.unmountDocumentPage();
 
         await sleep(100);
         await initBlob(options);
-        documentStore.mountCustomDocumentPage(800, 320, PDF_LETTER_SCALE);
+
+        documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
+        if(fullScreenSetBeforeReset) { await documentStore.toggleDocumentFullScreen(); }
     }
 
     /** This function updates the query based on the resume customization options. */
