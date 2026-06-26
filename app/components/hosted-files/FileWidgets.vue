@@ -28,7 +28,7 @@ const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open 
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
 const showMinimizeWidget = computed(() => { return (fullScreenSet.value && (!hfBottomBarVisible.value || largeWindowWidth.value)); });
 const largeWindowWidth = computed(() => {
-    return (onDocumentRoute.value && !documentStore.onMarkdownRoute && (windowWidth.value > documentStore.customPdfWidth + 125));
+    return (onDocumentRoute.value && !documentStore.onMarkdownRoute && (windowWidth.value > documentStore.customPdfWidth + 150));
 });
 
 const fileWidgets = useTemplateRef('file-widgets-container');
