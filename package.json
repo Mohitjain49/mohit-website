@@ -33,7 +33,7 @@
         "@fortawesome/fontawesome-svg-core": "^7.3.0",
         "@fortawesome/free-brands-svg-icons": "^7.3.0",
         "@fortawesome/free-solid-svg-icons": "^7.3.0",
-        "@fortawesome/vue-fontawesome": "^3.2.0",
+        "@fortawesome/vue-fontawesome": "^3.3.0",
         "@libpdf/core": "^0.4.0",
         "@nuxt/content": "^3.14.0",
         "@nuxt/fonts": "^0.14.0",
