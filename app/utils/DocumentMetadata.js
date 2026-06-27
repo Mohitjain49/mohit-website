@@ -28,6 +28,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
 
     const pdfVersion = shallowRef("");
     const fileSize = shallowRef("");
+    const fileSizeBinary = shallowRef("");
     const fileSizeInBytes = shallowRef(0);
 
     /**
@@ -65,8 +66,11 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
             dateModified.value = (modificationDate ? dayjs(modificationDate).format(DATE_FORMAT) : "");
 
             pdfVersion.value = pdf.version;
-            fileSize.value = prettyBytes(pdfBlob.size);
-            fileSizeInBytes.value = pdfBlob.size;
+            const blobSize = pdfBlob.size;
+
+            fileSize.value = prettyBytes(blobSize);
+            fileSizeBinary.value = prettyBytes(blobSize, { binary: true });
+            fileSizeInBytes.value = blobSize;
             
             // Returns true to indicate that the parsing was a success.
             return true;
@@ -82,6 +86,6 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
     onMountedAdvanced(() => { parsePdf(); });
 
     return { parsePdf, title, author, subject, dateCreated, dateModified, application, producer, keywords, keywordsAsOne,
-        pdfVersion, pageCount, pageCountAsString, pageWidth, pageHeight, pageOrientation, pageSize, fileSize, fileSizeInBytes
+        pdfVersion, pageCount, pageCountAsString, pageWidth, pageHeight, pageOrientation, pageSize, fileSize, fileSizeBinary, fileSizeInBytes
     }
 }
