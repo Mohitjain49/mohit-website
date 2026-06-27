@@ -183,6 +183,37 @@ export const useScrollStore = defineStore("scroll-store", () => {
         });
     }
 
+    /**
+     * This function lets the user autoscroll to a defined target passed in by the user.
+     * @param {Number} targetY The distance from the top the user should scroll from.
+     */
+    async function scrollToTarget(targetY = 0) {
+        return new Promise((resolve, reject) => {
+            if(!verifyAutoscroll()) { reject("Autoscroll Unavailable."); }
+            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
+
+            if(Math.abs(scrollY - targetY) < 1) {
+                onLenisScroll(lenis, "no-scroll");
+                resolve("Scroll Complete!");
+                return;
+            }
+
+            const initDuration = (Math.abs(targetY - scrollY) / 4000);
+            const finalDuration = Math.max(0.75, Math.min((initDuration), 3));
+
+            scrollProgress.value.targetElement = null;
+            scrollProgress.value.duration = finalDuration;
+            scrollStartTime = dayjs(new Date());
+
+            sleep(finalDuration + 1000).then(() => { resolve("timed out."); });
+            lenis.scrollTo(targetY, {
+                duration: finalDuration, lock: true,
+                onStart: () => { setScrollInterval(0); },
+                onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
+            });
+        });
+    }
+
     /** This function returns a Boolean that if true confirms that the website is ready for an autoscroll. */
     function verifyAutoscroll() { return (mounted.value && !isAutoScrolling.value && lenis); }
 
@@ -250,8 +281,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
     return { mounted, scrollProgress, isAutoScrolling,
-        mountScrollStore, unmountScrollStore, scrollToId, scrollToTop, cancelAutoscroll,
-        scrollByIncrement, gamepadScrollToTop
+        mountScrollStore, unmountScrollStore, cancelAutoscroll,
+        scrollToId, scrollToTop, scrollToTarget, scrollByIncrement, gamepadScrollToTop
     }
 });
 
@@ -274,8 +305,10 @@ export async function scrollToTop(instant = false, delay = 0) {
     return useScrollStore().scrollToTop(instant, delay);
 }
 
-/** This function returns a computed object that determines if the website is auto scrolling or not. */
-export function getAutoScrollingStatus() {
-    const { isAutoScrolling } = storeToRefs(useScrollStore());
-    return computed(() => { return isAutoScrolling.value; });
+/**
+ * This function lets the user autoscroll to a defined target passed in by the user.
+ * @param {Number} targetY The distance from the top the user should scroll from.
+ */
+export async function scrollToTarget(targetY = 0) {
+    return useScrollStore().scrollToTarget(targetY);
 }
