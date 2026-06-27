@@ -48,6 +48,7 @@ import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 const DEFAULT_OUTPUT_SCALE = 2;
 const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";
 const CUSTOM_PDFJS_DEST_ATTRIBUTE = "mohit-data-pdfjs-dest";
+const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
 const CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE = "mohit-pdfjs-raw-width";
 const CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE = "mohit-pdfjs-raw-height";
 
@@ -116,6 +117,9 @@ async function renderPDF() {
     pages.value = numPages;
     setInnerPagesArray(numPages);
     await nextTick();
+
+    /** @type {Array<HTMLAnchorElement>} These elements are inner Annotation elements that scroll to other parts of the PDF. */
+    const innerAnnotationElements = [];
 
     /** This is a link service used by the annotation layers. */
     const defaultLinkService = new PDFLinkService({ eventBus: new EventBus(), externalLinkTarget: 2 });
@@ -192,6 +196,7 @@ async function renderPDF() {
 
                     if(!annotationDataObject || !annotationDataObject.dest) { continue; }
                     innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(annotationDataObject.dest));
+                    innerAnnotationElements.push(innerAnnotationElement);
 
                     // This event listener watches out for click events to direct the user to the proper location when clicked.
                     innerAnnotationElement.addEventListener("click",
@@ -205,9 +210,22 @@ async function renderPDF() {
             }
         }
 
-        // This sets that the page is fully loaded on the website.
-        setSingleDocLoaded(i - 1);
+        // This sets that the page is fully loaded on the website. It holds the last page to add one more HTML attribute to annotations.
+        if(numPages > i) { setSingleDocLoaded(i - 1); }
     }
+
+    // This adds an attribute to every inner annotation that tells it the page to navigate to.
+    for(let k = 0; k < innerAnnotationElements.length; k++) {
+        const innerAnnotationElement = innerAnnotationElements[k];
+        const innerAnnotationDest = JSON.parse(innerAnnotationElement.getAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE));
+
+        if(!innerAnnotationDest) { continue; }
+        const innerAnnotationPageNumber = ((await pdfDoc.value.getPageIndex(innerAnnotationDest[0])) + 1);
+        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE, String(innerAnnotationPageNumber));
+    }
+
+    // This sets the last page as loaded for the user.
+    setSingleDocLoaded(numPages - 1);
 }
 
 /** This function cancels all PDF Rendering when called. */
@@ -223,22 +241,23 @@ function cancelRenders() {
  */
 function resizePdfViewer(index = null) {
     if(!index || index < 1 || index > pages.value) {
-        for(let i = 1; i <= pages.value; i++) {
-            try {
-                const pageElement = getPageElement(i);
-                const newScaleFactor = (documentStore.customPdfWidth / parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE)));
-                if(newScaleFactor >= 0) { pageElement.style.setProperty(PDFJS_SCALE_CSS_PROPERTY, newScaleFactor); }
-            } catch(e) {
-                continue;
-            }
-        }
+        for(let i = 1; i <= pages.value; i++) { setPdfPageScaleFactor(i) }
     } else {
-        try {
-            const pageElement = getPageElement(index);
-            const newScaleFactor = (documentStore.customPdfWidth / parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE)));
-            if(newScaleFactor >= 0) { pageElement.style.setProperty(PDFJS_SCALE_CSS_PROPERTY, newScaleFactor); }
-        } catch(e) {}
+        setPdfPageScaleFactor(index);
     }
+}
+
+/**
+ * This function sets the scale factor for a specific rendered Pdf Page.
+ * @param {Number} index The index of the page to set.
+ */
+function setPdfPageScaleFactor(index = 1) {
+    if(index < 1 || index > pages.value) { return; }
+    try {
+        const pageElement = getPageElement(index);
+        const newScaleFactor = (documentStore.customPdfWidth / parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE)));
+        if(newScaleFactor >= 0) { pageElement.style.setProperty(PDFJS_SCALE_CSS_PROPERTY, newScaleFactor); }
+    } catch(e) {}
 }
 
 /**
@@ -272,14 +291,14 @@ function setSingleDocLoaded(index = 1) {
  * This function scrolls to a specific page on an annotation internal link click.
  * @param {PointerEvent} event The click event emitted by the pointer event that was clicked.
  */
-async function onAnnotationClick(event) {
+function onAnnotationClick(event) {
     try {
         /** @type {HTMLAnchorElement} The element that was clicked on. */
         const element = event.target;
         const dest = JSON.parse(element.getAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE));
 
-        if(!dest || !dest[0] || !pdfDoc.value) { return; }
-        const pageNumber = ((await pdfDoc.value.getPageIndex(dest[0])) + 1);
+        if(!dest) { return; }
+        const pageNumber = parseInt(element.getAttribute(CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE));
 
         if(dest[1].name !== "XYZ") {
             documentStore.scrollToPage(pageNumber);
@@ -288,7 +307,7 @@ async function onAnnotationClick(event) {
             const destY = (Math.abs(dest[3] - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
             const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue("--total-scale-factor"));
 
-            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
+            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
             const top = (pageElement.getBoundingClientRect().top + scrollY + (((destY * destScalar) - 90) / cssToWindowHeightRatio.value));
             scrollToTarget(top);
         }

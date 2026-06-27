@@ -52,7 +52,7 @@ export default defineNuxtConfig({
             })
         }
     ],
-    components: [{ path: '~/components', pathPrefix: false, extensions: ['vue', 'md'] }],
+    components: [{ path: '~/components', pathPrefix: false, extensions: ['vue'] }],
     imports: { dirs: ['~/stores/**', '~/utils/**'] },
     pinia: { storesDirs: ['./stores/**'] },
     css: ['@fortawesome/fontawesome-svg-core/styles.css'],

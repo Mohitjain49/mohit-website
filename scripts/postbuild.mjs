@@ -51,15 +51,16 @@ function createBuildInfoFile() {
     }
 
     /** The JSON Object that makes up the build information. */
-    const jsonObj = {
+    const jsonObj = JSON.stringify({
         now_local: localNow.format(),
         now_utc: utcNow.format(),
         size_decimal: prettyBytes(totalBuildSizeInBytes),
         size_binary: prettyBytes(totalBuildSizeInBytes, { binary: true })
-    }
+    }, null, 4);
 
-    fs.writeFileSync(path, JSON.stringify(jsonObj, null, 4), 'utf8');
+    fs.writeFileSync(path, jsonObj, 'utf8');
     console.log('✅ Successfully created \"build-info.json\"!');
+    console.log("\n" + jsonObj);
 }
 
 /** This function runs when an error occurred in any postbuild function. */

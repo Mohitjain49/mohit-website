@@ -127,7 +127,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
             const target = document.getElementById(id);
             if(target == null) { reject("Element with id \"" + id + "\" does not exist."); }
 
-            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
+            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
             const targetY = (target.getBoundingClientRect().top + scrollY);
 
             if(Math.abs(scrollY - targetY) < 1) {
@@ -162,7 +162,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     async function scrollToTop(instant = false, delay = 0) {
         return new Promise((resolve, reject) => {
             if(!verifyAutoscroll()) { reject("Autoscroll Unavailable"); }
-            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
+            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
 
             if(scrollY < 1) {
                 onLenisScroll(lenis, "no-scroll");
@@ -190,7 +190,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     async function scrollToTarget(targetY = 0) {
         return new Promise((resolve, reject) => {
             if(!verifyAutoscroll()) { reject("Autoscroll Unavailable."); }
-            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollHeight : window.scrollY);
+            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
 
             if(Math.abs(scrollY - targetY) < 1) {
                 onLenisScroll(lenis, "no-scroll");

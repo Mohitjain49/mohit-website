@@ -24,6 +24,15 @@
             <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
             <span class="content" v-html="field.content.value"></span>
         </button>
+        <div class="mohit-navMenu-opt-break"></div>
+
+        <button v-for="field in METADATA_FIELDS_3" class="mohit-navMenu-info clickable"
+            @click="setFocusedMetadata(true, field.header, field.content.value)"
+            :title="('Show ' + field.header + ' Options')">
+
+            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+            <span class="content" v-html="field.content.value"></span>
+        </button>
         <div v-if="focusedMetadata.show" class="mohit-navMenu-opt-break"></div>
 
         <div v-if="focusedMetadata.show" class="metadata-docMenu-focused">
@@ -46,7 +55,6 @@
 
 <script setup>
 const webData = useWebsiteDataStore();
-const fullScreenStore = useFullScreenStore();
 const { documentMetadataMenuOpen } = storeToRefs(webData);
 
 const props = defineProps({ objectUrl: { type: String, default: "" }});
@@ -129,8 +137,12 @@ const METADATA_FIELDS_2 = [
     { header: 'PDF Producer', tabs: 1, content: pdfMetadata.producer },
     { header: 'PDF Version', tabs: 2, content: pdfMetadata.pdfVersion },
     { header: 'Page Count', tabs: 2, content: pdfMetadata.pageCountAsString },
-    { header: 'Page Size', tabs: 2, content: pdfMetadata.pageSize },
-    { header: 'File Size', tabs: 3, content: pdfMetadata.fileSize},
+    { header: 'Page Size', tabs: 2, content: pdfMetadata.pageSize }
+];
+const METADATA_FIELDS_3 = [
+    { header: 'File Size (Decimal)', tabs: 5, content: pdfMetadata.fileSize },
+    { header: 'File Size (Binary)', tabs: 6, content: pdfMetadata.fileSizeBinary },
+    { header: 'File Size (Bytes)', tabs: 6, content: pdfMetadata.fileSizeInBytes }
 ];
 
 /** These are the icons needed for the copy action. */
