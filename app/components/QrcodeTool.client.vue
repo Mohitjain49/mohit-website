@@ -74,7 +74,7 @@
         </div>
 
         <button ref="sharePopup-close" @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-close" title="Close Popup">
-            <FontAwesomeIcon icon="fa-xmark" :beat="hoverOverCloseBtn" />
+            <FontAwesomeIcon icon="fa-xmark" :jello="hoverOverCloseBtn" />
         </button>
     </div>
 </Transition>
@@ -208,9 +208,10 @@ function setQRCodeLink() {
     if(data === "main") {
         const linkUrl = new URL(route.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
         linkUrl.searchParams.delete('qrdata');
+        // console.log(linkUrl);
 
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + linkUrl.pathname.substring(1) + linkUrl.search + linkUrl.hash);
-        sharePopupMode.value = ((route.hash !== "" || Object.keys(route.query).length > 0) ? 0 : 1);
+        sharePopupMode.value = ((linkUrl.hash !== "" || linkUrl.searchParams.size > 0) ? 0 : 1);
     } else if(data === "filter") {
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + route.path.substring(1));
         sharePopupMode.value = 1;

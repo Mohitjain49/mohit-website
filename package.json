@@ -2,7 +2,7 @@
     "name": "mohit-website",
     "type": "module",
     "private": true,
-    "version": "3.15.4",
+    "version": "3.15.5",
     "engines": {
         "node": "26.1.0",
         "npm": "11.15.0"
@@ -40,8 +40,8 @@
         "@nuxtjs/robots": "^6.1.2",
         "@nuxtjs/sitemap": "^8.2.2",
         "@pinia/nuxt": "^0.11.3",
-        "@tsparticles/slim": "4.2.1",
-        "@tsparticles/vue3": "4.2.1",
+        "@tsparticles/slim": "4.3.0",
+        "@tsparticles/vue3": "4.3.0",
         "@vite-pwa/nuxt": "^1.1.1",
         "@vueuse/nuxt": "^14.3.0",
         "animate.css": "^4.1.1",
