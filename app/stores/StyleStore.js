@@ -44,7 +44,7 @@ export const useStyleStore = defineStore("style-store", () => {
     const trueViewportVariablesEnabled = ref(false);
     const mousePositionRecorderEnabled = ref(false);
 
-    const hideOverflowArray = ref([false, false, false, false]);
+    const hideOverflowArray = ref([false, false, false, false, false]);
     const hideCursorArray = ref([false, false]);
     const disableUserSelectArray = ref([false, false]);
 

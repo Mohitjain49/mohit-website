@@ -112,6 +112,6 @@ export default defineNuxtConfig({
     },
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
     typescript: { tsConfig: { compilerOptions: { types:
-        ['unplugin-info/client', '@types/node', '@types/validator', '@types/lodash-es']
+        ['unplugin-info/client', '@types/node', '@types/validator', '@types/lodash-es', '@types/google.picker']
     }}}
 });

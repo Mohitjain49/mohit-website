@@ -483,23 +483,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
-     * This sets a boolean to indicate that the document is loaded on the screen. Also handles the automatic scroll to a page.
-     */
-    function setDocLoaded() {
-        const totalPages = docLoaded.value.totalPages;
-        docLoaded.value = { status: true, totalPages, loadedPages: totalPages };
-
-        const hashStr = router.currentRoute.value.hash.substring(1);
-        if(hashStr === "") { return; }
-
-        try {
-            goToPageSection(hashStr, ((hashStr === "footer") ? 50 : 70), 10);
-        } catch(e) {
-            scrollToTop(true, 0);
-        }
-    }
-
-    /**
      * This function scrolls to any page on a document webpage.
      * @param {Number} pageNum The number of the specified page.
      */
@@ -516,7 +499,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
         onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
-        mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, setDocLoaded, initGoogleTokenClient, initGooglePickerAPI
+        mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, initGoogleTokenClient, initGooglePickerAPI
     }
 });
 

@@ -60,6 +60,7 @@ const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
 const webData = useWebsiteDataStore();
 const fullScreenSet = getFullScreenSet();
 const documentStore = useDocumentStore();
+const styleStore = useStyleStore();
 const router = useRouter();
 
 const props = defineProps({
@@ -85,10 +86,12 @@ const showFsWebCover = computed(() => {
 
 // These manage the PDF Viewer when it is mounted an unmounted.
 onMountedAdvanced(async() => {
+    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, true);
     await renderPDF();
     window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal: resizeAbortController.signal });
-})
+});
 onBeforeUnmount(() => {
+    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, false);
     cancelRenders();
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
     resizeAbortController.abort();
@@ -104,7 +107,9 @@ function getPageElement(index = 1) {
 
 /** This function renders the PDF so it can be displayed. */
 async function renderPDF() {
+    scrollToTop(true, 0);
     cancelRenders();
+
     if(!documentStore.workerSrcAdded) {
         GlobalWorkerOptions.workerSrc = workerSrcUrl;
         documentStore.workerSrcAdded = true;
@@ -225,6 +230,7 @@ async function renderPDF() {
     }
 
     // This sets the last page as loaded for the user.
+    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, false);
     setSingleDocLoaded(numPages - 1);
 }
 
@@ -241,7 +247,7 @@ function cancelRenders() {
  */
 function resizePdfViewer(index = null) {
     if(!index || index < 1 || index > pages.value) {
-        for(let i = 1; i <= pages.value; i++) { setPdfPageScaleFactor(i) }
+        for(let i = 1; i <= pages.value; i++) { setPdfPageScaleFactor(i); }
     } else {
         setPdfPageScaleFactor(index);
     }
@@ -284,7 +290,24 @@ function setSingleDocLoaded(index = 1) {
     }
 
     documentStore.docLoaded.loadedPages = numPagesLoaded;
-    if(numPagesLoaded == totalPages) { documentStore.setDocLoaded(); }
+    if(numPagesLoaded < totalPages) { return; }
+    documentStore.docLoaded = { status: true, totalPages, loadedPages: totalPages }
+
+    const linkUrl = new URL(router.currentRoute.value.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
+    const searchParams = linkUrl.searchParams;
+    const hashPageNumber = parseInt(linkUrl.hash.replaceAll("#page_", ""));
+
+    const pageQuery = (searchParams.has("page") ? parseInt(searchParams.get("page")) : NaN);
+    const validPageQuery = !Number.isNaN(pageQuery);
+    const yQuery = (searchParams.has("y") ? parseFloat(searchParams.get("y")) : NaN);
+
+    if(validPageQuery && !Number.isNaN(yQuery)) {
+        scrollToPdfDest(pageQuery, yQuery, false);
+    } else if(validPageQuery) {
+        documentStore.scrollToPage(pageQuery);
+    } else if(!Number.isNaN(hashPageNumber)) {
+        documentStore.scrollToPage(hashPageNumber);
+    }
 }
 
 /**
@@ -293,6 +316,9 @@ function setSingleDocLoaded(index = 1) {
  */
 function onAnnotationClick(event) {
     try {
+        // This ensures that clicking on the annotation does not trigger its own scroll functionality.
+        event.preventDefault();
+
         /** @type {HTMLAnchorElement} The element that was clicked on. */
         const element = event.target;
         const dest = JSON.parse(element.getAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE));
@@ -303,16 +329,32 @@ function onAnnotationClick(event) {
         if(dest[1].name !== "XYZ") {
             documentStore.scrollToPage(pageNumber);
         } else {
-            const pageElement = getPageElement(pageNumber);
-            const destY = (Math.abs(dest[3] - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
-            const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue("--total-scale-factor"));
-
-            const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
-            const top = (pageElement.getBoundingClientRect().top + scrollY + (((destY * destScalar) - 90) / cssToWindowHeightRatio.value));
-            scrollToTarget(top);
+            scrollToPdfDest(pageNumber, dest[3], true);
         }
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/**
+ * This function has the website scroll to a specific destination in the PDF.
+ * @param {Number} pageNumber The page number to scroll to.
+ * @param {Number} y The Y coordinate in the page to scroll to.
+ * @param {Boolean} setRoute If true, this sets query parameters indicating the route to the specific coords to scroll at.
+ */
+async function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
+    if(pageNumber < 1 || pageNumber > pages.value || y < 0) { return; }
+    const pageElement = getPageElement(pageNumber);
+    const destY = (Math.abs(y - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
+    const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue(PDFJS_SCALE_CSS_PROPERTY));
+
+    const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
+    const top = (pageElement.getBoundingClientRect().top + scrollY + (((destY * destScalar) - 90) / cssToWindowHeightRatio.value));
+    await scrollToTarget(top);
+
+    if(setRoute) {
+        const route = router.currentRoute.value;
+        await router.push({ path: route.path, hash: "", query: { ...route.query, page: pageNumber, y }});
     }
 }
 

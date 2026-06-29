@@ -118,7 +118,7 @@
                 <span> {{ (audioStore.volumeInput + '%') }} </span>
             </div>
             <button @click="reloadNuxtApp({ force: true })" ref="reload-btn" class="mohit-navMenu-reload-webpage" title="Reload Website">
-                <font-awesome-icon icon="fa-rotate-right" :beat="onReloadHover" />
+                <font-awesome-icon icon="fa-rotate-right" :jello="onReloadHover" />
             </button>
         </div>
     </div>
