@@ -168,6 +168,7 @@ function setStyles(ringActive = true) {
     justify-content: center;
     align-items: center;
     --fa-animation-duration: 0.25s;
+    --fa-beat-scale: 1.05;
 }
 
 .webpage-cover-progressRing-track {
