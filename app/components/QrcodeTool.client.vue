@@ -148,7 +148,7 @@ const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
 
 const copyLinkIcon = computed(() => {
     const status = actions.value.copy;
-    return ((status == 0) ? 'fa-copy' : STATUS_ICONS[status]);
+    return ((status == 0) ? 'fa-link' : STATUS_ICONS[status]);
 });
 const shareLinkIcon = computed(() => {
     const status = actions.value.share;
@@ -565,19 +565,17 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
 .qrcode-mainPopup-close {
     color: red;
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 5px;
+    right: 5px;
     transition: box-shadow 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
     background: var(--dark-background);
-    width: 28px;
-    height: 28px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 6px;
-    border-left: 1px solid white;
-    border-bottom: 1px solid white;
+    width: 29px;
+    height: 29px;
+    border-radius: 10px;
+    border: 1px solid white;
 }
 .qrcode-mainPopup-close:hover {
     box-shadow: 0px 0px 20px 3px black;
@@ -662,6 +660,11 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     .qrcode-mainPopup-btn svg {
         width: 14px;
         height: 14px;
+    }
+    .qrcode-mainPopup-close {
+        scale: 0.75;
+        right: 0px;
+        top: 0px;
     }
 }
 

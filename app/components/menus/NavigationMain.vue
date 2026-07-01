@@ -162,6 +162,9 @@
             {{ documentStore.docLoaded.loadedPages + '/' + documentStore.docLoaded.totalPages }}
         </span>
     </div>
+    <button title="Copy Webpage Link" @click="() => { copyWebpageLink(); }" class="mohit-navBar-statusIcon share yellow" pulse-loop>
+        <font-awesome-icon :icon="COPY_STATUS_ICONS[copyStatus]" :spin-pulse="(copyStatus == 1)" />
+    </button>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" pulse-loop>
         <font-awesome-icon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
         <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
@@ -173,6 +176,7 @@
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const { scrollProgress } = storeToRefs(useScrollStore());
 const { $pwa } = useNuxtApp();
+var copyTimeout = null;
 
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
@@ -184,6 +188,7 @@ const installStore = useInstallStore();
 
 const router = useRouter();
 const isMounted = onMountedAdvanced();
+const copyStatus = shallowRef(0);
 
 const navBar = shallowRef(null);
 const navMenu = shallowRef(null);
@@ -242,6 +247,26 @@ function onWakeLockButtonClick(event) {
     }
 }
 
+/** This function lets users copy the webpage link  */
+async function copyWebpageLink() {
+    if(copyStatus.value != 0) { return; }
+    copyStatus.value = 1;
+
+    try {
+        const url = new URL(router.currentRoute.value.fullPath.substring(1), PERSONAL_WEBSITE_LINK)
+        await navigator.clipboard.writeText(PERSONAL_WEBSITE_LINK + url.pathname.substring(1) + url.search + url.hash);
+        copyStatus.value = 2;
+    } catch(e) {
+        copyStatus.value = 3;
+    } finally {
+        if(copyTimeout != null) { clearTimeout(copyTimeout); }
+        copyTimeout = setTimeout(() => {
+            copyStatus.value = 0;
+            copyTimeout = null;
+        }, 3000); 
+    }
+}
+
 const MAIN_BTNS = [
     { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
     { path: "/contact/", icon: "fa-paper-plane", color: "var(--website-text)", title: "Contact Me" },
@@ -265,4 +290,5 @@ const NAV_MENU_EXTRAS = [
 ];
 
 const RESUME_QUERY_UNSYNC_TITLE = "Please reload this page here to apply your changes to customizing my resume.";
+const COPY_STATUS_ICONS = ['fa-link', 'fa-spinner', 'fa-check', 'fa-ban'];
 </script>

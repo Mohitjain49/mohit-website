@@ -112,7 +112,7 @@ async function main() {
 
         if(updateDepsBool) {
             runCommand('npx npm-check-updates --upgrade' + rejectDepsCommandOption);
-            console.log("✅ Dependencies Ready To Install!\n\n")
+            console.log("✅ Dependencies Ready To Install!")
         } else {
             console.log("🛑 Will Not Update Dependencies.\n\n");
         }
@@ -129,6 +129,7 @@ async function main() {
         }
 
         if(updateVersionBool) {
+            console.log();
             const versionPattern = /^\d+\.\d+\.\d+$/;
             var versionType = await rl.question('Please Enter the Version Number Here (M.m.p): ');
 

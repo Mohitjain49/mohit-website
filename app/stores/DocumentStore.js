@@ -468,7 +468,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function sets the full screen for the element containing the document or script.
      */
     async function toggleDocumentFullScreen() {
-        if(fsStateChanging.value) { return; }
+        if(!docLoaded.value.status || fsStateChanging.value) { return; }
         fsStateChanging.value = true;
 
         webData.bypassBodyClick();

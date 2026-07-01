@@ -86,12 +86,12 @@ const showFsWebCover = computed(() => {
 
 // These manage the PDF Viewer when it is mounted an unmounted.
 onMountedAdvanced(async() => {
-    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, true);
+    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
     await renderPDF();
     window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal: resizeAbortController.signal });
 });
 onBeforeUnmount(() => {
-    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, false);
+    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     cancelRenders();
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
     resizeAbortController.abort();
@@ -223,14 +223,15 @@ async function renderPDF() {
     for(let k = 0; k < innerAnnotationElements.length; k++) {
         const innerAnnotationElement = innerAnnotationElements[k];
         const innerAnnotationDest = JSON.parse(innerAnnotationElement.getAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE));
-
         if(!innerAnnotationDest) { continue; }
+
         const innerAnnotationPageNumber = ((await pdfDoc.value.getPageIndex(innerAnnotationDest[0])) + 1);
         innerAnnotationElement.setAttribute(CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE, String(innerAnnotationPageNumber));
+        innerAnnotationElement.setAttribute("href", `?page=${innerAnnotationPageNumber}&y=${innerAnnotationDest[3]}`);
     }
 
     // This sets the last page as loaded for the user.
-    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, false);
+    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     setSingleDocLoaded(numPages - 1);
 }
 
@@ -342,7 +343,7 @@ function onAnnotationClick(event) {
  * @param {Number} y The Y coordinate in the page to scroll to.
  * @param {Boolean} setRoute If true, this sets query parameters indicating the route to the specific coords to scroll at.
  */
-async function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
+function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
     if(pageNumber < 1 || pageNumber > pages.value || y < 0) { return; }
     const pageElement = getPageElement(pageNumber);
     const destY = (Math.abs(y - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
@@ -350,11 +351,11 @@ async function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
 
     const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
     const top = (pageElement.getBoundingClientRect().top + scrollY + (((destY * destScalar) - 90) / cssToWindowHeightRatio.value));
-    await scrollToTarget(top);
+    scrollToTarget(top);
 
     if(setRoute) {
         const route = router.currentRoute.value;
-        await router.push({ path: route.path, hash: "", query: { ...route.query, page: pageNumber, y }});
+        router.push({ path: route.path, hash: "", query: { ...route.query, page: pageNumber, y }});
     }
 }
 
