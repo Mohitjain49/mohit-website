@@ -86,12 +86,12 @@ const showFsWebCover = computed(() => {
 
 // These manage the PDF Viewer when it is mounted an unmounted.
 onMountedAdvanced(async() => {
-    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, true);
+    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
     await renderPDF();
     window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal: resizeAbortController.signal });
 });
 onBeforeUnmount(() => {
-    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, false);
+    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     cancelRenders();
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
     resizeAbortController.abort();
@@ -231,7 +231,7 @@ async function renderPDF() {
     }
 
     // This sets the last page as loaded for the user.
-    styleStore.setHideCursorArray(HideOverflow.LOADING_DOCUMENT, false);
+    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     setSingleDocLoaded(numPages - 1);
 }
 
