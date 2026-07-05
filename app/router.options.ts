@@ -1,4 +1,5 @@
 import type { RouterConfig } from "nuxt/schema";
+const QUERY_NO_SCROLL_PARAMS = ["qrdata", "qrcodeAdded", "linksRemoved"];
 const SCROLL_STORE_WAIT_SECONDS = 1.5;
 
 // This accounts for the majority of all auto-scrolling functionality across the website.
@@ -38,7 +39,7 @@ export default {
         const NO_SCROLL_CONDITIONS = [
             scrollStore.isAutoScrolling,
             (documentStore.onDocumentRoute && !documentStore.onMarkdownRoute && !documentStore.docLoaded.status),
-            (JSON.stringify(to.query) !== JSON.stringify(from.query))
+            (-1 != QUERY_NO_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== from.query[item]); }))
         ];
 
         // Checks the conditions and waits for the scroll store to be mounted.

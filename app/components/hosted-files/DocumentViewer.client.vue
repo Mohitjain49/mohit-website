@@ -302,7 +302,9 @@ function setSingleDocLoaded(index = 1) {
     const validPageQuery = !Number.isNaN(pageQuery);
     const yQuery = (searchParams.has("y") ? parseFloat(searchParams.get("y")) : NaN);
 
-    if(validPageQuery && !Number.isNaN(yQuery)) {
+    if(linkUrl.hash === "#footer") {
+        goToPageSection("footer");
+    } else if(validPageQuery && !Number.isNaN(yQuery)) {
         scrollToPdfDest(pageQuery, yQuery, false);
     } else if(validPageQuery) {
         documentStore.scrollToPage(pageQuery);

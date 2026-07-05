@@ -129,7 +129,6 @@ async function main() {
         }
 
         if(updateVersionBool) {
-            console.log();
             const versionPattern = /^\d+\.\d+\.\d+$/;
             var versionType = await rl.question('Please Enter the Version Number Here (M.m.p): ');
 
