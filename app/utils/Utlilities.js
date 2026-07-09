@@ -263,6 +263,14 @@ export function useWebsiteMenuUtility(menu) {
     }
 }
 
+/** This function returns a computed instance of the route path with the query string. */
+export function useRoutePathWithQuery() {
+    const router = useRouter();
+    const queryEnd = computed(() => { return new URLSearchParams(router.currentRoute.value.query).toString(); });
+    const path = computed(() => { return (router.currentRoute.value.path + ((queryEnd.value.length <= 0) ? "" : ("?" + queryEnd.value))); });
+    return path;
+}
+
 /**
  * This function returns void only when Nuxt is ready for the website. It takes in a function as well.
  * @param {Function} callback The callback function that is triggered when Nuxt is ready.

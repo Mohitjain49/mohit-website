@@ -204,8 +204,9 @@ usePulseLoopAnimation(navWidgets);
 usePulseLoopAnimation(shareWidget);
 useWebsiteMenuUtility(navMenu);
 
+const topPath = useRoutePathWithQuery();
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
+const footerRoute = computed(() => { return (topPath.value + (webData.webFooterVisibility ? '' :'#footer')); });
 
 const showWakeLockWidget = computed(() => {
     const isActive = webData.wakeLock.isActive;
@@ -216,7 +217,9 @@ const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocument
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
 
-const showNavLeftWidgets = computed(() => { return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value)); });
+const showNavLeftWidgets = computed(() => {
+    return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
+});
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1 || webData.websiteMenuMode == 1)); });
 
 /**

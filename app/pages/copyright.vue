@@ -1,6 +1,6 @@
 <template>
 <ParticlesBackground :particlesOptions="COPYRIGHT_BACKGROUND" />
-<main class="personal-web-body transparent">
+<main id="copyright-page" class="personal-web-body">
     <div class="copyright-body-exterior">
         <div class="copyright-body" ref="copyright-main-body">
             <h1 class="copyright-body-header">
@@ -12,11 +12,11 @@
             <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
             <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
 
-            <div class="copyright-body-desc">
+            <div v-if="!showLicense" class="copyright-body-desc">
                 I'm glad you're here and hope you find inspiration in my work. Feel free to explore the site, 
                 take ideas, and use them to spark your own creativity. However, please abide by the 
                 <span style="text-decoration: underline;">
-                    <a :href="PERSONAL_WEBSITE_LICENSE_LINK" target="mohit-jain-web-license">MIT License</a>
+                    <RouterLink :to="licenseLink" target="mohit-jain-web-license">MIT License</RouterLink>
                 </span>
                 associated with this website if you plan to use my code for your own work.
                 <br> <br>
@@ -26,13 +26,44 @@
                     <RouterLink :to="footerLink">below.</RouterLink>
                 </span>
             </div>
+            <div v-if="showLicense" class="copyright-body-desc license">
+                Permission is hereby granted, free of charge, to any person obtaining a copy
+                of this software and associated documentation files (the "Software"), to deal
+                in the Software without restriction, including without limitation the rights
+                to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+                copies of the Software, and to permit persons to whom the Software is
+                furnished to do so, subject to the following conditions:
+                <br> <br>
+                The above copyright notice and this permission notice shall be included in all
+                copies or substantial portions of the Software.
+                <br> <br>
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+                AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                SOFTWARE.
+            </div>
 
-            <button @click="checkForUpdates()" class="copyright-reload-btn" title="Update Website" pulse-loop>
-                <FontAwesomeIcon icon="fa-rotate" :spin="updateButtonClicked" />
-            </button>
-            <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-reload-btn updateLog" title="Update Log" pulse-loop>
-                <FontAwesomeIcon icon="fa-brands fa-git-alt" />
-            </a>
+            <div class="copyright-topBar">
+                <div class="copyright-topBar-side left">
+                    <RouterLink :to="(showLicense ? routePath : licenseLink)" class="copyright-topBar-btn" pulse-loop
+                        :style="getColorStyles('var(--website-light-text)')"
+                        :title="(showLicense ? 'Back To Main Statement' : 'See License')">
+
+                        <FontAwesomeIcon :icon="(showLicense ? 'fa-arrow-left' : 'fa-scale-balanced')" />
+                    </RouterLink>
+                </div>
+                <div class="copyright-topBar-side right">
+                    <button @click="checkForUpdates()" class="copyright-topBar-btn" title="Update Website" pulse-loop>
+                        <FontAwesomeIcon icon="fa-rotate" :spin="updateButtonClicked" />
+                    </button>
+                    <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-topBar-btn updateLog" title="Update Log" pulse-loop>
+                        <FontAwesomeIcon icon="fa-brands fa-git-alt" />
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     <WebFooter />
@@ -45,7 +76,11 @@ const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
 const updateButtonClicked = ref(false);
-const footerLink = computed(() => { return (router.currentRoute.value.path + '#footer'); });
+const showLicense = computed(() => { return (router.currentRoute.value.query.showLicense === "true"); });
+
+const routePath = computed(() => { return router.currentRoute.value.path; });
+const licenseLink = computed(() => { return (routePath.value + '?showLicense=true'); });
+const footerLink = computed(() => { return (routePath.value + '#footer'); });
 
 const COPYRIGHT_TEXT = useState("copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 const RELEASE_DATE = useState("release-date", () => { return ("Released On: " + $websiteBuild.releaseDate); });
@@ -65,9 +100,7 @@ useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
     "rgb(248, 206, 171)"
 ));
 
-/**
- * This function checks for updates and deletes the cache and unregisters service workers.
- */
+/**  This function checks for updates, deletes the cache, and unregisters service workers. */
 async function checkForUpdates() {
     if(updateButtonClicked.value) { return; }
     updateButtonClicked.value = true;
@@ -80,15 +113,21 @@ async function checkForUpdates() {
         const keys = await caches.keys();
         for(const key of keys) { await caches.delete(key); }
     }
+
+    // Reloads the website once everything is finished updating.
     window.location.reload(true);
 }
 </script>
 
 <style scoped lang="scss">
+.personal-web-body#copyright-page {
+    background: transparent;
+}
+
 .copyright-body-exterior {
     height: fit-content;
     min-height: calc(var(--true-100vh, 100vh) - 90px);
-    padding: 20px;
+    padding: 30px 20px;
     width: calc(100% - 40px);
     display: flex;
     justify-content: center;
@@ -106,7 +145,8 @@ async function checkForUpdates() {
     flex-direction: column;
     background-color: black;
     color: var(--website-light-text);
-    border-radius: 25px;
+    border: 1px solid var(--website-light-text);
+    border-radius: 12px;
 }
 
 .copyright-body-header {
@@ -146,6 +186,9 @@ async function checkForUpdates() {
     font-family: 'Montserrat', 'Roboto', sans-serif;
     color: inherit;
 }
+.copyright-body-desc.license {
+    max-width: 1100px;
+}
 
 .copyright-body-subheader.small {
     font-size: 14px;
@@ -156,16 +199,39 @@ async function checkForUpdates() {
     text-decoration: underline;
 }
 
-.copyright-reload-btn {
+.copyright-topBar {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 35px;
+    border-bottom: 2px dotted var(--website-light-text);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+.copyright-topBar-side {
+    height: 100%;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 7px;
+}
+
+.copyright-topBar-side.right { margin-right: 12px; }
+.copyright-topBar-side.left { margin-left: 12px; }
+
+.copyright-topBar-btn {
     background-color: var(--dark-background);
     border: 2px solid var(--website-text);
     color: var(--website-text);
-    height: 40px;
-    width: 40px;
-    font-size: 20px;
+    height: 22px;
+    width: 22px;
+    font-size: 10px;
     border-radius: 50%;
     overflow: hidden;
     z-index: 5;
@@ -174,16 +240,15 @@ async function checkForUpdates() {
     align-items: center;
     transition: var(--default-transition), scale 0.2s;
 }
-.copyright-reload-btn.updateLog {
-    color: #F05133;
-    border-color: #F05133;
-    font-size: 23px;
-    left: auto;
-    right: 15px;
-}
-.copyright-reload-btn:hover {
+.copyright-topBar-btn:hover {
     box-shadow: 0px 0px 10px 1px var(--website-light-text);
     scale: 1.05;
+}
+
+.copyright-topBar-btn.updateLog {
+    color: #F05133;
+    border-color: #F05133;
+    font-size: 14px;
 }
 
 @include dynamic-less-equal-width-rule(680) {
@@ -201,21 +266,8 @@ async function checkForUpdates() {
     .copyright-body-desc {
         font-size: 16px;
     }
-
     .copyright-body-subheader.small {
         font-size: 9px;
-    }
-    .copyright-reload-btn {
-        top: 10px;
-        left: 10px;
-        font-size: 14px;
-        width: 30px;
-        height: 30px;
-    }
-    .copyright-reload-btn.updateLog {
-        left: auto;
-        right: 10px;
-        font-size: 17px;
     }
 }
 @include dynamic-less-equal-width-rule(450) {
