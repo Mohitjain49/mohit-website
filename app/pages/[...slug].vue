@@ -87,6 +87,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/files/**"], replacement: "/library/" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
     { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" },
+    { routes: ["/mit/**", "/mit-license/**", "/license/**"], replacement: "/copyright/?showLicense=true" },
 
     { routes: ["/documents/resume"], replacement: "/resume/" },
     { routes: ["/documents/resume/qrcode"], replacement: "/resume/qrcode" },
@@ -115,7 +116,6 @@ const EXTERNAL_REDIRECTS = [
 
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
     { routes: ["/sitemap", "/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
-    { routes: ["/mit/**", "/mit-license/**", "/license/**"], replacement: PERSONAL_WEBSITE_LICENSE_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },
     { routes: ["/ivuemedia", "/ivue/media"], replacement: IVUE_MEDIA_WEBSITE_LINK },
