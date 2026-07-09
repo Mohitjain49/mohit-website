@@ -5,7 +5,6 @@ To use a custom port, run "npm run serve -- --port {port goes here}"
 ------------------------------------------------------------------------------------- */
 
 import http from "node:http";
-import http2 from "node:http2";
 import fs from "node:fs";
 import handler from "serve-handler";
 import { execSync } from 'node:child_process';

@@ -1,7 +1,7 @@
 <template>
 <!-- <WebCover v-if="(showSharePopupImmediate && fullScreenSet)" :zIndex="1500" /> -->
 <Transition name="qrcode-popup-transition" appear fade>
-    <div v-if="showMainPopup" class="qrcode-mainPopup">
+    <div v-if="showMainPopup" id="share-popup" class="qrcode-mainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
 
@@ -85,6 +85,10 @@ import QRCodeStyling from 'qr-code-styling';
 import ParsePhoneNumber from 'libphonenumber-js';
 import Lenis from 'lenis';
 
+const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
+const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
+const SHARE_POPUP_MIN_VIEWPORT_EDGE = 675;
+
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
@@ -93,6 +97,8 @@ const styleStore = useStyleStore();
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
 var autoscrollTimeout = null;
+
+const { width: windowWidth, height: windowHeight } = useMohitWindowSize();
 const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage("popup-shareLink");
 
 /** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
@@ -144,7 +150,7 @@ const openNewTabButtonTitle = computed(() => {
 
 const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0 });
 var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null }
-const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
+var sharePopupAbortController = new AbortController();
 
 const copyLinkIcon = computed(() => {
     const status = actions.value.copy;
@@ -167,6 +173,7 @@ const copyImageIcon = computed(() => {
     return ((status == 0) ? 'fa-clone' : STATUS_ICONS[status]);
 });
 
+// This mounts the share popup and all of its functionality.
 onMounted(async() => {
     styleStore.setHideOverflowArray(HideOverflow.SHARE_POPUP, true);
     await nextTick();
@@ -181,7 +188,10 @@ onMounted(async() => {
         content: document.getElementsByClassName("popup-qr-text").item(0).querySelector("p"),
         easing: (x = 0) => { return x; }
     });
+
     manageLenisScrolling();
+    calculateSharePopupScale();
+    window.addEventListener("animation-resize", () => { calculateSharePopupScale(); }, { signal: sharePopupAbortController.signal });
 });
 
 // This watches for changes to the QR Code Data so the popup changes reactively.
@@ -198,6 +208,7 @@ function unmountSharePopup() {
 
     if(lenis != null) { lenis.destroy(); }
     if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
+    setTimeout(() => { sharePopupAbortController.abort(); }, 450);
 }
 
 /** This function sets the link for the Share Popup. */
@@ -397,6 +408,20 @@ async function copyQRCode() {
     }
 }
 
+/** This function calculates and sets the scale property for the share popup. */
+function calculateSharePopupScale() {
+    const width = windowWidth.value;
+    const height = windowHeight.value;
+    if(!document || !document.documentElement) { return; }
+
+    if(width >= SHARE_POPUP_MIN_VIEWPORT_EDGE && height >= SHARE_POPUP_MIN_VIEWPORT_EDGE) {
+        document.documentElement.style.setProperty(SHARE_POPUP_SCALE_CSS_VAR, "1"); // Sets the scale to 1 if the viewport is big enough.
+    } else {
+        const newScale = (((width < height) ? width : height) / SHARE_POPUP_MIN_VIEWPORT_EDGE);
+        document.documentElement.style.setProperty(SHARE_POPUP_SCALE_CSS_VAR, String(newScale)); // Sets the scale based on the viewport.
+    }
+}
+
 /** This function triggers all parts of the lenis autoscroll for this popup. */
 async function triggerLenisAutoScroll() {
     lenis.scrollTo("left", { immediate: true });
@@ -418,23 +443,19 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
 </script>
 
 <style lang="scss">
-#qr-code-popup.webpage-cover {
-    z-index: 1500;
-}
 .qrcode-mainPopup {
     position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    margin: auto;
+    top: calc((100% - 585px) / 2);
+    left: calc((100% - 585px) / 2);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     overflow: visible;
-    height: 575px;
-    width: 575px;
+    width: 585px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    scale: var(--mohit-share-popup-scale, 1);
     border-radius: 10px;
     z-index: 1501;
     background: linear-gradient(
@@ -609,7 +630,7 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
 
 .qrcode-image-options {
     position: absolute;
-    top: 100%;
+    top: calc(100% - 5px);
     height: fit-content;
     width: fit-content;
     padding: 3px 5px;
@@ -632,44 +653,6 @@ function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substrin
     border-color: transparent transparent var(--blue-one) transparent;
     filter: var(--filter-drop-shadow);
 }
-
-@mixin qrcode-mainPopup-small-viewport {
-    .qrcode-mainPopup {
-        width: 325px;
-        height: 325px;
-    }
-    #mohit-qrcode, #mohit-qrcode-waiting {
-        width: 225px !important;
-        height: 225px !important;
-    }
-
-    .popup-qr-text {
-        padding: 5px;
-        max-width: 215px;
-    }
-    .popup-qr-text p {
-        font-size: 9px;
-    }
-    .popup-qr-text-scrollBar {
-        width: 225px;
-    }
-
-    .qrcode-mainPopup-btn {
-        padding: 4.5px;
-    }
-    .qrcode-mainPopup-btn svg {
-        width: 14px;
-        height: 14px;
-    }
-    .qrcode-mainPopup-close {
-        scale: 0.75;
-        right: 0px;
-        top: 0px;
-    }
-}
-
-@include dynamic-less-equal-width-rule(650) { @include qrcode-mainPopup-small-viewport(); }
-@include dynamic-less-equal-height-rule(650) { @include qrcode-mainPopup-small-viewport(); }
 
 .qrcode-popup-transition-enter-active, .qrcode-popup-transition-leave-active {
     transition: transform 0.5s, opacity 0.5s;

@@ -59,8 +59,9 @@ const compassMenu = shallowRef(null);
 usePulseLoopAnimation(compassMenu);
 useWebsiteMenuUtility(compassMenu);
 
+const topPath = useRoutePathWithQuery();
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const footerRoute = computed(() => { return { path: routePath.value, hash: (webData.webFooterVisibility ? '' :'#footer') } });
+const footerRoute = computed(() => { return (topPath.value + (webData.webFooterVisibility ? '' :'#footer')); });
 
 onMountedAdvanced(() => { webData.compassMenuAvailable = true; });
 onBeforeUnmount(() => { webData.compassMenuAvailable = false; });

@@ -78,7 +78,7 @@
                 <FontAwesomeIcon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
                 <FontAwesomeIcon v-else icon="fa-spinner" :spin-pulse="true" />
             </button>
-            <RouterLink v-show="isMounted" :to="routePath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
+            <RouterLink v-show="isMounted" :to="topPath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />
             </RouterLink>
         </div>
@@ -97,7 +97,7 @@ const { $websiteBuild } = useNuxtApp();
 const footerRef = useTemplateRef('mohit-footer');
 usePulseLoopAnimation(footerRef);
 
-onMountedAdvanced(() => {
+const isMounted = onMountedAdvanced(() => {
     webData.navFooterPresent = true;
     webData.webFooter = document.getElementById("footer");
     copyrightText.value = ($websiteBuild.coprightYear + " Mohit Jain");
@@ -107,7 +107,7 @@ onBeforeUnmount(() => {
     webData.webFooter = null;
 });
 
-const isMounted = computed(() => { return webData.navFooterPresent; });
+const topPath = useRoutePathWithQuery();
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const copyrightText = ref($websiteBuild.coprightYear + " Mohit Jain");
 
