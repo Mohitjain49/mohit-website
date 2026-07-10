@@ -179,16 +179,16 @@ export const useResumeStore = defineStore("resume-store", () => {
 
             const { width, height } = page;
             page.drawImage(qrImage, {
-                x: (width - 70),
-                y: (height - 70),
-                width: 60,
-                height: 60,
+                x: (width - 65),
+                y: (height - 65),
+                width: 57,
+                height: 57,
             });
 
             page.drawText("My Website!", {
-                x: (width - 70),
-                y: (height - 82),
-                size: 10,
+                x: (width - 62.5),
+                y: (height - 74),
+                size: 9,
                 color: NULL_COLOR,
                 font: StandardFonts.HelveticaBold
             });

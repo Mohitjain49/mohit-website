@@ -17,12 +17,29 @@ I’m a software developer experienced in web and mobile application development
 Lead Software Developer
 ::
 
-* Defined company standards for web application development by mandating professional coding best practices, writing technical documentation, and creating training programs to help new developers build essential frontend skills at iVue.  
-* Developed a full-stack single-page application called [Worlds iVue](https://www.worldsivue.com/), a geospatial platform that is capable of connecting to and operating advanced drones and other devices. It utilizes Amazon Web Services such as  [Amazon Cognito](https://aws.amazon.com/cognito/) for its user authentication services and Web APIs such as the [Web Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) to enable gamepad compatibility so users can operate their drone directly with a gaming controller.  
-* Led the development of iVue’s company websites, overseeing and personally contributing to its overall design, and improved website performance by lowering overall latency by 75% and improving search engine optimization with Google Analytics.  
+* Defined company standards for web application development by mandating professional coding best practices, writing technical documentation, and creating training programs to help new developers build essential software development skills at iVue.  
+* Developed a full-stack single-page application called [Worlds iVue](https://www.worldsivue.com/), a geospatial platform that is capable of connecting to and operating advanced drones and other devices. It utilizes Amazon Web Services such as [Amazon Cognito](https://aws.amazon.com/cognito/) for its user authentication services and Web APIs such as the [Web Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) to enable gamepad compatibility so users can operate their drone directly with any standard gaming controller.  
+* Led the development of iVue’s 5 main company websites, overseeing and personally contributing to its overall design, and improved website performance by lowering overall latency by 75% and improving search engine optimization with Google Analytics.  
 * Built Arduino systems for motor control and data communication and enabled reliable integration with drones and ground stations using the [MAVLink Protocol](https://mavlink.io/en/).  
-* Mentored multiple interns in front-end development by offering guidance and hands-on assistance on modern web development frameworks, responsive UI/UX design, and coding best practices.  
-* Implemented company-wide email services with [Amazon WorkMail](https://aws.amazon.com/workmail/), improving communication and productivity across sales, software development, and engineering teams.
+* Mentored multiple interns in front-end development and development operations (DevOps) engineering by offering guidance and hands-on assistance on modern web development frameworks, responsive UI/UX design, Infrastructure as Code (IaC), and coding best practices.
+
+**[Robins Air Force Base | 402nd Software Engineering Group](https://www.robins.af.mil/Units/402nd-Software-Engineering-Group/)**{ .resume-markdown-section-subtitle }  
+::div{ .resume-markdown-subHeader }
+Computer Science Intern
+::
+
+* Developed software, fixed errors, and created features for an information warfare system using the [C programming language](https://www.c-language.org/).  
+* Created a program that allows my team to automatically convert their Microsoft Word Documentation into more intuitive HTML files and send these files to their stakeholders with ease.  
+* Used [Azure Devops](https://azure.microsoft.com/en-us/products/devops) while to create pipelines for automation, manage Git repositories, and keep track of tasks.
+
+**[KSU Immersive Visualization Environments Lab](https://www.kennesaw.edu/coles/academics/information-systems-security/labs/immersive-visualization-environments-research-cluster.php)**
+::div{ .resume-markdown-subHeader }
+Student Assistant
+::
+
+* Developed a program that is capable of recording brainwave signals from humans, extracting the necessary data, and then feeding that data into an Artificial Intelligence (AI) Model.  
+* Contributed to a research paper focusing on the [Applications of Generative AI](https://www.americanscholarspress.us/journals/IMR/pdf/IMR-1-2026/IMRv22N12026-art7.pdf), specifically focusing on fields where AI can negatively impact work efficiency.  
+* Assisted lab professors with teaching their classes that involved subjects such as Data Visualization.
 
 **[Sublo](https://www.sublo.app/)**{ .resume-markdown-section-subtitle }  
 ::div{ .resume-markdown-subHeader }
@@ -30,16 +47,6 @@ Intern Mobile Application Developer
 ::
 
 * Collaborated with other software developers to create a mobile application with [React Native](https://reactnative.dev/) by taking charge as the primary mobile application developer, integrating [Amazon Cognito](https://aws.amazon.com/cognito/) into their application to create its user authentication system, and utilizing mobile-specific APIs to enhance the app’s capabilities.
-
-# **[PROJECTS](https://www.mohit-jain.com/projects/)**{ .resume-markdown-section-title }
-
-**[Mapping Neurodivergence](https://mnd.mohit-jain.com)**{ .resume-markdown-section-subtitle }  
-::div{ .resume-markdown-subHeader }
-Full-Stack Development
-::
-
-* Developed a web application that helps neurodivergent users easily connect with one another for the Spring 2025 Hackathon for Social Good at Kennesaw State University.  
-* Took charge of frontend development, software testing, and API development with my team.
 
 # **EDUCATION**{ .resume-markdown-section-title }
 
@@ -53,5 +60,5 @@ Bachelor Degree in Computer Science
 
 # **[SKILLS](https://www.mohit-jain.com/skills/)**{ .resume-markdown-section-title }
 
-* **Languages And Frameworks:** Java, JavaScript, Node.js, HTML, CSS, [Vue.js](https://vuejs.org/), Nuxt, React, React Native, Angular, Vite, Vitest, Tauri, TypeScript, NodeJS, Python, [GoLang](https://go.dev/), SQL, [R](https://www.r-project.org/)  
-* **Tools And Platforms:** Amazon Web Services, Git, GitHub, GitLab, NPM, Yarn, MAVLink Protocol, CesiumJS, Arduino
+* **Languages And Frameworks:** Java, JavaScript, Node.js, HTML, CSS, C, C\#, C++, Vue.js, Nuxt, React, React Native, Angular, Vite, Vitest, Tauri, TypeScript, NodeJS, Python, GoLang, SQL, R  
+* **Tools And Platforms:** Amazon Web Services, Google Cloud, Git, GitHub, GitLab, GitKraken, NPM, Yarn, MAVLink Protocol, CesiumJS, Arduino, Azure DevOps
