@@ -34,7 +34,6 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: "/steam", link: "https://steamcommunity.com/id/mohit-jain/", title: "Mohit Jain | Steam", desc: "This link will redirect you to my Steam Profile." },
 
         { path: "/repository", link: REPOSITORY, title: "Mohit Jain | Website Repository", desc: "This link will redirect you to this website's github repository." },
-        { path: "/license", link: (REPOSITORY + "/blob/main/LICENSE"), title: "Mohit Jain | Website Repository", desc: "This link will redirect you to this website's MIT License." },
         { path: "/ivue", link: "https://www.ivueworld.com/", title: "iVue - iVue The World", desc: "This link will redirect you to the Main iVue Website." },
         { path: "/worldsivue", link: "https://www.worldsivue.com/", title: "Mohit Jain | Worlds iVue", desc: "This link will redirect you to Worlds iVue." },
     ];

@@ -1,16 +1,16 @@
 # **Mohit Jain**{ .resume-markdown-title }
 
 ::div{ .resume-markdown-mainLinks }
-Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@gmail.com) • [www.mohit-jain.com](https://www.mohit-jain.com/) • [LinkedIn](https://www.linkedin.com/in/mohitjain49/) • [GitHub](https://github.com/Mohitjain49)
+Atlanta, GA • (770) 687-5981 • [mohitkjain49@gmail.com](mailto:mohitkjain49@gmail.com) • [www.mohit-jain.com](/) • [LinkedIn](https://www.linkedin.com/in/mohitjain49/) • [GitHub](https://github.com/Mohitjain49)
 ::
 
 # **SUMMARY**{ .resume-markdown-section-title }
 
 ::div{ .resume-markdown-mainSummary }
-I’m a software developer experienced in web and mobile application development. I work across the stack, combining frontend design, backend systems, and third-party cloud services to build solutions that are intuitive, reliable and help solve everyday problems. I also lead teams and mentor young, emerging developers, fostering growth and collaboration. For more information about me, check out my Personal Website at [www.mohit-jain.com](https://www.mohit-jain.com/).
+I’m a software developer experienced in web and mobile application development. I work across the stack, combining frontend design, backend systems, and third-party cloud services to build solutions that are intuitive, reliable and help solve everyday problems. I also lead teams and mentor young, emerging developers, fostering growth and collaboration. For more information about me, check out my Personal Website at [www.mohit-jain.com](/).
 ::
 
-# **[EXPERIENCE](https://www.mohit-jain.com/experience/)**{ .resume-markdown-section-title }
+# **[EXPERIENCE](/experience/)**{ .resume-markdown-section-title }
 
 **[iVue](https://www.ivueworld.com/)**{ .resume-markdown-section-subtitle }  
 ::div{ .resume-markdown-subHeader }
@@ -32,7 +32,7 @@ Computer Science Intern
 * Created a program that allows my team to automatically convert their Microsoft Word Documentation into more intuitive HTML files and send these files to their stakeholders with ease.  
 * Used [Azure Devops](https://azure.microsoft.com/en-us/products/devops) while to create pipelines for automation, manage Git repositories, and keep track of tasks.
 
-**[KSU Immersive Visualization Environments Lab](https://www.kennesaw.edu/coles/academics/information-systems-security/labs/immersive-visualization-environments-research-cluster.php)**
+**[KSU Immersive Visualization Environments Lab](https://www.kennesaw.edu/coles/academics/information-systems-security/labs/immersive-visualization-environments-research-cluster.php)**{ .resume-markdown-section-subtitle }  
 ::div{ .resume-markdown-subHeader }
 Student Assistant
 ::
@@ -58,7 +58,7 @@ Bachelor Degree in Computer Science
 * **GPA:** 3.7  
 * **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis, Operating Systems, Linear Algebra, Artificial Intelligence
 
-# **[SKILLS](https://www.mohit-jain.com/skills/)**{ .resume-markdown-section-title }
+# **[SKILLS](/skills/)**{ .resume-markdown-section-title }
 
 * **Languages And Frameworks:** Java, JavaScript, Node.js, HTML, CSS, C, C\#, C++, Vue.js, Nuxt, React, React Native, Angular, Vite, Vitest, Tauri, TypeScript, NodeJS, Python, GoLang, SQL, R  
 * **Tools And Platforms:** Amazon Web Services, Google Cloud, Git, GitHub, GitLab, GitKraken, NPM, Yarn, MAVLink Protocol, CesiumJS, Arduino, Azure DevOps

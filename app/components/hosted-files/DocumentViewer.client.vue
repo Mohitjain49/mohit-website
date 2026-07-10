@@ -198,16 +198,31 @@ async function renderPDF() {
 
                     if(!annotationDataId) { continue; }
                     const annotationDataObject = annotations.find((item) => { return (item.id === annotationDataId); });
+                    if(!annotationDataObject || annotationDataObject.subtype !== "Link") { continue; }
 
-                    if(!annotationDataObject || !annotationDataObject.dest) { continue; }
-                    innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(annotationDataObject.dest));
-                    innerAnnotationElements.push(innerAnnotationElement);
+                    if(annotationDataObject.dest) {
+                        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(annotationDataObject.dest));
+                        innerAnnotationElements.push(innerAnnotationElement);
 
-                    // This event listener watches out for click events to direct the user to the proper location when clicked.
-                    innerAnnotationElement.addEventListener("click",
-                        (event) => { onAnnotationClick(event); },
-                        { signal: resizeAbortController.signal }
-                    );
+                        // This event listener watches out for click events to direct the user to the proper location when clicked.
+                        innerAnnotationElement.addEventListener("click",
+                            (event) => { onAnnotationClick(event); },
+                            { signal: resizeAbortController.signal }
+                        );
+                    } else if(annotationDataObject.url && annotationDataObject.url.startsWith(PERSONAL_WEBSITE_LINK)) {
+                        const annotationUrl = annotationDataObject.url;
+                        const finalUrl = annotationUrl.substring((PERSONAL_WEBSITE_LINK.length - 1), annotationUrl.length);
+
+                        innerAnnotationElement.setAttribute("href", finalUrl);
+                        innerAnnotationElement.setAttribute("target", "_self");
+                        innerAnnotationElement.setAttribute("aria-current", "page");
+
+                        // This event listener watches out for click events to direct the user to the proper webpage when clicked.
+                        innerAnnotationElement.addEventListener("click",
+                            (event) => { onInnerWebsiteAnnotationClick(event); },
+                            { signal: resizeAbortController.signal }
+                        );
+                    }
                 }
             } else {
                 // The annotation layer element for a specific page is hidden if that page does not need an annotation layer.
@@ -310,6 +325,24 @@ function setSingleDocLoaded(index = 1) {
         documentStore.scrollToPage(pageQuery);
     } else if(!Number.isNaN(hashPageNumber)) {
         documentStore.scrollToPage(hashPageNumber);
+    }
+}
+
+/**
+ * This function uses Vue Router to navigate to internal pages on a inner link click.
+ * @param {PointerEvent} event The click event emitted by the pointer event that was clicked.
+ */
+function onInnerWebsiteAnnotationClick(event) {
+    try {
+        /** @type {HTMLAnchorElement} The element that was clicked on. */
+        const element = event.target;
+        if(!element || event.defaultPrevented || (element.getAttribute('target') === '_blank')) { return; }
+        if(event.ctrlKey || event.metaKey || event.shiftKey) { return; }
+
+        event.preventDefault();
+        router.push(element.getAttribute("href"));
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
     }
 }
 

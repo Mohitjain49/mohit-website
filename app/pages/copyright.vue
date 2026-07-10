@@ -139,6 +139,7 @@ async function checkForUpdates() {
     width: fit-content;
     margin: 0px auto;
     padding: 40px;
+    padding-top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
