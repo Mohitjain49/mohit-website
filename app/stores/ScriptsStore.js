@@ -9,6 +9,9 @@ import gamepad_store_utility_code from "~/stores/GamepadStore.js?raw";
 import gamepad_component_code from "~/components/GamepadComponent.client.vue?raw";
 import gamepad_events_code from "~/gamepad-events.js?raw";
 
+export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban"];
+export const SCRIPT_ACTION_PENDING = 1;
+
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
     /** This stores basic object data for each of the scripts hosted on my website. */
@@ -33,9 +36,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const fsStateChanging = ref(false);
     const lineOptions = ref({ num: -1, oldNum: -1, style: { left: "0px", top: "0px", borderRadius: "10px 10px 10px 10px" }, timeout: null, lastCopied: "" });
 
-    const scriptDownloadStatus = ref({ pending: false, fresh: false, timeout: null });
-    const scriptSaveStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
-    const scriptCopyStatus = ref({ pending: false, fresh: false, error: false, timeout: null });
+    const scriptDownloadStatus = ref(0);
+    const scriptSaveStatus = ref(0);
+    const scriptCopyStatus = ref(0);
 
     /** This calculates what script page the visitor is currently viewing. */
     const currentScriptRoute = computed(() => {
@@ -54,17 +57,21 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
 
     const downloadIcon = computed(() => {
-        const downloadObj = scriptDownloadStatus.value;
-        return (downloadObj.fresh ? "fa-check" : (downloadObj.pending ? "fa-spinner" : "fa-file-download"));
+        const downloadInt = scriptDownloadStatus.value;
+        return ((downloadInt == 0) ? 'fa-file-download' : SCRIPT_ACTION_STATUS_ICONS[downloadInt]);
     });
     const saveScriptIcon = computed(() => {
-        const saveObj = scriptSaveStatus.value;
-        return (saveObj.error ? "fa-ban" : (saveObj.fresh ? "fa-check" : (saveObj.pending ? "fa-spinner" : "fa-floppy-disk")));
+        const saveInt = scriptSaveStatus.value;
+        return ((saveInt == 0) ? "fa-floppy-disk" : SCRIPT_ACTION_STATUS_ICONS[saveInt]);
     });
     const copyIcon = computed(() => {
-        const copyObj = scriptCopyStatus.value;
-        return (copyObj.fresh ? "fa-check" : (copyObj.pending ? "fa-spinner" : "fa-copy"));
+        const copyInt = scriptCopyStatus.value;
+        return ((copyInt == 0) ? "fa-copy" : SCRIPT_ACTION_STATUS_ICONS[copyInt]);
     });
+
+    const downloadPending = computed(() => { return (scriptDownloadStatus.value == SCRIPT_ACTION_PENDING); });
+    const savePending = computed(() => { return (scriptSaveStatus.value == SCRIPT_ACTION_PENDING); });
+    const copyPending = computed(() => { return (scriptCopyStatus.value == SCRIPT_ACTION_PENDING); });
 
     const wrapIcon = computed(() => { return (wrapCode.value ? "fa-align-left" : "fa-arrows-left-right-to-line"); });
     const wrapStatement = computed(() => { return (wrapCode.value ? "Let Code Overflow" : "Wrap Code"); });
@@ -92,76 +99,62 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function downloads a script for the visitor to use. */
     function downloadScript() {
-        if(scriptDownloadStatus.value.pending) { return; }
-        scriptDownloadStatus.value.pending = true;
-        const scriptFile = getCurrentScript();
+        if(scriptDownloadStatus.value != 0) { return; }
+        scriptDownloadStatus.value = 1;
 
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(scriptFile.blob.value);
-        link.download = (scriptFile.name + scriptFile.suffix);
-    
-        link.click();
-        link.remove();
+        try {
+            const scriptFile = getCurrentScript();
+            const link = document.createElement('a');
 
-        scriptDownloadStatus.value.pending = false;
-        scriptDownloadStatus.value.fresh = true;
-
-        if(scriptDownloadStatus.value.timeout != null) { clearTimeout(scriptDownloadStatus.value.timeout); }
-        scriptDownloadStatus.value.timeout = setTimeout(() => {
-            scriptDownloadStatus.value.fresh = false;
-            scriptDownloadStatus.value.timeout = null;
-        }, 3000);
+            link.href = URL.createObjectURL(scriptFile.blob.value);
+            link.download = (scriptFile.name + scriptFile.suffix);
+        
+            link.click();
+            link.remove();
+            scriptDownloadStatus.value = 2;
+        } catch(e) {
+            scriptDownloadStatus.value = 3;
+        } finally {
+            setTimeout(() => { scriptDownloadStatus.value = 0; }, 3000);
+        }
     }
 
     /** This function lets users copy a script. */
     async function copyScript() {
-        if(scriptCopyStatus.value.pending) { return; }
-        scriptCopyStatus.value.pending = true;
-        const scriptFile = getCurrentScript();
+        if(scriptCopyStatus.value != 0) { return; }
+        scriptCopyStatus.value = 1;
 
-        await navigator.clipboard.writeText(scriptFile.code);
-        scriptCopyStatus.value.pending = false;
-        scriptCopyStatus.value.fresh = true;
-
-        if(scriptCopyStatus.value.timeout != null) { clearTimeout(scriptCopyStatus.value.timeout); }
-        scriptCopyStatus.value.timeout = setTimeout(() => {
-            scriptCopyStatus.value.fresh = false;
-            scriptCopyStatus.value.timeout = null;
-        }, 3000);
+        try {
+            const scriptFile = getCurrentScript();
+            await navigator.clipboard.writeText(scriptFile.code);
+            scriptCopyStatus.value = 2;
+        } catch(e) {
+            scriptCopyStatus.value = 3;
+        } finally {
+            setTimeout(() => { scriptCopyStatus.value = 0; }, 3000);
+        }
     }
 
     /** This function opens a "Save File Picker" so the user can save my script at their preferred location. */
     async function saveScript() {
-        if(!saveAsSupported.value || scriptSaveStatus.value.pending) { return; }
+        if(!saveAsSupported.value || scriptSaveStatus.value != 0) { return; }
+        scriptSaveStatus.value = 1;
+
         try {
-            scriptSaveStatus.value.pending = true;
             const scriptFile = getCurrentScript();
-
             var typeObj = { description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] } }
-            if(!scriptFile.suffix.endsWith("js")) { typeObj = { description: "JS File", accept: { 'text/plain': [scriptFile.suffix] } } }
-            const saveHandle = await window.showSaveFilePicker({ suggestedName: scriptFile.name, types: [typeObj] });
+            if(!scriptFile.suffix.endsWith("js")) { typeObj = { description: "JS File", accept: { 'text/plain': [scriptFile.suffix] }}}
 
+            const saveHandle = await window.showSaveFilePicker({ suggestedName: scriptFile.name, types: [typeObj] });
             const writable = await saveHandle.createWritable();
+
             await writable.write(scriptFile.blob.value);
             await writable.close();
-
-            scriptSaveStatus.value.pending = false;
-            scriptSaveStatus.value.fresh = true;
-
-            if(scriptSaveStatus.value.timeout != null) { clearTimeout(scriptSaveStatus.value.timeout); }
-            scriptSaveStatus.value.timeout = setTimeout(() => {
-                scriptSaveStatus.value.fresh = false;
-                scriptSaveStatus.value.timeout = null;
-            }, 4000);
+            scriptSaveStatus.value = 2;
         } catch(err) {
-            scriptSaveStatus.value.pending = false;
-            scriptSaveStatus.value.error = true;
-
-            if(scriptSaveStatus.value.timeout != null) { clearTimeout(scriptSaveStatus.value.timeout); }
-            scriptSaveStatus.value.timeout = setTimeout(() => {
-                scriptSaveStatus.value.error = false;
-                scriptSaveStatus.value.timeout = null;
-            }, 4000);
+            scriptSaveStatus.value = 3;
+        } finally {
+            setTimeout(() => { scriptSaveStatus.value = 0; }, 3000);
         }
     }
 
@@ -345,7 +338,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
-        currentScriptLink, scriptDownloadStatus, scriptCopyStatus, scriptSaveStatus, downloadIcon, saveScriptIcon, copyIcon,
+        currentScriptLink, downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, placeLineOptionsOnCode

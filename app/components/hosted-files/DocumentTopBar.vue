@@ -2,16 +2,16 @@
 <div ref="document-options" :class="['mohit-document-topBar', (documentStore.onMarkdownRoute ? 'markdown' : '')]">
     <div class="mohit-document-topBar-sideSection">
         <button class="lightblue" @click="documentStore.downloadDoc()" title="Download Document" pulse-loop>
-            <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.documentDownloadStatus.pending" />
+            <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
         </button>
         <button class="blue" v-if="documentStore.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" pulse-loop>
-            <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.documentSaveStatus.pending" />
+            <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
         <button class="lightblue" @click="documentStore.printDoc()" title="Print Document" pulse-loop>
-            <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.documentPrintStatus.pending" />
+            <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
         </button>
         <button class="blue" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>
-            <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.documentShareStatus.pending" />
+            <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
         <a class="white" v-if="(documentStore.documentLink !== '')"
             :href="documentStore.documentLink" target="mohit-document"

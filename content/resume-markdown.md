@@ -41,13 +41,6 @@ Student Assistant
 * Contributed to a research paper focusing on the [Applications of Generative AI](https://www.americanscholarspress.us/journals/IMR/pdf/IMR-1-2026/IMRv22N12026-art7.pdf), specifically focusing on fields where AI can negatively impact work efficiency.  
 * Assisted lab professors with teaching their classes that involved subjects such as Data Visualization.
 
-**[Sublo](https://www.sublo.app/)**{ .resume-markdown-section-subtitle }  
-::div{ .resume-markdown-subHeader }
-Intern Mobile Application Developer
-::
-
-* Collaborated with other software developers to create a mobile application with [React Native](https://reactnative.dev/) by taking charge as the primary mobile application developer, integrating [Amazon Cognito](https://aws.amazon.com/cognito/) into their application to create its user authentication system, and utilizing mobile-specific APIs to enhance the app’s capabilities.
-
 # **EDUCATION**{ .resume-markdown-section-title }
 
 **Kennesaw State University**

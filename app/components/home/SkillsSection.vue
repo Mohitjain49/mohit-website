@@ -139,14 +139,11 @@ function setSkillsTransitions(isVisible = false) {
         position: relative;
         left: calc(50% - 200px);
     }
-    .skills-main-desc {
-        width: 100%;
-    }
-
     .skills-main-header a {
         font-size: 75px;
     }
     .skills-main-desc {
+        width: 100%;
         font-size: 20px;
         line-height: 28px;
         margin-bottom: 0px;

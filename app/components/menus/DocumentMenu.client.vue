@@ -70,33 +70,25 @@
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.downloadIcon"
-                    :spin-pulse="documentStore.documentDownloadStatus.pending"
-                />
+                <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
                 <span> Download Document </span>
             </button>
         </div>
         <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.saveDocIcon"
-                    :spin-pulse="documentStore.documentSaveStatus.pending"
-                />
+                <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
                 <span> Save Document </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.printIcon"
-                    :spin-pulse="documentStore.documentPrintStatus.pending"
-                />
+                <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
                 <span> Print Document </span>
             </button>
         </div>
         <div v-if="webData.shareSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.shareIcon"
-                    :spin-pulse="documentStore.documentShareStatus.pending"
-                />
+                <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
                 <span> Share Document </span>
             </button>
         </div>
@@ -117,7 +109,7 @@
         <template v-if="documentStore.googleDriveOptionAvailable">
             <div class="mohit-navMenu-sectionheader" :style="getColorStyles('#34A853')">
                 <span> Google Drive </span>
-                <font-awesome-icon :icon="documentStore.uploadToGoogleDriveIcon" :spin-pulse="(documentStore.uploadToGoogleDriveIcon === 'fa-spinner')" />
+                <font-awesome-icon :icon="documentStore.uploadToGoogleDriveIcon" :spin-pulse="documentStore.uploadToGoogleDrivePending" />
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE" pulse-loop>
@@ -127,7 +119,7 @@
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(true)" :title="GOOGLE_CHOOSE_FOLDER_TITLE" pulse-loop>
-                    <font-awesome-icon :icon="(documentStore.documentUploadToGoogleDriveStatus.cancel ? 'fa-ban' : 'fa-folder-tree')" />
+                    <font-awesome-icon :icon="(documentStore.documentUploadToGoogleDriveCanceled ? 'fa-ban' : 'fa-folder-tree')" />
                     <span> Save To Google Drive (Choose Folder) </span>
                 </button>
             </div>

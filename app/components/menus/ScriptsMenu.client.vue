@@ -10,25 +10,19 @@
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
             <button class="mohit-navMenu-mainOpt" @click="scriptsStore.downloadScript()" pulse-loop>
-                <font-awesome-icon :icon="scriptsStore.downloadIcon"
-                    :spin-pulse="scriptsStore.scriptDownloadStatus.pending"
-                />
+                <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
                 <span> Download Code Script </span>
             </button>
         </div>
         <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
             <button class="mohit-navMenu-mainOpt" @click="scriptsStore.saveScript()" pulse-loop>
-                <font-awesome-icon :icon="scriptsStore.saveScriptIcon"
-                    :spin-pulse="scriptsStore.scriptSaveStatus.pending"
-                />
+                <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                 <span> Save Code Script </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
             <button class="mohit-navMenu-mainOpt" @click="scriptsStore.copyScript()" pulse-loop>
-                <font-awesome-icon :icon="scriptsStore.copyIcon"
-                    :spin-pulse="scriptsStore.scriptCopyStatus.pending"
-                />
+                <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
                 <span> Copy Raw Code Script </span>
             </button>
         </div>

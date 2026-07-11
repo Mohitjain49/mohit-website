@@ -8,13 +8,13 @@
         <div ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
                 <button class="lightblue" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
-                    <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.scriptDownloadStatus.pending" />
+                    <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
                 </button>
                 <button class="blue" v-if="(scriptsStore.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
-                        <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.scriptSaveStatus.pending" />
+                        <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                 </button>
                 <button class="lightblue" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>
-                    <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.scriptCopyStatus.pending" />
+                    <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
                 </button>
                 <a class="white" v-if="(scriptsStore.currentScriptLink != '')" :href="scriptsStore.currentScriptLink" title="See Code On Github" pulse-loop>
                     <font-awesome-icon icon="fa-brands fa-github" />
