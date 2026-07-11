@@ -75,6 +75,10 @@ const router = useRouter();
 const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
+const reactiveMeta = useReactiveMeta("Mohit Jain | Copyright Notice", "copyright",
+    "A legal disclaimer for any vistors on my website.", "rgb(248, 206, 171)"
+);
+
 const updateButtonClicked = ref(false);
 const showLicense = computed(() => { return (router.currentRoute.value.query.showLicense === "true"); });
 
@@ -87,18 +91,27 @@ const RELEASE_DATE = useState("release-date", () => { return ("Released On: " + 
 const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuild.releaseTime + ")"); });
 const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
+useHead(reactiveMeta.metaObjectRef);
 usePulseLoopAnimation(copyrightBodyRef);
+
+// Updates the Website Date Information when the website is mounted.
 onMountedAdvanced(() => {
     initWebData();
+    setPageTitle(licenseLink.value);
+
     COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);
     RELEASE_TIME.value = ("(" + $websiteBuild.releaseTime + ")");
     PROJECT_VERSION.value = ("Version " + $websiteBuild.version);
 });
-useHead(getMeta("Mohit Jain | Copyright Notice", "copyright",
-    "A legal disclaimer for any vistors on my website.",
-    "rgb(248, 206, 171)"
-));
+
+// This changes the document title when the user changes between the main statement and the license.
+watch(showLicense, (newValue) => { setPageTitle(newValue); });
+
+/** This sets the page title based on when the user changes between the License and Main Statement. */
+function setPageTitle(newValue = false) {
+    reactiveMeta.changeTitle(newValue ? "Mohit Jain | Website Code License" : "Mohit Jain | Copyright Statement");
+}
 
 /**  This function checks for updates, deletes the cache, and unregisters service workers. */
 async function checkForUpdates() {
@@ -126,7 +139,7 @@ async function checkForUpdates() {
 
 .copyright-body-exterior {
     height: fit-content;
-    min-height: calc(var(--true-100vh, 100vh) - 90px);
+    min-height: calc(var(--true-100vh, 100vh) - 115px);
     padding: 30px 20px;
     width: calc(100% - 40px);
     display: flex;
@@ -146,8 +159,10 @@ async function checkForUpdates() {
     flex-direction: column;
     background-color: black;
     color: var(--website-light-text);
-    border: 1px solid var(--website-light-text);
+    border: 1px solid white;
     border-radius: 12px;
+    box-shadow: 0px 0px 20px 5px black;
+    overflow: hidden;
 }
 
 .copyright-body-header {
@@ -206,7 +221,8 @@ async function checkForUpdates() {
     left: 0px;
     width: 100%;
     height: 35px;
-    border-bottom: 2px dotted var(--website-light-text);
+    border-bottom: 1px solid white;
+    background-color: rgba(255, 255, 255, 0.25);
     z-index: 10;
     display: flex;
     align-items: center;
@@ -220,11 +236,11 @@ async function checkForUpdates() {
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    gap: 7px;
+    gap: 5px;
 }
 
-.copyright-topBar-side.right { margin-right: 12px; }
-.copyright-topBar-side.left { margin-left: 12px; }
+.copyright-topBar-side.right { margin-right: 5px; }
+.copyright-topBar-side.left { margin-left: 5px; }
 
 .copyright-topBar-btn {
     background-color: var(--dark-background);
@@ -242,7 +258,6 @@ async function checkForUpdates() {
     transition: var(--default-transition), scale 0.2s;
 }
 .copyright-topBar-btn:hover {
-    box-shadow: 0px 0px 10px 1px var(--website-light-text);
     scale: 1.05;
 }
 

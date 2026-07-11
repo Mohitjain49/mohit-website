@@ -100,6 +100,31 @@ export function getHomeMeta(pageTitle = WEBSITE_TITLE) {
 }
 
 /**
+ * This function returns a utility that can be used to make a reactive version of the "getMeta" object.
+ * @param {String} initialPageTitle The document page title.
+ * @param {String} pageRoute The link to the route.
+ * @param {String} pageDesc The document meta description.
+ * @param {String} initialBgColor This is the default background color for the webpage.
+ * @param { "default" | "resume-extra" | "gamepad-extra" } type The type of webpage. Used if a page needs custom head tags compared to the default ones.
+ */
+export function useReactiveMeta(initialPageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WEBSITE_DESC, bgColor = "#000000", type = "default") {
+    const pageTitleRef = shallowRef(initialPageTitle);
+    const metaObjectRef = computed(() => { return getMeta(pageTitleRef.value, pageRoute, pageDesc, bgColor, type); });
+
+    /**
+     * This function lets the webpage change its title at will.
+     * @param {String} title The new title. MUST be a string.
+     */
+    function changeTitle(title = "") {
+        if(typeof title !== "string") { return; }
+        pageTitleRef.value = title;
+    }
+
+    // Returns the Meta object and functions to change it.
+    return { metaObjectRef, changeTitle }
+}
+
+/**
  * This function returns the meta tags for the website for Search Engine Optimization.
  * This function is diferrent as the link is not predefined.
  * @param {String} pageTitle The document page title.
