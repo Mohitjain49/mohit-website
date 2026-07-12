@@ -187,7 +187,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                 for(let i = 0; i < docImageUrls.value.length; i++) {
                     const tempImgResponse = await fetch(docImageUrls.value[i]);
                     const tempImgArrayBuffer = await tempImgResponse.arrayBuffer();
-                    imgZipParam[("Page_" + String(i) + ".png")] = new Uint8Array(tempImgArrayBuffer);
+                    imgZipParam[("Page_" + String(i + 1) + ".png")] = new Uint8Array(tempImgArrayBuffer);
                 }
 
                 const imageZip = zipSync(imgZipParam);
@@ -484,7 +484,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function returns rendered PDF Pages as an array of images (PNGs) for anyting to use. */
     async function getPdfAsImages() {
-        if(!import.meta.dev || !docLoaded.value.status) { return; }
+        if(!import.meta.client || !docLoaded.value.status) { return; }
 
         /** @type {Array<String>} The array of images to use. */
         const imgArray = [];
