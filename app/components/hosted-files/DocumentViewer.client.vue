@@ -52,7 +52,9 @@ const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
 const CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE = "mohit-pdfjs-raw-width";
 const CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE = "mohit-pdfjs-raw-height";
 
+var renderAbortController = new AbortController();
 var resizeAbortController = new AbortController();
+
 var renderTasks = { canvas: null, text: null, annontation: null }
 var pdfDocLoadingTask = null;
 const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
@@ -91,10 +93,12 @@ onMountedAdvanced(async() => {
     window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal: resizeAbortController.signal });
 });
 onBeforeUnmount(() => {
+    renderAbortController.abort();
+    resizeAbortController.abort();
+
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     cancelRenders();
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
-    resizeAbortController.abort();
 });
 
 /**
@@ -109,6 +113,7 @@ function getPageElement(index = 1) {
 async function renderPDF() {
     scrollToTop(true, 0);
     cancelRenders();
+    if(renderAborted()) { return; }
 
     if(!documentStore.workerSrcAdded) {
         GlobalWorkerOptions.workerSrc = workerSrcUrl;
@@ -118,6 +123,7 @@ async function renderPDF() {
     pdfDocLoadingTask = getDocument({ url: props.url });
     pdfDoc.value = await pdfDocLoadingTask.promise;
     const numPages = pdfDoc.value.numPages;
+    if(renderAborted()) { return; }
 
     pages.value = numPages;
     setInnerPagesArray(numPages);
@@ -125,6 +131,7 @@ async function renderPDF() {
 
     /** @type {Array<HTMLAnchorElement>} These elements are inner Annotation elements that scroll to other parts of the PDF. */
     const innerAnnotationElements = [];
+    if(renderAborted()) { return; }
 
     /** This is a link service used by the annotation layers. */
     const defaultLinkService = new PDFLinkService({ eventBus: new EventBus(), externalLinkTarget: 2 });
@@ -132,6 +139,7 @@ async function renderPDF() {
     defaultLinkService.goToDestination = (dest) => { return; }
 
     for(let i = 1; i <= numPages; i++) {
+        if(renderAborted()) { return; }
         const page = await pdfDoc.value.getPage(i);
         const defaultViewport = page.getViewport({ scale: 1 });
 
@@ -157,6 +165,7 @@ async function renderPDF() {
             viewport: viewport
         });
 
+        if(renderAborted()) { return; }
         try { await renderTasks.canvas.promise; } catch(e) {}
         renderTasks.canvas = null;
 
@@ -171,14 +180,17 @@ async function renderPDF() {
                 viewport: viewport
             });
             
+            if(renderAborted()) { return; }
             try { await renderTasks.text.render(); } catch(e) {}
             renderTasks.text = null;
-            textLayerDiv.style.setProperty("--min-font-size", 1);
 
+            textLayerDiv.style.setProperty("--min-font-size", 1);
             const annotationLayerDiv = document.getElementById('pdf_annotation_layer_' + i);
             annotationLayerDiv.innerHTML = '';
 
+            if(renderAborted()) { return; }
             const annotations = await page.getAnnotations({ intent: 'display' });
+
             if(annotations && annotations.length > 0) {
                 const annotationLayer = new AnnotationLayer({
                     div: annotationLayerDiv,
@@ -186,12 +198,14 @@ async function renderPDF() {
                     page: page,
                     linkService: defaultLinkService
                 });
+                if(renderAborted()) { return; }
 
                 // Renders the annotation layer.
                 await annotationLayer.render({ annotations });
                 annotationLayerDiv.style.setProperty("--min-font-size", 1);
-                
                 const annotationElements = annotationLayerDiv.children;
+
+                if(renderAborted()) { return; }
                 for(let j = 0; j < annotationElements.length; j++) {
                     const innerAnnotationElement = annotationElements.item(j).firstElementChild;
                     const annotationDataId = innerAnnotationElement.getAttribute("data-element-id");
@@ -248,6 +262,20 @@ async function renderPDF() {
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     setSingleDocLoaded(numPages - 1);
+    if(renderAborted()) { return; }
+
+    try {
+        await documentStore.getPdfAsImages();
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/** This function checks if the render abort signal has been sent or not. */
+function renderAborted() {
+    const aborted = renderAbortController.signal.aborted;
+    if(aborted) { cancelRenders(); }
+    return aborted;
 }
 
 /** This function cancels all PDF Rendering when called. */
