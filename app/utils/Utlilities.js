@@ -224,8 +224,10 @@ export function useWebsiteMenuUtility(menu) {
     function onMenuPointerEvent(event = new PointerEvent()) {
         if(typeof event.clientY !== "number") { return; }
         if(event.type === "pointerdown" && !menuTouched.value) {
-            startY = event.clientY;
             webData.bypassBodyClick();
+            if(menuScrollable.value) { return; } // Feature is DISABLED if the menu is vertically scrollable.
+
+            startY = event.clientY;
             menuTouched.value = true;
         } else if(event.type === "pointerup" && menuTouched.value) {
             if((startY - event.clientY) > (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)) { closeMenu(); }
@@ -239,11 +241,12 @@ export function useWebsiteMenuUtility(menu) {
      */
     function onMenuTouchEvent(event = new TouchEvent()) {
         if(event.type === "touchstart" && !menuTouched.value) {
+            webData.bypassBodyClick();
+            if(menuScrollable.value) { return; } // Feature is DISABLED if the menu is vertically scrollable.
+
             const firstTouch = event.touches.item(0);
             if(typeof firstTouch?.clientY !== 'number') { return; }
             startY = firstTouch.clientY;
-
-            webData.bypassBodyClick();
             menuTouched.value = true;
         } else if(event.type === "touchend" && menuTouched.value) {
             const firstTouch = event.changedTouches.item(0);

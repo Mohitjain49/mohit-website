@@ -32,9 +32,10 @@
     <WebCover v-if="showFsWebCover" :zIndex="500" />
     <WebFooter v-if="!fullScreenSet" />
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
-
     <FileWidgets />
+
     <DocumentMenu />
+    <PdfPageNavigationMenu v-if="documentStore.showPdfPageNav" />
     <DocMetadataMenu :objectUrl="url" />
     <slot></slot>
 </main>

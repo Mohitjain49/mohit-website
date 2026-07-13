@@ -98,6 +98,9 @@
                 <span> Download Document (PNG) </span>
             </button>
         </div>
+        <div class="mohit-navMenu-opt-break"></div>
+
+
         <div v-if="(documentStore.documentLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
             <a :href="documentStore.documentLink" target="mohit-document" class="mohit-navMenu-mainOpt" pulse-loop>
                 <font-awesome-icon icon="fa-up-right-from-square" />
@@ -108,6 +111,12 @@
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.2)" pulse-loop>
                 <font-awesome-icon icon="fa-database" />
                 <span> See Document Properties </span>
+            </button>
+        </div>
+        <div v-if="documentStore.showPdfPageNav" :style="getColorStyles('var(--lightning-yellow)')" class="mohit-navMenu-opt">
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.3)" pulse-loop>
+                <font-awesome-icon icon="fa-file" />
+                <span> Open PDF Navigation </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt-break"></div>

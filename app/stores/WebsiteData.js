@@ -38,6 +38,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
     const resumeMenuOpen = computed(() => { return (menuOpen.value == 3.1); });
     const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == 3.2); });
+    const pdfNavMenuOpen = computed(() => { return (menuOpen.value == 3.3); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
@@ -189,7 +190,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const WEBSITE_MENU_IDS = [
             "mohit-navBar", "mohit-navMenu", "mohit-compassMenu",
             "mohit-scriptsMenu", "mohit-docMenu", "mohit-resumeMenu",
-            "mohit-metadata-docMenu"
+            "mohit-metadata-docMenu", "mohit-docMenu-pdfNav"
         ];
 
         for(let i = 0; i < WEBSITE_MENU_IDS.length; i++) {
@@ -349,7 +350,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
-        openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
+        pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
