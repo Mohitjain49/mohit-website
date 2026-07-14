@@ -260,10 +260,10 @@
 .mohit-navMenu.pdf-nav { width: 300px; }
 
 .mohit-navMenu.vertical-overflow-atTop {
-    border-top-right-radius: 0px;
+    border-top-right-radius: 1px;
 }
 .mohit-navMenu.vertical-overflow-atBottom {
-    border-bottom-right-radius: 0px;
+    border-bottom-right-radius: 1px;
 }
 :fullscreen .mohit-navMenu {
     left: 0px;
@@ -710,15 +710,15 @@
 
 .mohit-navMenu::-webkit-scrollbar {
     width: 10px;
-    height: 10px;
     border: none;
-    border-radius: 30px;
     background: transparent;
 }
 .mohit-navMenu::-webkit-scrollbar-thumb {
     background-color: var(--website-text);
-    border-radius: 30px;
+    border-radius: 5px;
     transition: background-color 0.2s;
+    border: 1px solid transparent;
+    background-clip: padding-box;
 }
 .mohit-navMenu::-webkit-scrollbar-thumb:hover {
     background-color: var(--website-light-text);

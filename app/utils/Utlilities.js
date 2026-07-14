@@ -145,6 +145,7 @@ export function useWebsiteMenuUtility(menu) {
     const SCROLL_CLASS_TOP = "vertical-overflow-atTop";
     const SCROLL_CLASS_BOTTOM = "vertical-overflow-atBottom";
     const SWIPE_THRESHOLD = 50;
+    const SCROLLBAR_EGDE_CUTOFF = 16;
 
     const { cssToWindowHeightRatio } = useMohitWindowSize();
     const webData = useWebsiteDataStore();
@@ -169,16 +170,20 @@ export function useWebsiteMenuUtility(menu) {
     /** This function checks whether the menu is scrollable or not and sets the overflow class accordingly. */
     function checkMenu() {
         const element = menu.value;
-        const noElementPresent = (element == null);
+        if(element == null) {
+            menuScrollable.value = false;
+            menuScrolledToTop.value = false;
+            menuScrolledToBottom.value = false;
+            return;
+        }
 
         const totalHeight = element.scrollHeight;
         const visibleHeight = element.clientHeight;
         const currentScrollTop = element.scrollTop;
 
-        menuScrollable.value = (noElementPresent ? false : (totalHeight > visibleHeight));
-        menuScrolledToTop.value = (currentScrollTop < 10);
-        menuScrolledToBottom.value = (Math.abs(totalHeight - visibleHeight - currentScrollTop) < 10);
-        if(noElementPresent) { return; }
+        menuScrollable.value = (totalHeight > visibleHeight);
+        menuScrolledToTop.value = (currentScrollTop < SCROLLBAR_EGDE_CUTOFF);
+        menuScrolledToBottom.value = (Math.abs(totalHeight - visibleHeight - currentScrollTop) < SCROLLBAR_EGDE_CUTOFF);
 
         if(!menuScrollable.value) {
             element.classList.remove(SCROLL_CLASS_TOP, SCROLL_CLASS_BOTTOM);
