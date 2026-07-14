@@ -280,7 +280,11 @@ export function useWebsiteMenuUtility(menu) {
      */
     function cancelMenuCloseOnSwipe(element = null, isTouchEvent = false) {
         if(!element) { return true; }
-        return (!element.classList.contains("mohit-navMenu-top") || (menuScrollable.value && isTouchEvent));
+        const scrollable = menuScrollable.value;
+
+        if(!element.classList.contains("mohit-navMenu-top") && scrollable) { return true; }
+        if(scrollable && isTouchEvent) { return true; }
+        return false;
     }
 
     useRafFn(() => { checkMenu(); }, { immediate: true, fpsLimit: 30, once: false });
