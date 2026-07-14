@@ -259,9 +259,10 @@
 .mohit-navMenu.flame { border-color: var(--vibrant-flame); }
 .mohit-navMenu.pdf-nav { width: 300px; }
 
-.mohit-navMenu.vertical-overflow {
-    border-radius: 15px;
+.mohit-navMenu.vertical-overflow-atTop {
     border-top-right-radius: 0px;
+}
+.mohit-navMenu.vertical-overflow-atBottom {
     border-bottom-right-radius: 0px;
 }
 :fullscreen .mohit-navMenu {
