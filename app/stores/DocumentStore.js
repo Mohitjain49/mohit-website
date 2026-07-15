@@ -5,6 +5,7 @@ import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { ofetch } from 'ofetch';
 import { zipSync } from 'fflate';
+import prettyBytes from "pretty-bytes";
 
 const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
@@ -58,6 +59,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** @type {import('vue').ShallowRef<Array<String>>} An array of the object URLs for the images representing the rendered PDF. */
     const docImageUrls = shallowRef([]);
+    const docImagesSize = ref("");
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
 
     const workerSrcAdded = ref(false);
@@ -99,6 +101,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
     const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
     const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1)); });
+    const imageDownloadTitle = computed(() => { return ("Download Document As PNG Image (" + docImagesSize.value + ")"); });
 
     const downloadIcon = computed(() => {
         const downloadInt = documentDownloadStatus.value;
@@ -490,6 +493,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         /** @type {Array<String>} The array of images to use. */
         const imgArray = [];
         const numPages = docLoaded.value.totalPages;
+        var imgBlobSize = 0;
 
         for(let i = 1; i <= numPages; i++) {
             /** @type {Blob} The image blob gotten from paring the canvas. */
@@ -505,11 +509,13 @@ export const useDocumentStore = defineStore("document-store", () => {
                 throw new Error("Image Fetch Failed For Page " + i + ".");
             } else {
                 imgArray.push(URL.createObjectURL(imgBlob));
+                imgBlobSize += imgBlob.size;
             }
         }
 
         // Holds the images in a reference array.
         docImageUrls.value = imgArray;
+        docImagesSize.value = prettyBytes(imgBlobSize, { binary: true });
     }
 
     /** This function initializes a token client for OAuth 2 necessary for the "Save To Google Drive" Feature. */
@@ -605,7 +611,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { hostedDocuments, docImageUrls, docLoaded, googleDriveOptionAvailable, saveAsSupported, currentDocumentBlobCreated, workerSrcAdded,
         downloadIcon, saveDocIcon, printIcon, shareIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
-        downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending,
+        downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending, imageDownloadTitle,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
         onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute, showPdfPageNav,
         downloadDoc, saveDoc, printDoc, shareDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,

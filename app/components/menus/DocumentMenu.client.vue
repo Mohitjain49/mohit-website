@@ -93,7 +93,7 @@
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
-            <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDocAsImage()" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
                 <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending" />
                 <span> Download Document (PNG) </span>
             </button>
@@ -115,7 +115,7 @@
         </div>
         <div v-if="documentStore.showPdfPageNav" :style="getColorStyles('var(--lightning-yellow)')" class="mohit-navMenu-opt">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.3)" pulse-loop>
-                <font-awesome-icon icon="fa-file" />
+                <font-awesome-icon icon="fa-compass" />
                 <span> Open PDF Navigation </span>
             </button>
         </div>

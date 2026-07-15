@@ -13,7 +13,7 @@
         <button class="lightblue" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
-        <button class="blue" @click="documentStore.downloadDocAsImage()" title="Download Document (PNG)" pulse-loop>
+        <button class="blue" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
             <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending" />
         </button>
     </div>

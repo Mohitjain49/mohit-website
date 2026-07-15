@@ -39,7 +39,7 @@
         "@nuxt/fonts": "^0.14.0",
         "@nuxtjs/robots": "^6.1.2",
         "@nuxtjs/sitemap": "^8.2.2",
-        "@pinia/nuxt": "^0.11.3",
+        "@pinia/nuxt": "^1.0.0",
         "@tsparticles/slim": "4.3.2",
         "@tsparticles/vue3": "4.3.2",
         "@vite-pwa/nuxt": "^1.1.1",
@@ -55,13 +55,13 @@
         "nuxt-vitalizer": "^2.0.0",
         "ofetch": "^1.5.1",
         "pdfjs-dist": "^6.1.200",
-        "pinia": "^3.0.4",
+        "pinia": "^4.0.2",
         "pretty-bytes": "^7.1.0",
         "qr-code-styling": "^1.9.2",
         "validator": "^13.15.35",
         "vue": "^3.5.39",
         "vue-qrcode-reader": "^5.7.3",
-        "vue-router": "^5.1.0"
+        "vue-router": "^5.2.0"
     },
     "devDependencies": {
         "@aws-sdk/client-cloudfront": "^3.1087.0",
