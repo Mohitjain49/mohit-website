@@ -17,6 +17,9 @@
             <a v-if="showOpenNewTabButton" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn white" :title="openNewTabButtonTitle">
                 <FontAwesomeIcon :icon="openNewTabButtonIcon" />
             </a>
+            <RouterLink v-if="showInternalNavLink" :to="internalShareLinkFullPath" class="qrcode-mainPopup-btn white">
+                <FontAwesomeIcon icon="fa-diamond-turn-right" />
+            </RouterLink>
 
             <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
                 <FontAwesomeIcon :icon="copyLinkIcon" :spin-pulse="(actions.copy == 1)" />
@@ -137,7 +140,13 @@ const qrCodeFormattedLink = computed(() => {
     return mainLink;
 });
 
-const showOpenNewTabButton = computed(() => { return (sharePopupMode.value == 2 && !qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK)); });
+const shareLinkInternal = computed(() => { return qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK); });
+const internalShareLinkFullPath = computed(() => { return (shareLinkInternal.value ? ("/" + qrCodeLink.value.replace(PERSONAL_WEBSITE_LINK, "")) : ""); });
+const showOpenNewTabButton = computed(() => { return (sharePopupMode.value == 2 && !shareLinkInternal.value); });
+
+const showInternalNavLink = computed(() => {
+    return (shareLinkInternal.value ? ((PERSONAL_WEBSITE_LINK + internalShareLinkFullPath.value.substring(1)) !== getParsedUrl().href) : false);
+});
 const openNewTabButtonIcon = computed(() => {
     const mainLink = qrCodeLink.value;
     return (mainLink.startsWith("mailto:") ? 'fa-square-envelope' : (mainLink.startsWith("tel:") ? 'fa-square-phone' : 'fa-up-right-from-square'));
@@ -217,10 +226,7 @@ function setQRCodeLink() {
     const route = router.currentRoute.value;
 
     if(data === "main") {
-        const linkUrl = new URL(route.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
-        linkUrl.searchParams.delete('qrdata');
-        // console.log(linkUrl);
-
+        const linkUrl = getParsedUrl();
         qrCodeLink.value = (PERSONAL_WEBSITE_LINK + linkUrl.pathname.substring(1) + linkUrl.search + linkUrl.hash);
         sharePopupMode.value = ((linkUrl.hash !== "" || linkUrl.searchParams.size > 0) ? 0 : 1);
     } else if(data === "filter") {
@@ -440,6 +446,13 @@ function manageLenisScrolling() {
 
 /** This function returns a formatted phone number for the share popup to display. */
 function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substring(4), "US").formatNational(); }
+
+/** This function returns the current full URL as a string with the QR Data search parameter removed. */
+function getParsedUrl() {
+    const tempUrl = new URL(PERSONAL_WEBSITE_LINK + router.currentRoute.value.fullPath.substring(1));
+    tempUrl.searchParams.delete("qrdata");
+    return tempUrl;
+}
 </script>
 
 <style lang="scss">

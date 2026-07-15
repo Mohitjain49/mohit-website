@@ -142,16 +142,19 @@ export function useScrollPercentage(elementId = "") {
  * @param {import('vue').ShallowRef<HTMLElement>} menu This is the main container to which the utility will apply to.
  */
 export function useWebsiteMenuUtility(menu) {
-    const OVERFLOW_CLASS = "vertical-overflow";
+    const SCROLL_CLASS_TOP = "vertical-overflow-atTop";
+    const SCROLL_CLASS_BOTTOM = "vertical-overflow-atBottom";
     const SWIPE_THRESHOLD = 50;
+    const SCROLLBAR_EGDE_CUTOFF = 16;
 
     const { cssToWindowHeightRatio } = useMohitWindowSize();
     const webData = useWebsiteDataStore();
 
     const menuScrollable = shallowRef(false);
-    const swipeEnabled = shallowRef(false);
+    const menuScrolledToTop = shallowRef(false)
+    const menuScrolledToBottom = shallowRef(false);
 
-    const overflowClassAdded = shallowRef(false);
+    const swipeEnabled = shallowRef(false);
     const menuTouched = shallowRef(false);
 
     /** @type {AbortController} This abort controller can disable the swipe event listeners for a website menu. */
@@ -167,17 +170,36 @@ export function useWebsiteMenuUtility(menu) {
     /** This function checks whether the menu is scrollable or not and sets the overflow class accordingly. */
     function checkMenu() {
         const element = menu.value;
-        const noElementPresent = (element == null);
+        if(element == null) {
+            menuScrollable.value = false;
+            menuScrolledToTop.value = false;
+            menuScrolledToBottom.value = false;
+            return;
+        }
 
-        menuScrollable.value = (noElementPresent ? false : (element.scrollHeight > element.clientHeight));
-        if(noElementPresent) { return; }
+        const totalHeight = element.scrollHeight;
+        const visibleHeight = element.clientHeight;
+        const currentScrollTop = element.scrollTop;
 
-        if(menuScrollable.value) {
-            element.classList.add(OVERFLOW_CLASS);
-            overflowClassAdded.value = true;
+        menuScrollable.value = (totalHeight > visibleHeight);
+        menuScrolledToTop.value = (currentScrollTop < SCROLLBAR_EGDE_CUTOFF);
+        menuScrolledToBottom.value = (Math.abs(totalHeight - visibleHeight - currentScrollTop) < SCROLLBAR_EGDE_CUTOFF);
+
+        if(!menuScrollable.value) {
+            element.classList.remove(SCROLL_CLASS_TOP, SCROLL_CLASS_BOTTOM);
+            return; // Ends the function as classes should only be added if menu is scrollable.
+        }
+
+        if(menuScrolledToTop.value) {
+            element.classList.add(SCROLL_CLASS_TOP);
         } else {
-            element.classList.remove(OVERFLOW_CLASS);
-            overflowClassAdded.value = false;
+            element.classList.remove(SCROLL_CLASS_TOP);
+        }
+
+        if(menuScrolledToBottom.value) {
+            element.classList.add(SCROLL_CLASS_BOTTOM);
+        } else {
+            element.classList.remove(SCROLL_CLASS_BOTTOM);
         }
     }
 
@@ -222,10 +244,12 @@ export function useWebsiteMenuUtility(menu) {
      * @param {PointerEvent} event The Pointer Event. 
      */
     function onMenuPointerEvent(event = new PointerEvent()) {
-        if(typeof event.clientY !== "number") { return; }
+        if(event.pointerType !== "mouse" || typeof event.clientY !== "number") { return; }
         if(event.type === "pointerdown" && !menuTouched.value) {
-            startY = event.clientY;
             webData.bypassBodyClick();
+            if(cancelMenuCloseOnSwipe(event.target, false)) { return; }
+
+            startY = event.clientY;
             menuTouched.value = true;
         } else if(event.type === "pointerup" && menuTouched.value) {
             if((startY - event.clientY) > (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)) { closeMenu(); }
@@ -239,11 +263,12 @@ export function useWebsiteMenuUtility(menu) {
      */
     function onMenuTouchEvent(event = new TouchEvent()) {
         if(event.type === "touchstart" && !menuTouched.value) {
+            webData.bypassBodyClick();
+            if(cancelMenuCloseOnSwipe(event.target, true)) { return; }
+
             const firstTouch = event.touches.item(0);
             if(typeof firstTouch?.clientY !== 'number') { return; }
             startY = firstTouch.clientY;
-
-            webData.bypassBodyClick();
             menuTouched.value = true;
         } else if(event.type === "touchend" && menuTouched.value) {
             const firstTouch = event.changedTouches.item(0);
@@ -253,12 +278,26 @@ export function useWebsiteMenuUtility(menu) {
         }
     }
 
+    /**
+     * This function cancels a close on swipe if it returns true.
+     * @param {HTMLDivElement} element The element the user swiped on.
+     * @param {Boolean} isTouchEvent If true, the event is a touch event. 
+     */
+    function cancelMenuCloseOnSwipe(element = null, isTouchEvent = false) {
+        if(!element) { return true; }
+        const scrollable = menuScrollable.value;
+
+        if(!element.classList.contains("mohit-navMenu-top") && scrollable) { return true; }
+        if(scrollable && isTouchEvent) { return true; }
+        return false;
+    }
+
     useRafFn(() => { checkMenu(); }, { immediate: true, fpsLimit: 30, once: false });
     onMountedAdvanced(() => { enableSwipe(); });
     onBeforeUnmount(() => { disableSwipe(); });
     watch(menu, () => { resetSwipe(); });
 
-    return { menuScrollable, swipeEnabled, overflowClassAdded, menuTouched,
+    return { menuScrollable, menuScrolledToTop, menuScrolledToBottom, swipeEnabled, menuTouched,
         checkMenu, enableSwipe, disableSwipe, resetSwipe
     }
 }

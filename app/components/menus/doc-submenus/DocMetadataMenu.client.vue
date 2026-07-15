@@ -7,7 +7,7 @@
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu" ref="docMetadataMenu">
         <MenuTop :show-doc-options-btn="true" />
-        
+
         <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
             @click="setFocusedMetadata(true, field.header, field.content.value)"
             :title="('Show ' + field.header + ' Options')">

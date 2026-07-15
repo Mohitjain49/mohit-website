@@ -251,18 +251,19 @@
     overscroll-behavior: contain;
     user-select: none;
 }
-.mohit-navMenu.flame {
-    border-color: var(--vibrant-flame);
-}
 .mohit-navMenu.doc-metadata {
     border-color: var(--c-color);
     background-color: var(--dark-background);
 }
 
-.mohit-navMenu.vertical-overflow {
-    border-radius: 15px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+.mohit-navMenu.flame { border-color: var(--vibrant-flame); }
+.mohit-navMenu.pdf-nav { width: 300px; }
+
+.mohit-navMenu.vertical-overflow-atTop {
+    border-top-right-radius: 1px;
+}
+.mohit-navMenu.vertical-overflow-atBottom {
+    border-bottom-right-radius: 1px;
 }
 :fullscreen .mohit-navMenu {
     left: 0px;
@@ -613,6 +614,38 @@
     height: 10px;
 }
 
+.mohit-pdfNav-tab {
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0px auto;
+    margin-top: 10px;
+    padding: 10px;
+    padding-bottom: 0px;
+    border: var(--empty-border);
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    transition: var(--default-transition);
+}
+.mohit-pdfNav-tab:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px solid white;
+}
+
+.mohit-pdfNav-tab p {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: white;
+    margin: 3px 0px;
+}
+
 /**
  * Below contain specific styles like transitions and dynamic dimension rules.
  */
@@ -677,15 +710,15 @@
 
 .mohit-navMenu::-webkit-scrollbar {
     width: 10px;
-    height: 10px;
     border: none;
-    border-radius: 30px;
     background: transparent;
 }
 .mohit-navMenu::-webkit-scrollbar-thumb {
     background-color: var(--website-text);
-    border-radius: 30px;
+    border-radius: 5px;
     transition: background-color 0.2s;
+    border: 1px solid transparent;
+    background-clip: padding-box;
 }
 .mohit-navMenu::-webkit-scrollbar-thumb:hover {
     background-color: var(--website-light-text);

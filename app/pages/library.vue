@@ -16,10 +16,8 @@ const PAGE_DESC = ("I host a few documents and scripts on my website to showcase
     "Whether you are here to take a quick look or want to keep a copy for yourself, feel free to grab whatever helps you out!"
 );
 
-const pageTitle = ref(DEFAULT_TITLE);
 const router = useRouter();
-
-const headTags = computed(() => { return getMeta(pageTitle.value, "library", PAGE_DESC); });
+const reactiveMeta = useReactiveMeta(DEFAULT_TITLE, "library", PAGE_DESC);
 const routerHash = computed(() => { return router.currentRoute.value.hash; });
 
 const filesPageRef = useTemplateRef('mohit-files-page');
@@ -27,19 +25,19 @@ usePulseLoopAnimation(filesPageRef);
 
 onMountedAdvanced(() => { initWebData(); changePageTitle(); });
 watch(routerHash, () => { changePageTitle(); })
-useHead(headTags);
+useHead(reactiveMeta.metaObjectRef);
 
 /** This function changes the document title of the library page based of the URL Hash. */
 function changePageTitle() {
     const hash = routerHash.value;
     if(hash === "#documents") {
-        pageTitle.value = "Mohit Jain | My Documents";
+        reactiveMeta.changeTitle("Mohit Jain | My Documents");
     } else if(hash === "#scripts") {
-        pageTitle.value = "Mohit Jain | My Code";
+        reactiveMeta.changeTitle("Mohit Jain | My Code");
     } else if(hash === "#c") {
-        pageTitle.value = "Mohit Jain | My Code (C)";
+        reactiveMeta.changeTitle("Mohit Jain | My Code (C)");
     } else {
-        pageTitle.value = DEFAULT_TITLE;
+        reactiveMeta.changeTitle(DEFAULT_TITLE);
     }
 }
 </script>

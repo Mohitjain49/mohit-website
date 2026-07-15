@@ -321,20 +321,18 @@ function useGamepadCursor(index = 0) {
         }
     }
 
-    /**
-     * This function checks whether the cursor is in the main navigation menu or not.
-     */
+    /** This function checks whether the cursor is in a website or not. */
     function getScrollElement() {
-        const navMenu = document.getElementById("mohit-navMenu");
-        if(!webData.navMenuOpen || navMenu == null) { return undefined; }
+        const websiteMenu = webData.getCurrentWebsiteMenuElement();
+        if(websiteMenu == null) { return undefined; }
 
-        const rect = navMenu.getBoundingClientRect();
-        const scrollable = (navMenu.scrollHeight > rect.height);
+        const rect = websiteMenu.getBoundingClientRect();
+        const scrollable = (websiteMenu.scrollHeight > rect.height);
         if(!scrollable) { return undefined; }
 
         const xVal = x.value;
         const yVal = y.value;
-        return ((xVal >= rect.left && xVal <= rect.right && yVal >= rect.top && yVal <= rect.bottom) ? navMenu : undefined);
+        return ((xVal >= rect.left && xVal <= rect.right && yVal >= rect.top && yVal <= rect.bottom) ? websiteMenu : undefined);
     }
 
     return { index, color, connected, connectedFresh, standardMapping, showCursor,

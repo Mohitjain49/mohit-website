@@ -1,3 +1,14 @@
+/** A catalog of all the website menus that can be open. */
+export const WEBSITE_MENUS = [
+    { id: "mohit-navMenu", num: 0 },
+    { id: "mohit-compassMenu", num: 1 },
+    { id: "mohit-scriptsMenu", num: 2 },
+    { id: "mohit-docMenu", num: 3 },
+    { id: "mohit-resumeMenu", num: 3.1 },
+    { id: "mohit-metadata-docMenu", num: 3.2 },
+    { id: "mohit-docMenu-pdfNav", num: 3.3 }
+]
+
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
     const nuxtReady = ref(false);
@@ -38,6 +49,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
     const resumeMenuOpen = computed(() => { return (menuOpen.value == 3.1); });
     const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == 3.2); });
+    const pdfNavMenuOpen = computed(() => { return (menuOpen.value == 3.3); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
@@ -185,16 +197,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(element == null) { return false; }
         if(element.classList.contains("webpage-cover")) { return true; }
 
-        // A list of website menu IDs where the menu should not close when normally clicked.
-        const WEBSITE_MENU_IDS = [
-            "mohit-navBar", "mohit-navMenu", "mohit-compassMenu",
-            "mohit-scriptsMenu", "mohit-docMenu", "mohit-resumeMenu",
-            "mohit-metadata-docMenu"
+        // A list of website menu elements where the menu should not close when normally clicked.
+        const WEBSITE_MENU_ELEMENTS = [
+            document.getElementById("mohit-navBar"),
+            getCurrentWebsiteMenuElement()
         ];
 
-        for(let i = 0; i < WEBSITE_MENU_IDS.length; i++) {
-            const webMenu = document.getElementById(WEBSITE_MENU_IDS[i]);
-            if(webMenu != null && (webMenu === element || webMenu.contains(element))) { return true; }
+        for(let i = 0; i < WEBSITE_MENU_ELEMENTS.length; i++) {
+            const webMenu = WEBSITE_MENU_ELEMENTS[i];
+            if(webMenu && (webMenu === element || webMenu.contains(element))) { return true; }
         }
 
         // Returns false if element was not found in any menu.
@@ -259,6 +270,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(!navFooterPresent.value) { return; }
         closeNavMenu();
         if(webFooterVisibility.value) { scrollToTop(false, 0); }
+    }
+
+    /** This function gets the HTML Element representing the current website menu open. */
+    function getCurrentWebsiteMenuElement() {
+        const websiteMenuCatalogIndex = WEBSITE_MENUS.findIndex((item) => { return (item.num === menuOpen.value); });
+        return ((websiteMenuCatalogIndex == -1) ? null : document.getElementById(WEBSITE_MENUS[websiteMenuCatalogIndex].id));
     }
 
     /** The toggles the status of the home navigation menu. */
@@ -349,9 +366,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
         menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
-        openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
+        pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
-        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup,
+        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getCurrentWebsiteMenuElement,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });

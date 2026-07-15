@@ -135,22 +135,29 @@ function setSkillsTransitions(isVisible = false) {
 
     .skills-main-textContainer {
         grid-column: span 1;
-        width: 325px;
+        width: 400px;
         position: relative;
-        left: calc(50% - 162.5px);
+        left: calc(50% - 200px);
     }
-    .skills-main-desc {
-        width: 325px;
-    }
-
     .skills-main-header a {
         font-size: 75px;
     }
     .skills-main-desc {
+        width: 100%;
         font-size: 20px;
         line-height: 28px;
         margin-bottom: 0px;
         text-align: left;
+    }
+}
+@include dynamic-less-equal-width-rule(500) {
+    .skills-main-textContainer {
+        width: 330px;
+        position: relative;
+        left: calc(50% - 165px);
+    }
+    .skills-main-desc {
+        width: 330px;
     }
 }
 
