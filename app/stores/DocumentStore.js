@@ -613,7 +613,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadIcon, saveDocIcon, printIcon, shareIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending, imageDownloadTitle,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
-        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute, showPdfPageNav,
+        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute, showPdfPageNav, docImagesSize,
         downloadDoc, saveDoc, printDoc, shareDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages, initGoogleTokenClient, initGooglePickerAPI
     }

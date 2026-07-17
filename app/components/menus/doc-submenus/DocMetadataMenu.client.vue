@@ -56,6 +56,7 @@
 <script setup>
 const webData = useWebsiteDataStore();
 const { documentMetadataMenuOpen } = storeToRefs(webData);
+const { docImagesSize } = storeToRefs(useDocumentStore());
 
 const props = defineProps({ objectUrl: { type: String, default: "" }});
 const computedUrl = computed(() => { return props.objectUrl; });
@@ -142,7 +143,7 @@ const METADATA_FIELDS_2 = [
 const METADATA_FIELDS_3 = [
     { header: 'File Size (Decimal)', tabs: 5, content: pdfMetadata.fileSize },
     { header: 'File Size (Binary)', tabs: 6, content: pdfMetadata.fileSizeBinary },
-    { header: 'File Size (Bytes)', tabs: 6, content: pdfMetadata.fileSizeInBytes }
+    { header: 'File Size (PNG)', tabs: 6, content: docImagesSize }
 ];
 
 /** These are the icons needed for the copy action. */

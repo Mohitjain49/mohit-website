@@ -1,4 +1,10 @@
 <template>
+<Transition name="fade-exit-transition" fade>
+    <div class="mohit-fs-autoscroll-progressBar" v-if="scrollProgress.show">
+        <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
+    </div>
+</Transition>
+
 <div v-if="showScrollBar" class="mohit-scrollBar">
     <button class="top" @click="scrollFsElement(-10)" title="Click Here To Scroll Up!"> <FontAwesomeIcon icon="fa-caret-up" /> </button>
     <div class="mohit-scrollBar-body"> <div :class="innerScrollBarClasses" ref="scrollbar-inner" :style="vScrollbarStyle"></div> </div>
@@ -13,6 +19,7 @@ const interactiveScroll = useTemplateRef('scrollbar-inner');
 
 const { vScrollbarStyle, vertical } = useScrollPercentage(props.fsElementId);
 const { pressed: mousePressed } = useMousePressed({ target: interactiveScroll, touch: false });
+const { scrollProgress } = storeToRefs(useScrollStore());
 const { mouseY } = storeToRefs(styleStore);
 
 const wholeFileInView = useState("whole-hosted-file-in-view", () => { return false; });
@@ -142,5 +149,28 @@ function getFsElement() { return document.getElementById(props.fsElementId); }
 .mohit-scrollBar button.bottom svg {
     position: relative;
     bottom: 1px;
+}
+
+.mohit-fs-autoscroll-progressBar {
+    position: fixed;
+    top: 10px;
+    right: calc(50% - 102px);
+    width: 200px;
+    height: 10px;
+    background-color: black;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    border: 2px solid white;
+    border-radius: 7px;
+    box-shadow: 0px 0px 10px 2px black;
+    overflow: hidden;
+    z-index: 3000;
+}
+.mohit-fs-autoscroll-progressBar > .inner {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, white 0%, var(--vibrant-flame) 100%);
 }
 </style>
