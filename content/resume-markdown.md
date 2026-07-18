@@ -30,7 +30,7 @@ Computer Science Intern
 
 * Developed software, fixed errors, and created features for an electronic warfare system using the [C programming language](https://www.c-language.org/).  
 * Created a program that allows my team to automatically convert their Microsoft Word Documentation into more intuitive HTML files and send these files to their stakeholders with ease.  
-* Used [Azure Devops](https://azure.microsoft.com/en-us/products/devops) while to create pipelines for automation, manage Git repositories, and keep track of tasks.
+* Used [Azure DevOps](https://azure.microsoft.com/en-us/products/devops) while to create pipelines for automation, manage Git repositories, and keep track of tasks.
 
 **[KSU Immersive Visualization Environments Lab](https://www.kennesaw.edu/coles/academics/information-systems-security/labs/immersive-visualization-environments-research-cluster.php)**{ .resume-markdown-section-subtitle }  
 ::div{ .resume-markdown-subHeader }

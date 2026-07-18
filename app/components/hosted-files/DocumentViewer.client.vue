@@ -48,6 +48,8 @@ import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
 const DEFAULT_OUTPUT_SCALE = 2;
 const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";
+
+const CUSTOM_ANNOTATION_HTML_CLASS = "mohit-pdf-linkAnnotation";
 const CUSTOM_PDFJS_DEST_ATTRIBUTE = "mohit-data-pdfjs-dest";
 const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
 const CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE = "mohit-pdfjs-raw-width";
@@ -213,7 +215,9 @@ async function renderPDF() {
 
                     if(!annotationDataId) { continue; }
                     const annotationDataObject = annotations.find((item) => { return (item.id === annotationDataId); });
+
                     if(!annotationDataObject || annotationDataObject.subtype !== "Link") { continue; }
+                    innerAnnotationElement.classList.add(CUSTOM_ANNOTATION_HTML_CLASS);
 
                     if(annotationDataObject.dest) {
                         innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(annotationDataObject.dest));

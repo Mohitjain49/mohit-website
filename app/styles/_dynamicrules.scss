@@ -52,3 +52,10 @@
         @return calc($value * var(--webpage-zoom-factor));
     }
 }
+
+// This function allows selectors like classes to be chained, allowing them to have cleaner priority assignment,
+@function chain-selector($selector, $count: 3) {
+    $chained: "";
+    @for $i from 1 through $count { $chained: "#{$chained}#{$selector}"; }
+    @return selector-parse($chained);
+}
