@@ -90,11 +90,8 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/mit/**", "/mit-license/**", "/license/**"], replacement: "/copyright/?showLicense=true" },
 
     { routes: ["/documents/resume"], replacement: "/resume/" },
-    { routes: ["/documents/resume/qrcode"], replacement: "/resume/qrcode" },
     { routes: ["/documents/resume/markdown"], replacement: "/resume/markdown" },
-
     { routes: ["/documents/create-github-repo"], replacement: "/create-github-repo" },
-    { routes: ["/documents" + FCS_CERTIFICATE_ROUTE], replacement: FCS_CERTIFICATE_ROUTE },
 
     { routes: ["/gamepad/store", "/gamepad/utility", "/scripts/gamepad/**"], replacement: "/gamepad/store-and-utility" },
     { routes: ["/gamepad/component", "/gamepad/vue.js-component"], replacement: "/gamepad/vuejs-component" },

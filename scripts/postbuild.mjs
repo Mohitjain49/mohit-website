@@ -74,7 +74,7 @@ function main() {
     console.log("\n\n");
     try { editSitemapXsl(); } catch(e) { onError(e); }
     try { createBuildInfoFile(); } catch(e) { onError(e); }
-    console.log("\n\n🏁 Website Build Complete!");
+    console.log("\n🏁 Website Build Complete!");
 }
 
 // Runs the Main Function.

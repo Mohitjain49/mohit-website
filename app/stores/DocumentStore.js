@@ -1,5 +1,4 @@
 import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
-import Fulton_Internship_Program_Appreciation_Certificate_Spring_2025 from "/Fulton_Internship_Program_Appreciation_Certificate_Spring_2025.pdf";
 import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper from "/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper.pdf"
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
@@ -28,9 +27,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const hostedDocuments = [
         useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
         useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false, false),
-        useHostedDocument(FCS_CERTIFICATE_ROUTE, Fulton_Internship_Program_Appreciation_Certificate_Spring_2025,
-            "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025", ".pdf", FCS_CERTIFICATE_LINK, false, false
-        ),
         useHostedDocument(GEN_AI_APPLICATIONS_PAPER_ROUTE, Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper,
             "Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper", ".pdf", GEN_AI_APPLICATIONS_PAPER_LINK, false, false
         )
@@ -95,7 +91,6 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
-    const onFCSCertificateRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
     const onResearchPaperRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
 
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
@@ -454,7 +449,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
 
         if(onMarkdownRoute.value) { return; }
-        mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, (onFCSCertificateRoute.value ? PDF_CERTIFICATE_SCALE : PDF_LETTER_SCALE));
+        mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
     }
 
     /** This function unmounts a page that hosts a document. */
@@ -613,7 +608,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadIcon, saveDocIcon, printIcon, shareIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending, imageDownloadTitle,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
-        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onFCSCertificateRoute, onResearchPaperRoute, showPdfPageNav, docImagesSize,
+        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute, showPdfPageNav, docImagesSize,
         downloadDoc, saveDoc, printDoc, shareDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages, initGoogleTokenClient, initGooglePickerAPI
     }

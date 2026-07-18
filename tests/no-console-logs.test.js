@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { globSync } = require('glob');
 
-/** This fetches every .vue and .scss file except for the dynamic scss rules file. */
+/** This fetches every .vue, .ts, and .js file. */
 const targetFiles = globSync('./app/**/*.{vue,js,ts}');
 
 describe('No Console Logs', () => {

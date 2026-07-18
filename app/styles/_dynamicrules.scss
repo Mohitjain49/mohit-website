@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:selector";
 
 // This rule is a dynamic version of the "max-width" rule that accounts for the "zoom" css property.
 @mixin dynamic-less-equal-width-rule($value) {
@@ -57,5 +58,5 @@
 @function chain-selector($selector, $count: 3) {
     $chained: "";
     @for $i from 1 through $count { $chained: "#{$chained}#{$selector}"; }
-    @return selector-parse($chained);
+    @return selector.parse($chained);
 }

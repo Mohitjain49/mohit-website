@@ -44,20 +44,6 @@
                 </a>
             </div>
         </template>
-        <template v-else-if="documentStore.onFCSCertificateRoute">
-            <div class="mohit-navMenu-opt" :style="getColorStyles('#0072B1')">
-                <a :href="FCS_CERTIFICATE_LINKEDIN_POST" target="_blank" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <font-awesome-icon icon="fa-brands fa-linkedin" />
-                    <span> See Certificate On LinkedIn </span>
-                </a>
-            </div>
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--fulton-green)')">
-                <a :href="FCS_CAREER_INTERNSHIP_LINK" target="_blank" class="mohit-navMenu-mainOpt" pulse-loop>
-                    <font-awesome-icon icon="fa-school-flag" />
-                    <span> FCS Career Internship Program </span>
-                </a>
-            </div>
-        </template>
         <template v-else-if="documentStore.onResearchPaperRoute">
             <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.scrollToPage(1)" pulse-loop>
