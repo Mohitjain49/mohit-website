@@ -64,12 +64,8 @@ useHead(getMeta("Mohit Jain | Wake Lock", "wakelock",
     "preventing the screen from closing naturally."
 ));
 
-/**
- * This function sets the state of the menu.
- */
-function toggleMenuState() {
-    menuState.value = ((menuState.value == 0) ? 1 : 0);
-}
+/** This function sets the state of the menu. */
+function toggleMenuState() { menuState.value = ((menuState.value == 0) ? 1 : 0); }
 </script>
 
 <style scoped lang="scss">

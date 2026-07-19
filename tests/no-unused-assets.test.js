@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const { globSync } = require('glob');
 
-/** This is image file in the app folder. */
+/** This is every image file in the app folder. */
 const assetFiles = globSync('./app/**/*.{png,jpg,jpeg,svg,webp,avif,gif}');
 
-/** This is file in the app folder except for the image files. */
+/** This is every file in the app folder except for the image files. */
 const targetFiles = globSync('./app/**/*.{vue,js,ts,scss}');
 
 describe('No Unused Assets', () => {

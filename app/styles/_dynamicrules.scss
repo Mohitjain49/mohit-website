@@ -69,6 +69,19 @@
     }
 }
 
+// These functions specify if the dynamic rule should use its scoped block or unscoped block setting.
+@mixin dynamic-less-equal-width-rule-scopedBlock($value) { @include dynamic-less-equal-width-rule($value, 1); }
+@mixin dynamic-less-equal-width-rule-noScopedBlock($value) { @include dynamic-less-equal-width-rule($value, -1); }
+
+@mixin dynamic-greater-equal-width-rule-scopedBlock($value) { @include dynamic-greater-equal-width-rule($value, 1); }
+@mixin dynamic-greater-equal-width-rule-noScopedBlock($value) { @include dynamic-greater-equal-width-rule($value, -1); }
+
+@mixin dynamic-less-equal-height-rule-scopedBlock($value) { @include dynamic-less-equal-height-rule($value, 1); }
+@mixin dynamic-less-equal-height-rule-noScopedBlock($value) { @include dynamic-less-equal-height-rule($value, -1); }
+
+@mixin dynamic-greater-equal-height-rule-scopedBlock($value) { @include dynamic-greater-equal-height-rule($value, 1); }
+@mixin dynamic-greater-equal-height-rule-noScopedBlock($value) { @include dynamic-greater-equal-height-rule($value, -1); }
+
 // This function applies the zoom factor to any numeric value.
 @function apply-zoom-factor($value) {
     @if math.is-unitless($value) {
