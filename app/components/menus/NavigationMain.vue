@@ -149,8 +149,7 @@
     </RouterLink>
     <button v-if="resumeStore.queryOutOfSync" :title="RESUME_QUERY_UNSYNC_TITLE"
         @click="() => { reloadNuxtApp({ force: true }); }"
-        :style="getColorStyles('var(--blue-one)')"
-        class="mohit-navBar-statusIcon" pulse-loop>
+        class="mohit-navBar-statusIcon resume-unsynced" pulse-loop>
 
         <font-awesome-icon icon="fa-rotate-right" />
     </button>

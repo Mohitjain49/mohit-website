@@ -203,6 +203,11 @@
 .mohit-navBar-statusIcon.share {
     background-color: rgba(0, 0, 0, 1);
 }
+.mohit-navBar-statusIcon.resume-unsynced {
+    color: var(--blue-one);
+    border-color: var(--blue-one);
+    box-shadow: 0px 0px 7px 2px white;
+}
 
 .mohit-navBar-loadingWidget {
     cursor: default !important;

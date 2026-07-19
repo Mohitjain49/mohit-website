@@ -40,11 +40,11 @@
             </button>
         </div>
 
-        <div v-if="(newResumeState && resumeStore.queryOutOfSync)" class="mohit-navMenu-opt-break"></div>
+        <div v-if="(newResumeState || resumeStore.queryOutOfSync)" class="mohit-navMenu-opt-break"></div>
         <div v-if="resumeStore.queryOutOfSync" class="mohit-navMenu-opt">
             <button class="mohit-navMenu-mainOpt" pulse-loop
                 @click="() => { reloadNuxtApp({ force: true }); }"
-                :style="getColorStyles('#996e03')">
+                :style="getColorStyles('var(--blue-one)')">
 
                 <font-awesome-icon icon="fa-rotate-right" />
                 <span> Reload Webpage </span>
