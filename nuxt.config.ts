@@ -36,10 +36,13 @@ export default defineNuxtConfig({
     compatibilityDate: '2026-05-08',
     devtools: { enabled: false },
     ssr: true,
-    app: { baseURL: "/", head: {
-        script: [{ type: 'text/javascript', tagPosition: 'head', innerHTML: NO_SCROLL_FUNCTION }],
-        meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
-    }},
+    app: { baseURL: "/",
+        head: {
+            htmlAttrs: { lang: "en-US" },
+            script: [{ type: 'text/javascript', tagPosition: 'head', innerHTML: NO_SCROLL_FUNCTION }],
+            meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
+        }
+    },
     devServer: { port: 5700, host: "localhost" },
     modules: ['@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
         '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',
@@ -108,7 +111,11 @@ export default defineNuxtConfig({
             }),
             AUTO_ALT_PLUGIN
         ],
-        css: { preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;' }}}
+        css: {
+            preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;\n' }},
+            lightningcss: { errorRecovery: true },
+        },
+        build: { cssMinify: "lightningcss" }
     },
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
     typescript: { tsConfig: { compilerOptions: { types:

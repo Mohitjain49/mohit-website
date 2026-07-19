@@ -62,10 +62,7 @@
 
 <script setup>
 const webData = useWebsiteDataStore();
-const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
-
-const fullScreenSet = getFullScreenSet();
 const { resumeMenuOpen } = storeToRefs(webData);
 
 const resumeOptions = ref([

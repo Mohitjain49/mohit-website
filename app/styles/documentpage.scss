@@ -1,5 +1,4 @@
 @use "@/styles/_dynamicrules.scss" as *;
-@layer overrides;
 
 .document-loading-static {
     height: var(--body-height);
