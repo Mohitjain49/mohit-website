@@ -22,6 +22,28 @@
     align-items: center;
 }
 
+#mohit-doc-customPrint, .mohit-doc-customPrint {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+}
+.mohit-doc-customPrint-img {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    break-after: page;
+    page-break-after: always;
+}
+
 .markdown-body {
     width: calc(100% - 70px);
     max-width: 1000px;

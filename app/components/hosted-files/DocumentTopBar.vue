@@ -7,7 +7,7 @@
         <button class="doc-save-opt" v-if="documentStore.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
-        <button class="doc-save-opt" v-if="documentStore.browserPdfViewerPresent" @click="documentStore.printDoc()" title="Print Document" pulse-loop>
+        <button class="doc-save-opt" v-if="documentStore.showPrintButton" @click="documentStore.printDoc()" title="Print Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
         </button>
         <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>

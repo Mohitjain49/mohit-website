@@ -88,11 +88,12 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const routePath = computed(() => { return router.currentRoute.value.path; });
     const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown")); });
-
     const onDocumentRoute = computed(() => { return (-1 != currentDocumentRoute.value); });
+
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
     const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
+    const docImagesLoaded = computed(() => { return (docImageUrls.value.length > 0); });
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
@@ -101,6 +102,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
     const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
     const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1)); });
+    const showPrintButton = computed(() => { return (browserPdfViewerPresent.value || docImagesLoaded.value); });
     const imageDownloadTitle = computed(() => { return ("Download Document As PNG Image (" + docImagesSize.value + ")"); });
 
     const downloadIcon = computed(() => {
@@ -246,54 +248,83 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(documentPrintStatus.value != 0) { return; }
         documentPrintStatus.value = 1;
 
+        const PRINT_IFRAME_ID = "mohit-doc-customPrint";
+        const PRINT_IFRAME_IMG_CLASS = "mohit-doc-customPrint-img";
+        const TEMP_IMG_WIDTH = 850;
+
         try {
+            if(!showPrintButton.value) { throw new Error("Document Not Ready For Print Yet."); }
+            const documentFile = getCurrentPDFObject();
+            if(!documentFile) { throw new Error("Document Does Not Exist."); }
+
+            if(printIframe != null) { document.body.removeChild(printIframe); }
+            printIframe = document.createElement("iframe");
+            printIframe.id = PRINT_IFRAME_ID;
+            printIframe.classList.add(PRINT_IFRAME_ID);
+
             if(browserPdfViewerPresent.value) {
-                if(printIframe != null) { document.body.removeChild(printIframe); }
-                printIframe = null;
-
-                const documentFile = getCurrentPDFObject();
-                if(!documentFile) { throw new Error("Document Does Not Exist."); }
-
-                const url = documentFile.url;
-                printIframe = document.createElement("iframe");
-
-                printIframe.style.position = "absolute";
-                printIframe.style.width = "0";
-                printIframe.style.height = "0";
-                printIframe.style.border = "none";
-                printIframe.src = url;
-
+                printIframe.src = documentFile.url;
                 document.body.append(printIframe);
+
                 await new Promise(async (resolve, reject) => {
-                    printIframe.onload = () => {
-                        const win = printIframe.contentWindow;
-                        win.focus();
-                        win.print();
-
-                        waitingStatus = 1;
-                        resolve("Print Window Opened!");
+                    const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
+                    if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
+                        resolve("IFrame Loaded");
+                    } else {
+                        printIframe.onload = () => { resolve("IFrame Loaded"); }
+                        sleep(7000).then(() => { reject(new Error("Timeout Error")); });
                     }
+                });
+            } else if(docImagesLoaded.value) {
+                await new Promise(async (resolve, reject) => {
+                    document.body.append(printIframe);
+                    const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
 
-                    var waitingStatus = 0;
-                    var secondsPassed = 0;
-
-                    while(waitingStatus == 0 && secondsPassed < 7) {
-                        await sleep(1000);
-                        secondsPassed++;
-                    }
-
-                    // Sends a timeout error if the action takes too long.
-                    if(secondsPassed >= 7 && waitingStatus == 0) {
-                        reject(new Error("Timeout Error"));
+                    if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
+                        resolve("IFrame Loaded");
+                    } else {
+                        printIframe.onload = () => { resolve("IFrame Loaded"); }
+                        sleep(7000).then(() => { reject(new Error("Timeout Error")); });
                     }
                 });
 
-                // Sets the action as completed.
-                documentPrintStatus.value = 2;
+                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+                const numImages = docImageUrls.value.length;
+
+                for(let i = 0; i < numImages; i++) {
+                    const newChild = printIframeDocument.createElement("div");
+                    const newChildImg = printIframeDocument.createElement("img");
+
+                    newChild.classList.add(PRINT_IFRAME_IMG_CLASS);
+                    newChildImg.src = docImageUrls.value[i];
+
+                    newChildImg.width = TEMP_IMG_WIDTH;
+                    newChildImg.height = (TEMP_IMG_WIDTH * PDF_LETTER_SCALE);
+                    newChildImg.draggable = false;
+
+                    printIframeDocument.body.appendChild(newChild);
+                    await new Promise((resolve, reject) => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(); }); }); });
+
+                    newChild.appendChild(newChildImg);
+                    await new Promise((resolve, reject) => {
+                        if(newChildImg.complete) {
+                            resolve();
+                        } else {
+                            newChildImg.onload = () => { resolve(); }
+                        }
+                    });
+                }
             } else {
-                documentPrintStatus.value = 3; // Print is not supported so it states that there is an error.
+                throw new Error("Document Not Ready For Print Yet.");
             }
+
+            // This triggers the print function at the end to open the popup.
+            const win = printIframe.contentWindow;
+            win.focus();
+            win.print();
+            documentPrintStatus.value = 2;
         } catch(e) {
+            if(import.meta.dev) { console.error(e); }
             documentPrintStatus.value = ((e.message === "Timeout Error") ? 4 : 3);
         } finally {
             setTimeout(() => { documentPrintStatus.value = 0; }, 3000);
@@ -630,12 +661,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         try { goToPageSection(id, 70); } catch(e) {}
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize,
+    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, showPdfPageNav, showPrintButton,
         googleDriveOptionAvailable, saveAsSupported, browserPdfViewerPresent, currentDocumentBlobCreated, workerSrcAdded,
         downloadIcon, saveDocIcon, printIcon, shareIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending, imageDownloadTitle,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
-        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute, showPdfPageNav,
+        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages, initGoogleTokenClient, initGooglePickerAPI
     }
