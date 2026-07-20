@@ -4,12 +4,15 @@ import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { ofetch } from 'ofetch';
 import { zipSync } from 'fflate';
+
+import Bowser from "bowser";
 import prettyBytes from "pretty-bytes";
 
 const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
+const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
 export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const DOCUMENT_ACTION_PENDING = 1;
 
@@ -61,6 +64,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
     const windowSizeWatchersEnabled = ref(false);
+    const browserPdfViewerPresent = ref(false);
+    const confirmedImageTypes = ref(["image/png"]);
 
     const customPdfWidth = ref(DEFAULT_PDF_MAX_WIDTH);
     const customPdfMaxWidth = ref(DEFAULT_PDF_MAX_WIDTH);
@@ -91,7 +96,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
-    const onResearchPaperRoute = computed(() => { return hostedDocuments[3].onRoute.value; });
+    const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
 
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
     const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
@@ -236,54 +241,58 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    /** This function opens the browser's print doucment so the user can print a document. */
+    /** This function opens the browser's print popup so the user can print a document. */
     async function printDoc() {
         if(documentPrintStatus.value != 0) { return; }
         documentPrintStatus.value = 1;
 
         try {
-            if(printIframe != null) { document.body.removeChild(printIframe); }
-            printIframe = null;
+            if(browserPdfViewerPresent.value) {
+                if(printIframe != null) { document.body.removeChild(printIframe); }
+                printIframe = null;
 
-            const documentFile = getCurrentPDFObject();
-            if(!documentFile) { throw new Error("Document Does Not Exist."); }
+                const documentFile = getCurrentPDFObject();
+                if(!documentFile) { throw new Error("Document Does Not Exist."); }
 
-            const url = documentFile.url;
-            printIframe = document.createElement("iframe");
+                const url = documentFile.url;
+                printIframe = document.createElement("iframe");
 
-            printIframe.style.position = "absolute";
-            printIframe.style.width = "0";
-            printIframe.style.height = "0";
-            printIframe.style.border = "none";
-            printIframe.src = url;
+                printIframe.style.position = "absolute";
+                printIframe.style.width = "0";
+                printIframe.style.height = "0";
+                printIframe.style.border = "none";
+                printIframe.src = url;
 
-            document.body.append(printIframe);
-            await new Promise(async (resolve, reject) => {
-                printIframe.onload = () => {
-                    const win = printIframe.contentWindow;
-                    win.focus();
-                    win.print();
+                document.body.append(printIframe);
+                await new Promise(async (resolve, reject) => {
+                    printIframe.onload = () => {
+                        const win = printIframe.contentWindow;
+                        win.focus();
+                        win.print();
 
-                    waitingStatus = 1;
-                    resolve("Print Window Opened!");
-                }
+                        waitingStatus = 1;
+                        resolve("Print Window Opened!");
+                    }
 
-                var waitingStatus = 0;
-                var secondsPassed = 0;
+                    var waitingStatus = 0;
+                    var secondsPassed = 0;
 
-                while(waitingStatus == 0 && secondsPassed < 7) {
-                    await sleep(1000);
-                    secondsPassed++;
-                }
+                    while(waitingStatus == 0 && secondsPassed < 7) {
+                        await sleep(1000);
+                        secondsPassed++;
+                    }
 
-                // Sends a timeout error if the action takes too long.
-                if(secondsPassed >= 7 && waitingStatus == 0) {
-                    reject(new Error("Timeout Error"));
-                }
-            });
+                    // Sends a timeout error if the action takes too long.
+                    if(secondsPassed >= 7 && waitingStatus == 0) {
+                        reject(new Error("Timeout Error"));
+                    }
+                });
 
-            // Sets the action as completed.
-            documentPrintStatus.value = 2;
+                // Sets the action as completed.
+                documentPrintStatus.value = 2;
+            } else {
+                documentPrintStatus.value = 3; // Print is not supported so it states that there is an error.
+            }
         } catch(e) {
             documentPrintStatus.value = ((e.message === "Timeout Error") ? 4 : 3);
         } finally {
@@ -430,11 +439,28 @@ export const useDocumentStore = defineStore("document-store", () => {
      * ------------------------------------------------------------------------------------------
      */
 
-    /** This checks to ensure that the Google IDs and Keys are properly passed in. */
+    /** This function sets certain variables in the document store to ensure it runs properly. */
     function mountDocumentStore() {
+        // If certain Google Cloud API keys are not present, this function disables the Google Drive functionality.
         if(!GOOGLE_CLOUD_CLIENT_ID || GOOGLE_CLOUD_CLIENT_ID === "") { googleDriveOptAvailable.value = -1; }
         if(!GOOGLE_CLOUD_API_KEY || GOOGLE_CLOUD_API_KEY === "") { googleDriveOptAvailable.value = -1; }
         if(!GOOGLE_CLOUD_APP_ID || GOOGLE_CLOUD_APP_ID === "") { googleDriveOptAvailable.value = -1; }
+
+        // This sets whether the user is able to print a document on the website using the native PDF Viewer.
+        const notOnDesktop = ("userAgent" in navigator && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
+        browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && !notOnDesktop);
+
+        // This checks to see all possible image types a canvas can be converted into.
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = 1;
+        tempCanvas.height = 1;
+
+        confirmedImageTypes.value = [];
+        for(let i = 0; i < POSSIBLE_IMAGE_TYPES.length; i++) {
+            const possibleMimeType = POSSIBLE_IMAGE_TYPES[i];
+            const tempDataUrl = tempCanvas.toDataURL(possibleMimeType);
+            if(tempDataUrl.startsWith(`data:${possibleMimeType}`)) { confirmedImageTypes.value.push(possibleMimeType); }
+        }
     }
 
     /** This function mounts a page that hosts a document. */
@@ -604,11 +630,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         try { goToPageSection(id, 70); } catch(e) {}
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, googleDriveOptionAvailable, saveAsSupported, currentDocumentBlobCreated, workerSrcAdded,
+    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize,
+        googleDriveOptionAvailable, saveAsSupported, browserPdfViewerPresent, currentDocumentBlobCreated, workerSrcAdded,
         downloadIcon, saveDocIcon, printIcon, shareIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending, imageDownloadTitle,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
-        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute, showPdfPageNav, docImagesSize,
+        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute, showPdfPageNav,
         downloadDoc, saveDoc, printDoc, shareDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages, initGoogleTokenClient, initGooglePickerAPI
     }

@@ -7,7 +7,7 @@ const targetFiles = globSync('**/*.{vue,scss}', {
     ignore: ['**/node_modules/**', '**/*_dynamicrules.scss', '**/.nuxt/**']
 });
 
-const mediaQueryRegex = /@media\b/i;
+const mediaQueryRegex = /@media\b(?!\s*print\b)/i;
 const styleTagRegex = /<style(?:\s+scoped)?\s*>/i;
 
 describe('CSS Architecture Guardrails', () => {

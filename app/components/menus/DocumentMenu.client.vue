@@ -54,35 +54,37 @@
         </template>
         <div class="mohit-navMenu-opt-break"></div>
 
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
-            <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
-                <span> Download Document </span>
-            </button>
-        </div>
-        <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
-            <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
-                <span> Save Document </span>
-            </button>
-        </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
-            <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
-                <span> Print Document </span>
-            </button>
-        </div>
-        <div v-if="webData.shareSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
-            <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" pulse-loop>
-                <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
-                <span> Share Document </span>
-            </button>
-        </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
-            <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
-                <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending" />
-                <span> Download Document (PNG) </span>
-            </button>
+        <div class="mohit-navMenu-opt-group">
+            <div class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
+                    <span> Download Document </span>
+                </button>
+            </div>
+            <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
+                    <span> Save Document </span>
+                </button>
+            </div>
+            <div v-if="documentStore.browserPdfViewerPresent" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc()" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
+                    <span> Print Document </span>
+                </button>
+            </div>
+            <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
+                    <span> Share Document </span>
+                </button>
+            </div>
+            <div class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending" />
+                    <span> Download Document (PNG) </span>
+                </button>
+            </div>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 

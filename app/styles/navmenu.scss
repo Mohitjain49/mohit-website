@@ -307,6 +307,22 @@
     border-color: var(--website-light-text);
 }
 
+.mohit-navMenu-opt.hosted-file-save-opt:nth-last-of-type(even) {
+    color: var(--blue-one);
+    border-color: var(--blue-one);
+}
+.mohit-navMenu-opt.hosted-file-save-opt:nth-last-of-type(odd) {
+    color: var(--blue-three);
+    border-color: var(--blue-three);
+}
+
+.mohit-navMenu-opt-group {
+    width: 100%;
+    height: fit-content;
+    margin: 0px;
+    padding: 0px;
+}
+
 .mohit-navBar-icons.menu-top { align-items: end; }
 .mohit-navBar-icons.menu-top.left { margin-left: 15px; }
 .mohit-navBar-icons.menu-top.right { margin-right: 12px; }

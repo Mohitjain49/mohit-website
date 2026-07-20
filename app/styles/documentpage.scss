@@ -58,7 +58,6 @@
     margin: 0px auto;
 }
 
-
 .mohit-pdf-linkAnnotation {
     @at-root #{chain-selector(&, 4)} {
         position: absolute;
@@ -75,7 +74,6 @@
         background-color: rgb(0, 110, 255);
     }
 }
-
 
 .mohit-rendered-pdf {
     position: relative;
@@ -224,11 +222,12 @@
     color: white;
     border-color: white;
 }
-.mohit-document-topBar button.lightblue, .mohit-document-topBar a.lightblue {
+
+.mohit-document-topBar .doc-save-opt:nth-last-of-type(even) {
     color: var(--blue-one);
     border-color: var(--blue-one);
 }
-.mohit-document-topBar button.blue, .mohit-document-topBar a.blue {
+.mohit-document-topBar .doc-save-opt:nth-last-of-type(odd) {
     color: var(--blue-three);
     border-color: var(--blue-three);
 }

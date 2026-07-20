@@ -14,7 +14,7 @@
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
-            <div :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]">
+            <div @contextmenu="onPdfContentMenu" :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]">
                 <canvas :id="('pdf_canvas_' + page.num)"></canvas>
                 <div v-if="annontations" class="textLayer" :id="('pdf_text_layer_' + page.num)"></div>
                 <div v-if="(annontations && page.showAnnotations)" class="annotationLayer" :id="('pdf_annotation_layer_' + page.num)"></div>
@@ -60,13 +60,13 @@ var resizeAbortController = new AbortController();
 
 var renderTasks = { canvas: null, text: null, annontation: null }
 var pdfDocLoadingTask = null;
-const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
 
 const webData = useWebsiteDataStore();
 const fullScreenSet = getFullScreenSet();
 const documentStore = useDocumentStore();
 const styleStore = useStyleStore();
 const router = useRouter();
+const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
 
 const props = defineProps({
     templateIndex: { type: Number, required: true },
@@ -403,6 +403,16 @@ function onAnnotationClick(event) {
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
+}
+
+/**
+ * This event should trigger whenever someone right clicks on a rendered PDF.
+ * @param {PointerEvent} event The event fired by the action.
+ */
+async function onPdfContentMenu(event) {
+    event.preventDefault();
+    webData.setMenuOpen(3, true);
+    triggerClickSound();
 }
 
 /**

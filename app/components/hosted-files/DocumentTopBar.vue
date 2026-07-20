@@ -1,19 +1,19 @@
 <template>
 <div ref="document-options" :class="['mohit-document-topBar', (documentStore.onMarkdownRoute ? 'markdown' : '')]">
     <div class="mohit-document-topBar-sideSection">
-        <button class="blue" @click="documentStore.downloadDoc()" title="Download Document" pulse-loop>
+        <button class="doc-save-opt" @click="documentStore.downloadDoc()" title="Download Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
         </button>
-        <button class="lightblue" v-if="documentStore.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" pulse-loop>
+        <button class="doc-save-opt" v-if="documentStore.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
-        <button class="blue" @click="documentStore.printDoc()" title="Print Document" pulse-loop>
+        <button class="doc-save-opt" v-if="documentStore.browserPdfViewerPresent" @click="documentStore.printDoc()" title="Print Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
         </button>
-        <button class="lightblue" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>
+        <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
-        <button class="blue" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
+        <button class="doc-save-opt" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
             <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending" />
         </button>
     </div>

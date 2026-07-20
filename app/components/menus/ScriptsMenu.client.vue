@@ -8,24 +8,27 @@
     <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
         <MenuTop />
 
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
-            <button class="mohit-navMenu-mainOpt" @click="scriptsStore.downloadScript()" pulse-loop>
-                <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
-                <span> Download Code Script </span>
-            </button>
+        <div class="mohit-navMenu-opt-group">
+            <div class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.downloadScript()" pulse-loop>
+                    <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
+                    <span> Download Code Script </span>
+                </button>
+            </div>
+            <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.saveScript()" pulse-loop>
+                    <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
+                    <span> Save Code Script </span>
+                </button>
+            </div>
+            <div class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.copyScript()" pulse-loop>
+                    <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
+                    <span> Copy Raw Code Script </span>
+                </button>
+            </div>
         </div>
-        <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-three)')">
-            <button class="mohit-navMenu-mainOpt" @click="scriptsStore.saveScript()" pulse-loop>
-                <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
-                <span> Save Code Script </span>
-            </button>
-        </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--blue-one)')">
-            <button class="mohit-navMenu-mainOpt" @click="scriptsStore.copyScript()" pulse-loop>
-                <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
-                <span> Copy Raw Code Script </span>
-            </button>
-        </div>
+
         <div v-if="(scriptsStore.currentScriptLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
             <a :href="scriptsStore.currentScriptLink" target="_blank" class="mohit-navMenu-mainOpt" pulse-loop>
                 <font-awesome-icon icon="fa-brands fa-github" />
