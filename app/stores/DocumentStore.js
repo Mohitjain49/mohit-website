@@ -59,6 +59,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** @type {import('vue').ShallowRef<Array<String>>} An array of the object URLs for the images representing the rendered PDF. */
     const docImageUrls = shallowRef([]);
     const docImagesSize = ref("");
+    const docImageFetchFailed = ref(false);
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
 
     const workerSrcAdded = ref(false);
@@ -175,7 +176,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function downloads a document as an image for the visitor to see. */
     async function downloadDocAsImage() {
-        if(docImageUrls.value.length == 0 || imageDownloadStatus.value != 0) { return; }
+        if(!docImagesLoaded.value || imageDownloadStatus.value != 0) { return; }
         imageDownloadStatus.value = 1;
 
         try {
@@ -245,7 +246,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function opens the browser's print popup so the user can print a document. */
     async function printDoc() {
-        if(documentPrintStatus.value != 0) { return; }
+        if(!showPrintButton.value || documentPrintStatus.value != 0) { return; }
         documentPrintStatus.value = 1;
 
         const PRINT_IFRAME_ID = "mohit-doc-customPrint";
@@ -319,9 +320,9 @@ export const useDocumentStore = defineStore("document-store", () => {
             }
 
             // This triggers the print function at the end to open the popup.
-            const win = printIframe.contentWindow;
-            win.focus();
-            win.print();
+            const printIframeWin = printIframe.contentWindow;
+            printIframeWin.focus();
+            printIframeWin.print();
             documentPrintStatus.value = 2;
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
@@ -542,32 +543,37 @@ export const useDocumentStore = defineStore("document-store", () => {
     async function getPdfAsImages() {
         if(!import.meta.client || !docLoaded.value.status) { return; }
 
-        /** @type {Array<String>} The array of images to use. */
-        const imgArray = [];
-        const numPages = docLoaded.value.totalPages;
-        var imgBlobSize = 0;
+        try {
+            /** @type {Array<String>} The array of images to use. */
+            const imgArray = [];
+            const numPages = docLoaded.value.totalPages;
+            var imgBlobSize = 0;
 
-        for(let i = 1; i <= numPages; i++) {
-            /** @type {Blob} The image blob gotten from paring the canvas. */
-            const imgBlob = await new Promise((resolve, reject) => {
-                /** @type {HTMLCanvasElement} The canvas for the page on the Document Viewer. */
-                const canvasElement = document.getElementById("pdf_canvas_" + i);
+            for(let i = 1; i <= numPages; i++) {
+                /** @type {Blob} The image blob gotten from paring the canvas. */
+                const imgBlob = await new Promise((resolve, reject) => {
+                    /** @type {HTMLCanvasElement} The canvas for the page on the Document Viewer. */
+                    const canvasElement = document.getElementById("pdf_canvas_" + i);
 
-                if(!canvasElement) { resolve(null); }
-                canvasElement.toBlob((result) => { resolve(result); }, "image/png", 1);
-            });
+                    if(!canvasElement) { resolve(null); }
+                    canvasElement.toBlob((result) => { resolve(result); }, "image/png", 1);
+                });
 
-            if(!imgBlob) {
-                throw new Error("Image Fetch Failed For Page " + i + ".");
-            } else {
-                imgArray.push(URL.createObjectURL(imgBlob));
-                imgBlobSize += imgBlob.size;
+                if(!imgBlob) {
+                    throw new Error("Image Fetch Failed For Page " + i + ".");
+                } else {
+                    imgArray.push(URL.createObjectURL(imgBlob));
+                    imgBlobSize += imgBlob.size;
+                }
             }
-        }
 
-        // Holds the images in a reference array.
-        docImageUrls.value = imgArray;
-        docImagesSize.value = prettyBytes(imgBlobSize, { binary: true });
+            // Holds the images in a reference array.
+            docImageUrls.value = imgArray;
+            docImagesSize.value = prettyBytes(imgBlobSize, { binary: true });
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            docImageFetchFailed.value = true;
+        }
     }
 
     /** This function initializes a token client for OAuth 2 necessary for the "Save To Google Drive" Feature. */
@@ -661,7 +667,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         try { goToPageSection(id, 70); } catch(e) {}
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, showPdfPageNav, showPrintButton,
+    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed, showPdfPageNav, showPrintButton,
         googleDriveOptionAvailable, saveAsSupported, browserPdfViewerPresent, currentDocumentBlobCreated, workerSrcAdded,
         downloadIcon, saveDocIcon, printIcon, shareIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending, imageDownloadTitle,
