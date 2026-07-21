@@ -11,7 +11,7 @@
         <template v-if="documentStore.onResumeRoute">
             <template v-if="documentStore.onMainResumeRoute">
                 <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-                    <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.1)" pulse-loop>
+                    <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(RESUME_MENU)" pulse-loop>
                         <font-awesome-icon icon="fa-gears" />
                         <span> Edit Resume Components </span>
                     </button>
@@ -102,13 +102,13 @@
             </a>
         </div>
         <div v-if="!documentStore.onMarkdownRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.2)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" pulse-loop>
                 <font-awesome-icon icon="fa-database" />
                 <span> See Document Properties </span>
             </button>
         </div>
         <div v-if="documentStore.showPdfPageNav" :style="getColorStyles('var(--lightning-yellow)')" class="mohit-navMenu-opt">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3.3)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(PDF_NAVIGATION_MENU)" pulse-loop>
                 <font-awesome-icon icon="fa-compass" />
                 <span> Open PDF Navigation </span>
             </button>
@@ -142,7 +142,7 @@
             </button>
         </div>
         <div v-if="!fullScreenStore.fullScreenSet" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
                 <span> Open Navigation Menu </span>
             </button>

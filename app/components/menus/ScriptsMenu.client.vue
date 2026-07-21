@@ -58,7 +58,7 @@
             </button>
         </div>
         <div v-if="!fullScreenStore.fullScreenSet" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(0)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
                 <span> Open Navigation Menu </span>
             </button>

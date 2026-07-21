@@ -1,12 +1,13 @@
 /** A catalog of all the website menus that can be open. */
 export const WEBSITE_MENUS = [
-    { id: "mohit-navMenu", num: 0 },
-    { id: "mohit-compassMenu", num: 1 },
-    { id: "mohit-scriptsMenu", num: 2 },
-    { id: "mohit-docMenu", num: 3 },
-    { id: "mohit-resumeMenu", num: 3.1 },
-    { id: "mohit-metadata-docMenu", num: 3.2 },
-    { id: "mohit-docMenu-pdfNav", num: 3.3 }
+    { id: "mohit-navMenu", num: NAVIGATION_MENU },
+    { id: "mohit-compassMenu", num: COMPASS_MENU },
+    { id: "mohit-scriptsMenu", num: SCRIPTS_MENU },
+    { id: "mohit-docMenu", num: DOCUMENT_MENU },
+    { id: "mohit-export-docMenu", num: EXPORT_DOCUMENT_MENU },
+    { id: "mohit-resumeMenu", num: RESUME_MENU },
+    { id: "mohit-metadata-docMenu", num: DOCUMENT_METADATA_MENU },
+    { id: "mohit-docMenu-pdfNav", num: PDF_NAVIGATION_MENU }
 ]
 
 export const useWebsiteDataStore = defineStore("web-data", () => {
@@ -42,14 +43,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const wakeLockChangeFresh = ref(false);
     const nullifyBodyClick = ref(false);
 
-    const noMenuOpen = computed(() => { return (menuOpen.value == -1); });
-    const navMenuOpen = computed(() => { return (menuOpen.value == 0); });
-    const compassMenuOpen = computed(() => { return (menuOpen.value == 1); });
-    const scriptsMenuOpen = computed(() => { return (menuOpen.value == 2); });
-    const documentMenuOpen = computed(() => { return (menuOpen.value == 3); });
-    const resumeMenuOpen = computed(() => { return (menuOpen.value == 3.1); });
-    const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == 3.2); });
-    const pdfNavMenuOpen = computed(() => { return (menuOpen.value == 3.3); });
+    const noMenuOpen = computed(() => { return (menuOpen.value == NO_MENU); });
+    const navMenuOpen = computed(() => { return (menuOpen.value == NAVIGATION_MENU); });
+    const compassMenuOpen = computed(() => { return (menuOpen.value == COMPASS_MENU); });
+    const scriptsMenuOpen = computed(() => { return (menuOpen.value == SCRIPTS_MENU); });
+    const documentMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_MENU); });
+    const exportDocumentMenuOpen = computed(() => { return (menuOpen.value == EXPORT_DOCUMENT_MENU); });
+    const resumeMenuOpen = computed(() => { return (menuOpen.value == RESUME_MENU); });
+    const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_METADATA_MENU); });
+    const pdfNavMenuOpen = computed(() => { return (menuOpen.value == PDF_NAVIGATION_MENU); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
@@ -280,7 +282,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /** The toggles the status of the home navigation menu. */
     function toggleNavMenu() {
-        setMenuOpen((menuOpen.value == 0) ? -1 : 0);
+        setMenuOpen((menuOpen.value == NAVIGATION_MENU) ? NO_MENU : NAVIGATION_MENU);
     }
 
     /**
@@ -288,13 +290,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Number} index The index of what menu should be open.
      * @param {Boolean} toggle If true AND the menu to be opened is already open, this function wil then close the menu.
      */
-    function setMenuOpen(index = -1, toggle = false) {
+    function setMenuOpen(index = NO_MENU, toggle = false) {
         const setMenuClosed = (scrollStore.isAutoScrolling || (toggle && menuOpen.value == index));
-        menuOpen.value = (setMenuClosed ? -1 : index);
+        menuOpen.value = (setMenuClosed ? NO_MENU : index);
     }
 
     /** This function closes any open Navigation Menu. */
-    function closeNavMenu() { setMenuOpen(-1, false); }
+    function closeNavMenu() { setMenuOpen(NO_MENU, false); }
 
     /** This function bypasses the "onDocumentBodyClick" function that closes any Navigation Menu if an element outside the menus are clicked. */
     function bypassBodyClick() { nullifyBodyClick.value = true; }
@@ -365,8 +367,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
-        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
-        pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
+        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, exportDocumentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
+        documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getCurrentWebsiteMenuElement,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick

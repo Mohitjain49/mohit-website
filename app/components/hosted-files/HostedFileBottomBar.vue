@@ -17,7 +17,7 @@
             />
         </button>
         <button @click="openWebsiteMenu()" :title="fileOptionsTitle" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
-            <FontAwesomeIcon icon="fa-file-export" />
+            <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
         </button>
         <button v-if="!wholeFileInView" @click="scrollToTop(false, 0)" title="Scroll To The Top" pulse-loop>
             <font-awesome-icon icon="fa-turn-up" />
@@ -61,7 +61,7 @@ function setFS() {
 /** This function opens the options for the file. */
 function openWebsiteMenu() {
     webData.bypassBodyClick();
-    webData.setMenuOpen((onDocumentRoute.value ? 3 : 2), true);
+    webData.setMenuOpen((onDocumentRoute.value ? DOCUMENT_MENU : SCRIPTS_MENU), true);
 }
 
 /**

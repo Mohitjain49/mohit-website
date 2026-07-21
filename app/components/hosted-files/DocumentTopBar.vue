@@ -30,14 +30,14 @@
         </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
-        <button class="flame" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(3.1)" title="Edit Resume Components" pulse-loop>
+        <button class="flame" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" pulse-loop>
             <FontAwesomeIcon icon="fa-gears" />
         </button>
         <button class="flame" v-if="documentStore.onCreateGithubRepoRoute" @click="documentStore.scrollToPage(2)" title="Scroll To Table Of Contents" pulse-loop>
             <FontAwesomeIcon icon="fa-list" />
         </button>
-        <button @click="openWebsiteMenu(3)" title="Open Document Options" pulse-loop>
-            <FontAwesomeIcon icon="fa-file-export" />
+        <button @click="openWebsiteMenu(DOCUMENT_MENU)" title="Open Document Options" pulse-loop>
+            <FontAwesomeIcon icon="fa-file-pdf" />
         </button>
         <button @click="documentStore.toggleDocumentFullScreen()" :title="fullScreenStore.elementTitle" pulse-loop>
             <FontAwesomeIcon :icon="fullScreenStore.faIcon" />

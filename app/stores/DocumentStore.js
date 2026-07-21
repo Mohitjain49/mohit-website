@@ -421,7 +421,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, true);
         } else if(data.action === "cancel") {
             styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
-            webData.setMenuOpen(3);
+            webData.setMenuOpen(DOCUMENT_MENU);
 
             documentUploadToGoogleDriveCanceled.value = true;
             setTimeout(() => { documentUploadToGoogleDriveCanceled.value = false; }, 3000);
@@ -445,7 +445,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         chooseGoogleDriveFolderForUpload = false;
 
         try {
-            webData.setMenuOpen(3);
+            webData.setMenuOpen(DOCUMENT_MENU);
             const documentFile = getCurrentPDFObject();
             const form = new FormData();
 

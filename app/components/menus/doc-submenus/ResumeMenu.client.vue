@@ -34,8 +34,8 @@
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
-                <font-awesome-icon icon="fa-file-export" />
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_MENU)" pulse-loop>
+                <font-awesome-icon icon="fa-file-pdf" />
                 <span> Back To Document Options </span>
             </button>
         </div>

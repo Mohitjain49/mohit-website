@@ -81,7 +81,7 @@ const showFsWebCover = computed(() => {
 /** This function opens the scripts menu. */
 function openScriptsMenu() {
     webData.bypassBodyClick();
-    webData.setMenuOpen(2, true);
+    webData.setMenuOpen(SCRIPTS_MENU, true);
 }
 
 const PAGE_METADATA = [

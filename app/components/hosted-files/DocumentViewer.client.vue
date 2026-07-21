@@ -86,7 +86,7 @@ const showDocumentShareWidgets = computed(() => {
 });
 const showFsWebCover = computed(() => {
     if(!fullScreenSet.value) { return false; }
-    return (webData.showSharePopupImmediate || (webData.menuOpen >= 3 && webData.menuOpen < 4));
+    return (webData.showSharePopupImmediate || (webData.menuOpen >= DOCUMENT_MENU && webData.menuOpen < (DOCUMENT_MENU + 1)));
 });
 
 // These manage the PDF Viewer when it is mounted an unmounted.
@@ -411,7 +411,7 @@ function onAnnotationClick(event) {
  */
 async function onPdfContentMenu(event) {
     event.preventDefault();
-    webData.setMenuOpen(3, true);
+    webData.setMenuOpen(DOCUMENT_MENU, true);
     triggerClickSound();
 }
 

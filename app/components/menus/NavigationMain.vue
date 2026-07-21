@@ -31,16 +31,16 @@
             <RouterLink to="/contact/" title="Contact Me!" @click="(event) => { flashNavOpt(event, '/contact/') }" class="mohit-navBar-icon" pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
-            <button v-if="webData.compassMenuAvailable" class="mohit-navBar-icon light" @click="webData.setMenuOpen(1, true)" title="Navigate This Page" pulse-loop>
+            <button v-if="webData.compassMenuAvailable" class="mohit-navBar-icon light" @click="webData.setMenuOpen(COMPASS_MENU, true)" title="Navigate This Page" pulse-loop>
                 <font-awesome-icon icon="fa-compass" />
             </button>
-            <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(2, true)" title="Script Options" pulse-loop>
+            <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(SCRIPTS_MENU, true)" title="Script Options" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
-            <button v-else-if="showDocumentOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3, true)" title="Document Options" pulse-loop>
-                <font-awesome-icon icon="fa-file-export" />
+            <button v-else-if="showDocumentOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(DOCUMENT_MENU, true)" title="Document Options" pulse-loop>
+                <font-awesome-icon icon="fa-file-pdf" />
             </button>
-            <button class="mohit-navBar-icon light" @click="webData.setMenuOpen(0, true)" title="Open Navigation Menu" pulse-loop>
+            <button class="mohit-navBar-icon light" @click="webData.setMenuOpen(NAVIGATION_MENU, true)" title="Open Navigation Menu" pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
             </button>
         </div>
@@ -74,20 +74,20 @@
         <div class="mohit-navMenu-opt-break"></div>
 
         <div v-if="webData.compassMenuAvailable" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(1)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(COMPASS_MENU)" pulse-loop>
                 <font-awesome-icon icon="fa-compass" />
                 <span> Navigate This Page </span>
             </button>
         </div>
         <div v-if="scriptsStore.onScriptRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(2)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(SCRIPTS_MENU)" pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
                 <span> See Script Options </span>
             </button>
         </div>
         <div v-if="showDocumentOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
-                <font-awesome-icon icon="fa-file-export" />
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_MENU)" pulse-loop>
+                <font-awesome-icon icon="fa-file-pdf" />
                 <span> See Document Options </span>
             </button>
         </div>
@@ -219,7 +219,7 @@ const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdat
 const showNavLeftWidgets = computed(() => {
     return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
 });
-const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.menuOpen == -1 || webData.websiteMenuMode == 1)); });
+const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.noMenuOpen || webData.websiteMenuMode == 1)); });
 
 /**
  * This function makes a button flash if it will do nothing.
