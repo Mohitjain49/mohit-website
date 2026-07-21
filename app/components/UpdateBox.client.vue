@@ -1,28 +1,31 @@
 <template>
-<div v-if="installStore.showUpdateBox" class="update-box animate__animated animate__fadeInRight">
-    <div class="update-box-desc">
-        <FontAwesomeIcon :icon="(installStore.swUpdating ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="installStore.swUpdating" />
-        <p class="update-box-desc-text">
-            <span v-html="UPDATE_WIDGET_TITLE"></span>
-            <span class="version-num" v-html="UPDATE_DATE"></span>.
-        </p>
-    </div>
+<Transition :name="((windowWidth > 600) ? 'update-box-transition' : 'update-box-mobile-transition')">
+    <div v-if="installStore.showUpdateBox" class="update-box">
+        <div class="update-box-desc">
+            <FontAwesomeIcon :icon="(installStore.swUpdating ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="installStore.swUpdating" />
+            <p class="update-box-desc-text">
+                <span v-html="UPDATE_WIDGET_TITLE"></span>
+                <span class="version-num" v-html="UPDATE_DATE"></span>.
+            </p>
+        </div>
 
-    <div :class="['update-box-buttons', (installStore.swUpdating ? 'updating' : '')]">
-        <button class="updateBtn" @click="updateWebsite()"> {{ (installStore.swUpdating ? 'Updating...' : 'Update') }} </button>
-        <button class="closeBtn" @click="installStore.setUpdateBox(false)"> Close </button>
-        <RouterLink to="/copyright/" class="copyrightBtn"> Current Version </RouterLink>
+        <div :class="['update-box-buttons', (installStore.swUpdating ? 'updating' : '')]">
+            <button class="updateBtn" @click="updateWebsite()"> {{ (installStore.swUpdating ? 'Updating...' : 'Update') }} </button>
+            <button class="closeBtn" @click="installStore.setUpdateBox(false)"> Close </button>
+            <RouterLink to="/copyright/" class="copyrightBtn"> Current Version </RouterLink>
+        </div>
     </div>
-</div>
+</Transition>
 </template>
 
 <script setup>
 import dayjs from 'dayjs';
 
 const { $pwa, $websiteBuild } = useNuxtApp();
-const installStore = useInstallStore();
+const { width: windowWidth } = useMohitWindowSize();
 const currentNow = useNow({ scheduler: (fn) => useIntervalFn(fn, 1000) });
 
+const installStore = useInstallStore();
 const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website version was from ");
 const UPDATE_DATE = ref("10/24/2025");
 
@@ -158,5 +161,33 @@ function getPlural(num = 1) { return ((num > 1) ? "s" : ""); }
 .update-box a.copyrightBtn {
     color: var(--blue-two);
     text-wrap: nowrap;
+}
+
+.update-box-transition-enter-active, .update-box-transition-leave-active {
+    transition: transform 0.75s, opacity 0.75s;
+}
+.update-box-transition-enter-from, .update-box-transition-leave-to {
+    opacity: 0;
+    transform: translateX(100%);
+}
+.update-box-transition-enter-to, .update-box-transition-leave-from {
+    opacity: 1;
+    transform: translateX(0px);
+}
+
+.update-box-mobile-transition-enter-active, .update-box-mobile-transition-leave-active {
+    transition: transform 0.75s, opacity 0.75s;
+}
+.update-box-mobile-transition-enter-from, .update-box-mobile-transition-leave-to {
+    opacity: 0;
+    transform: translateY(100%);
+}
+.update-box-mobile-transition-enter-to, .update-box-mobile-transition-leave-from {
+    opacity: 1;
+    transform: translateY(0px);
+}
+
+@include dynamic-less-equal-width-rule(600) {
+    .update-box { right: calc(50% - 152px) !important; }
 }
 </style>

@@ -79,7 +79,7 @@
                     <span> Share Document </span>
                 </button>
             </div>
-            <div class="mohit-navMenu-opt hosted-file-save-opt">
+            <div v-if="documentStore.docImagesLoaded" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
                     <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending" />
                     <span> Download Document (PNG) </span>
