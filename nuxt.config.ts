@@ -67,7 +67,10 @@ export default defineNuxtConfig({
             '@fortawesome/vue-fontawesome'
         ]
     },
-    nitro: { preset: "static" },
+    nitro: {
+        prerender: { concurrency: 1 },
+        preset: "static"
+    },
     fonts: {
         families: [
             { name: "Lexend", provider: "fontsource" },

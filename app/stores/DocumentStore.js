@@ -12,6 +12,7 @@ const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
+const PDF_MIME_TYPE = "application/pdf";
 const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
 export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const DOCUMENT_ACTION_PENDING = 1;
@@ -66,6 +67,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const fsStateChanging = ref(false);
     const windowSizeWatchersEnabled = ref(false);
     const browserPdfViewerPresent = ref(false);
+    const copyDocumentSupported = ref(false);
     const confirmedImageTypes = ref(["image/png"]);
 
     const customPdfWidth = ref(DEFAULT_PDF_MAX_WIDTH);
@@ -82,6 +84,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentSaveStatus = ref(0);
     const documentPrintStatus = ref(0);
     const documentShareStatus = ref(0);
+    const documentCopyStatus = ref(0);
 
     const imageDownloadStatus = ref(0);
     const documentUploadToGoogleDriveStatus = ref(0);
@@ -93,6 +96,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
     const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
+    const currentDocumentFileSize = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].fileSize.value : ""); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
     const docImagesLoaded = computed(() => { return (docImageUrls.value.length > 0); });
 
@@ -104,6 +108,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
     const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && docImagesLoaded.value); });
     const showPrintButton = computed(() => { return (browserPdfViewerPresent.value || docImagesLoaded.value); });
+
+    const documentDownloadTitle = computed(() => { return ("Download Document (" + currentDocumentFileSize.value + ")"); });
     const imageDownloadTitle = computed(() => { return ("Download Document As PNG Image (" + docImagesSize.value + ")"); });
 
     const downloadIcon = computed(() => {
@@ -122,6 +128,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         const shareInt = documentShareStatus.value;
         return ((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]);
     });
+    const copyIcon = computed(() => {
+        const copyInt = documentCopyStatus.value;
+        return ((copyInt == 0) ? "fa-copy" : DOCUMENT_ACTION_STATUS_ICONS[copyInt]);
+    });
 
     const imageDownloadIcon = computed(() => {
         const imageDownloadInt = imageDownloadStatus.value;
@@ -139,6 +149,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const savePending = computed(() => { return (documentSaveStatus.value == DOCUMENT_ACTION_PENDING); });
     const printPending = computed(() => { return (documentPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
+    const copyPending = computed(() => { return (documentCopyStatus.value == DOCUMENT_ACTION_PENDING); });
 
     const imageDownloadPending = computed(() => { return (imageDownloadStatus.value == DOCUMENT_ACTION_PENDING); });
     const uploadToGoogleDrivePending = computed(() => {
@@ -350,6 +361,25 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
+    /** This function copies the document into the visitors OS Clipboard. */
+    async function copyDoc() {
+        if(documentCopyStatus.value != 0) { return; }
+        documentCopyStatus.value = 1;
+
+        try {
+            const documentFile = getCurrentPDFObject();
+            if(!documentFile) { throw new Error("Document Does Not Exist."); }
+
+            await navigator.clipboard.write([new ClipboardItem({ [documentFile.blob.type]: documentFile.blob })]);
+            documentCopyStatus.value = 2;
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            documentCopyStatus.value = 3;
+        } finally {
+            setTimeout(() => { documentCopyStatus.value = 0; }, 3000);
+        }
+    }
+
     /** This function returns the PDF Object the website is currently using. */
     function getCurrentPDFObject() {
         if(!onDocumentRoute.value) { return null; }
@@ -481,6 +511,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         // This sets whether the user is able to print a document on the website using the native PDF Viewer.
         const notOnDesktop = ("userAgent" in navigator && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
         browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && !notOnDesktop);
+        copyDocumentSupported.value = ClipboardItem.supports(PDF_MIME_TYPE);
 
         // This checks to see all possible image types a canvas can be converted into.
         const tempCanvas = document.createElement("canvas");
@@ -667,13 +698,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         try { goToPageSection(id, 70); } catch(e) {}
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed, showPdfPageNav, showPrintButton,
-        googleDriveOptionAvailable, saveAsSupported, browserPdfViewerPresent, currentDocumentBlobCreated, workerSrcAdded,
-        downloadIcon, saveDocIcon, printIcon, shareIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
-        downloadPending, savePending, printPending, sharePending, imageDownloadPending, uploadToGoogleDrivePending, imageDownloadTitle,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, documentLink, onDocumentRoute, onMainResumeRoute,
-        onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
+    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed,
+        googleDriveOptionAvailable, saveAsSupported, copyDocumentSupported, browserPdfViewerPresent, workerSrcAdded,
+        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
+        downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
+        downloadPending, savePending, printPending, sharePending, copyPending, imageDownloadPending, uploadToGoogleDrivePending,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav, showPrintButton,
+        onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
+        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages, initGoogleTokenClient, initGooglePickerAPI
     }
 });
@@ -690,24 +722,22 @@ export const useDocumentStore = defineStore("document-store", () => {
  */
 function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false, withMd = false) {
     path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
+    const router = useRouter();
 
     /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
-    const router = useRouter();
-
-    const blobCreated = shallowRef(false);
     const link = shallowRef("");
-    const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
+    const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
+    const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
+    const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {
         if(blobCreated.value) { return; }
         blob.value = await fetch(file).then((res) => res.blob());
-
         objectUrl.value = URL.createObjectURL(blob.value);
-        blobCreated.value = true;
         changeLink("default");
     }
 
@@ -715,9 +745,8 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     function deleteBlob() {
         if(!blobCreated.value) { return; }
         blob.value = null;
+        URL.revokeObjectURL(objectUrl.value);
         objectUrl.value = "";
-
-        blobCreated.value = false;
         changeLink("default");
     }
 
@@ -726,9 +755,9 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * @param {Blob} newBlob The new Blob that represents the hosted document.
      */
     function setNewBlob(newBlob) {
+        if(blobCreated.value) { deleteBlob(); }
         blob.value = newBlob;
         objectUrl.value = URL.createObjectURL(blob.value);
-        blobCreated.value = true;
     }
 
     /**
@@ -753,7 +782,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd,
+    return { path, onRoute, file, fileSize, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd,
         initBlob, setNewBlob, deleteBlob, checkPath, changeLink
     }
 }

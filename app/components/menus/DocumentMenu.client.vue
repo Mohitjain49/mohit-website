@@ -56,7 +56,7 @@
 
         <div class="mohit-navMenu-opt-group">
             <div class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()" pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()" :title="documentStore.documentDownloadTitle" pulse-loop>
                     <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
                     <span> Download Document </span>
                 </button>
@@ -77,6 +77,12 @@
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" pulse-loop>
                     <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
                     <span> Share Document </span>
+                </button>
+            </div>
+            <div v-if="documentStore.copyDocumentSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.copyDoc()" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.copyIcon" :spin-pulse="documentStore.copyPending" />
+                    <span> Copy Document </span>
                 </button>
             </div>
             <div v-if="documentStore.docImagesLoaded" class="mohit-navMenu-opt hosted-file-save-opt">

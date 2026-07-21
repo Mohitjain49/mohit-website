@@ -1,7 +1,7 @@
 <template>
 <div ref="document-options" :class="['mohit-document-topBar', (documentStore.onMarkdownRoute ? 'markdown' : '')]">
     <div class="mohit-document-topBar-sideSection">
-        <button class="doc-save-opt" @click="documentStore.downloadDoc()" title="Download Document" pulse-loop>
+        <button class="doc-save-opt" @click="documentStore.downloadDoc()" :title="documentStore.documentDownloadTitle" pulse-loop>
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
         </button>
         <button class="doc-save-opt" v-if="documentStore.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" pulse-loop>
@@ -14,8 +14,12 @@
                 :fade="(!documentStore.showPrintButton && !documentStore.docImageFetchFailed)"
             />
         </button>
+
         <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
+        </button>
+        <button class="doc-save-opt" v-if="documentStore.copyDocumentSupported" @click="documentStore.copyDoc()" title="Copy Document" pulse-loop>
+            <font-awesome-icon :icon="documentStore.copyIcon" :spin-pulse="documentStore.copyPending" />
         </button>
         <button class="doc-save-opt" v-if="(documentStore.docImagesLoaded || !documentStore.docImageFetchFailed)"
             @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
