@@ -90,6 +90,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentCopyStatus = ref(0);
 
     const imageDownloadStatus = ref(0);
+    const imageCopyStatus = ref(0);
+
     const documentUploadToGoogleDriveStatus = ref(0);
     const documentUploadToGoogleDriveCanceled = ref(false);
 
@@ -109,6 +111,8 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
     const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
+    const useImageCopy = computed(() => { return (webData.copyImageSupported && docImagesLoaded.value == 1); });
+
     const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && docImagesLoaded.value); });
     const showPrintButton = computed(() => { return (browserPdfViewerPresent.value || docImagesLoaded.value); });
 
@@ -140,6 +144,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         const imageDownloadInt = imageDownloadStatus.value;
         return ((imageDownloadInt == 0) ? 'fa-image' : DOCUMENT_ACTION_STATUS_ICONS[imageDownloadInt]);
     });
+    const imageCopyIcon = computed(() => {
+        const imageCopyInt = imageCopyStatus.value;
+        return ((imageCopyInt == 0) ? 'fa-images' : DOCUMENT_ACTION_STATUS_ICONS[imageCopyInt]);
+    });
     const uploadToGoogleDriveIcon = computed(() => {
         const uploadInt = documentUploadToGoogleDriveStatus.value;
         const uploadPending = uploadToGoogleDrivePending.value;
@@ -155,6 +163,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const copyPending = computed(() => { return (documentCopyStatus.value == DOCUMENT_ACTION_PENDING); });
 
     const imageDownloadPending = computed(() => { return (imageDownloadStatus.value == DOCUMENT_ACTION_PENDING); });
+    const imageCopyPending = computed(() => { return (imageCopyStatus.value == DOCUMENT_ACTION_PENDING); });
     const uploadToGoogleDrivePending = computed(() => {
         return (documentUploadToGoogleDriveStatus.value == DOCUMENT_ACTION_PENDING || googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
     });
@@ -364,7 +373,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    /** This function copies the document into the visitors OS Clipboard. */
+    /** This function copies the document into the visitor's OS Clipboard. */
     async function copyDoc() {
         if(documentCopyStatus.value != 0) { return; }
         documentCopyStatus.value = 1;
@@ -380,6 +389,23 @@ export const useDocumentStore = defineStore("document-store", () => {
             documentCopyStatus.value = 3;
         } finally {
             setTimeout(() => { documentCopyStatus.value = 0; }, 3000);
+        }
+    }
+
+    /** This function copies the document as an image into the visitor's OS Clipboard. */
+    async function copyDocAsImage() {
+        if(useImageCopy.value && imageCopyStatus.value != 0) { return; }
+        imageCopyStatus.value = 1;
+
+        try {
+            const tempImgBlob = await (await fetch(docImageUrls.value[0])).blob();
+            await navigator.clipboard.write([new ClipboardItem({ [tempImgBlob.type]: tempImgBlob })]);
+            imageCopyStatus.value = 2;
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            imageCopyStatus.value = 3;
+        } finally {
+            setTimeout(() => { imageCopyStatus.value = 0; }, 3000);
         }
     }
 
@@ -770,14 +796,15 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed,
-        googleDriveOptionAvailable, saveAsSupported, copyDocumentSupported, browserPdfViewerPresent, workerSrcAdded,
+        googleDriveOptionAvailable, saveAsSupported, copyDocumentSupported, useImageCopy, browserPdfViewerPresent, workerSrcAdded,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
-        downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
-        downloadPending, savePending, printPending, sharePending, copyPending, imageDownloadPending, uploadToGoogleDrivePending,
+        downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, imageCopyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
+        downloadPending, savePending, printPending, sharePending, copyPending, imageDownloadPending, imageCopyPending, uploadToGoogleDrivePending,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav, showPrintButton,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, downloadDocAsImage, requestGoogleToUploadDoc, toggleDocumentFullScreen, setPdfSize, scrollToPage,
-        mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages, initGoogleTokenClient, initGooglePickerAPI
+        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, copyDocAsImage, downloadDocAsImage, requestGoogleToUploadDoc,
+        toggleDocumentFullScreen, setPdfSize, scrollToPage, initGoogleTokenClient, initGooglePickerAPI,
+        mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages
     }
 });
 

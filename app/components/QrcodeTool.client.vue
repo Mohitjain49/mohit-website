@@ -65,7 +65,7 @@
                         <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow" title="Download QR Code.">
                             <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
                         </button>
-                        <button @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
+                        <button v-if="webData.copyImageSupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
                         </button>
                         <a v-if="(qrCodeURL != undefined)" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
@@ -351,7 +351,7 @@ async function shareQRCodeLink() {
 
 /** This function shares the actual QR Code image. */
 function shareQRCode() {
-    if(actions.value.shareImage > 0 || qrCodeBlob.value == null) { return; }
+    if(!webData.copyImageSupported || actions.value.shareImage > 0 || qrCodeBlob.value == null) { return; }
     actions.value.shareImage = 1;
     const blob = qrCodeBlob.value;
 
@@ -398,9 +398,9 @@ function downloadQRCode() {
 async function copyQRCode() {
     if(actions.value.copyImage > 0 || qrCodeBlob.value == undefined) { return; }
     actions.value.copyImage = 1;
-    const blob = qrCodeBlob.value;
 
     try {
+        const blob = qrCodeBlob.value;
         await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
         actions.value.copyImage = 2; 
     } catch(e) {

@@ -40,6 +40,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const navFooterPresent = ref(false);
     const compassMenuAvailable = ref(false);
     const wakeLockChangeFresh = ref(false);
+    const copyImageSupported = ref(false);
     const nullifyBodyClick = ref(false);
 
     const noMenuOpen = computed(() => { return (menuOpen.value == NO_MENU); });
@@ -122,6 +123,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         await onNuxtReadyAdvanced();
 
         nuxtReady.value = true;
+        copyImageSupported.value = ClipboardItem.supports("image/png");
         const signal = controller.signal;
 
         audioStore.setupClickAudio();
@@ -364,10 +366,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
+    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported,
         menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
         documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
-        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
+        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getCurrentWebsiteMenuElement,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }

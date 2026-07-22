@@ -91,6 +91,12 @@
                     <span> Download Document (PNG) </span>
                 </button>
             </div>
+            <div v-if="documentStore.useImageCopy" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.copyDocAsImage()" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.imageCopyIcon" :spin-pulse="documentStore.imageCopyPending" />
+                    <span> Copy Document (PNG) </span>
+                </button>
+            </div>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 

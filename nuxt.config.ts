@@ -68,6 +68,7 @@ export default defineNuxtConfig({
         ]
     },
     nitro: {
+        static: true,
         prerender: { concurrency: 1 },
         preset: "static"
     },
