@@ -75,7 +75,10 @@ const router = useRouter();
 const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
-const reactiveMeta = useReactiveMeta("Mohit Jain | Copyright Notice", "copyright",
+const COPYRIGHT_NOTICE_TITLE = "Mohit Jain | Copyright Notice";
+const LICENSE_PAGE_TITLE = "Mohit Jain | Website Code License";
+
+const reactiveMeta = useReactiveMeta(COPYRIGHT_NOTICE_TITLE, "copyright",
     "A legal disclaimer for any vistors on my website.", "rgb(248, 206, 171)"
 );
 
@@ -97,7 +100,7 @@ usePulseLoopAnimation(copyrightBodyRef);
 // Updates the Website Date Information when the website is mounted.
 onMountedAdvanced(() => {
     initWebData();
-    setPageTitle(licenseLink.value);
+    setPageTitle(showLicense.value);
 
     COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);
@@ -110,7 +113,7 @@ watch(showLicense, (newValue) => { setPageTitle(newValue); });
 
 /** This sets the page title based on when the user changes between the License and Main Statement. */
 function setPageTitle(newValue = false) {
-    reactiveMeta.changeTitle(newValue ? "Mohit Jain | Website Code License" : "Mohit Jain | Copyright Statement");
+    reactiveMeta.changeTitle(newValue ? LICENSE_PAGE_TITLE : COPYRIGHT_NOTICE_TITLE);
 }
 
 /**  This function checks for updates, deletes the cache, and unregisters service workers. */

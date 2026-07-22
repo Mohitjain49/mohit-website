@@ -1,5 +1,4 @@
 import { execSync } from 'node:child_process';
-import { readFile, writeFile, rm } from 'node:fs/promises';
 import readline from 'node:readline/promises';
 
 /** This array contains the arguments that can be passed in for this script. */

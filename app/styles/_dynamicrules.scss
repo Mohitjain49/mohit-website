@@ -1,48 +1,86 @@
 @use "sass:math";
+@use "sass:selector";
 
 // This rule is a dynamic version of the "max-width" rule that accounts for the "zoom" css property.
-@mixin dynamic-less-equal-width-rule($value) {
-    @at-root :global(html) { --less-equal-width-bp_#{$value}: #{$value}; }
-    @at-root html { --less-equal-width-bp_#{$value}: #{$value}; }
+@mixin dynamic-less-equal-width-rule($value, $in-scoped-block: 0) {
+    @if $in-scoped-block == 1 {
+        :global(html) { --less-equal-width-bp_#{$value}: #{$value}; }
+    } @else if $in-scoped-block == -1 {
+        html { --less-equal-width-bp_#{$value}: #{$value}; }
+    } @else {
+        :global(html) { --less-equal-width-bp_#{$value}: #{$value}; }
+        html { --less-equal-width-bp_#{$value}: #{$value}; }
+    }
+
     html[less-equal-width-bp-#{$value}] { @content; }
-    
     html:not(.js__active) {
         @media (max-width: #{$value}px) { @content; }
     }
 }
 
 // This rule is a dynamic version of the "min-width" rule that accounts for the "zoom" css property.
-@mixin dynamic-greater-equal-width-rule($value) {
-    @at-root :global(html) { --greater-equal-width-bp_#{$value}: #{$value}; }
-    @at-root html { --greater-equal-width-bp_#{$value}: #{$value}; }
-    html[greater-equal-width-bp-#{$value}] { @content; }
+@mixin dynamic-greater-equal-width-rule($value, $in-scoped-block: 0) {
+    @if $in-scoped-block == 1 {
+        :global(html) { --greater-equal-width-bp_#{$value}: #{$value}; }
+    } @else if $in-scoped-block == -1 {
+        html { --greater-equal-width-bp_#{$value}: #{$value}; }
+    } @else {
+        :global(html) { --greater-equal-width-bp_#{$value}: #{$value}; }
+        html { --greater-equal-width-bp_#{$value}: #{$value}; }
+    }
 
+    html[greater-equal-width-bp-#{$value}] { @content; }
     html:not(.js__active) {
         @media (min-width: #{$value}px) { @content; }
     }
 }
 
 // This rule is a dynamic version of the "max-height" rule that can account for the "zoom" css property.
-@mixin dynamic-less-equal-height-rule($value) {
-    @at-root :global(html) { --less-equal-height-bp_#{$value}: #{$value}; }
-    @at-root html { --less-equal-height-bp_#{$value}: #{$value}; }
+@mixin dynamic-less-equal-height-rule($value, $in-scoped-block: 0) {
+    @if $in-scoped-block == 1 {
+        :global(html) { --less-equal-height-bp_#{$value}: #{$value}; }
+    } @else if $in-scoped-block == -1 {
+        html { --less-equal-height-bp_#{$value}: #{$value}; }
+    } @else {
+        :global(html) { --less-equal-height-bp_#{$value}: #{$value}; }
+        html { --less-equal-height-bp_#{$value}: #{$value}; }
+    }
+
     html[less-equal-height-bp-#{$value}] { @content; }
-    
     html:not(.js__active) {
         @media (max-height: #{$value}px) { @content; }
     }
 }
 
 // This rule is a dynamic version of the "min-height" rule that can account for the "zoom" css property.
-@mixin dynamic-greater-equal-height-rule($value) {
-    @at-root :global(html) { --greater-equal-height-bp_#{$value}: #{$value}; }
-    @at-root html { --greater-equal-height-bp_#{$value}: #{$value}; }
+@mixin dynamic-greater-equal-height-rule($value, $in-scoped-block: 0) {
+    @if $in-scoped-block == 1 {
+        :global(html) { --greater-equal-height-bp_#{$value}: #{$value}; }
+    } @else if $in-scoped-block == -1 {
+        html { --greater-equal-height-bp_#{$value}: #{$value}; }
+    } @else {
+        :global(html) { --greater-equal-height-bp_#{$value}: #{$value}; }
+        html { --greater-equal-height-bp_#{$value}: #{$value}; }
+    }
+
     html[greater-equal-height-bp-#{$value}] { @content; }
-    
     html:not(.js__active) {
         @media (min-height: #{$value}px) { @content; }
     }
 }
+
+// These functions specify if the dynamic rule should use its scoped block or unscoped block setting.
+@mixin dynamic-less-equal-width-rule-scopedBlock($value) { @include dynamic-less-equal-width-rule($value, 1) { @content; }}
+@mixin dynamic-less-equal-width-rule-noScopedBlock($value) { @include dynamic-less-equal-width-rule($value, -1) { @content; }}
+
+@mixin dynamic-greater-equal-width-rule-scopedBlock($value) { @include dynamic-greater-equal-width-rule($value, 1) { @content; }}
+@mixin dynamic-greater-equal-width-rule-noScopedBlock($value) { @include dynamic-greater-equal-width-rule($value, -1) { @content; }}
+
+@mixin dynamic-less-equal-height-rule-scopedBlock($value) { @include dynamic-less-equal-height-rule($value, 1) { @content; }}
+@mixin dynamic-less-equal-height-rule-noScopedBlock($value) { @include dynamic-less-equal-height-rule($value, -1) { @content; }}
+
+@mixin dynamic-greater-equal-height-rule-scopedBlock($value) { @include dynamic-greater-equal-height-rule($value, 1) { @content; }}
+@mixin dynamic-greater-equal-height-rule-noScopedBlock($value) { @include dynamic-greater-equal-height-rule($value, -1) { @content; }}
 
 // This function applies the zoom factor to any numeric value.
 @function apply-zoom-factor($value) {
@@ -51,4 +89,11 @@
     } @else {
         @return calc($value * var(--webpage-zoom-factor));
     }
+}
+
+// This function allows selectors like classes to be chained, allowing them to have cleaner priority assignment,
+@function chain-selector($selector, $count: 3) {
+    $chained: "";
+    @for $i from 1 through $count { $chained: "#{$chained}#{$selector}"; }
+    @return selector.parse($chained);
 }

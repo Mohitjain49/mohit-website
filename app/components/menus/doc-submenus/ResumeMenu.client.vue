@@ -34,17 +34,17 @@
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(3)" pulse-loop>
-                <font-awesome-icon icon="fa-file-export" />
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_MENU)" pulse-loop>
+                <font-awesome-icon icon="fa-file-pdf" />
                 <span> Back To Document Options </span>
             </button>
         </div>
 
-        <div v-if="(newResumeState && resumeStore.queryOutOfSync)" class="mohit-navMenu-opt-break"></div>
+        <div v-if="(newResumeState || resumeStore.queryOutOfSync)" class="mohit-navMenu-opt-break"></div>
         <div v-if="resumeStore.queryOutOfSync" class="mohit-navMenu-opt">
             <button class="mohit-navMenu-mainOpt" pulse-loop
                 @click="() => { reloadNuxtApp({ force: true }); }"
-                :style="getColorStyles('#996e03')">
+                :style="getColorStyles('var(--blue-one)')">
 
                 <font-awesome-icon icon="fa-rotate-right" />
                 <span> Reload Webpage </span>
@@ -62,10 +62,7 @@
 
 <script setup>
 const webData = useWebsiteDataStore();
-const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
-
-const fullScreenSet = getFullScreenSet();
 const { resumeMenuOpen } = storeToRefs(webData);
 
 const resumeOptions = ref([

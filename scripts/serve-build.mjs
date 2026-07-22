@@ -7,6 +7,7 @@ To use a custom port, run "npm run serve -- --port {port goes here}"
 import http from "node:http";
 import fs from "node:fs";
 import handler from "serve-handler";
+import readline from "node:readline"
 import { execSync } from 'node:child_process';
 
 /** This array contains the arguments that can be passed in for this script. */
@@ -16,7 +17,11 @@ const DEFAULT_PORT = 3007;
 
 /** @type {http.Server} This holds the server instance that the script holds. */
 var server = null;
+var serverListening = false;
 var isShuttingDown = false;
+
+readline.emitKeypressEvents(process.stdin);
+if(process.stdin.isTTY) { process.stdin.setRawMode(true); }
 
 /** This function gets the port the http server should use. */
 function getPort() {
@@ -31,7 +36,7 @@ function getPort() {
  * @param {String} signal The signal used to end the script.
  */
 function shutdownServer(signal) {
-    if(isShuttingDown || !server) { return; }
+    if(isShuttingDown || !serverListening || !server) { return; }
     isShuttingDown = true;
     console.log(`\nReceived ${signal}. Closing server...`);
 
@@ -65,9 +70,12 @@ function main() {
 
     process.on("SIGINT", () => shutdownServer("SIGINT"));
     process.on("SIGTERM", () => shutdownServer("SIGTERM"));
+    process.stdin.on("keypress", (chunk = "", key) => { if(key.name === "q") { shutdownServer("Q"); }});
 
     server.listen(PORT, () => {
         const url = `http://localhost:${PORT}`;
+        serverListening = true;
+
         console.log(`Serving ${PUBLIC_DIR}`);
         console.log(`Server running at ${url}`);
 

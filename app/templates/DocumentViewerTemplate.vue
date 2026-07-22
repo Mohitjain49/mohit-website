@@ -36,16 +36,10 @@ const PAGE_METADATA = [
         type: "default",
     },
     {
-        title: "Mohit Jain | Fulton Internship Program Appreciation Certificate Spring 2025",
-        route: "Fulton_Internship_Program_Appreciation_Certificate_Spring_2025",
-        desc: "This is my Fulton Internship Program Appreciation Certificate from Spring 2025.",
-        type: "default",
-    },
-    {
         title: "Mohit Jain | Generative Artificial Intelligence Transforming Industries Research Paper",
         route: "Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper",
-        desc: "This is a research paper that I contributed to. " +
-            "It talks about the Applications of Generative Artificial Intelligence in the workplace.",
+        desc: ("This is a research paper that I contributed to. " +
+            "It talks about the Applications of Generative Artificial Intelligence in the workplace."),
         type: "default",
     }
 ];

@@ -7,7 +7,7 @@
     </Transition>
     <Transition name="file-widgets-transition" appear>
         <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" pulse-loop>
-            <FontAwesomeIcon icon="fa-file-export" />
+            <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
         </button>
     </Transition>
 </div>
@@ -37,7 +37,7 @@ usePulseLoopAnimation(fileWidgets);
 /** This function opens the options for the file. */
 function openOptions() {
     webData.bypassBodyClick();
-    webData.setMenuOpen((onDocumentRoute.value ? 3 : 2), true);
+    webData.setMenuOpen((onDocumentRoute.value ? DOCUMENT_MENU : SCRIPTS_MENU), true);
 }
 
 /** This function exits out of full screen mode for a hosted file. */

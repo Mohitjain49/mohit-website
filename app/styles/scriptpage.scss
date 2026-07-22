@@ -153,11 +153,21 @@
     color: white;
     border-color: white;
 }
-.mohit-main-script-top button.lightblue, .mohit-main-script-top a.lightblue {
+
+.mohit-main-script-top-group {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 5px;
+}
+.mohit-main-script-top .script-save-opt:nth-last-of-type(even) {
     color: var(--blue-one);
     border-color: var(--blue-one);
 }
-.mohit-main-script-top button.blue, .mohit-main-script-top a.blue {
+.mohit-main-script-top .script-save-opt:nth-last-of-type(odd) {
     color: var(--blue-three);
     border-color: var(--blue-three);
 }

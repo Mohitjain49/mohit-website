@@ -41,10 +41,7 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
                 itemListElement
             })
         }],
-        htmlAttrs: {
-            lang: "en",
-            style: ("background-color: " + bgColor + "; --webpage-html-bg-color: " + bgColor)
-        },
+        htmlAttrs: { style: ("background-color: " + bgColor + "; --webpage-html-bg-color: " + bgColor) },
 
         meta: [
             { name: 'description', content: pageDesc },
@@ -135,7 +132,7 @@ export function getMetaWithLink(pageTitle = WEBSITE_TITLE, pageLink = PERSONAL_W
     return {
         title: pageTitle,
         link: [{ rel: 'icon', href: og_img }],
-        htmlAttrs: { lang: "en", style: "background-color: rgb(248, 206, 171)" },
+        htmlAttrs: { style: "background-color: rgb(248, 206, 171); --webpage-html-bg-color: rgb(248, 206, 171)" },
 
         meta: [
             { name: 'description', content: pageDesc },

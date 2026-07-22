@@ -35,7 +35,7 @@ onBeforeUnmount(() => { resumeStore.unmountResumePage(); });
 /** This determines if the Full Screen Web Cover should be visible or not. */
 const showFsWebCover = computed(() => {
     if(!fullScreenSet.value) { return false; }
-    return (webData.showSharePopupImmediate || (webData.menuOpen >= 3 && webData.menuOpen < 4));
+    return (webData.showSharePopupImmediate || (webData.menuOpen >= DOCUMENT_MENU && webData.menuOpen < (DOCUMENT_MENU + 1)));
 });
 
 useHead(getMeta("Mohit Jain | My Resume (Markdown Format)", "resume/markdown",

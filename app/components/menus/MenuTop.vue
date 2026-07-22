@@ -11,8 +11,8 @@
     </div>
 
     <div class="mohit-navBar-icons menu-top right">
-        <button v-if="props.showDocOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(3)" title="Back To Document Options" pulse-loop>
-            <font-awesome-icon icon="fa-file-export" />
+        <button v-if="props.showDocOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(DOCUMENT_MENU)" title="Back To Document Options" pulse-loop>
+            <font-awesome-icon icon="fa-file-pdf" />
         </button>
         <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" pulse-loop>
             <font-awesome-icon icon="fa-share-from-square" />

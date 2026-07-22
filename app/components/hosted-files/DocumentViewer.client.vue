@@ -10,11 +10,11 @@
             <div v-if="!documentStore.docLoaded.status" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
             </div>
-            <button v-if="showDocumentShareWidgets" @click="openShare(page.num)" class="pdf-doc-linkBtn" :title="('Get A Link For This Document!')">
+            <button v-if="showDocumentShareWidgets" @click="openShare(page.num)" class="pdf-doc-linkBtn" :title="('Get A Link For Page ' + page.num + '.')">
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
-            <div :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]">
+            <div @contextmenu="onPdfContentMenu" :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]">
                 <canvas :id="('pdf_canvas_' + page.num)"></canvas>
                 <div v-if="annontations" class="textLayer" :id="('pdf_text_layer_' + page.num)"></div>
                 <div v-if="(annontations && page.showAnnotations)" class="annotationLayer" :id="('pdf_annotation_layer_' + page.num)"></div>
@@ -42,12 +42,10 @@
 </template>
 
 <script setup>
-import { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } from "pdfjs-dist";
-import { PDFLinkService, EventBus } from "pdfjs-dist/web/pdf_viewer.mjs";
 import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-
-const DEFAULT_OUTPUT_SCALE = 2;
 const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";
+
+const CUSTOM_ANNOTATION_HTML_CLASS = "mohit-pdf-linkAnnotation";
 const CUSTOM_PDFJS_DEST_ATTRIBUTE = "mohit-data-pdfjs-dest";
 const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
 const CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE = "mohit-pdfjs-raw-width";
@@ -58,13 +56,13 @@ var resizeAbortController = new AbortController();
 
 var renderTasks = { canvas: null, text: null, annontation: null }
 var pdfDocLoadingTask = null;
-const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
 
 const webData = useWebsiteDataStore();
 const fullScreenSet = getFullScreenSet();
 const documentStore = useDocumentStore();
 const styleStore = useStyleStore();
 const router = useRouter();
+const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
 
 const props = defineProps({
     templateIndex: { type: Number, required: true },
@@ -84,7 +82,7 @@ const showDocumentShareWidgets = computed(() => {
 });
 const showFsWebCover = computed(() => {
     if(!fullScreenSet.value) { return false; }
-    return (webData.showSharePopupImmediate || (webData.menuOpen >= 3 && webData.menuOpen < 4));
+    return (webData.showSharePopupImmediate || (webData.menuOpen >= DOCUMENT_MENU && webData.menuOpen < (DOCUMENT_MENU + 1)));
 });
 
 // These manage the PDF Viewer when it is mounted an unmounted.
@@ -114,6 +112,10 @@ function getPageElement(index = 1) {
 async function renderPDF() {
     scrollToTop(true, 0);
     cancelRenders();
+    if(renderAborted()) { return; }
+
+    const { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } = await import("pdfjs-dist");
+    const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
     if(renderAborted()) { return; }
 
     if(!documentStore.workerSrcAdded) {
@@ -155,14 +157,14 @@ async function renderPDF() {
         var canvas = document.getElementById("pdf_canvas_" + i);
         var context = canvas.getContext("2d");
 
-        canvas.width = Math.floor(viewport.width * DEFAULT_OUTPUT_SCALE);
-        canvas.height = Math.floor(viewport.height * DEFAULT_OUTPUT_SCALE);
+        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
         renderTasks.canvas = page.render({
             canvasContext: context,
-            transform: [DEFAULT_OUTPUT_SCALE, 0, 0, DEFAULT_OUTPUT_SCALE, 0, 0],
+            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
             viewport: viewport
         });
 
@@ -213,7 +215,9 @@ async function renderPDF() {
 
                     if(!annotationDataId) { continue; }
                     const annotationDataObject = annotations.find((item) => { return (item.id === annotationDataId); });
+
                     if(!annotationDataObject || annotationDataObject.subtype !== "Link") { continue; }
+                    innerAnnotationElement.classList.add(CUSTOM_ANNOTATION_HTML_CLASS);
 
                     if(annotationDataObject.dest) {
                         innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(annotationDataObject.dest));
@@ -399,6 +403,16 @@ function onAnnotationClick(event) {
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
+}
+
+/**
+ * This event should trigger whenever someone right clicks on a rendered PDF.
+ * @param {PointerEvent} event The event fired by the action.
+ */
+async function onPdfContentMenu(event) {
+    event.preventDefault();
+    webData.setMenuOpen(DOCUMENT_MENU, true);
+    triggerClickSound();
 }
 
 /**

@@ -7,15 +7,17 @@
     <div class="mohit-main-script" id="mohit-main-script">
         <div ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
-                <button class="lightblue" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
-                    <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
-                </button>
-                <button class="blue" v-if="(scriptsStore.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
-                        <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
-                </button>
-                <button class="lightblue" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>
-                    <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
-                </button>
+                <div class="mohit-main-script-top-group">
+                    <button class="script-save-opt" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
+                        <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
+                    </button>
+                    <button class="script-save-opt" v-if="(scriptsStore.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
+                            <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
+                    </button>
+                    <button class="script-save-opt" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>
+                        <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
+                    </button>
+                </div>
                 <a class="white" v-if="(scriptsStore.currentScriptLink != '')" :href="scriptsStore.currentScriptLink" title="See Code On Github" pulse-loop>
                     <font-awesome-icon icon="fa-brands fa-github" />
                 </a>
@@ -79,7 +81,7 @@ const showFsWebCover = computed(() => {
 /** This function opens the scripts menu. */
 function openScriptsMenu() {
     webData.bypassBodyClick();
-    webData.setMenuOpen(2, true);
+    webData.setMenuOpen(SCRIPTS_MENU, true);
 }
 
 const PAGE_METADATA = [

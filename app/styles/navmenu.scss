@@ -203,6 +203,11 @@
 .mohit-navBar-statusIcon.share {
     background-color: rgba(0, 0, 0, 1);
 }
+.mohit-navBar-statusIcon.resume-unsynced {
+    color: var(--blue-one);
+    border-color: var(--blue-one);
+    box-shadow: 0px 0px 7px 2px white;
+}
 
 .mohit-navBar-loadingWidget {
     cursor: default !important;
@@ -300,6 +305,22 @@
 .mohit-navMenu-opt.light {
     color: var(--website-light-text);
     border-color: var(--website-light-text);
+}
+
+.mohit-navMenu-opt.hosted-file-save-opt:nth-last-of-type(even) {
+    color: var(--blue-one);
+    border-color: var(--blue-one);
+}
+.mohit-navMenu-opt.hosted-file-save-opt:nth-last-of-type(odd) {
+    color: var(--blue-three);
+    border-color: var(--blue-three);
+}
+
+.mohit-navMenu-opt-group {
+    width: 100%;
+    height: fit-content;
+    margin: 0px;
+    padding: 0px;
 }
 
 .mohit-navBar-icons.menu-top { align-items: end; }
@@ -444,7 +465,7 @@
     position: relative;
     left: 10px;
     width: calc(100% - 20px);
-    height: 1px;
+    height: 2px;
     background-color: var(--website-text);
     margin: 10px 0px;
     border-radius: 10px;

@@ -1,6 +1,4 @@
 <script setup>
-import fcs_logo from "~/assets/Fulton_County_Schools_Logo.png";
-
 const DOCUMENT_TABS = [
     {
         id: "resume-tab",
@@ -22,14 +20,7 @@ const DOCUMENT_TABS = [
         header: { faIcon: true, img: "fa-brands fa-github", size: 0, title: "Create A Github Repo" },
         desc: "This is an instructions guide to how to create and clone a Repository with GitHub. " +
             "It'll walk anyone through creating an account with GitHub as well."
-    },
-    {
-        id: "fcs-certificate-tab",
-        link: FCS_CERTIFICATE_ROUTE,
-        header: { faIcon: false, img: fcs_logo, size: 110, title: "" },
-        desc: "iVue takes in a few interns through the Fulton County Schools Internship Program. " +
-            "We teach website design and development skills to these interns via interactive learning."
-    },
+    }
 ]
 
 const NUM_DOCUMENT_TABS = DOCUMENT_TABS.length;

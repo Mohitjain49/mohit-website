@@ -29,10 +29,12 @@ export default {
         const documentStore = useDocumentStore($pinia);
 
         // This waits for the page to load before triggering any scroll.
-        await new Promise<void>((resolve, reject) => {
-            hooks.hookOnce('page:loading:end', () => { resolve(); });
-            sleep(300).then(() => { resolve(); });
-        });
+        if(differentPage) {
+            await new Promise<void>((resolve, reject) => {
+                hooks.hookOnce('page:loading:end', () => { resolve(); });
+                sleep(1000).then(() => { resolve(); });
+            });
+        }
 
         // This function instant scrolls to the top of the page if certain conditions are met. 
         if(!hashExists && differentPage) {
