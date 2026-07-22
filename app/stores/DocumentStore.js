@@ -5,6 +5,7 @@ import Create_Github_Repo from "/Create_Github_Repo.pdf";
 import { ofetch } from 'ofetch';
 import { zipSync } from 'fflate';
 
+import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import Bowser from "bowser";
 import prettyBytes from "pretty-bytes";
 
@@ -14,9 +15,11 @@ const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
 const PDF_MIME_TYPE = "application/pdf";
 const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
+
 export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const DOCUMENT_ACTION_PENDING = 1;
 
+export const DEFAULT_PDF_OUTPUT_SCALE = 2;
 export const DEFAULT_PDF_MAX_WIDTH = 850;
 export const DEFAULT_PDF_MIN_WIDTH = 320;
 export const PDF_LETTER_SCALE = 1.295;
@@ -531,14 +534,17 @@ export const useDocumentStore = defineStore("document-store", () => {
         webData.mountWebData();
         await nextTick();
 
-        if(onResumeRoute.value && !onMarkdownRoute.value) {
-            await resumeStore.initBlob();
+        if(onResumeRoute.value) {
+            await resumeStore.initBlob({ addQrcode: false, removeLinks: false, updateQuery: false });
         } else if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
             await hostedDocuments[currentDocumentRoute.value].initBlob();
         }
 
-        if(onMarkdownRoute.value) { return; }
-        mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
+        if(onMarkdownRoute.value) {
+            await getRawPdfAsImages();
+        } else {
+            mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
+        }
     }
 
     /** This function unmounts a page that hosts a document. */
@@ -570,7 +576,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         setWindowSizeWatchers(true, false);
     }
 
-    /** This function returns rendered PDF Pages as an array of images (PNGs) for anyting to use. */
+    /** This function renders a PDF as an array of images (PNGs) for anything using PDF.js. */
     async function getPdfAsImages() {
         if(!import.meta.client || !docLoaded.value.status) { return; }
 
@@ -586,6 +592,71 @@ export const useDocumentStore = defineStore("document-store", () => {
                     /** @type {HTMLCanvasElement} The canvas for the page on the Document Viewer. */
                     const canvasElement = document.getElementById("pdf_canvas_" + i);
 
+                    if(!canvasElement) { resolve(null); }
+                    canvasElement.toBlob((result) => { resolve(result); }, "image/png", 1);
+                });
+
+                if(!imgBlob) {
+                    throw new Error("Image Fetch Failed For Page " + i + ".");
+                } else {
+                    imgArray.push(URL.createObjectURL(imgBlob));
+                    imgBlobSize += imgBlob.size;
+                }
+            }
+
+            // Holds the images in a reference array.
+            docImageUrls.value = imgArray;
+            docImagesSize.value = prettyBytes(imgBlobSize, { binary: true });
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            docImageFetchFailed.value = true;
+        }
+    }
+
+    /** This function returns rendered PDF Pages as an array of images (PNGs) for anyting to use. */
+    async function getRawPdfAsImages() {
+        if(!import.meta.client || !currentDocumentBlobCreated.value) { return; }
+
+        try {
+            /** @type {Array<String>} The array of images to use. */
+            const imgArray = [];
+            var imgBlobSize = 0;
+
+            const { getDocument, GlobalWorkerOptions } = await import("pdfjs-dist");
+            if(!workerSrcAdded.value) {
+                GlobalWorkerOptions.workerSrc = workerSrcUrl;
+                workerSrcAdded.value = true;
+            }
+
+            const documentFile = getCurrentPDFObject();
+            if(!documentFile || !documentFile.url) { throw new Error("Document Does Not Exist."); }
+
+            const tempPdfDocLoadingTask = getDocument({ url: documentFile.url });
+            const tempPdfDoc = await tempPdfDocLoadingTask.promise;
+            const numPages = tempPdfDoc.numPages;
+
+            for(let i = 1; i <= numPages; i++) {
+                const tempPdfPage = await tempPdfDoc.getPage(i);
+                const tempDefaultViewport = tempPdfPage.getViewport({ scale: 1 });
+                const tempViewport = tempPdfPage.getViewport({ scale: (DEFAULT_PDF_MAX_WIDTH / tempDefaultViewport.width) });
+
+                const canvasElement = document.createElement("canvas");
+                const canvasContext = canvasElement.getContext("2d");
+
+                canvasElement.height = Math.floor(tempViewport.height * DEFAULT_PDF_OUTPUT_SCALE);
+                canvasElement.width = Math.floor(tempViewport.width * DEFAULT_PDF_OUTPUT_SCALE);
+
+                const canvasRenderTask = tempPdfPage.render({
+                    viewport: tempViewport,
+                    transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+                    canvasContext
+                });
+
+                // Renders the PDF Image in a canvas first.
+                await canvasRenderTask.promise;
+
+                /** @type {Blob} The image blob gotten from paring the canvas. */
+                const imgBlob = await new Promise((resolve, reject) => {
                     if(!canvasElement) { resolve(null); }
                     canvasElement.toBlob((result) => { resolve(result); }, "image/png", 1);
                 });
@@ -673,7 +744,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function sets the full screen for the element containing the document or script.
      */
     async function toggleDocumentFullScreen() {
-        if(!docLoaded.value.status || fsStateChanging.value) { return; }
+        if((!onMarkdownRoute.value && !docLoaded.value.status) || fsStateChanging.value) { return; }
         fsStateChanging.value = true;
 
         webData.bypassBodyClick();

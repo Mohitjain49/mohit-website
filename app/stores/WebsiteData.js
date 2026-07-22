@@ -4,7 +4,6 @@ export const WEBSITE_MENUS = [
     { id: "mohit-compassMenu", num: COMPASS_MENU },
     { id: "mohit-scriptsMenu", num: SCRIPTS_MENU },
     { id: "mohit-docMenu", num: DOCUMENT_MENU },
-    { id: "mohit-export-docMenu", num: EXPORT_DOCUMENT_MENU },
     { id: "mohit-resumeMenu", num: RESUME_MENU },
     { id: "mohit-metadata-docMenu", num: DOCUMENT_METADATA_MENU },
     { id: "mohit-docMenu-pdfNav", num: PDF_NAVIGATION_MENU }
@@ -48,7 +47,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const compassMenuOpen = computed(() => { return (menuOpen.value == COMPASS_MENU); });
     const scriptsMenuOpen = computed(() => { return (menuOpen.value == SCRIPTS_MENU); });
     const documentMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_MENU); });
-    const exportDocumentMenuOpen = computed(() => { return (menuOpen.value == EXPORT_DOCUMENT_MENU); });
     const resumeMenuOpen = computed(() => { return (menuOpen.value == RESUME_MENU); });
     const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_METADATA_MENU); });
     const pdfNavMenuOpen = computed(() => { return (menuOpen.value == PDF_NAVIGATION_MENU); });
@@ -367,7 +365,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, webFooter, webFooterVisibility,
-        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, exportDocumentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
+        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
         documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getCurrentWebsiteMenuElement,

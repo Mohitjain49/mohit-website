@@ -61,7 +61,7 @@
                     <span> Download Document </span>
                 </button>
             </div>
-            <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+            <div v-if="documentStore.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" pulse-loop>
                     <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
                     <span> Save Document </span>
@@ -94,27 +94,6 @@
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
-
-        <div v-if="(documentStore.documentLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
-            <a :href="documentStore.documentLink" target="mohit-document" class="mohit-navMenu-mainOpt" pulse-loop>
-                <font-awesome-icon icon="fa-up-right-from-square" />
-                <span> Open Document In New Tab </span>
-            </a>
-        </div>
-        <div v-if="!documentStore.onMarkdownRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" pulse-loop>
-                <font-awesome-icon icon="fa-database" />
-                <span> See Document Properties </span>
-            </button>
-        </div>
-        <div v-if="documentStore.showPdfPageNav" :style="getColorStyles('var(--lightning-yellow)')" class="mohit-navMenu-opt">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(PDF_NAVIGATION_MENU)" pulse-loop>
-                <font-awesome-icon icon="fa-compass" />
-                <span> Open PDF Navigation </span>
-            </button>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
-
         <template v-if="documentStore.googleDriveOptionAvailable">
             <div class="mohit-navMenu-sectionheader" :style="getColorStyles('#34A853')">
                 <span> Google Drive </span>
@@ -134,6 +113,28 @@
             </div>
             <div class="mohit-navMenu-opt-break"></div>
         </template>
+
+        <div class="mohit-navMenu-opt-group">
+            <div v-if="(documentStore.documentLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
+                <a :href="documentStore.documentLink" target="mohit-document" class="mohit-navMenu-mainOpt" pulse-loop>
+                    <font-awesome-icon icon="fa-up-right-from-square" />
+                    <span> Open Document In New Tab </span>
+                </a>
+            </div>
+            <div v-if="!documentStore.onMarkdownRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" pulse-loop>
+                    <font-awesome-icon icon="fa-database" />
+                    <span> See Document Properties </span>
+                </button>
+            </div>
+            <div v-if="documentStore.showPdfPageNav" class="mohit-navMenu-opt" :style="getColorStyles('white')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(PDF_NAVIGATION_MENU)" pulse-loop>
+                    <font-awesome-icon icon="fa-compass" />
+                    <span> Open PDF Navigation </span>
+                </button>
+            </div>
+        </div>
+        <div v-if="!documentStore.onMarkdownRoute" class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.toggleDocumentFullScreen()" pulse-loop>
@@ -171,7 +172,6 @@ const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
-const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
 const router = useRouter();
 

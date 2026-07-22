@@ -42,11 +42,7 @@
 </template>
 
 <script setup>
-import { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } from "pdfjs-dist";
-import { PDFLinkService, EventBus } from "pdfjs-dist/web/pdf_viewer.mjs";
 import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-
-const DEFAULT_OUTPUT_SCALE = 2;
 const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";
 
 const CUSTOM_ANNOTATION_HTML_CLASS = "mohit-pdf-linkAnnotation";
@@ -118,6 +114,10 @@ async function renderPDF() {
     cancelRenders();
     if(renderAborted()) { return; }
 
+    const { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } = await import("pdfjs-dist");
+    const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
+    if(renderAborted()) { return; }
+
     if(!documentStore.workerSrcAdded) {
         GlobalWorkerOptions.workerSrc = workerSrcUrl;
         documentStore.workerSrcAdded = true;
@@ -157,14 +157,14 @@ async function renderPDF() {
         var canvas = document.getElementById("pdf_canvas_" + i);
         var context = canvas.getContext("2d");
 
-        canvas.width = Math.floor(viewport.width * DEFAULT_OUTPUT_SCALE);
-        canvas.height = Math.floor(viewport.height * DEFAULT_OUTPUT_SCALE);
+        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
         renderTasks.canvas = page.render({
             canvasContext: context,
-            transform: [DEFAULT_OUTPUT_SCALE, 0, 0, DEFAULT_OUTPUT_SCALE, 0, 0],
+            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
             viewport: viewport
         });
 
