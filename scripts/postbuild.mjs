@@ -5,6 +5,7 @@ import prettyBytes from 'pretty-bytes';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
+import advancedFormat from 'dayjs/plugin/advancedFormat.js';
 
 /** This function adds the tag representing the .xsl file to the Sitemap to give the Sitemap a cleaner look. */
 function editSitemapXsl() {
@@ -29,12 +30,14 @@ function editSitemapXsl() {
 
 /** This function creates a simple file that records when the website was last built. */
 function createBuildInfoFile() {
+    const DATE_FORMAT = "M/D/YY, h:mm:ss A";
     const path = resolve("build-info.json");
     const outDir = resolve('.output/public');
     fs.rmSync(path, { force: true, recursive: true });
 
     dayjs.extend(utc);
     dayjs.extend(timezone);
+    dayjs.extend(advancedFormat);
 
     const localNow = dayjs();
     const utcNow = dayjs().utc();
@@ -52,8 +55,14 @@ function createBuildInfoFile() {
 
     /** The JSON Object that makes up the build information. */
     const jsonObj = JSON.stringify({
-        now_local: localNow.format(),
-        now_utc: utcNow.format(),
+        local: {
+            now: localNow.format(),
+            now_format: localNow.format(DATE_FORMAT)
+        },
+        utc: {
+            now: utcNow.format(),
+            now_format: utcNow.format(DATE_FORMAT)
+        },
         size_decimal: prettyBytes(totalBuildSizeInBytes),
         size_binary: prettyBytes(totalBuildSizeInBytes, { binary: true })
     }, null, 4);

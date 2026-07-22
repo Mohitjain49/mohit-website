@@ -64,8 +64,8 @@
         "vue-router": "^5.2.0"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1092.0",
-        "@aws-sdk/client-s3": "^3.1092.0",
+        "@aws-sdk/client-cloudfront": "^3.1093.0",
+        "@aws-sdk/client-s3": "^3.1093.0",
         "@stefanobartoletti/nuxt-social-share": "^3.1.0",
         "@types/google.picker": "^0.0.52",
         "@types/lodash-es": "^4.17.12",
@@ -75,7 +75,7 @@
         "glob": "^13.0.6",
         "jest": "^30.4.2",
         "mime-types": "^3.0.2",
-        "sass": "^1.101.3",
+        "sass": "^1.101.4",
         "serve": "^14.2.6",
         "shiki": "^4.3.1",
         "simple-git-hooks": "^2.13.1",
