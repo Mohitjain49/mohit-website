@@ -127,20 +127,20 @@
                     <span> Open Document In New Tab </span>
                 </a>
             </div>
-            <div v-if="!documentStore.onMarkdownRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
                 <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" pulse-loop>
                     <font-awesome-icon icon="fa-database" />
                     <span> See Document Properties </span>
                 </button>
             </div>
-            <div v-if="documentStore.showPdfPageNav" class="mohit-navMenu-opt" :style="getColorStyles('white')">
+            <div v-if="documentStore.showPdfPageNav" class="mohit-navMenu-opt" :style="getColorStyles('var(--lightning-yellow)')">
                 <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(PDF_NAVIGATION_MENU)" pulse-loop>
                     <font-awesome-icon icon="fa-compass" />
                     <span> Open PDF Navigation </span>
                 </button>
             </div>
         </div>
-        <div v-if="!documentStore.onMarkdownRoute" class="mohit-navMenu-opt-break"></div>
+        <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="documentStore.toggleDocumentFullScreen()" pulse-loop>
