@@ -70,7 +70,11 @@ function main() {
 
     process.on("SIGINT", () => shutdownServer("SIGINT"));
     process.on("SIGTERM", () => shutdownServer("SIGTERM"));
-    process.stdin.on("keypress", (chunk = "", key) => { if(key.name === "q") { shutdownServer("Q"); }});
+
+    process.stdin.on("keypress", (chunk = "", key) => {
+        if(key.name === "c" && key.ctrl) { shutdownServer("SIGINT"); }
+        if(key.name === "q") { shutdownServer("Q"); }
+    });
 
     server.listen(PORT, () => {
         const url = `http://localhost:${PORT}`;
@@ -79,9 +83,11 @@ function main() {
         console.log(`Serving ${PUBLIC_DIR}`);
         console.log(`Server running at ${url}`);
 
-        const platform = process.platform;
-        const command = ((platform === "win32") ? "start" : ((platform === "darwin") ? "open" : "xdg-open"));
-        execSync(command + " " + url);
+        if(args.indexOf("--no-open") == -1) {
+            const platform = process.platform;
+            const command = ((platform === "win32") ? "start" : ((platform === "darwin") ? "open" : "xdg-open"));
+            execSync(command + " " + url);
+        }
     });
 }
 
