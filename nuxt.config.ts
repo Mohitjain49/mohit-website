@@ -82,7 +82,7 @@ export default defineNuxtConfig({
 
     features: { inlineStyles: true },
     vitalizer: {
-        disableStylesheets: 'entry',
+        disableStylesheets: false,
         disablePrefetchLinks: true,
         disablePreloadLinks: true
     },

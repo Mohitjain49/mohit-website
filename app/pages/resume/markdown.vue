@@ -1,7 +1,7 @@
 <template>
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
-        <DocumentTopBar v-if="documentStore.hostedDocuments[0].blobCreated" />
+        <DocumentTopBar v-if="resumeStore.blobCreated" />
         <ContentRenderer class="markdown-body" v-if="home" :value="home" />
         <HostedFileBottomBar v-if="fullScreenSet" />
     </div>
@@ -12,12 +12,15 @@
         <QrcodeTool v-if="webData.showSharePopup" />
     </template>
 
+    <template v-if="resumeStore.blobCreated">
+        <DocumentMenu />
+        <DocMetadataMenu :objectUrl="resumeStore.objectUrl" />
+        <FileWidgets />
+    </template>
+
     <WebCover v-if="showFsWebCover" :zIndex="500" />
     <WebFooter v-if="!fullScreenSet" />
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
-
-    <FileWidgets />
-    <DocumentMenu />
 </main>
 </template>
 

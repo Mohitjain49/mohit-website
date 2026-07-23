@@ -111,7 +111,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
     const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
-    const useImageCopy = computed(() => { return (webData.copyImageSupported && docImagesLoaded.value == 1); });
+    const showImageCopyButton = computed(() => { return (webData.copyImageSupported && docImagesLoaded.value == 1); });
 
     const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && docImagesLoaded.value); });
     const showPrintButton = computed(() => { return (browserPdfViewerPresent.value || docImagesLoaded.value); });
@@ -392,13 +392,17 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    /** This function copies the document as an image into the visitor's OS Clipboard. */
-    async function copyDocAsImage() {
-        if(useImageCopy.value && imageCopyStatus.value != 0) { return; }
+    /**
+     * This function copies the document as an image into the visitor's OS Clipboard.
+     * @param {Number} index The index of the page that should be copied.
+     */
+    async function copyDocAsImage(index = 1) {
+        if(!docImagesLoaded.value || imageCopyStatus.value != 0) { return; }
+        if(index < 1 || index > docImageUrls.value.length) { return; }
         imageCopyStatus.value = 1;
 
         try {
-            const tempImgBlob = await (await fetch(docImageUrls.value[0])).blob();
+            const tempImgBlob = await (await fetch(docImageUrls.value[index - 1])).blob();
             await navigator.clipboard.write([new ClipboardItem({ [tempImgBlob.type]: tempImgBlob })]);
             imageCopyStatus.value = 2;
         } catch(e) {
@@ -407,6 +411,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         } finally {
             setTimeout(() => { imageCopyStatus.value = 0; }, 3000);
         }
+    }
+
+    /**
+     * This function copies the first page in the rendered PDF document as an image.
+     * @param {Boolean} force If true, bypass the condition on whether the Copy button is on the Document Website Menu.
+     */
+    async function copyFirstDocPageAsImage(force = false) {
+        if(showImageCopyButton.value || force) { await copyDocAsImage(1); }
     }
 
     /** This function returns the PDF Object the website is currently using. */
@@ -796,13 +808,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed,
-        googleDriveOptionAvailable, saveAsSupported, copyDocumentSupported, useImageCopy, browserPdfViewerPresent, workerSrcAdded,
+        googleDriveOptionAvailable, saveAsSupported, copyDocumentSupported, showImageCopyButton, browserPdfViewerPresent, workerSrcAdded,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
         downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, imageCopyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, sharePending, copyPending, imageDownloadPending, imageCopyPending, uploadToGoogleDrivePending,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav, showPrintButton,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, copyDocAsImage, downloadDocAsImage, requestGoogleToUploadDoc,
+        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, downloadDocAsImage, copyDocAsImage, copyFirstDocPageAsImage, requestGoogleToUploadDoc,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages
     }
