@@ -56,8 +56,8 @@
                     </RouterLink>
                 </div>
                 <div class="copyright-topBar-side right">
-                    <button @click="checkForUpdates()" class="copyright-topBar-btn" title="Update Website" pulse-loop>
-                        <FontAwesomeIcon icon="fa-rotate" :spin="updateButtonClicked" />
+                    <button @click="installStore.resetWebsiteVersion()" class="copyright-topBar-btn" title="Update Website" pulse-loop>
+                        <FontAwesomeIcon icon="fa-rotate" :spin="installStore.swUpdating" />
                     </button>
                     <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-topBar-btn updateLog" title="Update Log" pulse-loop>
                         <FontAwesomeIcon icon="fa-brands fa-git-alt" />
@@ -72,6 +72,7 @@
 
 <script setup>
 const router = useRouter();
+const installStore = useInstallStore();
 const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
@@ -82,9 +83,7 @@ const reactiveMeta = useReactiveMeta(COPYRIGHT_NOTICE_TITLE, "copyright",
     "A legal disclaimer for any vistors on my website.", "rgb(248, 206, 171)"
 );
 
-const updateButtonClicked = ref(false);
 const showLicense = computed(() => { return (router.currentRoute.value.query.showLicense === "true"); });
-
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const licenseLink = computed(() => { return (routePath.value + '?showLicense=true'); });
 const footerLink = computed(() => { return (routePath.value + '#footer'); });
@@ -114,24 +113,6 @@ watch(showLicense, (newValue) => { setPageTitle(newValue); });
 /** This sets the page title based on when the user changes between the License and Main Statement. */
 function setPageTitle(newValue = false) {
     reactiveMeta.changeTitle(newValue ? LICENSE_PAGE_TITLE : COPYRIGHT_NOTICE_TITLE);
-}
-
-/**  This function checks for updates, deletes the cache, and unregisters service workers. */
-async function checkForUpdates() {
-    if(updateButtonClicked.value) { return; }
-    updateButtonClicked.value = true;
-
-    if('serviceWorker' in navigator) {
-        const regs = await navigator.serviceWorker.getRegistrations();
-        for(const reg of regs) { await reg.unregister(); }
-    }
-    if('caches' in window) {
-        const keys = await caches.keys();
-        for(const key of keys) { await caches.delete(key); }
-    }
-
-    // Reloads the website once everything is finished updating.
-    window.location.reload(true);
 }
 </script>
 

@@ -174,7 +174,6 @@
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const { scrollProgress } = storeToRefs(useScrollStore());
-const { $pwa } = useNuxtApp();
 var copyTimeout = null;
 
 const webData = useWebsiteDataStore();
@@ -214,7 +213,7 @@ const showWakeLockWidget = computed(() => {
 
 const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
-const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && $pwa?.needRefresh); });
+const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && installStore.updateNeeded); });
 
 const showNavLeftWidgets = computed(() => {
     return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
