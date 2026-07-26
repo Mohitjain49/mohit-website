@@ -10,7 +10,7 @@
         </div>
 
         <div :class="['update-box-buttons', (installStore.swUpdating ? 'updating' : '')]">
-            <button class="updateBtn" @click="updateWebsite()"> {{ (installStore.swUpdating ? 'Updating...' : 'Update') }} </button>
+            <button class="updateBtn" @click="installStore.resetWebsiteVersion()"> {{ (installStore.swUpdating ? 'Updating...' : 'Update') }} </button>
             <button class="closeBtn" @click="installStore.setUpdateBox(false)"> Close </button>
             <RouterLink to="/copyright/" class="copyrightBtn"> Current Version </RouterLink>
         </div>
@@ -32,16 +32,9 @@ const UPDATE_DATE = ref("10/24/2025");
 onMountedAdvanced(() => { calculateDateDifference(); });
 watch(currentNow, () => { calculateDateDifference(); });
 
-watch(() => $pwa?.needRefresh, (newValue) => { if(newValue) { installStore.setUpdateBox(true); } });
+watch(() => $pwa?.needRefresh, (newValue) => { if(newValue) { installStore.setUpdateNeeded(true); } });
 watch(() => $pwa?.offlineReady, (newValue) => { if(newValue) { installStore.setPwaCreated(); } });
 watch(() => $pwa?.swActivated, (newValue) => { if(newValue) { installStore.swRegistered = true; } });
-
-/** This button triggers a reload that updates the website to its latest version. */
-async function updateWebsite() {
-    if(installStore.swUpdating) { return; }
-    installStore.swUpdating = true;
-    await $pwa?.updateServiceWorker(true);
-}
 
 /**
  * This function calculates the date difference between the present date and the date of the user's last update.
@@ -115,7 +108,7 @@ function getPlural(num = 1) { return ((num > 1) ? "s" : ""); }
     margin: 0px auto;
     gap: 15px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     flex-direction: row;
 }

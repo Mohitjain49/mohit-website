@@ -9,7 +9,7 @@ const pwaConfig: PwaModuleOptions = {
 
     client: { periodicSyncForUpdates: 600 },
     workbox: {
-        cacheId: `v3.17.1-${Date.now()}`,
+        cacheId: `mohit-website-pwa-cache-id-v3.17.2-${Date.now()}`,
         globPatterns: ['**/*.{js,css,html,mjs,png,svg,pdf,webp,jpg,jpeg,woff2,woff,ttf,eot,md,wav,xml,txt,xsl,mp3,json}', '_fonts/**'],
         ignoreURLParametersMatching: [/.*/],
         globIgnores: ["**\/node_modules\/**\/*", '**/node_modules/**/*'],

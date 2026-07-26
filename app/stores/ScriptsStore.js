@@ -229,10 +229,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
         const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
         const optionsAboveLine = (((rect.top * cssToWindowHeightRatio.value) + 140) > getMohitInnerHeight());
+        const rectTop = (rect.top + window.scrollY);
 
-        const yNum = ((optionsAboveLine ? (rect.top * cssToWindowHeightRatio.value - 122) : ((rect.top + rect.height + 2)  * cssToWindowHeightRatio.value)));
+        const yNum = ((optionsAboveLine ? (rectTop * cssToWindowHeightRatio.value - 122) : ((rectTop + rect.height) * cssToWindowHeightRatio.value + 3)));
         const borderRadius = (optionsAboveLine ? "10px 10px 10px 0px" : "0px 10px 10px 10px")
-        lineOptions.value.style = { left: (((rect.left + rect.width + 4)  * cssToWindowWidthRatio.value) + "px"), top: (yNum + "px"), borderRadius }
+        lineOptions.value.style = { left: ((((rect.left + rect.width + 4 + window.scrollX) * cssToWindowWidthRatio.value)) + "px"), top: (yNum + "px"), borderRadius }
     }
 
     /**

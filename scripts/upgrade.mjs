@@ -22,11 +22,22 @@ function runCommand(command) {
 }
 
 /**
+ * This function checks to see if an argument or list of arguments have been passed into the command.
+ * @param {Array<String> | String} commandArgs The argument(s) to check for.
+ * @returns The index where the argument has been found.
+ */
+function findCommandArgument(commandArgs = "") {
+    if(typeof commandArgs === "string") { commandArgs = [commandArgs]; }
+    const searchResult = args.findIndex((item) => { return (-1 != commandArgs.findIndex((value) => { return (item === value); })); });
+    return { index: searchResult, found: (searchResult != -1), notLast: (searchResult != -1 && searchResult < args.length - 1) }
+}
+
+/**
  * This function checks to see if an argument exists in the "args" array and returns the result.
  * @param {String} mainArg The argument passed into the command.
  */
 function checkForArg(mainArg = "") {
-    return (args.findIndex(item => item === mainArg) != -1)
+    return findCommandArgument(mainArg).found;
 }
 
 /**
@@ -65,8 +76,12 @@ async function removeFileOrDirectory(path = "", directory = false) {
 /** This function is the core of the file and handles all the upgrade requirements. */
 async function main() {
     try {
+        const autoExclude = findCommandArgument("--auto-exclude");
+        var rejectDepsCommandOption = "";
+        if(autoExclude.notLast) { rejectDepsCommandOption = (" --reject " + args[autoExclude.index + 1]); }
+
         // This section handles asking for and dependencies to reject for the next step.
-        var rejectDepsBool = (checkForArg("--exclude-deps") ? true : (checkForArg("--skip-exclude-deps") ? false : null));
+        var rejectDepsBool = ((checkForArg("--exclude-deps") || rejectDepsCommandOption.length > 0) ? true : (checkForArg("--skip-exclude-deps") ? false : null));
         const rejectDepsQuestion = 'Do you want to exclude any dependencies from being updated? (y/n): ';
 
         if(rejectDepsBool == null) {
@@ -80,18 +95,19 @@ async function main() {
         /** @type {Array<String>} An array that stores all the dependencies to not update. */
         const rejectDepsArray = [];
 
-        if(rejectDepsBool) {
+        if(rejectDepsBool && rejectDepsCommandOption.length == 0) {
             var rejectDepsInput = "";
             while(rejectDepsInput != "_stop_" && rejectDepsInput != "_no_") {
                 rejectDepsInput = await rl.question('Type in the name of a package, or the string \"_stop_\" if you would like to stop: ');
                 if(rejectDepsInput != "_stop_" && rejectDepsInput != "_no_") { rejectDepsArray.push(rejectDepsInput.toLowerCase()); }
             }
             console.log("✅ Packages Recorded.\n\n")
+        } else if(rejectDepsCommandOption.length > 0) {
+            console.log("✅ Will Exclude Passed In Dependencies.\n\n");
         } else {
             console.log("🛑 Will Not Ignore Any Dependencies.\n\n");
         }
 
-        var rejectDepsCommandOption = "";
         if(rejectDepsArray.length > 0) {
             rejectDepsCommandOption = " --reject ";
             rejectDepsArray.forEach((item) => { rejectDepsCommandOption += (item + ","); });
@@ -153,7 +169,11 @@ async function main() {
             // Updates the vite.config.js file.
             const viteConfigSpinner = createSpinner("Updating pwa.config.ts...");
             const content = await readFile("./pwa.config.ts", 'utf8');
-            const updatedContent = content.replace(/v\d+\.\d+\.\d+-\$\{Date\.now\(\)\}/, `v${newVersion}-\${Date.now()}`);
+
+            const updatedContent = content.replace(
+                /mohit-website-pwa-cache-id-v\d+\.\d+\.\d+-\$\{Date\.now\(\)\}/,
+                `mohit-website-pwa-cache-id-v${newVersion}-\${Date.now()}`
+            );
 
             await writeFile("./pwa.config.ts", updatedContent, 'utf8');
             viteConfigSpinner.succeed("Updated PWA Config File!!");
