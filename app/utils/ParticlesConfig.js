@@ -2,7 +2,7 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
 import {
     faCopyright, faStar, faCertificate, faQuestion, faBookBookmark, faCube,
-    faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst, faSquare
+    faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst, faSquare, faSun
 } from '@fortawesome/free-solid-svg-icons';
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
@@ -246,7 +246,7 @@ export const WAKE_LOCK_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 200
+            value: 150
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -255,11 +255,14 @@ export const WAKE_LOCK_BACKGROUND = ref({
         shape: {
             type: "image",
             options: {
-                image: { src: getFontAwesomeSvg(faStar, "#E92A60"), width: 100, height: 100 }
+                image: [
+                    { src: getFontAwesomeSvg(faSun, "#E92A60"), width: 100, height: 100 },
+                    { src: getFontAwesomeSvg(faSun, "#E8E163"), width: 100, height: 100 }
+                ]
             }
         },
         size: {
-            value: { min: 3, max: 4 },
+            value: { min: 7, max: 8 },
         },
     },
     detectRetina: true,

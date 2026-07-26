@@ -706,6 +706,9 @@
     opacity: 1;
     top: 60px;
 }
+.navMenu-transition_1-leave-to, .navMenu-transition_1-leave-from {
+    z-index: 498 !important;
+}
 
 .navMenu-transition_2-enter-active, .navMenu-transition_2-leave-active {
     transition: transform 0.5s, opacity 0.5s !important;

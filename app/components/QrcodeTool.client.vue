@@ -5,7 +5,7 @@
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
 
-        <div id="mohit-qrcode" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
+        <div id="mohit-qrcode" @contextmenu="(e) => { showImageOptionsOnRightClick(e); }" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
         <div id="mohit-qrcode-waiting" v-if="!qrCodeDisplay">
             <div class="cover"> <FontAwesomeIcon icon="fa-spinner" :spin-pulse="true" /> </div>
         </div>
@@ -54,7 +54,9 @@
             </div>
 
             <div class="qrcode-mainPopup-btn_v2">
-                <button @click="setImageOptions('toggle')" class="qrcode-mainPopup-btn" :title="(((showShareOptions == 0) ? 'Close' : 'See') + ' Image Options')">
+                <button v-if="qrCodeBlob != null" @click="setImageOptions('toggle')" class="qrcode-mainPopup-btn"
+                    :title="(((showShareOptions == 0) ? 'Close' : 'See') + ' Image Options')">
+
                     <FontAwesomeIcon icon="fa-image" />
                 </button>
                 <Transition name="fade-transition">
@@ -67,6 +69,9 @@
                         </button>
                         <button v-if="webData.copyImageSupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
+                        </button>
+                        <button @click="printQRCode()" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
+                            <FontAwesomeIcon :icon="printImageIcon" :spin-pulse="(actions.printImage == 1)" />
                         </button>
                         <a v-if="(qrCodeURL != undefined)" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
                             <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
@@ -100,6 +105,9 @@ const styleStore = useStyleStore();
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
 var autoscrollTimeout = null;
+
+/** @type {HTMLIFrameElement} This variable stores the iframe element used for printing the qr code. */
+var printIframe = null;
 
 const { width: windowWidth, height: windowHeight } = useMohitWindowSize();
 const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage("popup-shareLink");
@@ -157,8 +165,8 @@ const openNewTabButtonTitle = computed(() => {
     return (mainLink.startsWith("mailto:") ? ('Email ' + formattedLink) : (mainLink.startsWith("tel:") ? ('Call ' + formattedLink) : 'Open Link In New Tab'));
 });
 
-const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0 });
-var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null }
+const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0, printImage: 0 });
+var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null }
 var sharePopupAbortController = new AbortController();
 
 const copyLinkIcon = computed(() => {
@@ -180,6 +188,10 @@ const downloadImageIcon = computed(() => {
 const copyImageIcon = computed(() => {
     const status = actions.value.copyImage;
     return ((status == 0) ? 'fa-clone' : STATUS_ICONS[status]);
+});
+const printImageIcon = computed(() => {
+    const status = actions.value.printImage;
+    return ((status == 0) ? 'fa-print' : STATUS_ICONS[status]);
 });
 
 // This mounts the share popup and all of its functionality.
@@ -221,9 +233,10 @@ function unmountSharePopup() {
 }
 
 /** This function sets the link for the Share Popup. */
-function setQRCodeLink() {
+async function setQRCodeLink() {
     const data = qrdata.value;
     const route = router.currentRoute.value;
+    // await sleep(50000); For testing purposes if the waiting screen needs to be edited.
 
     if(data === "main") {
         const linkUrl = getParsedUrl();
@@ -284,11 +297,11 @@ function setQRCodeLink() {
         qrCodeDisplay.value = true;
     }
 
-    qrcode.value.getRawData("png").then((result) => {
-        qrCodeBlob.value = result;
-    }).catch((e) => {
-        console.error(e)
-    });
+    try {
+        qrCodeBlob.value = await qrcode.value.getRawData("png");
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
 }
 
 /**
@@ -296,6 +309,7 @@ function setQRCodeLink() {
  * @param {Boolean | "toggle"} status The new status for the image options. If it is set to "toggle", then it just flips the value.
  */
 function setImageOptions(status = "toggle") {
+    if(qrCodeBlob.value == null) { return; }
     showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 0) ? -1 : 0) : (status ? 0 : -1));
 }
 
@@ -305,6 +319,16 @@ function setImageOptions(status = "toggle") {
  */
 function setSocialMediaOptions(status = "toggle") {
     showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 1) ? -1 : 1) : (status ? 1 : -1));
+}
+
+/**
+ * This function opens the image options when the visitor right clicks the QR Code.
+ * @param {PointerEvent} event The right click event.
+ */
+function showImageOptionsOnRightClick(event) {
+    event.preventDefault();
+    triggerClickSound();
+    setImageOptions("toggle");
 }
 
 /** This function copies the QR Code Link currently visible. */
@@ -351,7 +375,7 @@ async function shareQRCodeLink() {
 
 /** This function shares the actual QR Code image. */
 function shareQRCode() {
-    if(!webData.copyImageSupported || actions.value.shareImage > 0 || qrCodeBlob.value == null) { return; }
+    if(!webData.copyImageSupported || actions.value.shareImage > 0 || !qrCodeBlob.value) { return; }
     actions.value.shareImage = 1;
     const blob = qrCodeBlob.value;
 
@@ -371,7 +395,7 @@ function shareQRCode() {
 
 /** This function lets the user download the QR Code as a .png file. */
 function downloadQRCode() {
-    if(actions.value.downloadImage > 0 || qrCodeURL.value == undefined) { return; }
+    if(actions.value.downloadImage > 0 || !qrCodeURL.value) { return; }
     actions.value.downloadImage = 1;
 
     try {
@@ -396,7 +420,7 @@ function downloadQRCode() {
 
 /** This function lets the user copy the QR Code. */
 async function copyQRCode() {
-    if(actions.value.copyImage > 0 || qrCodeBlob.value == undefined) { return; }
+    if(actions.value.copyImage > 0 || !qrCodeBlob.value) { return; }
     actions.value.copyImage = 1;
 
     try {
@@ -410,6 +434,91 @@ async function copyQRCode() {
         timeouts.copyImage = setTimeout(() => {
             actions.value.copyImage = 0;
             timeouts.copyImage = null;
+        }, 3000); 
+    }
+}
+
+/** This function lets the user print the QR Code rendered by the user. */
+async function printQRCode() {
+    if(actions.value.printImage > 0 || !qrCodeURL.value) { return; }
+    actions.value.printImage = 1;
+
+    const PRINT_IFRAME_ID = "mohit-qrcode-customPrint";
+    const PRINT_IFRAME_IMG_CLASS = "mohit-qrcode-customPrint-img";
+    const QRCODE_EDGE_LENGTH = 450;
+
+    try {
+        if(printIframe != null) { document.body.removeChild(printIframe); }
+        printIframe = document.createElement("iframe");
+        printIframe.id = PRINT_IFRAME_ID;
+        printIframe.classList.add(PRINT_IFRAME_ID);
+
+        await new Promise(async (resolve, reject) => {
+            document.body.append(printIframe);
+            const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
+
+            if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
+                resolve("IFrame Loaded");
+            } else {
+                printIframe.onload = () => { resolve("IFrame Loaded"); }
+                sleep(7000).then(() => { reject(new Error("Timeout Error")); });
+            }
+        });
+
+        const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+        printIframeDocument.title = "Mohit_Website_QRCode";
+
+        const newChild = printIframeDocument.createElement("div");
+        const newChildImg = printIframeDocument.createElement("img");
+        const iframeStyle = printIframeDocument.createElement("style");
+
+        // The style rule here should match the one at the bottom for this same class.
+        iframeStyle.textContent = `
+            .mohit-qrcode-customPrint-img {
+                width: 99vw;
+                height: 99vh;
+                max-height: 100vh;
+                margin: 0px;
+                padding: 0px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        `;
+
+        newChild.classList.add(PRINT_IFRAME_IMG_CLASS);
+        newChildImg.src = qrCodeURL.value;
+
+        newChildImg.width = QRCODE_EDGE_LENGTH;
+        newChildImg.height = QRCODE_EDGE_LENGTH;
+        newChildImg.draggable = false;
+        newChildImg.style.borderRadius = "10px";
+
+        printIframeDocument.body.appendChild(iframeStyle);
+        printIframeDocument.body.appendChild(newChild);
+        await new Promise((resolve, reject) => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(); }); }); });
+
+        newChild.appendChild(newChildImg);
+        await new Promise((resolve, reject) => {
+            if(newChildImg.complete) {
+                resolve();
+            } else {
+                newChildImg.onload = () => { resolve(); }
+            }
+        });
+
+        // This triggers the print function at the end to open the popup.
+        const printIframeWin = printIframe.contentWindow;
+        printIframeWin.focus();
+        printIframeWin.print();
+       actions.value.printImage = 2; 
+    } catch(e) {
+        actions.value.printImage = 3;
+    } finally {
+        if(timeouts.printImage != null) { clearTimeout(timeouts.printImage); }
+        timeouts.printImage = setTimeout(() => {
+            actions.value.printImage = 0;
+            timeouts.printImage = null;
         }, 3000); 
     }
 }
@@ -495,8 +604,8 @@ function getParsedUrl() {
 }
 #mohit-qrcode-waiting > .cover {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 450px;
+    height: 450px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -665,6 +774,29 @@ function getParsedUrl() {
     border-style: solid;
     border-color: transparent transparent var(--blue-one) transparent;
     filter: var(--filter-drop-shadow);
+}
+
+#mohit-qrcode-customPrint, .mohit-qrcode-customPrint {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+    break-after: avoid;
+    break-inside: avoid;
+}
+.mohit-qrcode-customPrint-img {
+    width: 99vw;
+    height: 99vh;
+    max-height: 100vh;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .qrcode-popup-transition-enter-active, .qrcode-popup-transition-leave-active {

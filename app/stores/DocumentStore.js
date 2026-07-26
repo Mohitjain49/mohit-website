@@ -312,8 +312,8 @@ export const useDocumentStore = defineStore("document-store", () => {
                     }
                 });
 
-                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
                 const numImages = docImageUrls.value.length;
+                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
 
                 for(let i = 0; i < numImages; i++) {
                     const newChild = printIframeDocument.createElement("div");
