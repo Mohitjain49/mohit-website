@@ -145,6 +145,15 @@
     margin-top: 0px;
 }
 
+.markdown-body a {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    transition: background-color 0.2s;
+}
+.markdown-body a:hover {
+    background-color: rgb(0, 110, 255, 0.2);
+}
+
 .resume-markdown-title {
     font-size: 40px !important;
 }
@@ -162,6 +171,7 @@
     text-decoration: none;
     color: black;
     transition: text-shadow 0.2s;
+    background-color: transparent !important;
 }
 .resume-markdown-section-title a:hover {
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
@@ -171,6 +181,7 @@
     text-decoration: none;
     color: black;
     transition: text-shadow 0.2s;
+    background-color: transparent !important;
 }
 .resume-markdown-section-subtitle a:hover {
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
