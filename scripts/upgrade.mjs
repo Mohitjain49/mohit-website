@@ -169,7 +169,11 @@ async function main() {
             // Updates the vite.config.js file.
             const viteConfigSpinner = createSpinner("Updating pwa.config.ts...");
             const content = await readFile("./pwa.config.ts", 'utf8');
-            const updatedContent = content.replace(/mohit-website-pwa-cache-id-v\d+\.\d+\.\d+-\$\{Date\.now\(\)\}/, `v${newVersion}-\${Date.now()}`);
+
+            const updatedContent = content.replace(
+                /mohit-website-pwa-cache-id-v\d+\.\d+\.\d+-\$\{Date\.now\(\)\}/,
+                `mohit-website-pwa-cache-id-v${newVersion}-\${Date.now()}`
+            );
 
             await writeFile("./pwa.config.ts", updatedContent, 'utf8');
             viteConfigSpinner.succeed("Updated PWA Config File!!");
