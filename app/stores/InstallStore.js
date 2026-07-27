@@ -40,6 +40,16 @@ export const useInstallStore = defineStore("install-store", () => {
     /** This function checks manually if an update is needed and sets and returns the result. */
     async function checkUpdateNeededManually() {
         try {
+            const cacheNames = await window.caches.keys();
+            const workboxPrecacheKeys = cacheNames.filter((name) => { return name.includes(PWA_CACHE_ID_STATIC); });
+
+            // If there is more than one precache key, then the service worker needs to be updated.
+            if(workboxPrecacheKeys.length > 1) {
+                setUpdateNeeded(true);
+                return true;
+            }
+
+            /* This object represents the options for an ofetch call. */
             const fetchOptions = { cache: "no-store",
                 query: { _nocache: new Date().getTime() },
                 headers: { "Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache" }

@@ -125,9 +125,8 @@
 </Transition>
 
 <div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
-    <button v-if="showUpdateWebsiteWidget" class="mohit-navBar-statusIcon yellow" pulse-loop
-        @click="installStore.setUpdateBox(true)"
-        title="This Is An Old Version Of My Website. Click Here To Update It.">
+    <button v-if="showUpdateWebsiteWidget" class="mohit-navBar-statusIcon yellow" @click="openUpdateBox()" pulse-loop
+        :title="(installStore.swUpdating ? 'Updating Website...' : 'This Is An Old Version Of My Website. Click Here To Update It.')">
 
         <font-awesome-icon v-if="!installStore.swUpdating" icon="fa-triangle-exclamation" />
         <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
@@ -213,7 +212,7 @@ const showWakeLockWidget = computed(() => {
 
 const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
-const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && installStore.updateNeeded); });
+const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && (installStore.updateNeeded || installStore.swUpdating)); });
 
 const showNavLeftWidgets = computed(() => {
     return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
@@ -267,6 +266,9 @@ async function copyWebpageLink() {
         }, 3000); 
     }
 }
+
+/** This opens the update box only if an update is needed. */
+function openUpdateBox() { if(installStore.updateNeeded) { installStore.setUpdateBox(true); }}
 
 const MAIN_BTNS = [
     { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },

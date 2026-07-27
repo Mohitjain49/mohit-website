@@ -35,6 +35,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const mounted = ref(0);
     const menuOpen = ref(-1);
+    const previousMenuOpen = ref(-1);
 
     const openShareOnMount = ref(true);
     const navFooterPresent = ref(false);
@@ -113,6 +114,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     });
 
+    // This lets the website menu track the previous website menu open before the current website menu open.
+    watch(menuOpen, (newValue, oldValue) => { previousMenuOpen.value = oldValue; });
+
     /** This function adds event listeners to the website as soon as its loaded. */
     async function setEventListeners() {
         if(mounted.value != 0) { return; }
@@ -173,7 +177,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function onDocumentBodyClick(event = new MouseEvent("click")) {
         audioStore.confirmClickSound(event);
         const element = event.target;
-        if(!checkNavigationElement(element)) { closeNavMenu(); }
+        checkNavigationElement(element).then((result) => { if(!result) { closeNavMenu(); }});
 
         const lineOptions = document.getElementById("mohit-line-options");
         if(lineOptions != null) {
@@ -190,7 +194,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * This function returns whether an element is in any navigation menu or webpage cover within the website.
      * @param {HTMLElement} element The element.
      */
-    function checkNavigationElement(element = null) {
+    async function checkNavigationElement(element = null) {
+        await nextTick();
         if(nullifyBodyClick.value) {
             nullifyBodyClick.value = false;
             return true;
@@ -202,7 +207,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         // A list of website menu elements where the menu should not close when normally clicked.
         const WEBSITE_MENU_ELEMENTS = [
             document.getElementById("mohit-navBar"),
-            getCurrentWebsiteMenuElement()
+            getWebsiteMenuElement("current"),
+            getWebsiteMenuElement("previous"),
         ];
 
         for(let i = 0; i < WEBSITE_MENU_ELEMENTS.length; i++) {
@@ -274,9 +280,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(webFooterVisibility.value) { scrollToTop(false, 0); }
     }
 
-    /** This function gets the HTML Element representing the current website menu open. */
-    function getCurrentWebsiteMenuElement() {
-        const websiteMenuCatalogIndex = WEBSITE_MENUS.findIndex((item) => { return (item.num === menuOpen.value); });
+    /**
+     * This function gets the HTML Element representing the current website menu open.
+     * @param {"current" | "previous"} mode The website menu to obtain.
+     */
+    function getWebsiteMenuElement(mode = "current") {
+        const menuIndex = ((mode === "current") ? menuOpen.value : ((mode === "previous") ? previousMenuOpen.value : NO_MENU));
+        const websiteMenuCatalogIndex = WEBSITE_MENUS.findIndex((item) => { return (item.num === menuIndex); });
         return ((websiteMenuCatalogIndex == -1) ? null : document.getElementById(WEBSITE_MENUS[websiteMenuCatalogIndex].id));
     }
 
@@ -370,7 +380,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
         documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
-        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getCurrentWebsiteMenuElement,
+        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getWebsiteMenuElement,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
     }
 });

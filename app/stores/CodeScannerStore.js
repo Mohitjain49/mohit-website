@@ -53,11 +53,9 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         scanMode.value = ((index === "toggle") ? ((scanMode.value != 0) ? 0 : 1) : index);
     }
 
-    /**
-     * This function is run whenever a visior activates their camera for the webpage.
-     */
+    /** This function is run whenever a visior activates their camera for the webpage. */
     function onCameraActive(event = {}) {
-        if(import.meta.env.DEV) { console.log(event); }
+        if(import.meta.dev) { console.log(event); }
         cameraActive.value = true;
     }
 
@@ -66,7 +64,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      * Note that this doesn't actually deactivate the camera.
      */
     function deactivateCamera(event = {}) {
-        if(import.meta.env.DEV) { console.log(event); }
+        if(import.meta.dev) { console.log(event); }
         cameraActive.value = false;
     }
 
@@ -75,7 +73,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      * @param {Array<{ rawValue: String, format: String }>} event The object made by the event.
      */
     function onDetectCode(event) {
-        if(import.meta.env.DEV) { console.log(event); }
+        if(import.meta.dev) { console.log(event); }
         for(let i = 0; i < event.length; i++) {
             const item = event[i];
             const rawValue = item.rawValue;

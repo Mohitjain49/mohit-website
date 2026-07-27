@@ -120,23 +120,23 @@
 </template>
 
 <script setup>
-import left_stick from "~/assets/gamepad-buttons/left_stick.png";
-import left_stick_press from "~/assets/gamepad-buttons/left_stick_press.png";
-import right_stick_vertical from "~/assets/gamepad-buttons/right_stick_vertical.png";
-import right_stick_press from "~/assets/gamepad-buttons/right_stick_press.png";
-import dpad_controller from "~/assets/gamepad-buttons/dpad_controller.png";
+import left_stick from "~/assets/gamepad-buttons/left_stick.png?inline";
+import left_stick_press from "~/assets/gamepad-buttons/left_stick_press.png?inline";
+import right_stick_vertical from "~/assets/gamepad-buttons/right_stick_vertical.png?inline";
+import right_stick_press from "~/assets/gamepad-buttons/right_stick_press.png?inline";
+import dpad_controller from "~/assets/gamepad-buttons/dpad_controller.png?inline";
 
-import a_button from "~/assets/gamepad-buttons/a_button.png";
-import b_button from "~/assets/gamepad-buttons/b_button.png";
-import x_button from "~/assets/gamepad-buttons/x_button.png";
-import y_button from "~/assets/gamepad-buttons/y_button.png";
-import plus_button from "~/assets/gamepad-buttons/plus_button.png";
-import minus_button from "~/assets/gamepad-buttons/minus_button.png";
+import a_button from "~/assets/gamepad-buttons/a_button.png?inline";
+import b_button from "~/assets/gamepad-buttons/b_button.png?inline";
+import x_button from "~/assets/gamepad-buttons/x_button.png?inline";
+import y_button from "~/assets/gamepad-buttons/y_button.png?inline";
+import plus_button from "~/assets/gamepad-buttons/plus_button.png?inline";
+import minus_button from "~/assets/gamepad-buttons/minus_button.png?inline";
 
-import left_bumper from "~/assets/gamepad-buttons/left_bumper.png";
-import right_bumper from "~/assets/gamepad-buttons/right_bumper.png";
-import left_trigger from "~/assets/gamepad-buttons/left_trigger.png";
-import right_trigger from "~/assets/gamepad-buttons/right_trigger.png";
+import left_bumper from "~/assets/gamepad-buttons/left_bumper.png?inline";
+import right_bumper from "~/assets/gamepad-buttons/right_bumper.png?inline";
+import left_trigger from "~/assets/gamepad-buttons/left_trigger.png?inline";
+import right_trigger from "~/assets/gamepad-buttons/right_trigger.png?inline";
 
 const gamepadStore = useGamepadStore();
 const router = useRouter();

@@ -7,6 +7,7 @@ const targetFiles = globSync('./app/**/*.{vue,js,ts}');
 
 const consoleLogRegex = /console\.log\(.*?\)/g;
 const devConsoleLogRegex = /if\s*\(\s*import\.meta\.env\.DEV\s*\)\s*\{\s*console\.log\([\s\S]*?\);?\s*\}/g;
+const newDevConsoleLogRegex = /if\s*\(\s*import\.meta\.dev\s*\)\s*\{\s*console\.log\([\s\S]*?\);?\s*\}/g;
 const commentedConsoleLogRegex = /\/\/\s*console\.log\([\s\S]*?\);?/g;
 
 describe('No Console Logs', () => {
@@ -21,11 +22,13 @@ describe('No Console Logs', () => {
 
         const consoleLogs = fileContent.match(consoleLogRegex);
         const devConsoleLogs = fileContent.match(devConsoleLogRegex);
+        const newDevConsoleLogs = fileContent.match(newDevConsoleLogRegex);
         const commentConsoleLogs = fileContent.match(commentedConsoleLogRegex);
 
         const numConsoleLogs = ((consoleLogs == null) ? 0 : consoleLogs.length);
         const numDevConsoleLogs = ((devConsoleLogs == null) ? 0 : devConsoleLogs.length);
+        const numNewDevConsoleLogs = ((newDevConsoleLogs == null) ? 0 : newDevConsoleLogs.length);
         const numCommentConsoleLogs = ((commentConsoleLogs == null) ? 0 : commentConsoleLogs.length);
-        expect(numConsoleLogs == (numDevConsoleLogs + numCommentConsoleLogs)).toBe(true);
+        expect(numConsoleLogs == (numDevConsoleLogs + numCommentConsoleLogs + numNewDevConsoleLogs)).toBe(true);
     });
 });

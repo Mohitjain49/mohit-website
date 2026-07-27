@@ -10,6 +10,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const scriptsStore = useScriptsStore();
+    const styleStore = useStyleStore();
 
     const fullScreenSet = getFullScreenSet();
     const { cssToWindowHeightRatio } = useMohitWindowSize();
@@ -214,6 +215,26 @@ export const useScrollStore = defineStore("scroll-store", () => {
         });
     }
 
+    /** This function handles auto scrolling for the gamepad. */
+    async function gamepadScrollToTop() {
+        if(!verifyAutoscroll()) { return; }
+        const routerObj = router.currentRoute.value;
+        if(routerObj.hash !== "") { router.push(routerObj.path); }
+
+        webData.closeNavMenu();
+        await scrollToTop(false, 10);
+    }
+
+    /**
+     * This function scrolls by adding an increment to the current scroll.
+     * @param {Number} increment The increment scroll.
+     */
+    function scrollByIncrement(increment) {
+        if(!verifyAutoscroll() || styleStore.hideOverflow) { return; }
+        lenis.scrollTo(lenis.scroll + increment, { immediate: true, force: true });
+        webData.closeNavMenu();
+    }
+
     /** This function returns a Boolean that if true confirms that the website is ready for an autoscroll. */
     function verifyAutoscroll() { return (mounted.value && !isAutoScrolling.value && lenis); }
 
@@ -223,23 +244,6 @@ export const useScrollStore = defineStore("scroll-store", () => {
         setScrollInterval(2);
         lenis.stop();
         lenis.start();
-    }
-
-    /**
-     * This function scrolls by adding an increment to the current scroll.
-     * @param {Number} increment The increment scroll.
-     */
-    function scrollByIncrement(increment) {
-        if(isAutoScrolling.value) { return; }
-        lenis.scrollTo(lenis.scroll + increment, { immediate: true, force: true });
-    }
-
-    /** This function handles auto scrolling for the gamepad. */
-    function gamepadScrollToTop() {
-        if(isAutoScrolling.value) { return; }
-        const routerObj = router.currentRoute.value;
-        if(routerObj.hash !== "") { router.push(routerObj.path); }
-        scrollToTop(false, 10);
     }
 
     /**

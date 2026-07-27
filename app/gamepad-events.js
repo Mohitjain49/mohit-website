@@ -116,7 +116,7 @@ class GamepadAxisMoveEvent {
  */
 window.addEventListener("gamepadconnected", (e) => {
     useGamepadStore().gamepadCursors[e.gamepad.index].start();
-    if(import.meta.env.DEV) { console.log(e); }
+    if(import.meta.dev) { console.log(e); }
 });
 
 /**
@@ -128,7 +128,7 @@ window.addEventListener("gamepadbuttondown", (e) => {
     const buttonIndex = event.button;
     const gpIndex = event.gpIndex;
     const gamepadStore = useGamepadStore();
-    // if(import.meta.env.DEV) { console.log(buttonIndex); }
+    // if(import.meta.dev) { console.log(buttonIndex); }
 
     if(buttonIndex >= 12 && buttonIndex <= 15) {
         gamepadStore.getCursor(gpIndex).manageCursorWithDpad(buttonIndex - 12);
@@ -155,7 +155,7 @@ window.addEventListener("gamepadbuttonup", (e) => {
     const buttonIndex = event.button;
     const gpIndex = event.gpIndex;
     const gamepadStore = useGamepadStore();
-    // if(import.meta.env.DEV) { console.log(buttonIndex); }
+    // if(import.meta.dev) { console.log(buttonIndex); }
 
     if(buttonIndex == 6 || buttonIndex == 7) { useAudioStore().volumeChangingWithGamepad = false; }
     if(buttonIndex == 4 || buttonIndex == 5) { gamepadStore.getCursor(gpIndex).stopChangingMaxCursorSpeed(); }
@@ -171,7 +171,7 @@ window.addEventListener("gamepadbuttonhold", (e) => {
     const gpIndex = event.gpIndex;
     const holdFrames = event.framesHeld;
     const gamepadStore = useGamepadStore();
-    // if(import.meta.env.DEV) { console.log(event); }
+    // if(import.meta.dev) { console.log(event); }
 
     if(buttonIndex >= 12 && buttonIndex <= 15) {
         gamepadStore.getCursor(gpIndex).manageCursorWithDpad(buttonIndex - 12);
@@ -193,7 +193,7 @@ window.addEventListener("gamepadaxismove", (e) => {
     const event = e.detail;
     const gpIndex = event.gpIndex;
     const gamepadStore = useGamepadStore();
-    // if(import.meta.env.DEV) { console.log(event); }
+    // if(import.meta.dev) { console.log(event); }
 
     if(event.stick === "left_stick") {
         gamepadStore.getCursor(gpIndex).manageCursor(event);

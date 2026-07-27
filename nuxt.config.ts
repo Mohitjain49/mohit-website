@@ -105,7 +105,12 @@ export default defineNuxtConfig({
         plugins: [
             imagetools({
                 include: /assets\/.*\.(png|jpe?g)$/,
-                defaultDirectives: (url) => { return new URLSearchParams('format=webp&quality=70'); }
+                removeMetadata: true,
+                defaultDirectives: (url) => {
+                    const params = new URLSearchParams('format=webp&quality=90');
+                    url.searchParams.forEach((value, key) => { params.set(key, value); });
+                    return params;
+                }
             }),
             AUTO_ALT_PLUGIN
         ],

@@ -1,6 +1,10 @@
 export const useGamepadStore = defineStore("gamepad-store", () => {
+    const webData = useWebsiteDataStore();
     const styleStore = useStyleStore();
     const fullScreenSet = getFullScreenSet();
+
+    const documentStore = useDocumentStore();
+    const scriptsStore = useScriptsStore();
     var cursorSpeedTimeout = null;
 
     /** These are the gamepad cursors that can be used with the website. */
@@ -36,8 +40,19 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
 
     /** This function runs whenever the visitor clicks on a typical gamepad "menu" button. */
     function onGamepadMenuClick() {
-        if(fullScreenSet.value && document.fullscreenElement !== document.body) { return; }
-        useWebsiteDataStore().toggleNavMenu();
+        const onFullScreen = fullScreenSet.value;
+        var websiteMenuIdx = -1;
+
+        if(!onFullScreen) {
+            websiteMenuIdx = NAVIGATION_MENU;
+        } else if(onFullScreen && documentStore.onDocumentRoute) {
+            websiteMenuIdx = DOCUMENT_MENU;
+        } else if(onFullScreen && scriptsStore.onScriptRoute) {
+            websiteMenuIdx = SCRIPTS_MENU;
+        }
+
+        if(websiteMenuIdx == -1) { return; }
+        webData.setMenuOpen(websiteMenuIdx, true);
         triggerClickSound();
     }
 
@@ -176,7 +191,9 @@ function useGamepadCursor(index = 0) {
     function emitClick() {
         const element = clickElement.value;
         if(element == null) {
-            document.body.click(); // Clicks on the document body if there is no button detected.
+            const xVal = ((x.value + 15) / windowSize.cssToWindowWidthRatio.value);
+            const yVal = ((y.value + 15) / windowSize.cssToWindowHeightRatio.value);
+            document.elementFromPoint(xVal, yVal).click();
         } else {
             (onInputElement.value ? element.focus() : element.click());
             nextTick(() => { setClickElement(); });
@@ -321,9 +338,9 @@ function useGamepadCursor(index = 0) {
         }
     }
 
-    /** This function checks whether the cursor is in a website or not. */
+    /** This function checks whether the cursor is in a website menu or not. */
     function getScrollElement() {
-        const websiteMenu = webData.getCurrentWebsiteMenuElement();
+        const websiteMenu = webData.getWebsiteMenuElement("current");
         if(websiteMenu == null) { return undefined; }
 
         const rect = websiteMenu.getBoundingClientRect();
