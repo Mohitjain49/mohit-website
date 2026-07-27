@@ -32,11 +32,13 @@ const audioStore = useAudioStore();
 <Transition name="gamepad-cursorSpeed-transition">
     <div class="gamepad-cursorSpeed-menu" v-if="gamepadStore.showCursorSpeedMenu">
         <h1> Cursor Speeds </h1>
-        <div v-for="cursor in gamepadStore.gamepadCursors" class="gamepadComp-input-section" :style="('color: ' + cursor.color + ';')">
-            <div class="left-icon" style="margin-left: 5px;"> <FontAwesomeIcon icon="fa-gauge" /> </div>
-            <input type="range" min="0" max="30" disabled v-model="cursor.maxSpeed" />
-            <span> {{ (cursor.maxSpeed + 'px') }} </span>
-        </div>
+        <template v-for="cursor in gamepadStore.gamepadCursors">
+            <div v-if="cursor.connected" class="gamepadComp-input-section" :style="('color: ' + cursor.color + ';')">
+                <div class="left-icon" style="margin-left: 5px;"> <FontAwesomeIcon icon="fa-gauge" /> </div>
+                <input type="range" min="0" max="30" disabled v-model="cursor.maxSpeed" />
+                <span> {{ (cursor.maxSpeed + 'px') }} </span>
+            </div>
+        </template>
     </div>
 </Transition>
 </template>
@@ -78,10 +80,11 @@ const audioStore = useAudioStore();
     left: calc(50% - 152px);
     z-index: 9000;
     width: 300px;
-    height: 160px;
+    height: fit-content;
     background-color: black;
     border: 2px solid var(--website-text);
     border-radius: 10px;
+    padding-bottom: 7px;
     box-shadow: 0px 0px 10px 2px black;
 }
 
@@ -98,12 +101,13 @@ const audioStore = useAudioStore();
     border-bottom: 1px solid;
     border-radius: 3px;
     padding: 0px 2px;
+    margin-bottom: 7px;
     user-select: none;
 }
 
 .gamepadComp-input-section {
     width: 300px;
-    height: 30px;
+    height: 26px;
     display: flex;
     justify-content: center;
     align-items: center;
