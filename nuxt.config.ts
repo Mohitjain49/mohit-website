@@ -80,6 +80,9 @@ export default defineNuxtConfig({
         ]
     },
 
+    routeRules: { '/**': { appLayout: false }},
+    router: { options: { sensitive: false }},
+
     features: { inlineStyles: true },
     vitalizer: {
         disableStylesheets: false,

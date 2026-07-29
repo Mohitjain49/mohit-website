@@ -63,11 +63,11 @@
                 <span> Open Navigation Menu </span>
             </button>
         </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('red')">
-            <button class="mohit-navMenu-mainOpt" @click="router.back()" pulse-loop>
-                <font-awesome-icon icon="fa-tent-arrow-turn-left" />
-                <span> Leave To Previous Page </span>
-            </button>
+        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--script-page-main-color)')">
+            <RouterLink to="/library/#scripts" class="mohit-navMenu-mainOpt" pulse-loop>
+                <font-awesome-icon icon="fa-code" />
+                <span> See More Scripts </span>
+            </RouterLink>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 

@@ -52,6 +52,9 @@ export const useGamepadStore = defineStore("gamepad-store", () => {
         }
 
         if(websiteMenuIdx == -1) { return; }
+        if(webData.showSharePopup) { webData.setQRCodePopup("quit"); }
+
+        // Actually Opens The Website Menu Here.
         webData.setMenuOpen(websiteMenuIdx, true);
         triggerClickSound();
     }

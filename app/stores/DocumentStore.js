@@ -111,7 +111,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
     const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
-    const showImageCopyButton = computed(() => { return (webData.copyImageSupported && docImagesLoaded.value == 1); });
+    const showImageCopyButton = computed(() => { return (webData.copyImageSupported && docImageUrls.value.length == 1); });
 
     const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && docImagesLoaded.value); });
     const showPrintButton = computed(() => { return (browserPdfViewerPresent.value || docImagesLoaded.value); });
