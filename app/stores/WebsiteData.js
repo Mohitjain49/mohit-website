@@ -320,13 +320,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const route = router.currentRoute.value;
 
         if(qrdata === "quit" || qrdata === "") {
-            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata: undefined } }).then(() => {
-                sleep(10).then(() => { closeNavMenu(); });
-            });
+            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata: undefined }});
         } else if(qrdata === "toggle") {
             setQRCodePopup(showSharePopup.value ? "quit" : "main");
         } else {
-            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata } }).then(() => {
+            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata }}).then(() => {
                 sleep(10).then(() => { closeNavMenu(); });
             });
         }
