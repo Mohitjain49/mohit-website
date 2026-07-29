@@ -2,7 +2,7 @@
     "name": "mohit-website",
     "type": "module",
     "private": true,
-    "version": "3.17.3",
+    "version": "3.17.4",
     "engines": {
         "node": "26.1.0",
         "npm": "11.15.0"
@@ -43,7 +43,7 @@
         "@tsparticles/slim": "4.3.2",
         "@tsparticles/vue3": "4.3.2",
         "@vite-pwa/nuxt": "^1.1.1",
-        "@vueuse/nuxt": "^14.3.0",
+        "@vueuse/nuxt": "^14.4.0",
         "animate.css": "^4.1.1",
         "better-sqlite3": "^12.11.1",
         "bowser": "^2.14.1",
@@ -55,7 +55,7 @@
         "nuxt": "4.5.0",
         "nuxt-vitalizer": "^2.0.0",
         "ofetch": "^1.5.1",
-        "pdfjs-dist": "^6.1.200",
+        "pdfjs-dist": "^6.2.108",
         "pinia": "^4.0.2",
         "pretty-bytes": "^7.1.1",
         "qr-code-styling": "^1.9.2",
@@ -66,9 +66,9 @@
         "vue-router": "^5.2.0"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1096.0",
-        "@aws-sdk/client-s3": "^3.1096.0",
-        "@stefanobartoletti/nuxt-social-share": "^3.1.0",
+        "@aws-sdk/client-cloudfront": "^3.1097.0",
+        "@aws-sdk/client-s3": "^3.1097.0",
+        "@stefanobartoletti/nuxt-social-share": "^3.2.0",
         "@types/google.picker": "^0.0.52",
         "@types/lodash-es": "^4.17.12",
         "@types/node": "^26.1.2",

@@ -45,16 +45,8 @@
                     </a>
                 </div>
             </template>
-            <template v-else-if="documentStore.onResearchPaperRoute">
-                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-                    <button class="mohit-navMenu-mainOpt" @click="documentStore.scrollToPage(1)" pulse-loop>
-                        <font-awesome-icon icon="fa-book-open" />
-                        <span> Scroll To Title Page </span>
-                    </button>
-                </div>
-            </template>
         </div>
-        <div class="mohit-navMenu-opt-break"></div>
+        <div class="mohit-navMenu-opt-break" v-if="!documentStore.onResearchPaperRoute"></div>
 
         <div class="mohit-navMenu-opt-group">
             <div class="mohit-navMenu-opt hosted-file-save-opt">
@@ -157,11 +149,11 @@
                     <span> Open Navigation Menu </span>
                 </button>
             </div>
-            <div class="mohit-navMenu-opt" :style="getColorStyles('red')">
-                <button class="mohit-navMenu-mainOpt" @click="router.back()" pulse-loop>
-                    <font-awesome-icon icon="fa-tent-arrow-turn-left" />
-                    <span> Leave To Previous Page </span>
-                </button>
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-text)')">
+                <RouterLink to="/library/#documents" class="mohit-navMenu-mainOpt" pulse-loop>
+                    <font-awesome-icon icon="fa-folder-open" />
+                    <span> See More Documents </span>
+                </RouterLink>
             </div>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
@@ -183,7 +175,6 @@ const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
-const router = useRouter();
 
 const docMenu = shallowRef(null);
 usePulseLoopAnimation(docMenu);
