@@ -11,12 +11,9 @@
         </div>
 
         <div class="start-buttonRow main">
-            <RouterLink v-for="link in MAIN_BTNS" :to="link.path"
+            <RouterLink v-for="link in MAIN_BTNS" :to="link.path" :title="link.title"
                 class="start-buttonRow-btn inner-path"
-                :style="getSpecialBtnStyles(link.color)"
-                :title="link.title"
-                @pointerenter="setHeartbeatAnimation"
-                @mouseleave="setHeartbeatAnimation">
+                :style="getSpecialBtnStyles(link.color)">
 
                 <font-awesome-icon :icon="link.icon" />
                 <div class="start-btn-caption"> {{ link.shortTitle }} </div>
@@ -35,16 +32,14 @@
                         :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                         :style="getSpecialBtnStyles(contact.color)"
                         @click="(event) => onContactBtnClick(event, contact)"
-                        @dblclick="webData.setQRCodePopup(contact.link)"
-                        @pointerenter="setHeartbeatAnimation"
-                        @mouseleave="setHeartbeatAnimation">
+                        @dblclick="shareContactLink(contact.link)">
 
                         <font-awesome-icon :icon="contact.linkIcon" />
                     </button>
 
                     <Transition name="fade-transition">
                         <div v-if="(startContactObj === contact.id)" class="start-contactBtn-dropdown" :style="getContactDropdownStyles(contact.color)">
-                            <button class="start-contactBtn-dropdown-button top" @click="webData.setQRCodePopup(contact.link)" :title="contact.shareBtn">
+                            <button class="start-contactBtn-dropdown-button top" @click="shareContactLink(contact.link)" :title="contact.shareBtn">
                                 Share <FontAwesomeIcon icon="fa-share-from-square" />
                             </button>
                             <RouterLink class="start-contactBtn-dropdown-button" :to="('/contact/#' + contact.id)" title="Go To Contact Page">
@@ -86,7 +81,7 @@ const isMounted = onMountedAdvanced(() => { onClickOutside(startSocialsContainer
  */
 function onContactBtnClick(event = new PointerEvent('click'), obj) {
     if(event.altKey) {
-        webData.setQRCodePopup(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
+        shareContactLink(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
     } else if(event.ctrlKey) {
         window.open(obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self")) // If the Ctrl key is pressed, the webpage itself is automatically opened.
     } else if(event.shiftKey) {
@@ -118,6 +113,15 @@ function setNameTransitions(isVisible) {
         document.getElementsByClassName("start-buttonRow").item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-buttonRow").item(1)?.classList.add("animate__animated", "animate__lightSpeedInRight");
     }
+}
+
+/**
+ * This function opens the share popup for a contact link.
+ * @param {String} link The Contact Link.
+ */
+function shareContactLink(link = "") {
+    webData.setQRCodePopup(link);
+    sleep(100).then(() => { hideStartContactDropdown(); });
 }
 
 /** This function hides the contact dropdown on this section. */
@@ -239,7 +243,7 @@ const MAIN_BTNS = [
     height: 33px;
     border-radius: 15px;
     border: 2px solid var(--website-text);
-    transition: var(--default-transition);
+    transition: var(--default-transition), scale 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -248,6 +252,7 @@ const MAIN_BTNS = [
 }
 .start-buttonRow-btn:hover {
     background-color: rgb(39, 39, 39);
+    scale: 1.1;
 }
 
 .start-buttonRow-btn.inner-path {

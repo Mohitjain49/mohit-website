@@ -27,7 +27,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             await sleep(50);
             if(webData.showSharePopupImmediate) { webData.showSharePopup = true; }
         } else {
-            setQRCodePopup("quit");
+            webData.setQRCodePopup("quit");
         }
 
         // Tells the website that the navigation was good.
