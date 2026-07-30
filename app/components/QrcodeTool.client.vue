@@ -24,7 +24,7 @@
             <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
                 <FontAwesomeIcon :icon="copyLinkIcon" :spin-pulse="(actions.copy == 1)" />
             </button>
-            <button v-if="(webData.shareSupported && sharePopupMode == 2)" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
+            <button v-if="showCustomLinkShare" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
                 <FontAwesomeIcon :icon="shareLinkIcon" :spin-pulse="(actions.share == 1)" />
             </button>
             
@@ -93,6 +93,9 @@ import QRCodeStyling from 'qr-code-styling';
 import ParsePhoneNumber from 'libphonenumber-js';
 import Lenis from 'lenis';
 
+import isUrl from 'validator/es/lib/isUrl';
+import isMailtoURI from 'validator/es/lib/isMailtoURI';
+
 const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
 const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
 const SHARE_POPUP_MIN_VIEWPORT_EDGE = 675;
@@ -124,6 +127,7 @@ const qrCodeURL = useObjectUrl(qrCodeBlob);
 const showMainPopup = ref(false);
 const showShareOptions = ref(-1);
 const sharePopupMode = ref(0);
+const customLinkValid = ref(false);
 
 const shareLinkedIn = ref("");
 const shareFacebook = ref("");
@@ -136,7 +140,7 @@ const hoverOverCloseBtn = useElementHover(shareCloseRef);
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
 const qrcodeBg = computed(() => { return { 'background-image': ((qrCodeURL.value != undefined) ? 'url(' + qrCodeURL.value + ')' : '') }});
 
-const showSharePopupImmediate = computed(() => { return webData.showSharePopupImmediate; });
+const { showSharePopupImmediate } = storeToRefs(webData);
 const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
 
 const qrCodeFormattedLink = computed(() => {
@@ -150,7 +154,8 @@ const qrCodeFormattedLink = computed(() => {
 
 const shareLinkInternal = computed(() => { return qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK); });
 const internalShareLinkFullPath = computed(() => { return (shareLinkInternal.value ? ("/" + qrCodeLink.value.replace(PERSONAL_WEBSITE_LINK, "")) : ""); });
-const showOpenNewTabButton = computed(() => { return (sharePopupMode.value == 2 && !shareLinkInternal.value); });
+const showOpenNewTabButton = computed(() => { return (sharePopupMode.value == 2 && !shareLinkInternal.value && customLinkValid.value); });
+const showCustomLinkShare = computed(() => { return (webData.shareSupported && sharePopupMode.value == 2 && customLinkValid.value); });
 
 const showInternalNavLink = computed(() => {
     return (shareLinkInternal.value ? ((PERSONAL_WEBSITE_LINK + internalShareLinkFullPath.value.substring(1)) !== getParsedUrl().href) : false);
@@ -236,6 +241,7 @@ function unmountSharePopup() {
 async function setQRCodeLink() {
     const data = qrdata.value;
     const route = router.currentRoute.value;
+    if(!data) { return; }
     // await sleep(50000); For testing purposes if the waiting screen needs to be edited.
 
     if(data === "main") {
@@ -250,21 +256,27 @@ async function setQRCodeLink() {
         sharePopupMode.value = 2;
     }
 
+    /** This is the new and parsed QR Code Link. */
+    const newQRCodeLink = qrCodeLink.value;
+
     if(sharePopupMode.value != 2) {
-        shareLinkedIn.value = useSocialShare({ network: 'linkedin', url: qrCodeLink.value }).value.shareUrl;
-        shareFacebook.value = useSocialShare({ network: 'facebook', url: qrCodeLink.value }).value.shareUrl;
-        shareWhatsApp.value = useSocialShare({ network: 'whatsapp', url: qrCodeLink.value }).value.shareUrl;
-        shareEmail.value = useSocialShare({ network: 'email', url: qrCodeLink.value }).value.shareUrl;
+        customLinkValid.value = true;
+        shareLinkedIn.value = useSocialShare({ network: 'linkedin', url: newQRCodeLink }).value.shareUrl;
+        shareFacebook.value = useSocialShare({ network: 'facebook', url: newQRCodeLink }).value.shareUrl;
+        shareWhatsApp.value = useSocialShare({ network: 'whatsapp', url: newQRCodeLink }).value.shareUrl;
+        shareEmail.value = useSocialShare({ network: 'email', url: newQRCodeLink }).value.shareUrl;
+    } else {
+        customLinkValid.value = (isUrl(newQRCodeLink) || isMailtoURI(newQRCodeLink) || newQRCodeLink.startsWith("tel:"));
     }
 
     if(qrcode.value != null) {
-        qrcode.value.update({ data: qrCodeLink.value });
+        qrcode.value.update({ data: newQRCodeLink });
     } else {
         qrcode.value = new QRCodeStyling({
             width: 450,
             height: 450,
             type: 'canvas',
-            data: qrCodeLink.value,
+            data: newQRCodeLink,
             image: "/static-icons/Personal_Icon_Expanded_Rounded.png",
             margin: 10,
             dotsOptions: {
