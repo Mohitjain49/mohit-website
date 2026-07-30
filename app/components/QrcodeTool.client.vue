@@ -93,7 +93,7 @@ import QRCodeStyling from 'qr-code-styling';
 import ParsePhoneNumber from 'libphonenumber-js';
 import Lenis from 'lenis';
 
-import isUrl from 'validator/es/lib/isUrl';
+import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
 const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
@@ -266,7 +266,7 @@ async function setQRCodeLink() {
         shareWhatsApp.value = useSocialShare({ network: 'whatsapp', url: newQRCodeLink }).value.shareUrl;
         shareEmail.value = useSocialShare({ network: 'email', url: newQRCodeLink }).value.shareUrl;
     } else {
-        customLinkValid.value = (isUrl(newQRCodeLink) || isMailtoURI(newQRCodeLink) || newQRCodeLink.startsWith("tel:"));
+        customLinkValid.value = (isURL(newQRCodeLink) || isMailtoURI(newQRCodeLink) || newQRCodeLink.startsWith("tel:"));
     }
 
     if(qrcode.value != null) {
