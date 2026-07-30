@@ -262,17 +262,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(event.reason?.name === "AbortException") { event.preventDefault(); }
     }
 
-    /** This runs whenever a page is opened. */
-    function mountWebData() {
-        closeNavMenu();
-        if(openShareOnMount.value) {
-            openShareOnMount.value = false;
-            sleep(50).then(() => { if(showSharePopupImmediate.value) { showSharePopup.value = true; }});
-        } else {
-            setQRCodePopup("quit");
-        }
-    }
-
     /** This function scrolls to the footer of the webpage if it exists. */
     function scrollToAndFromFooter() {
         if(!navFooterPresent.value) { return; }
@@ -379,12 +368,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getWebsiteMenuElement,
-        shareText, shareLink, shareFile, setEventListeners, removeEventListeners, mountWebData, scrollToAndFromFooter, bypassBodyClick
+        shareText, shareLink, shareFile, setEventListeners, removeEventListeners, scrollToAndFromFooter, bypassBodyClick
     }
 });
-
-/** This function mounts the website data pinia store on a page. */
-export function initWebData() { useWebsiteDataStore().mountWebData(); }
 
 /** This function returns a reactive computed value on whether the user is on a hosted file page or not. */
 export function getOnHostedFileRoute() {

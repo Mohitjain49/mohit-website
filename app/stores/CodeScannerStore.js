@@ -27,18 +27,13 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const scanModeBtnTitle = computed(() => { return ((scanMode.value == 0) ? "Switch To Drag and Drop" : "Switch to Video"); });
     const draggingImageText = computed(() => { return (!draggingImage.value ? "Click Here or Drag Your Image Here To Find Its QR Codes." : "Drop Your Image Here."); });
 
-    /**
-     * This function mounts the page hosting the code scanner.
-     */
+    /** This function mounts the page hosting the code scanner. */
     function mountCodeScanner() {
-        initWebData();
         const lastScannedItems = localStorage.getItem(SCANNED_ITEMS_KEY);
         scannedItems.value = ((lastScannedItems == null) ? [] : JSON.parse(lastScannedItems));
     }
 
-    /**
-     * This function unmounts the page hosting the code scanner.
-     */
+    /** This function unmounts the page hosting the code scanner. */
     function unmountCodeScanner() {
         deactivateCamera();
         setScannedItemMenu(-1);

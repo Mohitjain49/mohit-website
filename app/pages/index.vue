@@ -24,8 +24,8 @@ const routerHash = computed(() => { return router.currentRoute.value.hash; });
 const hompageRef = useTemplateRef('mohit-homepage');
 usePulseLoopAnimation(hompageRef);
 
-onMountedAdvanced(() => { initWebData(); changePageTitle(); });
-watch(routerHash, () => { changePageTitle(); })
+onMountedAdvanced(() => { changePageTitle(); });
+watch(routerHash, () => { changePageTitle(); });
 useHead(headTags);
 
 /** This function changes the document title of the homepage based of the URL Hash. */

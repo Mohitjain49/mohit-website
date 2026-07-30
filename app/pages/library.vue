@@ -23,8 +23,8 @@ const routerHash = computed(() => { return router.currentRoute.value.hash; });
 const filesPageRef = useTemplateRef('mohit-files-page');
 usePulseLoopAnimation(filesPageRef);
 
-onMountedAdvanced(() => { initWebData(); changePageTitle(); });
-watch(routerHash, () => { changePageTitle(); })
+onMountedAdvanced(() => { changePageTitle(); });
+watch(routerHash, () => { changePageTitle(); });
 useHead(reactiveMeta.metaObjectRef);
 
 /** This function changes the document title of the library page based of the URL Hash. */

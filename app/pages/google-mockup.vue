@@ -40,7 +40,6 @@ const directionsOpen = computed(() => { return (router.currentRoute.value.hash =
 const { data: home } = await useAsyncData(() => queryCollection('content').path('/google-mockup-directions').first());
 
 onMountedAdvanced(() => {
-    initWebData();
     if((typeof window !== 'undefined') && (typeof window.matchMedia === 'function')) {
         if(window.matchMedia('(prefers-color-scheme: dark)').matches) { toggleDarkMode(); }
     }

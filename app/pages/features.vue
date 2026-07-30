@@ -38,10 +38,9 @@ useIntersectionObserver(cardRefs, (entry) => {
 });
 
 onMountedAdvanced(async() => {
-    initWebData();
     await nextTick();
-
     if(getMohitInnerWidth() <= 450) { return; }
+
     const elements = [
         document.getElementsByClassName('features-main-header').item(0),
         document.getElementsByClassName('features-main-desc').item(0)
