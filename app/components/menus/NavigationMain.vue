@@ -160,7 +160,7 @@
             {{ documentStore.docLoaded.loadedPages + '/' + documentStore.docLoaded.totalPages }}
         </span>
     </div>
-    <button title="Copy Webpage Link" @click="() => { copyWebpageLink(); }" class="mohit-navBar-statusIcon share yellow" pulse-loop>
+    <button v-if="showCopyLinkButton" title="Copy Webpage Link" @click="copyWebpageLink()" class="mohit-navBar-statusIcon share yellow" pulse-loop>
         <font-awesome-icon :icon="COPY_STATUS_ICONS[copyStatus]" :spin-pulse="(copyStatus == 1)" />
     </button>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" pulse-loop>
@@ -213,6 +213,7 @@ const showWakeLockWidget = computed(() => {
 const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && (installStore.updateNeeded || installStore.swUpdating)); });
+const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || scriptsStore.onScriptRoute); });
 
 const showNavLeftWidgets = computed(() => {
     return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));

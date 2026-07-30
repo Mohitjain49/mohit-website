@@ -27,7 +27,6 @@ const projectsRef = useTemplateRef('mohit-projects-page');
 usePulseLoopAnimation(projectsRef);
 
 onMountedAdvanced(() => {
-    initWebData();
     setNavCardAnimation("main-projects-features-btn");
 });
 useHead(getMeta("Mohit Jain | My Projects", "projects/",

@@ -176,9 +176,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function mounts a page that hosts a script. */
     async function mountScriptPage() {
-        webData.mountWebData();
         if(!onScriptRoute.value) { return; }
-
         await nextTick();
         await sleep(10);
 

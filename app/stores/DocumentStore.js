@@ -569,9 +569,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function mounts a page that hosts a document. */
     async function mountDocumentPage() {
-        webData.mountWebData();
         await nextTick();
-
         if(onResumeRoute.value) {
             await resumeStore.initBlob({ addQrcode: false, removeLinks: false, updateQuery: false });
         } else if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {

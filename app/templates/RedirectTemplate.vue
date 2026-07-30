@@ -12,8 +12,5 @@ const props = defineProps({
 });
 
 useHead(getMetaWithLink(props.title, props.link, props.desc));
-onMountedAdvanced(() => {
-    initWebData();
-    window.location.replace(props.link);
-});
+onMountedAdvanced(() => { window.location.replace(props.link); });
 </script>

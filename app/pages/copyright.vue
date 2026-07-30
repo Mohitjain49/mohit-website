@@ -98,9 +98,7 @@ usePulseLoopAnimation(copyrightBodyRef);
 
 // Updates the Website Date Information when the website is mounted.
 onMountedAdvanced(() => {
-    initWebData();
     setPageTitle(showLicense.value);
-
     COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);
     RELEASE_TIME.value = ("(" + $websiteBuild.releaseTime + ")");

@@ -197,9 +197,7 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple 
 // This adds a transition to the contact boxes if the screen width is large enough.
 /** */
 const isMounted = onMountedAdvanced(() => {
-    initWebData();
     manageSocialTabGlow();
-
     audioStore.changeSTTUpdateFunc((str) => { updateMainMsg(str); });
     if(getMohitInnerWidth() <= 525 || routeHash.value !== "") { return; }
 
