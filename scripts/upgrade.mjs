@@ -198,7 +198,6 @@ async function main() {
             const TO_BE_REMOVED = [
                 { path: "./package-lock.json", directory: false },
                 { path: "./build-info.json", directory: false },
-                { path: "./.data", directory: true },
                 { path: "./.nuxt", directory: true },
                 { path: "./.output", directory: true },
                 { path: "./dist", directory: true },

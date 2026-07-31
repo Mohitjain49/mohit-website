@@ -14,7 +14,7 @@
             </div>
         </template>
         <template v-if="directionsOpen">
-            <ContentRenderer id="directions" class="markdown-body animate__animated animate__fadeIn" v-if="home" :value="home" />
+            <Comark class="markdown-body animate__animated animate__fadeIn"> {{ googleMockupDirectionsMdFile }} </Comark>
             <button @click="toggleDirections()" class="gMockup-directions-btn animate__animated animate__bounceIn"> Close Directions </button>
         </template>
     </div>
@@ -32,12 +32,12 @@
 </template>
 
 <script setup>
+import googleMockupDirectionsMdFile from "~/markdown/google-mockup-directions.md?raw";
 const router = useRouter();
 const gSearchInput = ref("");
 
 const isDarkMode = ref(false);
 const directionsOpen = computed(() => { return (router.currentRoute.value.hash === "#directions"); });
-const { data: home } = await useAsyncData(() => queryCollection('content').path('/google-mockup-directions').first());
 
 onMountedAdvanced(() => {
     if((typeof window !== 'undefined') && (typeof window.matchMedia === 'function')) {
