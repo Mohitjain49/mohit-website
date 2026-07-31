@@ -2,7 +2,7 @@
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar v-if="resumeStore.blobCreated" />
-        <ContentRenderer class="markdown-body" v-if="home" :value="home" />
+        <Comark class="markdown-body"> {{ resumeMdFile }} </Comark>
         <HostedFileBottomBar v-if="fullScreenSet" />
     </div>
 
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-const { data: home } = await useAsyncData(() => queryCollection('content').path('/resume-markdown').first());
+import resumeMdFile from "~/markdown/resume-markdown.md?raw";
 
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();

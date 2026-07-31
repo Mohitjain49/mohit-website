@@ -44,9 +44,10 @@ export default defineNuxtConfig({
         }
     },
     devServer: { port: 5700, host: "localhost" },
-    modules: ['@vueuse/nuxt', '@pinia/nuxt', '@nuxt/content', '@vite-pwa/nuxt',
-        '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxt/fonts', 'unplugin-info/nuxt',
-        '@stefanobartoletti/nuxt-social-share', "nuxt-vitalizer",
+    modules: [
+        '@vueuse/nuxt', '@pinia/nuxt', '@vite-pwa/nuxt', '@nuxt/fonts',
+        '@nuxtjs/sitemap', '@nuxtjs/robots', 'unplugin-info/nuxt',
+        '@stefanobartoletti/nuxt-social-share', "@comark/nuxt", "nuxt-vitalizer",
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',

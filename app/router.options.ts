@@ -2,6 +2,7 @@ import type { RouterConfig } from "nuxt/schema";
 import type { RouteLocation } from "vue-router";
 
 const QUERY_NO_SCROLL_PARAMS = ["qrdata", "qrcodeAdded", "linksRemoved"];
+const QUERY_DOCUMENT_SCROLL_PARAMS = ["page", "y"];
 const SCROLL_STORE_WAIT_SECONDS = 1.5;
 
 /** This function determines if a scroll should be disabled based off a query change. */
@@ -10,6 +11,16 @@ function disableScrollOnQueryChange(to: RouteLocation, from: RouteLocation) {
     const differentPage = (to.path !== from.path);
     const differentHash = (to.hash !== from.hash);
     return (queryChanged && !(differentPage || differentHash));
+}
+
+/** This function determines if the next autoscroll should be based off of certain scroll params on a hosted document page. */
+function checkDocumentScrollParams(to: RouteLocation, from: RouteLocation) {
+    const { $pinia } = useNuxtApp();
+    const documentStore = useDocumentStore($pinia);
+    if(!documentStore.onDocumentRoute || documentStore.onMarkdownRoute || !documentStore.docLoaded.status) { return false; }
+
+    const documentQueryChanged = (-1 != QUERY_DOCUMENT_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== from.query[item]); }));
+    return (documentQueryChanged && (to.path === from.path));
 }
 
 // This accounts for the majority of all auto-scrolling functionality across the website.
@@ -69,6 +80,8 @@ export default {
             return false;
         } else if(hashExists) {
             try { await scrollStore.scrollToId(hash, 0, 0); } catch(e) {}
+        } else if(checkDocumentScrollParams(to, from)) {
+            try { window.dispatchEvent(new Event("mohit-pdf-destination-scroll", { cancelable: false })); } catch(e) {}
         } else if(!differentPage) {
             try { await scrollStore.scrollToTop(false, 0); } catch(e) {}
         }

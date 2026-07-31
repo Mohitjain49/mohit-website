@@ -38,7 +38,7 @@
     padding: 15px;
     border-radius: 5px;
     height: fit-content;
-    margin: auto;
+    margin: 0px auto;
     background-color: white;
     font-family: 'Roboto', sans-serif;
 }
@@ -128,7 +128,7 @@
 #resume-container:fullscreen .pdf-doc-mohit-container {
     min-height: calc(100% - 100px);
 }
-.markdown-body h1, .markdown-body p, .markdown-body li {
+.markdown-body h1, .markdown-body p, .markdown-body li, .markdown-body div {
     color: black !important;
     font-family: 'Roboto', sans-serif;
 }
@@ -160,8 +160,9 @@
 .resume-markdown-mainLinks, .resume-markdown-mainSummary {
     margin-bottom: 20px;
 }
-.resume-markdown-mainSummary p {
+.resume-markdown-mainSummary {
     font-style: italic;
+    color: black;
 }
 
 .resume-markdown-subHeader {
@@ -278,11 +279,11 @@
 
 @include dynamic-less-equal-width-rule(850) {
     .markdown-body h1 { font-size: 20px; }
-    .markdown-body p, .markdown-body li { font-size: 13px; }
+    .markdown-body p, .markdown-body li, .markdown-body div { font-size: 13px; }
 }
 @include dynamic-less-equal-width-rule(600) {
     .markdown-body h1 { font-size: 17px; }
-    .markdown-body p, .markdown-body li { font-size: 11px; }
+    .markdown-body p, .markdown-body li, .markdown-body div { font-size: 11px; }
 
     .pdf-doc-linkBtn {
         width: 25px;

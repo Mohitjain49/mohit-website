@@ -342,8 +342,34 @@ export function onMountedAdvanced(callback = () => {}) {
 
 /** This function returns a computed instance of the route path with the query string. */
 export function useRoutePathWithQuery() {
+    const documentStore = useDocumentStore();
     const router = useRouter();
-    const queryEnd = computed(() => { return new URLSearchParams(router.currentRoute.value.query).toString(); });
-    const path = computed(() => { return (router.currentRoute.value.path + ((queryEnd.value.length <= 0) ? "" : ("?" + queryEnd.value))); });
+
+    const rawRoutePath = computed(() => { return router.currentRoute.value.path; });
+    const rawRouteQuery = computed(() => { return router.currentRoute.value.query; });
+    const queryEnd = ref("");
+
+    /** This is the final parsed path returned for the website to use. */
+    const path = computed(() => { return (rawRoutePath.value + ((queryEnd.value.length <= 0) ? "" : ("?" + queryEnd.value))); });
+
+    /** This function updates the Query End parameter. */
+    function updateQueryEnd() {
+        if(!documentStore.onDocumentRoute) {
+            const searchParamsStr = new URLSearchParams(rawRouteQuery.value).toString();
+            queryEnd.value = searchParamsStr;
+            return searchParamsStr;
+        } else {
+            var searchParams = new URLSearchParams(rawRouteQuery.value);
+            if(searchParams.has("page")) { searchParams.delete("page"); }
+            if(searchParams.has("y")) { searchParams.delete("y"); }
+
+            const searchParamsStr = searchParams.toString();
+            queryEnd.value = searchParamsStr;
+            return searchParamsStr;
+        }
+    }
+
+    updateQueryEnd();
+    watch(rawRouteQuery, () => { updateQueryEnd(); }, { deep: true });
     return path;
 }

@@ -15,10 +15,15 @@ const BACKGROUND_COLOR_PROPERTY = "--particles-bg-color";
 const tsparticlesContainer = shallowRef(null);
 const props = defineProps({ particlesOptions: { type: Object, required: true } });
 
+var resizeAbortController = new AbortController();
+var resizeTimeout = null;
+
 const visibility = useDocumentVisibility();
 const battery = useBattery();
 const windowSize = useMohitWindowSize();
 
+const particlesLoaded = ref(false);
+const particlesResetting = ref(false);
 const batteryLow = ref(false);
 const particlesHalved = ref(false);
 
@@ -32,12 +37,53 @@ const disableParticleDensity = computed(() => { return (windowSize.height.value 
 function onParticlesLoaded(container) {
     tsparticlesContainer.value = container;
     setParticlesBackgroundColor();
+
+    particlesLoaded.value = true;
+    particlesResetting.value = false;
+
+    if(resizeAbortController != null) { resizeAbortController.abort(); }
+    resizeAbortController = new AbortController();
+    window.addEventListener("animation-resize", () => { resetParticlesOnResize(); }, { signal: resizeAbortController.signal });
 }
 
 /** This function simple resets the particles in the tsparticles container. */
-function resetParticles() {
-    if(tsparticlesContainer.value == null) { return; }
-    tsparticlesContainer.value.reset(props.particlesOptions);
+async function resetParticles() {
+    if(particlesResetting.value) { return; }
+    particlesResetting.value = true;
+
+    try {
+        await waitForParticles();
+        particlesLoaded.value = false;
+
+        await tsparticlesContainer.value.reset(props.particlesOptions);
+        particlesResetting.value = false;
+        particlesLoaded.value = true;
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/** This function triggers a particle reset on a viewport resize. */
+function resetParticlesOnResize() {
+    if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+    resizeTimeout = setTimeout(() => { resetParticles().then(() => { resizeTimeout = null; }); }, 500);
+}
+
+/** This function can have a function wait till the particles are loaded before executing its capabilities. */
+async function waitForParticles() {
+    await new Promise(async(resolve, reject) => {
+        var msPassed = 0;
+        while(msPassed < 10000 && !particlesLoaded.value) {
+            await sleep(50);
+            msPassed += 50;
+        }
+
+        if(particlesLoaded.value) {
+            resolve("Wait Time: " + msPassed + " milliseconds");
+        } else {
+            reject("Timeout Error");
+        }
+    });
 }
 
 /** This returns whether the density property for a particles background exists. */
@@ -94,12 +140,15 @@ onBeforeUnmount(() => {
 
 // This pauses the animations when the website is not visible on the visitor's device.
 watch(webpageHidden, (newValue) => {
-    if(tsparticlesContainer.value == null) { return; }
-    if(newValue) {
-        tsparticlesContainer.value.pause();
-    } else {
-        tsparticlesContainer.value.play();
-    }
+    waitForParticles().then(() => {
+        if(newValue) {
+            tsparticlesContainer.value.pause();
+        } else {
+            tsparticlesContainer.value.play();
+        }
+    }).catch((e) => {
+        if(import.meta.dev) { console.error(e); }
+    });
 });
 
 // This disables the "density" property of the TS Particles Background when the viewport size gets too large.

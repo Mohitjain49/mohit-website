@@ -89,7 +89,10 @@ const showFsWebCover = computed(() => {
 onMountedAdvanced(async() => {
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
     await renderPDF();
-    window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal: resizeAbortController.signal });
+
+    const signal = resizeAbortController.signal;
+    window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal });
+    window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
 });
 onBeforeUnmount(() => {
     renderAbortController.abort();
@@ -338,27 +341,8 @@ function setSingleDocLoaded(index = 1) {
         if(docPages.value[i].loaded) { numPagesLoaded++; }
     }
 
-    documentStore.docLoaded.loadedPages = numPagesLoaded;
-    if(numPagesLoaded < totalPages) { return; }
-    documentStore.docLoaded = { status: true, totalPages, loadedPages: totalPages }
-
-    const linkUrl = new URL(router.currentRoute.value.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
-    const searchParams = linkUrl.searchParams;
-    const hashPageNumber = parseInt(linkUrl.hash.replaceAll("#page_", ""));
-
-    const pageQuery = (searchParams.has("page") ? parseInt(searchParams.get("page")) : NaN);
-    const validPageQuery = !Number.isNaN(pageQuery);
-    const yQuery = (searchParams.has("y") ? parseFloat(searchParams.get("y")) : NaN);
-
-    if(linkUrl.hash === "#footer") {
-        goToPageSection("footer");
-    } else if(validPageQuery && !Number.isNaN(yQuery)) {
-        scrollToPdfDest(pageQuery, yQuery, false);
-    } else if(validPageQuery) {
-        documentStore.scrollToPage(pageQuery);
-    } else if(!Number.isNaN(hashPageNumber)) {
-        documentStore.scrollToPage(hashPageNumber);
-    }
+    documentStore.docLoaded = { status: (numPagesLoaded >= totalPages), totalPages, loadedPages: numPagesLoaded }
+    if(documentStore.docLoaded.status) { scrollToCurrentPdfDest(); }
 }
 
 /**
@@ -434,6 +418,29 @@ function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
     if(setRoute) {
         const route = router.currentRoute.value;
         router.push({ path: route.path, hash: "", query: { ...route.query, page: pageNumber, y }});
+    }
+}
+
+/** This function lets the user scroll to the current PDF Destination using the URL. */
+function scrollToCurrentPdfDest() {
+    const linkUrl = new URL(router.currentRoute.value.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
+    const searchParams = linkUrl.searchParams;
+    const hashPageNumber = parseInt(linkUrl.hash.replaceAll("#page_", ""));
+
+    const pageQuery = (searchParams.has("page") ? parseInt(searchParams.get("page")) : NaN);
+    const validPageQuery = !Number.isNaN(pageQuery);
+    const yQuery = (searchParams.has("y") ? parseFloat(searchParams.get("y")) : NaN);
+
+    if(linkUrl.hash === "#footer") {
+        goToPageSection("footer");
+    } else if(validPageQuery && !Number.isNaN(yQuery)) {
+        scrollToPdfDest(pageQuery, yQuery, false);
+    } else if(validPageQuery) {
+        documentStore.scrollToPage(pageQuery);
+    } else if(!Number.isNaN(hashPageNumber)) {
+        documentStore.scrollToPage(hashPageNumber);
+    } else {
+        scrollToTop(false, 10);
     }
 }
 
