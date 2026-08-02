@@ -394,9 +394,16 @@ function onAnnotationClick(event) {
  * @param {PointerEvent} event The event fired by the action.
  */
 async function onPdfContentMenu(event) {
-    event.preventDefault();
-    webData.setMenuOpen(DOCUMENT_MENU, true);
-    triggerClickSound();
+    /** @type {HTMLElement} The element that was clicked on. */
+    const element = event.target;
+    const selection = window.getSelection();
+    const selectedText = (selection ? selection.toString().trim() : "");
+
+    // If the user does not right click on selected text or a link, this function opens the website document menu.
+    if(!element.closest("a") && (!selection || selectedText.length <= 0 || !selection.containsNode(element, true))) {
+        event.preventDefault();
+        webData.setMenuOpen(DOCUMENT_MENU, true);
+    }
 }
 
 /**

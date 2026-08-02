@@ -142,7 +142,7 @@ const gamepadStore = useGamepadStore();
 const router = useRouter();
 
 onMountedAdvanced(() => { manageGamepadTabGlow(); });
-useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad", "These are the gamepad controls on my website." ));
+useHead(getMeta("Mohit Jain | Gamepad Controls", "gamepad", "These are the gamepad controls on my website."));
 watch(() => router.currentRoute.value.hash, (newValue, oldValue) => { manageGamepadTabGlow(oldValue); });
 
 /**

@@ -314,6 +314,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
                 const numImages = docImageUrls.value.length;
                 const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+                const imgScaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
 
                 for(let i = 0; i < numImages; i++) {
                     const newChild = printIframeDocument.createElement("div");
@@ -323,7 +324,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                     newChildImg.src = docImageUrls.value[i];
 
                     newChildImg.width = TEMP_IMG_WIDTH;
-                    newChildImg.height = (TEMP_IMG_WIDTH * PDF_LETTER_SCALE);
+                    newChildImg.height = (TEMP_IMG_WIDTH * imgScaleFactor);
                     newChildImg.draggable = false;
 
                     printIframeDocument.body.appendChild(newChild);
@@ -579,7 +580,8 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(onMarkdownRoute.value) {
             await getRawPdfAsImages();
         } else {
-            mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
+            const scaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
+            mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
         }
     }
 
@@ -603,7 +605,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Number} maxWidth The Maximum width for the custom pdf.
      * @param {Number} scaleFactor the scale factor to get height pixels.
      */
-    function mountCustomDocumentPage(maxWidth = DEFAULT_PDF_MAX_WIDTH, minWidth = DEFAULT_PDF_MIN_WIDTH, scaleFactor = 1.375) {
+    function mountCustomDocumentPage(maxWidth = DEFAULT_PDF_MAX_WIDTH, minWidth = DEFAULT_PDF_MIN_WIDTH, scaleFactor = PDF_LETTER_SCALE) {
         customPdfMaxWidth.value = maxWidth;
         customPdfMinWidth.value = minWidth;
         customPdfScaleFactor.value = scaleFactor;
@@ -841,20 +843,28 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
+    /** This is the metadata provided by the document. */
+    const metadata = usePdfMetadata(objectUrl, false);
+
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {
         if(blobCreated.value) { return; }
         blob.value = await fetch(file).then((res) => res.blob());
         objectUrl.value = URL.createObjectURL(blob.value);
+
         changeLink("default");
+        await metadata.parsePdf();
     }
 
     /** This function deletes the current blob used by the website. */
     function deleteBlob() {
         if(!blobCreated.value) { return; }
-        blob.value = null;
         URL.revokeObjectURL(objectUrl.value);
+
+        blob.value = null;
         objectUrl.value = "";
+
+        metadata.setDefaultValues();
         changeLink("default");
     }
 
@@ -862,10 +872,13 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * This function lets external stores and components set the blob itself for the hosted document.
      * @param {Blob} newBlob The new Blob that represents the hosted document.
      */
-    function setNewBlob(newBlob) {
+    async function setNewBlob(newBlob) {
         if(blobCreated.value) { deleteBlob(); }
         blob.value = newBlob;
         objectUrl.value = URL.createObjectURL(blob.value);
+        
+        changeLink("default");
+        await metadata.parsePdf();
     }
 
     /**
@@ -890,7 +903,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, fileSize, name, suffix, link, blob, blobCreated, objectUrl, originLink, withMd,
+    return { path, onRoute, file, fileSize, name, suffix, link, blob, blobCreated, objectUrl, metadata, originLink, withMd,
         initBlob, setNewBlob, deleteBlob, checkPath, changeLink
     }
 }

@@ -31,6 +31,9 @@ function getPort() {
     return (Number.isNaN(potentialPort) ? DEFAULT_PORT : potentialPort);
 }
 
+const PORT = getPort();
+const SERVE_URL = `http://localhost:${PORT}`;
+
 /**
  * This function properly shuts down the server.
  * @param {String} signal The signal used to end the script.
@@ -61,9 +64,21 @@ function shutdownServer(signal) {
     if(typeof server.closeAllConnections === "function") { server.closeAllConnections(); }
 }
 
+/**
+ * This function opens the URL for the served build output.
+ * @param {String} message A message to print after opening the URL.
+ */
+function openUrl(message = "") {
+    if(!serverListening) { return; }
+    const platform = process.platform;
+    const command = ((platform === "win32") ? "start" : ((platform === "darwin") ? "open" : "xdg-open"));
+
+    execSync(command + " " + SERVE_URL);
+    if(message.length > 0) { console.log(message); }
+}
+
 /** This function runs the main JS for the script. */
 function main() {
-    const PORT = getPort();
     server = http.createServer((request, response) => {
         return handler(request, response, { public: PUBLIC_DIR });
     });
@@ -74,20 +89,14 @@ function main() {
     process.stdin.on("keypress", (chunk = "", key) => {
         if(key.name === "c" && key.ctrl) { shutdownServer("SIGINT"); }
         if(key.name === "q") { shutdownServer("Q"); }
+        if(key.name === "o") { openUrl(`Opened ${SERVE_URL}`); }
     });
 
     server.listen(PORT, () => {
-        const url = `http://localhost:${PORT}`;
         serverListening = true;
-
         console.log(`Serving ${PUBLIC_DIR}`);
-        console.log(`Server running at ${url}`);
-
-        if(args.indexOf("--no-open") == -1) {
-            const platform = process.platform;
-            const command = ((platform === "win32") ? "start" : ((platform === "darwin") ? "open" : "xdg-open"));
-            execSync(command + " " + url);
-        }
+        console.log(`Server running at ${SERVE_URL}`);
+        if(args.indexOf("--no-open") == -1) { openUrl(); }
     });
 }
 

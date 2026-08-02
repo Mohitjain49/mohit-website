@@ -14,12 +14,20 @@ export function useMohitWindowSize() {
  * @param {import('vue').ShallowRef<HTMLElement>} container This is the main container to which the utility will apply to.
  */
 export function usePulseLoopAnimation(container = null) {
+    const styleStore = useStyleStore();
+
     /** @type {MutationObserver} */
     var observer = null;
 
     /** @type {AbortController} */
     var controller = null;
+    var interval = null;
 
+    /**
+     * @type {import('vue').Ref<Array<HTMLElement>>}
+     * A list of all the elements that's given the specific event listeners for this utility.
+     */
+    const animatedElements = ref([]);
     const enabled = ref(false);
     const numElements = ref(0);
 
@@ -41,10 +49,12 @@ export function usePulseLoopAnimation(container = null) {
         if(controller != null) { controller.abort(); }
         if(observer != null) { observer.disconnect(); }
 
+        clearVerifyInterval();
         controller = null;
         observer = null;
 
         numElements.value = 0;
+        animatedElements.value = [];
         enabled.value = false;
     }
 
@@ -56,12 +66,17 @@ export function usePulseLoopAnimation(container = null) {
 
     /** This is a practical copy of {@link setPulseLoopAnimation}. */
     function animate(event) {
+        /** @type {HTMLElement} This is the element that classes are being added and removed from. */
+        const element = event.target;
+        const listIndex = animatedElements.value.findIndex((item) => { return (element === item); });
+        if(listIndex <= -1) { return; }
+
         if(event.type === "pointerenter" && event.pointerType === "mouse") {
-            if(event.target.classList.contains('animate__animated')) { return; }
-            event.target.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
+            if(element.classList.contains('animate__animated')) { return; }
+            element.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
         } else {
-            if(!event.target.classList.contains('animate__pulse')) { return; }
-            event.target.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
+            if(!element.classList.contains('animate__pulse')) { return; }
+            element.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
         }
     }
 
@@ -70,6 +85,7 @@ export function usePulseLoopAnimation(container = null) {
         if(controller != null) { controller.abort(); }
         controller = new AbortController();
 
+        clearVerifyInterval();
         await nextTick();
         await sleep(5);
         if(!container.value) { return; }
@@ -78,20 +94,54 @@ export function usePulseLoopAnimation(container = null) {
         const elements = container.value.querySelectorAll('[pulse-loop]');
         numElements.value = elements.length;
 
+        // This adds event listeners to the element this utility is applied to if it have the "pulse-loop" attribute.
         if(container.value.hasAttribute("pulse-loop")) {
+            numElements.value++;
+            animatedElements.value.push(container.value);
             container.value.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
             container.value.addEventListener("mouseleave", (event) => { animate(event); }, { signal });
         }
+
+        // This adds event listeners that is a descendant of the element this utility is applied to if they have the "pulse-loop" attribute.
         elements.forEach((element) => {
+            animatedElements.value.push(element);
             element.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
             element.addEventListener("mouseleave", (event) => { animate(event); }, { signal });
         });
+
+        // This sets an interval that iterates through the pulse loop elements twice a second to see if classes need to be removed.
+        interval = setInterval(() => { verifyAnimatedElements(); }, 500);
+
+        // This creates an event listener for the abort controller signal that clears the interval when aborted.
+        signal.addEventListener("abort", () => { clearVerifyInterval(); }, { once: true });
+    }
+
+    /** This function verifies that only the elements that the user is hovering over have the pulse loop class. */
+    function verifyAnimatedElements() {
+        try {
+            const xVal = (styleStore.mouseX / styleStore.cssToWindowWidthRatio);
+            const yVal = (styleStore.mouseY / styleStore.cssToWindowHeightRatio);
+            const currentElementOnMouse = document.elementFromPoint(xVal, yVal);
+
+            for(let i = 0; i < animatedElements.value.length; i++) {
+                const element = animatedElements.value[i];
+                if(!element || !element.classList.contains('animate__pulse')) { continue; }
+                if(element === currentElementOnMouse || element.contains(currentElementOnMouse)) { continue; }
+                element.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
+            }
+        } catch(e) {}
+    }
+
+    /** This clears the verify interval used by this utility. */
+    function clearVerifyInterval() {
+        if(interval != null) { clearInterval(interval); }
+        interval = null;
     }
 
     onMountedAdvanced(async() => { await enable(); });
     onBeforeUnmount(() => { disable(); });
     watch(container, () => { reset(); });
-    return { enabled, numElements, enable, disable, reset, animate }
+    return { enabled, numElements, animatedElements, enable, disable, reset, animate, verifyAnimatedElements }
 }
 
 /**
