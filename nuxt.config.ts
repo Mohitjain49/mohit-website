@@ -108,7 +108,7 @@ export default defineNuxtConfig({
     vite: {
         plugins: [
             imagetools({
-                include: /assets\/.*\.(png|jpe?g)$/,
+                include: /assets\/.*\.(png|jpe?g)(\?.*)?$/,
                 removeMetadata: true,
                 defaultDirectives: (url) => {
                     const params = new URLSearchParams('format=webp&quality=90');

@@ -80,7 +80,7 @@
         "shiki": "^4.4.1",
         "simple-git-hooks": "^2.13.1",
         "unplugin-info": "^1.3.2",
-        "vite-imagetools": "^10.0.1"
+        "vite-imagetools": "^11.0.0"
     },
     "simple-git-hooks": {
         "pre-commit": "npm.cmd run test"
