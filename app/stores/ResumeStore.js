@@ -2,6 +2,8 @@ import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
 import { PDF, StandardFonts, rgb } from "@libpdf/core";
 import QRCodeStyling from "qr-code-styling";
 
+export const RESUME_HOSTED_DOCUMENT_INDEX = 0;
+
 /** This pinia store is used to customize my resume. */
 export const useResumeStore = defineStore("resume-store", () => {
     const documentStore = useDocumentStore();
@@ -39,7 +41,8 @@ export const useResumeStore = defineStore("resume-store", () => {
         }
 
         await initBlob({ addQrcode: qrcodeAdded.value, removeLinks: linksRemoved.value, updateQuery: false });
-        documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
+        const scaleFactor = documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].metadata.pageHeightToWidthRatio;
+        documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
     }
 
     /** This function unmounts the resume page. */
@@ -62,9 +65,9 @@ export const useResumeStore = defineStore("resume-store", () => {
         blob.value = await createNewBlob(options);
         objectUrl.value = URL.createObjectURL(blob.value);
 
-        documentStore.hostedDocuments[0].setNewBlob(blob.value);
+        await documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].setNewBlob(blob.value);
         const newLink = ((qrcodeAdded.value || linksRemoved.value) ? objectUrl.value : PERSONAL_RESUME_LINK);
-        documentStore.hostedDocuments[0].changeLink(newLink);
+        documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].changeLink(newLink);
 
         await sleep(5);
         blobCreated.value = 2;
@@ -76,7 +79,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         blobCreated.value = 1.1;
 
         blob.value = null;
-        documentStore.hostedDocuments[0].deleteBlob();
+        documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].deleteBlob();
         objectUrl.value = "";
         blobCreated.value = 0;
     }
@@ -96,7 +99,8 @@ export const useResumeStore = defineStore("resume-store", () => {
         await sleep(100);
         await initBlob(options);
 
-        documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, PDF_LETTER_SCALE);
+        const scaleFactor = documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].metadata.pageHeightToWidthRatio;
+        documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
         if(fullScreenSetBeforeReset) { await documentStore.toggleDocumentFullScreen(); }
     }
 

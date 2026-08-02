@@ -8,46 +8,52 @@
     <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu" ref="docMetadataMenu">
         <MenuTop :show-doc-options-btn="true" />
 
-        <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
-            @click="setFocusedMetadata(true, field.header, field.content.value)"
-            :title="('Show ' + field.header + ' Options')">
+        <template v-if="!pdfMetadata.parsingPdf.value && pdfMetadata.metadataReceived.value">
+            <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
+                @click="setFocusedMetadata(true, field.header, field.content.value)"
+                :title="('Show ' + field.header + ' Options')">
 
-            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-            <span class="content" v-html="field.content.value"></span>
-        </button>
-        <div class="mohit-navMenu-opt-break"></div>
+                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+                <span class="content" v-html="field.content.value"></span>
+            </button>
+            <div class="mohit-navMenu-opt-break"></div>
 
-        <button v-for="field in METADATA_FIELDS_2" class="mohit-navMenu-info clickable"
-            @click="setFocusedMetadata(true, field.header, field.content.value)"
-            :title="('Show ' + field.header + ' Options')">
+            <button v-for="field in METADATA_FIELDS_2" class="mohit-navMenu-info clickable"
+                @click="setFocusedMetadata(true, field.header, field.content.value)"
+                :title="('Show ' + field.header + ' Options')">
 
-            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-            <span class="content" v-html="field.content.value"></span>
-        </button>
-        <div class="mohit-navMenu-opt-break"></div>
+                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+                <span class="content" v-html="field.content.value"></span>
+            </button>
+            <div class="mohit-navMenu-opt-break"></div>
 
-        <button v-for="field in METADATA_FIELDS_3" class="mohit-navMenu-info clickable"
-            @click="setFocusedMetadata(true, field.header, field.content.value)"
-            :title="('Show ' + field.header + ' Options')">
+            <button v-for="field in METADATA_FIELDS_3" class="mohit-navMenu-info clickable"
+                @click="setFocusedMetadata(true, field.header, field.content.value)"
+                :title="('Show ' + field.header + ' Options')">
 
-            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-            <span class="content" v-html="field.content.value"></span>
-        </button>
-        <div v-if="focusedMetadata.show" class="mohit-navMenu-opt-break"></div>
+                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+                <span class="content" v-html="field.content.value"></span>
+            </button>
+            <div v-if="focusedMetadata.show" class="mohit-navMenu-opt-break"></div>
 
-        <div v-if="focusedMetadata.show" class="metadata-docMenu-focused">
-            <div class="top-section">
-                <h3> {{ focusedMetadata.header }} </h3>
-                <div class="metadata-docMenu-focused-options">
-                    <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)" pulse-loop>
-                        <FontAwesomeIcon :icon="COPY_ACTION_ICONS[metadataCopyState]" />
-                    </button>
-                    <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" pulse-loop>
-                        <FontAwesomeIcon icon="fa-xmark" />
-                    </button>
+            <div v-if="focusedMetadata.show" class="metadata-docMenu-focused">
+                <div class="top-section">
+                    <h3> {{ focusedMetadata.header }} </h3>
+                    <div class="metadata-docMenu-focused-options">
+                        <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)" pulse-loop>
+                            <FontAwesomeIcon :icon="COPY_ACTION_ICONS[metadataCopyState]" />
+                        </button>
+                        <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" pulse-loop>
+                            <FontAwesomeIcon icon="fa-xmark" />
+                        </button>
+                    </div>
                 </div>
+                <p :style="{ 'font-size': focusedMetadata.fontSize }"> {{ focusedMetadata.content }} </p>
             </div>
-            <p :style="{ 'font-size': focusedMetadata.fontSize }"> {{ focusedMetadata.content }} </p>
+        </template>
+
+        <div class="metadata-docMenu-loadingBar" v-if="pdfMetadata.parsingPdf.value">
+            <div class="inner" :style="('width:' + (metadataLoadingCount * 20) + '%')"></div>
         </div>
     </div>
 </Transition>
@@ -60,9 +66,11 @@ const { docImagesSize } = storeToRefs(useDocumentStore());
 
 const props = defineProps({ objectUrl: { type: String, default: "" }});
 const computedUrl = computed(() => { return props.objectUrl; });
-const pdfMetadata = usePdfMetadata(computedUrl);
 
+const pdfMetadata = usePdfMetadata(computedUrl);
+const loadingInterval = useIntervalFn(() => { incrementLoadingCount(); }, 400, { immediate: true });
 const docMetadataMenu = shallowRef(null);
+
 usePulseLoopAnimation(docMetadataMenu);
 useWebsiteMenuUtility(docMetadataMenu);
 
@@ -71,6 +79,7 @@ watch(documentMetadataMenuOpen, () => { setFocusedMetadata(false, "", ""); });
 
 /** This manages the state of this menu's bottom section. */
 const focusedMetadata = ref({ show: false, header: "", content: "", fontSize: "10px" });
+const metadataLoadingCount = ref(0);
 const metadataCopyState = shallowRef(0);
 var metadataCopyTimeout = null;
 
@@ -105,7 +114,6 @@ function setFocusedMetadata(show = false, header = "", content = "") {
     metadataCopyTimeout = null;
 }
 
-
 /** This function copies the QR Code Link currently visible. */
 async function copyMetadataField() {
     if(metadataCopyState.value > 0) { return; }
@@ -122,6 +130,17 @@ async function copyMetadataField() {
             metadataCopyState.value = 0;
             metadataCopyTimeout = null;
         }, 2000); 
+    }
+}
+
+/** This function increments the loading count. */
+function incrementLoadingCount() {
+    if(!pdfMetadata.parsingPdf.value) {
+        loadingInterval.pause()
+    } else if(metadataLoadingCount.value > 6) {
+        metadataLoadingCount.value = 0;
+    } else {
+        metadataLoadingCount.value++;
     }
 }
 

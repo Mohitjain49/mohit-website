@@ -635,6 +635,32 @@
     height: 10px;
 }
 
+.metadata-docMenu-loadingBar {
+    position: relative;
+    left: calc(50% - 102px);
+    width: 200px;
+    height: 10px;
+    margin: 20px 0px 10px 0px;
+    background-color: black;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    border: 2px solid var(--website-light-text);
+    border-radius: 7px;
+    box-shadow: 0px 0px 10px 2px black;
+    overflow: hidden;
+    z-index: 3000;
+}
+.metadata-docMenu-loadingBar > .inner {
+    height: 100%;
+    width: 100%;
+    transition: width 0.1s;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    background: var(--c-color);
+}
+
 .mohit-pdfNav-tab {
     cursor: pointer;
     width: fit-content;

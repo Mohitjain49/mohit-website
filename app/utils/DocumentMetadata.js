@@ -5,8 +5,12 @@ import dayjs from "dayjs"
 /**
  * This utility gathers the metadata for a PDF and ensures that the website can use it.
  * @param {import('vue').ShallowRef<String>} objectUrl A reference Object URL representing the document.
+ * @param {Boolean} onMounted If true (which is by default), this function runs the "parsePDF" function when initialized.
  */
-export function usePdfMetadata(objectUrl = shallowRef(null)) {
+export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
+    const metadataReceived = shallowRef(false);
+    const parsingPdf = shallowRef(false);
+
     const title = shallowRef("");
     const author = shallowRef("");
     const subject = shallowRef("");
@@ -20,6 +24,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
 
     const pageWidth = shallowRef(0);
     const pageHeight = shallowRef(0);
+    const pageHeightToWidthRatio = shallowRef(1);
     const pageOrientation = shallowRef("");
     const pageSize = shallowRef("");
 
@@ -37,10 +42,11 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
      */
     async function parsePdf() {
         try {
-            if(import.meta.server || !objectUrl.value || objectUrl.value === "") { return false; }
+            parsingPdf.value = true;
+            if(import.meta.server || !objectUrl.value || objectUrl.value === "") { throw new Error("Object URL Not Ready."); }
             const pdfBlob = await (await fetch(objectUrl.value)).blob(); // The blob fetched with the Object URL.
 
-            if(!pdfBlob || pdfBlob == null || !(pdfBlob instanceof Blob)) { return false; }
+            if(!pdfBlob || pdfBlob == null || !(pdfBlob instanceof Blob)) { throw new Error("Blob Parsed By Object URL Not Ready."); }
             const pdf = await PDF.load(new Uint8Array(await pdfBlob.arrayBuffer())); // The PDF parsed by @libpdf/core.
 
             title.value = (pdf.getTitle() ?? "");
@@ -55,6 +61,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
             pageCountAsString.value = String(pageCount.value);
             pageWidth.value = ((pageCount.value <= 0) ? 0 : (pdf.getPage(0).width / 72));
             pageHeight.value = ((pageCount.value <= 0) ? 0 : (pdf.getPage(0).height / 72));
+            pageHeightToWidthRatio.value = (Math.round((pageHeight.value * 1000) / pageWidth.value) / 1000);
             pageOrientation.value = ((pageCount.value <= 0) ? "" : (pdf.getPage(0).isPortrait ? "Portrait" : "Landscape"));
             pageSize.value = String(pageWidth.value + " × " + pageHeight.value + " in (" + pageOrientation.value + ")");
 
@@ -72,20 +79,62 @@ export function usePdfMetadata(objectUrl = shallowRef(null)) {
             fileSizeBinary.value = prettyBytes(blobSize, { binary: true });
             fileSizeInBytes.value = blobSize;
             
-            // Returns true to indicate that the parsing was a success.
+            metadataReceived.value = true;
+            parsingPdf.value = false;
             return true;
         } catch(e) {
-            console.error(e);
+            if(import.meta.dev) { console.error(e); }
+            metadataReceived.value = false;
+            parsingPdf.value = false;
             return false;
         }
     }
 
-    // Sets Hooks that will run the parse function.
-    parsePdf();
-    watch(objectUrl, () => { parsePdf(); });
-    onMountedAdvanced(() => { parsePdf(); });
+    /** This function sets the variables here to their original state. */
+    function setDefaultValues() {
+        title.value = "";
+        author.value = "";
+        subject.value = "";
+        application.value = "";
+        producer.value = "";
+        keywords.value = [""];
+        keywordsAsOne.value = "";
 
-    return { parsePdf, title, author, subject, dateCreated, dateModified, application, producer, keywords, keywordsAsOne,
-        pdfVersion, pageCount, pageCountAsString, pageWidth, pageHeight, pageOrientation, pageSize, fileSize, fileSizeBinary, fileSizeInBytes
+        pageCount.value = 0;
+        pageCountAsString.value = "";
+
+        pageWidth.value = 0;
+        pageHeight.value = 0;
+        pageHeightToWidthRatio.value = 1;
+        pageOrientation.value = "";
+        pageSize.value = "";
+
+        dateCreated.value = "";
+        dateModified.value = "";
+
+        pdfVersion.value = "";
+        fileSize.value = "";
+        fileSizeBinary.value = "";
+        fileSizeInBytes.value = 0;
+        metadataReceived.value = false;
+    }
+
+    /**
+     * This function resets the values and parses the PDF again.
+     * @returns A boolean indicating if the function could successfully parse the PDF.
+     */
+    async function reset() {
+        setDefaultValues();
+        return await parsePdf();
+    }
+
+    // Sets Hooks that will run the parse function.
+    if(onMounted) { parsePdf(); }
+    watch(objectUrl, () => { parsePdf(); });
+    if(getCurrentInstance() && onMounted) { onMountedAdvanced(() => { parsePdf(); }); }
+
+    return { parsePdf, setDefaultValues, reset, metadataReceived, parsingPdf, title, author, subject,
+        dateCreated, dateModified, application, producer, keywords, keywordsAsOne, pdfVersion, pageCount,  pageCountAsString,
+        pageWidth, pageHeight, pageHeightToWidthRatio, pageOrientation, pageSize, fileSize, fileSizeBinary, fileSizeInBytes
     }
 }
