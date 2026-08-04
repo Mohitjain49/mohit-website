@@ -1,8 +1,8 @@
 <template>
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
-        <DocumentTopBar v-if="resumeStore.blobCreated" />
-        <Comark class="markdown-body"> {{ resumeMdFile }} </Comark>
+        <DocumentTopBar v-if="(resumeStore.blobCreated == 2)" />
+        <Markdown class="markdown-body"> {{ resumeMdFile }} </Markdown>
         <HostedFileBottomBar v-if="fullScreenSet" />
     </div>
 
@@ -12,7 +12,7 @@
         <QrcodeTool v-if="webData.showSharePopup" />
     </template>
 
-    <template v-if="resumeStore.blobCreated">
+    <template v-if="(resumeStore.blobCreated == 2)">
         <DocumentMenu />
         <DocMetadataMenu :objectUrl="resumeStore.objectUrl" />
         <FileWidgets />

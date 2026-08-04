@@ -125,12 +125,13 @@ export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
      */
     async function reset() {
         setDefaultValues();
+        if(!objectUrl.value || objectUrl.value === "") { return; }
         return await parsePdf();
     }
 
     // Sets Hooks that will run the parse function.
     if(onMounted) { parsePdf(); }
-    watch(objectUrl, () => { parsePdf(); });
+    watch(objectUrl, () => { reset(); });
     if(getCurrentInstance() && onMounted) { onMountedAdvanced(() => { parsePdf(); }); }
 
     return { parsePdf, setDefaultValues, reset, metadataReceived, parsingPdf, title, author, subject,
