@@ -43,6 +43,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const wakeLockChangeFresh = ref(false);
     const copyImageSupported = ref(false);
     const nullifyBodyClick = ref(false);
+    const saveAsSupported = ref(false);
 
     const noMenuOpen = computed(() => { return (menuOpen.value == NO_MENU); });
     const navMenuOpen = computed(() => { return (menuOpen.value == NAVIGATION_MENU); });
@@ -128,6 +129,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         nuxtReady.value = true;
         copyImageSupported.value = ClipboardItem.supports("image/png");
+        saveAsSupported.value = (window.isSecureContext && typeof window.showSaveFilePicker === 'function');
         const signal = controller.signal;
 
         audioStore.setupClickAudio();
@@ -363,7 +365,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
-    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported,
+    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported, saveAsSupported,
         menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
         documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
@@ -372,9 +374,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 });
 
-/** This function returns a reactive computed value on whether the user is on a hosted file page or not. */
-export function getOnHostedFileRoute() {
-    const { onDocumentRoute } = storeToRefs(useDocumentStore());
-    const { onScriptRoute } = storeToRefs(useScriptsStore());
-    return computed(() => { return (onDocumentRoute.value || onScriptRoute.value); });
+/** This function returns a computed value of whether "Save As" buttons are supported on the browser or not. */
+export function getSaveAsSupported() {
+    const { saveAsSupported } = storeToRefs(useWebsiteDataStore());
+    return computed(() => { return saveAsSupported.value; });
 }

@@ -55,7 +55,7 @@
                     <span> Download Document </span>
                 </button>
             </div>
-            <div v-if="documentStore.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+            <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" pulse-loop>
                     <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
                     <span> Save Document </span>

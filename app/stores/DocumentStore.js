@@ -110,9 +110,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
 
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
-    const saveAsSupported = computed(() => { return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function'); });
     const showImageCopyButton = computed(() => { return (webData.copyImageSupported && docImageUrls.value.length == 1); });
-
     const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && docImagesLoaded.value); });
     const showPrintButton = computed(() => { return (browserPdfViewerPresent.value || docImagesLoaded.value); });
 
@@ -242,7 +240,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function opens a "Save File Picker" so the user can save my document at their preferred location. */
     async function saveDoc() {
-        if(!saveAsSupported.value || documentSaveStatus.value != 0) { return; }
+        if(!webData.saveAsSupported || documentSaveStatus.value != 0) { return; }
         documentSaveStatus.value = 1;
 
         try {
@@ -808,7 +806,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed,
-        googleDriveOptionAvailable, saveAsSupported, copyDocumentSupported, showImageCopyButton, browserPdfViewerPresent, workerSrcAdded,
+        googleDriveOptionAvailable, copyDocumentSupported, showImageCopyButton, browserPdfViewerPresent, workerSrcAdded,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
         downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, imageCopyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, sharePending, copyPending, imageDownloadPending, imageCopyPending, uploadToGoogleDrivePending,

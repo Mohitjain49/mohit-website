@@ -4,7 +4,7 @@
         <button class="doc-save-opt" @click="documentStore.downloadDoc()" :title="documentStore.documentDownloadTitle" pulse-loop>
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
         </button>
-        <button class="doc-save-opt" v-if="documentStore.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" pulse-loop>
+        <button class="doc-save-opt" v-if="webData.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
         <button class="doc-save-opt" v-if="(documentStore.showPrintButton || !documentStore.docImageFetchFailed)"

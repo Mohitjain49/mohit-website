@@ -45,9 +45,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         const routePath = router.currentRoute.value.path;
         return scripts.findIndex((item) => { return item.checkPath(routePath); });
     });
-    const saveAsSupported = computed(() => {
-        return (import.meta.client && window.isSecureContext && typeof window.showSaveFilePicker === 'function');
-    });
 
     const onScriptRoute = computed(() => { return (currentScriptRoute.value != -1); });
     const onDeployScriptRoute = computed(() => { return scripts[0].onRoute.value; });
@@ -137,7 +134,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function opens a "Save File Picker" so the user can save my script at their preferred location. */
     async function saveScript() {
-        if(!saveAsSupported.value || scriptSaveStatus.value != 0) { return; }
+        if(!webData.saveAsSupported || scriptSaveStatus.value != 0) { return; }
         scriptSaveStatus.value = 1;
 
         try {
@@ -336,7 +333,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, mounted, wrapCode, lineOptions, saveAsSupported, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
+    return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
         currentScriptLink, downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
