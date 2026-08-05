@@ -15,7 +15,7 @@
         <circle class="webpage-cover-progressRing-track" cx="15" cy="15" r="13.5"></circle>
         <circle class="webpage-cover-progressRing-indicator" :style="progressRingInnerFill" cx="15" cy="15" r="13.5"></circle>
     </svg>
-    <FontAwesomeIcon icon="fa-xmark" :beat="(counter > (FINAL_COUNT / 4))" class="webpage-cover-progressRing-xmark" />
+    <FontAwesomeIcon icon="fa-xmark" :spinSnap4="animateProgressRing" class="webpage-cover-progressRing-xmark" />
 </div>
 </template>
 
@@ -39,8 +39,9 @@ const interval = useInterval(10, { controls: true, immediate: false });
 const { cssToWindowHeightRatio, cssToWindowWidthRatio } = useMohitWindowSize();
 
 const counter = computed(() => { return interval.counter.value; });
-const showProgressRing = computed(() => { return (counter.value > 0); });
 const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex } });
+const showProgressRing = computed(() => { return (counter.value > 0); });
+const animateProgressRing = computed(() => { return (counter.value > (FINAL_COUNT / 4)); });
 
 const progressRingPosition = computed(() => {
     const leftVal = String((x.value - 15) * cssToWindowWidthRatio.value);
@@ -167,8 +168,7 @@ function setStyles(ringActive = true) {
     display: flex;
     justify-content: center;
     align-items: center;
-    --fa-animation-duration: 0.25s;
-    --fa-beat-scale: 1.05;
+    --fa-animation-duration: 1.25s;
 }
 
 .webpage-cover-progressRing-track {

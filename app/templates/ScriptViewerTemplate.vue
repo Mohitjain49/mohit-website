@@ -11,7 +11,7 @@
                     <button class="script-save-opt" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
                         <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
                     </button>
-                    <button class="script-save-opt" v-if="(scriptsStore.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
+                    <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
                             <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                     </button>
                     <button class="script-save-opt" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>

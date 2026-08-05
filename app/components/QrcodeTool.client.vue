@@ -67,6 +67,9 @@
                         <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow" title="Download QR Code.">
                             <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
                         </button>
+                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" class="qrcode-mainPopup-btn yellow" title="Save QR Code.">
+                            <FontAwesomeIcon :icon="saveImageIcon" :spin-pulse="(actions.saveImage == 1)" />
+                        </button>
                         <button v-if="webData.copyImageSupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
                         </button>
@@ -170,8 +173,8 @@ const openNewTabButtonTitle = computed(() => {
     return (mainLink.startsWith("mailto:") ? ('Email ' + formattedLink) : (mainLink.startsWith("tel:") ? ('Call ' + formattedLink) : 'Open Link In New Tab'));
 });
 
-const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0, printImage: 0 });
-var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null }
+const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0, printImage: 0, saveImage: 0 });
+var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null, saveImage: null }
 var sharePopupAbortController = new AbortController();
 
 const copyLinkIcon = computed(() => {
@@ -197,6 +200,10 @@ const copyImageIcon = computed(() => {
 const printImageIcon = computed(() => {
     const status = actions.value.printImage;
     return ((status == 0) ? 'fa-print' : STATUS_ICONS[status]);
+});
+const saveImageIcon = computed(() => {
+    const status = actions.value.saveImage;
+    return ((status == 0) ? 'fa-floppy-disk' : STATUS_ICONS[status]);
 });
 
 // This mounts the share popup and all of its functionality.
@@ -403,6 +410,35 @@ function shareQRCode() {
             timeouts.shareImage = null;
         }, 3000);
     });
+}
+
+/** This function saves the actual QR Code image. */
+async function saveQRCode() {
+    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrCodeBlob.value) { return; }
+    actions.value.saveImage = 1;
+
+    try {
+        const blob = qrCodeBlob.value;
+        const saveHandle = await window.showSaveFilePicker({
+            suggestedName: 'Mohit_Website_QRCode.png',
+            types: [{ description: "QR Code", accept: { 'image/png': ['.png'] } }]
+        });
+
+        const writable = await saveHandle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+
+        // Marks the action as completed!
+        actions.value.saveImage = 2; 
+    } catch(e) {
+        actions.value.saveImage = 3;
+    } finally {
+        if(timeouts.saveImage != null) { clearTimeout(timeouts.saveImage); }
+        timeouts.saveImage = setTimeout(() => {
+            actions.value.saveImage = 0;
+            timeouts.saveImage = null;
+        }, 3000); 
+    }
 }
 
 /** This function lets the user download the QR Code as a .png file. */

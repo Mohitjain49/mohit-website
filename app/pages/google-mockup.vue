@@ -14,7 +14,7 @@
             </div>
         </template>
         <template v-if="directionsOpen">
-            <Comark class="markdown-body animate__animated animate__fadeIn"> {{ googleMockupDirectionsMdFile }} </Comark>
+            <Markdown class="markdown-body animate__animated animate__fadeIn"> {{ googleMockupDirectionsMdFile }} </Markdown>
             <button @click="toggleDirections()" class="gMockup-directions-btn animate__animated animate__bounceIn"> Close Directions </button>
         </template>
     </div>

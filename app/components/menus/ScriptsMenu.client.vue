@@ -15,7 +15,7 @@
                     <span> Download Code Script </span>
                 </button>
             </div>
-            <div v-if="scriptsStore.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+            <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="scriptsStore.saveScript()" pulse-loop>
                     <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                     <span> Save Code Script </span>
