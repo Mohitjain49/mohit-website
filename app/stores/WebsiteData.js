@@ -7,7 +7,7 @@ export const WEBSITE_MENUS = [
     { id: "mohit-resumeMenu", num: RESUME_MENU },
     { id: "mohit-metadata-docMenu", num: DOCUMENT_METADATA_MENU },
     { id: "mohit-docMenu-pdfNav", num: PDF_NAVIGATION_MENU }
-]
+];
 
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
@@ -15,6 +15,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     var controller = new AbortController();
     var wakeLockTimeout = null;
+    var saveAsSupportedCheckInterval = null;
 
     const gamepadStore = useGamepadStore();
     const scriptsStore = useScriptsStore();
@@ -126,10 +127,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         await nextTick();
         await onNuxtReadyAdvanced();
+        setSaveAsSupported();
 
         nuxtReady.value = true;
         copyImageSupported.value = ClipboardItem.supports("image/png");
-        saveAsSupported.value = (window.isSecureContext && typeof window.showSaveFilePicker === 'function');
         const signal = controller.signal;
 
         audioStore.setupClickAudio();
@@ -150,6 +151,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         // This sets a new function in the window object to let static HTML elements access the share popup.
         window.openShareMenu = (param = "") => { setQRCodePopup(param); }
+        saveAsSupportedCheckInterval = setInterval(() => { setSaveAsSupported(); }, 1000);
+        signal.addEventListener("abort", () => { clearInterval(saveAsSupportedCheckInterval); }, { once: true });
 
         // This imports the gamepad-events JS file to make sure gamepads work on the website.
         await import("~/gamepad-events.js");
@@ -363,6 +366,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 console.error(e);
             }
         }
+    }
+
+    /** This function sets whether "Save As" buttons are supported in their browser or not. */
+    function setSaveAsSupported() {
+        const newStatus = (window.isSecureContext && typeof window.showSaveFilePicker === 'function');
+        if(saveAsSupported.value !== newStatus) { saveAsSupported.value = newStatus; }
     }
 
     return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported, saveAsSupported,

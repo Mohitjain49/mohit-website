@@ -17,7 +17,7 @@ export function getFontAwesomeSvg(faIcon, color = "#FFFFFF") {
  * @param {Number} ms The number of milliseconds you want the function to sleep.
  */
 export async function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(() => { resolve(null); }, ms));
 }
 
 /** This function cuts a string to ensure it has the max length of characters. */

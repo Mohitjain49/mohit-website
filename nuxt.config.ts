@@ -82,7 +82,7 @@ export default defineNuxtConfig({
     },
 
     routeRules: { '/**': { appLayout: false }},
-    router: { options: { sensitive: false }},
+    router: { options: { sensitive: true }},
 
     features: { inlineStyles: true },
     vitalizer: {
@@ -91,7 +91,7 @@ export default defineNuxtConfig({
         disablePreloadLinks: true
     },
 
-    hooks: { 'pages:extend'(pages) { usePageTemplates(pages); } },
+    hooks: { 'pages:extend'(pages) { usePageTemplates(pages); }},
     site: { url: PERSONAL_MAIN_WEBSITE, name: "Mohit Jain | My Portfolio" },
     sitemap: {
         zeroRuntime: true,

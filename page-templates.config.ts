@@ -10,12 +10,12 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
     const SCRIPT_TEMPLATE = "~/templates/ScriptViewerTemplate.vue";
     const REDIRECT_TEMPLATE = "~/templates/RedirectTemplate.vue";
 
-    const routesToDocumentTemplate = [
+    const routesToDocumentTemplate: Array<NuxtPage> = [
         // { path: '/resume', file: DOC_TEMPLATE, props: { index: 0 }},
         { path: '/create-github-repo', file: DOC_TEMPLATE, props: { index: 1 }},
         { path: '/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper', file: DOC_TEMPLATE, props: { index: 2 }},
     ];
-    const routesToScriptTemplate = [
+    const routesToScriptTemplate: Array<NuxtPage> = [
         { path: '/aws-deploy-script', file: SCRIPT_TEMPLATE, props: { index: 0 } },
         { path: '/gamepad/store-and-utility', file: SCRIPT_TEMPLATE, props: { index: 1 } },
         { path: '/gamepad/vuejs-component', file: SCRIPT_TEMPLATE, props: { index: 2 } },
@@ -36,7 +36,7 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
         { path: "/ivue", link: "https://www.ivueworld.com/", title: "iVue - iVue The World", desc: "This link will redirect you to the Main iVue Website." },
         { path: "/worldsivue", link: "https://www.worldsivue.com/", title: "Mohit Jain | Worlds iVue", desc: "This link will redirect you to Worlds iVue." },
     ];
-    const redirectPages = [];
+    const redirectPages: Array<NuxtPage> = [];
 
     for(let i = 0; i < REDIRECT_PAGES.length; i++) {
         if(i < 0 || i >= REDIRECT_PAGES.length) { continue; }

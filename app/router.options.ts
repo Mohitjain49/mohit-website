@@ -1,12 +1,20 @@
 import type { RouterConfig } from "nuxt/schema";
-import type { RouteLocation } from "vue-router";
+import type { RouteLocationNormalizedGeneric } from "vue-router";
 
 const QUERY_NO_SCROLL_PARAMS = ["qrdata", "qrcodeAdded", "linksRemoved"];
 const QUERY_DOCUMENT_SCROLL_PARAMS = ["page", "y"];
 const SCROLL_STORE_WAIT_SECONDS = 1.5;
 
+/**
+ * This function is a generic sleep function that lets a function wait before performing the next act.
+ * @param ms The number of milliseconds you want the function to sleep.
+ */
+async function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(() => { resolve(null); }, ms));
+}
+
 /** This function determines if a scroll should be disabled based off a query change. */
-function disableScrollOnQueryChange(to: RouteLocation, from: RouteLocation) {
+function disableScrollOnQueryChange(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
     const queryChanged = (-1 != QUERY_NO_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== from.query[item]); }));
     const differentPage = (to.path !== from.path);
     const differentHash = (to.hash !== from.hash);
@@ -14,9 +22,9 @@ function disableScrollOnQueryChange(to: RouteLocation, from: RouteLocation) {
 }
 
 /** This function determines if the next autoscroll should be based off of certain scroll params on a hosted document page. */
-function checkDocumentScrollParams(to: RouteLocation, from: RouteLocation) {
+async function checkDocumentScrollParams(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
     const { $pinia } = useNuxtApp();
-    const documentStore = useDocumentStore($pinia);
+    const documentStore = (await import('~/stores/DocumentStore.js')).useDocumentStore($pinia);
     if(!documentStore.onDocumentRoute || documentStore.onMarkdownRoute || !documentStore.docLoaded.status) { return false; }
 
     const documentQueryChanged = (-1 != QUERY_DOCUMENT_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== from.query[item]); }));
@@ -35,9 +43,8 @@ export default {
         const hashExists = (hash.length > 0);
         const differentPage = (to.path !== from.path);
 
+        // These are modules required from the nuxt app itself.
         const { $pinia, hooks } = useNuxtApp();
-        const scrollStore = useScrollStore($pinia);
-        const documentStore = useDocumentStore($pinia);
 
         // This waits for the page to load before triggering any scroll.
         if(differentPage) {
@@ -56,7 +63,11 @@ export default {
 
         // Wait for all elements and itself to be properly rendered in.
         await nextTick();
-        if(differentPage) { await onNuxtReadyAdvanced(); }
+        if(differentPage) { await new Promise<void>((resolve) => { onNuxtReady(() => { resolve(); }); }); }
+
+        // These are two stores required for making a unique autoscroll
+        const scrollStore = (await import('~/stores/ScrollStore.js')).useScrollStore($pinia);
+        const documentStore = (await import('~/stores/DocumentStore.js')).useDocumentStore($pinia);
 
         /** An array of conditions where if one is true, no smooth auto-scroll takes place. */
         const NO_SCROLL_CONDITIONS = [
@@ -80,7 +91,7 @@ export default {
             return false;
         } else if(hashExists) {
             try { await scrollStore.scrollToId(hash, 0, 0); } catch(e) {}
-        } else if(checkDocumentScrollParams(to, from)) {
+        } else if(await checkDocumentScrollParams(to, from)) {
             try { window.dispatchEvent(new Event("mohit-pdf-destination-scroll", { cancelable: false })); } catch(e) {}
         } else if(!differentPage) {
             try { await scrollStore.scrollToTop(false, 0); } catch(e) {}
