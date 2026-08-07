@@ -290,7 +290,7 @@ const CENTER_LINKS = [
 const NAV_MENU_EXTRAS = [
     { path: "/library/", icon: "fa-book-open-reader", color: "var(--website-light-text)", title: "My Library" },
     { path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)", title: "Website Features" },
-    { path: "/copyright/", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Statement" },
+    { path: "/copyright/", icon: "fa-copyright", color: "var(--blue-four)", title: "Copyright Notice" },
 ];
 
 const RESUME_QUERY_UNSYNC_TITLE = "Please reload this page here to apply your changes to customizing my resume.";

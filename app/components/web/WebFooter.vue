@@ -68,7 +68,7 @@
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Statement" @click="footerScrollToTop('/copyright')" pulse-loop>
+        <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Notice" @click="footerScrollToTop('/copyright')" pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ copyrightText }} </span>
         </RouterLink>
@@ -133,7 +133,7 @@ const MAIN_ROUTES = [
 const SECONDARY_ROUTES = [
     { name: "My Library", path: "/library/", icon: "fa-book-open-reader", color: "var(--website-light-text)" },
     { name: "Website Features", path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)" },
-    { name: "Copyright Statement", path: "/copyright/", icon: "fa-copyright", color: "var(--blue-cobalt)" },
+    { name: "Copyright Notice", path: "/copyright/", icon: "fa-copyright", color: "var(--blue-cobalt)" },
     { name: "My Icons", path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-two)" },
     { name: "Gamepad Controls", path: "/gamepad/", icon: "fa-gamepad", color: "var(--website-light-text)" },
     { name: "Wake Lock", path: "/wakelock/", icon: "fa-lock", color: "var(--vibrant-flame)" },

@@ -48,8 +48,8 @@ Student Assistant
 Bachelor Degree in Computer Science
 ::
 
-* **GPA:** 3.7  
-* **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis, Operating Systems, Linear Algebra, Artificial Intelligence
+* **GPA:** 3.3  
+* **Coursework:** Programming Problem Solving, Database Systems, Software Engineering, Discrete Mathematics, Professional Practices and Ethics, Physics, Data Structures, Probability and Data Analysis, Operating Systems, Linear Algebra, Artificial Intelligence, Algorithm Analysis
 
 # **[SKILLS](/skills/)**{ .resume-markdown-section-title }
 
