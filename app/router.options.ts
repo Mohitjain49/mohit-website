@@ -71,7 +71,6 @@ export default {
 
         /** An array of conditions where if one is true, no smooth auto-scroll takes place. */
         const NO_SCROLL_CONDITIONS = [
-            scrollStore.isAutoScrolling,
             (documentStore.onDocumentRoute && !documentStore.onMarkdownRoute && !documentStore.docLoaded.status),
             disableScrollOnQueryChange(to, from)
         ];
@@ -85,11 +84,13 @@ export default {
             secondsScrollStoreNotMounted += 0.05;
         }
 
-        // If the scroll store takes too long to mount, the function stops.
-        // Smooth scrolls to a section if there is a hash, else it smooth scrolls to the top of the page.
-        if(!scrollStore.mounted) {
-            return false;
-        } else if(hashExists) {
+        // If the scroll store is not mounted yet, this function does not do anything.
+        if(!scrollStore.mounted) { return false; }
+
+        // This function cancels any ongoing autoscroll.
+        if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
+
+        if(hashExists) {
             try { await scrollStore.scrollToId(hash, 0, 0); } catch(e) {}
         } else if(await checkDocumentScrollParams(to, from)) {
             try { window.dispatchEvent(new Event("mohit-pdf-destination-scroll", { cancelable: false })); } catch(e) {}
