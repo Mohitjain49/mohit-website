@@ -5,7 +5,7 @@
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
 
-        <div id="mohit-qrcode" @contextmenu="(e) => { showImageOptionsOnRightClick(e); }" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
+        <div id="mohit-qrcode" @click="focusOnQrcode()" @contextmenu="(e) => { showImageOptionsOnRightClick(e); }" tabindex="0" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
         <div id="mohit-qrcode-waiting" v-if="!qrCodeDisplay">
             <div class="cover"> <FontAwesomeIcon icon="fa-spinner" :spin-pulse="true" /> </div>
         </div>
@@ -224,7 +224,10 @@ onMounted(async() => {
 
     manageLenisScrolling();
     calculateSharePopupScale();
-    window.addEventListener("animation-resize", () => { calculateSharePopupScale(); }, { signal: sharePopupAbortController.signal });
+
+    const signal = sharePopupAbortController.signal;
+    window.addEventListener("animation-resize", () => { calculateSharePopupScale(); }, { signal });
+    window.addEventListener("keydown", (event) => { onSharePopupKeydown(event) }, { signal });
 });
 
 // This watches for changes to the QR Code Data so the popup changes reactively.
@@ -348,6 +351,49 @@ function showImageOptionsOnRightClick(event) {
     event.preventDefault();
     triggerClickSound();
     setImageOptions("toggle");
+}
+
+/** This function has the website focus on the QR Code. */
+function focusOnQrcode() {
+    try {
+        document.getElementById("mohit-qrcode").focus({ preventScroll: true, focusVisible: true });
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/**
+ * This function triggers on every keyboard press when the share popup is open.
+ * This allows users to use keybinds to copy, print, or save the qr code image.
+ * @param {KeyboardEvent} event The Keyboard Event.
+ */
+function onSharePopupKeydown(event = undefined) {
+    try {
+        if(!event || document.activeElement !== document.getElementById("mohit-qrcode")) { return; }
+        if(!event.ctrlKey || !qrCodeBlob.value) { return; }
+        const keyLetter = event.key.toLowerCase();
+
+        if(keyLetter === "c") {
+            event.preventDefault();
+            setImageOptions(true);
+            copyQRCode();
+        } else if(keyLetter === "p") {
+            event.preventDefault();
+            setImageOptions(true);
+            printQRCode()
+        } else if(keyLetter === "s") {
+            event.preventDefault();
+            setImageOptions(true);
+
+            if(webData.saveAsSupported && event.shiftKey) {
+                saveQRCode();
+            } else {
+                downloadQRCode();
+            }
+        }
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
 }
 
 /** This function copies the QR Code Link currently visible. */
@@ -662,6 +708,9 @@ function getParsedUrl() {
 
 #mohit-qrcode canvas {
     width: 100%;
+}
+#mohit-qrcode:focus, #mohit-qrcode:focus-visible {
+    border: 2px solid black;
 }
 #mohit-qrcode-waiting svg {
     font-size: 100px;
