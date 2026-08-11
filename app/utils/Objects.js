@@ -33,6 +33,7 @@ import api_gateway_icon from "../assets/aws/AWS_API_Gateway_Icon.svg";
 export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/";
 export const PERSONAL_RESUME_LINK = (PERSONAL_WEBSITE_LINK + "Mohit_Jain_Resume.pdf");
 export const PERSONAL_SITEMAP_LINK = (PERSONAL_WEBSITE_LINK + "sitemap.xml");
+export const PERSONAL_LICENSE_LINK = (PERSONAL_WEBSITE_LINK + "license.txt");
 export const CREATE_GITHUB_REPO_DOC_LINK = (PERSONAL_WEBSITE_LINK + "Create_Github_Repo.pdf");
 
 export const PERSONAL_WEBSITE_REPOSITORY_LINK = "https://github.com/Mohitjain49/mohit-website";
