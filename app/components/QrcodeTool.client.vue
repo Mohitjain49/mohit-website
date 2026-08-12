@@ -5,7 +5,13 @@
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
 
-        <div id="mohit-qrcode" @click="focusOnQrcode()" @contextmenu="(e) => { showImageOptionsOnRightClick(e); }" tabindex="0" :style="qrcodeBg" v-show="qrCodeDisplay"></div>
+        <div id="mohit-qrcode" v-show="qrCodeDisplay"
+            @click="focusOnQrcode()"
+            @focus="setImageOptions(true)"
+            @contextmenu="(e) => { showImageOptionsOnRightClick(e); }"
+            title="Select QR Code"
+            tabindex="0" :style="qrcodeBg">
+        </div>
         <div id="mohit-qrcode-waiting" v-if="!qrCodeDisplay">
             <div class="cover"> <FontAwesomeIcon icon="fa-spinner" :spin-pulse="true" /> </div>
         </div>
@@ -227,7 +233,8 @@ onMounted(async() => {
 
     const signal = sharePopupAbortController.signal;
     window.addEventListener("animation-resize", () => { calculateSharePopupScale(); }, { signal });
-    window.addEventListener("keydown", (event) => { onSharePopupKeydown(event) }, { signal });
+    window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal });
+    window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
 });
 
 // This watches for changes to the QR Code Data so the popup changes reactively.
@@ -357,6 +364,7 @@ function showImageOptionsOnRightClick(event) {
 function focusOnQrcode() {
     try {
         document.getElementById("mohit-qrcode").focus({ preventScroll: true, focusVisible: true });
+        setImageOptions(true);
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -394,6 +402,23 @@ function onSharePopupKeydown(event = undefined) {
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
+}
+
+/**
+ * This function triggers when the user clicks anywhere while the share popup is open.
+ * @param {PointerEvent} event The click event.
+ */
+function onSharePopupClick(event) {
+    /** @type {HTMLElement} The element the user clicked on. */
+    const clickedElement = event.target;
+
+    // This function does not do anything if the user clicks on the share options or the QR Code.
+    const inSharePopupOptions = (clickedElement.closest(".qrcode-mainPopup-options") != null);
+    const inQrcode = (clickedElement.closest("#mohit-qrcode") != null);
+    if(inSharePopupOptions || inQrcode) { return; }
+
+    // This function by default should close the Share Options in the popup.
+    showShareOptions.value = -1;
 }
 
 /** This function copies the QR Code Link currently visible. */
@@ -695,6 +720,9 @@ function getParsedUrl() {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    transition: border 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    outline: none;
 }
 #mohit-qrcode-waiting > .cover {
     position: relative;
@@ -706,11 +734,12 @@ function getParsedUrl() {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-#mohit-qrcode canvas {
+#mohit-qrcode canvas, #mohit-qrcode svg {
     width: 100%;
 }
 #mohit-qrcode:focus, #mohit-qrcode:focus-visible {
     border: 2px solid black;
+    box-shadow: 0px 0px 15px 3px var(--blue-three);
 }
 #mohit-qrcode-waiting svg {
     font-size: 100px;
