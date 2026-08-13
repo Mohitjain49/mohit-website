@@ -6,9 +6,9 @@
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
 
         <div id="mohit-qrcode" v-show="qrCodeDisplay"
-            @click="focusOnQrcode()"
             @focus="setImageOptions(true)"
-            @contextmenu="(e) => { showImageOptionsOnRightClick(e); }"
+            @click="(e) => { focusOnQrcode(e); }"
+            @contextmenu="(e) => { focusOnQrcode(e); }"
             title="Select QR Code"
             tabindex="0" :style="qrcodeBg">
         </div>
@@ -88,6 +88,22 @@
                     </div>
                 </Transition>
             </div>
+
+            <div class="qrcode-mainPopup-btn_v2">
+                <button v-if="qrCodeBlob != null" @click="setImageTypesOptions('toggle')" class="qrcode-mainPopup-btn"
+                    :title="((showShareOptions == 2) ? 'Close Image Types' : 'Change Image Type')">
+
+                    <FontAwesomeIcon icon="fa-marker" />
+                </button>
+                <Transition name="fade-transition">
+                    <div v-if="(showShareOptions == 2)" class="qrcode-image-options">
+                        <button v-for="(type, index) in IMAGE_STATUS" v-html="type.toUpperCase()"
+                            @click="() => { changeImageType(index); }"
+                            :class="['qrcode-mainPopup-btn_v3', (qrcodeImageMode == index ? 'selected' : '')]">
+                        </button>
+                    </div>
+                </Transition>
+            </div>
         </div>
 
         <button ref="sharePopup-close" @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-close" title="Close Popup">
@@ -106,6 +122,9 @@ import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
 const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
+const IMAGE_STATUS = ['png', 'svg'];
+
+const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
 const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
 const SHARE_POPUP_MIN_VIEWPORT_EDGE = 675;
 
@@ -129,6 +148,9 @@ const qrcode = ref(null);
 const qrCodeLink = ref(PERSONAL_WEBSITE_LINK);
 const qrCodeDisplay = ref(false);
 
+/** This integer determines what image type should be displayed for the QR Code. */
+const qrcodeImageMode = ref(0);
+
 /** @type {Ref<Blob>} This blob is used for the backgorund image and to download the qr code. */
 const qrCodeBlob = ref(null);
 const qrCodeURL = useObjectUrl(qrCodeBlob);
@@ -148,6 +170,7 @@ const hoverOverCloseBtn = useElementHover(shareCloseRef);
 
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
 const qrcodeBg = computed(() => { return { 'background-image': ((qrCodeURL.value != undefined) ? 'url(' + qrCodeURL.value + ')' : '') }});
+const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.value] ?? ''); });
 
 const { showSharePopupImmediate } = storeToRefs(webData);
 const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
@@ -287,12 +310,15 @@ async function setQRCodeLink() {
     }
 
     if(qrcode.value != null) {
-        qrcode.value.update({ data: newQRCodeLink });
+        qrcode.value.update({
+            type: ((qrcodeImageMode.value == 0) ? 'canvas' : 'svg'),
+            data: newQRCodeLink
+        });
     } else {
         qrcode.value = new QRCodeStyling({
             width: 450,
             height: 450,
-            type: 'canvas',
+            type: ((qrcodeImageMode.value == 0) ? 'canvas' : 'svg'),
             data: newQRCodeLink,
             image: "/static-icons/Personal_Icon_Expanded_Rounded.png",
             margin: 10,
@@ -327,10 +353,19 @@ async function setQRCodeLink() {
     }
 
     try {
-        qrCodeBlob.value = await qrcode.value.getRawData("png");
+        qrCodeBlob.value = await qrcode.value.getRawData(qrcodeImageSuffix.value);
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
+}
+
+/**
+ * This function sets the new QR Code Image Type.
+ * @param {Number} newType The new image type.
+ */
+async function changeImageType(newType = 0) {
+    qrcodeImageMode.value = newType;
+    setQRCodeLink();
 }
 
 /**
@@ -351,20 +386,25 @@ function setSocialMediaOptions(status = "toggle") {
 }
 
 /**
- * This function opens the image options when the visitor right clicks the QR Code.
- * @param {PointerEvent} event The right click event.
+ * This function sets a boolean that sets whether to show the image options.
+ * @param {Boolean | "toggle"} status The new status for the image options. If it is set to "toggle", then it just flips the value.
  */
-function showImageOptionsOnRightClick(event) {
-    event.preventDefault();
-    triggerClickSound();
-    setImageOptions("toggle");
+function setImageTypesOptions(status = "toggle") {
+    if(qrCodeBlob.value == null) { return; }
+    showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 2) ? -1 : 2) : (status ? 2 : -1));
 }
 
-/** This function has the website focus on the QR Code. */
-function focusOnQrcode() {
+
+/**
+ * This function has the website focus on the QR Code.
+ * @param {PointerEvent} event The click event.
+ */
+function focusOnQrcode(event = undefined) {
     try {
+        if(event) { event.preventDefault(); }
         document.getElementById("mohit-qrcode").focus({ preventScroll: true, focusVisible: true });
         setImageOptions(true);
+        triggerClickSound();
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -409,16 +449,16 @@ function onSharePopupKeydown(event = undefined) {
  * @param {PointerEvent} event The click event.
  */
 function onSharePopupClick(event) {
+    if(!event || !event.target) { return; }
+
     /** @type {HTMLElement} The element the user clicked on. */
     const clickedElement = event.target;
+    if(!(clickedElement instanceof HTMLElement)) { return; }
 
-    // This function does not do anything if the user clicks on the share options or the QR Code.
-    const inSharePopupOptions = (clickedElement.closest(".qrcode-mainPopup-options") != null);
-    const inQrcode = (clickedElement.closest("#mohit-qrcode") != null);
-    if(inSharePopupOptions || inQrcode) { return; }
-
-    // This function by default should close the Share Options in the popup.
-    showShareOptions.value = -1;
+    // This function by default should close the Share Options in the popup if the user does not click on the share options or the QR Code.
+    const notInSharePopupOptions = (clickedElement.closest(".qrcode-mainPopup-options") == null);
+    const notInQrcode = (clickedElement.closest("#mohit-qrcode") == null);
+    if(notInSharePopupOptions && notInQrcode) { showShareOptions.value = -1; }
 }
 
 /** This function copies the QR Code Link currently visible. */
@@ -469,7 +509,7 @@ function shareQRCode() {
     actions.value.shareImage = 1;
     const blob = qrCodeBlob.value;
 
-    webData.shareFile(new File([blob], 'Mohit_Website_QRCode.png', { type: blob.type })).then(() => {
+    webData.shareFile(new File([blob], getImageFilename(), { type: blob.type })).then(() => {
         actions.value.shareImage = 2;
     }).catch((e) => {
         console.error(e)
@@ -490,9 +530,11 @@ async function saveQRCode() {
 
     try {
         const blob = qrCodeBlob.value;
+        const imageMimeType = ((qrcodeImageSuffix.value == 0) ? 'image/png' : 'image/svg+xml')
+
         const saveHandle = await window.showSaveFilePicker({
-            suggestedName: 'Mohit_Website_QRCode.png',
-            types: [{ description: "QR Code", accept: { 'image/png': ['.png'] } }]
+            suggestedName: getImageFilename(),
+            types: [{ description: "QR Code", accept: { [imageMimeType]: ['.' + qrcodeImageSuffix.value] }}]
         });
 
         const writable = await saveHandle.createWritable();
@@ -520,10 +562,12 @@ function downloadQRCode() {
     try {
         const link = document.createElement('a');
         link.href = qrCodeURL.value;
-        link.download = 'Mohit_Website_QRCode.png';
+        link.download = getImageFilename();
 
         document.body.appendChild(link);
+        link.addEventListener("click", (event) => { event.stopPropagation(); });
         link.click();
+
         document.body.removeChild(link);
         actions.value.downloadImage = 2; 
     } catch(e) {
@@ -585,7 +629,7 @@ async function printQRCode() {
         });
 
         const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
-        printIframeDocument.title = "Mohit_Website_QRCode";
+        printIframeDocument.title = DEFAULT_IMAGE_FILENAME;
 
         const newChild = printIframeDocument.createElement("div");
         const newChildImg = printIframeDocument.createElement("img");
@@ -671,6 +715,9 @@ function manageLenisScrolling() {
         autoscrollTimeout = null;
     }, 1500);
 }
+
+/** This returns the image filename for the image export options. */
+function getImageFilename() { return (DEFAULT_IMAGE_FILENAME + "." + qrcodeImageSuffix.value); }
 
 /** This function returns a formatted phone number for the share popup to display. */
 function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substring(4), "US").formatNational(); }
@@ -874,6 +921,30 @@ function getParsedUrl() {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.qrcode-mainPopup-btn_v3 {
+    padding: 0px;
+    height: 27px;
+    width: 32px;
+    border: 2px solid var(--globe-green);
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--dark-background);
+    color: var(--globe-green);
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    transition: box-shadow 0.2s;
+}
+
+.qrcode-mainPopup-btn_v3:hover {
+    box-shadow: 0px 0px 3px 1px var(--blue-five);
+}
+.qrcode-mainPopup-btn_v3.selected {
+    font-weight: bold;
+    color: var(--globe-green-light);
 }
 
 .qrcode-image-options {
