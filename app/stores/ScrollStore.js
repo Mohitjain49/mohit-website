@@ -241,7 +241,13 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This function cancels any ongoing autoscroll. */
     function cancelAutoscroll() {
         if(lenis == null) { return; }
-        setScrollInterval(2);
+        if(calculateScrollInterval != null) { clearInterval(calculateScrollInterval); }
+        if(hideScrollProgressTimeout != null) { clearTimeout(hideScrollProgressTimeout); }
+        
+        scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
+        calculateScrollInterval = null;
+        hideScrollProgressTimeout = null;
+
         lenis.stop();
         lenis.start();
     }
@@ -258,15 +264,10 @@ export const useScrollStore = defineStore("scroll-store", () => {
             calculateScrollInterval = null;
             scrollProgress.value.pct = 150;
 
-            if(start == 1) {
-                hideScrollProgressTimeout = setTimeout(() => {
-                    scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
-                    hideScrollProgressTimeout = null;
-                }, 250);
-            } else if(start == 2) {
+            hideScrollProgressTimeout = setTimeout(() => {
                 scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
                 hideScrollProgressTimeout = null;
-            }
+            }, 250);
         } else if(start == 0 && calculateScrollInterval == null) {
             calculateScrollInterval = setInterval(() => { calculateScrollProgress(); }, 10);
             scrollProgress.value.show = true;

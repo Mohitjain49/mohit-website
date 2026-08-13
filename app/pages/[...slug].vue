@@ -115,7 +115,8 @@ const INTERNAL_REDIRECTS = [
 const INTERNAL_FILE_REDIRECTS = [
     { routes: ["/license/**"], replacement: "license.txt" },
     { routes: ["/sitemap/**"], replacement: "sitemap.xml" },
-]
+    { routes: ["/favicon/**"], replacement: "favicon.ico" }
+];
 
 /** This is a list of redirects to other websites. */
 const EXTERNAL_REDIRECTS = [
@@ -123,8 +124,7 @@ const EXTERNAL_REDIRECTS = [
     { routes: ["/pizza"], replacement: PIZZA_WEBSITE_LINK },
     { routes: ["/globe/**"], replacement: PERSONAL_GLOBE_LINK },
 
-    { routes: ["/tictactoe/**", "/tic-tac-toe/**"], replacement: TICTACTOE_PROJECT_LINK },    
-    { routes: ["/eeg/**", "/eeg-ai/**"], replacement: EEG_PROJECT_LINK },
+    { routes: ["/tictactoe/**", "/tic-tac-toe/**"], replacement: TICTACTOE_PROJECT_LINK },
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },

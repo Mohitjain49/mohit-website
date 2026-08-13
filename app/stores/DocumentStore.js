@@ -800,9 +800,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function scrollToPage(pageNum = 1) {
         const id = ("page_" + pageNum);
-        if(document.getElementById(id) == null) { return; }
-        router.push(routePath.value + "#" + id);
-        try { goToPageSection(id, 70); } catch(e) {}
+        if(document.getElementById(id) != null) { router.push(routePath.value + "#" + id); }
     }
 
     return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed,
