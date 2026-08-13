@@ -100,6 +100,7 @@ function useGamepadCursor(index = 0) {
 
     const color = ref(CUSTOM_CURSOR_COLORS[index]);
     var cursorAnimationFrameId = null;
+    var cursorInterval = null;
 
     const connected = ref(false);
     const connectedFresh = ref(false);
@@ -150,57 +151,61 @@ function useGamepadCursor(index = 0) {
         }
     });
 
-    /**
-     * This function starts animation frames for checking if any gamepad is connected or not.
-     */
+    /** This function starts animation frames for checking if any gamepad is connected or not. */
     function start() {
-        if(cursorAnimationFrameId != null) { return; }
-        const checkGamepadConnected = () => {
-            if(checkGamepadsSupported()) {
-                const gamepads = navigator.getGamepads();
-                connected.value = (gamepads[index] && gamepads[index].connected);
+        if(cursorInterval != null) { stop(); }
+        cursorInterval = setInterval(() => { updateGamepadStatus(); }, 100);
+    }
 
-                if(connected.value) {
-                    if(showCursor.value) { setClickElement(); }
-                    setStandardMapping(gamepads[index].mapping === "standard");
-                    cursorAnimationFrameId = requestAnimationFrame(checkGamepadConnected);
-                } else {
-                    setStandardMapping();
-                    stop();
-                }
+    /** This function stops the Gamepad Cursor object from updating. */
+    function stop() {
+        if(cursorInterval == null) { return; }
+        clearInterval(cursorInterval);
+        setCustomCursor(false);
+        cursorInterval = null;
+    }
+
+    /** This function updates general variables here in regard to the gamepad status. */
+    function updateGamepadStatus() {
+        if(checkGamepadsSupported()) {
+            const gamepads = navigator.getGamepads();
+            connected.value = (gamepads[index] && gamepads[index].connected);
+
+            if(connected.value) {
+                if(showCursor.value) { setClickElement(); }
+                setStandardMapping(gamepads[index].mapping === "standard");
             } else {
-                connected.value = false;
                 setStandardMapping();
                 stop();
             }
+        } else {
+            connected.value = false;
+            setStandardMapping();
+            stop();
         }
-        cursorAnimationFrameId = requestAnimationFrame(checkGamepadConnected);
     }
 
-    /**
-     * This function stops the Gamepad Cursor object from updating.
-     */
-    function stop() {
-        if(cursorAnimationFrameId == null) { return; }
-        cancelAnimationFrame(cursorAnimationFrameId);
-
-        setCustomCursor(false);
-        cursorAnimationFrameId = null;
-    }
-
-    /**
-     * This function emits a click event at the cursor's location.
-     */
+    /** This function emits a click event at the cursor's location. */
     function emitClick() {
         const element = clickElement.value;
         if(element == null) {
             const xVal = ((x.value + 15) / windowSize.cssToWindowWidthRatio.value);
             const yVal = ((y.value + 15) / windowSize.cssToWindowHeightRatio.value);
-            document.elementFromPoint(xVal, yVal).click();
+
+            const elementAtPoint = document.elementFromPoint(xVal, yVal);
+            if(!elementAtPoint) { return; }
+            if(document.activeElement && document.activeElement.blur) { document.activeElement.blur(); }
+
+            if(elementAtPoint.focus) { elementAtPoint.focus({ focusVisible: true, preventScroll: true }); }
+            if(elementAtPoint.click) { elementAtPoint.click(); }
         } else {
-            (onInputElement.value ? element.focus() : element.click());
-            nextTick(() => { setClickElement(); });
+            if(document.activeElement && document.activeElement.blur) { document.activeElement.blur(); }
+            if(element.focus) { element.focus({ focusVisible: true, preventScroll: true }); }
+            if(element.click) { element.click(); }
         }
+
+        // This function sets the next click element after a click.
+        nextTick(() => { setClickElement(); });
     }
 
     /**
@@ -220,12 +225,8 @@ function useGamepadCursor(index = 0) {
         setMaxCursorSpeed(maxSpeed.value + amount);
     }
 
-    /**
-     * This function indicates the user has stopped changing their max cursor speed.
-     */
-    function stopChangingMaxCursorSpeed() {
-        maxSpeedChanging.value = false
-    }
+    /** This function indicates the user has stopped changing their max cursor speed. */
+    function stopChangingMaxCursorSpeed() { maxSpeedChanging.value = false; }
 
     /**
      * This function sets the visibility of the custom cursor.
@@ -245,9 +246,7 @@ function useGamepadCursor(index = 0) {
         standardMapping.value = newStatus;
     }
 
-    /**
-     * This finds the element that the cursor is hovering over.
-     */
+    /** This finds the element that the cursor is hovering over. */
     function setClickElement() {
         // This section stops the function if the gamepad or cursor is not enabled.
         if(!connected.value || !showCursor.value) {

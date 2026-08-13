@@ -5,13 +5,13 @@
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
         <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
 
-        <div id="mohit-qrcode" v-show="qrCodeDisplay"
+        <button id="mohit-qrcode" v-show="qrCodeDisplay"
             @focus="setImageOptions(true)"
             @click="(e) => { focusOnQrcode(e); }"
             @contextmenu="(e) => { focusOnQrcode(e); }"
             title="Select QR Code"
             tabindex="0" :style="qrcodeBg">
-        </div>
+        </button>
         <div id="mohit-qrcode-waiting" v-if="!qrCodeDisplay">
             <div class="cover"> <FontAwesomeIcon icon="fa-spinner" :spin-pulse="true" /> </div>
         </div>

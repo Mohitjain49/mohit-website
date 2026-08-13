@@ -1,5 +1,5 @@
 <template>
-<div ref="mohit-website-cover" class="webpage-cover" :style="webpageCoverStyle">
+<div ref="mohit-website-cover" class="webpage-cover" :style="webpageCoverStyle" @mousedown="createSyntheticClick()">
     <Transition name="fade-transition" appear>
         <div v-if="!showProgressRing" class="webpage-cover-closeMsg"> Hold Cover To Close </div>
     </Transition>
@@ -91,6 +91,12 @@ function resetCounter() {
 function setStyles(ringActive = true) {
     styleStore.setHideCursorArray(HideCursor.WEBSITE_COVER, ringActive);
     styleStore.setDisableUserSelectArray(DisableUserSelect.WEBSITE_COVER, ringActive);
+}
+
+/** This function creates a synthetic click event for the window so listeners in other menus can hear it. */
+function createSyntheticClick() {
+    if(!coverRef.value) { return; }
+    coverRef.value.dispatchEvent(new PointerEvent("click", { bubbles: true, cancelable: true }));
 }
 </script>
 
