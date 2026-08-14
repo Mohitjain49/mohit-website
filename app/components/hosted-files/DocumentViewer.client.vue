@@ -6,7 +6,7 @@
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar />
-        <div class="pdf-page-innerContainer" v-for="page in docPages" :id="('page_' + page.num)">
+        <div class="pdf-page-innerContainer" v-for="page in docPages" :id="('page_' + page.num)" :page-num="page.num" ref="pageRefs">
             <div v-if="!documentStore.docLoaded.status" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
             </div>
@@ -50,12 +50,14 @@ const CUSTOM_PDFJS_DEST_ATTRIBUTE = "mohit-data-pdfjs-dest";
 const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
 const CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE = "mohit-pdfjs-raw-width";
 const CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE = "mohit-pdfjs-raw-height";
+const CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE = "page-num";
 
 var renderAbortController = new AbortController();
 var resizeAbortController = new AbortController();
 
 var renderTasks = { canvas: null, text: null, annontation: null }
 var pdfDocLoadingTask = null;
+var bestPageRatio = 0;
 
 const webData = useWebsiteDataStore();
 const fullScreenSet = getFullScreenSet();
@@ -71,6 +73,22 @@ const props = defineProps({
     addShare: { type: Boolean, default: true },
     shareMinWidth: { type: Number, default: 0 }
 });
+
+/** @type {import('vue').Ref<Array<HTMLElement>>} The array of references to the Page elemnets. */
+const pageRefs = ref([]);
+
+// This observer tracks which page the user is currently viewing.
+useIntersectionObserver(pageRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const entryItem = entry[i];
+        const itemRatio = entryItem.intersectionRatio;
+        const newPageNumber = parseInt(entryItem.target.getAttribute(CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE));
+
+        if(itemRatio <= bestPageRatio && (newPageNumber != documentStore.currentObservedPage)) { return; }
+        bestPageRatio = itemRatio;
+        documentStore.currentObservedPage = newPageNumber;
+    }
+}, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0] });
 
 /** @type {import('vue').ShallowRef<import('pdfjs-dist').PDFDocumentProxy>} The pdf document loaded in by the viewer. */
 const pdfDoc = shallowRef(null);

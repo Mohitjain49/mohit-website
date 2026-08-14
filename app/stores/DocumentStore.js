@@ -65,6 +65,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const docImagesSize = ref("");
     const docImageFetchFailed = ref(false);
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
+    const currentObservedPage = ref(-1);
 
     const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
@@ -803,7 +804,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(document.getElementById(id) != null) { router.push(routePath.value + "#" + id); }
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed,
+    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed, currentObservedPage,
         googleDriveOptionAvailable, copyDocumentSupported, showImageCopyButton, browserPdfViewerPresent, workerSrcAdded,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
         downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, imageCopyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
