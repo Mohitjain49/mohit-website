@@ -44,7 +44,9 @@ const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open 
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
 const largeWindowWidth = computed(() => { return (onDocumentRoute.value && !onMarkdownRoute.value && (windowWidth.value > documentStore.customPdfWidth + 150)); });
 const showMinimizeWidget = computed(() => { return (fullScreenSet.value && (!hfBottomBarVisible.value || largeWindowWidth.value)); });
-const showPageNavigationWidget = computed(() => { return (onDocumentRoute.value && !onMarkdownRoute.value && (documentStore.docLoaded.totalPages > 1)); });
+const showPageNavigationWidget = computed(() => {
+    return (onDocumentRoute.value && !onMarkdownRoute.value && documentStore.docLoaded.status && (documentStore.docLoaded.totalPages > 1));
+});
 
 const onFirstPage = computed(() => { return (currentObservedPage.value <= 1); });
 const onLastPage = computed(() => { return (currentObservedPage.value >= documentStore.docLoaded.totalPages); });

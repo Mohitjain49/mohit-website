@@ -86,7 +86,7 @@ useIntersectionObserver(pageRefs, (entry) => {
 
         if(itemRatio <= bestPageRatio && (newPageNumber != documentStore.currentObservedPage)) { return; }
         bestPageRatio = itemRatio;
-        documentStore.currentObservedPage = newPageNumber;
+        documentStore.setCurrentObservedPage(newPageNumber);
     }
 }, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0] });
 
@@ -287,6 +287,7 @@ async function renderPDF() {
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
+    documentStore.setCurrentObservedPage(1);
     setSingleDocLoaded(numPages - 1);
     if(renderAborted()) { return; }
 

@@ -217,11 +217,12 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     /** This function handles auto scrolling for the gamepad. */
     async function gamepadScrollToTop() {
-        if(!verifyAutoscroll()) { return; }
+        if(!mounted.value || !lenis) { return; }
         const routerObj = router.currentRoute.value;
         if(routerObj.hash !== "") { router.push(routerObj.path); }
 
         webData.closeNavMenu();
+        cancelAutoscroll();
         await scrollToTop(false, 10);
     }
 

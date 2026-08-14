@@ -804,6 +804,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(document.getElementById(id) != null) { router.push(routePath.value + "#" + id); }
     }
 
+    /**
+     * This function sets the current observed page.
+     * @param {Number} index The Page Number.
+     */
+    function setCurrentObservedPage(index = 1) {
+        if(index >= 1 && index <= docLoaded.value.totalPages) { currentObservedPage.value = index; }
+    }
+
     return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed, currentObservedPage,
         googleDriveOptionAvailable, copyDocumentSupported, showImageCopyButton, browserPdfViewerPresent, workerSrcAdded,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
@@ -812,7 +820,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav, showPrintButton,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, downloadDocAsImage, copyDocAsImage, copyFirstDocPageAsImage, requestGoogleToUploadDoc,
-        toggleDocumentFullScreen, setPdfSize, scrollToPage, initGoogleTokenClient, initGooglePickerAPI,
+        toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages
     }
 });
