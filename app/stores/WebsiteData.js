@@ -172,7 +172,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** This sets the size of crucial components within the website. */
     function resizePageComponents() {
         gamepadStore.resetCursorPositions();
-        scriptsStore.setLineOptions(-1);
+        scriptsStore.closeLineOptions();
     }
 
     /**
@@ -191,7 +191,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
             const lineId = element.closest("span")?.id
             if(lineOptions === element || lineOptionsElements.includes(element) || pattern.test(lineId)) { return; }
-            scriptsStore.setLineOptions(-1);
+            scriptsStore.closeLineOptions();
         }
     }
 

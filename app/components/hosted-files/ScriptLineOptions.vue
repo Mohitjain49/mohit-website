@@ -1,5 +1,5 @@
 <template>
-<Transition name="fade-transition">
+<Transition name="fade-context-menu-transition">
     <div v-if="(lineOptionsNum != -1)" :style="lineOptions.style" id="mohit-line-options" class="mohit-script-lineOptions">
         <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
             <h3> Line <span id="lineOptions-num" v-html="lineOptionsNum"></span> </h3>
@@ -53,7 +53,7 @@ function openScriptsMenu() {
 /** This function closes the line options menu. */
 function closeLineOptionsMenu() {
     stopButtonAnimations();
-    scriptsStore.setLineOptions(-1);
+    scriptsStore.closeLineOptions();
 }
 
 /** This function stops animations for all buttons in this menu. */

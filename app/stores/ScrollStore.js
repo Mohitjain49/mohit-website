@@ -113,7 +113,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
      */
     function onLenisScroll(lenisInstance, customEventType = "default") {
         if(webData.websiteMenuMode == 0 || customEventType === "no-scroll") { webData.closeNavMenu(); }
-        scriptsStore.setLineOptions(-1);
+        scriptsStore.closeLineOptions();
     }
 
     /**

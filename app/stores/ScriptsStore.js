@@ -204,20 +204,28 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /**
      * This function sets the status of the line options menu.
-     * @param {MouseEvent} event The event fired by clicking on the mouse.
      * @param {Number} lineNum The number of the line to be opened. -1 closes the options menu.
      */
-    function setLineOptions(lineNum = -1) {
+    async function setLineOptions(lineNum = -1) {
         if(lineNum == -1 || !lineNum || lineOptions.value.num == lineNum) {
-            lineOptions.value.oldNum = lineOptions.value.num;
-            lineOptions.value.num = -1;
-            manageLineNumberFocus(-1, lineOptions.value.oldNum, 1)
+            closeLineOptions();
         } else {
-            lineOptions.value.oldNum = lineOptions.value.num;
+            const currentLineNum = lineOptions.value.num;
+            lineOptions.value.num = -1;
+            if(currentLineNum != -1) { await sleep(100); }
+
+            lineOptions.value.oldNum = currentLineNum;
             lineOptions.value.num = lineNum;
             placeLineOptionsOnCode(lineNum);
             manageLineNumberFocus(lineNum, lineOptions.value.oldNum, 1)
         }
+    }
+
+    /** This function closes the line options. */
+    function closeLineOptions() {
+        lineOptions.value.oldNum = lineOptions.value.num;
+        lineOptions.value.num = -1;
+        manageLineNumberFocus(-1, lineOptions.value.oldNum, 1);
     }
 
     /**
@@ -346,8 +354,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
         currentScriptLink, downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
-        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles, setLineOptions, scrollToLine,
-        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink, placeLineOptionsOnCode
+        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles,
+        setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
+        mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
     }
 });
 
