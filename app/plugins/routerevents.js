@@ -26,7 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             webData.openShareOnMount = false;
             await sleep(50);
             if(webData.showSharePopupImmediate) { webData.showSharePopup = true; }
-        } else {
+        } else if(webData.showSharePopup || webData.showSharePopupImmediate) {
             webData.setQRCodePopup("quit");
         }
 
