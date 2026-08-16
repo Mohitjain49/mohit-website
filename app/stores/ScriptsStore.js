@@ -167,7 +167,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function mountScriptsStore() {
         for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
-        window.openCodeLineOptions = (lineNum) => { setLineOptions(lineNum); }
+        window.openCodeLineOptions = (event, lineNum) => { openLineOfCodeOptions(event, lineNum); }
         mounted.value = true;
     }
 
@@ -184,6 +184,16 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This function unmounts a page that hosts a script. */
     function unmountScriptPage() {
         fullScreenStore.exitFullScreen();
+    }
+
+    /**
+     * This function is used by "mountScriptsStore()" to set a window fnuction that can be used to open options for a Line Of Code.
+     * @param {PointerEvent} event The event from clicking the button.
+     * @param {Number} lineNum The number of the line in the code file.
+     */
+    function openLineOfCodeOptions(event, lineNum) {
+        if(event && event instanceof PointerEvent) { event.preventDefault(); }
+        if(lineOptions.value.num != lineNum || event.type.toLowerCase() !== "contextmenu") { setLineOptions(lineNum); }
     }
 
     /**

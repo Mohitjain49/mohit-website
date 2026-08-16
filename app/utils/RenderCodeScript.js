@@ -86,7 +86,8 @@ function transformCodeLine(addClassToHast, node, lineNum, path) {
             type: "element",
             tagName: "button",
             properties: {
-                onclick: "window.openCodeLineOptions(" + String(lineNum) + ")",
+                onClick: "window.openCodeLineOptions(event, " + String(lineNum) + ")",
+                onContextMenu: "window.openCodeLineOptions(event, " + String(lineNum) + ")",
                 title: "See Options for Line " + lineNum + " Of This Code Script."
             },
             children: [{ type: "text", value: String(lineNum) }]

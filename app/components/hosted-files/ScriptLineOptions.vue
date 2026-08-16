@@ -4,8 +4,11 @@
         <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
             <h3> Line <span id="lineOptions-num" v-html="lineOptions.num"></span> </h3>
             <div class="mohit-script-lineOptions-topOpts">
-                <button @click="scriptsStore.setLineOptions(-1)" :title="('Close Options For Line ' + lineOptions.num)">
-                    <FontAwesomeIcon icon="fa-xmark" />
+                <button class="web-menu" @click="openScriptsMenu()" ref="options-open-web-menu-btn" title="Open Scripts Menu">
+                    <FontAwesomeIcon icon="fa-file-export" :jello="hoverOnWebMenuButton" />
+                </button>
+                <button @click="scriptsStore.setLineOptions(-1)" ref="options-close-btn" :title="('Close Options For Line ' + lineOptions.num)">
+                    <FontAwesomeIcon icon="fa-xmark" :jello="hoverOnCloseButton" />
                 </button>
             </div>
         </div>
@@ -23,6 +26,19 @@
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const scriptsStore = useScriptsStore();
 const { lineOptions } = storeToRefs(scriptsStore);
+
+const closeButton = useTemplateRef('options-close-btn');
+const webMenuButton = useTemplateRef('options-open-web-menu-btn');
+const hoverOnCloseButton = useElementHover(closeButton);
+const hoverOnWebMenuButton = useElementHover(webMenuButton);
+
+/** This function opens the scripts menu. */
+function openScriptsMenu() {
+    scriptsStore.setLineOptions(-1);
+    webData.bypassBodyClick();
+    webData.setMenuOpen(SCRIPTS_MENU, false);
+}
 </script>

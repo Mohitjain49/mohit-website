@@ -233,9 +233,9 @@
     user-select: none;
 }
 
-.mohit-script-lineOptions-top button.white {
-    color: white;
-    border-color: white;
+.mohit-script-lineOptions-top button.web-menu {
+    color: var(--website-light-text);
+    border-color: var(--website-light-text);
 }
 .mohit-script-lineOptions-top button:hover {
     background-color: var(--dark-background);
