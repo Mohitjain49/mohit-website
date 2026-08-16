@@ -49,7 +49,7 @@ export default {
         // This waits for the page to load before triggering any scroll.
         if(differentPage) {
             await new Promise<void>((resolve, reject) => {
-                hooks.hookOnce('page:loading:end', () => { resolve(); });
+                hooks.hookOnce('page:finish', () => { resolve(); });
                 sleep(1000).then(() => { resolve(); });
             });
         }

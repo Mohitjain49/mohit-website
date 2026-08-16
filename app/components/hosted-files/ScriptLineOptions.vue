@@ -1,14 +1,14 @@
 <template>
 <Transition name="fade-transition">
-    <div v-if="(lineOptions.num != -1)" :style="lineOptions.style" id="mohit-line-options" class="mohit-script-lineOptions">
+    <div v-if="(lineOptionsNum != -1)" :style="lineOptions.style" id="mohit-line-options" class="mohit-script-lineOptions">
         <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
-            <h3> Line <span id="lineOptions-num" v-html="lineOptions.num"></span> </h3>
+            <h3> Line <span id="lineOptions-num" v-html="lineOptionsNum"></span> </h3>
             <div class="mohit-script-lineOptions-topOpts">
                 <button class="web-menu" @click="openScriptsMenu()" ref="options-open-web-menu-btn" title="Open Scripts Menu">
-                    <FontAwesomeIcon icon="fa-file-export" :jello="hoverOnWebMenuButton" />
+                    <FontAwesomeIcon icon="fa-file-export" :jello="animateWebMenuButton" />
                 </button>
-                <button @click="scriptsStore.setLineOptions(-1)" ref="options-close-btn" :title="('Close Options For Line ' + lineOptions.num)">
-                    <FontAwesomeIcon icon="fa-xmark" :jello="hoverOnCloseButton" />
+                <button @click="closeLineOptionsMenu()" ref="options-close-btn" :title="('Close Options For Line ' + lineOptionsNum)">
+                    <FontAwesomeIcon icon="fa-xmark" :jello="animateCloseButton" />
                 </button>
             </div>
         </div>
@@ -35,10 +35,30 @@ const webMenuButton = useTemplateRef('options-open-web-menu-btn');
 const hoverOnCloseButton = useElementHover(closeButton);
 const hoverOnWebMenuButton = useElementHover(webMenuButton);
 
+const lineOptionsNum = computed(() => { return lineOptions.value.num; });
+const animateCloseButton = ref(false);
+const animateWebMenuButton = ref(false);
+
+watch(hoverOnCloseButton, (newValue) => { animateCloseButton.value = newValue; });
+watch(hoverOnWebMenuButton, (newValue) => { animateWebMenuButton.value = newValue; });
+watch(lineOptionsNum, () => { stopButtonAnimations(); });
+
 /** This function opens the scripts menu. */
 function openScriptsMenu() {
-    scriptsStore.setLineOptions(-1);
+    closeLineOptionsMenu();
     webData.bypassBodyClick();
     webData.setMenuOpen(SCRIPTS_MENU, false);
+}
+
+/** This function closes the line options menu. */
+function closeLineOptionsMenu() {
+    stopButtonAnimations();
+    scriptsStore.setLineOptions(-1);
+}
+
+/** This function stops animations for all buttons in this menu. */
+function stopButtonAnimations() {
+    animateCloseButton.value = false;
+    animateWebMenuButton.value = false;
 }
 </script>
