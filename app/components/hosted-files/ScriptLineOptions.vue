@@ -1,6 +1,6 @@
 <template>
 <Transition name="fade-context-menu-transition">
-    <div v-if="showLineOptions" :style="lineOptions.style" id="mohit-line-options" class="mohit-script-lineOptions">
+    <div v-if="showLineOptions" :style="lineOptions.style" :id="LINE_OPTIONS_ELEMENT_ID" class="mohit-script-lineOptions">
         <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
             <h3> Line <span id="lineOptions-num" v-html="lineOptionsNum"></span> </h3>
             <div class="mohit-script-lineOptions-topOpts">
@@ -26,6 +26,8 @@
 </template>
 
 <script setup>
+const LINE_OPTIONS_ELEMENT_ID = "mohit-line-options";
+
 const webData = useWebsiteDataStore();
 const scriptsStore = useScriptsStore();
 const { lineOptions } = storeToRefs(scriptsStore);
@@ -90,13 +92,13 @@ function checkComponentStayVisible(event = null) {
 
     /** @type {Element} The element target from the event. */
     const element = event.target;
-    const lineOptions = document.getElementById("mohit-line-options");
+    const lineOptionsElement = document.getElementById(LINE_OPTIONS_ELEMENT_ID);
 
-    if(lineOptions == null || !(element instanceof Element)) { return; }
+    if(lineOptionsElement == null || !(element instanceof Element)) { return; }
     const pattern = new RegExp("^L" + "\\d+$");
     const lineId = element.closest("span")?.id;
 
-    if(lineOptions === element || lineOptions.contains(element) || pattern.test(lineId)) { return; }
+    if(lineOptionsElement === element || lineOptionsElement.contains(element) || pattern.test(lineId)) { return; }
     scriptsStore.closeLineOptions();
 }
 </script>

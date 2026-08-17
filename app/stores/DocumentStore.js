@@ -66,6 +66,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const docImageFetchFailed = ref(false);
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const currentObservedPage = ref(-1);
+    const contextMenuPageNumber = ref(0);
 
     const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
@@ -812,7 +813,15 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(index >= 1 && index <= docLoaded.value.totalPages) { currentObservedPage.value = index; }
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed, currentObservedPage,
+    /**
+     * This function sets the page number for the hosted document context menu.
+     * @param {Number} index The Page Number. 0 by default means that the contextmenu should be hidden.
+     */
+    function setContextMenuPageNumber(index = 0) {
+        if(index >= 0 && index <= docLoaded.value.totalPages) { contextMenuPageNumber.value = index; }
+    }
+
+    return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, copyDocumentSupported, showImageCopyButton, browserPdfViewerPresent, workerSrcAdded,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
         downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, imageCopyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
@@ -820,7 +829,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav, showPrintButton,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, downloadDocAsImage, copyDocAsImage, copyFirstDocPageAsImage, requestGoogleToUploadDoc,
-        toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, initGoogleTokenClient, initGooglePickerAPI,
+        toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages
     }
 });

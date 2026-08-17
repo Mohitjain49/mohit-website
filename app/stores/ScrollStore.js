@@ -10,6 +10,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const scriptsStore = useScriptsStore();
+    const documentStore = useDocumentStore();
     const styleStore = useStyleStore();
 
     const fullScreenSet = getFullScreenSet();
@@ -114,6 +115,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function onLenisScroll(lenisInstance, customEventType = "default") {
         if(webData.websiteMenuMode == 0 || customEventType === "no-scroll") { webData.closeNavMenu(); }
         scriptsStore.closeLineOptions();
+        documentStore.setContextMenuPageNumber(0);
     }
 
     /**

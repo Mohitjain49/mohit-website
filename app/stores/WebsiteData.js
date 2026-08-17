@@ -174,6 +174,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function resizePageComponents() {
         gamepadStore.resetCursorPositions();
         scriptsStore.closeLineOptions();
+        documentStore.setContextMenuPageNumber(0);
     }
 
     /**

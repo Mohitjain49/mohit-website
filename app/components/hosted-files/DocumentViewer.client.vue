@@ -14,7 +14,9 @@
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
-            <div @contextmenu="onPdfContentMenu" :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]">
+            <div :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]"
+                @contextmenu="(event) => { onPdfContentMenu(event, page.num); }">
+
                 <canvas :id="('pdf_canvas_' + page.num)"></canvas>
                 <div v-if="annontations" class="textLayer" :id="('pdf_text_layer_' + page.num)"></div>
                 <div v-if="(annontations && page.showAnnotations)" class="annotationLayer" :id="('pdf_annotation_layer_' + page.num)"></div>
@@ -33,6 +35,7 @@
     <WebFooter v-if="!fullScreenSet" />
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <FileWidgets />
+    <DocumentPageContextMenu />
 
     <DocumentMenu />
     <PdfPageNavigationMenu v-if="documentStore.showPdfPageNav" />
@@ -411,8 +414,9 @@ function onAnnotationClick(event) {
 /**
  * This event should trigger whenever someone right clicks on a rendered PDF.
  * @param {PointerEvent} event The event fired by the action.
+ * @param {Number} pageNum The number of the page that was clicked on.
  */
-async function onPdfContentMenu(event) {
+async function onPdfContentMenu(event, pageNum = 1) {
     /** @type {HTMLElement} The element that was clicked on. */
     const element = event.target;
     const selection = window.getSelection();
@@ -421,7 +425,13 @@ async function onPdfContentMenu(event) {
     // If the user does not right click on selected text or a link, this function opens the website document menu.
     if(!element.closest("a") && (!selection || selectedText.length <= 0 || !selection.containsNode(element, true))) {
         event.preventDefault();
-        webData.setMenuOpen(DOCUMENT_MENU, true);
+        if(documentStore.contextMenuPageNumber > 0 && pageNum != 0) {
+            documentStore.setContextMenuPageNumber(0);
+            await sleep(100);
+        }
+
+        // Sets the new page number for the context menu.
+        documentStore.setContextMenuPageNumber(pageNum);
     }
 }
 
