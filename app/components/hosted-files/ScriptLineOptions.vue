@@ -57,7 +57,6 @@ onMountedAdvanced(() => {
     window.addEventListener("pointerdown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("mousedown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("touchstart", (event) => { checkComponentStayVisible(event); }, { signal });
-    window.addEventListener("click", (event) => { checkComponentStayVisible(event); }, { signal });
 });
 
 // This aborts the event listeners when the user leaves the webpage.
@@ -95,10 +94,7 @@ function checkComponentStayVisible(event = null) {
     const lineOptionsElement = document.getElementById(LINE_OPTIONS_ELEMENT_ID);
 
     if(lineOptionsElement == null || !(element instanceof Element)) { return; }
-    const pattern = new RegExp("^L" + "\\d+$");
-    const lineId = element.closest("span")?.id;
-
-    if(lineOptionsElement === element || lineOptionsElement.contains(element) || pattern.test(lineId)) { return; }
+    if(lineOptionsElement === element || lineOptionsElement.contains(element)) { return; }
     scriptsStore.closeLineOptions();
 }
 </script>

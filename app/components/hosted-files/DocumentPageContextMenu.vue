@@ -66,7 +66,6 @@ onMountedAdvanced(() => {
     window.addEventListener("pointerdown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("mousedown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("touchstart", (event) => { checkComponentStayVisible(event); }, { signal });
-    window.addEventListener("click", (event) => { checkComponentStayVisible(event); }, { signal });
 });
 
 // This aborts the event listeners when the user leaves the webpage.

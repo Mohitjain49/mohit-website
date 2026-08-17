@@ -193,7 +193,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function openLineOfCodeOptions(event, lineNum) {
         if(event && event instanceof PointerEvent) { event.preventDefault(); }
-        if(lineOptions.value.num != lineNum || event.type.toLowerCase() !== "contextmenu") { setLineOptions(lineNum); }
+        if(lineOptions.value.num != lineNum) { setLineOptions(lineNum); }
     }
 
     /**
