@@ -32,11 +32,11 @@
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
+const scrollStore = useScrollStore();
 
 const fullScreenSet = getFullScreenSet();
 const { width: windowWidth } = useMohitWindowSize();
 const { onDocumentRoute, onMarkdownRoute, currentObservedPage } = storeToRefs(documentStore);
-const { isAutoScrolling } = storeToRefs(useScrollStore());
 
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
@@ -82,10 +82,11 @@ function exitFS() {
  * @param {"up" | "down"} direction The direction to go.
  */
 function navigatePage(direction = "up") {
-    if(isAutoScrolling.value) { return; }
     if(direction === "up" && !onLastPage.value) {
+        if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
         documentStore.scrollToPage(Math.max(1, (currentObservedPage.value + 1)));
     } else if(direction === "down" && !onFirstPage.value) {
+        if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
         documentStore.scrollToPage(Math.min(documentStore.docLoaded.loadedPages, (currentObservedPage.value - 1)));
     }
 }
