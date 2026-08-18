@@ -87,11 +87,11 @@ useIntersectionObserver(pageRefs, (entry) => {
         const itemRatio = entryItem.intersectionRatio;
         const newPageNumber = parseInt(entryItem.target.getAttribute(CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE));
 
-        if(itemRatio <= bestPageRatio && (newPageNumber != documentStore.currentObservedPage)) { return; }
+        if(itemRatio <= bestPageRatio && (newPageNumber != documentStore.currentObservedPage)) { continue; }
         bestPageRatio = itemRatio;
         documentStore.setCurrentObservedPage(newPageNumber);
     }
-}, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0] });
+}, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] });
 
 /** @type {import('vue').ShallowRef<import('pdfjs-dist').PDFDocumentProxy>} The pdf document loaded in by the viewer. */
 const pdfDoc = shallowRef(null);
