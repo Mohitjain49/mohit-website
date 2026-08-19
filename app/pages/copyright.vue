@@ -12,11 +12,11 @@
             <h2 class="copyright-body-subheader"> {{ RELEASE_DATE }} </h2>
             <h2 class="copyright-body-subheader small"> {{ RELEASE_TIME }} </h2>
 
-            <div v-if="!showLicense" class="copyright-body-desc">
+            <div class="copyright-body-desc">
                 I'm glad you're here and hope you find inspiration in my work. Feel free to explore the site, 
                 take ideas, and use them to spark your own creativity. However, please abide by the 
                 <span style="text-decoration: underline;">
-                    <RouterLink :to="licenseLink" target="mohit-jain-web-license">MIT License</RouterLink>
+                    <a :href="LICENSE_LINK" target="_self">license</a>
                 </span>
                 associated with this website if you plan to use my code for your own work.
                 <br> <br>
@@ -26,41 +26,22 @@
                     <RouterLink :to="footerLink">below.</RouterLink>
                 </span>
             </div>
-            <div v-if="showLicense" class="copyright-body-desc license">
-                Permission is hereby granted, free of charge, to any person obtaining a copy
-                of this software and associated documentation files (the "Software"), to deal
-                in the Software without restriction, including without limitation the rights
-                to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-                copies of the Software, and to permit persons to whom the Software is
-                furnished to do so, subject to the following conditions:
-                <br> <br>
-                The above copyright notice and this permission notice shall be included in all
-                copies or substantial portions of the Software.
-                <br> <br>
-                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-                IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-                FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-                AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-                LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-                OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-                SOFTWARE.
-            </div>
 
             <div class="copyright-topBar">
                 <div class="copyright-topBar-side left">
-                    <RouterLink :to="(showLicense ? routePath : licenseLink)" class="copyright-topBar-btn" pulse-loop
-                        :style="getColorStyles('var(--website-light-text)')"
-                        :title="(showLicense ? 'Back To Main Statement' : 'See License')">
-
-                        <FontAwesomeIcon :icon="(showLicense ? 'fa-arrow-left' : 'fa-scale-balanced')" />
-                    </RouterLink>
-                </div>
-                <div class="copyright-topBar-side right">
                     <button @click="installStore.resetWebsiteVersion()" class="copyright-topBar-btn" title="Update Website" pulse-loop>
                         <FontAwesomeIcon icon="fa-rotate" :spin="installStore.swUpdating" />
                     </button>
                     <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-topBar-btn updateLog" title="Update Log" pulse-loop>
                         <FontAwesomeIcon icon="fa-brands fa-git-alt" />
+                    </a>
+                </div>
+                <div class="copyright-topBar-side right">
+                    <RouterLink :to="footerLink" class="copyright-topBar-btn webpages" title="See Webpages" pulse-loop>
+                        <FontAwesomeIcon icon="fa-book-open" />
+                    </RouterLink>
+                    <a :href="LICENSE_LINK" target="license-mohit-website" class="copyright-topBar-btn white" title="See License" pulse-loop>
+                        <FontAwesomeIcon icon="fa-brands fa-creative-commons" />
                     </a>
                 </div>
             </div>
@@ -76,18 +57,14 @@ const installStore = useInstallStore();
 const { $websiteBuild } = useNuxtApp();
 const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
-const COPYRIGHT_NOTICE_TITLE = "Mohit Jain | Copyright Notice";
-const LICENSE_PAGE_TITLE = "Mohit Jain | Website Code License";
-
-const reactiveMeta = useReactiveMeta(COPYRIGHT_NOTICE_TITLE, "copyright",
+const reactiveMeta = useReactiveMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website.", "rgb(248, 206, 171)"
 );
 
-const showLicense = computed(() => { return (router.currentRoute.value.query.showLicense === "true"); });
 const routePath = computed(() => { return router.currentRoute.value.path; });
-const licenseLink = computed(() => { return (routePath.value + '?showLicense=true'); });
 const footerLink = computed(() => { return (routePath.value + '#footer'); });
 
+const LICENSE_LINK = useState("license-link", () => { return PERSONAL_LICENSE_LINK; });
 const COPYRIGHT_TEXT = useState("copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 const RELEASE_DATE = useState("release-date", () => { return ("Released On: " + $websiteBuild.releaseDate); });
 const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuild.releaseTime + ")"); });
@@ -98,20 +75,12 @@ usePulseLoopAnimation(copyrightBodyRef);
 
 // Updates the Website Date Information when the website is mounted.
 onMountedAdvanced(() => {
-    setPageTitle(showLicense.value);
+    LICENSE_LINK.value = (window.location.origin + "/license.txt");
     COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);
     RELEASE_TIME.value = ("(" + $websiteBuild.releaseTime + ")");
     PROJECT_VERSION.value = ("Version " + $websiteBuild.version);
 });
-
-// This changes the document title when the user changes between the main statement and the license.
-watch(showLicense, (newValue) => { setPageTitle(newValue); });
-
-/** This sets the page title based on when the user changes between the License and Main Statement. */
-function setPageTitle(newValue = false) {
-    reactiveMeta.changeTitle(newValue ? LICENSE_PAGE_TITLE : COPYRIGHT_NOTICE_TITLE);
-}
 </script>
 
 <style scoped lang="scss">
@@ -230,7 +199,6 @@ function setPageTitle(newValue = false) {
     color: var(--website-text);
     height: 22px;
     width: 22px;
-    font-size: 10px;
     border-radius: 50%;
     overflow: hidden;
     z-index: 5;
@@ -246,27 +214,33 @@ function setPageTitle(newValue = false) {
 .copyright-topBar-btn.updateLog {
     color: #F05133;
     border-color: #F05133;
-    font-size: 14px;
+}
+.copyright-topBar-btn.white {
+    color: white;
+    border-color: white;
+}
+
+.copyright-topBar-btn svg {
+    height: 10px;
+    width: 10px;
+}
+.copyright-topBar-btn.webpages svg {
+    height: 12px;
+    width: 12px;
+}
+.copyright-topBar-btn.updateLog svg, .copyright-topBar-btn.white svg {
+    height: 14px;
+    width: 14px;
 }
 
 @include dynamic-less-equal-width-rule(680) {
-    .copyright-body-header {
-        font-size: 40px;
-    }
+    .copyright-body-header { font-size: 40px; }
 }
 @include dynamic-less-equal-width-rule(600) {
-    .copyright-body-header {
-        font-size: 28px;
-    }
-    .copyright-body-subheader {
-        font-size: 12px;
-    }
-    .copyright-body-desc {
-        font-size: 16px;
-    }
-    .copyright-body-subheader.small {
-        font-size: 9px;
-    }
+    .copyright-body-header { font-size: 28px; }
+    .copyright-body-subheader { font-size: 12px; }
+    .copyright-body-desc { font-size: 16px; }
+    .copyright-body-subheader.small { font-size: 9px; }
 }
 @include dynamic-less-equal-width-rule(450) {
     .copyright-body-header {

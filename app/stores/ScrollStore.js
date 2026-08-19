@@ -10,6 +10,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const scriptsStore = useScriptsStore();
+    const documentStore = useDocumentStore();
     const styleStore = useStyleStore();
 
     const fullScreenSet = getFullScreenSet();
@@ -113,7 +114,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
      */
     function onLenisScroll(lenisInstance, customEventType = "default") {
         if(webData.websiteMenuMode == 0 || customEventType === "no-scroll") { webData.closeNavMenu(); }
-        scriptsStore.setLineOptions(-1);
+        scriptsStore.closeLineOptions();
+        documentStore.setContextMenuPageNumber(0);
     }
 
     /**
@@ -217,11 +219,12 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     /** This function handles auto scrolling for the gamepad. */
     async function gamepadScrollToTop() {
-        if(!verifyAutoscroll()) { return; }
+        if(!mounted.value || !lenis) { return; }
         const routerObj = router.currentRoute.value;
         if(routerObj.hash !== "") { router.push(routerObj.path); }
 
         webData.closeNavMenu();
+        cancelAutoscroll();
         await scrollToTop(false, 10);
     }
 
@@ -241,7 +244,13 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This function cancels any ongoing autoscroll. */
     function cancelAutoscroll() {
         if(lenis == null) { return; }
-        setScrollInterval(2);
+        if(calculateScrollInterval != null) { clearInterval(calculateScrollInterval); }
+        if(hideScrollProgressTimeout != null) { clearTimeout(hideScrollProgressTimeout); }
+        
+        scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
+        calculateScrollInterval = null;
+        hideScrollProgressTimeout = null;
+
         lenis.stop();
         lenis.start();
     }
@@ -258,15 +267,10 @@ export const useScrollStore = defineStore("scroll-store", () => {
             calculateScrollInterval = null;
             scrollProgress.value.pct = 150;
 
-            if(start == 1) {
-                hideScrollProgressTimeout = setTimeout(() => {
-                    scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
-                    hideScrollProgressTimeout = null;
-                }, 250);
-            } else if(start == 2) {
+            hideScrollProgressTimeout = setTimeout(() => {
                 scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
                 hideScrollProgressTimeout = null;
-            }
+            }, 250);
         } else if(start == 0 && calculateScrollInterval == null) {
             calculateScrollInterval = setInterval(() => { calculateScrollProgress(); }, 10);
             scrollProgress.value.show = true;

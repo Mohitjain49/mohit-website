@@ -6,7 +6,7 @@
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar />
-        <div class="pdf-page-innerContainer" v-for="page in docPages" :id="('page_' + page.num)">
+        <div class="pdf-page-innerContainer" v-for="page in docPages" :id="('page_' + page.num)" :page-num="page.num" ref="pageRefs">
             <div v-if="!documentStore.docLoaded.status" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
             </div>
@@ -14,7 +14,9 @@
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
-            <div @contextmenu="onPdfContentMenu" :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]">
+            <div :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]"
+                @contextmenu="(event) => { onPdfContentMenu(event, page.num); }">
+
                 <canvas :id="('pdf_canvas_' + page.num)"></canvas>
                 <div v-if="annontations" class="textLayer" :id="('pdf_text_layer_' + page.num)"></div>
                 <div v-if="(annontations && page.showAnnotations)" class="annotationLayer" :id="('pdf_annotation_layer_' + page.num)"></div>
@@ -33,6 +35,7 @@
     <WebFooter v-if="!fullScreenSet" />
     <ParticlesBackground :particles-options="DOCUMENT_BACKGROUND" />
     <FileWidgets />
+    <DocumentPageContextMenu />
 
     <DocumentMenu />
     <PdfPageNavigationMenu v-if="documentStore.showPdfPageNav" />
@@ -50,12 +53,14 @@ const CUSTOM_PDFJS_DEST_ATTRIBUTE = "mohit-data-pdfjs-dest";
 const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
 const CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE = "mohit-pdfjs-raw-width";
 const CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE = "mohit-pdfjs-raw-height";
+const CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE = "page-num";
 
 var renderAbortController = new AbortController();
 var resizeAbortController = new AbortController();
 
 var renderTasks = { canvas: null, text: null, annontation: null }
 var pdfDocLoadingTask = null;
+var bestPageRatio = 0;
 
 const webData = useWebsiteDataStore();
 const fullScreenSet = getFullScreenSet();
@@ -71,6 +76,22 @@ const props = defineProps({
     addShare: { type: Boolean, default: true },
     shareMinWidth: { type: Number, default: 0 }
 });
+
+/** @type {import('vue').Ref<Array<HTMLElement>>} The array of references to the Page elemnets. */
+const pageRefs = ref([]);
+
+// This observer tracks which page the user is currently viewing.
+useIntersectionObserver(pageRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const entryItem = entry[i];
+        const itemRatio = entryItem.intersectionRatio;
+        const newPageNumber = parseInt(entryItem.target.getAttribute(CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE));
+
+        if(itemRatio <= bestPageRatio && (newPageNumber != documentStore.currentObservedPage)) { continue; }
+        bestPageRatio = itemRatio;
+        documentStore.setCurrentObservedPage(newPageNumber);
+    }
+}, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] });
 
 /** @type {import('vue').ShallowRef<import('pdfjs-dist').PDFDocumentProxy>} The pdf document loaded in by the viewer. */
 const pdfDoc = shallowRef(null);
@@ -269,6 +290,7 @@ async function renderPDF() {
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
+    documentStore.setCurrentObservedPage(1);
     setSingleDocLoaded(numPages - 1);
     if(renderAborted()) { return; }
 
@@ -392,8 +414,9 @@ function onAnnotationClick(event) {
 /**
  * This event should trigger whenever someone right clicks on a rendered PDF.
  * @param {PointerEvent} event The event fired by the action.
+ * @param {Number} pageNum The number of the page that was clicked on.
  */
-async function onPdfContentMenu(event) {
+async function onPdfContentMenu(event, pageNum = 1) {
     /** @type {HTMLElement} The element that was clicked on. */
     const element = event.target;
     const selection = window.getSelection();
@@ -402,7 +425,13 @@ async function onPdfContentMenu(event) {
     // If the user does not right click on selected text or a link, this function opens the website document menu.
     if(!element.closest("a") && (!selection || selectedText.length <= 0 || !selection.containsNode(element, true))) {
         event.preventDefault();
-        webData.setMenuOpen(DOCUMENT_MENU, true);
+        if(documentStore.contextMenuPageNumber > 0 && pageNum != 0) {
+            documentStore.setContextMenuPageNumber(0);
+            await sleep(100);
+        }
+
+        // Sets the new page number for the context menu.
+        documentStore.setContextMenuPageNumber(pageNum);
     }
 }
 

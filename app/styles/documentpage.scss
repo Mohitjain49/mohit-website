@@ -67,6 +67,9 @@
     width: fit-content;
     margin: 0px auto;
 }
+:fullscreen .pdf-page-innerContainer {
+    scroll-margin-top: apply-zoom-factor(20);
+}
 
 .mohit-pdf-linkAnnotation {
     @at-root #{chain-selector(&, 4)} {
@@ -90,7 +93,6 @@
     width: var(--mohit-custom-pdf-width);
     height: var(--mohit-custom-pdf-height);
     margin: 0px auto;
-    scroll-margin-top: apply-zoom-factor(70);
 }
 .mohit-rendered-pdf.multi-page {
     margin-bottom: 20px;
@@ -275,6 +277,100 @@
 .pdf-doc-linkBtn:hover {
     box-shadow: 0px 0px 10px 1px;
     scale: 1.1;
+}
+
+.mohit-hostedDoc-contextMenu {
+    position: fixed;
+    overflow: hidden;
+    bottom: 95px;
+    left: 15px;
+    background-color: black;
+    border: 2px solid var(--blue-one);
+    height: fit-content;
+    width: 200px;
+    border-radius: 10px;
+    z-index: 2500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.mohit-hostedDoc-contextMenu-top {
+    height: 23px;
+    width: calc(100% - 10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    padding: 0px 5px;
+}
+
+.mohit-hostedDoc-contextMenu-top > h3 {
+    color: var(--blue-one);
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'Lexend', sans-serif;
+    user-select: none;
+}
+.mohit-hostedDoc-contextMenu-top > h3 > #mohit-document-contextMenu-pageNum {
+    color: white;
+    text-decoration: underline;
+}
+
+.mohit-hostedDoc-contextMenu-topOpts {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+}
+.mohit-hostedDoc-contextMenu-top button {
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 14px;
+    width: 14px;
+    border: 1px solid red;
+    border-radius: 4px;
+    transition: var(--default-transition);
+    user-select: none;
+}
+
+.mohit-hostedDoc-contextMenu-top button.web-menu {
+    color: var(--website-light-text);
+    border-color: var(--website-light-text);
+}
+.mohit-hostedDoc-contextMenu-top button:hover {
+    background-color: var(--dark-background);
+}
+.mohit-hostedDoc-contextMenu-topOpts button > svg {
+    height: 9px;
+}
+
+.mohit-hostedDoc-contextMenu > button {
+    color: var(--blue-one);
+    font-family: "Lexend", "Roboto", sans-serif;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    width: calc(100% - 20px);
+    padding: 0px 10px;
+    border-top: 1px solid rgba(159, 191, 255, 0.75);
+    transition: background-color 0.2s, font-size 0.2s, width 0.2s;
+}
+
+.mohit-hostedDoc-contextMenu > button.share {
+    color: var(--website-light-text);
+}
+.mohit-hostedDoc-contextMenu > button:hover {
+    background-color: var(--dark-background);
+    font-size: 15px;
+    width: calc(100% - 14px);
 }
 
 @include dynamic-less-equal-width-rule(850) {

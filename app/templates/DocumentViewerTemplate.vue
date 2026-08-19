@@ -3,7 +3,7 @@
     :url="documentStore.hostedDocuments[index].objectUrl"
     :shareMinWidth="0"
     :addShare="(index == 1)"
-    :annontations="(index != 2)"
+    :annontations="true"
     :templateIndex="index"
 />
 <main id="resume-container" v-else>

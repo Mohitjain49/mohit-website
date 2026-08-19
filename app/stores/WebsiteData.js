@@ -9,6 +9,7 @@ export const WEBSITE_MENUS = [
     { id: "mohit-docMenu-pdfNav", num: PDF_NAVIGATION_MENU }
 ];
 
+/** This is the general pinia store for the website that manages general components like the website menus. */
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
     const nuxtReady = ref(false);
@@ -43,6 +44,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const compassMenuAvailable = ref(false);
     const wakeLockChangeFresh = ref(false);
     const copyImageSupported = ref(false);
+    const copySvgSupported = ref(false);
     const nullifyBodyClick = ref(false);
     const saveAsSupported = ref(false);
 
@@ -131,6 +133,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         nuxtReady.value = true;
         copyImageSupported.value = ClipboardItem.supports("image/png");
+        copySvgSupported.value = ClipboardItem.supports("image/svg+xml");
         const signal = controller.signal;
 
         audioStore.setupClickAudio();
@@ -172,27 +175,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** This sets the size of crucial components within the website. */
     function resizePageComponents() {
         gamepadStore.resetCursorPositions();
-        scriptsStore.setLineOptions(-1);
+        scriptsStore.closeLineOptions();
+        documentStore.setContextMenuPageNumber(0);
     }
 
     /**
      * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
-     * @param event The event.
+     * @param {PointerEvent} event The event.
      */
-    function onDocumentBodyClick(event = new MouseEvent("click")) {
+    function onDocumentBodyClick(event = null) {
+        if(!event || !event.target) { return; }
         audioStore.confirmClickSound(event);
-        const element = event.target;
-        checkNavigationElement(element).then((result) => { if(!result) { closeNavMenu(); }});
-
-        const lineOptions = document.getElementById("mohit-line-options");
-        if(lineOptions != null) {
-            const lineOptionsElements = Array.from(lineOptions.querySelectorAll('*'));
-            const pattern = new RegExp("^L" + "\\d+$");
-
-            const lineId = element.closest("span")?.id
-            if(lineOptions === element || lineOptionsElements.includes(element) || pattern.test(lineId)) { return; }
-            scriptsStore.setLineOptions(-1);
-        }
+        checkNavigationElement(event.target).then((result) => { if(!result) { closeNavMenu(); }});
     }
 
     /**
@@ -374,9 +368,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(saveAsSupported.value !== newStatus) { saveAsSupported.value = newStatus; }
     }
 
-    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported, saveAsSupported,
-        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
-        documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
+    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported, copySvgSupported, saveAsSupported,
+        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen, pdfNavMenuOpen,
+        openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getWebsiteMenuElement,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, scrollToAndFromFooter, bypassBodyClick

@@ -1,15 +1,18 @@
+import { createResolver } from "@nuxt/kit"
 import type { NuxtPage } from '@nuxt/schema';
+
 const REPOSITORY = "https://github.com/Mohitjain49/mohit-website";
+const { resolve } = createResolver(import.meta.url);
+
+const DOC_TEMPLATE = resolve("./app/templates/DocumentViewerTemplate.vue");
+const SCRIPT_TEMPLATE = resolve("./app/templates/ScriptViewerTemplate.vue");
+const REDIRECT_TEMPLATE = resolve("./app/templates/RedirectTemplate.vue");
 
 /**
  * This function is run by the "pages:extend" hook. It adds pages to the website by using "templates" in the app folder.
  * @param pages The pages array given by the hook.
  */
 export default function usePageTemplates(pages: Array<NuxtPage>) {
-    const DOC_TEMPLATE = "~/templates/DocumentViewerTemplate.vue";
-    const SCRIPT_TEMPLATE = "~/templates/ScriptViewerTemplate.vue";
-    const REDIRECT_TEMPLATE = "~/templates/RedirectTemplate.vue";
-
     const routesToDocumentTemplate: Array<NuxtPage> = [
         // { path: '/resume', file: DOC_TEMPLATE, props: { index: 0 }},
         { path: '/create-github-repo', file: DOC_TEMPLATE, props: { index: 1 }},

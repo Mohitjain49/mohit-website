@@ -182,12 +182,11 @@
     height: fit-content;
     width: 200px;
     border-radius: 10px;
-    z-index: 25;
+    z-index: 2500;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    transition: top 0.5s, left 0.5s, opacity 0.5s;
 }
 .mohit-script-lineOptions-top {
     height: 23px;
@@ -233,9 +232,9 @@
     user-select: none;
 }
 
-.mohit-script-lineOptions-top button.white {
-    color: white;
-    border-color: white;
+.mohit-script-lineOptions-top button.web-menu {
+    color: var(--website-light-text);
+    border-color: var(--website-light-text);
 }
 .mohit-script-lineOptions-top button:hover {
     background-color: var(--dark-background);

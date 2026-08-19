@@ -37,6 +37,14 @@ onMountedAdvanced(() => {
         return;
     }
 
+    // This section redirects to a particular page in the website if the user typed in a particular route.
+    const internalFileRoute = INTERNAL_FILE_REDIRECTS.findIndex(item => checkRedirectRoute(item.routes));
+    if(internalFileRoute != -1) {
+        startRedirect(false);
+        window.location.replace(window.location.origin + "/" + INTERNAL_FILE_REDIRECTS[internalFileRoute].replacement);
+        return;
+    }
+
     // This section redirects to another website if the user typed in a particular route.
     const externalRoute = EXTERNAL_REDIRECTS.findIndex(item => checkRedirectRoute(item.routes));
     if(externalRoute != -1) {
@@ -44,7 +52,9 @@ onMountedAdvanced(() => {
         window.location.replace(EXTERNAL_REDIRECTS[externalRoute].replacement);
         return;
     }
-    if(internalRoute == -1 && externalRoute == -1) { backgroundType.value = 0; }
+
+    // Sets the background to a 404 background if a redirect is not occuring.
+    if(internalRoute == -1 && internalFileRoute == -1 && externalRoute == -1) { backgroundType.value = 0; }
 });
 
 /**
@@ -73,7 +83,7 @@ function checkRedirectRoute(routes = [""]) {
     }));
 }
 
-// This is a list of redirects to other webpages within this website.
+/** This is a list of redirects to other webpages within this website. */
 const INTERNAL_REDIRECTS = [
     { routes: ["/mohit-website/**"], replacement: "/" },
     { routes: ["/contact-me"], replacement: "/contact" },
@@ -87,7 +97,6 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/files/**"], replacement: "/library/" },
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
     { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" },
-    { routes: ["/mit/**", "/mit-license/**", "/license/**"], replacement: "/copyright/?showLicense=true" },
 
     { routes: ["/documents/resume"], replacement: "/resume/" },
     { routes: ["/documents/resume/markdown"], replacement: "/resume/markdown" },
@@ -102,17 +111,21 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/code-reader"], replacement: "/code-scanner" }
 ];
 
-// This is a list of redirects to other websites.
+/** This is a list to certain files in the website like "license.txt". */
+const INTERNAL_FILE_REDIRECTS = [
+    { routes: ["/license/**"], replacement: "license.txt" },
+    { routes: ["/sitemap/**"], replacement: "sitemap.xml" },
+    { routes: ["/favicon/**"], replacement: "favicon.ico" }
+];
+
+/** This is a list of redirects to other websites. */
 const EXTERNAL_REDIRECTS = [
     { routes: ["/mnd"], replacement: MND_PROJECT_LINK },
     { routes: ["/pizza"], replacement: PIZZA_WEBSITE_LINK },
     { routes: ["/globe/**"], replacement: PERSONAL_GLOBE_LINK },
 
-    { routes: ["/tictactoe/**", "/tic-tac-toe/**"], replacement: TICTACTOE_PROJECT_LINK },    
-    { routes: ["/eeg/**", "/eeg-ai/**"], replacement: EEG_PROJECT_LINK },
-
+    { routes: ["/tictactoe/**", "/tic-tac-toe/**"], replacement: TICTACTOE_PROJECT_LINK },
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
-    { routes: ["/sitemap", "/documents/sitemap"], replacement: PERSONAL_SITEMAP_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },
     { routes: ["/ivuemedia", "/ivue/media"], replacement: IVUE_MEDIA_WEBSITE_LINK },
