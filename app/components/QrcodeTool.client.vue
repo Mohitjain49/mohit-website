@@ -76,7 +76,7 @@
                         <button v-if="webData.saveAsSupported" @click="saveQRCode()" class="qrcode-mainPopup-btn yellow" title="Save QR Code.">
                             <FontAwesomeIcon :icon="saveImageIcon" :spin-pulse="(actions.saveImage == 1)" />
                         </button>
-                        <button v-if="webData.copyImageSupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
+                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
                         </button>
                         <button @click="printQRCode()" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
@@ -171,6 +171,7 @@ const hoverOverCloseBtn = useElementHover(shareCloseRef);
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
 const qrcodeBg = computed(() => { return { 'background-image': ((qrCodeURL.value != undefined) ? 'url(' + qrCodeURL.value + ')' : '') }});
 const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.value] ?? ''); });
+const qrcodeImageCopySupported = computed(() => { return ((qrcodeImageMode.value == 0) ? webData.copyImageSupported : webData.copySvgSupported); });
 
 const { showSharePopupImmediate } = storeToRefs(webData);
 const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
@@ -530,11 +531,9 @@ async function saveQRCode() {
 
     try {
         const blob = qrCodeBlob.value;
-        const imageMimeType = ((qrcodeImageSuffix.value == 0) ? 'image/png' : 'image/svg+xml')
-
         const saveHandle = await window.showSaveFilePicker({
             suggestedName: getImageFilename(),
-            types: [{ description: "QR Code", accept: { [imageMimeType]: ['.' + qrcodeImageSuffix.value] }}]
+            types: [{ description: "QR Code", accept: { [blob.type]: ['.' + qrcodeImageSuffix.value] }}]
         });
 
         const writable = await saveHandle.createWritable();
@@ -583,7 +582,7 @@ function downloadQRCode() {
 
 /** This function lets the user copy the QR Code. */
 async function copyQRCode() {
-    if(actions.value.copyImage > 0 || !qrCodeBlob.value) { return; }
+    if(actions.value.copyImage > 0 || !qrcodeImageCopySupported.value || !qrCodeBlob.value) { return; }
     actions.value.copyImage = 1;
 
     try {

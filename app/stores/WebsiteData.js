@@ -44,6 +44,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const compassMenuAvailable = ref(false);
     const wakeLockChangeFresh = ref(false);
     const copyImageSupported = ref(false);
+    const copySvgSupported = ref(false);
     const nullifyBodyClick = ref(false);
     const saveAsSupported = ref(false);
 
@@ -132,6 +133,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         nuxtReady.value = true;
         copyImageSupported.value = ClipboardItem.supports("image/png");
+        copySvgSupported.value = ClipboardItem.supports("image/svg+xml");
         const signal = controller.signal;
 
         audioStore.setupClickAudio();
@@ -366,9 +368,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(saveAsSupported.value !== newStatus) { saveAsSupported.value = newStatus; }
     }
 
-    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported, saveAsSupported,
-        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen,
-        documentMetadataMenuOpen, pdfNavMenuOpen, openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
+    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported, copySvgSupported, saveAsSupported,
+        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen, pdfNavMenuOpen,
+        openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getWebsiteMenuElement,
         shareText, shareLink, shareFile, setEventListeners, removeEventListeners, scrollToAndFromFooter, bypassBodyClick
