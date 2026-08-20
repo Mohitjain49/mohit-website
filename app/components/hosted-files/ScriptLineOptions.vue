@@ -1,13 +1,13 @@
 <template>
 <Transition name="fade-context-menu-transition">
-    <div v-if="showLineOptions" :style="lineOptions.style" :id="LINE_OPTIONS_ELEMENT_ID" class="mohit-script-lineOptions">
+    <div v-show="showLineOptions" :style="lineOptions.style" :id="LINE_OPTIONS_ELEMENT_ID" class="mohit-script-lineOptions">
         <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
-            <h3> Line <span id="lineOptions-num" v-html="lineOptionsNum"></span> </h3>
+            <h3> Line <span id="lineOptions-num" v-html="viewableLineOptionsNum"></span> </h3>
             <div class="mohit-script-lineOptions-topOpts">
                 <button class="web-menu" @click="openScriptsMenu()" ref="options-open-web-menu-btn" title="Open Scripts Menu">
                     <FontAwesomeIcon icon="fa-file-export" :jello="animateWebMenuButton" />
                 </button>
-                <button @click="closeLineOptionsMenu()" ref="options-close-btn" :title="('Close Options For Line ' + lineOptionsNum)">
+                <button @click="closeLineOptionsMenu()" ref="options-close-btn" :title="('Close Options For Line ' + viewableLineOptionsNum)">
                     <FontAwesomeIcon icon="fa-xmark" :jello="animateCloseButton" />
                 </button>
             </div>
@@ -42,12 +42,13 @@ var lineOptionsAbortController = null;
 const lineOptionsNum = computed(() => { return lineOptions.value.num; });
 const showLineOptions = computed(() => { return (lineOptionsNum.value > 0); });
 
+const viewableLineOptionsNum = ref(1);
 const animateCloseButton = ref(false);
 const animateWebMenuButton = ref(false);
 
 watch(hoverOnCloseButton, (newValue) => { animateCloseButton.value = newValue; });
 watch(hoverOnWebMenuButton, (newValue) => { animateWebMenuButton.value = newValue; });
-watch(lineOptionsNum, () => { stopButtonAnimations(); });
+watch(lineOptionsNum, () => { onLineOptionsNumChange(); });
 
 // This mounts a few event listeners that help close the line options menu if the proper HTML Element is not clicked.
 onMountedAdvanced(() => {
@@ -57,6 +58,7 @@ onMountedAdvanced(() => {
     window.addEventListener("pointerdown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("mousedown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("touchstart", (event) => { checkComponentStayVisible(event); }, { signal });
+    document.getElementById(LINE_OPTIONS_ELEMENT_ID).addEventListener("contextmenu", (event) => { onMenuRightClick(event); }, { signal });
 });
 
 // This aborts the event listeners when the user leaves the webpage.
@@ -81,6 +83,13 @@ function stopButtonAnimations() {
     animateWebMenuButton.value = false;
 }
 
+/** This function runs whenever the number for what code line the menu represents changes. */
+function onLineOptionsNumChange() {
+    stopButtonAnimations();
+    const newNum = lineOptionsNum.value;
+    if(newNum > 0 && newNum < Number.POSITIVE_INFINITY) { viewableLineOptionsNum.value = newNum; }
+}
+
 /**
  * Given an element, this closes the Line Options Menu if the element is not a valid element to click.
  * @param {Event} event The event fired from the window event listener.
@@ -96,5 +105,22 @@ function checkComponentStayVisible(event = null) {
     if(lineOptionsElement == null || !(element instanceof Element)) { return; }
     if(lineOptionsElement === element || lineOptionsElement.contains(element)) { return; }
     scriptsStore.closeLineOptions();
+}
+
+/**
+ * This function runs whenever the user right clicks on the line options menu.
+ * @param {PointerEvent} event The emitted event.
+ */
+function onMenuRightClick(event) {
+    if(!event) { return; }
+    event.preventDefault();
+    
+    /** @type {HTMLElement} The element right clicked on. */
+    const element = event.target;
+    const closestButton = element.closest("button");
+    const closestLink = element.closest("link");
+
+    if(closestButton) { closestButton.click(); }
+    if(closestLink) { closestLink.click(); }
 }
 </script>

@@ -66,6 +66,7 @@ onMountedAdvanced(() => {
     window.addEventListener("pointerdown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("mousedown", (event) => { checkComponentStayVisible(event); }, { signal });
     window.addEventListener("touchstart", (event) => { checkComponentStayVisible(event); }, { signal });
+    document.getElementById(CONTEXT_MENU_ID).addEventListener("contextmenu", (event) => { onMenuRightClick(event); }, { signal });
 });
 
 // This aborts the event listeners when the user leaves the webpage.
@@ -114,6 +115,23 @@ function checkComponentStayVisible(event = null) {
     if(docContextMenu == null || !(element instanceof Element)) { return; }
     if(docContextMenu === element || docContextMenu.contains(element)) { return; }
     documentStore.setContextMenuPageNumber(0);
+}
+
+/**
+ * This function runs whenever the user right clicks on the hosted document context menu.
+ * @param {PointerEvent} event The emitted event.
+ */
+function onMenuRightClick(event) {
+    if(!event) { return; }
+    event.preventDefault();
+    
+    /** @type {HTMLElement} The element right clicked on. */
+    const element = event.target;
+    const closestButton = element.closest("button");
+    const closestLink = element.closest("link");
+
+    if(closestButton) { closestButton.click(); }
+    if(closestLink) { closestLink.click(); }
 }
 
 /** This function sets the current position of the context menu based on the position of the user's mouse. */

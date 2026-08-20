@@ -36,7 +36,8 @@ export default defineNuxtConfig({
     compatibilityDate: '2026-05-08',
     devtools: { enabled: false },
     ssr: true,
-    app: { baseURL: "/",
+    app: {
+        baseURL: "/",
         head: {
             htmlAttrs: { lang: "en-US" },
             script: [{ type: 'text/javascript', tagPosition: 'head', innerHTML: NO_SCROLL_FUNCTION }],
