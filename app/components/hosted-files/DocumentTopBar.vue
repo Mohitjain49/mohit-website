@@ -14,16 +14,8 @@
                 :fade="(!documentStore.showPrintButton && !documentStore.docImageFetchFailed)"
             />
         </button>
-
         <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
-        </button>
-        <button class="doc-save-opt" v-if="(documentStore.docImagesLoaded || !documentStore.docImageFetchFailed)"
-            @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
-
-            <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending"
-                :fade="(!documentStore.docImagesLoaded && !documentStore.docImageFetchFailed)"
-            />
         </button>
     </div>
     <div class="mohit-document-topBar-sideSection">

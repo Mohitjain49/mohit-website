@@ -58,7 +58,6 @@ const CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE = "page-num";
 var renderAbortController = new AbortController();
 var resizeAbortController = new AbortController();
 
-var renderTasks = { canvas: null, text: null, annontation: null }
 var pdfDocLoadingTask = null;
 var bestPageRatio = 0;
 
@@ -120,7 +119,6 @@ onBeforeUnmount(() => {
     resizeAbortController.abort();
 
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
-    cancelRenders();
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
 });
 
@@ -135,7 +133,6 @@ function getPageElement(index = 1) {
 /** This function renders the PDF so it can be displayed. */
 async function renderPDF() {
     scrollToTop(true, 0);
-    cancelRenders();
     if(renderAborted()) { return; }
 
     const { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } = await import("pdfjs-dist");
@@ -155,9 +152,6 @@ async function renderPDF() {
     pages.value = numPages;
     setInnerPagesArray(numPages);
     await nextTick();
-
-    /** @type {Array<HTMLAnchorElement>} These elements are inner Annotation elements that scroll to other parts of the PDF. */
-    const innerAnnotationElements = [];
     if(renderAborted()) { return; }
 
     /** This is a link service used by the annotation layers. */
@@ -165,7 +159,11 @@ async function renderPDF() {
     defaultLinkService.getDestinationHash = (string) => { return "#"; }
     defaultLinkService.goToDestination = (dest) => { return; }
 
-    for(let i = 1; i <= numPages; i++) {
+    /**
+     * This function renders a singular page.
+     * @param {Number} i The page number.
+     */
+    async function renderSingularPage(i = 1) {
         if(renderAborted()) { return; }
         const page = await pdfDoc.value.getPage(i);
         const defaultViewport = page.getViewport({ scale: 1 });
@@ -186,30 +184,28 @@ async function renderPDF() {
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
-        renderTasks.canvas = page.render({
+        const canvasRenderTask = page.render({
             canvasContext: context,
             transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
             viewport: viewport
         });
 
         if(renderAborted()) { return; }
-        try { await renderTasks.canvas.promise; } catch(e) {}
-        renderTasks.canvas = null;
+        try { await canvasRenderTask.promise; } catch(e) {}
 
         if(props.annontations) {
             const textLayerDiv = document.getElementById('pdf_text_layer_'+ i);
             textLayerDiv.innerHTML = '';
             const textContent = await page.getTextContent({ includeMarkedContent: true });
             
-            renderTasks.text = new TextLayer({
+            const textRenderTask = new TextLayer({
                 textContentSource: textContent,
                 container: textLayerDiv,
                 viewport: viewport
             });
             
             if(renderAborted()) { return; }
-            try { await renderTasks.text.render(); } catch(e) {}
-            renderTasks.text = null;
+            try { await textRenderTask.render(); } catch(e) {}
 
             textLayerDiv.style.setProperty("--min-font-size", 1);
             const annotationLayerDiv = document.getElementById('pdf_annotation_layer_' + i);
@@ -244,8 +240,12 @@ async function renderPDF() {
                     innerAnnotationElement.classList.add(CUSTOM_ANNOTATION_HTML_CLASS);
 
                     if(annotationDataObject.dest) {
-                        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(annotationDataObject.dest));
-                        innerAnnotationElements.push(innerAnnotationElement);
+                        const innerAnnotationDest = annotationDataObject.dest;
+                        const innerAnnotationPageNumber = ((await pdfDoc.value.getPageIndex(annotationDataObject.dest[0])) + 1);
+
+                        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(innerAnnotationDest));
+                        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE, String(innerAnnotationPageNumber));
+                        innerAnnotationElement.setAttribute("href", `?page=${innerAnnotationPageNumber}&y=${innerAnnotationDest[3]}`);
 
                         // This event listener watches out for click events to direct the user to the proper location when clicked.
                         innerAnnotationElement.addEventListener("click",
@@ -277,16 +277,9 @@ async function renderPDF() {
         if(numPages > i) { setSingleDocLoaded(i - 1); }
     }
 
-    // This adds an attribute to every inner annotation that tells it the page to navigate to.
-    for(let k = 0; k < innerAnnotationElements.length; k++) {
-        const innerAnnotationElement = innerAnnotationElements[k];
-        const innerAnnotationDest = JSON.parse(innerAnnotationElement.getAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE));
-        if(!innerAnnotationDest) { continue; }
-
-        const innerAnnotationPageNumber = ((await pdfDoc.value.getPageIndex(innerAnnotationDest[0])) + 1);
-        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE, String(innerAnnotationPageNumber));
-        innerAnnotationElement.setAttribute("href", `?page=${innerAnnotationPageNumber}&y=${innerAnnotationDest[3]}`);
-    }
+    const pageRenderPromises = [];
+    for(let i = 1; i <= numPages; i++) { pageRenderPromises.push(renderSingularPage(i)); }
+    await Promise.all(pageRenderPromises);
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
@@ -302,18 +295,7 @@ async function renderPDF() {
 }
 
 /** This function checks if the render abort signal has been sent or not. */
-function renderAborted() {
-    const aborted = renderAbortController.signal.aborted;
-    if(aborted) { cancelRenders(); }
-    return aborted;
-}
-
-/** This function cancels all PDF Rendering when called. */
-function cancelRenders() {
-    if(renderTasks.canvas != null) { renderTasks.canvas.cancel(); }
-    if(renderTasks.text != null) { renderTasks.text.cancel(); }
-    renderTasks = { canvas: null, text: null, annontation: null }
-}
+function renderAborted() { return renderAbortController.signal.aborted; }
 
 /**
  * This function resizes all necessary styles for the PDF Viewer when called.

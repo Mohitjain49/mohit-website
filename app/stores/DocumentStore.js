@@ -3,8 +3,6 @@ import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import { ofetch } from 'ofetch';
-import { zipSync } from 'fflate';
-
 import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import Bowser from "bowser";
 import prettyBytes from "pretty-bytes";
@@ -91,9 +89,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentShareStatus = ref(0);
     const documentCopyStatus = ref(0);
 
-    const imageDownloadStatus = ref(0);
-    const imageCopyStatus = ref(0);
-
     const documentUploadToGoogleDriveStatus = ref(0);
     const documentUploadToGoogleDriveCanceled = ref(false);
 
@@ -139,15 +134,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         const copyInt = documentCopyStatus.value;
         return ((copyInt == 0) ? "fa-copy" : DOCUMENT_ACTION_STATUS_ICONS[copyInt]);
     });
-
-    const imageDownloadIcon = computed(() => {
-        const imageDownloadInt = imageDownloadStatus.value;
-        return ((imageDownloadInt == 0) ? 'fa-image' : DOCUMENT_ACTION_STATUS_ICONS[imageDownloadInt]);
-    });
-    const imageCopyIcon = computed(() => {
-        const imageCopyInt = imageCopyStatus.value;
-        return ((imageCopyInt == 0) ? 'fa-images' : DOCUMENT_ACTION_STATUS_ICONS[imageCopyInt]);
-    });
     const uploadToGoogleDriveIcon = computed(() => {
         const uploadInt = documentUploadToGoogleDriveStatus.value;
         const uploadPending = uploadToGoogleDrivePending.value;
@@ -162,8 +148,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
     const copyPending = computed(() => { return (documentCopyStatus.value == DOCUMENT_ACTION_PENDING); });
 
-    const imageDownloadPending = computed(() => { return (imageDownloadStatus.value == DOCUMENT_ACTION_PENDING); });
-    const imageCopyPending = computed(() => { return (imageCopyStatus.value == DOCUMENT_ACTION_PENDING); });
     const uploadToGoogleDrivePending = computed(() => {
         return (documentUploadToGoogleDriveStatus.value == DOCUMENT_ACTION_PENDING || googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
     });
@@ -194,49 +178,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             documentDownloadStatus.value = 3;
         } finally {
             setTimeout(() => { documentDownloadStatus.value = 0; }, 3000);
-        }
-    }
-
-    /** This function downloads a document as an image for the visitor to see. */
-    async function downloadDocAsImage() {
-        if(!docImagesLoaded.value || imageDownloadStatus.value != 0) { return; }
-        imageDownloadStatus.value = 1;
-
-        try {
-            const documentFile = getCurrentPDFObject();
-            if(!documentFile) { throw new Error("Document Does Not Exist."); }
-
-            const link = document.createElement('a');
-            var imageZipObjectUrl = "";
-
-            if(docImageUrls.value.length == 1) {
-                link.href = docImageUrls.value[0];
-                link.download = (documentFile.name + ".png");
-            } else {
-                const imgZipParam = {}
-                for(let i = 0; i < docImageUrls.value.length; i++) {
-                    const tempImgResponse = await fetch(docImageUrls.value[i]);
-                    const tempImgArrayBuffer = await tempImgResponse.arrayBuffer();
-                    imgZipParam[("Page_" + String(i + 1) + ".png")] = new Uint8Array(tempImgArrayBuffer);
-                }
-
-                const imageZip = zipSync(imgZipParam);
-                const imageZipBlob = new Blob([imageZip], { type: "application/zip" });
-
-                imageZipObjectUrl = URL.createObjectURL(imageZipBlob);
-                link.href = imageZipObjectUrl;
-                link.download = (documentFile.name + "_IMAGES.zip");
-            }
-
-            link.click();
-            link.remove();
-
-            URL.revokeObjectURL(imageZipObjectUrl);
-            imageDownloadStatus.value = 2;
-        } catch(e) {
-            imageDownloadStatus.value = 3;
-        } finally {
-            setTimeout(() => { imageDownloadStatus.value = 0; }, 3000);
         }
     }
 
@@ -391,35 +332,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         } finally {
             setTimeout(() => { documentCopyStatus.value = 0; }, 3000);
         }
-    }
-
-    /**
-     * This function copies the document as an image into the visitor's OS Clipboard.
-     * @param {Number} index The index of the page that should be copied.
-     */
-    async function copyDocAsImage(index = 1) {
-        if(!docImagesLoaded.value || imageCopyStatus.value != 0) { return; }
-        if(index < 1 || index > docImageUrls.value.length) { return; }
-        imageCopyStatus.value = 1;
-
-        try {
-            const tempImgBlob = await (await fetch(docImageUrls.value[index - 1])).blob();
-            await navigator.clipboard.write([new ClipboardItem({ [tempImgBlob.type]: tempImgBlob })]);
-            imageCopyStatus.value = 2;
-        } catch(e) {
-            if(import.meta.dev) { console.error(e); }
-            imageCopyStatus.value = 3;
-        } finally {
-            setTimeout(() => { imageCopyStatus.value = 0; }, 3000);
-        }
-    }
-
-    /**
-     * This function copies the first page in the rendered PDF document as an image.
-     * @param {Boolean} force If true, bypass the condition on whether the Copy button is on the Document Website Menu.
-     */
-    async function copyFirstDocPageAsImage(force = false) {
-        if(showImageCopyButton.value || force) { await copyDocAsImage(1); }
     }
 
     /** This function returns the PDF Object the website is currently using. */
@@ -824,11 +736,11 @@ export const useDocumentStore = defineStore("document-store", () => {
     return { hostedDocuments, docImageUrls, docLoaded, docImagesSize, docImagesLoaded, docImageFetchFailed, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, copyDocumentSupported, showImageCopyButton, browserPdfViewerPresent, workerSrcAdded,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, imageDownloadTitle,
-        downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, imageDownloadIcon, imageCopyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
-        downloadPending, savePending, printPending, sharePending, copyPending, imageDownloadPending, imageCopyPending, uploadToGoogleDrivePending,
+        downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
+        downloadPending, savePending, printPending, sharePending, copyPending, uploadToGoogleDrivePending,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav, showPrintButton,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, downloadDocAsImage, copyDocAsImage, copyFirstDocPageAsImage, requestGoogleToUploadDoc,
+        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, requestGoogleToUploadDoc,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, getPdfAsImages
     }

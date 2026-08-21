@@ -79,18 +79,6 @@
                     <span> Copy Document </span>
                 </button>
             </div>
-            <div v-if="documentStore.docImagesLoaded" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDocAsImage()" :title="documentStore.imageDownloadTitle" pulse-loop>
-                    <font-awesome-icon :icon="documentStore.imageDownloadIcon" :spin-pulse="documentStore.imageDownloadPending" />
-                    <span> Download Document (PNG) </span>
-                </button>
-            </div>
-            <div v-if="documentStore.showImageCopyButton" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.copyFirstDocPageAsImage(false)" pulse-loop>
-                    <font-awesome-icon :icon="documentStore.imageCopyIcon" :spin-pulse="documentStore.imageCopyPending" />
-                    <span> Copy Document (PNG) </span>
-                </button>
-            </div>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
