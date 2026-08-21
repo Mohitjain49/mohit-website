@@ -277,6 +277,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                             resolve();
                         } else {
                             newChildImg.onload = () => { resolve(); }
+                            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
                         }
                     });
                 }

@@ -404,15 +404,16 @@ async function onPdfContentMenu(event, pageNum = 1) {
     const selection = window.getSelection();
     const selectedText = (selection ? selection.toString().trim() : "");
 
-    // If the user does not right click on selected text or a link, this function opens the website document menu.
-    if(!element.closest("a") && (!selection || selectedText.length <= 0 || !selection.containsNode(element, true))) {
-        event.preventDefault();
-        if(documentStore.contextMenuPageNumber > 0 && pageNum != 0) {
-            documentStore.setContextMenuPageNumber(0);
-            await sleep(100);
-        }
+    // If the user does not right click on selected text or a link or holds the control key down, this function does nothing.
+    if(event.ctrlKey || element.closest("a")) { return; }
+    if(selection && selectedText.length > 0 && selection.containsNode(element, true)) { return; }
 
-        // Sets the new page number for the context menu.
+    // This opens the custom hosted document context menu.
+    event.preventDefault();
+    if(documentStore.contextMenuPageNumber > 0 && pageNum != 0) {
+        documentStore.setContextMenuPageNumber(0);
+        sleep(100).then(() => { documentStore.setContextMenuPageNumber(pageNum); });
+    } else {
         documentStore.setContextMenuPageNumber(pageNum);
     }
 }
