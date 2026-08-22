@@ -61,8 +61,8 @@
                     <span> Save Document </span>
                 </button>
             </div>
-            <div v-if="documentStore.showPrintButton" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc()" pulse-loop>
+            <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" pulse-loop>
                     <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
                     <span> Print Document </span>
                 </button>

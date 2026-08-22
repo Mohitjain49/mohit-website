@@ -45,9 +45,7 @@
 </template>
 
 <script setup>
-import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";
-
 const CUSTOM_ANNOTATION_HTML_CLASS = "mohit-pdf-linkAnnotation";
 const CUSTOM_PDFJS_DEST_ATTRIBUTE = "mohit-data-pdfjs-dest";
 const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
@@ -135,14 +133,10 @@ async function renderPDF() {
     scrollToTop(true, 0);
     if(renderAborted()) { return; }
 
-    const { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } = await import("pdfjs-dist");
+    const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
     const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
+    await documentStore.checkPdfjsWorker();
     if(renderAborted()) { return; }
-
-    if(!documentStore.workerSrcAdded) {
-        GlobalWorkerOptions.workerSrc = workerSrcUrl;
-        documentStore.workerSrcAdded = true;
-    }
 
     pdfDocLoadingTask = getDocument({ url: props.url });
     pdfDoc.value = await pdfDocLoadingTask.promise;
@@ -277,9 +271,20 @@ async function renderPDF() {
         if(numPages > i) { setSingleDocLoaded(i - 1); }
     }
 
+    /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
     const pageRenderPromises = [];
-    for(let i = 1; i <= numPages; i++) { pageRenderPromises.push(renderSingularPage(i)); }
-    await Promise.all(pageRenderPromises);
+    const numPromiseArrays = Math.ceil(numPages / 10);
+    const numPromisesPerArray = (numPages / numPromiseArrays);
+
+    // This divides the tasks into separate arrays to ensure the website does not crash or something.
+    for(let i = 0; i < numPromiseArrays; i++) {
+        const tempPromiseArray = [];
+        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderSingularPage(j + (i * numPromisesPerArray))); }
+        pageRenderPromises.push(tempPromiseArray);
+    }
+
+    // This runs all the arrays of promises.
+    for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
