@@ -60,28 +60,15 @@ const scriptsStore = useScriptsStore();
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 
-/** @type {AbortController} This abort controller manages the window event listeners for this webpage. */
-var scriptAbortController = null;
-
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
 const scriptOptions = useTemplateRef('script-options');
 usePulseLoopAnimation(scriptOptions);
 
-// This mounts the script page.
-const isMounted = onMountedAdvanced(() => {
-    scriptsStore.mountScriptPage();
-    scriptAbortController = new AbortController();
-    window.addEventListener("keydown", (event) => { scriptsStore.onScriptPageKeydown(event) }, { signal: scriptAbortController.signal });
-});
-
-// This unmounts the script page.
-onBeforeUnmount(() => {
-    if(scriptAbortController != null) { scriptAbortController.abort(); }
-    scriptsStore.unmountScriptPage();
-});
-
+const isMounted = onMountedAdvanced(() => { scriptsStore.mountScriptPage(); });
+onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
+
 const script = scriptsStore.scripts[props.index];
 const { html } = await renderCodeScript(script.code, script.suffix, script.path);
 

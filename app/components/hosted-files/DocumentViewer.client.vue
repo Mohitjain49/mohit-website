@@ -57,6 +57,7 @@ var renderAbortController = new AbortController();
 var resizeAbortController = new AbortController();
 
 var pdfDocLoadingTask = null;
+var resizeTimeout = null;
 var bestPageRatio = 0;
 
 const webData = useWebsiteDataStore();
@@ -76,6 +77,7 @@ const props = defineProps({
 
 /** @type {import('vue').Ref<Array<HTMLElement>>} The array of references to the Page elemnets. */
 const pageRefs = ref([]);
+const currentDocumentSize = ref(0);
 
 // This observer tracks which page the user is currently viewing.
 useIntersectionObserver(pageRefs, (entry) => {
@@ -109,7 +111,7 @@ onMountedAdvanced(async() => {
     await renderPDF();
 
     const signal = resizeAbortController.signal;
-    window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal });
+    window.addEventListener("animation-resize", () => { resizePdfViewer(null); }, { signal });
     window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
     window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
 });
@@ -154,6 +156,9 @@ async function renderPDF() {
     defaultLinkService.getDestinationHash = (string) => { return "#"; }
     defaultLinkService.goToDestination = (dest) => { return; }
 
+    // This sets the initial document size for each PDF Page.
+    currentDocumentSize.value = documentStore.customPdfWidth;
+
     /**
      * This function renders a singular page.
      * @param {Number} i The page number.
@@ -168,11 +173,15 @@ async function renderPDF() {
         pageElement.setAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE, String(defaultViewport.height));
 
         // Sets a properly scaled viewport so it works on every necessary size.
-        const viewport = page.getViewport({ scale: (documentStore.customPdfMaxWidth / defaultViewport.width) });
+        const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
         resizePdfViewer(i);
 
+        /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
         var canvas = document.getElementById("pdf_canvas_" + i);
         var context = canvas.getContext("2d");
+
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
 
         canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
         canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
@@ -294,10 +303,70 @@ async function renderPDF() {
     if(renderAborted()) { return; }
 
     try {
+        rerenderCanvases();
         await documentStore.getPdfAsImages();
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
+}
+
+/** This function rerenders the canvases for the PDF. */
+async function rerenderCanvases() {
+    if(currentDocumentSize.value == documentStore.customPdfWidth) { return; }
+    currentDocumentSize.value = documentStore.customPdfWidth;
+    const numPages = pages.value;
+
+    /** This function renders a singular canvas  */
+    async function renderSingularCanvas(i = 1) {
+        if(renderAborted()) { return; }
+        const page = await pdfDoc.value.getPage(i);
+        const defaultViewport = page.getViewport({ scale: 1 });
+
+        const pageElement = getPageElement(i);
+        pageElement.setAttribute(CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE, String(defaultViewport.width));
+        pageElement.setAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE, String(defaultViewport.height));
+
+        // Sets a properly scaled viewport so it works on every necessary size.
+        const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
+        resizePdfViewer(i);
+
+        /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
+        var canvas = document.getElementById("pdf_canvas_" + i);
+        var context = canvas.getContext("2d");
+
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
+
+        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.style.width = 'var(--mohit-custom-pdf-width)';
+        canvas.style.height =  'var(--mohit-custom-pdf-height)';
+
+        const canvasRenderTask = page.render({
+            canvasContext: context,
+            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+            viewport: viewport
+        });
+
+        if(renderAborted()) { return; }
+        try { await canvasRenderTask.promise; } catch(e) {}
+    }
+
+    /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
+    const pageRenderPromises = [];
+    const numPromiseArrays = Math.ceil(numPages / 10);
+    const numPromisesPerArray = (numPages / numPromiseArrays);
+
+    // This divides the tasks into separate arrays to ensure the website does not crash or something.
+    for(let i = 0; i < numPromiseArrays; i++) {
+        const tempPromiseArray = [];
+        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderSingularCanvas(j + (i * numPromisesPerArray))); }
+        pageRenderPromises.push(tempPromiseArray);
+    }
+
+    // This runs all the arrays of promises.
+    for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
+    resizeTimeout = null;
 }
 
 /** This function checks if the render abort signal has been sent or not. */
@@ -309,7 +378,8 @@ function renderAborted() { return renderAbortController.signal.aborted; }
  */
 function resizePdfViewer(index = null) {
     if(!index || index < 1 || index > pages.value) {
-        for(let i = 1; i <= pages.value; i++) { setPdfPageScaleFactor(i); }
+        if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+        resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
     } else {
         setPdfPageScaleFactor(index);
     }

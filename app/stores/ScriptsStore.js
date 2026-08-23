@@ -26,6 +26,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         useHostedScript("/use-docker-script", use_docker_code, "use-docker", ".mjs", PERSONAL_USE_DOCKER_SCRIPT_LINK),
     ];
 
+    /** @type {AbortController} This abort controller manages the event listeners for a script page. */
+    var scriptAbortController = null;
+
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
@@ -177,6 +180,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         await nextTick();
         await sleep(10);
 
+        if(scriptAbortController != null) { scriptAbortController.abort(); }
+        scriptAbortController = new AbortController();
+        window.addEventListener("keydown", (event) => { onScriptPageKeydown(event); }, { signal: scriptAbortController.signal });
+
         const hashStr = router.currentRoute.value.hash.substring(1);
         manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
     }
@@ -184,6 +191,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This function unmounts a page that hosts a script. */
     function unmountScriptPage() {
         fullScreenStore.exitFullScreen();
+        if(scriptAbortController != null) { scriptAbortController.abort(); }
+        scriptAbortController = null;
     }
 
     /**
@@ -206,7 +215,14 @@ export const useScriptsStore = defineStore("scripts-store", () => {
             if(!event.ctrlKey || event.repeat) { return; }
             const keyLetter = event.key.toLowerCase();
 
-            if(keyLetter === "s") {
+            if(keyLetter === "c") {
+                const selection = window.getSelection();
+                if(selection && selection.toString().trim().length > 0) { return; }
+
+                event.preventDefault();
+                webData.setMenuOpen(SCRIPTS_MENU, false);
+                copyScript();
+            } else if(keyLetter === "s") {
                 event.preventDefault();
                 webData.setMenuOpen(SCRIPTS_MENU, false);
 
