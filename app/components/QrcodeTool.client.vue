@@ -419,7 +419,7 @@ function focusOnQrcode(event = undefined) {
 function onSharePopupKeydown(event = undefined) {
     try {
         if(!event || document.activeElement !== document.getElementById("mohit-qrcode")) { return; }
-        if(!event.ctrlKey || !qrCodeBlob.value) { return; }
+        if(!event.ctrlKey || event.repeat || !qrCodeBlob.value) { return; }
         const keyLetter = event.key.toLowerCase();
 
         if(keyLetter === "c") {

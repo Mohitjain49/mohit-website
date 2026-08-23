@@ -197,6 +197,37 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     /**
+     * This function should run every time the user presses a key on their keyboard while on a Script Page.
+     * @param {KeyboardEvent} event The Keyboard Event.
+     */
+    function onScriptPageKeydown(event) {
+        try {
+            if(!event || webData.showSharePopup) { return; }
+            if(!event.ctrlKey || event.repeat) { return; }
+            const keyLetter = event.key.toLowerCase();
+
+            if(keyLetter === "s") {
+                event.preventDefault();
+                webData.setMenuOpen(SCRIPTS_MENU, false);
+
+                if(webData.saveAsSupported && event.shiftKey) {
+                    saveScript();
+                } else {
+                    downloadScript();
+                }
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+        }
+    }
+
+    /** This function returns the script the website is currently using. */
+    function getCurrentScript() {
+        if(!onScriptRoute.value) { return null; }
+        return scripts[currentScriptRoute.value];
+    }
+
+    /**
      * -------------------------------------------------------------------------------
      * These functions are used to set and record the status of the line options menu.
      * -------------------------------------------------------------------------------
@@ -288,12 +319,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * --------------------------------------------------------------------------------
      */
 
-    /** This function returns the script the website is currently using. */
-    function getCurrentScript() {
-        if(!onScriptRoute.value) { return null; }
-        return scripts[currentScriptRoute.value];
-    }
-
     /** This function sets the full screen for the element containing the document or script. */
     async function toggleScriptFullScreen() {
         if(fsStateChanging.value) { return; }
@@ -354,8 +379,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
         currentScriptLink, downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
-        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles,
-        setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
+        downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
+        setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
     }
 });

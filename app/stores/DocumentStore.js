@@ -86,6 +86,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentDownloadStatus = ref(0);
     const documentSaveStatus = ref(0);
     const documentPrintStatus = ref(0);
+    const documentCustomPrintStatus = ref(0);
     const documentShareStatus = ref(0);
     const documentCopyStatus = ref(0);
 
@@ -122,6 +123,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         const printInt = documentPrintStatus.value;
         return ((printInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[printInt]);
     });
+    const customPrintIcon = computed(() => {
+        const customPrintInt = documentCustomPrintStatus.value;
+        return ((customPrintInt == 0) ? "fa-film" : DOCUMENT_ACTION_STATUS_ICONS[customPrintInt]);
+    });
     const shareIcon = computed(() => {
         const shareInt = documentShareStatus.value;
         return ((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]);
@@ -141,6 +146,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const downloadPending = computed(() => { return (documentDownloadStatus.value == DOCUMENT_ACTION_PENDING); });
     const savePending = computed(() => { return (documentSaveStatus.value == DOCUMENT_ACTION_PENDING); });
     const printPending = computed(() => { return (documentPrintStatus.value == DOCUMENT_ACTION_PENDING); });
+    const customPrintPending = computed(() => { return (documentCustomPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
     const copyPending = computed(() => { return (documentCopyStatus.value == DOCUMENT_ACTION_PENDING); });
 
@@ -209,8 +215,17 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Boolean} customPrint If true, this function forces the website to render the PDF into images instead of using the PDF Viewer.
      */
     async function printDoc(customPrint = false) {
-        if(!iframeSupported.value || documentPrintStatus.value != 0) { return; }
-        documentPrintStatus.value = 1;
+        if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
+        const customPrintRequired = !browserPdfViewerPresent.value;
+
+        if(customPrintRequired) {
+            documentPrintStatus.value = 1;
+            documentCustomPrintStatus.value = 1;
+        } else if(customPrint) {
+            documentCustomPrintStatus.value = 1;
+        } else {
+            documentPrintStatus.value = 1;
+        }
 
         const PRINT_IFRAME_ID = "mohit-doc-customPrint";
         const PRINT_IFRAME_IMG_CLASS = "mohit-doc-customPrint-img";
@@ -286,12 +301,32 @@ export const useDocumentStore = defineStore("document-store", () => {
             const printIframeWin = printIframe.contentWindow;
             printIframeWin.focus();
             printIframeWin.print();
-            documentPrintStatus.value = 2;
+            
+            if(customPrintRequired) {
+                documentPrintStatus.value = 2;
+                documentCustomPrintStatus.value = 2;
+            } else if(customPrint) {
+                documentCustomPrintStatus.value = 2;
+            } else {
+                documentPrintStatus.value = 2;
+            }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
-            documentPrintStatus.value = ((e.message === "Timeout Error") ? 4 : 3);
+            const errorNum = ((e.message === "Timeout Error") ? 4 : 3);
+
+            if(customPrintRequired) {
+                documentPrintStatus.value = errorNum;
+                documentCustomPrintStatus.value = errorNum;
+            } else if(customPrint) {
+                documentCustomPrintStatus.value = errorNum;
+            } else {
+                documentPrintStatus.value = errorNum;
+            }
         } finally {
-            setTimeout(() => { documentPrintStatus.value = 0; }, 3000);
+            setTimeout(() => {
+                documentPrintStatus.value = 0;
+                documentCustomPrintStatus.value = 0;
+            }, 3000);
         }
     }
 
@@ -329,6 +364,35 @@ export const useDocumentStore = defineStore("document-store", () => {
             documentCopyStatus.value = 3;
         } finally {
             setTimeout(() => { documentCopyStatus.value = 0; }, 3000);
+        }
+    }
+
+    /**
+     * This function should run every time the user presses a key on their keyboard while on a Hosted Document Page.
+     * @param {KeyboardEvent} event The Keyboard Event.
+     */
+    function onHostedDocumentPageKeydown(event = undefined) {
+        try {
+            if(!event || webData.showSharePopup || !currentDocumentBlobCreated.value) { return; }
+            if(!event.ctrlKey || event.repeat) { return; }
+            const keyLetter = event.key.toLowerCase();
+
+            if(keyLetter === "p") {
+                event.preventDefault();
+                webData.setMenuOpen(DOCUMENT_MENU, false);
+                printDoc(event.altKey);
+            } else if(keyLetter === "s") {
+                event.preventDefault();
+                webData.setMenuOpen(DOCUMENT_MENU, false);
+
+                if(webData.saveAsSupported && event.shiftKey) {
+                    saveDoc();
+                } else {
+                    downloadDoc();
+                }
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
         }
     }
 
@@ -488,12 +552,9 @@ export const useDocumentStore = defineStore("document-store", () => {
             await hostedDocuments[currentDocumentRoute.value].initBlob();
         }
 
-        if(onMarkdownRoute.value) {
-            await getRawPdfAsImages();
-        } else {
-            const scaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
-            mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
-        }
+        if(onMarkdownRoute.value) { return; }
+        const scaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
+        mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
     }
 
     /** This function unmounts a page that hosts a document. */
@@ -539,67 +600,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             const documentFile = getCurrentPDFObject();
             if(!documentFile) { throw new Error("Document Does Not Exist."); }
             docImageUrls.value = await renderPdfAsPng(documentFile.url, 200);
-        } catch(e) {
-            if(import.meta.dev) { console.error(e); }
-            docImageFetchFailed.value = true;
-        }
-    }
-
-    /** This function returns rendered PDF Pages as an array of images (PNGs) for anyting to use. */
-    async function getRawPdfAsImages() {
-        if(!import.meta.client || !currentDocumentBlobCreated.value) { return; }
-
-        try {
-            /** @type {Array<String>} The array of images to use. */
-            const imgArray = [];
-            var imgBlobSize = 0;
-
-            const { getDocument } = await import("pdfjs-dist");
-            await checkPdfjsWorker();
-
-            const documentFile = getCurrentPDFObject();
-            if(!documentFile || !documentFile.url) { throw new Error("Document Does Not Exist."); }
-
-            const tempPdfDocLoadingTask = getDocument({ url: documentFile.url });
-            const tempPdfDoc = await tempPdfDocLoadingTask.promise;
-            const numPages = tempPdfDoc.numPages;
-
-            for(let i = 1; i <= numPages; i++) {
-                const tempPdfPage = await tempPdfDoc.getPage(i);
-                const tempDefaultViewport = tempPdfPage.getViewport({ scale: 1 });
-                const tempViewport = tempPdfPage.getViewport({ scale: (DEFAULT_PDF_MAX_WIDTH / tempDefaultViewport.width) });
-
-                const canvasElement = document.createElement("canvas");
-                const canvasContext = canvasElement.getContext("2d");
-
-                canvasElement.height = Math.floor(tempViewport.height * DEFAULT_PDF_OUTPUT_SCALE);
-                canvasElement.width = Math.floor(tempViewport.width * DEFAULT_PDF_OUTPUT_SCALE);
-
-                const canvasRenderTask = tempPdfPage.render({
-                    viewport: tempViewport,
-                    transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
-                    canvasContext
-                });
-
-                // Renders the PDF Image in a canvas first.
-                await canvasRenderTask.promise;
-
-                /** @type {Blob} The image blob gotten from paring the canvas. */
-                const imgBlob = await new Promise((resolve, reject) => {
-                    if(!canvasElement) { resolve(null); }
-                    canvasElement.toBlob((result) => { resolve(result); }, "image/png", 1);
-                });
-
-                if(!imgBlob) {
-                    throw new Error("Image Fetch Failed For Page " + i + ".");
-                } else {
-                    imgArray.push(URL.createObjectURL(imgBlob));
-                    imgBlobSize += imgBlob.size;
-                }
-            }
-
-            // Holds the images in a reference array.
-            docImageUrls.value = imgArray;
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
             docImageFetchFailed.value = true;
@@ -714,11 +714,11 @@ export const useDocumentStore = defineStore("document-store", () => {
     return { hostedDocuments, docImageUrls, docLoaded, docImagesLoaded, docImageFetchFailed, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, copyDocumentSupported, browserPdfViewerPresent, workerSrcAdded, iframeSupported,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle,
-        downloadIcon, saveDocIcon, printIcon, shareIcon, copyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
-        downloadPending, savePending, printPending, sharePending, copyPending, uploadToGoogleDrivePending,
+        downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, copyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
+        downloadPending, savePending, printPending, customPrintPending, sharePending, copyPending, uploadToGoogleDrivePending,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, requestGoogleToUploadDoc,
+        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, checkPdfjsWorker, getPdfAsImages
     }

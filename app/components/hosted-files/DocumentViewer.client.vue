@@ -111,6 +111,7 @@ onMountedAdvanced(async() => {
     const signal = resizeAbortController.signal;
     window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal });
     window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
+    window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
 });
 onBeforeUnmount(() => {
     renderAbortController.abort();

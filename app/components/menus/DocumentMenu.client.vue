@@ -73,6 +73,12 @@
                     <span> Share Document </span>
                 </button>
             </div>
+            <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" pulse-loop>
+                    <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
+                    <span> Print Document (Screenshots) </span>
+                </button>
+            </div>
             <div v-if="documentStore.copyDocumentSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.copyDoc()" pulse-loop>
                     <font-awesome-icon :icon="documentStore.copyIcon" :spin-pulse="documentStore.copyPending" />

@@ -13,6 +13,9 @@
         <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
+        <button class="doc-save-opt" v-if="documentStore.iframeSupported" @click="documentStore.printDoc(true)" title="Print Document (Screenshots)" pulse-loop>
+            <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
+        </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
         <button class="flame" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" pulse-loop>
