@@ -60,6 +60,7 @@ const reactiveMeta = useReactiveMeta("Mohit Jain | Copyright Notice", "copyright
     "A legal disclaimer for any vistors on my website.", "rgb(248, 206, 171)"
 );
 
+useHead(reactiveMeta.metaObjectRef);
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerLink = computed(() => { return (routePath.value + '#footer'); });
 
@@ -68,8 +69,6 @@ const COPYRIGHT_TEXT = useState("copyright-text", () => { return ($websiteBuild.
 const RELEASE_DATE = useState("release-date", () => { return ("Released On: " + $websiteBuild.releaseDate); });
 const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuild.releaseTime + ")"); });
 const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
-
-useHead(reactiveMeta.metaObjectRef);
 
 // Updates the Website Date Information when the website is mounted.
 onMountedAdvanced(() => {

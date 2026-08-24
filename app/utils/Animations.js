@@ -39,8 +39,22 @@ export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
     const navCard = document.getElementById(cardId);
     if(!navCard || (typeof navCard.classList === "undefined") || !(navCard.classList instanceof DOMTokenList)) { return; }
 
+    removeAnimationClasses(navCard);
     navCard.classList.add("animate__animated", "animate__jackInTheBox", "animate__slowLess");
     setTimeout(() => { navCard.classList.remove("animate__animated", "animate__jackInTheBox", "animate__slowLess") }, 1500);
+}
+
+/**
+ * This function sets the initial transition for a Bottom Corner Widget.
+ * @param {HTMLElement} target The HTML element that was observed.
+ */
+export function setBottomCornerWidgetAnimation(widgetId = "") {
+    const target = document.getElementById(widgetId);
+    if(!target || (typeof target.classList === "undefined") || !(target.classList instanceof DOMTokenList)) { return; }
+
+    removeAnimationClasses(target);
+    target.classList.add("animate__animated", "animate__fadeInUp");
+    setTimeout(() => { removeAnimationClasses(document.getElementById(widgetId)); }, 1100);
 }
 
 /**
@@ -54,6 +68,7 @@ export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
     const animationClassList = ["animate__animated", "animate__fadeInLeft", "animate__fadeInRight", "animate__zoomIn"];
     const animationClass = animationClassList[(getMohitInnerWidth() > 450) ? (fromLeft ? 1 : 2) : 3];
 
+    removeAnimationClasses(target);
     target.classList.add("animate__animated", animationClass);
     homeTabTargets.unshift(target);
 
@@ -71,6 +86,7 @@ export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
  */
 export function addNoteCardAnimation(target, isVisible = true) {
     if(!isVisible || (findNoteCardTarget(target) != -1)) { return; }
+    removeAnimationClasses(target);
     target.classList.add("animate__animated", "animate__zoomIn");
     noteCardTargets.unshift(target);
 
@@ -88,6 +104,7 @@ export function addNoteCardAnimation(target, isVisible = true) {
  */
 export function setFlipInXAnimation(target, isVisible) {
     if(!isVisible || (findFlipInXTarget(target) != -1)) { return; }
+    removeAnimationClasses(target);
     target.classList.add("animate__animated", "animate__flipInX");
     flipInXTargets.unshift(target)
 
