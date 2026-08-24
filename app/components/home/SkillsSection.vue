@@ -4,10 +4,7 @@
         <div class="skills-main-header">
             <RouterLink to="/skills/" title="See My Skills" pulse-loop> My Skills </RouterLink>
         </div>
-        <div class="skills-main-desc">
-            Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, and projects 
-            by utilizing multiple programming languages, frontend frameworks, web services, and modules.
-        </div>
+        <div class="skills-main-desc"> {{ SKILLS_PAGE_DESC }} </div>
     </div>
 
     <div v-for="entity in NEW_SKILL_ENTITIES" class="skills-entity-container" ref="cardRefs">

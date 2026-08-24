@@ -134,9 +134,7 @@
     </div>
 
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-        <RouterLink to="/" class="linkBtn-blue" @pointerenter="setPulseLoopAnimation" @mouseleave="setPulseLoopAnimation">
-            Back To Home
-        </RouterLink>
+        <RouterLink to="/" class="linkBtn-blue" ref="home-button" pulse-loop> Back To Home </RouterLink>
     </div>
     <WebFooter />
 </main>
@@ -148,6 +146,12 @@ import aws_icon from "~/assets/aws/AWS_Icon.png";
 
 const titleRefs = ref([]);
 const cardRefs = ref([]);
+
+const homeButtonRef = useTemplateRef('home-button');
+const homeButtonRefElement = computed(() => { return (homeButtonRef.value ? unrefElement(homeButtonRef.value) : null); });
+
+usePulseLoopAnimation(homeButtonRefElement);
+useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"));
 
 useIntersectionObserver(titleRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
@@ -161,13 +165,6 @@ useIntersectionObserver(cardRefs, (entry) => {
         addNoteCardAnimation(observed.target, observed.isIntersecting);
     }
 });
-
-useHead(getMeta("Mohit Jain | My Skills", "skills/",
-    "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
-    "web applications, and projects by utilizing multiple programming languages, " +
-    "frontend frameworks, web services, and modules.",
-    "#0047AB"
-));
 </script>
 
 <style scoped lang="scss">

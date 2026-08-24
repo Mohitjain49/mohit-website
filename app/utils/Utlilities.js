@@ -16,10 +16,10 @@ export function useMohitWindowSize() {
 export function usePulseLoopAnimation(container = null) {
     const styleStore = useStyleStore();
 
-    /** @type {MutationObserver} */
+    /** @type {MutationObserver} This mutation observer watches elements' attributes. */
     var observer = null;
 
-    /** @type {AbortController} */
+    /** @type {AbortController} This abort controller deletes event listeners when a change is necessary. */
     var controller = null;
     var interval = null;
 
@@ -64,7 +64,10 @@ export function usePulseLoopAnimation(container = null) {
         await enable();
     }
 
-    /** This is a practical copy of {@link setPulseLoopAnimation}. */
+    /**
+     * This function sets a pulse animation for any element for an infinite amount of time.
+     * @param {PointerEvent} event The event where the user hovers over or leaves the button.
+     */
     function animate(event) {
         /** @type {HTMLElement} This is the element that classes are being added and removed from. */
         const element = event.target;
@@ -91,7 +94,8 @@ export function usePulseLoopAnimation(container = null) {
         if(!container.value) { return; }
 
         const signal = controller.signal;
-        const elements = container.value.querySelectorAll('[pulse-loop]');
+        const querySelectorExists = (typeof container.value.querySelectorAll === "function");
+        const elements = (querySelectorExists ? Array.from(container.value.querySelectorAll('[pulse-loop]')) : []);
         numElements.value = elements.length;
 
         // This adds event listeners to the element this utility is applied to if it have the "pulse-loop" attribute.
@@ -99,14 +103,14 @@ export function usePulseLoopAnimation(container = null) {
             numElements.value++;
             animatedElements.value.push(container.value);
             container.value.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
-            container.value.addEventListener("mouseleave", (event) => { animate(event); }, { signal });
+            container.value.addEventListener("pointerleave", (event) => { animate(event); }, { signal });
         }
 
         // This adds event listeners that is a descendant of the element this utility is applied to if they have the "pulse-loop" attribute.
         elements.forEach((element) => {
             animatedElements.value.push(element);
             element.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
-            element.addEventListener("mouseleave", (event) => { animate(event); }, { signal });
+            element.addEventListener("pointerleave", (event) => { animate(event); }, { signal });
         });
 
         // This sets an interval that iterates through the pulse loop elements twice a second to see if classes need to be removed.
