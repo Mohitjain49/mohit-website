@@ -1,5 +1,5 @@
 <template>
-<button id="compass-widget" ref="compass-widget" :class="htmlClass" @click="openCompass()" title="Navigate This Page" pulse-loop>
+<button id="compass-widget" ref="compass-widget" :class="htmlClass" @click="openCompass()" title="Navigate This Page" v-pulse-loop>
     <font-awesome-icon icon="fa-compass" />
 </button>
 </template>
@@ -7,8 +7,6 @@
 <script setup>
 const props = defineProps({ htmlClass: { type: String, default: "main" } });
 const webData = useWebsiteDataStore();
-const compassWidgetRef = useTemplateRef('compass-widget');
-usePulseLoopAnimation(compassWidgetRef);
 
 /** This function opens the compass for this page. */
 function openCompass() {

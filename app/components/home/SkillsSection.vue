@@ -2,7 +2,7 @@
 <div id="skills" class="skills-section">
     <div class="skills-main-textContainer" ref="skillsText">
         <div class="skills-main-header">
-            <RouterLink to="/skills/" title="See My Skills" pulse-loop> My Skills </RouterLink>
+            <RouterLink to="/skills/" title="See My Skills" v-pulse-loop> My Skills </RouterLink>
         </div>
         <div class="skills-main-desc"> {{ SKILLS_PAGE_DESC }} </div>
     </div>

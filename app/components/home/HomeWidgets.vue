@@ -1,6 +1,6 @@
 <template>
 <CompassWidget />
-<a :href="KSU_CCSE_LINK" target="mohit-ksu" id="ksu-widget" :title="KSU_WIDGET_TITLE" pulse-loop>
+<a :href="KSU_CCSE_LINK" target="mohit-ksu" id="ksu-widget" :title="KSU_WIDGET_TITLE" v-pulse-loop>
     <img :src="ksu_logo" draggable="false" />
 </a>
 </template>

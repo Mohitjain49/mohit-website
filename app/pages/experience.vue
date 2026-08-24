@@ -9,7 +9,7 @@
             <SubloNavCard />
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-            <RouterLink to="/" pulse-loop> Back To Home </RouterLink>
+            <RouterLink to="/" v-pulse-loop> Back To Home </RouterLink>
         </div>
     </div>
     <WebFooter />
@@ -17,8 +17,6 @@
 </template>
 
 <script setup>
-const experienceRef = useTemplateRef('mohit-exp-page');
-usePulseLoopAnimation(experienceRef);
 useHead(getMeta("Mohit Jain | My Experience", "experience/",
     "On this page, I go into depth about my work experience.",
     "rgb(248, 206, 171)"

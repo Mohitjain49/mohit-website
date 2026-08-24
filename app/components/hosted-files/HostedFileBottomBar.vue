@@ -1,13 +1,13 @@
 <template>
 <div ref="hosted-file-bottom-options" :class="['mohit-hostedFile-bottom', hostedFileClass]">
     <div class="mohit-document-topBar-sideSection">
-        <button @click="setFS()" :title="minimizeTitle" :style="getColorStyles('var(--lightning-yellow)')" pulse-loop>
+        <button @click="setFS()" :title="minimizeTitle" :style="getColorStyles('var(--lightning-yellow)')" v-pulse-loop>
             <font-awesome-icon :icon="fullScreenStore.faIcon" />
         </button>
     </div>
 
     <div class="mohit-document-topBar-sideSection">
-        <button v-show="(webData.wakeLock.isActive || webData.wakeLockChangeFresh)" pulse-loop
+        <button v-show="(webData.wakeLock.isActive || webData.wakeLockChangeFresh)" v-pulse-loop
             @click="(event) => { onWakeLockButtonClick(event); }"
             :style="getColorStyles('var(--vibrant-flame)')"
             :title="webData.wakeLockTitle">
@@ -16,10 +16,10 @@
                 :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
             />
         </button>
-        <button @click="openWebsiteMenu()" :title="fileOptionsTitle" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
+        <button @click="openWebsiteMenu()" :title="fileOptionsTitle" :style="getColorStyles('var(--website-light-text)')" v-pulse-loop>
             <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
         </button>
-        <button v-if="!wholeFileInView" @click="scrollToTop(false, 0)" title="Scroll To The Top" pulse-loop>
+        <button v-if="!wholeFileInView" @click="scrollToTop(false, 0)" title="Scroll To The Top" v-pulse-loop>
             <font-awesome-icon icon="fa-turn-up" />
         </button>
     </div>
@@ -39,7 +39,6 @@ const wholeFileInView = useState("whole-hosted-file-in-view", () => { return fal
 
 const bottomOptionsBar = useTemplateRef('hosted-file-bottom-options');
 const barVisible = useElementVisibility(bottomOptionsBar);
-usePulseLoopAnimation(bottomOptionsBar);
 
 // These two functions update the state on whether the hosted file bottom bar is visible or not.
 onMountedAdvanced(() => { hfBottomBarVisible.value = barVisible.value; });

@@ -1,54 +1,53 @@
 <template>
-<div class="mohit-note-container" ref="note-container-ref">
-    <div v-if="(link === '#')" class="mohit-note no-link" pulse-loop>
-        <div class="mohit-note-image">
-            <img v-if="!faIcon" :src="id" :width="size" draggable="false" />
-            <font-awesome-icon v-else :icon="id" :style="getFAIconStyle()" />
-        </div>
-        <div class="mohit-note-body" :style="{ color: color }">
-            <div class="mohit-note-header"> {{ name }} </div>
-            <div class="mohit-note-desc"> {{ desc }} </div>
-        </div>
+<div v-if="(link === '#')" class="mohit-note no-link" v-pulse-loop>
+    <div class="mohit-note-image">
+        <img v-if="!faIcon" :src="id" :width="size" draggable="false" />
+        <font-awesome-icon v-else :icon="id" :style="getFAIconStyle()" />
     </div>
-
-    <a v-else-if="isExternalLink" :href="link" target="_blank" class="mohit-note" pulse-loop>
-        <div class="mohit-note-image">
-            <img v-if="!faIcon" :src="id" :width="size" draggable="false" />
-            <font-awesome-icon v-else :icon="id" :style="getFAIconStyle()" />
-        </div>
-        <div class="mohit-note-body" :style="{ color: color }">
-            <div class="mohit-note-header"> {{ name }} </div>
-            <div class="mohit-note-desc"> {{ desc }} </div>
-        </div>
-    </a>
-
-    <button v-else-if="(link === 'mohit-qrcode-button')" class="mohit-note" pulse-loop
-        title="Create a QR Code for this page."
-        @click="webData.openQRCodePopup()">
-
-        <div class="mohit-note-image">
-            <font-awesome-icon :icon="id" :style="getFAIconStyle()" />
-        </div>
-        <div class="mohit-note-body" :style="{ color: color }">
-            <div class="mohit-note-header"> {{ name }} </div>
-            <div class="mohit-note-desc"> {{ desc }} </div>
-        </div>
-    </button>
-
-    <RouterLink v-else :to="link" class="mohit-note" pulse-loop>
-        <div class="mohit-note-image">
-            <img v-if="!faIcon" :src="id" :width="size" draggable="false" />
-            <font-awesome-icon v-else :icon="id" :style="getFAIconStyle()" />
-        </div>
-        <div class="mohit-note-body" :style="{ color: color }">
-            <div class="mohit-note-header"> {{ name }} </div>
-            <div class="mohit-note-desc"> {{ desc }} </div>
-        </div>
-    </RouterLink>
+    <div class="mohit-note-body" :style="{ color: color }">
+        <div class="mohit-note-header"> {{ name }} </div>
+        <div class="mohit-note-desc"> {{ desc }} </div>
+    </div>
 </div>
+
+<a v-else-if="isExternalLink" :href="link" target="_blank" class="mohit-note" v-pulse-loop>
+    <div class="mohit-note-image">
+        <img v-if="!faIcon" :src="id" :width="size" draggable="false" />
+        <font-awesome-icon v-else :icon="id" :style="getFAIconStyle()" />
+    </div>
+    <div class="mohit-note-body" :style="{ color: color }">
+        <div class="mohit-note-header"> {{ name }} </div>
+        <div class="mohit-note-desc"> {{ desc }} </div>
+    </div>
+</a>
+
+<button v-else-if="(link === 'mohit-qrcode-button')" class="mohit-note" v-pulse-loop
+    title="Create a QR Code for this page."
+    @click="webData.openQRCodePopup()">
+
+    <div class="mohit-note-image">
+        <font-awesome-icon :icon="id" :style="getFAIconStyle()" />
+    </div>
+    <div class="mohit-note-body" :style="{ color: color }">
+        <div class="mohit-note-header"> {{ name }} </div>
+        <div class="mohit-note-desc"> {{ desc }} </div>
+    </div>
+</button>
+
+<RouterLink v-else :to="link" class="mohit-note" v-pulse-loop>
+    <div class="mohit-note-image">
+        <img v-if="!faIcon" :src="id" :width="size" draggable="false" />
+        <font-awesome-icon v-else :icon="id" :style="getFAIconStyle()" />
+    </div>
+    <div class="mohit-note-body" :style="{ color: color }">
+        <div class="mohit-note-header"> {{ name }} </div>
+        <div class="mohit-note-desc"> {{ desc }} </div>
+    </div>
+</RouterLink>
 </template>
 
 <script setup>
+const webData = useWebsiteDataStore();
 const props = defineProps({
     link: { type: String, default: "#" },
     faIcon: { type: Boolean, default: true },
@@ -58,10 +57,6 @@ const props = defineProps({
     size: { type: String, default: "105" },
     id: { type: String, default: "fa-circle-info" }
 });
-
-const webData = useWebsiteDataStore();
-const noteContainer = useTemplateRef('note-container-ref');
-usePulseLoopAnimation(noteContainer);
 
 /** This tells the component if the link leads to an external website or not. */
 const isExternalLink = computed(() => {

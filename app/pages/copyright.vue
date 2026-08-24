@@ -29,18 +29,18 @@
 
             <div class="copyright-topBar">
                 <div class="copyright-topBar-side left">
-                    <button @click="installStore.resetWebsiteVersion()" class="copyright-topBar-btn" title="Update Website" pulse-loop>
+                    <button @click="installStore.resetWebsiteVersion()" class="copyright-topBar-btn" title="Update Website" v-pulse-loop>
                         <FontAwesomeIcon icon="fa-rotate" :spin="installStore.swUpdating" />
                     </button>
-                    <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-topBar-btn updateLog" title="Update Log" pulse-loop>
+                    <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-topBar-btn updateLog" title="Update Log" v-pulse-loop>
                         <FontAwesomeIcon icon="fa-brands fa-git-alt" />
                     </a>
                 </div>
                 <div class="copyright-topBar-side right">
-                    <RouterLink :to="footerLink" class="copyright-topBar-btn webpages" title="See Webpages" pulse-loop>
+                    <RouterLink :to="footerLink" class="copyright-topBar-btn webpages" title="See Webpages" v-pulse-loop>
                         <FontAwesomeIcon icon="fa-book-open" />
                     </RouterLink>
-                    <a :href="LICENSE_LINK" target="license-mohit-website" class="copyright-topBar-btn white" title="See License" pulse-loop>
+                    <a :href="LICENSE_LINK" target="license-mohit-website" class="copyright-topBar-btn white" title="See License" v-pulse-loop>
                         <FontAwesomeIcon icon="fa-brands fa-creative-commons" />
                     </a>
                 </div>
@@ -55,7 +55,6 @@
 const router = useRouter();
 const installStore = useInstallStore();
 const { $websiteBuild } = useNuxtApp();
-const copyrightBodyRef = useTemplateRef('copyright-main-body');
 
 const reactiveMeta = useReactiveMeta("Mohit Jain | Copyright Notice", "copyright",
     "A legal disclaimer for any vistors on my website.", "rgb(248, 206, 171)"
@@ -71,7 +70,6 @@ const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuil
 const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
 useHead(reactiveMeta.metaObjectRef);
-usePulseLoopAnimation(copyrightBodyRef);
 
 // Updates the Website Date Information when the website is mounted.
 onMountedAdvanced(() => {

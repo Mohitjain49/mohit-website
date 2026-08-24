@@ -36,7 +36,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
 <div id="ivue" class="ivue-section">
     <div class="ivue-section-mainText" ref="ivueText">
         <div id="ivue-section-title">
-            <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue" pulse-loop>
+            <a :href="MAIN_IVUE_WEBSITE_LINK" target="ivue" title="Explore iVue" v-pulse-loop>
                 <img :src="ivue_white_text" draggable="false" />
             </a>
         </div>
@@ -49,7 +49,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
 
     <div class="ivue-section-tabs-container">
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[0] = el}">
-            <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab" pulse-loop>
+            <a :href="WORLDS_IVUE_LINK" id="wiv-tab" class="ivue-section-tab" v-pulse-loop>
                 <img :src="wiv_banner" width="225" />
                 <p>
                     Worlds iVue is a 3D geospatial platform that functions as a ground control station for iVue's "Develop Air" Drones. 
@@ -58,7 +58,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
             </a>
         </div>
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[1] = el}">
-            <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab" pulse-loop>
+            <a :href="MAIN_IVUE_WEBSITE_LINK" id="main-tab" class="ivue-section-tab" v-pulse-loop>
                 <img :src="ivue_white_text" width="68" />
                 <p>
                     iVue provides a broad range of products and services through its multiple subsidiaries. 
@@ -68,7 +68,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
             </a>
         </div>
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[2] = el}">
-            <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab" pulse-loop>
+            <a :href="IVUE_MEDIA_WEBSITE_LINK" id="media-tab" class="ivue-section-tab" v-pulse-loop>
                 <img :src="ivue_media_banner" width="175" />
                 <p>
                     iVue Media offers photography, videography, and content creation services to our clients. 
@@ -78,7 +78,7 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
             </a>
         </div>
         <div class="ivue-section-tab-parent" :ref="(el) => {tabRefs[3] = el}">
-            <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab" pulse-loop>
+            <a :href="IVUE_ROBOTICS_WEBSITE_LINK" id="robotics-tab" class="ivue-section-tab" v-pulse-loop>
                 <img :src="ivue_robotics_banner" width="190" />
                 <p>
                     iVue Robotics build Drone Hardware for the future. 
@@ -89,13 +89,13 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
         </div>
         <div class="ivue-section-tab-parent">
             <div id="ivue-contact-tab" ref="ivue-contact-tabRef">
-                <a :href="(MAIN_IVUE_WEBSITE_LINK + 'linkedin')" class="linkedin" :title="LINKEDIN_TITLE" pulse-loop>
+                <a :href="(MAIN_IVUE_WEBSITE_LINK + 'linkedin')" class="linkedin" :title="LINKEDIN_TITLE" v-pulse-loop>
                     <font-awesome-icon icon="fa-brands fa-linkedin" />
                 </a>
-                <a :href="(IVUE_ROBOTICS_WEBSITE_LINK + 'youtube')" class="youtube" :title="YOUTUBE_TITLE" pulse-loop>
+                <a :href="(IVUE_ROBOTICS_WEBSITE_LINK + 'youtube')" class="youtube" :title="YOUTUBE_TITLE" v-pulse-loop>
                     <font-awesome-icon icon="fa-brands fa-youtube" />
                 </a>
-                <a :href="(MAIN_IVUE_WEBSITE_LINK + 'discord')" class="discord" :title="DISCORD_TITLE" pulse-loop>
+                <a :href="(MAIN_IVUE_WEBSITE_LINK + 'discord')" class="discord" :title="DISCORD_TITLE" v-pulse-loop>
                     <font-awesome-icon icon="fa-brands fa-discord" />
                 </a>
             </div>

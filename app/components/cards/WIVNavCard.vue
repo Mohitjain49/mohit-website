@@ -1,6 +1,6 @@
 <template>
 <div class="newCard-container">
-    <a :href="WORLDS_IVUE_LINK" id="wiv-nav-newCard" class="nav-newCard" pulse-loop>
+    <a :href="WORLDS_IVUE_LINK" id="wiv-nav-newCard" class="nav-newCard" v-pulse-loop>
         <div class="nav-newCard-header">
             <img :src="wiv_banner" width="200" />
         </div>

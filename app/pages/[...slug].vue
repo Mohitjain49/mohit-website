@@ -4,7 +4,7 @@
     <h1 class="incomplete-title"> {{ PAGE_DESC }} </h1>
     
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-        <RouterLink to="/" pulse-loop> Go To Home Page </RouterLink>
+        <RouterLink to="/" v-pulse-loop> Go To Home Page </RouterLink>
     </div>
 </main>
 </template>
@@ -12,7 +12,6 @@
 <script setup>
 const router = useRouter();
 const webData = useWebsiteDataStore();
-const pageRef = useTemplateRef('invalid-page-ref');
 
 const PAGE_TITLE = ref("Mohit Jain | 404 Error");
 const PAGE_DESC = ref("404 - Page Not Found");
@@ -26,7 +25,6 @@ const routePath = computed(() => { return router.currentRoute.value.path; });
 const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value, "rgb(248, 206, 171)"); });
 useHead(metaTags);
 
-usePulseLoopAnimation(pageRef);
 onMountedAdvanced(() => {
     // console.log(router.getRoutes());
     webData.closeNavMenu();

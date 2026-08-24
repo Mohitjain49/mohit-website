@@ -1,6 +1,6 @@
 <template>
 <div id="third-nav-card" class="newCard-container">
-    <a :href="SUBLO_WEBSITE_LINK" id="sublo-nav-newCard" class="nav-newCard" pulse-loop>
+    <a :href="SUBLO_WEBSITE_LINK" id="sublo-nav-newCard" class="nav-newCard" v-pulse-loop>
         <div class="nav-newCard-header">
             <img :src="sublo_icon" width="40" />
             <div class="nav-newCard-header-text" style="color: #36A1D9"> ublo </div>

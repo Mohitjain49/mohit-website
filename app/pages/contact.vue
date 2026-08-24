@@ -10,7 +10,7 @@
 <main id="contact-page" class="personal-web-body" ref="contact-page-ref">
     <div class="contact-boxes-container">
         <div class="contact-me-box web-service" id="form">
-            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE" pulse-loop>
+            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE" v-pulse-loop>
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
 
@@ -80,7 +80,7 @@
                 </div>
                 <div class="contact-box-buttons-container">
                     <div class="contact-input-tab-btn-container">
-                        <button class="contact-input-tab-btn" @click="sendEmail()" pulse-loop>
+                        <button class="contact-input-tab-btn" @click="sendEmail()" v-pulse-loop>
                             <span> Send Message </span>
                             <FontAwesomeIcon :icon="sendMessageIcon" :spinPulse="sendMessageState.pending" />
                         </button>
@@ -109,16 +109,16 @@
                         <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
 
                         <div class="social-tab-options">
-                            <button @click="copyLink(social.displayLink)" :title="social.copyBtn" pulse-loop>
+                            <button @click="copyLink(social.displayLink)" :title="social.copyBtn" v-pulse-loop>
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
-                            <button @click="openSocialQrcode(social.link)" :title="social.shareBtn" pulse-loop>
+                            <button @click="openSocialQrcode(social.link)" :title="social.shareBtn" v-pulse-loop>
                                 <font-awesome-icon icon="fa-share-from-square" />
                             </button>
-                            <a :href="social.link" target="_blank" :title="social.linkBtn" pulse-loop>
+                            <a :href="social.link" target="_blank" :title="social.linkBtn" v-pulse-loop>
                                 <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
-                            <button v-if="social.showCopyUsername" title="Copy Username" @click="copyUsername(social.username)" pulse-loop>
+                            <button v-if="social.showCopyUsername" title="Copy Username" @click="copyUsername(social.username)" v-pulse-loop>
                                 <font-awesome-icon icon="fa-signature" />
                             </button>
                         </div>
@@ -154,8 +154,6 @@ const router = useRouter();
 
 const titleInput = ref();
 const alertBoxText = ref("");
-const contactPageRef = useTemplateRef('contact-page-ref');
-usePulseLoopAnimation(contactPageRef);
 
 var alertBoxTimeout = null;
 var sendMessageTimeout = null;

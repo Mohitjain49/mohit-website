@@ -20,9 +20,6 @@ const router = useRouter();
 const reactiveMeta = useReactiveMeta(DEFAULT_TITLE, "library", PAGE_DESC);
 const routerHash = computed(() => { return router.currentRoute.value.hash; });
 
-const filesPageRef = useTemplateRef('mohit-files-page');
-usePulseLoopAnimation(filesPageRef);
-
 onMountedAdvanced(() => { changePageTitle(); });
 watch(routerHash, () => { changePageTitle(); });
 useHead(reactiveMeta.metaObjectRef);

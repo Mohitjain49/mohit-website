@@ -2,14 +2,14 @@
 <footer id="footer" ref="mohit-footer">
     <div class="footer-body">
         <div class="footer-main-icon">
-            <RouterLink to="/" @click="footerScrollToTop('/')" title="Home Page" pulse-loop>
+            <RouterLink to="/" @click="footerScrollToTop('/')" title="Home Page" v-pulse-loop>
                 <img :src="mkj_icon" draggable="false" />
             </RouterLink>
         </div>
 
         <div class="footer-routes-column">
             <h2 class="footer-routes-header light"> Main Pages </h2>
-            <RouterLink v-for="tab in MAIN_ROUTES" :to="tab.path" pulse-loop
+            <RouterLink v-for="tab in MAIN_ROUTES" :to="tab.path" v-pulse-loop
                 :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
                 @click="footerScrollToTop(tab.path)">
@@ -21,7 +21,7 @@
 
         <div class="footer-routes-column">
             <h2 class="footer-routes-header"> Secondary Pages </h2>
-            <RouterLink v-for="tab in SECONDARY_ROUTES" :to="tab.path" pulse-loop
+            <RouterLink v-for="tab in SECONDARY_ROUTES" :to="tab.path" v-pulse-loop
                 :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
                 @click="footerScrollToTop(tab.path)">
@@ -33,7 +33,7 @@
 
         <div class="footer-routes-column">
             <h2 class="footer-routes-header light"> Extra Pages </h2>
-            <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path" pulse-loop
+            <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path" v-pulse-loop
                 :style="getColorStyles(tab.color)"
                 class="footer-routes-opt"
                 @click="footerScrollToTop(tab.path)">
@@ -42,11 +42,11 @@
                 <font-awesome-icon :icon="tab.icon" />
             </RouterLink>
 
-            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="getColorStyles('white')" pulse-loop>
+            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="getColorStyles('white')" v-pulse-loop>
                 <span> Website Repository </span>
                 <font-awesome-icon icon="fa-code-branch" />
             </a>
-            <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="footer-routes-opt" :style="getColorStyles('#F05133')" pulse-loop>
+            <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="footer-routes-opt" :style="getColorStyles('#F05133')" v-pulse-loop>
                 <span> Update Log </span>
                 <font-awesome-icon icon="fa-brands fa-git-alt" />
             </a>
@@ -55,7 +55,7 @@
 
     <div class="footer-contact-section">
         <template v-for="(contact, index) in SOCIALS">
-            <a v-if="(index != 2)" :href="contact.link" pulse-loop
+            <a v-if="(index != 2)" :href="contact.link" v-pulse-loop
                 :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                 :style="getColorStyles(contact.color)">
 
@@ -64,21 +64,21 @@
         </template>
     </div>
     <div class="footer-job-title">
-        Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" pulse-loop> <img :src="ivue_text" draggable="false" /> </a></span>
+        Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" v-pulse-loop> <img :src="ivue_text" draggable="false" /> </a></span>
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Notice" @click="footerScrollToTop('/copyright')" pulse-loop>
+        <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Notice" @click="footerScrollToTop('/copyright')" v-pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ copyrightText }} </span>
         </RouterLink>
 
         <div class="footer-bottom-buttons">
-            <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" pulse-loop>
+            <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" v-pulse-loop>
                 <FontAwesomeIcon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
                 <FontAwesomeIcon v-else icon="fa-spinner" :spin-pulse="true" />
             </button>
-            <RouterLink v-show="isMounted" :to="topPath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" pulse-loop>
+            <RouterLink v-show="isMounted" :to="topPath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" v-pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />
             </RouterLink>
         </div>
@@ -93,9 +93,6 @@ import ivue_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const { $websiteBuild } = useNuxtApp();
-
-const footerRef = useTemplateRef('mohit-footer');
-usePulseLoopAnimation(footerRef);
 
 const isMounted = onMountedAdvanced(() => {
     webData.navFooterPresent = true;

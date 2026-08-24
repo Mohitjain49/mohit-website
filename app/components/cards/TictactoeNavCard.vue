@@ -1,6 +1,6 @@
 <template>
 <div class="newCard-container">
-    <a :href="TICTACTOE_PROJECT_LINK" id="tictactoe-nav-newCard" class="nav-newCard" pulse-loop>
+    <a :href="TICTACTOE_PROJECT_LINK" id="tictactoe-nav-newCard" class="nav-newCard" v-pulse-loop>
         <div class="nav-newCard-header">
             <FontAwesomeIcon icon="fa-table-cells" />
         </div>

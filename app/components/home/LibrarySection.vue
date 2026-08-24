@@ -45,7 +45,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 <div id="library" class="library-section">
     <div class="library-section-mainText" ref="libraryText">
         <div id="library-section-title">
-            <RouterLink to="/library/" title="See My Library" pulse-loop> My Library </RouterLink>
+            <RouterLink to="/library/" title="See My Library" v-pulse-loop> My Library </RouterLink>
         </div>
         <p id="library-section-desc">
             I host a few documents and scripts on my website to showcase my expertise in software development and engineering. 
@@ -54,7 +54,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     </div>
     <div class="library-section-tabs-container">
         <div v-for="(docTab, index) in LIBRARY_TABS" class="library-section-tab-parent" :ref="(el) => {tabRefs[index] = el}">
-            <RouterLink :to="docTab.link" :id="docTab.id" class="library-section-tab" pulse-loop>
+            <RouterLink :to="docTab.link" :id="docTab.id" class="library-section-tab" v-pulse-loop>
                 <div v-if="(docTab.header.title !== '')" class="library-section-tab-header">
                     <FontAwesomeIcon v-if="docTab.header.faIcon" :icon="docTab.header.img" />
                     <img v-else :src="docTab.header.img" :width="docTab.header.size" draggable="false" />

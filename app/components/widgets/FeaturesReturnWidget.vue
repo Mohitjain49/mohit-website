@@ -1,15 +1,12 @@
 <template>
 <div ref="features-widget" class="features-widget-wrapper">
-    <RouterLink to="/features/" id="features-return-widget" title="Return To Features Page" pulse-loop>
+    <RouterLink to="/features/" id="features-return-widget" title="Return To Features Page" v-pulse-loop>
         <FontAwesomeIcon icon="fa-bolt-lightning" />
     </RouterLink>
 </div>
 </template>
 
 <script setup>
-const featuresWidgetRef = useTemplateRef('features-widget');
-usePulseLoopAnimation(featuresWidgetRef);
-
 onMountedAdvanced(async() => {
     document.getElementById("features-return-widget")?.classList.add("animate__animated", "animate__fadeInUp");
     await sleep(1100);

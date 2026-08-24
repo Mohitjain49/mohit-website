@@ -21,9 +21,6 @@ const router = useRouter();
 const headTags = computed(() => { return getHomeMeta(pageTitle.value); });
 const routerHash = computed(() => { return router.currentRoute.value.hash; });
 
-const hompageRef = useTemplateRef('mohit-homepage');
-usePulseLoopAnimation(hompageRef);
-
 onMountedAdvanced(() => { changePageTitle(); });
 watch(routerHash, () => { changePageTitle(); });
 useHead(headTags);

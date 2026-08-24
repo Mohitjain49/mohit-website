@@ -5,19 +5,19 @@
 <template>
 <div class="mohit-navMenu-top">
     <div class="mohit-navBar-icons menu-top left">
-        <RouterLink to="/" class="mohit-navBar-banner" title="Home Page" @click="manageHomeNav()" pulse-loop>
+        <RouterLink to="/" class="mohit-navBar-banner" title="Home Page" @click="manageHomeNav()" v-pulse-loop>
             <img :src="mkj_text" draggable="false" />
         </RouterLink>
     </div>
 
     <div class="mohit-navBar-icons menu-top right">
-        <button v-if="props.showDocOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(DOCUMENT_MENU)" title="Back To Document Options" pulse-loop>
+        <button v-if="props.showDocOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(DOCUMENT_MENU)" title="Back To Document Options" v-pulse-loop>
             <font-awesome-icon icon="fa-file-pdf" />
         </button>
-        <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" pulse-loop>
+        <button class="mohit-navBar-icon light" @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" v-pulse-loop>
             <font-awesome-icon icon="fa-share-from-square" />
         </button>
-        <button class="mohit-navBar-icon red" @click="webData.closeNavMenu()" title="Close Menu" pulse-loop>
+        <button class="mohit-navBar-icon red" @click="webData.closeNavMenu()" title="Close Menu" v-pulse-loop>
             <font-awesome-icon icon="fa-square-xmark" />
         </button>
     </div>

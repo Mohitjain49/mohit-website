@@ -8,28 +8,28 @@
         <div ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
                 <div class="mohit-main-script-top-group">
-                    <button class="script-save-opt" @click="scriptsStore.downloadScript()" title="Download Code Script" pulse-loop>
+                    <button class="script-save-opt" @click="scriptsStore.downloadScript()" title="Download Code Script" v-pulse-loop>
                         <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
                     </button>
-                    <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" pulse-loop>
+                    <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" v-pulse-loop>
                             <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                     </button>
-                    <button class="script-save-opt" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" pulse-loop>
+                    <button class="script-save-opt" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" v-pulse-loop>
                         <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
                     </button>
                 </div>
-                <a class="white" v-if="(scriptsStore.currentScriptLink != '')" :href="scriptsStore.currentScriptLink" title="See Code On Github" pulse-loop>
+                <a class="white" v-if="(scriptsStore.currentScriptLink != '')" :href="scriptsStore.currentScriptLink" title="See Code On Github" v-pulse-loop>
                     <font-awesome-icon icon="fa-brands fa-github" />
                 </a>
             </div>
             <div class="mohit-main-script-top-sideSection">
-                <button @click="openScriptsMenu()" title="Open Script Options" pulse-loop>
+                <button @click="openScriptsMenu()" title="Open Script Options" v-pulse-loop>
                     <FontAwesomeIcon icon="fa-file-export" />
                 </button>
-                <button class="flame" @click="scriptsStore.setCodeWrapping('toggle')" :title="scriptsStore.wrapStatement" pulse-loop>
+                <button class="flame" @click="scriptsStore.setCodeWrapping('toggle')" :title="scriptsStore.wrapStatement" v-pulse-loop>
                     <FontAwesomeIcon :icon="scriptsStore.wrapIcon" />
                 </button>
-                <button @click="scriptsStore.toggleScriptFullScreen()" :title="fullScreenStore.elementTitle" pulse-loop>
+                <button @click="scriptsStore.toggleScriptFullScreen()" :title="fullScreenStore.elementTitle" v-pulse-loop>
                     <FontAwesomeIcon :icon="fullScreenStore.faIcon" />
                 </button>
             </div>
@@ -62,8 +62,6 @@ const fullScreenStore = useFullScreenStore();
 
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
-const scriptOptions = useTemplateRef('script-options');
-usePulseLoopAnimation(scriptOptions);
 
 const isMounted = onMountedAdvanced(() => { scriptsStore.mountScriptPage(); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
