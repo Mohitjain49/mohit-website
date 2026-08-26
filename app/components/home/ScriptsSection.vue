@@ -78,7 +78,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     </div>
     <div class="scripts-section-tabs-container">
         <div v-for="(docTab, index) in SCRIPTS_TABS" class="scripts-section-tab-parent" :ref="(el) => {tabRefs[index] = el}">
-            <RouterLink :to="docTab.link" :id="docTab.id" class="scripts-section-tab" pulse-loop>
+            <RouterLink :to="docTab.link" :id="docTab.id" class="scripts-section-tab" v-pulse-loop>
                 <div v-if="(docTab.header.title !== '')" class="scripts-section-tab-header">
                     <FontAwesomeIcon v-if="docTab.header.faIcon" :icon="docTab.header.img" />
                     <img v-else :src="docTab.header.img" :width="docTab.header.size" draggable="false" />

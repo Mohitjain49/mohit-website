@@ -1,6 +1,6 @@
 <template>
 <div class="newCard-container">
-    <RouterLink to="/#ivue" id="ivue-nav-newCard" class="nav-newCard" pulse-loop>
+    <RouterLink to="/#ivue" id="ivue-nav-newCard" class="nav-newCard" v-pulse-loop>
         <div class="nav-newCard-header">
             <img :src="ivue_text" width="100" />
         </div>

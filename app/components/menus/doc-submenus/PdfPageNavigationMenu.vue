@@ -28,6 +28,5 @@ const { pdfNavMenuOpen } = storeToRefs(webData);
 const { docImageUrls } = storeToRefs(useDocumentStore());
 
 const pdfPageNavMenu = shallowRef(null);
-usePulseLoopAnimation(pdfPageNavMenu);
 useWebsiteMenuUtility(pdfPageNavMenu);
 </script>

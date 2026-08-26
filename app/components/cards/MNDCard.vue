@@ -1,6 +1,6 @@
 <template>
 <div class="newCard-container">
-    <a :href="MND_PROJECT_LINK" id="mnd-nav-newCard" class="nav-newCard" pulse-loop>
+    <a :href="MND_PROJECT_LINK" id="mnd-nav-newCard" class="nav-newCard" v-pulse-loop>
         <div class="nav-newCard-header">
             <img :src="mnd_text" width="100" class="nav-newCard-personalText" />
         </div>

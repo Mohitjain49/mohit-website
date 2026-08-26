@@ -2,7 +2,7 @@
 <div id="projects" class="projects-section">
     <div class="projects-main-textContainer" ref="projectsText">
         <div class="projects-main-header">
-            <RouterLink to="/projects/" title="Explore My Projects" pulse-loop> My Projects </RouterLink>
+            <RouterLink to="/projects/" title="Explore My Projects" v-pulse-loop> My Projects </RouterLink>
         </div>
         <div class="projects-main-desc">
             While my best work is with iVue's websites and applications, 
@@ -11,7 +11,7 @@
     </div>
 
     <RouterLink class="projects-features-btn" to="/features/" ref="featuresButton"
-        title="Explore this Website's Unique Capabilities" pulse-loop>
+        title="Explore this Website's Unique Capabilities" v-pulse-loop>
 
         <FontAwesomeIcon icon="fa-bolt-lightning" />
         <span> Website Features </span>

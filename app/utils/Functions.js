@@ -46,3 +46,17 @@ export function getMohitInnerHeight() {
     const element = document.getElementById("invisible-css-layout");
     return (element == null ? 0 : element.clientHeight);
 }
+
+/**
+ * This function removes all animation classes from a specific element.
+ * @param {HTMLElement} element The element to remove the classes from.
+ */
+export function removeAnimationClasses(element = null) {
+    if(!element) { return; }
+    const elementClassList = Array.from(element.classList);
+    
+    for(let i = 0; i < elementClassList.length; i++) {
+        const className = elementClassList[i];
+        if(className.startsWith("animate__")) { element.classList.remove(className); }
+    }
+}

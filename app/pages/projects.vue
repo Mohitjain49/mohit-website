@@ -3,7 +3,7 @@
 <main id="project-page" class="personal-web-body transparent">
     <div class="main-nav-page-container" ref="mohit-projects-page">
         <h1 class="nav-page-title project"> My Projects </h1>
-        <RouterLink id="main-projects-features-btn" to="/features/" title="Explore this Website's Unique Capabilities" pulse-loop>
+        <RouterLink id="main-projects-features-btn" to="/features/" title="Explore this Website's Unique Capabilities" v-pulse-loop>
             <FontAwesomeIcon icon="fa-bolt-lightning" />
             <span> Website Features </span>
         </RouterLink>
@@ -15,7 +15,7 @@
             <GlobeNavCard />
         </div>
         <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-            <RouterLink to="/" class="linkBtn-green" pulse-loop> Back To Home </RouterLink>
+            <RouterLink to="/" class="linkBtn-green" v-pulse-loop> Back To Home </RouterLink>
         </div>
     </div>
     <WebFooter />
@@ -23,9 +23,6 @@
 </template>
 
 <script setup>
-const projectsRef = useTemplateRef('mohit-projects-page');
-usePulseLoopAnimation(projectsRef);
-
 onMountedAdvanced(() => {
     setNavCardAnimation("main-projects-features-btn");
 });

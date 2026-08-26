@@ -134,9 +134,7 @@
     </div>
 
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-        <RouterLink to="/" class="linkBtn-blue" @pointerenter="setPulseLoopAnimation" @mouseleave="setPulseLoopAnimation">
-            Back To Home
-        </RouterLink>
+        <RouterLink to="/" class="linkBtn-blue" v-pulse-loop> Back To Home </RouterLink>
     </div>
     <WebFooter />
 </main>
@@ -162,12 +160,8 @@ useIntersectionObserver(cardRefs, (entry) => {
     }
 });
 
-useHead(getMeta("Mohit Jain | My Skills", "skills/",
-    "Since 2021, I have successfully designed, developed, and deployed numerous websites, " +
-    "web applications, and projects by utilizing multiple programming languages, " +
-    "frontend frameworks, web services, and modules.",
-    "#0047AB"
-));
+// This defines the Page's SEO Tags.
+useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"));
 </script>
 
 <style scoped lang="scss">

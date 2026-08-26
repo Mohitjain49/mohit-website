@@ -8,7 +8,7 @@
         <MenuTop />
 
         <div v-for="section in routes" class="mohit-navMenu-opt" :style="getColorStyles(section.color)">
-            <RouterLink class="mohit-navMenu-mainOpt" pulse-loop
+            <RouterLink class="mohit-navMenu-mainOpt" v-pulse-loop
                 @click="webData.closeNavMenu()"
                 :title="('Scroll To The ' + section.title + ' Section')"
                 :to="getSectionLink(section.id)">
@@ -25,7 +25,7 @@
             </RouterLink>
         </div>
         <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
-            <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" @click="webData.scrollToAndFromFooter()" pulse-loop>
+            <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" @click="webData.scrollToAndFromFooter()" v-pulse-loop>
                 <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
                 <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
             </RouterLink>
@@ -33,13 +33,13 @@
         <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" v-pulse-loop>
                 <font-awesome-icon icon="fa-bars" />
                 <span> Open Navigation Menu </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('red')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.closeNavMenu()" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.closeNavMenu()" v-pulse-loop>
                 <font-awesome-icon icon="fa-square-xmark" />
                 <span> Close Menu </span>
             </button>
@@ -54,10 +54,7 @@ const props = defineProps({ routes: { type: Array, default: [] } });
 
 const router = useRouter();
 const webData = useWebsiteDataStore();
-
 const compassMenu = shallowRef(null);
-usePulseLoopAnimation(compassMenu);
-useWebsiteMenuUtility(compassMenu);
 
 const topPath = useRoutePathWithQuery();
 const routePath = computed(() => { return router.currentRoute.value.path; });
@@ -65,6 +62,7 @@ const footerRoute = computed(() => { return (topPath.value + (webData.webFooterV
 
 onMountedAdvanced(() => { webData.compassMenuAvailable = true; });
 onBeforeUnmount(() => { webData.compassMenuAvailable = false; });
+useWebsiteMenuUtility(compassMenu);
 
 /**
  * This function makes a route for the main section.

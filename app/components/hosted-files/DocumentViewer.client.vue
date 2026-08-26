@@ -45,9 +45,7 @@
 </template>
 
 <script setup>
-import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 const PDFJS_SCALE_CSS_PROPERTY = "--total-scale-factor";
-
 const CUSTOM_ANNOTATION_HTML_CLASS = "mohit-pdf-linkAnnotation";
 const CUSTOM_PDFJS_DEST_ATTRIBUTE = "mohit-data-pdfjs-dest";
 const CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE = "mohit-data-pdfjs-page-number";
@@ -58,8 +56,8 @@ const CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE = "page-num";
 var renderAbortController = new AbortController();
 var resizeAbortController = new AbortController();
 
-var renderTasks = { canvas: null, text: null, annontation: null }
 var pdfDocLoadingTask = null;
+var resizeTimeout = null;
 var bestPageRatio = 0;
 
 const webData = useWebsiteDataStore();
@@ -79,6 +77,7 @@ const props = defineProps({
 
 /** @type {import('vue').Ref<Array<HTMLElement>>} The array of references to the Page elemnets. */
 const pageRefs = ref([]);
+const currentDocumentSize = ref(0);
 
 // This observer tracks which page the user is currently viewing.
 useIntersectionObserver(pageRefs, (entry) => {
@@ -112,15 +111,15 @@ onMountedAdvanced(async() => {
     await renderPDF();
 
     const signal = resizeAbortController.signal;
-    window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal });
+    window.addEventListener("animation-resize", () => { resizePdfViewer(null); }, { signal });
     window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
+    window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
 });
 onBeforeUnmount(() => {
     renderAbortController.abort();
     resizeAbortController.abort();
 
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
-    cancelRenders();
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
 });
 
@@ -135,17 +134,12 @@ function getPageElement(index = 1) {
 /** This function renders the PDF so it can be displayed. */
 async function renderPDF() {
     scrollToTop(true, 0);
-    cancelRenders();
     if(renderAborted()) { return; }
 
-    const { getDocument, TextLayer, AnnotationLayer, GlobalWorkerOptions } = await import("pdfjs-dist");
+    const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
     const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
+    await documentStore.checkPdfjsWorker();
     if(renderAborted()) { return; }
-
-    if(!documentStore.workerSrcAdded) {
-        GlobalWorkerOptions.workerSrc = workerSrcUrl;
-        documentStore.workerSrcAdded = true;
-    }
 
     pdfDocLoadingTask = getDocument({ url: props.url });
     pdfDoc.value = await pdfDocLoadingTask.promise;
@@ -155,9 +149,6 @@ async function renderPDF() {
     pages.value = numPages;
     setInnerPagesArray(numPages);
     await nextTick();
-
-    /** @type {Array<HTMLAnchorElement>} These elements are inner Annotation elements that scroll to other parts of the PDF. */
-    const innerAnnotationElements = [];
     if(renderAborted()) { return; }
 
     /** This is a link service used by the annotation layers. */
@@ -165,7 +156,14 @@ async function renderPDF() {
     defaultLinkService.getDestinationHash = (string) => { return "#"; }
     defaultLinkService.goToDestination = (dest) => { return; }
 
-    for(let i = 1; i <= numPages; i++) {
+    // This sets the initial document size for each PDF Page.
+    currentDocumentSize.value = documentStore.customPdfWidth;
+
+    /**
+     * This function renders a singular page.
+     * @param {Number} i The page number.
+     */
+    async function renderSingularPage(i = 1) {
         if(renderAborted()) { return; }
         const page = await pdfDoc.value.getPage(i);
         const defaultViewport = page.getViewport({ scale: 1 });
@@ -175,41 +173,43 @@ async function renderPDF() {
         pageElement.setAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE, String(defaultViewport.height));
 
         // Sets a properly scaled viewport so it works on every necessary size.
-        const viewport = page.getViewport({ scale: (documentStore.customPdfMaxWidth / defaultViewport.width) });
+        const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
         resizePdfViewer(i);
 
+        /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
         var canvas = document.getElementById("pdf_canvas_" + i);
         var context = canvas.getContext("2d");
+
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
 
         canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
         canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
-        renderTasks.canvas = page.render({
+        const canvasRenderTask = page.render({
             canvasContext: context,
             transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
             viewport: viewport
         });
 
         if(renderAborted()) { return; }
-        try { await renderTasks.canvas.promise; } catch(e) {}
-        renderTasks.canvas = null;
+        try { await canvasRenderTask.promise; } catch(e) {}
 
         if(props.annontations) {
             const textLayerDiv = document.getElementById('pdf_text_layer_'+ i);
             textLayerDiv.innerHTML = '';
             const textContent = await page.getTextContent({ includeMarkedContent: true });
             
-            renderTasks.text = new TextLayer({
+            const textRenderTask = new TextLayer({
                 textContentSource: textContent,
                 container: textLayerDiv,
                 viewport: viewport
             });
             
             if(renderAborted()) { return; }
-            try { await renderTasks.text.render(); } catch(e) {}
-            renderTasks.text = null;
+            try { await textRenderTask.render(); } catch(e) {}
 
             textLayerDiv.style.setProperty("--min-font-size", 1);
             const annotationLayerDiv = document.getElementById('pdf_annotation_layer_' + i);
@@ -244,8 +244,12 @@ async function renderPDF() {
                     innerAnnotationElement.classList.add(CUSTOM_ANNOTATION_HTML_CLASS);
 
                     if(annotationDataObject.dest) {
-                        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(annotationDataObject.dest));
-                        innerAnnotationElements.push(innerAnnotationElement);
+                        const innerAnnotationDest = annotationDataObject.dest;
+                        const innerAnnotationPageNumber = ((await pdfDoc.value.getPageIndex(annotationDataObject.dest[0])) + 1);
+
+                        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE, JSON.stringify(innerAnnotationDest));
+                        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE, String(innerAnnotationPageNumber));
+                        innerAnnotationElement.setAttribute("href", `?page=${innerAnnotationPageNumber}&y=${innerAnnotationDest[3]}`);
 
                         // This event listener watches out for click events to direct the user to the proper location when clicked.
                         innerAnnotationElement.addEventListener("click",
@@ -277,16 +281,20 @@ async function renderPDF() {
         if(numPages > i) { setSingleDocLoaded(i - 1); }
     }
 
-    // This adds an attribute to every inner annotation that tells it the page to navigate to.
-    for(let k = 0; k < innerAnnotationElements.length; k++) {
-        const innerAnnotationElement = innerAnnotationElements[k];
-        const innerAnnotationDest = JSON.parse(innerAnnotationElement.getAttribute(CUSTOM_PDFJS_DEST_ATTRIBUTE));
-        if(!innerAnnotationDest) { continue; }
+    /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
+    const pageRenderPromises = [];
+    const numPromiseArrays = Math.ceil(numPages / 10);
+    const numPromisesPerArray = (numPages / numPromiseArrays);
 
-        const innerAnnotationPageNumber = ((await pdfDoc.value.getPageIndex(innerAnnotationDest[0])) + 1);
-        innerAnnotationElement.setAttribute(CUSTOM_PDFJS_PAGE_NUMBER_ATTRIBUTE, String(innerAnnotationPageNumber));
-        innerAnnotationElement.setAttribute("href", `?page=${innerAnnotationPageNumber}&y=${innerAnnotationDest[3]}`);
+    // This divides the tasks into separate arrays to ensure the website does not crash or something.
+    for(let i = 0; i < numPromiseArrays; i++) {
+        const tempPromiseArray = [];
+        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderSingularPage(j + (i * numPromisesPerArray))); }
+        pageRenderPromises.push(tempPromiseArray);
     }
+
+    // This runs all the arrays of promises.
+    for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
@@ -295,25 +303,74 @@ async function renderPDF() {
     if(renderAborted()) { return; }
 
     try {
+        rerenderCanvases();
         await documentStore.getPdfAsImages();
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
 }
 
-/** This function checks if the render abort signal has been sent or not. */
-function renderAborted() {
-    const aborted = renderAbortController.signal.aborted;
-    if(aborted) { cancelRenders(); }
-    return aborted;
+/** This function rerenders the canvases for the PDF. */
+async function rerenderCanvases() {
+    if(currentDocumentSize.value == documentStore.customPdfWidth) { return; }
+    currentDocumentSize.value = documentStore.customPdfWidth;
+    const numPages = pages.value;
+
+    /** This function renders a singular canvas  */
+    async function renderSingularCanvas(i = 1) {
+        if(renderAborted()) { return; }
+        const page = await pdfDoc.value.getPage(i);
+        const defaultViewport = page.getViewport({ scale: 1 });
+
+        const pageElement = getPageElement(i);
+        pageElement.setAttribute(CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE, String(defaultViewport.width));
+        pageElement.setAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE, String(defaultViewport.height));
+
+        // Sets a properly scaled viewport so it works on every necessary size.
+        const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
+        resizePdfViewer(i);
+
+        /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
+        var canvas = document.getElementById("pdf_canvas_" + i);
+        var context = canvas.getContext("2d");
+
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
+
+        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.style.width = 'var(--mohit-custom-pdf-width)';
+        canvas.style.height =  'var(--mohit-custom-pdf-height)';
+
+        const canvasRenderTask = page.render({
+            canvasContext: context,
+            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+            viewport: viewport
+        });
+
+        if(renderAborted()) { return; }
+        try { await canvasRenderTask.promise; } catch(e) {}
+    }
+
+    /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
+    const pageRenderPromises = [];
+    const numPromiseArrays = Math.ceil(numPages / 10);
+    const numPromisesPerArray = (numPages / numPromiseArrays);
+
+    // This divides the tasks into separate arrays to ensure the website does not crash or something.
+    for(let i = 0; i < numPromiseArrays; i++) {
+        const tempPromiseArray = [];
+        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderSingularCanvas(j + (i * numPromisesPerArray))); }
+        pageRenderPromises.push(tempPromiseArray);
+    }
+
+    // This runs all the arrays of promises.
+    for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
+    resizeTimeout = null;
 }
 
-/** This function cancels all PDF Rendering when called. */
-function cancelRenders() {
-    if(renderTasks.canvas != null) { renderTasks.canvas.cancel(); }
-    if(renderTasks.text != null) { renderTasks.text.cancel(); }
-    renderTasks = { canvas: null, text: null, annontation: null }
-}
+/** This function checks if the render abort signal has been sent or not. */
+function renderAborted() { return renderAbortController.signal.aborted; }
 
 /**
  * This function resizes all necessary styles for the PDF Viewer when called.
@@ -321,7 +378,8 @@ function cancelRenders() {
  */
 function resizePdfViewer(index = null) {
     if(!index || index < 1 || index > pages.value) {
-        for(let i = 1; i <= pages.value; i++) { setPdfPageScaleFactor(i); }
+        if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+        resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
     } else {
         setPdfPageScaleFactor(index);
     }
@@ -422,15 +480,16 @@ async function onPdfContentMenu(event, pageNum = 1) {
     const selection = window.getSelection();
     const selectedText = (selection ? selection.toString().trim() : "");
 
-    // If the user does not right click on selected text or a link, this function opens the website document menu.
-    if(!element.closest("a") && (!selection || selectedText.length <= 0 || !selection.containsNode(element, true))) {
-        event.preventDefault();
-        if(documentStore.contextMenuPageNumber > 0 && pageNum != 0) {
-            documentStore.setContextMenuPageNumber(0);
-            await sleep(100);
-        }
+    // If the user does not right click on selected text or a link or holds the control key down, this function does nothing.
+    if(event.ctrlKey || element.closest("a")) { return; }
+    if(selection && selectedText.length > 0 && selection.containsNode(element, true)) { return; }
 
-        // Sets the new page number for the context menu.
+    // This opens the custom hosted document context menu.
+    event.preventDefault();
+    if(documentStore.contextMenuPageNumber > 0 && pageNum != 0) {
+        documentStore.setContextMenuPageNumber(0);
+        sleep(100).then(() => { documentStore.setContextMenuPageNumber(pageNum); });
+    } else {
         documentStore.setContextMenuPageNumber(pageNum);
     }
 }

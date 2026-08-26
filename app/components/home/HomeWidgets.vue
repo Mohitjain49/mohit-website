@@ -1,6 +1,6 @@
 <template>
 <CompassWidget />
-<a :href="KSU_CCSE_LINK" target="mohit-ksu" id="ksu-widget" :title="KSU_WIDGET_TITLE" pulse-loop>
+<a :href="KSU_CCSE_LINK" target="mohit-ksu" id="ksu-widget" :title="KSU_WIDGET_TITLE" v-pulse-loop>
     <img :src="ksu_logo" draggable="false" />
 </a>
 </template>
@@ -9,12 +9,7 @@
 import ksu_logo from "~/assets/Kennesaw_Logo.png";
 const KSU_CCSE_LINK = "https://www.kennesaw.edu/ccse/";
 const KSU_WIDGET_TITLE = "I'm A Proud Computer Science Student Of Kennesaw State University!";
-
-onMountedAdvanced(async() => {
-    document.getElementById("ksu-widget")?.classList.add("animate__animated", "animate__fadeInUp");
-    await sleep(1100);
-    document.getElementById("ksu-widget")?.classList.remove("animate__animated", "animate__fadeInUp");
-});
+onMountedAdvanced(() => { setBottomCornerWidgetAnimation("ksu-widget"); });
 </script>
 
 <style scoped lang="scss">

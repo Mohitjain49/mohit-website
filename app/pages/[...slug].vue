@@ -1,10 +1,10 @@
 <template>
 <ParticlesBackground v-if="(backgroundType != -1)" :particlesOptions="((backgroundType == 0) ? INVALID_BACKGROUND : REDIRECT_BACKGROUND)" />
-<main id="invalid" class="personal-web-body" :style="bodyBackground">
+<main id="invalid" class="personal-web-body" ref="invalid-page-ref" :style="bodyBackground">
     <h1 class="incomplete-title"> {{ PAGE_DESC }} </h1>
     
     <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-        <RouterLink to="/" @pointerenter="setHeartbeatAnimation" @mouseleave="setHeartbeatAnimation">Go To Home Page</RouterLink>
+        <RouterLink to="/" v-pulse-loop> Go To Home Page </RouterLink>
     </div>
 </main>
 </template>
@@ -18,7 +18,7 @@ const PAGE_DESC = ref("404 - Page Not Found");
 
 const backgroundType = ref(-1);
 const bodyBackground = computed(() => {
-    return { background: ((backgroundType.value == -1) ? "var(--webpage-static-background)" : "transparent")}
+    return { background: ((backgroundType.value == -1) ? "var(--webpage-static-background)" : "transparent") }
 });
 
 const routePath = computed(() => { return router.currentRoute.value.path; });

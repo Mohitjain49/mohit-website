@@ -7,10 +7,10 @@
 <CompassMenu :routes="CONTACT_COMPASS" />
 <CompassWidget :htmlClass="'main'" />
 
-<main id="contact-page" class="personal-web-body">
+<main id="contact-page" class="personal-web-body" ref="contact-page-ref">
     <div class="contact-boxes-container">
-        <div class="contact-me-box web-service" id="form" ref="contact-form-box">
-            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE" pulse-loop>
+        <div class="contact-me-box web-service" id="form">
+            <button @click="webData.openQRCodePopup()" class="contact-share-btn" :title="SHARE_PAGE_TITLE" v-pulse-loop>
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
 
@@ -80,7 +80,7 @@
                 </div>
                 <div class="contact-box-buttons-container">
                     <div class="contact-input-tab-btn-container">
-                        <button class="contact-input-tab-btn" @click="sendEmail()" pulse-loop>
+                        <button class="contact-input-tab-btn" @click="sendEmail()" v-pulse-loop>
                             <span> Send Message </span>
                             <FontAwesomeIcon :icon="sendMessageIcon" :spinPulse="sendMessageState.pending" />
                         </button>
@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <div class="contact-me-box socials">
+        <div class="contact-me-box socials" ref="socials-box">
             <div class="contact-box-title-container">
                 <div class="gradient-text contact-box-title">My Socials</div>
             </div>
@@ -109,29 +109,16 @@
                         <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
 
                         <div class="social-tab-options">
-                            <button @click="copyLink(social.displayLink)" :title="social.copyBtn"
-                                @pointerenter="setHeadShakeAnimation"
-                                @mouseleave="setHeadShakeAnimation">
-
+                            <button @click="copyLink(social.displayLink)" :title="social.copyBtn" v-pulse-loop>
                                 <font-awesome-icon icon="fa-copy" />
                             </button>
-                            <button @click="openSocialQrcode(social.link)" :title="social.shareBtn"
-                                @pointerenter="setHeadShakeAnimation"
-                                @mouseleave="setHeadShakeAnimation">
-
+                            <button @click="openSocialQrcode(social.link)" :title="social.shareBtn" v-pulse-loop>
                                 <font-awesome-icon icon="fa-share-from-square" />
                             </button>
-                            <a :href="social.link" target="_blank" :title="social.linkBtn"
-                                @pointerenter="setHeadShakeAnimation"
-                                @mouseleave="setHeadShakeAnimation">
-
+                            <a :href="social.link" target="_blank" :title="social.linkBtn" v-pulse-loop>
                                 <font-awesome-icon icon="fa-up-right-from-square" />
                             </a>
-                            <button v-if="social.showCopyUsername" title="Copy Username"
-                                @click="copyUsername(social.username)"
-                                @pointerenter="setHeadShakeAnimation"
-                                @mouseleave="setHeadShakeAnimation">
-
+                            <button v-if="social.showCopyUsername" title="Copy Username" @click="copyUsername(social.username)" v-pulse-loop>
                                 <font-awesome-icon icon="fa-signature" />
                             </button>
                         </div>
@@ -167,8 +154,6 @@ const router = useRouter();
 
 const titleInput = ref();
 const alertBoxText = ref("");
-const contactFormRef = useTemplateRef('contact-form-box');
-usePulseLoopAnimation(contactFormRef);
 
 var alertBoxTimeout = null;
 var sendMessageTimeout = null;

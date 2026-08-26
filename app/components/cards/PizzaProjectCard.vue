@@ -1,6 +1,6 @@
 <template>
 <div class="newCard-container">
-    <a :href="PIZZA_WEBSITE_LINK" id="pizza-nav-newCard" class="nav-newCard" pulse-loop>
+    <a :href="PIZZA_WEBSITE_LINK" id="pizza-nav-newCard" class="nav-newCard" v-pulse-loop>
         <div class="nav-newCard-header">
             <font-awesome-icon icon="fa-pizza-slice" />
         </div>

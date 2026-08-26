@@ -18,6 +18,8 @@ export const useStyleStore = defineStore("style-store", () => {
     const cssToWindowWidthRatio = shallowRef(1.0);
     const cssToWindowHeightRatio = shallowRef(1.0);
 
+    /** @type {import('vue').ShallowRef<Element>} This is the element the user's mouse is ove at any given time. */
+    const mouseElement = ref(null);
     const mouseX = shallowRef(0);
     const mouseY = shallowRef(0);
 
@@ -408,6 +410,7 @@ export const useStyleStore = defineStore("style-store", () => {
         if(mousePositionController != null) { mousePositionController.abort(); }
         mousePositionController = null;
 
+        mouseElement.value = null;
         mouseX.value = 0;
         mouseY.value = 0;
         mousePositionRecorderEnabled.value = false;
@@ -427,6 +430,9 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!event || typeof event.clientX !== 'number' || typeof event.clientY !== 'number') { return; }
         mouseX.value = event.clientX;
         mouseY.value = event.clientY;
+        
+        const newElement = event.target;
+        mouseElement.value = ((newElement && newElement instanceof Element) ? newElement : null);
     }
 
     /**
@@ -436,10 +442,13 @@ export const useStyleStore = defineStore("style-store", () => {
     function recordMousePositionWithTouch(event) {
         if(!event.touches) { return; }
         const firstTouch = event.touches.item(0);
-        if(typeof firstTouch?.clientX !== 'number' || typeof firstTouch?.clientY !== 'number') { return; }
+        if(!firstTouch || typeof firstTouch?.clientX !== 'number' || typeof firstTouch?.clientY !== 'number') { return; }
 
         mouseX.value = firstTouch.clientX;
         mouseY.value = firstTouch.clientY;
+        
+        const newElement = firstTouch.target;
+        mouseElement.value = ((newElement && newElement instanceof Element) ? newElement : null);
     }
 
     /**
@@ -588,7 +597,7 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY,
+    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY, mouseElement,
         breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled, cssLayoutObserverEnabled,
         viewportWidth, viewportHeight, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,

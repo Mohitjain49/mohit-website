@@ -26,14 +26,27 @@
 
 <script setup>
 import resumeMdFile from "~/markdown/resume-markdown.md?raw";
+var keybindAbortController = null;
 
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
 const fullScreenSet = getFullScreenSet();
 
-onMountedAdvanced(() => { documentStore.mountDocumentPage(); });
-onBeforeUnmount(() => { resumeStore.unmountResumePage(); });
+onMountedAdvanced(() => {
+    documentStore.mountDocumentPage();
+    keybindAbortController = new AbortController();
+
+    // Adds keybind commands for exporting the resume as a PDF.
+    window.addEventListener("keydown",
+        (event) => { documentStore.onHostedDocumentPageKeydown(event); },
+        { signal: keybindAbortController.signal }
+    );
+});
+onBeforeUnmount(() => {
+    if(keybindAbortController != null) { keybindAbortController.abort(); }
+    resumeStore.unmountResumePage();
+});
 
 /** This determines if the Full Screen Web Cover should be visible or not. */
 const showFsWebCover = computed(() => {

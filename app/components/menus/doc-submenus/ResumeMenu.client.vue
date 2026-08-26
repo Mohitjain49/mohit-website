@@ -28,13 +28,13 @@
         <div class="mohit-navMenu-opt-break"></div>
 
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="setAllResumeOptions(!allSelected)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="setAllResumeOptions(!allSelected)" v-pulse-loop>
                 <font-awesome-icon :icon="(allSelected ? 'fa-rotate-left' : 'fa-check-to-slot')" />
                 <span> {{ (allSelected ? 'Clear All Options' : 'Select All Options') }} </span>
             </button>
         </div>
         <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_MENU)" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_MENU)" v-pulse-loop>
                 <font-awesome-icon icon="fa-file-pdf" />
                 <span> Back To Document Options </span>
             </button>
@@ -42,7 +42,7 @@
 
         <div v-if="(newResumeState || resumeStore.queryOutOfSync)" class="mohit-navMenu-opt-break"></div>
         <div v-if="resumeStore.queryOutOfSync" class="mohit-navMenu-opt">
-            <button class="mohit-navMenu-mainOpt" pulse-loop
+            <button class="mohit-navMenu-mainOpt" v-pulse-loop
                 @click="() => { reloadNuxtApp({ force: true }); }"
                 :style="getColorStyles('var(--blue-one)')">
 
@@ -51,7 +51,7 @@
             </button>
         </div>
         <div v-if="newResumeState" class="mohit-navMenu-opt" :style="getColorStyles('#03ad03')">
-            <button class="mohit-navMenu-mainOpt" @click="editResumeState()" pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="editResumeState()" v-pulse-loop>
                 <font-awesome-icon icon="fa-file-pen" />
                 <span> Modify My Resume! </span>
             </button>
@@ -64,6 +64,9 @@
 const webData = useWebsiteDataStore();
 const resumeStore = useResumeStore();
 const { resumeMenuOpen } = storeToRefs(webData);
+
+const resumeMenu = shallowRef(null);
+useWebsiteMenuUtility(resumeMenu);
 
 const resumeOptions = ref([
     { name: "qrcode", title: "Add QR Code", faIcon: "fa-qrcode", color: 'var(--blue-one)', status: false },
@@ -114,8 +117,4 @@ function setAllResumeOptions(status = true) {
         resumeOptions.value[i].status = status;
     }
 }
-
-const resumeMenu = shallowRef(null);
-usePulseLoopAnimation(resumeMenu);
-useWebsiteMenuUtility(resumeMenu);
 </script>

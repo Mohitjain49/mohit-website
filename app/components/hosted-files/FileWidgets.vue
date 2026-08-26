@@ -1,12 +1,12 @@
 <template>
 <div class="file-widgets-container" ref="file-widgets-container">
     <Transition name="file-widgets-transition" appear>
-        <button v-if="showMinimizeWidget" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" pulse-loop>
+        <button v-if="showMinimizeWidget" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" v-pulse-loop>
             <FontAwesomeIcon icon="fa-compress" />
         </button>
     </Transition>
     <Transition name="file-widgets-transition" appear>
-        <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" pulse-loop>
+        <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" v-pulse-loop>
             <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
         </button>
     </Transition>
@@ -57,9 +57,6 @@ const previousPageScrollTitle = computed(() => {
 const nextPageScrollTitle = computed(() => {
     return (onLastPage.value ? ('Cannot Scroll After Page ' + currentObservedPage.value + '.') : ('Scroll To Page ' + (currentObservedPage.value + 1)));
 });
-
-const fileWidgets = useTemplateRef('file-widgets-container');
-usePulseLoopAnimation(fileWidgets);
 
 /** This function opens the options for the file. */
 function openOptions() {

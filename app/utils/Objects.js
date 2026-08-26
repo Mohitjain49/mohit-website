@@ -74,6 +74,8 @@ export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/";
 export const GEN_AI_APPLICATIONS_PAPER_ROUTE = "/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper/";
 export const GEN_AI_APPLICATIONS_PAPER_LINK = "https://www.americanscholarspress.us/journals/IMR/pdf/IMR-1-2026/IMRv22N12026-art7.pdf";
 export const SHARE_PAGE_TITLE = "Share This Page With Someone Else!";
+export const SKILLS_PAGE_DESC = ("Since 2021, I have successfully designed, developed, and deployed numerous websites, web applications, " +
+    "and projects by utilizing multiple programming languages, frontend frameworks, web services, and modules.");
 
 export const SOCIALS = [
     {

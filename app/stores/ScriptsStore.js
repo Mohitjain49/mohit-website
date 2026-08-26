@@ -26,6 +26,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         useHostedScript("/use-docker-script", use_docker_code, "use-docker", ".mjs", PERSONAL_USE_DOCKER_SCRIPT_LINK),
     ];
 
+    /** @type {AbortController} This abort controller manages the event listeners for a script page. */
+    var scriptAbortController = null;
+
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
@@ -177,6 +180,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         await nextTick();
         await sleep(10);
 
+        if(scriptAbortController != null) { scriptAbortController.abort(); }
+        scriptAbortController = new AbortController();
+        window.addEventListener("keydown", (event) => { onScriptPageKeydown(event); }, { signal: scriptAbortController.signal });
+
         const hashStr = router.currentRoute.value.hash.substring(1);
         manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
     }
@@ -184,6 +191,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This function unmounts a page that hosts a script. */
     function unmountScriptPage() {
         fullScreenStore.exitFullScreen();
+        if(scriptAbortController != null) { scriptAbortController.abort(); }
+        scriptAbortController = null;
     }
 
     /**
@@ -194,6 +203,44 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     function openLineOfCodeOptions(event, lineNum) {
         if(event && event instanceof PointerEvent) { event.preventDefault(); }
         if(lineOptions.value.num != lineNum) { setLineOptions(lineNum); }
+    }
+
+    /**
+     * This function should run every time the user presses a key on their keyboard while on a Script Page.
+     * @param {KeyboardEvent} event The Keyboard Event.
+     */
+    function onScriptPageKeydown(event) {
+        try {
+            if(!event || webData.showSharePopup) { return; }
+            if(!event.ctrlKey || event.repeat) { return; }
+            const keyLetter = event.key.toLowerCase();
+
+            if(keyLetter === "c") {
+                const selection = window.getSelection();
+                if(selection && selection.toString().trim().length > 0) { return; }
+
+                event.preventDefault();
+                webData.setMenuOpen(SCRIPTS_MENU, false);
+                copyScript();
+            } else if(keyLetter === "s") {
+                event.preventDefault();
+                webData.setMenuOpen(SCRIPTS_MENU, false);
+
+                if(webData.saveAsSupported && event.shiftKey) {
+                    saveScript();
+                } else {
+                    downloadScript();
+                }
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+        }
+    }
+
+    /** This function returns the script the website is currently using. */
+    function getCurrentScript() {
+        if(!onScriptRoute.value) { return null; }
+        return scripts[currentScriptRoute.value];
     }
 
     /**
@@ -288,12 +335,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * --------------------------------------------------------------------------------
      */
 
-    /** This function returns the script the website is currently using. */
-    function getCurrentScript() {
-        if(!onScriptRoute.value) { return null; }
-        return scripts[currentScriptRoute.value];
-    }
-
     /** This function sets the full screen for the element containing the document or script. */
     async function toggleScriptFullScreen() {
         if(fsStateChanging.value) { return; }
@@ -354,8 +395,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
         currentScriptLink, downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
         copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
-        downloadScript, copyScript, saveScript, toggleScriptFullScreen, setCodeWrapping, setWrapCodeStyles,
-        setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
+        downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
+        setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
     }
 });

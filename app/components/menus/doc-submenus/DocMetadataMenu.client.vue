@@ -40,10 +40,10 @@
                 <div class="top-section">
                     <h3> {{ focusedMetadata.header }} </h3>
                     <div class="metadata-docMenu-focused-options">
-                        <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)" pulse-loop>
+                        <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)" v-pulse-loop>
                             <FontAwesomeIcon :icon="COPY_ACTION_ICONS[metadataCopyState]" />
                         </button>
-                        <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" pulse-loop>
+                        <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" v-pulse-loop>
                             <FontAwesomeIcon icon="fa-xmark" />
                         </button>
                     </div>
@@ -62,7 +62,6 @@
 <script setup>
 const webData = useWebsiteDataStore();
 const { documentMetadataMenuOpen } = storeToRefs(webData);
-const { docImagesSize } = storeToRefs(useDocumentStore());
 
 const props = defineProps({ objectUrl: { type: String, default: "" }});
 const computedUrl = computed(() => { return props.objectUrl; });
@@ -71,11 +70,9 @@ const pdfMetadata = usePdfMetadata(computedUrl);
 const loadingInterval = useIntervalFn(() => { incrementLoadingCount(); }, 400, { immediate: true });
 const docMetadataMenu = shallowRef(null);
 
-usePulseLoopAnimation(docMetadataMenu);
-useWebsiteMenuUtility(docMetadataMenu);
-
 // This watcher closes the bottom section when the user closes or opens this website menu.
 watch(documentMetadataMenuOpen, () => { setFocusedMetadata(false, "", ""); });
+useWebsiteMenuUtility(docMetadataMenu);
 
 /** This manages the state of this menu's bottom section. */
 const focusedMetadata = ref({ show: false, header: "", content: "", fontSize: "10px" });
@@ -161,8 +158,7 @@ const METADATA_FIELDS_2 = [
 ];
 const METADATA_FIELDS_3 = [
     { header: 'File Size (Decimal)', tabs: 5, content: pdfMetadata.fileSize },
-    { header: 'File Size (Binary)', tabs: 6, content: pdfMetadata.fileSizeBinary },
-    { header: 'File Size (PNG)', tabs: 6, content: docImagesSize }
+    { header: 'File Size (Binary)', tabs: 6, content: pdfMetadata.fileSizeBinary }
 ];
 
 /** These are the icons needed for the copy action. */
