@@ -64,9 +64,9 @@
         "vue-router": "^5.2.0"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1117.0",
-        "@aws-sdk/client-s3": "^3.1117.0",
-        "@stefanobartoletti/nuxt-social-share": "^3.2.0",
+        "@aws-sdk/client-cloudfront": "^3.1118.0",
+        "@aws-sdk/client-s3": "^3.1118.0",
+        "@stefanobartoletti/nuxt-social-share": "^3.2.1",
         "@types/google.picker": "^0.0.52",
         "@types/lodash-es": "^4.17.12",
         "@types/node": "^26.3.0",

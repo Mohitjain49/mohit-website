@@ -1,6 +1,11 @@
 export default defineNuxtPlugin((nuxtApp) => {
     /** @type {Array<{ el: HTMLElement, controller: AbortController }>} A list of the animated elements. */
     const animatedElementsList = [];
+    var verifyInterval = null;
+
+    const webData = useWebsiteDataStore();
+    const styleStore = useStyleStore();
+    const verifyWatcher = watch(() => webData.mounted, () => { manageVerifyInterval(); }, { deep: true });
 
     /**
      * This function finds an element in the list of animated elements.
@@ -25,6 +30,30 @@ export default defineNuxtPlugin((nuxtApp) => {
             if(!element.classList.contains('animate__pulse')) { return; }
             element.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
         }
+    }
+
+    /** This function verifies that only the elements that the user is hovering over have the pulse loop class. */
+    function verifyAnimatedElements() {
+        try {
+            const currentElementOnMouse = styleStore.mouseElement;
+            const numElements = animatedElementsList.length;
+
+            for(let i = 0; i < numElements; i++) {
+                const element = animatedElementsList[i].el;
+                if(!element || !element.classList.contains('animate__pulse')) { continue; }
+                if(element === currentElementOnMouse || element.contains(currentElementOnMouse)) { continue; }
+                element.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+        }
+    }
+
+    /** This function manages the verify interval, activating and deactivating it when necessary. */
+    function manageVerifyInterval() {
+        const activate = (webData.mounted == 2);
+        if(verifyInterval != null) { clearInterval(verifyInterval); }
+        verifyInterval = (activate ? setInterval(() => { verifyAnimatedElements(); }, 2000) : null);
     }
 
     /**
@@ -54,6 +83,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         animatedElementsList.splice(itemIndex, 1);
     }
 
+    // This makes a new directive that allows any element to use the pulse-loop animation when hovered over.
     nuxtApp.vueApp.directive('pulse-loop', {
         mounted(el, binding) { onDirectiveElementMounted(el, binding); },
         beforeUnmount(el, binding) { beforeDirectiveElementUnmount(el, binding); }
