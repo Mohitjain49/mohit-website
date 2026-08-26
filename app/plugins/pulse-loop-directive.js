@@ -5,7 +5,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     const webData = useWebsiteDataStore();
     const styleStore = useStyleStore();
-    const verifyWatcher = watch(() => webData.mounted, () => { manageVerifyInterval(); }, { deep: true });
+    watch(() => webData.mounted, () => { manageVerifyInterval(); }, { deep: true });
 
     /**
      * This function finds an element in the list of animated elements.
