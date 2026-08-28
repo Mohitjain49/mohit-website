@@ -16,6 +16,7 @@ const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/av
 
 export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const DOCUMENT_ACTION_PENDING = 1;
+export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
 
 export const DEFAULT_PDF_OUTPUT_SCALE = 2;
 export const DEFAULT_PDF_MAX_WIDTH = 850;
