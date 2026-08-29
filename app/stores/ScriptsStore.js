@@ -337,11 +337,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function sets the full screen for the element containing the document or script. */
     async function toggleScriptFullScreen() {
-        if(fsStateChanging.value) { return; }
-        fsStateChanging.value = true;
+        if(!import.meta.client ||  fsStateChanging.value) { return; }
+        const element = document.getElementById("script-page");
+        if(!element) { return; }
 
+        fsStateChanging.value = true;
         webData.bypassBodyClick();
-        await fullScreenStore.setFullScreen(document.getElementById('script-page'));
+
+        element.scrollTop = 0;
+        await fullScreenStore.setFullScreen(element);
 
         await sleep(50);
         await nextTick();

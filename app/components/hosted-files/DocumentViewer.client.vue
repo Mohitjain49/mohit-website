@@ -282,28 +282,19 @@ async function renderPDF() {
     }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
-    const pageRenderPromises = [];
-    const numPromiseArrays = Math.ceil(numPages / DOCUMENT_RENDER_TASK_PARTITION_SIZE);
-    const numPromisesPerArray = Math.floor(numPages / numPromiseArrays);
-    const numPromisesRemaining = (numPages % numPromiseArrays);
+    const pageRenderPromises = create2dPromiseArray(numPages, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
+    const numPromiseArrays = pageRenderPromises.length;
 
-    // This divides the tasks into separate arrays to ensure the website does not crash or something.
+    // This fills all the numbers in the Array with Promises.
     for(let i = 0; i < numPromiseArrays; i++) {
-        const tempPromiseArray = [];
-        const pagesAccountedFor = (i * numPromisesPerArray);
-        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderSingularPage(j + pagesAccountedFor)); }
-        pageRenderPromises.push(tempPromiseArray);
-    }
-
-    if(numPromisesRemaining > 0) {
-        const tempPromiseArray = [];
-        const pagesAccountedFor = (numPromiseArrays * numPromisesPerArray);
-        for(let i = 1; i <= numPromisesRemaining; i++) { tempPromiseArray.push(renderSingularPage(i + pagesAccountedFor)); }
-        pageRenderPromises.push(tempPromiseArray);
+        const numPromiseForIArray = pageRenderPromises[i].length;
+        for(let j = 0; j < numPromiseForIArray; j++) {
+            pageRenderPromises[i][j] = renderSingularPage(pageRenderPromises[i][j]);
+        }
     }
 
     // This runs all the arrays of promises.
-    for(let k = 0; k < pageRenderPromises.length; k++) { await Promise.all(pageRenderPromises[k]); }
+    for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
@@ -362,15 +353,15 @@ async function rerenderCanvases() {
     }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
-    const pageRenderPromises = [];
-    const numPromiseArrays = Math.ceil(numPages / 10);
-    const numPromisesPerArray = (numPages / numPromiseArrays);
+    const pageRenderPromises = create2dPromiseArray(numPages, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
+    const numPromiseArrays = pageRenderPromises.length;
 
-    // This divides the tasks into separate arrays to ensure the website does not crash or something.
+    // This fills all the numbers in the Array with Promises.
     for(let i = 0; i < numPromiseArrays; i++) {
-        const tempPromiseArray = [];
-        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderSingularCanvas(j + (i * numPromisesPerArray))); }
-        pageRenderPromises.push(tempPromiseArray);
+        const numPromiseForIArray = pageRenderPromises[i].length;
+        for(let j = 0; j < numPromiseForIArray; j++) {
+            pageRenderPromises[i][j] = renderSingularCanvas(pageRenderPromises[i][j]);
+        }
     }
 
     // This runs all the arrays of promises.

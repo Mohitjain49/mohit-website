@@ -17,7 +17,7 @@
                 <FontAwesomeIcon icon="fa-chevron-left" />
             </button>
             <div class="page-nav-center">
-                <input id="page-number-mohit" type="text" readonly v-model="currentObservedPage" />
+                <input id="page-number-mohit" type="text" v-model="currentObservedPage" readonly />
                 <span>{{ ('/ ' + documentStore.docLoaded.totalPages) }}</span>  
             </div>
             <button :class="['page-nav-side-button', (onLastPage ? 'inactive' : '')]" @click="navigatePage('up')" :title="nextPageScrollTitle">
@@ -180,7 +180,8 @@ function navigatePage(direction = "up") {
     margin-right: 3px;
     border-radius: 4px;
     border: 1px solid white;
-    user-select: none;
+    user-select: none !important;
+    pointer-events: none !important;
 }
 
 .page-nav-side-button {

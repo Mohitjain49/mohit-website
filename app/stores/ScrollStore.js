@@ -89,7 +89,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     /** This function sets the lenis instance based on the full screen status. */
     function setLenisInstance() {
+        cancelAutoscroll();
         if(lenis != null) { lenis.destroy(); }
+
         if(fullScreenSet.value) {
             lenis = new Lenis({ wrapper: document.fullscreenElement, autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
             lenis.resize();

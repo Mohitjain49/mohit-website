@@ -673,11 +673,15 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function sets the full screen for the element containing the document or script.
      */
     async function toggleDocumentFullScreen() {
-        if((!onMarkdownRoute.value && !docLoaded.value.status) || fsStateChanging.value) { return; }
-        fsStateChanging.value = true;
+        if(!import.meta.client || (!onMarkdownRoute.value && !docLoaded.value.status) || fsStateChanging.value) { return; }
+        const element = document.getElementById("resume-container");
+        if(!element) { return; }
 
+        fsStateChanging.value = true;
         webData.bypassBodyClick();
-        await fullScreenStore.setFullScreen(document.getElementById("resume-container"));
+
+        element.scrollTop = 0;
+        await fullScreenStore.setFullScreen(element);
 
         await sleep(50);
         await nextTick();

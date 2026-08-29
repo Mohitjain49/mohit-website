@@ -60,3 +60,32 @@ export function removeAnimationClasses(element = null) {
         if(className.startsWith("animate__")) { element.classList.remove(className); }
     }
 }
+
+/**
+ * This function returns an 2D array of "slots" where each slot should hold a Promise.
+ * Each slot represents the promise each number should carry out. For instance [0][0] has the number "1" for the first promise.
+ * @param {Number} totalPromises The total number of promises for the 2D Array.
+ * @param {Number} maxPromisesPerArray The total number of promises that should be run at once.
+ */
+export function create2dPromiseArray(totalPromises = 1, maxPromisesPerArray = DOCUMENT_RENDER_TASK_PARTITION_SIZE) {
+    /** @type {Array<Array<Number>>} A 2D Array of numbers representing the promise each should complete. */
+    const pageRenderPromises = [];
+    const numPromiseArrays = Math.ceil(totalPromises / maxPromisesPerArray);
+    const numPromisesPerArray = Math.floor(totalPromises / numPromiseArrays);
+
+    var numPromisesRemainder = (totalPromises % numPromiseArrays);
+    var pagesAccountedFor = 0;
+
+    // This divides the tasks into separate arrays to ensure the website does not crash or something.
+    for(let i = 0; i < numPromiseArrays; i++) {
+        const length = (numPromisesPerArray + ((numPromisesRemainder > 0) ? 1 : 0));
+        const tempPromiseArray = Array.from({ length }, (_, j) => { return (j + 1 + pagesAccountedFor) });
+
+        pageRenderPromises.push(tempPromiseArray);
+        pagesAccountedFor += length;
+        numPromisesRemainder--;
+    }
+
+    // Returns the 2D Array.
+    return pageRenderPromises;
+}
