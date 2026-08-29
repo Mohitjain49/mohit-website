@@ -2,7 +2,7 @@
     "name": "mohit-website",
     "type": "module",
     "private": true,
-    "version": "3.19.1",
+    "version": "3.19.2",
     "engines": {
         "node": "26.1.0",
         "npm": "11.15.0"
@@ -53,7 +53,7 @@
         "nuxt": "4.5.2",
         "nuxt-vitalizer": "^3.0.0",
         "ofetch": "^1.5.1",
-        "pdfjs-dist": "^6.2.108",
+        "pdfjs-dist": "^6.3.289",
         "pinia": "^4.0.3",
         "pretty-bytes": "^7.1.2",
         "qr-code-styling": "^1.9.2",

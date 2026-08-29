@@ -76,9 +76,9 @@ function checkRedirectRoute(routes = [""]) {
     return (-1 != routes.findIndex((givenRoute) => {
         if(givenRoute.endsWith("/**")) {
             const parsedRoute = givenRoute.substring(0, (givenRoute.length - 3));
-            return (parsedRoute === routePath.value || routePath.value.startsWith(parsedRoute + "/"))
+            return (parsedRoute === routePath.value || routePath.value.startsWith(parsedRoute + "/"));
         } else {
-            return (givenRoute === routePath.value || (givenRoute + "/") === routePath.value)
+            return (givenRoute === routePath.value || (givenRoute + "/") === routePath.value);
         }
     }));
 }
