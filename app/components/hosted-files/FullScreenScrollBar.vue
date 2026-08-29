@@ -75,7 +75,6 @@ function manageOverflowClass(noOverflow = false) {
 function onExitFS() {
     setUserSelect(false);
     manageOverflowClass(false);
-    getFsElement()?.scrollTo({ top: 0, left: 0, behavior: "instant" });
 }
 
 /** This function returns the Full Screen element for it to be adjusted by the Full Screen Element. */
