@@ -53,17 +53,26 @@ export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH) {
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
     const pageRenderPromises = [];
-    const numPromiseArrays = Math.ceil(numPages / 10);
-    const numPromisesPerArray = (numPages / numPromiseArrays);
+    const numPromiseArrays = Math.ceil(numPages / DOCUMENT_RENDER_TASK_PARTITION_SIZE);
+    const numPromisesPerArray = Math.floor(numPages / numPromiseArrays);
+    const numPromisesRemaining = (numPages % numPromiseArrays);
 
     // This divides the tasks into separate arrays to ensure the website does not crash or something.
     for(let i = 0; i < numPromiseArrays; i++) {
         const tempPromiseArray = [];
-        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderPageAsPng(j + (i * numPromisesPerArray))); }
+        const pagesAccountedFor = (i * numPromisesPerArray);
+        for(let j = 1; j <= numPromisesPerArray; j++) { tempPromiseArray.push(renderPageAsPng(j + pagesAccountedFor)); }
+        pageRenderPromises.push(tempPromiseArray);
+    }
+
+    if(numPromisesRemaining > 0) {
+        const tempPromiseArray = [];
+        const pagesAccountedFor = (numPromiseArrays * numPromisesPerArray);
+        for(let i = 1; i <= numPromisesRemaining; i++) { tempPromiseArray.push(renderPageAsPng(i + pagesAccountedFor)); }
         pageRenderPromises.push(tempPromiseArray);
     }
 
     // This runs all the arrays of promises and returns the Array of Images.
-    for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
+    for(let k = 0; k < pageRenderPromises.length; k++) { await Promise.all(pageRenderPromises[k]); }
     return imageObjectUrls;
 }

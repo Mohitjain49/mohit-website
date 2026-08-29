@@ -115,7 +115,10 @@ const INTERNAL_REDIRECTS = [
 const INTERNAL_FILE_REDIRECTS = [
     { routes: ["/license/**"], replacement: "license.txt" },
     { routes: ["/sitemap/**"], replacement: "sitemap.xml" },
-    { routes: ["/favicon/**"], replacement: "favicon.ico" }
+    { routes: ["/favicon/**"], replacement: "favicon.ico" },
+
+    { routes: ["/resume/raw/**"], replacement: "Mohit_Jain_Resume.pdf" },
+    { routes: ["/create-github-repo/raw/**"], replacement: "Create_Github_Repo.pdf" }
 ];
 
 /** This is a list of redirects to other websites. */
@@ -126,12 +129,13 @@ const EXTERNAL_REDIRECTS = [
 
     { routes: ["/tictactoe/**", "/tic-tac-toe/**"], replacement: TICTACTOE_PROJECT_LINK },
     { routes: ["/repo", "/code"], replacement: PERSONAL_WEBSITE_REPOSITORY_LINK },
+    { routes: [(GEN_AI_APPLICATIONS_PAPER_ROUTE + "raw/**")], replacement: GEN_AI_APPLICATIONS_PAPER_LINK },
 
     { routes: ['/wiv', '/worlds-ivue', "/ivue/world"], replacement: WORLDS_IVUE_LINK },
     { routes: ["/ivuemedia", "/ivue/media"], replacement: IVUE_MEDIA_WEBSITE_LINK },
     { routes: ["/ivuerobotics", "/ivue/robotics"], replacement: IVUE_ROBOTICS_WEBSITE_LINK },
     { routes: ["/floridaman"], replacement: FLORIDA_MAN_LINK },
-    { routes: ["/sublo"], replacement: SUBLO_WEBSITE_LINK },
+    { routes: ["/sublo"], replacement: SUBLO_WEBSITE_LINK }
 ];
 </script>
 

@@ -40,7 +40,7 @@
                     <RouterLink :to="footerLink" class="copyright-topBar-btn webpages" title="See Webpages" v-pulse-loop>
                         <FontAwesomeIcon icon="fa-book-open" />
                     </RouterLink>
-                    <a :href="LICENSE_LINK" target="license-mohit-website" class="copyright-topBar-btn white" title="See License" v-pulse-loop>
+                    <a :href="LICENSE_LINK" target="_self" class="copyright-topBar-btn white" title="See License" v-pulse-loop>
                         <FontAwesomeIcon icon="fa-brands fa-creative-commons" />
                     </a>
                 </div>
