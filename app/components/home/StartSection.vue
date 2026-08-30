@@ -19,7 +19,7 @@
                 <div class="start-btn-caption"> {{ link.shortTitle }} </div>
             </RouterLink>
         </div>
-        <div class="start-buttonRow contact-links" ref="startSocialsContainer">
+        <div class="start-buttonRow contact-links">
             <template v-for="(contact, index) in SOCIALS">
                 <div class="start-buttonRow-btn-container" v-if="(index != 2 && index != 4)" :style="getColorStyles(contact.color)">
                     <a v-if="!isMounted" :href="contact.link" class="start-buttonRow-btn"
@@ -38,7 +38,9 @@
                     </button>
 
                     <Transition name="fade-transition">
-                        <div v-if="(startContactObj === contact.id)" class="start-contactBtn-dropdown" :style="getContactDropdownStyles(contact.color)">
+                        <div v-if="(startContactObj === contact.id)" class="start-contactBtn-dropdown" :id="CONTACT_DROPDOWN_ID"
+                            :style="getContactDropdownStyles(contact.color)">
+
                             <button class="start-contactBtn-dropdown-button top" @click="shareContactLink(contact.link)" :title="contact.shareBtn">
                                 Share <FontAwesomeIcon icon="fa-share-from-square" />
                             </button>
@@ -62,24 +64,51 @@
 </template>
 
 <script setup>
+const CONTACT_DROPDOWN_ID = "start-contact-dropdown";
+
 const webData = useWebsiteDataStore();
-const visitorLeftPage = usePageLeave();
 const router = useRouter();
+var abortController = null;
 
 const startContent = ref(null);
-const startSocialsContainer = ref(null);
 const startContactObj = ref("");
 
+// This sets up event listeners that close the contact dropdown when the user clicks outside the dropdown itself or an assoicated button for it.
+const isMounted = onMountedAdvanced(() => {
+    abortController = new AbortController();
+    const signal = abortController.signal;
+
+    window.addEventListener("pointerdown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+    window.addEventListener("mousedown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+    window.addEventListener("touchstart", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+});
+
+onBeforeUnmount(() => { if(abortController != null) { abortController.abort(); }});
 useIntersectionObserver(startContent, ([{ isIntersecting }]) => { setNameTransitions(isIntersecting); });
-watch(visitorLeftPage, (newValue) => { if(newValue) { hideStartContactDropdown(); } });
-const isMounted = onMountedAdvanced(() => { onClickOutside(startSocialsContainer.value, () => { hideStartContactDropdown(); }); });
+
+/**
+ * Given an element, this closes the open Contact Button Dropdown if the element is not a valid element to click.
+ * @param {Event} event The event fired from the window event listener.
+ */
+function checkContactDropdownStayVisible(event) {
+    // console.log(event);
+    if(!event || !event.target) { return; }
+
+    /** @type {Element} The element target from the event. */
+    const element = event.target;
+    const contactDropdownElement = document.getElementById(CONTACT_DROPDOWN_ID);
+
+    if(contactDropdownElement == null || !(contactDropdownElement instanceof Element)) { return; }
+    if(contactDropdownElement === element || contactDropdownElement.contains(element) || element.closest(".start-buttonRow-btn")) { return; }
+    startContactObj.value = "";
+}
 
 /**
  * This function triggers whenever the a button for a social media link is clicked.
  * @param {PointerEvent} event The pointer event from the contact button.
  * @param {{ link: String, id: String }} obj The custom object sent by the contact button.
  */
-function onContactBtnClick(event = new PointerEvent('click'), obj) {
+function onContactBtnClick(event, obj) {
     if(event.altKey) {
         shareContactLink(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
     } else if(event.ctrlKey) {

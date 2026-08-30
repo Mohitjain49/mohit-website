@@ -679,8 +679,6 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         fsStateChanging.value = true;
         webData.bypassBodyClick();
-
-        element.scrollTop = 0;
         await fullScreenStore.setFullScreen(element);
 
         await sleep(50);

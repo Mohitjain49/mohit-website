@@ -250,9 +250,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 triggerClickSound();
             }
         } else if(key === "Escape") {
-            if(fullScreenStore.fullScreenSet) { triggerClickSound(); }
-            else if(showSharePopup.value) { setQRCodePopup("quit"); triggerClickSound(); }
-            else { toggleNavMenu(); triggerClickSound(); }
+            triggerClickSound();
+            event.preventDefault();
+
+            if(fullScreenStore.fullScreenSet) {
+                fullScreenStore.exitFullScreen();
+            } else if(showSharePopup.value) {
+                setQRCodePopup("quit");
+            } else {
+                toggleNavMenu();
+            }
         }
     }
 

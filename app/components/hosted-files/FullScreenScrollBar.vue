@@ -30,7 +30,7 @@ watch(mouseY, (newY, oldY) => { if(mousePressed.value) { scrollFsElement((window
 watch(mousePressed, () => { setUserSelect(mousePressed.value); });
 watch(showScrollBar, (newValue) => { manageOverflowClass(!newValue); });
 
-onMounted(() => { manageOverflowClass(!showScrollBar.value); });
+onMounted(() => { onEnterFS(); });
 onBeforeUnmount(() => { onExitFS(); });
 
 /**
@@ -69,6 +69,12 @@ function manageOverflowClass(noOverflow = false) {
     } else if(!noOverflow) {
         element.classList.remove(className);
     }
+}
+
+/** This function runs when the user enters full screen mode. */
+function onEnterFS() {
+    manageOverflowClass(!showScrollBar.value);
+    getFsElement()?.scrollTo({ top: 0, left: 0, behavior: "instant" });
 }
 
 /** This function runs when the user exits full screen mode. */

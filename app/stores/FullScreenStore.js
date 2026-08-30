@@ -1,5 +1,6 @@
 export const useFullScreenStore = defineStore("screen-store", () => {
     const fullScreenSet = ref(false);
+    const fsChanging = ref(false);
 
     /** @type {import("vue").ShallowRef<HTMLElement>} This tracks the element that IS in full screen mode. */
     const element = shallowRef(null);
@@ -14,8 +15,11 @@ export const useFullScreenStore = defineStore("screen-store", () => {
      * This function sets whether a specific element takes up the whole screen or not.
      * @param {HTMLElement} element The element to expand to full screen.
      */
-    async function setFullScreen(element = new HTMLElement()) {
+    async function setFullScreen(element = null) {
+        if(!import.meta.client || !element || fsChanging.value) { return; }
+        fsChanging.value = true;
         const fullScreenInactive = !fullScreenSet.value;
+
         try {
             if((element.requestFullscreen != undefined) && fullScreenInactive) {
                 await element.requestFullscreen();
@@ -26,8 +30,11 @@ export const useFullScreenStore = defineStore("screen-store", () => {
             } else if((element.msRequestFullscreen != undefined) && fullScreenInactive) {
                 await element.msRequestFullscreen();
             } else if(!fullScreenInactive) {
-                await exitFullScreen();
+                await document.exitFullscreen();
             }
+
+            // This marks that the website is no longer changing its full screen status.
+            fsChanging.value = false;
         } catch(e) {
             console.error(e);
         }
@@ -42,10 +49,13 @@ export const useFullScreenStore = defineStore("screen-store", () => {
 
     /** This function exits the full screen for any element. */
     async function exitFullScreen() {
-        if(fullScreenSet.value && import.meta.client) { await document.exitFullscreen(); }
+        if(!fullScreenSet.value || fsChanging.value || !import.meta.client) { return; }
+        fsChanging.value = true;
+        await document.exitFullscreen();
+        fsChanging.value = false;
     }
 
-    return { fullScreenSet, faIcon, elementTitle, element, oldElement,
+    return { fullScreenSet, fsChanging, faIcon, elementTitle, element, oldElement,
         setFullScreen, setFullScreenStatus, exitFullScreen
     }
 });
