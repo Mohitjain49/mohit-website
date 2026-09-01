@@ -7,13 +7,13 @@
         <button class="doc-save-opt" v-if="webData.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
-        <button class="doc-save-opt" v-if="documentStore.iframeSupported" @click="documentStore.printDoc(false)" title="Print Document" v-pulse-loop>
+        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(false)" :style="printButtonCursor" title="Print Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
         </button>
         <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
-        <button class="doc-save-opt" v-if="documentStore.iframeSupported" @click="documentStore.printDoc(true)" title="Print Document (Screenshots)" v-pulse-loop>
+        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(true)" :style="printButtonCursor" title="Print Document (Screenshots)" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
         </button>
     </div>
@@ -38,6 +38,9 @@
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
+
+const { printInProgress, iframeSupported } = storeToRefs(useDocumentStore());
+const printButtonCursor = computed(() => { return { cursor: (printInProgress.value ? "default" : "") }});
 
 /** This function opens the document menu. */
 function openWebsiteMenu(index = 3) {

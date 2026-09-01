@@ -62,7 +62,7 @@
                 </button>
             </div>
             <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" :style="printButtonCursor" v-pulse-loop>
                     <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
                     <span> Print Document </span>
                 </button>
@@ -74,7 +74,7 @@
                 </button>
             </div>
             <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="printButtonCursor" v-pulse-loop>
                     <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
                     <span> Print Document (Screenshots) </span>
                 </button>
@@ -170,6 +170,7 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 
+const printButtonCursor = computed(() => { return { cursor: (documentStore.printInProgress ? "default" : "") }});
 const docMenu = shallowRef(null);
 useWebsiteMenuUtility(docMenu);
 

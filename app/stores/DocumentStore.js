@@ -59,9 +59,18 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => { return (googleDriveOptAvailable.value >= 0); });
 
-    /** @type {import('vue').ShallowRef<Array<String>>} An array of the object URLs for the images representing the rendered PDF. */
+    /**
+     * @type {import('vue').ShallowRef<Array<String>>}
+     * An array of the object URLs for the images representing the rendered PDF used by the PDF navigation menu.
+     */
     const docImageUrls = shallowRef([]);
-    const docImageFetchFailed = ref(false);
+
+    /**
+     * @type {import('vue').ShallowRef<Array<String>>}
+     * An array of the object URLs for the images representing the rendered PDF used by the custom print functionality.
+     */
+    const docPrintImageUrls = shallowRef([]);
+
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const currentObservedPage = ref(-1);
     const contextMenuPageNumber = ref(0);
@@ -102,15 +111,16 @@ export const useDocumentStore = defineStore("document-store", () => {
     const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
     const currentDocumentFileSize = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].fileSize.value : ""); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
-    const docImagesLoaded = computed(() => { return (docImageUrls.value.length > 0); });
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
-
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
-    const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && docImagesLoaded.value); });
+
     const documentDownloadTitle = computed(() => { return ("Download Document (" + currentDocumentFileSize.value + ")"); });
+    const showPdfPageNav = computed(() => {
+        return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && (docImageUrls.value.length > 0));
+    });
 
     const downloadIcon = computed(() => {
         const downloadInt = documentDownloadStatus.value;
@@ -151,6 +161,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
     const copyPending = computed(() => { return (documentCopyStatus.value == DOCUMENT_ACTION_PENDING); });
 
+    const printInProgress = computed(() => { return (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0); });
     const uploadToGoogleDrivePending = computed(() => {
         return (documentUploadToGoogleDriveStatus.value == DOCUMENT_ACTION_PENDING || googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
     });
@@ -267,10 +278,44 @@ export const useDocumentStore = defineStore("document-store", () => {
                     }
                 });
 
-                const imagesForPrint = await renderPdfAsPng(documentFile.url, TEMP_IMG_WIDTH);
+                // Renders the images for printing if they are not rendered already.
+                if(docPrintImageUrls.value.length <= 0) {
+                    docPrintImageUrls.value = await renderPdfAsPng(documentFile.url, TEMP_IMG_WIDTH);
+                }
+
+                const imagesForPrint = docPrintImageUrls.value;
                 const numImages = imagesForPrint.length;
-                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
                 const imgScaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
+
+                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+                const iframeStyle = printIframeDocument.createElement("style");
+
+                // The style rule here should match the one at the bottom for this same class.
+                iframeStyle.textContent = `
+                    .mohit-doc-customPrint-img {
+                        width: 99vw;
+                        height: 99vh;
+                        max-height: 100vh;
+                        margin: 0px;
+                        padding: 0px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .mohit-doc-customPrint-img img {
+                        width: 100%;
+                        height: 100%;
+                        margin: 0px;
+                        padding: 0px;
+                    }
+
+                    @media print {
+                        @page { margin: 0px; }
+                    }
+                `;
+
+                // Adds styles to the iframe.
+                printIframeDocument.body.appendChild(iframeStyle);
 
                 for(let i = 0; i < numImages; i++) {
                     const newChild = printIframeDocument.createElement("div");
@@ -563,11 +608,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         fullScreenStore.exitFullScreen();
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
 
-        for(let i = 0; i < docImageUrls.value; i++) {
-            URL.revokeObjectURL(docImageUrls.value[i]);
-        }
+        for(let i = 0; i < docImageUrls.value.length; i++) { URL.revokeObjectURL(docImageUrls.value[i]); }
+        for(let j = 0; j < docPrintImageUrls.value.length; j++) { URL.revokeObjectURL(docPrintImageUrls.value[j]); }
 
         docImageUrls.value = [];
+        docPrintImageUrls.value = [];
+
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
         setWindowSizeWatchers(false, false);
     }
@@ -603,7 +649,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             docImageUrls.value = await renderPdfAsPng(documentFile.url, 200);
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
-            docImageFetchFailed.value = true;
         }
     }
 
@@ -714,7 +759,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(index >= 0 && index <= docLoaded.value.totalPages) { contextMenuPageNumber.value = index; }
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, docImagesLoaded, docImageFetchFailed, currentObservedPage, contextMenuPageNumber,
+    return { hostedDocuments, docImageUrls, docLoaded, currentObservedPage, contextMenuPageNumber, printInProgress,
         googleDriveOptionAvailable, copyDocumentSupported, browserPdfViewerPresent, workerSrcAdded, iframeSupported,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle,
         downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, copyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,

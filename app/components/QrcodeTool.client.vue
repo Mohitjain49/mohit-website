@@ -79,7 +79,7 @@
                         <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
                         </button>
-                        <button @click="printQRCode()" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
+                        <button v-if="iframeSupported" @click="printQRCode()" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
                             <FontAwesomeIcon :icon="printImageIcon" :spin-pulse="(actions.printImage == 1)" />
                         </button>
                         <a v-if="(qrCodeURL != undefined)" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
@@ -151,8 +151,8 @@ const qrCodeDisplay = ref(false);
 /** This integer determines what image type should be displayed for the QR Code. */
 const qrcodeImageMode = ref(0);
 
-/** @type {Ref<Blob>} This blob is used for the backgorund image and to download the qr code. */
-const qrCodeBlob = ref(null);
+/** @type {import('vue').ShallowRef<Blob>} This blob is used for the backgorund image and to download the qr code. */
+const qrCodeBlob = shallowRef(null);
 const qrCodeURL = useObjectUrl(qrCodeBlob);
 
 const showMainPopup = ref(false);
@@ -174,6 +174,7 @@ const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.
 const qrcodeImageCopySupported = computed(() => { return ((qrcodeImageMode.value == 0) ? webData.copyImageSupported : webData.copySvgSupported); });
 
 const { showSharePopupImmediate } = storeToRefs(webData);
+const { iframeSupported } = storeToRefs(useDocumentStore());
 const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
 
 const qrCodeFormattedLink = computed(() => {
@@ -602,7 +603,7 @@ async function copyQRCode() {
 
 /** This function lets the user print the QR Code rendered by the user. */
 async function printQRCode() {
-    if(actions.value.printImage > 0 || !qrCodeURL.value) { return; }
+    if(actions.value.printImage > 0 || !iframeSupported.value || !qrCodeURL.value) { return; }
     actions.value.printImage = 1;
 
     const PRINT_IFRAME_ID = "mohit-qrcode-customPrint";
@@ -645,6 +646,10 @@ async function printQRCode() {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+            }
+
+            @media print {
+                @page { margin: 0px; }
             }
         `;
 
