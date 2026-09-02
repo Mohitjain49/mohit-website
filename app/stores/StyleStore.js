@@ -9,9 +9,9 @@ export const useStyleStore = defineStore("style-store", () => {
     const fullScreenStore = useFullScreenStore();
     const fullScreenSet = getFullScreenSet();
 
-    const viewportRafEnabled = shallowRef(false);
     const viewportWidth = shallowRef(Number.POSITIVE_INFINITY);
     const viewportHeight = shallowRef(Number.POSITIVE_INFINITY);
+    const recordedDevicePixelRatio = shallowRef(1);
 
     const cssViewportWidth = shallowRef(Number.POSITIVE_INFINITY);
     const cssViewportHeight = shallowRef(Number.POSITIVE_INFINITY);
@@ -41,6 +41,7 @@ export const useStyleStore = defineStore("style-store", () => {
     const mounted = ref(false);
     const zoomFactor = ref(1.0);
 
+    const viewportRafEnabled = shallowRef(false);
     const breakpointsEnabled = ref(false);
     const cssLayoutObserverEnabled = ref(false);
     const trueViewportVariablesEnabled = ref(false);
@@ -254,11 +255,16 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!window) { return; }
         const oldViewportWidth = viewportWidth.value;
         const oldViewportHeight = viewportHeight.value;
+        const oldDevicePixelRatio = recordedDevicePixelRatio.value;
 
         viewportWidth.value = window.innerWidth;
         viewportHeight.value = window.innerHeight;
+        recordedDevicePixelRatio.value = (window.devicePixelRatio || 1);
 
         if(viewportWidth.value !== oldViewportWidth || viewportHeight.value !== oldViewportHeight) {
+            window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
+        }
+        if(recordedDevicePixelRatio.value !== oldDevicePixelRatio) {
             window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
         }
 
@@ -599,7 +605,7 @@ export const useStyleStore = defineStore("style-store", () => {
 
     return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY, mouseElement,
         breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled, cssLayoutObserverEnabled,
-        viewportWidth, viewportHeight, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
+        viewportWidth, viewportHeight, recordedDevicePixelRatio, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,
         enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
         enableMousePositionRecorder, disableMousePositionRecorder, resetMousePositionRecorder,

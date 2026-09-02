@@ -18,7 +18,6 @@ export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-b
 export const DOCUMENT_ACTION_PENDING = 1;
 export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
 
-export const DEFAULT_PDF_OUTPUT_SCALE = 2;
 export const DEFAULT_PDF_MAX_WIDTH = 850;
 export const DEFAULT_PDF_MIN_WIDTH = 320;
 export const PDF_LETTER_SCALE = 1.295;

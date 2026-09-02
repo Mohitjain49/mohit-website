@@ -26,12 +26,12 @@ export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH) {
         const canvasElement = document.createElement("canvas");
         const canvasContext = canvasElement.getContext("2d");
 
-        canvasElement.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
-        canvasElement.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
+        canvasElement.height = Math.floor(viewport.height);
+        canvasElement.width = Math.floor(viewport.width);
 
         const canvasRenderTask = pdfPage.render({
             viewport: viewport,
-            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+            transform: [1, 0, 0, 1, 0, 0],
             canvasContext
         });
 

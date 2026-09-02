@@ -78,6 +78,7 @@ const props = defineProps({
 /** @type {import('vue').Ref<Array<HTMLElement>>} The array of references to the Page elemnets. */
 const pageRefs = ref([]);
 const currentDocumentSize = ref(0);
+const currentPixelRatio = ref(1);
 
 // This observer tracks which page the user is currently viewing.
 useIntersectionObserver(pageRefs, (entry) => {
@@ -158,6 +159,7 @@ async function renderPDF() {
 
     // This sets the initial document size for each PDF Page.
     currentDocumentSize.value = documentStore.customPdfWidth;
+    currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
 
     /**
      * This function renders a singular page.
@@ -183,14 +185,14 @@ async function renderPDF() {
         context.imageSmoothingEnabled = true;
         context.imageSmoothingQuality = 'high';
 
-        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
-        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.width = Math.floor(viewport.width * currentPixelRatio.value);
+        canvas.height = Math.floor(viewport.height * currentPixelRatio.value);
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
         const canvasRenderTask = page.render({
             canvasContext: context,
-            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+            transform: [currentPixelRatio.value, 0, 0, currentPixelRatio.value, 0, 0],
             viewport: viewport
         });
 
@@ -312,9 +314,12 @@ async function renderPDF() {
 
 /** This function rerenders the canvases for the PDF. */
 async function rerenderCanvases() {
-    if(currentDocumentSize.value == documentStore.customPdfWidth) { return; }
+    const documentSizeUnchanged = (currentDocumentSize.value == documentStore.customPdfWidth);
+    const pixelRatioUnchanged = (currentPixelRatio.value == styleStore.recordedDevicePixelRatio);
+    if(documentSizeUnchanged && pixelRatioUnchanged) { return; }
+
     currentDocumentSize.value = documentStore.customPdfWidth;
-    const numPages = pages.value;
+    currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
 
     /** This function renders a singular canvas  */
     async function renderSingularCanvas(i = 1) {
@@ -337,14 +342,14 @@ async function rerenderCanvases() {
         context.imageSmoothingEnabled = true;
         context.imageSmoothingQuality = 'high';
 
-        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
-        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.width = Math.floor(viewport.width * currentPixelRatio.value);
+        canvas.height = Math.floor(viewport.height * currentPixelRatio.value);
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
         const canvasRenderTask = page.render({
             canvasContext: context,
-            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+            transform: [currentPixelRatio.value, 0, 0, currentPixelRatio.value, 0, 0],
             viewport: viewport
         });
 
@@ -353,7 +358,7 @@ async function rerenderCanvases() {
     }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
-    const pageRenderPromises = create2dPromiseArray(numPages, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
+    const pageRenderPromises = create2dPromiseArray(pages.value, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
     const numPromiseArrays = pageRenderPromises.length;
 
     // This fills all the numbers in the Array with Promises.
