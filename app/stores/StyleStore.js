@@ -262,10 +262,10 @@ export const useStyleStore = defineStore("style-store", () => {
         recordedDevicePixelRatio.value = (window.devicePixelRatio || 1);
 
         if(viewportWidth.value !== oldViewportWidth || viewportHeight.value !== oldViewportHeight) {
-            window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
+            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "resize" }}));
         }
         if(recordedDevicePixelRatio.value !== oldDevicePixelRatio) {
-            window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
+            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "pixel-ratio" }}));
         }
 
         if(!document || !document.getElementById) { return; }
@@ -281,7 +281,7 @@ export const useStyleStore = defineStore("style-store", () => {
         cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
 
         if(cssViewportWidth.value !== oldCssViewportWidth || cssViewportHeight.value !== oldCssViewportHeight) {
-            window.dispatchEvent(new Event("animation-resize", { cancelable: false }));
+            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "css-resize" }}));
         }
     }
 

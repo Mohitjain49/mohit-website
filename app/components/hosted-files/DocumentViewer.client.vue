@@ -112,7 +112,7 @@ onMountedAdvanced(async() => {
     await renderPDF();
 
     const signal = resizeAbortController.signal;
-    window.addEventListener("animation-resize", () => { resizePdfViewer(null); }, { signal });
+    window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
     window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
     window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
 });
@@ -176,7 +176,7 @@ async function renderPDF() {
 
         // Sets a properly scaled viewport so it works on every necessary size.
         const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
-        resizePdfViewer(i);
+        setPdfPageScaleFactor(i);
 
         /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
         var canvas = document.getElementById("pdf_canvas_" + i);
@@ -314,10 +314,11 @@ async function renderPDF() {
 
 /** This function rerenders the canvases for the PDF. */
 async function rerenderCanvases() {
+    resizeTimeout = null;
     const documentSizeUnchanged = (currentDocumentSize.value == documentStore.customPdfWidth);
     const pixelRatioUnchanged = (currentPixelRatio.value == styleStore.recordedDevicePixelRatio);
-    if(documentSizeUnchanged && pixelRatioUnchanged) { return; }
 
+    if(documentSizeUnchanged && pixelRatioUnchanged) { return; }
     currentDocumentSize.value = documentStore.customPdfWidth;
     currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
 
@@ -333,7 +334,7 @@ async function rerenderCanvases() {
 
         // Sets a properly scaled viewport so it works on every necessary size.
         const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
-        resizePdfViewer(i);
+        setPdfPageScaleFactor(i);
 
         /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
         var canvas = document.getElementById("pdf_canvas_" + i);
@@ -371,23 +372,20 @@ async function rerenderCanvases() {
 
     // This runs all the arrays of promises.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-    resizeTimeout = null;
+    if(!pixelRatioUnchanged) { await documentStore.getPdfAsImages(); }
 }
 
 /** This function checks if the render abort signal has been sent or not. */
 function renderAborted() { return renderAbortController.signal.aborted; }
 
 /**
- * This function resizes all necessary styles for the PDF Viewer when called.
- * @param {Number} index "null" if the user wants to update ALL the pages, or the index of the page.
+ * This function resizes all necessary components for the PDF Viewer when called.
+ * @param {Event} event The event fired by resizing the screen.
  */
-function resizePdfViewer(index = null) {
-    if(!index || index < 1 || index > pages.value) {
-        if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
-        resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
-    } else {
-        setPdfPageScaleFactor(index);
-    }
+function resizePdfViewer(event) {
+    if(webData.pdfNavMenuOpen && event && event.detail.type === "pixel-ratio") { webData.closeNavMenu(); }
+    if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+    resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
 }
 
 /**
@@ -512,7 +510,8 @@ function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
     const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue(PDFJS_SCALE_CSS_PROPERTY));
 
     const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
-    const top = (pageElement.getBoundingClientRect().top + scrollY + (((destY * destScalar) - 90) / cssToWindowHeightRatio.value));
+    const destPixels = (((destY * destScalar) - (fullScreenSet.value ? 20 : 90)) / cssToWindowHeightRatio.value);
+    const top = (pageElement.getBoundingClientRect().top + scrollY + destPixels);
     scrollToTarget(top);
 
     if(setRoute) {

@@ -279,7 +279,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
                 // Renders the images for printing if they are not rendered already.
                 if(docPrintImageUrls.value.length <= 0) {
-                    docPrintImageUrls.value = await renderPdfAsPng(documentFile.url, TEMP_IMG_WIDTH);
+                    docPrintImageUrls.value = await renderPdfAsPng(documentFile.url, TEMP_IMG_WIDTH, false);
                 }
 
                 const imagesForPrint = docPrintImageUrls.value;
@@ -645,7 +645,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         try {
             const documentFile = getCurrentPDFObject();
             if(!documentFile) { throw new Error("Document Does Not Exist."); }
-            docImageUrls.value = await renderPdfAsPng(documentFile.url, 200);
+
+            for(let i = 0; i < docImageUrls.value.length; i++) { URL.revokeObjectURL(docImageUrls.value[i]); }
+            docImageUrls.value = [];
+            docImageUrls.value = await renderPdfAsPng(documentFile.url, 200, true);
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
         }

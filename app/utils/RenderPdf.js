@@ -2,8 +2,9 @@
  * This function takes a PDF and renders it as an array of PNGs, one for each page.
  * @param {String} url The URL of the PDF.
  * @param {Number} width The Width Of The PDF.
+ * @param {Boolean} usePixelRatio If true, this function incorporates the device pixel ratio to enhance the rendered image.
  */
-export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH) {
+export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH, usePixelRatio = false) {
     if(import.meta.server || !url || url === "") { throw new Error("URL Invalid."); }
     const pdfBlob = await (await fetch(url)).blob(); // The blob fetched with the URL.
 
@@ -16,6 +17,7 @@ export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH) {
 
     /** @type {Array<String>} An array of Object URLs representing every page as a PNG. */
     const imageObjectUrls = Array.from({ length: numPages }, () => { return null; });
+    const outputScale = (usePixelRatio ? useStyleStore().recordedDevicePixelRatio : 1);
 
     /** This function renders a specific page in the PDF as a PNG. */
     async function renderPageAsPng(pageNum = 1) {
@@ -26,12 +28,12 @@ export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH) {
         const canvasElement = document.createElement("canvas");
         const canvasContext = canvasElement.getContext("2d");
 
-        canvasElement.height = Math.floor(viewport.height);
-        canvasElement.width = Math.floor(viewport.width);
+        canvasElement.height = Math.floor(viewport.height * outputScale);
+        canvasElement.width = Math.floor(viewport.width * outputScale);
 
         const canvasRenderTask = pdfPage.render({
             viewport: viewport,
-            transform: [1, 0, 0, 1, 0, 0],
+            transform: [outputScale, 0, 0, outputScale, 0, 0],
             canvasContext
         });
 
