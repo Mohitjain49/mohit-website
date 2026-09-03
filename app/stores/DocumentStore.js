@@ -240,7 +240,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         const PRINT_IFRAME_ID = "mohit-doc-customPrint";
         const PRINT_IFRAME_IMG_CLASS = "mohit-doc-customPrint-img";
-        const TEMP_IMG_WIDTH = 850;
+        const TEMP_IMG_WIDTH = 1632;
 
         try {
             const documentFile = getCurrentPDFObject();
@@ -293,8 +293,9 @@ export const useDocumentStore = defineStore("document-store", () => {
                 iframeStyle.textContent = `
                     .mohit-doc-customPrint-img {
                         width: 99vw;
-                        height: 99vh;
-                        max-height: 100vh;
+                        max-width: 816px;
+                        max-height: 99vh;
+                        aspect-ratio: 816 / 1056;
                         margin: 0px;
                         padding: 0px;
                         display: flex;
@@ -310,6 +311,15 @@ export const useDocumentStore = defineStore("document-store", () => {
 
                     @media print {
                         @page { margin: 0px; }
+                    }
+                    @media (orientation: landscape) {
+                        .mohit-doc-customPrint-img {
+                            height: 99vh !important;
+                            width: auto !important;
+                            max-width: 99vw !important;
+                            max-height: 1056px !important;
+                            aspect-ratio: 816 / 1056;
+                        }
                     }
                 `;
 
