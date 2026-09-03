@@ -386,7 +386,7 @@ const MAIN_BTNS = [
         font-size: 23px;
     }
     .start-contactBtn-dropdown {
-        top: calc(75% + 10px);
+        top: calc(75% + 12px);
         scale: 0.75;
     }
 }

@@ -54,7 +54,7 @@ const CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE = "mohit-pdfjs-raw-height";
 const CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE = "page-num";
 
 var renderAbortController = new AbortController();
-var resizeAbortController = new AbortController();
+var eventAbortController = new AbortController();
 
 var pdfDocLoadingTask = null;
 var resizeTimeout = null;
@@ -111,14 +111,17 @@ onMountedAdvanced(async() => {
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
     await renderPDF();
 
-    const signal = resizeAbortController.signal;
+    const signal = eventAbortController.signal;
     window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
     window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
     window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
 });
 onBeforeUnmount(() => {
     renderAbortController.abort();
-    resizeAbortController.abort();
+    eventAbortController.abort();
+
+    renderAbortController = null;
+    eventAbortController = null;
 
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
@@ -256,7 +259,7 @@ async function renderPDF() {
                         // This event listener watches out for click events to direct the user to the proper location when clicked.
                         innerAnnotationElement.addEventListener("click",
                             (event) => { onAnnotationClick(event); },
-                            { signal: resizeAbortController.signal }
+                            { signal: eventAbortController.signal }
                         );
                     } else if(annotationDataObject.url && annotationDataObject.url.startsWith(PERSONAL_WEBSITE_LINK)) {
                         const annotationUrl = annotationDataObject.url;
@@ -269,7 +272,7 @@ async function renderPDF() {
                         // This event listener watches out for click events to direct the user to the proper webpage when clicked.
                         innerAnnotationElement.addEventListener("click",
                             (event) => { onInnerWebsiteAnnotationClick(event); },
-                            { signal: resizeAbortController.signal }
+                            { signal: eventAbortController.signal }
                         );
                     }
                 }
@@ -305,8 +308,8 @@ async function renderPDF() {
     if(renderAborted()) { return; }
 
     try {
-        rerenderCanvases();
         await documentStore.getPdfAsImages();
+        await rerenderCanvases();
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -319,6 +322,9 @@ async function rerenderCanvases() {
     const pixelRatioUnchanged = (currentPixelRatio.value == styleStore.recordedDevicePixelRatio);
 
     if(documentSizeUnchanged && pixelRatioUnchanged) { return; }
+    if(renderAbortController != null) { renderAbortController.abort(); }
+    renderAbortController = new AbortController();
+
     currentDocumentSize.value = documentStore.customPdfWidth;
     currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
 
@@ -376,7 +382,9 @@ async function rerenderCanvases() {
 }
 
 /** This function checks if the render abort signal has been sent or not. */
-function renderAborted() { return renderAbortController.signal.aborted; }
+function renderAborted() {
+    return ((renderAbortController == null) ? false : renderAbortController.signal.aborted);
+}
 
 /**
  * This function resizes all necessary components for the PDF Viewer when called.
