@@ -54,7 +54,7 @@ const CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE = "mohit-pdfjs-raw-height";
 const CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE = "page-num";
 
 var renderAbortController = new AbortController();
-var resizeAbortController = new AbortController();
+var eventAbortController = new AbortController();
 
 var pdfDocLoadingTask = null;
 var resizeTimeout = null;
@@ -78,6 +78,7 @@ const props = defineProps({
 /** @type {import('vue').Ref<Array<HTMLElement>>} The array of references to the Page elemnets. */
 const pageRefs = ref([]);
 const currentDocumentSize = ref(0);
+const currentPixelRatio = ref(1);
 
 // This observer tracks which page the user is currently viewing.
 useIntersectionObserver(pageRefs, (entry) => {
@@ -107,17 +108,24 @@ const showFsWebCover = computed(() => {
 
 // These manage the PDF Viewer when it is mounted an unmounted.
 onMountedAdvanced(async() => {
-    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
-    await renderPDF();
+    try {
+        styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
+        await renderPDF();
 
-    const signal = resizeAbortController.signal;
-    window.addEventListener("animation-resize", () => { resizePdfViewer(null); }, { signal });
-    window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
-    window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
+        const signal = eventAbortController.signal;
+        window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
+        window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
+        window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
 });
 onBeforeUnmount(() => {
     renderAbortController.abort();
-    resizeAbortController.abort();
+    eventAbortController.abort();
+
+    renderAbortController = null;
+    eventAbortController = null;
 
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     if(pdfDocLoadingTask != null) { pdfDocLoadingTask.destroy(); }
@@ -158,6 +166,7 @@ async function renderPDF() {
 
     // This sets the initial document size for each PDF Page.
     currentDocumentSize.value = documentStore.customPdfWidth;
+    currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
 
     /**
      * This function renders a singular page.
@@ -174,7 +183,7 @@ async function renderPDF() {
 
         // Sets a properly scaled viewport so it works on every necessary size.
         const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
-        resizePdfViewer(i);
+        setPdfPageScaleFactor(i);
 
         /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
         var canvas = document.getElementById("pdf_canvas_" + i);
@@ -183,14 +192,14 @@ async function renderPDF() {
         context.imageSmoothingEnabled = true;
         context.imageSmoothingQuality = 'high';
 
-        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
-        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.width = Math.floor(viewport.width * currentPixelRatio.value);
+        canvas.height = Math.floor(viewport.height * currentPixelRatio.value);
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
         const canvasRenderTask = page.render({
             canvasContext: context,
-            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+            transform: [currentPixelRatio.value, 0, 0, currentPixelRatio.value, 0, 0],
             viewport: viewport
         });
 
@@ -254,7 +263,7 @@ async function renderPDF() {
                         // This event listener watches out for click events to direct the user to the proper location when clicked.
                         innerAnnotationElement.addEventListener("click",
                             (event) => { onAnnotationClick(event); },
-                            { signal: resizeAbortController.signal }
+                            { signal: eventAbortController.signal }
                         );
                     } else if(annotationDataObject.url && annotationDataObject.url.startsWith(PERSONAL_WEBSITE_LINK)) {
                         const annotationUrl = annotationDataObject.url;
@@ -267,7 +276,7 @@ async function renderPDF() {
                         // This event listener watches out for click events to direct the user to the proper webpage when clicked.
                         innerAnnotationElement.addEventListener("click",
                             (event) => { onInnerWebsiteAnnotationClick(event); },
-                            { signal: resizeAbortController.signal }
+                            { signal: eventAbortController.signal }
                         );
                     }
                 }
@@ -303,8 +312,8 @@ async function renderPDF() {
     if(renderAborted()) { return; }
 
     try {
-        rerenderCanvases();
         await documentStore.getPdfAsImages();
+        await rerenderCanvases();
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -312,9 +321,16 @@ async function renderPDF() {
 
 /** This function rerenders the canvases for the PDF. */
 async function rerenderCanvases() {
-    if(currentDocumentSize.value == documentStore.customPdfWidth) { return; }
+    resizeTimeout = null;
+    const documentSizeUnchanged = (currentDocumentSize.value == documentStore.customPdfWidth);
+    const pixelRatioUnchanged = (currentPixelRatio.value == styleStore.recordedDevicePixelRatio);
+
+    if(documentSizeUnchanged && pixelRatioUnchanged) { return; }
+    if(renderAbortController != null) { renderAbortController.abort(); }
+    renderAbortController = new AbortController();
+
     currentDocumentSize.value = documentStore.customPdfWidth;
-    const numPages = pages.value;
+    currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
 
     /** This function renders a singular canvas  */
     async function renderSingularCanvas(i = 1) {
@@ -328,7 +344,7 @@ async function rerenderCanvases() {
 
         // Sets a properly scaled viewport so it works on every necessary size.
         const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
-        resizePdfViewer(i);
+        setPdfPageScaleFactor(i);
 
         /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
         var canvas = document.getElementById("pdf_canvas_" + i);
@@ -337,14 +353,14 @@ async function rerenderCanvases() {
         context.imageSmoothingEnabled = true;
         context.imageSmoothingQuality = 'high';
 
-        canvas.width = Math.floor(viewport.width * DEFAULT_PDF_OUTPUT_SCALE);
-        canvas.height = Math.floor(viewport.height * DEFAULT_PDF_OUTPUT_SCALE);
+        canvas.width = Math.floor(viewport.width * currentPixelRatio.value);
+        canvas.height = Math.floor(viewport.height * currentPixelRatio.value);
         canvas.style.width = 'var(--mohit-custom-pdf-width)';
         canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
         const canvasRenderTask = page.render({
             canvasContext: context,
-            transform: [DEFAULT_PDF_OUTPUT_SCALE, 0, 0, DEFAULT_PDF_OUTPUT_SCALE, 0, 0],
+            transform: [currentPixelRatio.value, 0, 0, currentPixelRatio.value, 0, 0],
             viewport: viewport
         });
 
@@ -353,7 +369,7 @@ async function rerenderCanvases() {
     }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
-    const pageRenderPromises = create2dPromiseArray(numPages, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
+    const pageRenderPromises = create2dPromiseArray(pages.value, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
     const numPromiseArrays = pageRenderPromises.length;
 
     // This fills all the numbers in the Array with Promises.
@@ -366,23 +382,22 @@ async function rerenderCanvases() {
 
     // This runs all the arrays of promises.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-    resizeTimeout = null;
+    if(!pixelRatioUnchanged) { await documentStore.getPdfAsImages(); }
 }
 
 /** This function checks if the render abort signal has been sent or not. */
-function renderAborted() { return renderAbortController.signal.aborted; }
+function renderAborted() {
+    return ((renderAbortController == null) ? false : renderAbortController.signal.aborted);
+}
 
 /**
- * This function resizes all necessary styles for the PDF Viewer when called.
- * @param {Number} index "null" if the user wants to update ALL the pages, or the index of the page.
+ * This function resizes all necessary components for the PDF Viewer when called.
+ * @param {Event} event The event fired by resizing the screen.
  */
-function resizePdfViewer(index = null) {
-    if(!index || index < 1 || index > pages.value) {
-        if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
-        resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
-    } else {
-        setPdfPageScaleFactor(index);
-    }
+function resizePdfViewer(event) {
+    if(webData.pdfNavMenuOpen && event && event.detail.type === "pixel-ratio") { webData.closeNavMenu(); }
+    if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+    resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
 }
 
 /**
@@ -507,7 +522,8 @@ function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
     const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue(PDFJS_SCALE_CSS_PROPERTY));
 
     const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
-    const top = (pageElement.getBoundingClientRect().top + scrollY + (((destY * destScalar) - 90) / cssToWindowHeightRatio.value));
+    const destPixels = (((destY * destScalar) - (fullScreenSet.value ? 20 : 90)) / cssToWindowHeightRatio.value);
+    const top = (pageElement.getBoundingClientRect().top + scrollY + destPixels);
     scrollToTarget(top);
 
     if(setRoute) {

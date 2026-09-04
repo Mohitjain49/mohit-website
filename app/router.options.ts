@@ -93,7 +93,7 @@ export default {
         if(hashExists) {
             try { await scrollStore.scrollToId(hash, 0, 0); } catch(e) {}
         } else if(await checkDocumentScrollParams(to, from)) {
-            try { window.dispatchEvent(new Event("mohit-pdf-destination-scroll", { cancelable: false })); } catch(e) {}
+            try { window.dispatchEvent(new CustomEvent("mohit-pdf-destination-scroll", { cancelable: false })); } catch(e) {}
         } else if(!differentPage) {
             try { await scrollStore.scrollToTop(false, 0); } catch(e) {}
         }

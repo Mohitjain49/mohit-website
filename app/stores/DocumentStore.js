@@ -18,7 +18,6 @@ export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-b
 export const DOCUMENT_ACTION_PENDING = 1;
 export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
 
-export const DEFAULT_PDF_OUTPUT_SCALE = 2;
 export const DEFAULT_PDF_MAX_WIDTH = 850;
 export const DEFAULT_PDF_MIN_WIDTH = 320;
 export const PDF_LETTER_SCALE = 1.295;
@@ -59,9 +58,18 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => { return (googleDriveOptAvailable.value >= 0); });
 
-    /** @type {import('vue').ShallowRef<Array<String>>} An array of the object URLs for the images representing the rendered PDF. */
+    /**
+     * @type {import('vue').ShallowRef<Array<String>>}
+     * An array of the object URLs for the images representing the rendered PDF used by the PDF navigation menu.
+     */
     const docImageUrls = shallowRef([]);
-    const docImageFetchFailed = ref(false);
+
+    /**
+     * @type {import('vue').ShallowRef<Array<String>>}
+     * An array of the object URLs for the images representing the rendered PDF used by the custom print functionality.
+     */
+    const docPrintImageUrls = shallowRef([]);
+
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const currentObservedPage = ref(-1);
     const contextMenuPageNumber = ref(0);
@@ -102,15 +110,16 @@ export const useDocumentStore = defineStore("document-store", () => {
     const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
     const currentDocumentFileSize = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].fileSize.value : ""); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
-    const docImagesLoaded = computed(() => { return (docImageUrls.value.length > 0); });
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
-
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
-    const showPdfPageNav = computed(() => { return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && docImagesLoaded.value); });
+
     const documentDownloadTitle = computed(() => { return ("Download Document (" + currentDocumentFileSize.value + ")"); });
+    const showPdfPageNav = computed(() => {
+        return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && (docImageUrls.value.length > 0));
+    });
 
     const downloadIcon = computed(() => {
         const downloadInt = documentDownloadStatus.value;
@@ -151,6 +160,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
     const copyPending = computed(() => { return (documentCopyStatus.value == DOCUMENT_ACTION_PENDING); });
 
+    const printInProgress = computed(() => { return (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0); });
     const uploadToGoogleDrivePending = computed(() => {
         return (documentUploadToGoogleDriveStatus.value == DOCUMENT_ACTION_PENDING || googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
     });
@@ -230,7 +240,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         const PRINT_IFRAME_ID = "mohit-doc-customPrint";
         const PRINT_IFRAME_IMG_CLASS = "mohit-doc-customPrint-img";
-        const TEMP_IMG_WIDTH = 850;
+        const TEMP_IMG_WIDTH = 1632;
 
         try {
             const documentFile = getCurrentPDFObject();
@@ -267,10 +277,55 @@ export const useDocumentStore = defineStore("document-store", () => {
                     }
                 });
 
-                const imagesForPrint = await renderPdfAsPng(documentFile.url, TEMP_IMG_WIDTH);
+                // Renders the images for printing if they are not rendered already.
+                if(docPrintImageUrls.value.length <= 0) {
+                    docPrintImageUrls.value = await renderPdfAsPng(documentFile.url, TEMP_IMG_WIDTH, false);
+                }
+
+                const imagesForPrint = docPrintImageUrls.value;
                 const numImages = imagesForPrint.length;
-                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
                 const imgScaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
+
+                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+                const iframeStyle = printIframeDocument.createElement("style");
+
+                // The style rule here should match the one at the bottom for this same class.
+                iframeStyle.textContent = `
+                    .mohit-doc-customPrint-img {
+                        width: 99vw;
+                        max-width: 816px;
+                        max-height: 99vh;
+                        aspect-ratio: 816 / 1056;
+                        margin: 0px;
+                        padding: 0px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin: auto;
+                    }
+                    .mohit-doc-customPrint-img img {
+                        width: 100%;
+                        height: 100%;
+                        margin: 0px;
+                        padding: 0px;
+                    }
+
+                    @media print {
+                        @page { margin: 0px; }
+                    }
+                    @media (orientation: landscape) {
+                        .mohit-doc-customPrint-img {
+                            height: 99vh !important;
+                            width: auto !important;
+                            max-width: 99vw !important;
+                            max-height: 1056px !important;
+                            aspect-ratio: 816 / 1056;
+                        }
+                    }
+                `;
+
+                // Adds styles to the iframe.
+                printIframeDocument.body.appendChild(iframeStyle);
 
                 for(let i = 0; i < numImages; i++) {
                     const newChild = printIframeDocument.createElement("div");
@@ -563,11 +618,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         fullScreenStore.exitFullScreen();
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
 
-        for(let i = 0; i < docImageUrls.value; i++) {
-            URL.revokeObjectURL(docImageUrls.value[i]);
-        }
+        for(let i = 0; i < docImageUrls.value.length; i++) { URL.revokeObjectURL(docImageUrls.value[i]); }
+        for(let j = 0; j < docPrintImageUrls.value.length; j++) { URL.revokeObjectURL(docPrintImageUrls.value[j]); }
 
         docImageUrls.value = [];
+        docPrintImageUrls.value = [];
+
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
         setWindowSizeWatchers(false, false);
     }
@@ -600,10 +656,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         try {
             const documentFile = getCurrentPDFObject();
             if(!documentFile) { throw new Error("Document Does Not Exist."); }
-            docImageUrls.value = await renderPdfAsPng(documentFile.url, 200);
+
+            for(let i = 0; i < docImageUrls.value.length; i++) { URL.revokeObjectURL(docImageUrls.value[i]); }
+            docImageUrls.value = [];
+            docImageUrls.value = await renderPdfAsPng(documentFile.url, 200, true);
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
-            docImageFetchFailed.value = true;
         }
     }
 
@@ -714,7 +772,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(index >= 0 && index <= docLoaded.value.totalPages) { contextMenuPageNumber.value = index; }
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, docImagesLoaded, docImageFetchFailed, currentObservedPage, contextMenuPageNumber,
+    return { hostedDocuments, docImageUrls, docLoaded, currentObservedPage, contextMenuPageNumber, printInProgress,
         googleDriveOptionAvailable, copyDocumentSupported, browserPdfViewerPresent, workerSrcAdded, iframeSupported,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle,
         downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, copyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
