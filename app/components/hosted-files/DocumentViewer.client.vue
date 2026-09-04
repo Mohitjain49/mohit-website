@@ -108,13 +108,17 @@ const showFsWebCover = computed(() => {
 
 // These manage the PDF Viewer when it is mounted an unmounted.
 onMountedAdvanced(async() => {
-    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
-    await renderPDF();
+    try {
+        styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
+        await renderPDF();
 
-    const signal = eventAbortController.signal;
-    window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
-    window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
-    window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
+        const signal = eventAbortController.signal;
+        window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
+        window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
+        window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
 });
 onBeforeUnmount(() => {
     renderAbortController.abort();
