@@ -301,6 +301,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                         display: flex;
                         justify-content: center;
                         align-items: center;
+                        margin: auto;
                     }
                     .mohit-doc-customPrint-img img {
                         width: 100%;

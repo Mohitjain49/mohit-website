@@ -5,7 +5,7 @@
             <h3> Page <span id="mohit-document-contextMenu-pageNum" v-html="viewablePageNumber"></span> </h3>
             <div class="mohit-hostedDoc-contextMenu-topOpts">
                 <button class="web-menu" @click="openDocumentMenu()" ref="options-open-web-menu-btn" title="Open Document Menu">
-                    <FontAwesomeIcon icon="fa-file-export" :jello="animateWebMenuButton" />
+                    <FontAwesomeIcon icon="fa-file-pdf" :jello="animateWebMenuButton" />
                 </button>
                 <button @click="closeDocumentContextMenu()" ref="options-close-btn" title="Close Context Menu">
                     <FontAwesomeIcon icon="fa-xmark" :jello="animateCloseButton" />
