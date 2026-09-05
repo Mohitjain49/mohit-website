@@ -752,6 +752,9 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Number} pageNum The number of the specified page.
      */
     function scrollToPage(pageNum = 1) {
+        if(typeof pageNum !== 'number') { pageNum = Number(pageNum); }
+        if(isNaN(pageNum)) { return; }
+
         const id = ("page_" + pageNum);
         if(document.getElementById(id) != null) { router.push(routePath.value + "#" + id); }
     }
