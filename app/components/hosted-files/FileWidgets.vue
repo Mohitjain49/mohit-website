@@ -41,7 +41,7 @@ const fullScreenSet = getFullScreenSet();
 const { width: windowWidth } = useMohitWindowSize();
 const { onDocumentRoute, onMarkdownRoute, currentObservedPage } = storeToRefs(documentStore);
 
-const widgetPageNumber = ref(0);
+const widgetPageNumber = ref("1");
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
 
@@ -87,7 +87,7 @@ function exitFS() {
  */
 function resetWidgetPageNumber(blurInput = true) {
     if(blurInput) { document.getElementById("page-number-mohit")?.blur(); }
-    widgetPageNumber.value = currentObservedPage.value;
+    widgetPageNumber.value = String(currentObservedPage.value);
 }
 
 /**
@@ -98,7 +98,7 @@ function navigatePage(direction = "up") {
     if(direction === "up" && !onLastPage.value) {
         documentStore.scrollToPage(Math.max(1, (currentObservedPage.value + 1)));
     } else if(direction === "down" && !onFirstPage.value) {
-        documentStore.scrollToPage(Math.min(documentStore.docLoaded.loadedPages, (currentObservedPage.value - 1)));
+        documentStore.scrollToPage(Math.min(documentStore.docLoaded.totalPages, (currentObservedPage.value - 1)));
     }
 }
 
@@ -110,7 +110,7 @@ function onWidgetPageNumberChange() {
     if(isNaN(editedNumber) || editedNumber > 999) {
         resetWidgetPageNumber(false);
     } else {
-        widgetPageNumber.value = editedNumber.toFixed(0);
+        widgetPageNumber.value = String(Math.max(1, (Math.min(999, editedNumber.toFixed(0)))));
     }
 }
 
@@ -121,9 +121,11 @@ function onWidgetPageNumberChange() {
 function onPageNumberKeydown(event) {
     if(event.key !== "Enter") { return; }
     onWidgetPageNumberChange();
-    if(widgetPageNumber.value === currentObservedPage.value) { return; }
 
-    if(widgetPageNumber.value === "" || widgetPageNumber.value < 1 || widgetPageNumber.value > documentStore.docLoaded.loadedPages) {
+    const editedNumber = parseInt(widgetPageNumber.value, 10);
+    if(editedNumber === currentObservedPage.value) { return; }
+
+    if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
         resetWidgetPageNumber(true);
     } else {
         documentStore.scrollToPage(parseInt(widgetPageNumber.value, 10));
