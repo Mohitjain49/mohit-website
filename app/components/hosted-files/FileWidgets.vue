@@ -17,7 +17,11 @@
                 <FontAwesomeIcon icon="fa-chevron-left" />
             </button>
             <div class="page-nav-center">
-                <input id="page-number-mohit" type="text" v-model="currentObservedPage" readonly />
+                <input id="page-number-mohit" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done"
+                    v-model="widgetPageNumber"
+                    @input="() => { onWidgetPageNumberChange(); }"
+                    @keydown="(event) => { onPageNumberKeydown(event); }"
+                />
                 <span>{{ ('/ ' + documentStore.docLoaded.totalPages) }}</span>  
             </div>
             <button :class="['page-nav-side-button', (onLastPage ? 'inactive' : '')]" @click="navigatePage('up')" :title="nextPageScrollTitle">
@@ -32,12 +36,12 @@
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
-const scrollStore = useScrollStore();
 
 const fullScreenSet = getFullScreenSet();
 const { width: windowWidth } = useMohitWindowSize();
 const { onDocumentRoute, onMarkdownRoute, currentObservedPage } = storeToRefs(documentStore);
 
+const widgetPageNumber = ref("1");
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
 
@@ -58,6 +62,9 @@ const nextPageScrollTitle = computed(() => {
     return (onLastPage.value ? ('Cannot Scroll After Page ' + currentObservedPage.value + '.') : ('Scroll To Page ' + (currentObservedPage.value + 1)));
 });
 
+// This sets the widget page number to the last observed page when it changes.
+watch(currentObservedPage, () => { resetWidgetPageNumber(); });
+
 /** This function opens the options for the file. */
 function openOptions() {
     webData.bypassBodyClick();
@@ -74,17 +81,51 @@ function exitFS() {
     }
 }
 
+/** This function resets the widget page number to the current observed page. */
+function resetWidgetPageNumber() {
+    widgetPageNumber.value = String(currentObservedPage.value);
+}
+
 /**
  * This function navigates a page either up or down one page.
  * @param {"up" | "down"} direction The direction to go.
  */
 function navigatePage(direction = "up") {
     if(direction === "up" && !onLastPage.value) {
-        if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
         documentStore.scrollToPage(Math.max(1, (currentObservedPage.value + 1)));
     } else if(direction === "down" && !onFirstPage.value) {
-        if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
-        documentStore.scrollToPage(Math.min(documentStore.docLoaded.loadedPages, (currentObservedPage.value - 1)));
+        documentStore.scrollToPage(Math.min(documentStore.docLoaded.totalPages, (currentObservedPage.value - 1)));
+    }
+}
+
+/** This function runs when the widget page number changes. */
+function onWidgetPageNumberChange() {
+    if(widgetPageNumber.value === "") { return; }
+    const editedNumber = Number(widgetPageNumber.value);
+
+    if(isNaN(editedNumber) || editedNumber > 999) {
+        resetWidgetPageNumber();
+    } else {
+        widgetPageNumber.value = String(Math.max(1, (Math.min(999, editedNumber.toFixed(0)))));
+    }
+}
+
+/**
+ * This functions whenever the user presses a key on the page number input.
+ * @param {KeyboardEvent} event The event fired by clicking a key.
+ */
+function onPageNumberKeydown(event) {
+    if(event.key !== "Enter") { return; }
+    onWidgetPageNumberChange();
+
+    const editedNumber = parseInt(widgetPageNumber.value, 10);
+    if(editedNumber === currentObservedPage.value) { return; }
+    document.getElementById("page-number-mohit")?.blur();
+
+    if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
+        resetWidgetPageNumber();
+    } else {
+        documentStore.scrollToPage(parseInt(widgetPageNumber.value, 10));
     }
 }
 </script>
@@ -180,8 +221,6 @@ function navigatePage(direction = "up") {
     margin-right: 3px;
     border-radius: 4px;
     border: 1px solid white;
-    user-select: none !important;
-    pointer-events: none !important;
 }
 
 .page-nav-side-button {

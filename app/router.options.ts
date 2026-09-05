@@ -27,7 +27,7 @@ async function checkDocumentScrollParams(to: RouteLocationNormalizedGeneric, fro
     const documentStore = (await import('~/stores/DocumentStore.js')).useDocumentStore($pinia);
     if(!documentStore.onDocumentRoute || documentStore.onMarkdownRoute || !documentStore.docLoaded.status) { return false; }
 
-    const documentQueryChanged = (-1 != QUERY_DOCUMENT_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== from.query[item]); }));
+    const documentQueryChanged = (-1 != QUERY_DOCUMENT_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== undefined); }));
     return (documentQueryChanged && (to.path === from.path));
 }
 
@@ -36,6 +36,7 @@ async function checkDocumentScrollParams(to: RouteLocationNormalizedGeneric, fro
 export default {
     async scrollBehavior(to, from, savedPosition) {
         // console.log({ to, from, savedPosition });
+        if(!import.meta.client) { return (savedPosition || { top: 0, left: 0, behavior: "instant" }); }
         window.history.scrollRestoration = "manual";
 
         // Initialize Stores, Variables, and Conditions.
@@ -54,12 +55,8 @@ export default {
             });
         }
 
-        // This function instant scrolls to the top of the page if certain conditions are met. 
-        if(!hashExists && differentPage) {
-            return { top: 0, left: 0, behavior: "instant" };
-        } else if(differentPage) {
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        }
+        // This function instant scrolls to the top of the page if the next page is different.
+        if(differentPage) { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); }
 
         // Wait for all elements and itself to be properly rendered in.
         await nextTick();
@@ -90,12 +87,18 @@ export default {
         // This function cancels any ongoing autoscroll.
         if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
 
-        if(hashExists) {
-            try { await scrollStore.scrollToId(hash, 0, 0); } catch(e) {}
-        } else if(await checkDocumentScrollParams(to, from)) {
-            try { window.dispatchEvent(new CustomEvent("mohit-pdf-destination-scroll", { cancelable: false })); } catch(e) {}
-        } else if(!differentPage) {
-            try { await scrollStore.scrollToTop(false, 0); } catch(e) {}
+        try {
+            if(hashExists) {
+                await scrollStore.scrollToId(hash, 0, 0);
+            } else if(await checkDocumentScrollParams(to, from)) {
+                window.dispatchEvent(new CustomEvent("mohit-pdf-destination-scroll", { cancelable: false }));
+            } else if(!hashExists && differentPage) {
+                await scrollStore.scrollToTop(true, 0);
+            } else if(!differentPage) {
+                await scrollStore.scrollToTop(false, 0);
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
         }
     }
 } satisfies RouterConfig

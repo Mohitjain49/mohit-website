@@ -26,7 +26,7 @@ const { width: windowWidth } = useMohitWindowSize();
 const currentNow = useNow({ scheduler: (fn) => useIntervalFn(fn, 1000) });
 
 const installStore = useInstallStore();
-const UPDATE_WIDGET_TITLE = ("My website has a new update! Your current website version was from ");
+const UPDATE_WIDGET_TITLE = ("My website has a new update! This website version was last uploaded ");
 const UPDATE_DATE = ref("10/24/2025");
 
 onMountedAdvanced(() => { calculateDateDifference(); });
@@ -56,24 +56,24 @@ async function calculateDateDifference() {
     // console.log(dateDifference);
 
     if(dateDifference.year > 0) {
-        UPDATE_DATE.value = (dateDifference.year + " year" + getPlural(dateDifference.year) + " ago");
+        UPDATE_DATE.value = (dateDifference.year + " year" + getPlural(dateDifference.year));
     } else if(dateDifference.month > 0) {
-        UPDATE_DATE.value = (dateDifference.month + " month" + getPlural(dateDifference.month) + " ago");
+        UPDATE_DATE.value = (dateDifference.month + " month" + getPlural(dateDifference.month));
     } else if(dateDifference.week > 0) {
-        UPDATE_DATE.value = (dateDifference.week + " week" + getPlural(dateDifference.week) + " ago");
+        UPDATE_DATE.value = (dateDifference.week + " week" + getPlural(dateDifference.week));
     } else if(dateDifference.day > 0) {
-        UPDATE_DATE.value = (dateDifference.day + " day" + getPlural(dateDifference.day) + " ago");
+        UPDATE_DATE.value = (dateDifference.day + " day" + getPlural(dateDifference.day));
     } else if(dateDifference.hour > 0) {
-        UPDATE_DATE.value = (dateDifference.hour + " hour" + getPlural(dateDifference.hour) + " ago");
+        UPDATE_DATE.value = (dateDifference.hour + " hour" + getPlural(dateDifference.hour));
     } else if(dateDifference.minute > 0) {
-        UPDATE_DATE.value = (dateDifference.minute + " minute" + getPlural(dateDifference.minute) + " ago");
+        UPDATE_DATE.value = (dateDifference.minute + " minute" + getPlural(dateDifference.minute));
     } else {
         UPDATE_DATE.value = "a moment ago";
     }
 }
 
 /** This function returns a "pluralized" date unit if it has a quantity over 1. */
-function getPlural(num = 1) { return ((num > 1) ? "s" : ""); }
+function getPlural(num = 1) { return (((num > 1) ? "s" : "") + " ago"); }
 </script>
 
 <style scoped lang="scss">
