@@ -109,6 +109,7 @@ const showFsWebCover = computed(() => {
 // These manage the PDF Viewer when it is mounted an unmounted.
 onMountedAdvanced(async() => {
     try {
+        if(renderAborted()) { return; }
         styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
         await renderPDF();
 
@@ -477,7 +478,8 @@ function onAnnotationClick(event) {
         if(dest[1].name !== "XYZ") {
             documentStore.scrollToPage(pageNumber);
         } else {
-            scrollToPdfDest(pageNumber, dest[3], true);
+            const route = router.currentRoute.value;
+            router.push({ path: route.path, hash: "", query: { ...route.query, page: pageNumber, y: dest[3] }});
         }
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
@@ -513,9 +515,8 @@ async function onPdfContentMenu(event, pageNum = 1) {
  * This function has the website scroll to a specific destination in the PDF.
  * @param {Number} pageNumber The page number to scroll to.
  * @param {Number} y The Y coordinate in the page to scroll to.
- * @param {Boolean} setRoute If true, this sets query parameters indicating the route to the specific coords to scroll at.
  */
-function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
+function scrollToPdfDest(pageNumber = 1, y = 0) {
     if(pageNumber < 1 || pageNumber > pages.value || y < 0) { return; }
     const pageElement = getPageElement(pageNumber);
     const destY = (Math.abs(y - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
@@ -525,11 +526,6 @@ function scrollToPdfDest(pageNumber = 1, y = 0, setRoute = true) {
     const destPixels = (((destY * destScalar) - (fullScreenSet.value ? 20 : 90)) / cssToWindowHeightRatio.value);
     const top = (pageElement.getBoundingClientRect().top + scrollY + destPixels);
     scrollToTarget(top);
-
-    if(setRoute) {
-        const route = router.currentRoute.value;
-        router.push({ path: route.path, hash: "", query: { ...route.query, page: pageNumber, y }});
-    }
 }
 
 /** This function lets the user scroll to the current PDF Destination using the URL. */
@@ -545,7 +541,7 @@ function scrollToCurrentPdfDest() {
     if(linkUrl.hash === "#footer") {
         goToPageSection("footer");
     } else if(validPageQuery && !Number.isNaN(yQuery)) {
-        scrollToPdfDest(pageQuery, yQuery, false);
+        scrollToPdfDest(pageQuery, yQuery);
     } else if(validPageQuery) {
         documentStore.scrollToPage(pageQuery);
     } else if(!Number.isNaN(hashPageNumber)) {
