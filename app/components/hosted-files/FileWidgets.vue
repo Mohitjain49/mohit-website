@@ -63,7 +63,7 @@ const nextPageScrollTitle = computed(() => {
 });
 
 // This sets the widget page number to the last observed page when it changes.
-watch(currentObservedPage, () => { resetWidgetPageNumber(true); });
+watch(currentObservedPage, () => { resetWidgetPageNumber(); });
 
 /** This function opens the options for the file. */
 function openOptions() {
@@ -81,12 +81,8 @@ function exitFS() {
     }
 }
 
-/**
- * This function resets the widget page number to the current observed page.
- * @param {Boolean} blurInput If true, this function also has the website "blur" the input bar.
- */
-function resetWidgetPageNumber(blurInput = true) {
-    if(blurInput) { document.getElementById("page-number-mohit")?.blur(); }
+/** This function resets the widget page number to the current observed page. */
+function resetWidgetPageNumber() {
     widgetPageNumber.value = String(currentObservedPage.value);
 }
 
@@ -108,7 +104,7 @@ function onWidgetPageNumberChange() {
     const editedNumber = Number(widgetPageNumber.value);
 
     if(isNaN(editedNumber) || editedNumber > 999) {
-        resetWidgetPageNumber(false);
+        resetWidgetPageNumber();
     } else {
         widgetPageNumber.value = String(Math.max(1, (Math.min(999, editedNumber.toFixed(0)))));
     }
@@ -124,6 +120,7 @@ function onPageNumberKeydown(event) {
 
     const editedNumber = parseInt(widgetPageNumber.value, 10);
     if(editedNumber === currentObservedPage.value) { return; }
+    document.getElementById("page-number-mohit")?.blur();
 
     if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
         resetWidgetPageNumber(true);
