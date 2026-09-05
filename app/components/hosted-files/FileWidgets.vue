@@ -123,7 +123,7 @@ function onPageNumberKeydown(event) {
     document.getElementById("page-number-mohit")?.blur();
 
     if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
-        resetWidgetPageNumber(true);
+        resetWidgetPageNumber();
     } else {
         documentStore.scrollToPage(parseInt(widgetPageNumber.value, 10));
     }
