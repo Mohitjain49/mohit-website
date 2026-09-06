@@ -2,10 +2,14 @@
 <Transition :name="((windowWidth > 600) ? 'update-box-transition' : 'update-box-mobile-transition')">
     <div v-if="installStore.showUpdateBox" class="update-box">
         <div class="update-box-desc">
-            <FontAwesomeIcon :icon="(installStore.swUpdating ? 'fa-spinner' : 'fa-triangle-exclamation')" :spin-pulse="installStore.swUpdating" />
+            <FontAwesomeIcon class="update-box-desc-mainIcon"
+                :spin-pulse="installStore.swUpdating"
+                :icon="(installStore.swUpdating ? 'fa-spinner' : 'fa-triangle-exclamation')"
+            />
             <p class="update-box-desc-text">
-                <span v-html="UPDATE_WIDGET_TITLE"></span>
-                <span class="version-num" v-html="UPDATE_DATE"></span>.
+                <span> You are viewing a website release made </span>
+                <span class="version-num" v-html="UPDATE_DATE"></span>
+                <span>. Click "Update" to view the latest releases.</span>
             </p>
         </div>
 
@@ -26,7 +30,6 @@ const { width: windowWidth } = useMohitWindowSize();
 const currentNow = useNow({ scheduler: (fn) => useIntervalFn(fn, 1000) });
 
 const installStore = useInstallStore();
-const UPDATE_WIDGET_TITLE = ("My website has a new update! This website version was last uploaded ");
 const UPDATE_DATE = ref("10/24/2025");
 
 onMountedAdvanced(() => { calculateDateDifference(); });
@@ -85,26 +88,36 @@ function getPlural(num = 1) { return (((num > 1) ? "s" : "") + " ago"); }
     border: 2px solid var(--lightning-yellow);
     color: var(--lightning-yellow);
     border-radius: 10px;
-    height: 90px;
+    height: 80px;
     width: 300px;
     overflow: hidden;
     z-index: 1100;
     font-size: 24px;
     box-shadow: 0px 0px 10px black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .update-box-desc {
     width: 95%;
-    height: 55%;
+    height: fit-content;
     margin: 0px auto;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     flex-direction: row;
 }
+.update-box-desc-mainIcon {
+    width: 22px;
+    height: 22px;
+}
+
 .update-box-buttons {
     width: 90%;
-    height: 45%;
+    height: fit-content;
     margin: 0px auto;
     gap: 15px;
     display: flex;
@@ -120,8 +133,8 @@ function getPlural(num = 1) { return (((num > 1) ? "s" : "") + " ago"); }
 
 .update-box-desc-text {
     width: 100%;
-    margin-left: 5px;
-    font-size: 13px;
+    margin-left: 7px;
+    font-size: 11px;
     font-family: 'Roboto', sans-serif;
     color: inherit;
 }

@@ -32,12 +32,13 @@
                         :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                         :style="getSpecialBtnStyles(contact.color)"
                         @click="(event) => onContactBtnClick(event, contact)"
+                        @contextmenu="(event) => onContactBtnClick(event, contact)"
                         @dblclick="shareContactLink(contact.link)">
 
                         <font-awesome-icon :icon="contact.linkIcon" />
                     </button>
 
-                    <Transition name="fade-transition">
+                    <Transition name="fade-context-menu-transition">
                         <div v-if="(startContactObj === contact.id)" class="start-contactBtn-dropdown" :id="CONTACT_DROPDOWN_ID"
                             :style="getContactDropdownStyles(contact.color)">
 
@@ -100,7 +101,7 @@ function checkContactDropdownStayVisible(event) {
 
     if(contactDropdownElement == null || !(contactDropdownElement instanceof Element)) { return; }
     if(contactDropdownElement === element || contactDropdownElement.contains(element) || element.closest(".start-buttonRow-btn")) { return; }
-    startContactObj.value = "";
+    hideStartContactDropdown();
 }
 
 /**
@@ -109,14 +110,20 @@ function checkContactDropdownStayVisible(event) {
  * @param {{ link: String, id: String }} obj The custom object sent by the contact button.
  */
 function onContactBtnClick(event, obj) {
+    if(!event) { return }
+    event.preventDefault();
+
     if(event.altKey) {
         shareContactLink(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
     } else if(event.ctrlKey) {
         window.open(obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self")) // If the Ctrl key is pressed, the webpage itself is automatically opened.
     } else if(event.shiftKey) {
         router.push('/contact/#' + obj.id); // If the Shift key is pressed, the key opens up the social tab on the contact page for the button.
+    } else if(startContactObj.value === obj.id) {
+        hideStartContactDropdown();
+        sleep(100).then(() => { startContactObj.value = obj.id; });
     } else {
-        startContactObj.value = ((startContactObj.value === obj.id) ? "" : obj.id); // If no special key is pressed, this sets the Start Contact Dropdown.
+        startContactObj.value = obj.id;
     }
 }
 

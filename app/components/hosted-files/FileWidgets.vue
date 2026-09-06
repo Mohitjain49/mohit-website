@@ -125,7 +125,7 @@ function onPageNumberKeydown(event) {
     if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
         resetWidgetPageNumber();
     } else {
-        documentStore.scrollToPage(parseInt(widgetPageNumber.value, 10));
+        documentStore.scrollToPage(editedNumber);
     }
 }
 </script>
