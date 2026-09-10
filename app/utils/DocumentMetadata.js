@@ -43,7 +43,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
     async function parsePdf() {
         try {
             parsingPdf.value = true;
-            if(import.meta.server || !objectUrl.value || objectUrl.value === "") { throw new Error("Object URL Not Ready."); }
+            if(!import.meta.client || !objectUrl.value || objectUrl.value === "") { throw new Error("Object URL Not Ready."); }
             const pdfBlob = await (await fetch(objectUrl.value)).blob(); // The blob fetched with the Object URL.
 
             if(!pdfBlob || pdfBlob == null || !(pdfBlob instanceof Blob)) { throw new Error("Blob Parsed By Object URL Not Ready."); }

@@ -5,7 +5,7 @@
  * @param {Boolean} usePixelRatio If true, this function incorporates the device pixel ratio to enhance the rendered image.
  */
 export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH, usePixelRatio = false) {
-    if(import.meta.server || !url || url === "") { throw new Error("URL Invalid."); }
+    if(!import.meta.client || !url || url === "") { throw new Error("URL Invalid."); }
     const pdfBlob = await (await fetch(url)).blob(); // The blob fetched with the URL.
 
     if(!pdfBlob || pdfBlob == null || !(pdfBlob instanceof Blob)) { throw new Error("Blob Parsed By URL Invalid."); }

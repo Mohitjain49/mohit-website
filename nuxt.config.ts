@@ -31,6 +31,16 @@ const AUTO_ALT_PLUGIN: Plugin = {
     }
 }
 
+/** This plugin reloads the client when a page change is detected. */
+const WINDOW_RELOAD_PLUGIN: Plugin = {
+    name: 'vite-plugin-window-reload-mohit',
+    configureServer(viteServer) {
+        viteServer.watcher.on("all", (event, path) => {
+            viteServer.ws.send('dev:window:reload', { event, path });
+        });
+    }
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: '2026-05-08',
@@ -117,7 +127,8 @@ export default defineNuxtConfig({
                     return params;
                 }
             }),
-            AUTO_ALT_PLUGIN
+            AUTO_ALT_PLUGIN,
+            WINDOW_RELOAD_PLUGIN
         ],
         css: {
             preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;\n' }},
