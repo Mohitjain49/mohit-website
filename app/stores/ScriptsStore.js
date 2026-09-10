@@ -158,6 +158,12 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
+    /** This function returns the script the website is currently using. */
+    function getCurrentScript() {
+        if(!onScriptRoute.value) { return null; }
+        return scripts[currentScriptRoute.value];
+    }
+
     /**
      * ------------------------------------------------------------------------------------
      * These functions are for initializing certain objects necessary for the script pages.
@@ -170,7 +176,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function mountScriptsStore() {
         for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
-        window.openCodeLineOptions = (event, lineNum) => { openLineOfCodeOptions(event, lineNum); }
         mounted.value = true;
     }
 
@@ -180,12 +185,14 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         await nextTick();
         await sleep(10);
 
-        if(scriptAbortController != null) { scriptAbortController.abort(); }
-        scriptAbortController = new AbortController();
-        window.addEventListener("keydown", (event) => { onScriptPageKeydown(event); }, { signal: scriptAbortController.signal });
-
         const hashStr = router.currentRoute.value.hash.substring(1);
         manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
+
+        if(scriptAbortController != null) { scriptAbortController.abort(); }
+        scriptAbortController = new AbortController();
+
+        window.addEventListener("keydown", (event) => { onScriptPageKeydown(event); }, { signal: scriptAbortController.signal });
+        await setLineNumberEventListeners();
     }
 
     /** This function unmounts a page that hosts a script. */
@@ -193,16 +200,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         fullScreenStore.exitFullScreen();
         if(scriptAbortController != null) { scriptAbortController.abort(); }
         scriptAbortController = null;
-    }
-
-    /**
-     * This function is used by "mountScriptsStore()" to set a window fnuction that can be used to open options for a Line Of Code.
-     * @param {PointerEvent} event The event from clicking the button.
-     * @param {Number} lineNum The number of the line in the code file.
-     */
-    function openLineOfCodeOptions(event, lineNum) {
-        if(event && event instanceof PointerEvent) { event.preventDefault(); }
-        if(lineOptions.value.num != lineNum) { setLineOptions(lineNum); }
     }
 
     /**
@@ -237,10 +234,59 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    /** This function returns the script the website is currently using. */
-    function getCurrentScript() {
-        if(!onScriptRoute.value) { return null; }
-        return scripts[currentScriptRoute.value];
+    /** This function sets fresh event listeners for the script line numbers. */
+    async function setLineNumberEventListeners() {
+        try {
+            await new Promise(async (resolve, reject) => {
+                if(eventsAborted()) { return reject("Process Aborted"); }
+
+                /** @type {HTMLCollectionOf<HTMLButtonElement>} This is the new website for  */
+                const lineButtons = document.getElementsByClassName("mohit-scriptPage-code-lineNum-innerButton");
+                const numLineButtons = lineButtons.length;
+                const signal = scriptAbortController.signal;
+
+                for(let i = 0; i < numLineButtons; i++) {
+                    if(eventsAborted()) { return reject("Process Aborted"); }
+                    const element = lineButtons.item(i);
+                    if(!element) { continue; }
+
+                    const lineNum = Number(element.getAttribute("line-number"));
+                    if(isNaN(lineNum)) { continue; }
+
+                    element.addEventListener("click", (event) => { openLineOptionsMenu(event, lineNum); }, { signal });
+                    element.addEventListener("contextmenu", (event) => { openLineOptionsMenu(event, lineNum); }, { signal });
+                }
+
+                // This resolves the promise when all the event listeners are added.
+                return resolve("Process Completed.");
+            });
+        } catch(e) {
+            if(import.meta.dev && e !== "Process Aborted") { console.error(e); }
+        }
+    }
+
+    /**
+     * This function opens the script line options menu for a specific line of code.
+     * Note that this must be used only by the line numbers to the left of the script's code itself.
+     * @param {PointerEvent} event The event from clicking the button.
+     * @param {Number} lineNum The number of the line in the code file.
+     */
+    function openLineOptionsMenu(event = null, lineNum = null) {
+        if(!event || !lineNum || !(event instanceof PointerEvent)) { return; }
+        if(event.type.toLowerCase() === "contextmenu" && event.ctrlKey) { return; }
+
+        event.preventDefault();
+        if(lineNum == lineOptions.value.num) {
+            closeLineOptions();
+            sleep(100).then(() => { setLineOptions(lineNum); });
+        } else {
+            setLineOptions(lineNum);
+        }
+    }
+
+    /** This checks if the script abort controller's "abort()" function was called or not. */
+    function eventsAborted() {
+        if((scriptAbortController == null) ? true : scriptAbortController.signal.aborted);
     }
 
     /**

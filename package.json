@@ -2,7 +2,7 @@
     "name": "mohit-website",
     "type": "module",
     "private": true,
-    "version": "3.19.6",
+    "version": "3.20.0",
     "engines": {
         "node": "26.1.0",
         "npm": "11.15.0"
@@ -65,8 +65,8 @@
         "vue-router": "^5.3.1"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1127.0",
-        "@aws-sdk/client-s3": "^3.1127.0",
+        "@aws-sdk/client-cloudfront": "^3.1129.0",
+        "@aws-sdk/client-s3": "^3.1129.0",
         "@stefanobartoletti/nuxt-social-share": "^3.2.1",
         "@types/google.picker": "^0.0.52",
         "@types/lodash-es": "^4.17.12",
