@@ -101,7 +101,7 @@ export default defineNuxtConfig({
     },
 
     sourcemap: false,
-    experimental: { appManifest: true, typedPages: true, payloadExtraction: true },
+    experimental: { appManifest: true, typedPages: true, payloadExtraction: false },
     pwa: pwaConfig,
     socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
     watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],
