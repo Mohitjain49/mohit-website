@@ -11,8 +11,8 @@ const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
-const PDF_MIME_TYPE = "application/pdf";
 const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
+const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
 export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const DOCUMENT_ACTION_PENDING = 1;
@@ -78,7 +78,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const fsStateChanging = ref(false);
     const windowSizeWatchersEnabled = ref(false);
     const browserPdfViewerPresent = ref(false);
-    const copyDocumentSupported = ref(false);
     const iframeSupported = ref(false);
     const confirmedImageTypes = ref(["image/png"]);
 
@@ -97,7 +96,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentPrintStatus = ref(0);
     const documentCustomPrintStatus = ref(0);
     const documentShareStatus = ref(0);
-    const documentCopyStatus = ref(0);
 
     const documentUploadToGoogleDriveStatus = ref(0);
     const documentUploadToGoogleDriveCanceled = ref(false);
@@ -116,6 +114,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
 
+    const customPrintTitle = computed(() => { return (browserPdfViewerPresent.value ? "Print Document (Optimized)" : "Print Document"); });
     const documentDownloadTitle = computed(() => { return ("Download Document (" + currentDocumentFileSize.value + ")"); });
     const showPdfPageNav = computed(() => {
         return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && (docImageUrls.value.length > 0));
@@ -141,10 +140,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         const shareInt = documentShareStatus.value;
         return ((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]);
     });
-    const copyIcon = computed(() => {
-        const copyInt = documentCopyStatus.value;
-        return ((copyInt == 0) ? "fa-copy" : DOCUMENT_ACTION_STATUS_ICONS[copyInt]);
-    });
     const uploadToGoogleDriveIcon = computed(() => {
         const uploadInt = documentUploadToGoogleDriveStatus.value;
         const uploadPending = uploadToGoogleDrivePending.value;
@@ -158,7 +153,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const printPending = computed(() => { return (documentPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const customPrintPending = computed(() => { return (documentCustomPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
-    const copyPending = computed(() => { return (documentCopyStatus.value == DOCUMENT_ACTION_PENDING); });
 
     const printInProgress = computed(() => { return (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0); });
     const uploadToGoogleDrivePending = computed(() => {
@@ -238,10 +232,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             documentPrintStatus.value = 1;
         }
 
-        const PRINT_IFRAME_ID = "mohit-doc-customPrint";
-        const PRINT_IFRAME_IMG_CLASS = "mohit-doc-customPrint-img";
-        const TEMP_IMG_WIDTH = 1632;
-
         try {
             const documentFile = getCurrentPDFObject();
             if(!documentFile) { throw new Error("Document Does Not Exist."); }
@@ -319,25 +309,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    /** This function copies the document into the visitor's OS Clipboard. */
-    async function copyDoc() {
-        if(documentCopyStatus.value != 0) { return; }
-        documentCopyStatus.value = 1;
-
-        try {
-            const documentFile = getCurrentPDFObject();
-            if(!documentFile) { throw new Error("Document Does Not Exist."); }
-
-            await navigator.clipboard.write([new ClipboardItem({ [documentFile.blob.type]: documentFile.blob })]);
-            documentCopyStatus.value = 2;
-        } catch(e) {
-            if(import.meta.dev) { console.error(e); }
-            documentCopyStatus.value = 3;
-        } finally {
-            setTimeout(() => { documentCopyStatus.value = 0; }, 3000);
-        }
-    }
-
     /**
      * This function should run every time the user presses a key on their keyboard while on a Hosted Document Page.
      * @param {KeyboardEvent} event The Keyboard Event.
@@ -350,11 +321,11 @@ export const useDocumentStore = defineStore("document-store", () => {
 
             if(keyLetter === "p") {
                 event.preventDefault();
-                webData.setMenuOpen(DOCUMENT_MENU, false);
+                waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
                 printDoc(!event.altKey);
             } else if(keyLetter === "s") {
                 event.preventDefault();
-                webData.setMenuOpen(DOCUMENT_MENU, false);
+                waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
 
                 if(webData.saveAsSupported && event.shiftKey) {
                     saveDoc();
@@ -498,7 +469,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         // This sets whether the user is able to print a document on the website using the native PDF Viewer.
         const notOnDesktop = ("userAgent" in navigator && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
         browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && !notOnDesktop);
-        copyDocumentSupported.value = ClipboardItem.supports(PDF_MIME_TYPE);
         iframeSupported.value = (!!document.createElement("iframe"));
 
         // This checks to see all possible image types a canvas can be converted into.
@@ -691,13 +661,13 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { hostedDocuments, docImageUrls, docLoaded, currentObservedPage, contextMenuPageNumber, printInProgress,
-        googleDriveOptionAvailable, copyDocumentSupported, browserPdfViewerPresent, workerSrcAdded, iframeSupported,
-        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle,
-        downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, copyIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
-        downloadPending, savePending, printPending, customPrintPending, sharePending, copyPending, uploadToGoogleDrivePending,
+        googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported,
+        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, customPrintTitle,
+        downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
+        downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, copyDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
+        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, checkPdfjsWorker, getPdfAsImages
     }

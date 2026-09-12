@@ -217,11 +217,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
                 if(selection && selection.toString().trim().length > 0) { return; }
 
                 event.preventDefault();
-                webData.setMenuOpen(SCRIPTS_MENU, false);
+                waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
                 copyScript();
             } else if(keyLetter === "s") {
                 event.preventDefault();
-                webData.setMenuOpen(SCRIPTS_MENU, false);
+                waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
 
                 if(webData.saveAsSupported && event.shiftKey) {
                     saveScript();

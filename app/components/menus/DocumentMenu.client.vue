@@ -64,7 +64,7 @@
             <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="printButtonCursor" v-pulse-loop>
                     <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
-                    <span> Print Document (Optimized) </span>
+                    <span> {{ documentStore.customPrintTitle }} </span>
                 </button>
             </div>
             <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
