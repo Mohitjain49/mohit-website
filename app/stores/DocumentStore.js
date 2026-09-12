@@ -135,7 +135,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     });
     const customPrintIcon = computed(() => {
         const customPrintInt = documentCustomPrintStatus.value;
-        return ((customPrintInt == 0) ? "fa-film" : DOCUMENT_ACTION_STATUS_ICONS[customPrintInt]);
+        return ((customPrintInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[customPrintInt]);
     });
     const shareIcon = computed(() => {
         const shareInt = documentShareStatus.value;
@@ -245,13 +245,13 @@ export const useDocumentStore = defineStore("document-store", () => {
         try {
             const documentFile = getCurrentPDFObject();
             if(!documentFile) { throw new Error("Document Does Not Exist."); }
-
             if(printIframe != null) { document.body.removeChild(printIframe); }
-            printIframe = document.createElement("iframe");
-            printIframe.id = PRINT_IFRAME_ID;
-            printIframe.classList.add(PRINT_IFRAME_ID);
 
             if(browserPdfViewerPresent.value && !customPrint) {
+                printIframe = document.createElement("iframe");
+                printIframe.id = PRINT_IFRAME_ID;
+                printIframe.classList.add(PRINT_IFRAME_ID);
+                
                 printIframe.src = documentFile.url;
                 document.body.append(printIframe);
 
@@ -265,92 +265,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                     }
                 });
             } else {
-                await new Promise(async (resolve, reject) => {
-                    document.body.append(printIframe);
-                    const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
-
-                    if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-                        resolve("IFrame Loaded");
-                    } else {
-                        printIframe.onload = () => { resolve("IFrame Loaded"); }
-                        sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                    }
-                });
-
-                // Renders the images for printing if they are not rendered already.
-                if(docPrintImageUrls.value.length <= 0) {
-                    docPrintImageUrls.value = await renderPdfAsPng(documentFile.url, TEMP_IMG_WIDTH, false);
-                }
-
-                const imagesForPrint = docPrintImageUrls.value;
-                const numImages = imagesForPrint.length;
-                const imgScaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
-
-                const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
-                const iframeStyle = printIframeDocument.createElement("style");
-
-                // The style rule here should match the one at the bottom for this same class.
-                iframeStyle.textContent = `
-                    .mohit-doc-customPrint-img {
-                        width: 99vw;
-                        max-width: 816px;
-                        max-height: 99vh;
-                        aspect-ratio: 816 / 1056;
-                        margin: 0px;
-                        padding: 0px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        margin: auto;
-                    }
-                    .mohit-doc-customPrint-img img {
-                        width: 100%;
-                        height: 100%;
-                        margin: 0px;
-                        padding: 0px;
-                    }
-
-                    @media print {
-                        @page { margin: 0px; }
-                    }
-                    @media (orientation: landscape) {
-                        .mohit-doc-customPrint-img {
-                            height: 99vh !important;
-                            width: auto !important;
-                            max-width: 99vw !important;
-                            max-height: 1056px !important;
-                            aspect-ratio: 816 / 1056;
-                        }
-                    }
-                `;
-
-                // Adds styles to the iframe.
-                printIframeDocument.body.appendChild(iframeStyle);
-
-                for(let i = 0; i < numImages; i++) {
-                    const newChild = printIframeDocument.createElement("div");
-                    const newChildImg = printIframeDocument.createElement("img");
-
-                    newChild.classList.add(PRINT_IFRAME_IMG_CLASS);
-                    newChildImg.src = imagesForPrint[i];
-
-                    newChildImg.width = TEMP_IMG_WIDTH;
-                    newChildImg.height = (TEMP_IMG_WIDTH * imgScaleFactor);
-                    newChildImg.draggable = false;
-
-                    printIframeDocument.body.appendChild(newChild);
-                    await new Promise((resolve, reject) => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(); }); }); });
-
-                    newChild.appendChild(newChildImg);
-                    await new Promise((resolve, reject) => {
-                        if(newChildImg.complete) {
-                            resolve();
-                        } else {
-                            newChildImg.onload = () => { resolve(); }
-                            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                        }
-                    });
-                }
+                printIframe = await renderCustomPrintIframe(documentFile.url);
             }
 
             // This triggers the print function at the end to open the popup.
@@ -436,7 +351,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(keyLetter === "p") {
                 event.preventDefault();
                 webData.setMenuOpen(DOCUMENT_MENU, false);
-                printDoc(event.altKey);
+                printDoc(!event.altKey);
             } else if(keyLetter === "s") {
                 event.preventDefault();
                 webData.setMenuOpen(DOCUMENT_MENU, false);

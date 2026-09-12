@@ -20,6 +20,11 @@ export async function sleep(ms) {
     return new Promise((resolve) => setTimeout(() => { resolve(null); }, ms));
 }
 
+/** This async function can be used to have a function wait two animation frames before performing its next task. */
+export async function waitTwoFrames() {
+    return new Promise((resolve) => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(null); }); }); });
+}
+
 /** This function cuts a string to ensure it has the max length of characters. */
 export function truncate(str = "", maxLength = 80) {
     return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);

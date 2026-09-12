@@ -316,6 +316,11 @@
     border-color: var(--blue-three);
 }
 
+.mohit-navMenu-opt.hosted-file-save-opt button > img, .mohit-navMenu-opt.hosted-file-save-opt a > img {
+    width: 16px;
+    height: 16px;
+    user-select: none;
+}
 .mohit-navMenu-opt-group {
     width: 100%;
     height: fit-content;

@@ -663,7 +663,7 @@ async function printQRCode() {
 
         printIframeDocument.body.appendChild(iframeStyle);
         printIframeDocument.body.appendChild(newChild);
-        await new Promise((resolve, reject) => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(); }); }); });
+        await waitTwoFrames();
 
         newChild.appendChild(newChildImg);
         await new Promise((resolve, reject) => {

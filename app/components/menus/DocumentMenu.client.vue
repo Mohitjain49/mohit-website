@@ -62,9 +62,9 @@
                 </button>
             </div>
             <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" :style="printButtonCursor" v-pulse-loop>
-                    <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
-                    <span> Print Document </span>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="printButtonCursor" v-pulse-loop>
+                    <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
+                    <span> Print Document (Optimized) </span>
                 </button>
             </div>
             <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
@@ -73,16 +73,11 @@
                     <span> Share Document </span>
                 </button>
             </div>
-            <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="printButtonCursor" v-pulse-loop>
-                    <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
-                    <span> Print Document (Screenshots) </span>
-                </button>
-            </div>
-            <div v-if="documentStore.copyDocumentSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.copyDoc()" v-pulse-loop>
-                    <font-awesome-icon :icon="documentStore.copyIcon" :spin-pulse="documentStore.copyPending" />
-                    <span> Copy Document </span>
+            <div v-if="(documentStore.iframeSupported && documentStore.browserPdfViewerPresent)" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" :style="printButtonCursor" v-pulse-loop>
+                    <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
+                    <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
+                    <span> Print Document (Standard) </span>
                 </button>
             </div>
         </div>
@@ -163,6 +158,7 @@
 </template>
 
 <script setup>
+import standard_print_icon from "~/assets/Standard_Print_Icon.svg";
 import pdfjs_icon from "~/assets/PDFJS_logo.svg";
 const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 

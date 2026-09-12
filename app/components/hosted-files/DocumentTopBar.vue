@@ -7,14 +7,19 @@
         <button class="doc-save-opt" v-if="webData.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
-        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(false)" :style="printButtonCursor" title="Print Document" v-pulse-loop>
-            <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
+        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(true)" :style="printButtonCursor" title="Print Document (Optimized)" v-pulse-loop>
+            <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
         </button>
         <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
-        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(true)" :style="printButtonCursor" title="Print Document (Screenshots)" v-pulse-loop>
-            <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
+        <button v-if="(iframeSupported && documentStore.browserPdfViewerPresent)"
+            class="doc-save-opt" title="Print Document (Standard)"
+            @click="documentStore.printDoc(false)"
+            :style="printButtonCursor" v-pulse-loop>
+
+            <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
+            <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
         </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
@@ -35,6 +40,8 @@
 </template>
 
 <script setup>
+import standard_print_icon from "~/assets/Standard_Print_Icon.svg";
+
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
