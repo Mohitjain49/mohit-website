@@ -115,79 +115,12 @@ export async function renderCustomPrintIframe(url = "") {
     const iframeStyle = printIframeDocument.createElement("style");
     const pdfjsStylesheet = printIframeDocument.createElement("style");
 
-    // The style rule here should match the one at the bottom for this same class.
-    iframeStyle.textContent = `
-        .mohit-doc-customPrint-page {
-            position: relative;
-            width: 99vw;
-            max-width: 816px;
-            max-height: 99vh;
-            aspect-ratio: 816 / 1056;
-            margin: 0px;
-            padding: 0px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: auto;
-        }
-        .mohit-doc-customPrint-page img {
-            width: 100%;
-            height: 100%;
-            margin: 0px;
-            padding: 0px;
-        }
+    const customPrintStyles = await fetch("/printstyles.css");
+    if(!customPrintStyles.ok) { throw new Error("Failed To Load Print CSS Stylesheet."); }
 
-        .mohit-doc-customPrint-page .textLayer {
-            color-scheme: only light;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            width: 100% !important;
-            height: 100% !important;
-            text-align: initial;
-            inset: 0;
-            overflow: clip;
-            opacity: 1;
-            line-height: 1;
-            -webkit-text-size-adjust: none;
-            -moz-text-size-adjust: none;
-            text-size-adjust: none;
-            forced-color-adjust: none;
-            transform-origin: 0 0;
-            caret-color: CanvasText;
-            z-index: 1000;
-            --min-font-size: 1;
-            --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
-            --min-font-size-inv: calc(1 / var(--min-font-size));
-        }
-        .mohit-doc-customPrint-page .annotationLayer {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            width: 100% !important;
-            height: 100% !important;
-            z-index: 2000;
-        }
-
-        @media print {
-            @page {
-                margin: 0px;
-                size: portrait;
-            }
-        }
-        @media (orientation: landscape) {
-            .mohit-doc-customPrint-page {
-                height: 99vh !important;
-                width: auto !important;
-                max-width: 99vw !important;
-                max-height: 1056px !important;
-                aspect-ratio: 816 / 1056;
-            }
-        }
-    `;
-
-    // Adds styles to the iframe.
+    iframeStyle.textContent = await customPrintStyles.text();
     pdfjsStylesheet.textContent = documentStore.getPdfjsStylesheet();
+
     printIframeDocument.body.appendChild(iframeStyle);
     printIframeDocument.head.appendChild(pdfjsStylesheet);
 

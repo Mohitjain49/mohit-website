@@ -23,13 +23,13 @@
         </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
-        <button class="flame" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" v-pulse-loop>
+        <button class="flame largeSvg" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" v-pulse-loop>
             <FontAwesomeIcon icon="fa-gears" />
         </button>
         <button class="flame" v-if="documentStore.onCreateGithubRepoRoute" @click="documentStore.scrollToPage(2)" title="Scroll To Table Of Contents" v-pulse-loop>
             <FontAwesomeIcon icon="fa-list" />
         </button>
-        <button @click="openWebsiteMenu(DOCUMENT_MENU)" title="Open Document Options" v-pulse-loop>
+        <button class="largeSvg" @click="openWebsiteMenu(DOCUMENT_MENU)" title="Open Document Options" v-pulse-loop>
             <FontAwesomeIcon icon="fa-file-pdf" />
         </button>
         <button @click="documentStore.toggleDocumentFullScreen()" :title="fullScreenStore.elementTitle" v-pulse-loop>
