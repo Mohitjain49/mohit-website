@@ -7,11 +7,11 @@
         <button class="doc-save-opt" v-if="webData.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
-        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(true)" :style="printButtonCursor" :title="documentStore.customPrintTitle" v-pulse-loop>
-            <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
-        </button>
         <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
+        </button>
+        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(true)" :style="printButtonCursor" :title="documentStore.customPrintTitle" v-pulse-loop>
+            <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
         </button>
         <button v-if="(iframeSupported && documentStore.browserPdfViewerPresent)"
             class="doc-save-opt" title="Print Document (Standard)"

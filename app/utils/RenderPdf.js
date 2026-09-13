@@ -1,5 +1,3 @@
-import pdfViewerStyles from 'pdfjs-dist/web/pdf_viewer.css?inline'
-
 /**
  * This function takes a PDF and renders it as an array of PNGs, one for each page.
  * @param {String} url The URL of the PDF.
@@ -81,7 +79,8 @@ export async function renderCustomPrintIframe(url = "") {
     const pdfBlob = await (await fetch(url)).blob(); // The blob fetched with the URL.
 
     if(!pdfBlob || pdfBlob == null || !(pdfBlob instanceof Blob)) { throw new Error("Blob Parsed By URL Invalid."); }
-    await useDocumentStore().checkPdfjsWorker();
+    const documentStore = useDocumentStore();
+    await documentStore.checkPdfjsWorker();
 
     const PRINT_IFRAME_ID = "mohit-doc-customPrint";
     const PRINT_IFRAME_PAGE_CLASS = "mohit-doc-customPrint-page";
@@ -104,9 +103,11 @@ export async function renderCustomPrintIframe(url = "") {
         }
     });
 
-    const { getDocument, TextLayer } = await import("pdfjs-dist");
-    const pdfLoadingTask = getDocument({ url });
+    const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
+    const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
+    const defaultLinkService = new PDFLinkService({ eventBus: new EventBus(), externalLinkTarget: 2 });
 
+    const pdfLoadingTask = getDocument({ url });
     const pdf = await pdfLoadingTask.promise;
     const numPages = pdf.numPages;
 
@@ -139,8 +140,10 @@ export async function renderCustomPrintIframe(url = "") {
         .mohit-doc-customPrint-page .textLayer {
             color-scheme: only light;
             position: absolute;
-            width: 100%;
-            height: 100%;
+            top: 0px;
+            left: 0px;
+            width: 100% !important;
+            height: 100% !important;
             text-align: initial;
             inset: 0;
             overflow: clip;
@@ -152,10 +155,18 @@ export async function renderCustomPrintIframe(url = "") {
             forced-color-adjust: none;
             transform-origin: 0 0;
             caret-color: CanvasText;
-            z-index: 0;
+            z-index: 1000;
             --min-font-size: 1;
             --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
             --min-font-size-inv: calc(1 / var(--min-font-size));
+        }
+        .mohit-doc-customPrint-page .annotationLayer {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 2000;
         }
 
         @media print {
@@ -176,7 +187,7 @@ export async function renderCustomPrintIframe(url = "") {
     `;
 
     // Adds styles to the iframe.
-    pdfjsStylesheet.textContent = pdfViewerStyles;
+    pdfjsStylesheet.textContent = documentStore.getPdfjsStylesheet();
     printIframeDocument.body.appendChild(iframeStyle);
     printIframeDocument.head.appendChild(pdfjsStylesheet);
 
@@ -201,6 +212,8 @@ export async function renderCustomPrintIframe(url = "") {
 
         printPageContainer.style.setProperty("--mohit-customPrint-pdfjs-raw-width", String(defaultViewport.width));
         printPageContainer.style.setProperty("--mohit-customPrint-pdfjs-raw-height", String(defaultViewport.height));
+        printPageContainer.style.setProperty("--min-font-size", 1);
+        printPageContainer.style.setProperty("--total-scale-factor", String(viewport.scale));
 
         const canvasElement = document.createElement("canvas");
         const canvasContext = canvasElement.getContext("2d");
@@ -261,8 +274,24 @@ export async function renderCustomPrintIframe(url = "") {
         });
         
         await textRenderTask.render();
-        printPageText.style.setProperty("--min-font-size", 1);
-        printPageContainer.style.setProperty("--total-scale-factor", String(viewport.scale))
+        const annotations = await pdfPage.getAnnotations({ intent: 'print' });
+        // console.log(annotations);
+
+        if(annotations && annotations.length > 0) {
+            const printPageAnnotations = document.createElement("div");
+            printPageAnnotations.classList.add("annotationLayer");
+            printPageContainer.appendChild(printPageAnnotations);
+
+            const annotationLayer = new AnnotationLayer({
+                div: printPageAnnotations,
+                viewport: viewport.clone({ dontFlip: true }),
+                page: pdfPage,
+                linkService: defaultLinkService
+            });
+
+            await waitTwoFrames();
+            await annotationLayer.render({ annotations });
+        }
     }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */

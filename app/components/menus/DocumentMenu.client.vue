@@ -61,16 +61,16 @@
                     <span> Save Document </span>
                 </button>
             </div>
-            <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="printButtonCursor" v-pulse-loop>
-                    <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
-                    <span> {{ documentStore.customPrintTitle }} </span>
-                </button>
-            </div>
             <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" v-pulse-loop>
                     <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
                     <span> Share Document </span>
+                </button>
+            </div>
+            <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="printButtonCursor" v-pulse-loop>
+                    <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
+                    <span> {{ documentStore.customPrintTitle }} </span>
                 </button>
             </div>
             <div v-if="(documentStore.iframeSupported && documentStore.browserPdfViewerPresent)" class="mohit-navMenu-opt hosted-file-save-opt">

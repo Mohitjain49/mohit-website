@@ -2,8 +2,10 @@ import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
 import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper from "/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper.pdf"
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
-import { ofetch } from 'ofetch';
 import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import pdfViewerStyles from 'pdfjs-dist/web/pdf_viewer.css?inline';
+
+import { ofetch } from 'ofetch';
 import Bowser from "bowser";
 import prettyBytes from "pretty-bytes";
 
@@ -459,7 +461,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * ------------------------------------------------------------------------------------------
      */
 
-    /** This function sets certain variables in the document store to ensure it runs properly. */
+    /** This function sets certain variables in the document store and DOM to ensure it runs properly. */
     function mountDocumentStore() {
         // If certain Google Cloud API keys are not present, this function disables the Google Drive functionality.
         if(!GOOGLE_CLOUD_CLIENT_ID || GOOGLE_CLOUD_CLIENT_ID === "") { googleDriveOptAvailable.value = -1; }
@@ -470,6 +472,11 @@ export const useDocumentStore = defineStore("document-store", () => {
         const notOnDesktop = ("userAgent" in navigator && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
         browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && !notOnDesktop);
         iframeSupported.value = (!!document.createElement("iframe"));
+
+        // This adds the PDF.js Viewer Styles to the DOM to ensure the rendered documents are visually appealing.
+        const pdfViewerStyleBlock = document.createElement("style");
+        pdfViewerStyleBlock.textContent = pdfViewerStyles;
+        document.head.appendChild(pdfViewerStyleBlock);
 
         // This checks to see all possible image types a canvas can be converted into.
         const tempCanvas = document.createElement("canvas");
@@ -612,9 +619,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
     }
 
-    /**
-     * This function sets the full screen for the element containing the document or script.
-     */
+    /** This function sets the full screen for the element containing the document. */
     async function toggleDocumentFullScreen() {
         if(!import.meta.client || (!onMarkdownRoute.value && !docLoaded.value.status) || fsStateChanging.value) { return; }
         const element = document.getElementById("resume-container");
@@ -644,6 +649,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(document.getElementById(id) != null) { router.push(routePath.value + "#" + id); }
     }
 
+    /** This function returns the PDF.js Viewer Styles if they need it. */
+    function getPdfjsStylesheet() { return pdfViewerStyles; }
+
     /**
      * This function sets the current observed page.
      * @param {Number} index The Page Number.
@@ -667,9 +675,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
+        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, getPdfAsImages,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
-        mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, checkPdfjsWorker, getPdfAsImages
+        mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, checkPdfjsWorker, getPdfjsStylesheet
     }
 });
 
