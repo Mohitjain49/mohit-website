@@ -1,0 +1,78 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mohit-doc-customPrint-page {
+    position: relative;
+    width: calc(100% - 0px);
+    max-width: 950px;
+    height: auto;
+    max-height: 100%;
+    aspect-ratio: 850 / 1100;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.mohit-doc-customPrint-page img {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.mohit-doc-customPrint-page .textLayer {
+    color-scheme: only light;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100% !important;
+    height: 100% !important;
+    text-align: initial;
+    inset: 0;
+    overflow: clip;
+    opacity: 1;
+    line-height: 1;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+    caret-color: CanvasText;
+    z-index: 1000;
+    --min-font-size: 1;
+    --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+    --min-font-size-inv: calc(1 / var(--min-font-size));
+}
+.mohit-doc-customPrint-page .annotationLayer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 2000;
+}
+
+@media print {
+    @page {
+        margin: 0px;
+        size: portrait;
+    }
+}
+@media (orientation: landscape) {
+    .mohit-doc-customPrint-page {
+        height: calc(100vh - 1px) !important;
+        width: auto !important;
+        max-width: calc(100vw - 1px) !important;
+        max-height: 1100px !important;
+        aspect-ratio: 850 / 1100;
+    }
+}

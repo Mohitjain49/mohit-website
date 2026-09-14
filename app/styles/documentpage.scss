@@ -238,6 +238,20 @@
     background-color: rgba(255, 255, 255, 0.15);
 }
 
+.mohit-document-topBar button > svg, .mohit-document-topBar a > svg {
+    width: 12px;
+    height: 12px;
+}
+.mohit-document-topBar button.largeSvg > svg, .mohit-document-topBar a.largeSvg > svg {
+    width: 14px;
+    height: 14px;
+}
+.mohit-document-topBar button > img, .mohit-document-topBar a > img {
+    width: 16px;
+    height: 16px;
+    user-select: none;
+}
+
 .mohit-document-topBar button.flame, .mohit-document-topBar a.flame {
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame);

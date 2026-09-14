@@ -5,16 +5,19 @@
 <template>
 <main id="script-page" class="personal-web-body transparent">
     <div class="mohit-main-script" id="mohit-main-script">
-        <div ref="script-options" class="mohit-main-script-top">
+        <div v-if="scriptsStore.scriptBlobCreated" ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
                 <div class="mohit-main-script-top-group">
-                    <button class="script-save-opt" @click="scriptsStore.downloadScript()" title="Download Code Script" v-pulse-loop>
+                    <button class="script-save-opt" @click="scriptsStore.downloadScript()" :style="scriptsStore.downloadCursor" title="Download Code Script" v-pulse-loop>
                         <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
                     </button>
-                    <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)" @click="scriptsStore.saveScript()" title="Save Code Script" v-pulse-loop>
-                            <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
+                    <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)"
+                        :style="scriptsStore.saveDocCursor" @click="scriptsStore.saveScript()"
+                        title="Save Code Script" v-pulse-loop>
+                        
+                        <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                     </button>
-                    <button class="script-save-opt" @click="scriptsStore.copyScript()" title="Copy Raw Code Script" v-pulse-loop>
+                    <button class="script-save-opt" @click="scriptsStore.copyScript()" :style="scriptsStore.copyDocCursor" title="Copy Raw Code Script" v-pulse-loop>
                         <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
                     </button>
                 </div>
@@ -45,13 +48,15 @@
         <GamepadComponent />
     </template>
 
+    <template v-if="scriptsStore.scriptBlobCreated">
+        <FileWidgets />
+        <ScriptLineOptions />
+        <ScriptsMenu />
+    </template>
+
     <WebCover v-if="showFsWebCover" :zIndex="500" />
     <WebFooter v-if="!fullScreenStore.fullScreenSet" />
     <ParticlesBackground :particles-options="CODE_ICON_BACKGROUND" />
-
-    <FileWidgets />
-    <ScriptLineOptions />
-    <ScriptsMenu />
 </main>
 </template>
 

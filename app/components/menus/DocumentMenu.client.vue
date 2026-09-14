@@ -50,39 +50,37 @@
 
         <div class="mohit-navMenu-opt-group">
             <div class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()" :title="documentStore.documentDownloadTitle" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()"
+                    :style="documentStore.downloadCursor"
+                    :title="documentStore.documentDownloadTitle" v-pulse-loop>
+
                     <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
                     <span> Download Document </span>
                 </button>
             </div>
             <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" :style="documentStore.saveDocCursor" v-pulse-loop>
                     <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
                     <span> Save Document </span>
                 </button>
             </div>
-            <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" :style="printButtonCursor" v-pulse-loop>
-                    <font-awesome-icon :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
-                    <span> Print Document </span>
-                </button>
-            </div>
             <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" :style="documentStore.shareCursor" v-pulse-loop>
                     <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
                     <span> Share Document </span>
                 </button>
             </div>
             <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="printButtonCursor" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="documentStore.printCursor" v-pulse-loop>
                     <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
-                    <span> Print Document (Screenshots) </span>
+                    <span> {{ documentStore.customPrintTitle }} </span>
                 </button>
             </div>
-            <div v-if="documentStore.copyDocumentSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.copyDoc()" v-pulse-loop>
-                    <font-awesome-icon :icon="documentStore.copyIcon" :spin-pulse="documentStore.copyPending" />
-                    <span> Copy Document </span>
+            <div v-if="(documentStore.iframeSupported && documentStore.browserPdfViewerPresent)" class="mohit-navMenu-opt hosted-file-save-opt">
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" :style="documentStore.printCursor" v-pulse-loop>
+                    <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
+                    <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
+                    <span> Print Document (Browser) </span>
                 </button>
             </div>
         </div>
@@ -163,6 +161,7 @@
 </template>
 
 <script setup>
+import standard_print_icon from "~/assets/Standard_Print_Icon.svg";
 import pdfjs_icon from "~/assets/PDFJS_logo.svg";
 const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
@@ -170,7 +169,6 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 
-const printButtonCursor = computed(() => { return { cursor: (documentStore.printInProgress ? "default" : "") }});
 const docMenu = shallowRef(null);
 useWebsiteMenuUtility(docMenu);
 

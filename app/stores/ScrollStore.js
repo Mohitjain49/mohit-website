@@ -255,6 +255,22 @@ export const useScrollStore = defineStore("scroll-store", () => {
         lenis.start();
     }
 
+    /** This function returns a promise that resolves when the auto scroll is finished. */
+    async function waitForAutoScroll() {
+        return new Promise(async (resolve, reject) => {
+            if(!isAutoScrolling.value) { resolve(0); }
+            var secondsPassed = 0;
+
+            while(isAutoScrolling.value) {
+                await sleep(50);
+                secondsPassed += 0.05;
+            }
+
+            // This resolves how long the promise needed to wait before resolving.
+            resolve(secondsPassed);
+        })
+    }
+
     /**
      * This function sets the scroll calculation interval.
      * @param {0 | 1 | 2} start If true, this function should start the interval, else it should stop it.
@@ -289,7 +305,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
     return { mounted, scrollProgress, isAutoScrolling,
-        mountScrollStore, unmountScrollStore, cancelAutoscroll,
+        mountScrollStore, unmountScrollStore, cancelAutoscroll, waitForAutoScroll,
         scrollToId, scrollToTop, scrollToTarget, scrollByIncrement, gamepadScrollToTop
     }
 });
@@ -319,4 +335,9 @@ export async function scrollToTop(instant = false, delay = 0) {
  */
 export async function scrollToTarget(targetY = 0) {
     return useScrollStore().scrollToTarget(targetY);
+}
+
+/** This function returns a promise that resolves when the auto scroll is finished. */
+export async function waitForAutoScroll() {
+    return useScrollStore().waitForAutoScroll();
 }

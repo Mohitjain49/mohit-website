@@ -1,7 +1,3 @@
-<style lang="scss">
-@use "pdfjs-dist/web/pdf_viewer.css";
-</style>
-
 <template>
 <main id="resume-container">
     <div class="pdf-doc-mohit-container">

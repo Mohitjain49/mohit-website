@@ -86,9 +86,9 @@ function transformCodeLine(addClassToHast, node, lineNum, path) {
             type: "element",
             tagName: "button",
             properties: {
-                onClick: "window.openCodeLineOptions(event, " + String(lineNum) + ")",
-                onContextMenu: "window.openCodeLineOptions(event, " + String(lineNum) + ")",
-                title: "See Options for Line " + lineNum + " Of This Code Script."
+                className: "mohit-scriptPage-code-lineNum-innerButton",
+                title: "See Options for Line " + String(lineNum) + " Of This Code Script.",
+                "line-number": String(lineNum)
             },
             children: [{ type: "text", value: String(lineNum) }]
         }]

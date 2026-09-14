@@ -27,7 +27,7 @@
                 <FontAwesomeIcon icon="fa-diamond-turn-right" />
             </RouterLink>
 
-            <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
+            <button @click="copyQRCodeLink()" :style="copyLinkCursor" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
                 <FontAwesomeIcon :icon="copyLinkIcon" :spin-pulse="(actions.copy == 1)" />
             </button>
             <button v-if="showCustomLinkShare" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
@@ -40,7 +40,7 @@
                 </button>
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 1)" class="qrcode-image-options">
-                        <button v-if="webData.shareSupported" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
+                        <button v-if="webData.shareSupported" @click="shareQRCodeLink()" :style="shareLinkCursor" class="qrcode-mainPopup-btn light" title="Share Link">
                             <FontAwesomeIcon :icon="shareLinkIcon" :spin-pulse="(actions.share == 1)" />
                         </button>
                         <a :href="shareEmail" class="qrcode-mainPopup-btn" title="Share This Link By Email!">
@@ -67,19 +67,19 @@
                 </button>
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
-                        <button v-if="webData.shareSupported" @click="shareQRCode()" class="qrcode-mainPopup-btn yellow" title="Share QR Code">
+                        <button v-if="webData.shareSupported" @click="shareQRCode()" :style="shareImageCursor" class="qrcode-mainPopup-btn yellow" title="Share QR Code">
                             <FontAwesomeIcon :icon="shareImageIcon" :spin-pulse="(actions.shareImage == 1)" />
                         </button>
-                        <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow" title="Download QR Code.">
+                        <button @click="downloadQRCode()" :style="downloadImageCursor" class="qrcode-mainPopup-btn yellow" title="Download QR Code.">
                             <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
                         </button>
-                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" class="qrcode-mainPopup-btn yellow" title="Save QR Code.">
+                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" :style="saveImageCursor" class="qrcode-mainPopup-btn yellow" title="Save QR Code.">
                             <FontAwesomeIcon :icon="saveImageIcon" :spin-pulse="(actions.saveImage == 1)" />
                         </button>
-                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
+                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" :style="copyImageCursor" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
                         </button>
-                        <button v-if="iframeSupported" @click="printQRCode()" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
+                        <button v-if="iframeSupported" @click="printQRCode()" :style="printImageCursor" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
                             <FontAwesomeIcon :icon="printImageIcon" :spin-pulse="(actions.printImage == 1)" />
                         </button>
                         <a v-if="(qrCodeURL != undefined)" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
@@ -208,34 +208,21 @@ const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyIm
 var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null, saveImage: null }
 var sharePopupAbortController = new AbortController();
 
-const copyLinkIcon = computed(() => {
-    const status = actions.value.copy;
-    return ((status == 0) ? 'fa-link' : STATUS_ICONS[status]);
-});
-const shareLinkIcon = computed(() => {
-    const status = actions.value.share;
-    return ((status == 0) ? 'fa-share' : STATUS_ICONS[status]);
-});
-const shareImageIcon = computed(() => {
-    const status = actions.value.shareImage;
-    return ((status == 0) ? 'fa-share' : STATUS_ICONS[status]);
-});
-const downloadImageIcon = computed(() => {
-    const status = actions.value.downloadImage;
-    return ((status == 0) ? 'fa-download' : STATUS_ICONS[status]);
-});
-const copyImageIcon = computed(() => {
-    const status = actions.value.copyImage;
-    return ((status == 0) ? 'fa-clone' : STATUS_ICONS[status]);
-});
-const printImageIcon = computed(() => {
-    const status = actions.value.printImage;
-    return ((status == 0) ? 'fa-print' : STATUS_ICONS[status]);
-});
-const saveImageIcon = computed(() => {
-    const status = actions.value.saveImage;
-    return ((status == 0) ? 'fa-floppy-disk' : STATUS_ICONS[status]);
-});
+const copyLinkIcon = computed(() => { return ((actions.value.copy == 0) ? 'fa-link' : STATUS_ICONS[actions.value.copy]); });
+const shareLinkIcon = computed(() => { return ((actions.value.share == 0) ? 'fa-share' : STATUS_ICONS[actions.value.share]); });
+const shareImageIcon = computed(() => { return ((actions.value.shareImage == 0) ? 'fa-share' : STATUS_ICONS[actions.value.shareImage]); });
+const downloadImageIcon = computed(() => { return ((actions.value.downloadImage == 0) ? 'fa-download' : STATUS_ICONS[actions.value.downloadImage]); });
+const copyImageIcon = computed(() => { return ((actions.value.copyImage == 0) ? 'fa-clone' : STATUS_ICONS[actions.value.copyImage]); });
+const printImageIcon = computed(() => { return ((actions.value.printImage == 0) ? 'fa-print' : STATUS_ICONS[actions.value.printImage]); });
+const saveImageIcon = computed(() => { return ((actions.value.saveImage == 0) ? 'fa-floppy-disk' : STATUS_ICONS[actions.value.saveImage]); });
+
+const copyLinkCursor = computed (() => { return { cursor: ((actions.value.copy > 0) ? 'default' : '') }});
+const shareLinkCursor = computed (() => { return { cursor: ((actions.value.share > 0) ? 'default' : '') }});
+const shareImageCursor = computed (() => { return { cursor: ((actions.value.shareImage > 0) ? 'default' : '') }});
+const downloadImageCursor = computed (() => { return { cursor: ((actions.value.downloadImage > 0) ? 'default' : '') }});
+const copyImageCursor = computed (() => { return { cursor: ((actions.value.copyImage > 0) ? 'default' : '') }});
+const printImageCursor = computed (() => { return { cursor: ((actions.value.printImage > 0) ? 'default' : '') }});
+const saveImageCursor = computed (() => { return { cursor: ((actions.value.saveImage > 0) ? 'default' : '') }});
 
 // This mounts the share popup and all of its functionality.
 onMounted(async() => {
@@ -419,14 +406,20 @@ function focusOnQrcode(event = undefined) {
  */
 function onSharePopupKeydown(event = undefined) {
     try {
-        if(!event || document.activeElement !== document.getElementById("mohit-qrcode")) { return; }
-        if(!event.ctrlKey || event.repeat || !qrCodeBlob.value) { return; }
+        if(!event || !event.ctrlKey || event.repeat || !qrCodeBlob.value) { return; }
+        const qrcodeActiveElement = (document.activeElement === document.getElementById("mohit-qrcode"));
         const keyLetter = event.key.toLowerCase();
 
         if(keyLetter === "c") {
             event.preventDefault();
-            setImageOptions(true);
-            copyQRCode();
+            window.getSelection()?.removeAllRanges();
+
+            if(qrcodeActiveElement) {
+                setImageOptions(true);
+                copyQRCode();
+            } else {
+                copyQRCodeLink();
+            }
         } else if(keyLetter === "p") {
             event.preventDefault();
             setImageOptions(true);
@@ -605,6 +598,7 @@ async function copyQRCode() {
 async function printQRCode() {
     if(actions.value.printImage > 0 || !iframeSupported.value || !qrCodeURL.value) { return; }
     actions.value.printImage = 1;
+    var cancelTimeout = false;
 
     const PRINT_IFRAME_ID = "mohit-qrcode-customPrint";
     const PRINT_IFRAME_IMG_CLASS = "mohit-qrcode-customPrint-img";
@@ -663,7 +657,7 @@ async function printQRCode() {
 
         printIframeDocument.body.appendChild(iframeStyle);
         printIframeDocument.body.appendChild(newChild);
-        await new Promise((resolve, reject) => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(); }); }); });
+        await waitTwoFrames();
 
         newChild.appendChild(newChildImg);
         await new Promise((resolve, reject) => {
@@ -674,19 +668,26 @@ async function printQRCode() {
             }
         });
 
-        // This triggers the print function at the end to open the popup.
-        const printIframeWin = printIframe.contentWindow;
-        printIframeWin.focus();
-        printIframeWin.print();
-       actions.value.printImage = 2; 
+        if(webData.showSharePopupImmediate) {
+            // This triggers the print function at the end to open the popup.
+            const printIframeWin = printIframe.contentWindow;
+            printIframeWin.focus();
+            printIframeWin.print();
+            actions.value.printImage = 2;
+        } else {
+            if(printIframe != null) { document.body.removeChild(printIframe); }
+            printIframe = null;
+            cancelTimeout = true;
+            actions.value.printImage = 0;
+        }
     } catch(e) {
         actions.value.printImage = 3;
     } finally {
         if(timeouts.printImage != null) { clearTimeout(timeouts.printImage); }
-        timeouts.printImage = setTimeout(() => {
+        timeouts.printImage = (cancelTimeout ? null : setTimeout(() => {
             actions.value.printImage = 0;
             timeouts.printImage = null;
-        }, 3000); 
+        }, 3000));
     }
 }
 

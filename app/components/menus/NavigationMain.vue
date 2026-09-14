@@ -34,7 +34,7 @@
             <button v-if="webData.compassMenuAvailable" class="mohit-navBar-icon light" @click="webData.setMenuOpen(COMPASS_MENU, true)" title="Navigate This Page" v-pulse-loop>
                 <font-awesome-icon icon="fa-compass" />
             </button>
-            <button v-else-if="scriptsStore.onScriptRoute" class="mohit-navBar-icon light" @click="webData.setMenuOpen(SCRIPTS_MENU, true)" title="Script Options" v-pulse-loop>
+            <button v-else-if="showScriptOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(SCRIPTS_MENU, true)" title="Script Options" v-pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
             </button>
             <button v-else-if="showDocumentOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(DOCUMENT_MENU, true)" title="Document Options" v-pulse-loop>
@@ -79,7 +79,7 @@
                 <span> Navigate This Page </span>
             </button>
         </div>
-        <div v-if="scriptsStore.onScriptRoute" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+        <div v-if="showScriptOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
             <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(SCRIPTS_MENU)" v-pulse-loop>
                 <font-awesome-icon icon="fa-file-export" />
                 <span> See Script Options </span>
@@ -203,9 +203,10 @@ const showWakeLockWidget = computed(() => {
 });
 
 const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
+const showScriptOptionsBtn = computed(() => { return (scriptsStore.onScriptRoute && scriptsStore.scriptBlobCreated); });
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && (installStore.updateNeeded || installStore.swUpdating)); });
-const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || scriptsStore.onScriptRoute); });
+const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
 const showNavLeftWidgets = computed(() => {
     return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));

@@ -110,7 +110,7 @@ function checkContactDropdownStayVisible(event) {
  * @param {{ link: String, id: String }} obj The custom object sent by the contact button.
  */
 function onContactBtnClick(event, obj) {
-    if(!event) { return }
+    if(!event) { return; }
     event.preventDefault();
 
     if(event.altKey) {
@@ -121,7 +121,7 @@ function onContactBtnClick(event, obj) {
         router.push('/contact/#' + obj.id); // If the Shift key is pressed, the key opens up the social tab on the contact page for the button.
     } else if(startContactObj.value === obj.id) {
         hideStartContactDropdown();
-        sleep(100).then(() => { startContactObj.value = obj.id; });
+        if(event.type.toLowerCase() === "contextmenu") { sleep(100).then(() => { startContactObj.value = obj.id; }); }
     } else {
         startContactObj.value = obj.id;
     }
