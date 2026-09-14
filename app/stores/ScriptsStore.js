@@ -50,10 +50,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     });
 
     const onScriptRoute = computed(() => { return (currentScriptRoute.value != -1); });
-    const onDeployScriptRoute = computed(() => { return scripts[0].onRoute.value; });
-    const onGamepadScriptRoute = computed(() => { return (currentScriptLink.value >= 1 || currentScriptLink.value <= 3); });
-
-    /** The GitHub Link of the script currently being displayed. */
+    const scriptBlobCreated = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].blobCreated.value : false); });
     const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
 
     const downloadIcon = computed(() => {
@@ -72,6 +69,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const downloadPending = computed(() => { return (scriptDownloadStatus.value == SCRIPT_ACTION_PENDING); });
     const savePending = computed(() => { return (scriptSaveStatus.value == SCRIPT_ACTION_PENDING); });
     const copyPending = computed(() => { return (scriptCopyStatus.value == SCRIPT_ACTION_PENDING); });
+
+    const downloadCursor = computed(() => { return { cursor: ((scriptDownloadStatus.value > 0) ? "default" : "") }});
+    const saveDocCursor = computed(() => { return { cursor: ((scriptSaveStatus.value > 0) ? "default" : "") }});
+    const copyDocCursor = computed(() => { return { cursor: ((scriptCopyStatus.value > 0) ? "default" : "") }});
 
     const wrapIcon = computed(() => { return (wrapCode.value ? "fa-align-left" : "fa-arrows-left-right-to-line"); });
     const wrapStatement = computed(() => { return (wrapCode.value ? "Let Code Overflow" : "Wrap Code"); });
@@ -440,9 +441,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, onDeployScriptRoute, onGamepadScriptRoute,
-        currentScriptLink, downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
-        copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
+    return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, currentScriptLink, scriptBlobCreated,
+        downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
+        copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement, downloadCursor, saveDocCursor, copyDocCursor,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
         setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
@@ -462,13 +463,17 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
 
     /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = ref(null);
+    const blobCreated = ref(false);
     const router = useRouter();
 
     const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted script. */
-    function initBlob() { blob.value = new Blob([code], { type: "text/javascript" }); }
+    function initBlob() {
+        blob.value = new Blob([code], { type: (suffix.endsWith("js") ? "text/javascript" : "text/plain") });
+        blobCreated.value = true;
+    }
 
     /**
      * This function checks whether the path associated with this hosted script is equivalent to another given path.
@@ -479,5 +484,5 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         return (path === pathname || (path + "/") === pathname);
     }
 
-    return { path, code, onRoute, name, suffix, link, blob, html, initBlob, checkPath }
+    return { path, code, onRoute, name, suffix, link, blob, blobCreated, html, initBlob, checkPath }
 }

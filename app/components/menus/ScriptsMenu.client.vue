@@ -10,19 +10,19 @@
 
         <div class="mohit-navMenu-opt-group">
             <div class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.downloadScript()" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.downloadScript()" :style="scriptsStore.downloadCursor" v-pulse-loop>
                     <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
                     <span> Download Code Script </span>
                 </button>
             </div>
             <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.saveScript()" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.saveScript()" :style="scriptsStore.saveDocCursor" v-pulse-loop>
                     <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                     <span> Save Code Script </span>
                 </button>
             </div>
             <div class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.copyScript()" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="scriptsStore.copyScript()" :style="scriptsStore.copyDocCursor" v-pulse-loop>
                     <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
                     <span> Copy Raw Code Script </span>
                 </button>

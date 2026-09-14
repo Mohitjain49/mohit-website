@@ -1,22 +1,27 @@
 <template>
 <div ref="document-options" :class="['mohit-document-topBar', (documentStore.onMarkdownRoute ? 'markdown' : '')]">
     <div class="mohit-document-topBar-sideSection">
-        <button class="doc-save-opt" @click="documentStore.downloadDoc()" :title="documentStore.documentDownloadTitle" v-pulse-loop>
+        <button class="doc-save-opt" @click="documentStore.downloadDoc()" :style="documentStore.downloadCursor" :title="documentStore.documentDownloadTitle" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
         </button>
-        <button class="doc-save-opt" v-if="webData.saveAsSupported" @click="documentStore.saveDoc()" title="Save Document" v-pulse-loop>
+        <button class="doc-save-opt" v-if="webData.saveAsSupported" @click="documentStore.saveDoc()" :style="documentStore.saveDocCursor" title="Save Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
-        <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" title="Share Document" v-pulse-loop>
+        <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" :style="documentStore.shareCursor" title="Share Document" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
-        <button class="doc-save-opt" v-if="iframeSupported" @click="documentStore.printDoc(true)" :style="printButtonCursor" :title="documentStore.customPrintTitle" v-pulse-loop>
+
+        <button class="doc-save-opt" v-if="iframeSupported"
+            @click="documentStore.printDoc(true)"
+            :style="documentStore.printCursor"
+            :title="documentStore.customPrintTitle" v-pulse-loop>
+
             <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
         </button>
         <button v-if="(iframeSupported && documentStore.browserPdfViewerPresent)"
             class="doc-save-opt" title="Print Document (Browser)"
             @click="documentStore.printDoc(false)"
-            :style="printButtonCursor" v-pulse-loop>
+            :style="documentStore.printCursor" v-pulse-loop>
 
             <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
             <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
@@ -45,9 +50,7 @@ import standard_print_icon from "~/assets/Standard_Print_Icon.svg";
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
-
-const { printInProgress, iframeSupported } = storeToRefs(useDocumentStore());
-const printButtonCursor = computed(() => { return { cursor: (printInProgress.value ? "default" : "") }});
+const { iframeSupported } = storeToRefs(documentStore);
 
 /** This function opens the document menu. */
 function openWebsiteMenu(index = 3) {

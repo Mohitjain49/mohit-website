@@ -156,9 +156,16 @@ export const useDocumentStore = defineStore("document-store", () => {
     const customPrintPending = computed(() => { return (documentCustomPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
 
-    const printInProgress = computed(() => { return (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0); });
+    const printCursor = computed(() => { return { cursor: ((documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0) ? "default" : "") }});
+    const downloadCursor = computed(() => { return { cursor: ((documentDownloadStatus.value > 0) ? "default" : "") }});
+    const saveDocCursor = computed(() => { return { cursor: ((documentSaveStatus.value > 0) ? "default" : "") }});
+    const shareCursor = computed(() => { return { cursor: ((documentShareStatus.value > 0) ? "default" : "") }});
+
     const uploadToGoogleDrivePending = computed(() => {
         return (documentUploadToGoogleDriveStatus.value == DOCUMENT_ACTION_PENDING || googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
+    });
+    const uploadToGoogleDriveCursor = computed(() => {
+        return { cursor: ((documentUploadToGoogleDriveStatus.value > 0 || googleDriveOptAvailable.value > 0) ? "default" : "") }
     });
 
     /**
@@ -263,7 +270,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                 printIframe = await renderCustomPrintIframe(documentFile.url);
             }
 
-            if(currentDocumentRouteNumber == currentDocumentRoute.value) {
+            if(currentDocumentRouteNumber == currentDocumentRoute.value && !webData.showSharePopupImmediate) {
                 // This triggers the print function at the end to open the popup.
                 const printIframeWin = printIframe.contentWindow;
                 printIframeWin.focus();
@@ -683,11 +690,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(index >= 0 && index <= docLoaded.value.totalPages) { contextMenuPageNumber.value = index; }
     }
 
-    return { hostedDocuments, docImageUrls, docLoaded, currentObservedPage, contextMenuPageNumber, printInProgress,
+    return { hostedDocuments, docImageUrls, docLoaded, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, customPrintTitle,
         downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,
+        downloadCursor, saveDocCursor, shareCursor, printCursor, uploadToGoogleDriveCursor,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
         onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, getPdfAsImages,

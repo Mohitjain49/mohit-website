@@ -605,6 +605,7 @@ async function copyQRCode() {
 async function printQRCode() {
     if(actions.value.printImage > 0 || !iframeSupported.value || !qrCodeURL.value) { return; }
     actions.value.printImage = 1;
+    var cancelTimeout = false;
 
     const PRINT_IFRAME_ID = "mohit-qrcode-customPrint";
     const PRINT_IFRAME_IMG_CLASS = "mohit-qrcode-customPrint-img";
@@ -674,19 +675,26 @@ async function printQRCode() {
             }
         });
 
-        // This triggers the print function at the end to open the popup.
-        const printIframeWin = printIframe.contentWindow;
-        printIframeWin.focus();
-        printIframeWin.print();
-       actions.value.printImage = 2; 
+        if(webData.showSharePopupImmediate) {
+            // This triggers the print function at the end to open the popup.
+            const printIframeWin = printIframe.contentWindow;
+            printIframeWin.focus();
+            printIframeWin.print();
+            actions.value.printImage = 2;
+        } else {
+            if(printIframe != null) { document.body.removeChild(printIframe); }
+            printIframe = null;
+            cancelTimeout = true;
+            actions.value.printImage = 0;
+        }
     } catch(e) {
         actions.value.printImage = 3;
     } finally {
         if(timeouts.printImage != null) { clearTimeout(timeouts.printImage); }
-        timeouts.printImage = setTimeout(() => {
+        timeouts.printImage = (cancelTimeout ? null : setTimeout(() => {
             actions.value.printImage = 0;
             timeouts.printImage = null;
-        }, 3000); 
+        }, 3000));
     }
 }
 
