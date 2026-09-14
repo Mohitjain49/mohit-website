@@ -116,7 +116,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
     const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
 
-    const customPrintTitle = computed(() => { return (browserPdfViewerPresent.value ? "Print Document (Optimized)" : "Print Document"); });
+    const customPrintTitle = computed(() => { return (browserPdfViewerPresent.value ? "Print Document (Standard)" : "Print Document"); });
     const documentDownloadTitle = computed(() => { return ("Download Document (" + currentDocumentFileSize.value + ")"); });
     const showPdfPageNav = computed(() => {
         return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && (docImageUrls.value.length > 0));
@@ -224,6 +224,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     async function printDoc(customPrint = false) {
         if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
         const customPrintRequired = !browserPdfViewerPresent.value;
+        var cancelTimeout = false;
 
         if(customPrintRequired) {
             documentPrintStatus.value = 1;
@@ -236,7 +237,9 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         try {
             const documentFile = getCurrentPDFObject();
-            if(!documentFile) { throw new Error("Document Does Not Exist."); }
+            const currentDocumentRouteNumber = currentDocumentRoute.value;
+
+            if(!documentFile || currentDocumentRouteNumber == -1) { throw new Error("Document Does Not Exist."); }
             if(printIframe != null) { document.body.removeChild(printIframe); }
 
             if(browserPdfViewerPresent.value && !customPrint) {
@@ -260,18 +263,28 @@ export const useDocumentStore = defineStore("document-store", () => {
                 printIframe = await renderCustomPrintIframe(documentFile.url);
             }
 
-            // This triggers the print function at the end to open the popup.
-            const printIframeWin = printIframe.contentWindow;
-            printIframeWin.focus();
-            printIframeWin.print();
-            
-            if(customPrintRequired) {
-                documentPrintStatus.value = 2;
-                documentCustomPrintStatus.value = 2;
-            } else if(customPrint) {
-                documentCustomPrintStatus.value = 2;
+            if(currentDocumentRouteNumber == currentDocumentRoute.value) {
+                // This triggers the print function at the end to open the popup.
+                const printIframeWin = printIframe.contentWindow;
+                printIframeWin.focus();
+                printIframeWin.print();
+                
+                if(customPrintRequired) {
+                    documentPrintStatus.value = 2;
+                    documentCustomPrintStatus.value = 2;
+                } else if(customPrint) {
+                    documentCustomPrintStatus.value = 2;
+                } else {
+                    documentPrintStatus.value = 2;
+                }
             } else {
-                documentPrintStatus.value = 2;
+                // This removes the print IFrame if the user performs an action that aborts the print functionality.
+                if(printIframe != null) { document.body.removeChild(printIframe); }
+                printIframe = null;
+                cancelTimeout = true;
+
+                documentPrintStatus.value = 0;
+                documentCustomPrintStatus.value = 0;
             }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
@@ -286,6 +299,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                 documentPrintStatus.value = errorNum;
             }
         } finally {
+            if(cancelTimeout) { return; }
             setTimeout(() => {
                 documentPrintStatus.value = 0;
                 documentCustomPrintStatus.value = 0;
@@ -469,8 +483,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(!GOOGLE_CLOUD_APP_ID || GOOGLE_CLOUD_APP_ID === "") { googleDriveOptAvailable.value = -1; }
 
         // This sets whether the user is able to print a document on the website using the native PDF Viewer.
-        const notOnDesktop = ("userAgent" in navigator && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
-        browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && !notOnDesktop);
+        const userAgentExists = ("userAgent" in navigator);
+        const notOnDesktop = (userAgentExists && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
+        browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && userAgentExists && !notOnDesktop);
         iframeSupported.value = (!!document.createElement("iframe"));
 
         // This adds the PDF.js Viewer Styles to the DOM to ensure the rendered documents are visually appealing.
@@ -669,7 +684,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     return { hostedDocuments, docImageUrls, docLoaded, currentObservedPage, contextMenuPageNumber, printInProgress,
-        googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported,
+        googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, customPrintTitle,
         downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,

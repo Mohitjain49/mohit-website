@@ -6,9 +6,6 @@
  */
 export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH, usePixelRatio = false) {
     if(!import.meta.client || !url || url === "") { throw new Error("URL Invalid."); }
-    const pdfBlob = await (await fetch(url)).blob(); // The blob fetched with the URL.
-
-    if(!pdfBlob || pdfBlob == null || !(pdfBlob instanceof Blob)) { throw new Error("Blob Parsed By URL Invalid."); }
     await useDocumentStore().checkPdfjsWorker();
 
     const pdfLoadingTask = (await import("pdfjs-dist")).getDocument({ url });
@@ -76,9 +73,6 @@ export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH, us
  */
 export async function renderCustomPrintIframe(url = "") {
     if(!import.meta.client || !url || url === "") { throw new Error("URL Invalid."); }
-    const pdfBlob = await (await fetch(url)).blob(); // The blob fetched with the URL.
-
-    if(!pdfBlob || pdfBlob == null || !(pdfBlob instanceof Blob)) { throw new Error("Blob Parsed By URL Invalid."); }
     const documentStore = useDocumentStore();
     await documentStore.checkPdfjsWorker();
 
@@ -105,7 +99,10 @@ export async function renderCustomPrintIframe(url = "") {
 
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
     const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
+
     const defaultLinkService = new PDFLinkService({ eventBus: new EventBus(), externalLinkTarget: 2 });
+    const imageOutputScale = 2;
+    const imageType = "image/png";
 
     const pdfLoadingTask = getDocument({ url });
     const pdf = await pdfLoadingTask.promise;
@@ -151,15 +148,15 @@ export async function renderCustomPrintIframe(url = "") {
         const canvasElement = document.createElement("canvas");
         const canvasContext = canvasElement.getContext("2d");
 
-        const imageWidth = Math.floor(viewport.width * 2);
-        const imageHeight = Math.floor(viewport.height * 2);
+        const imageWidth = Math.floor(viewport.width * imageOutputScale);
+        const imageHeight = Math.floor(viewport.height * imageOutputScale);
 
         canvasElement.height = imageHeight;
         canvasElement.width = imageWidth;
 
         const canvasRenderTask = pdfPage.render({
             viewport: viewport,
-            transform: [2, 0, 0, 2, 0, 0],
+            transform: [imageOutputScale, 0, 0, imageOutputScale, 0, 0],
             canvasContext
         });
 
@@ -169,7 +166,7 @@ export async function renderCustomPrintIframe(url = "") {
         /** @type {Blob} The image blob gotten from creating the canvas. */
         const imgBlob = await new Promise((resolve, reject) => {
             if(!canvasElement) { resolve(null); }
-            canvasElement.toBlob((result) => { resolve(result); }, "image/png", 1);
+            canvasElement.toBlob((result) => { resolve(result); }, imageType, 1);
         });
 
         const printPageImage = printIframeDocument.createElement("img");

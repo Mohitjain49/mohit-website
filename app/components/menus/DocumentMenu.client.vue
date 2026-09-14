@@ -77,7 +77,7 @@
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" :style="printButtonCursor" v-pulse-loop>
                     <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
                     <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
-                    <span> Print Document (Standard) </span>
+                    <span> Print Document (Browser) </span>
                 </button>
             </div>
         </div>

@@ -14,7 +14,7 @@
             <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
         </button>
         <button v-if="(iframeSupported && documentStore.browserPdfViewerPresent)"
-            class="doc-save-opt" title="Print Document (Standard)"
+            class="doc-save-opt" title="Print Document (Browser)"
             @click="documentStore.printDoc(false)"
             :style="printButtonCursor" v-pulse-loop>
 
