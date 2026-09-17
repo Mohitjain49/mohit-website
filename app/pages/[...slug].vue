@@ -15,7 +15,9 @@ const webData = useWebsiteDataStore();
 
 const PAGE_TITLE = ref("Mohit Jain | 404 Error");
 const PAGE_DESC = ref("404 - Page Not Found");
+var redirectTextInterval = null;
 
+const numRedirectDots = ref(1);
 const backgroundType = ref(-1);
 const bodyBackground = computed(() => {
     return { background: ((backgroundType.value == -1) ? "var(--webpage-static-background)" : "transparent") }
@@ -25,7 +27,7 @@ const routePath = computed(() => { return router.currentRoute.value.path; });
 const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value, "rgb(248, 206, 171)"); });
 useHead(metaTags);
 
-onMountedAdvanced(() => {
+onMountedAdvanced(async() => {
     // console.log(router.getRoutes());
     webData.closeNavMenu();
 
@@ -33,7 +35,7 @@ onMountedAdvanced(() => {
     const internalRoute = INTERNAL_REDIRECTS.findIndex(item => checkRedirectRoute(item.routes));
     if(internalRoute != -1) {
         startRedirect(true);
-        router.replace(INTERNAL_REDIRECTS[internalRoute].replacement);
+        await router.replace(INTERNAL_REDIRECTS[internalRoute].replacement);
         return;
     }
 
@@ -54,8 +56,11 @@ onMountedAdvanced(() => {
     }
 
     // Sets the background to a 404 background if a redirect is not occuring.
-    if(internalRoute == -1 && internalFileRoute == -1 && externalRoute == -1) { backgroundType.value = 0; }
+    backgroundType.value = 0;
 });
+
+// Stops the Redirect Text Interval when the user leaves the page.
+onBeforeUnmount(() => { setRedirectTextInterval(false); });
 
 /**
  * This function runs whenever the website starts redirecting the user to another page.
@@ -64,8 +69,22 @@ onMountedAdvanced(() => {
 function startRedirect(internal = true) {
     PAGE_TITLE.value = "Mohit Jain | Redirecting...";
     PAGE_DESC.value = "Redirecting...";
+    setRedirectTextInterval(true);
     backgroundType.value = (internal ? -1 : 1);
     webData.openShareOnMount = true;
+}
+
+/**
+ * This function sets the redirect text interval.
+ * @param {Boolean} status The new status for the interval.
+ */
+function setRedirectTextInterval(status = true) {
+    if(redirectTextInterval != null) { clearInterval(redirectTextInterval); }
+    redirectTextInterval = (!status ? null : setInterval(() => {
+        PAGE_TITLE.value = ("Mohit Jain | Redirecting" + ".".repeat(numRedirectDots.value));
+        PAGE_DESC.value = ("Redirecting" + ".".repeat(numRedirectDots.value));
+        numRedirectDots.value = ((numRedirectDots.value == 3) ? 1 : (numRedirectDots.value + 1));
+    }, 500));
 }
 
 /**
@@ -116,6 +135,7 @@ const INTERNAL_FILE_REDIRECTS = [
     { routes: ["/license/**"], replacement: "license.txt" },
     { routes: ["/sitemap/**"], replacement: "sitemap.xml" },
     { routes: ["/favicon/**"], replacement: "favicon.ico" },
+    { routes: ["/robots/**"], replacement: "robots.txt" },
 
     { routes: ["/resume/raw/**"], replacement: "Mohit_Jain_Resume.pdf" },
     { routes: ["/create-github-repo/raw/**"], replacement: "Create_Github_Repo.pdf" }
