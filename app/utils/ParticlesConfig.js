@@ -391,7 +391,7 @@ export const GAMEPAD_CONTROLS_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 500
+            value: 350
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -400,9 +400,7 @@ export const GAMEPAD_CONTROLS_BACKGROUND = ref({
         shape: {
             type: "image",
             options: {
-                image: [
-                    { src: getFontAwesomeSvg(faGamepad, "#2E8B57"), width: 100, height: 100 }
-                ]
+                image: [{ src: getFontAwesomeSvg(faGamepad, "#2E8B57"), width: 100, height: 100 }]
             }
         },
         size: {
@@ -430,7 +428,7 @@ export const INVALID_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 500
+            value: 350
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -439,9 +437,7 @@ export const INVALID_BACKGROUND = ref({
         shape: {
             type: "image",
             options: {
-                image: [
-                    { src: getFontAwesomeSvg(faQuestion, "#700ee7ff"), width: 100, height: 100 }
-                ]
+                image: [{ src: getFontAwesomeSvg(faQuestion, "#700ee7ff"), width: 100, height: 100 }]
             }
         },
         size: {
@@ -469,7 +465,7 @@ export const REDIRECT_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 500
+            value: 350
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -508,7 +504,7 @@ export const DOCUMENT_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 500
+            value: 350
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -517,9 +513,7 @@ export const DOCUMENT_BACKGROUND = ref({
         shape: {
             type: "image",
             options: {
-                image: [
-                    { src: getFontAwesomeSvg(faFolderOpen, "#FFFFFF"), width: 100, height: 100 }
-                ]
+                image: [{ src: getFontAwesomeSvg(faFolderOpen, "#FFFFFF"), width: 100, height: 100 }]
             }
         },
         size: {
@@ -547,7 +541,7 @@ export const CODE_ICON_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 500
+            value: 350
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
@@ -556,9 +550,7 @@ export const CODE_ICON_BACKGROUND = ref({
         shape: {
             type: "image",
             options: {
-                image: [
-                    { src: getFontAwesomeSvg(faCode, "#FFFFFF"), width: 100, height: 100 }
-                ]
+                image: [{ src: getFontAwesomeSvg(faCode, "#FFFFFF"), width: 100, height: 100 }]
             }
         },
         size: {
