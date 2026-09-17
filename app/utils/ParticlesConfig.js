@@ -9,7 +9,7 @@ import {
 export const HOME_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         move: {
             direction: "bottom",
@@ -48,7 +48,7 @@ export const HOME_BACKGROUND = ref({
 export const LIBRARY_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         move: {
             direction: "outside",
@@ -87,7 +87,7 @@ export const LIBRARY_BACKGROUND = ref({
 export const BLUE_BACKGROUND = ref({
     background: { color: "#0047AB" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         // paint: { fill: { enable: true, color: { value: "rgb(187, 210, 255)" }}},
         move: {
@@ -124,7 +124,7 @@ export const BLUE_BACKGROUND = ref({
 export const ORANGE_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         paint: { fill: { enable: true, color: { value: "rgb(126, 90, 0)" }}},
         move: {
@@ -161,7 +161,7 @@ export const ORANGE_BACKGROUND = ref({
 export const GREEN_BACKGROUND = ref({
     background: { color: "rgb(0, 100, 0)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         paint: { fill: { enable: true, color: { value: "rgb(144, 238, 144)" }}},
         move: {
@@ -198,7 +198,7 @@ export const GREEN_BACKGROUND = ref({
 export const INSTALL_BACKGROUND = ref({
     background: { color: "#232323" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         paint: [
             { fill: { enable: true, color: { value: "rgba(126, 90, 0, 0.9)" }}},
@@ -234,7 +234,7 @@ export const INSTALL_BACKGROUND = ref({
 export const WAKE_LOCK_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         paint: { fill: { enable: true, color: { value: "#E92A60" }}},
         move: {
@@ -273,7 +273,7 @@ export const WAKE_LOCK_BACKGROUND = ref({
 export const FEATURES_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         // paint: { fill: { enable: true, color: { value: "#FFD700" }}},
         move: {
@@ -343,7 +343,7 @@ export const CODE_SCANNER_BACKGROUND = ref({
 export const COPYRIGHT_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         move: {
             direction: "none",
@@ -378,7 +378,7 @@ export const COPYRIGHT_BACKGROUND = ref({
 export const GAMEPAD_CONTROLS_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
@@ -417,7 +417,7 @@ export const GAMEPAD_CONTROLS_BACKGROUND = ref({
 export const INVALID_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
@@ -456,7 +456,7 @@ export const INVALID_BACKGROUND = ref({
 export const REDIRECT_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
@@ -495,7 +495,7 @@ export const REDIRECT_BACKGROUND = ref({
 export const DOCUMENT_BACKGROUND = ref({
     background: { color: "#464646" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         // paint: { fill: { enable: true, color: { value: "white" }}},
         move: {
@@ -534,7 +534,7 @@ export const DOCUMENT_BACKGROUND = ref({
 export const CODE_ICON_BACKGROUND = ref({
     background: { color: "#4d3e3e" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 40,
+    fpsLimit: 30,
     particles: {
         // paint: { fill: { enable: true, color: { value: "white" }}},
         move: {

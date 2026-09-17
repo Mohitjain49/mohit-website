@@ -136,10 +136,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         copySvgSupported.value = ClipboardItem.supports("image/svg+xml");
         const signal = controller.signal;
 
+        await styleStore.mountStyleStore();
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
         documentStore.mountDocumentStore();
-        await styleStore.mountStyleStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
         resizePageComponents();

@@ -40,6 +40,7 @@ export const useStyleStore = defineStore("style-store", () => {
 
     const mounted = ref(false);
     const zoomFactor = ref(1.0);
+    const viewportRafRanOnce = ref(false);
 
     const viewportRafEnabled = shallowRef(false);
     const breakpointsEnabled = ref(false);
@@ -79,6 +80,7 @@ export const useStyleStore = defineStore("style-store", () => {
         changeZoomFactor((window.innerHeight > 450) ? 1.0 : 0.5);
         startViewportRaf();
 
+        await waitForFirstViewportCalculation();
         await enableCssLayoutObserver();
         await enableBreakpoints();
         await enableTrueViewportVariables();
@@ -253,6 +255,8 @@ export const useStyleStore = defineStore("style-store", () => {
     /** This function records the viewports' inner width and inner height (its dimensions). */
     function recordViewportDimensions() {
         if(!window) { return; }
+        var getNewCssViewport = true;
+
         const oldViewportWidth = viewportWidth.value;
         const oldViewportHeight = viewportHeight.value;
         const oldDevicePixelRatio = recordedDevicePixelRatio.value;
@@ -268,20 +272,27 @@ export const useStyleStore = defineStore("style-store", () => {
             window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "pixel-ratio" }}));
         }
 
-        if(!document || !document.getElementById) { return; }
+        if(!document || !document.getElementById) { getNewCssViewport = false; }
         const cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
-        if(!cssLayoutElement) { return; }
+        if(!cssLayoutElement) { getNewCssViewport = false; }
 
-        const oldCssViewportWidth = cssViewportWidth.value;
-        const oldCssViewportHeight = cssViewportHeight.value;
+        if(getNewCssViewport) {
+            const oldCssViewportWidth = cssViewportWidth.value;
+            const oldCssViewportHeight = cssViewportHeight.value;
 
-        cssViewportWidth.value = cssLayoutElement.clientWidth;
-        cssViewportHeight.value = cssLayoutElement.clientHeight;
-        cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
-        cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
+            cssViewportWidth.value = cssLayoutElement.clientWidth;
+            cssViewportHeight.value = cssLayoutElement.clientHeight;
+            cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
+            cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
 
-        if(cssViewportWidth.value !== oldCssViewportWidth || cssViewportHeight.value !== oldCssViewportHeight) {
-            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "css-resize" }}));
+            if(cssViewportWidth.value !== oldCssViewportWidth || cssViewportHeight.value !== oldCssViewportHeight) {
+                window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "css-resize" }}));
+            }
+        }
+
+        if(!viewportRafRanOnce.value) {
+            viewportRafRanOnce.value = true;
+            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "init-resize" }}));
         }
     }
 
@@ -305,6 +316,24 @@ export const useStyleStore = defineStore("style-store", () => {
         if(windowSizeAnimationFrame != null) { cancelAnimationFrame(windowSizeAnimationFrame); }
         windowSizeAnimationFrame = null;
         viewportRafEnabled.value = false;
+        viewportRafRanOnce.value = false;
+    }
+
+    /** This function can be used to let the viewport run its first calculations before before doing other tasks. */
+    async function waitForFirstViewportCalculation() {
+        await new Promise(async(resolve, reject) => {
+            var msPassed = 0;
+            while(msPassed < 10000 && !viewportRafRanOnce.value) {
+                await sleep(50);
+                msPassed += 50;
+            }
+
+            if(viewportRafRanOnce.value) {
+                resolve("Wait Time: " + msPassed + " milliseconds");
+            } else {
+                reject("Timeout Error");
+            }
+        });
     }
 
     /**
@@ -603,10 +632,10 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY, mouseElement,
+    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY, mouseElement, viewportRafRanOnce,
         breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled, cssLayoutObserverEnabled,
         viewportWidth, viewportHeight, recordedDevicePixelRatio, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
-        mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray,
+        mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray, waitForFirstViewportCalculation,
         enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
         enableMousePositionRecorder, disableMousePositionRecorder, resetMousePositionRecorder,
         enableCssLayoutObserver, disableCssLayoutObserver, resetCssLayoutObserver,
