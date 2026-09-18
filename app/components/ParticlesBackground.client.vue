@@ -33,8 +33,6 @@ const fps = useFps();
 
 const particlesLoadedOnce = ref(false);
 const particlesLoaded = ref(false);
-const particlesResetting = ref(false);
-
 const batteryLow = ref(false);
 const webpageHidden = computed(() => { return (visibility.value === "hidden"); });
 
@@ -45,9 +43,7 @@ const webpageHidden = computed(() => { return (visibility.value === "hidden"); }
 async function onParticlesLoaded(container) {
     tsparticlesContainer.value = container;
     setParticlesBackgroundColor();
-
     particlesLoaded.value = true;
-    particlesResetting.value = false;
 
     if(!particlesLoadedOnce.value) {
         await styleStore.waitForFirstViewportCalculation();
@@ -62,15 +58,10 @@ async function onParticlesLoaded(container) {
 
 /** This function simple resets the particles in the tsparticles container. */
 async function resetParticles() {
-    if(particlesResetting.value) { return; }
-    particlesResetting.value = true;
-
     try {
         await waitForParticles();
         particlesLoaded.value = false;
-
         await tsparticlesContainer.value.reset(particlesOptionsCopy.value);
-        particlesResetting.value = false;
         particlesLoaded.value = true;
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
@@ -266,6 +257,7 @@ batteryChargingWatcher.pause();
     height: 0px;
     z-index: -10;
     --particles-bg-color: var(--webpage-html-bg-color, #000000);
+    background-color: var(--particles-bg-color) !important;
 }
 #mohit-website-particlests canvas {
     background-color: var(--particles-bg-color) !important;

@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '26.1.0' # Set this to your Node.js version
 
+      - name: Set specific npm version
+        run: npm install -g npm@11.15.0 # Forces a specific npm version
+
       - name: Install dependencies
         run: npm ci
 
