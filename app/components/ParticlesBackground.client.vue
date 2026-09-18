@@ -18,7 +18,7 @@ const BACKGROUND_COLOR_PROPERTY = "--particles-bg-color";
 /** @type {import('vue').ShallowRef<import('@tsparticles/engine').Container>} The container representing the background. */
 const tsparticlesContainer = shallowRef(null);
 
-/** @type {import('vue').ShallowRef<import('@tsparticles/engine').IOptions>} */
+/** @type {import('vue').ShallowRef<import('@tsparticles/engine').IOptions>} A copy of the particles background property. */
 const particlesOptionsCopy = shallowRef(null);
 const props = defineProps({ particlesOptions: { type: Object, required: true } });
 
@@ -115,13 +115,13 @@ async function setAllParticlesSettings(mounting = true) {
 
     const batteryReset = await onBatteryStatusChange(false);
     const densityReset = await setParticlesDensity(false);
-    const fpsReset = await setFpsLimit(false);
+    // const fpsReset = await setFpsLimit(false);
 
     batteryLevelWatcher.resume();
     batterySupportedWatcher.resume();
     batteryChargingWatcher.resume();
 
-    if(batteryReset || densityReset || fpsReset || !mounting) { await resetParticles(); }
+    if(batteryReset || densityReset || !mounting) { await resetParticles(); }
     onWebpageVisibilityChange();
     visibilityWatcher.resume();
 }

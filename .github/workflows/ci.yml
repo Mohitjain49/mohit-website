@@ -21,4 +21,9 @@ jobs:
         run: npm ci
 
       - name: Building...
+        env:
+          VITE_GOOGLE_CLOUD_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLOUD_CLIENT_ID }}
+          VITE_GOOGLE_CLOUD_API_KEY: ${{ secrets.VITE_GOOGLE_CLOUD_API_KEY }}
+          VITE_GOOGLE_CLOUD_APP_ID: ${{ secrets.VITE_GOOGLE_CLOUD_APP_ID }}
+          DOCKER_SCRIPT: ${{ 'false' }}
         run: npm run build

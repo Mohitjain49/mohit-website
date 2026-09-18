@@ -2,15 +2,23 @@ import { exec, execSync } from "node:child_process";
 import readline from "node:readline";
 import os from "node:os";
 
+/** This is the OS being used as a string. */
+const platform = os.platform();
+
 /** This array contains the arguments that can be passed in for this script. */
 const args = process.argv.slice(2);
+
+var dockerBuilt = false;
+var dockerBuildCommandComplete = false;
+var dockerScriptClosing = false;
 
 const PORT_NUM = "5700";
 const PORT_URL = ("http://localhost:" + PORT_NUM);
 
 const DOCKER_IMAGE = "mohit_website";
 const DOCKER_CONTAINER = "mohit_website_main_docker_container";
-const DOCKER_START_ARGS = ("--env-file .env --env PORT=" + PORT_NUM + " --env HOST=0.0.0.0 -p " + PORT_NUM + ":" + PORT_NUM);
+const DOCKER_START_ENV_ARGS = (`--env PORT=${PORT_NUM} --env HOST=0.0.0.0 --env HOST_PLATFORM=${platform} --env DOCKER_SCRIPT=true`);
+const DOCKER_START_ARGS = (`--env-file .env ${DOCKER_START_ENV_ARGS} -p ${PORT_NUM}:${PORT_NUM} -v "${process.cwd()}:/app" -v /app/node_modules`);
 
 const DOCKER_BUILD_COMMAND = ("docker build -t " + DOCKER_IMAGE + " .");
 const DOCKER_START_COMMAND = ("docker run " + DOCKER_START_ARGS + " --name " + DOCKER_CONTAINER + " " + DOCKER_IMAGE);
@@ -29,11 +37,25 @@ function onError(error) {
     process.exit(1);
 }
 
+/** This function shuts down the docker instance. */
+function shutdownDockerInstance() {
+    if(!dockerBuildCommandComplete || dockerScriptClosing) { return; }
+    dockerScriptClosing = true;
+
+    try {
+        console.log("\n\nGracefully shutting down Docker container...");
+        execSync(DOCKER_STOP_COMMAND, { stdio: 'inherit' });
+        execSync(DOCKER_REMOVE_COMMAND, { stdio: 'inherit' });
+
+        console.log("Docker Container Shut Down!");
+        process.exit(0);
+    } catch(err) {
+        onError(err);
+    }
+}
+
 /** This function runs the main logic for this script. */
 function main() {
-    var dockerBuilt = false;
-    var dockerBuildCommandComplete = false;
-
     // This figures out if the docker instance needs to be built.
     try {
         if(-1 != args.findIndex((item) => { return (item === "--force-build"); })) { throw new Error("FORCE_DOCKER_BUILD"); }
@@ -59,9 +81,7 @@ function main() {
     dockerBuildCommandComplete = true;
     console.log("Starting Docker Instance...");
 
-    const platform = os.platform();
     const openBrowserCommand = (platform === "darwin" ? 'open' : (platform === "win32" ? 'start' : 'xdg-open'));
-
     const startProcess = exec(DOCKER_START_COMMAND);
     setTimeout(() => { execSync(openBrowserCommand + " " + PORT_URL); }, 1000);
 
@@ -70,35 +90,12 @@ function main() {
     startProcess.on("error", (err) => { onError(err); });
 
     process.stdin.resume();
-    process.on("SIGINT", () => {
-        if(!dockerBuildCommandComplete) { return; }
-        try {
-            console.log("\n\nGracefully shutting down Docker container...");
-            execSync(DOCKER_STOP_COMMAND, { stdio: 'inherit' });
-            execSync(DOCKER_REMOVE_COMMAND, { stdio: 'inherit' });
-
-            console.log("Docker Container Shut Down!");
-            process.exit(0);
-        } catch(err) {
-            onError(err);
-        }
-    });
+    process.on("SIGINT", () => { shutdownDockerInstance(); });
+    process.on("SIGTERM", () => { shutdownDockerInstance(); });
 
     process.stdin.on("keypress", (chunk = "", key) => {
-        if(!dockerBuildCommandComplete) { return; }
         if((key.name !== "c" || !key.ctrl) && key.name !== "q") { return; }
-
-        // Shuts down the docker instance.
-        try {
-            console.log("\n\nGracefully shutting down Docker container...");
-            execSync(DOCKER_STOP_COMMAND, { stdio: 'inherit' });
-            execSync(DOCKER_REMOVE_COMMAND, { stdio: 'inherit' });
-
-            console.log("Docker Container Shut Down!");
-            process.exit(0);
-        } catch(err) {
-            onError(err);
-        }
+        shutdownDockerInstance();
     });
 }
 
