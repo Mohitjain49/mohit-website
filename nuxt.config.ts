@@ -6,7 +6,9 @@ import type { Plugin } from "vite";
 import usePageTemplates from "./page-templates.config";
 import pwaConfig from "./pwa.config";
 
+const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
+
 const SITEMAP_EXCLUDED_ROUTES = [
     "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
     "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
@@ -117,6 +119,18 @@ export default defineNuxtConfig({
     watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],
 
     vite: {
+        server: {
+            ws: {
+                protocol: (RUNNING_DOCKER_ENV ? 'ws' : undefined),
+                host: (RUNNING_DOCKER_ENV ? '0.0.0.0' : undefined),
+                port: (RUNNING_DOCKER_ENV ? 5700 : undefined),
+                clientPort: (RUNNING_DOCKER_ENV ? 5700 : undefined)
+            },
+            watch: {
+                usePolling: (RUNNING_DOCKER_ENV ? true : undefined),
+                interval: (RUNNING_DOCKER_ENV ? 100 : undefined)
+            }
+        },
         plugins: [
             imagetools({
                 include: /assets\/.*\.(png|jpe?g)(\?.*)?$/,
