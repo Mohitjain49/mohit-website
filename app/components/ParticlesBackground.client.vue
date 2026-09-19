@@ -29,7 +29,6 @@ var resizeTimeout = null;
 const styleStore = useStyleStore();
 const visibility = useDocumentVisibility();
 const battery = useBattery();
-const fps = useFps();
 
 const particlesLoadedOnce = ref(false);
 const particlesLoaded = ref(false);
@@ -115,7 +114,6 @@ async function setAllParticlesSettings(mounting = true) {
 
     const batteryReset = await onBatteryStatusChange(false);
     const densityReset = await setParticlesDensity(false);
-    // const fpsReset = await setFpsLimit(false);
 
     batteryLevelWatcher.resume();
     batterySupportedWatcher.resume();
@@ -128,9 +126,6 @@ async function setAllParticlesSettings(mounting = true) {
 
 /** This returns whether the density property for a particles background exists. */
 function checkDensityExists() { return has(particlesOptionsCopy.value, 'particles.number.density.enable'); }
-
-/** This returns whether the "fps limit" property for a particles background exists. */
-function checkFpsLimitExists() { return has(particlesOptionsCopy.value, 'fpsLimit'); }
 
 /** This returns whether the number's "value" property for a particles background exists. */
 function checkParticlesNumberExists() { return has(particlesOptionsCopy.value, 'particles.number.value'); }
@@ -193,35 +188,18 @@ async function setParticlesDensity(reset = true) {
     return needsReset;
 }
 
-/**
- * This sets the FPS Limit for the Particles Background to prevent lag.
- * @param {Boolean} reset If true, this function resets the particles after the change.
- * @returns A boolean indicating whether the particles need to be reset.
- */
-async function setFpsLimit(reset = true) {
-    if(!checkFpsLimitExists()) { return false; }
-    await sleep(1000);
-
-    const oldFpsLimit = particlesOptionsCopy.value.fpsLimit;
-    const newFpsLimit = Math.ceil(fps.value / 2);
-    particlesOptionsCopy.value.fpsLimit = newFpsLimit;
-
-    const needsReset = (oldFpsLimit != newFpsLimit);
-    if(reset && needsReset) { await resetParticles(); }
-    return needsReset;
-}
-
 /** This function changes whether the particles are paused or playing based on whether the webpage is visible. */
-function onWebpageVisibilityChange() {
-    waitForParticles().then(() => {
+async function onWebpageVisibilityChange() {
+    try {
+        await waitForParticles();
         if(webpageHidden.value) {
             tsparticlesContainer.value.pause();
         } else {
             tsparticlesContainer.value.play();
         }
-    }).catch((e) => {
+    } catch(e) {
         if(import.meta.dev) { console.error(e); }
-    });
+    }
 }
 
 // This sets certain settings of the particles background when the component is mounted.
