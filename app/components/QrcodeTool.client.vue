@@ -629,23 +629,9 @@ async function printQRCode() {
         const newChildImg = printIframeDocument.createElement("img");
         const iframeStyle = printIframeDocument.createElement("style");
 
-        // The style rule here should match the one at the bottom for this same class.
-        iframeStyle.textContent = `
-            .mohit-qrcode-customPrint-img {
-                width: 99vw;
-                height: 99vh;
-                max-height: 100vh;
-                margin: 0px;
-                padding: 0px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            @media print {
-                @page { margin: 0px; }
-            }
-        `;
+        const customPrintStyles = await fetch("/printstyles.css");
+        if(!customPrintStyles.ok) { throw new Error("Failed To Load Print CSS Stylesheet."); }
+        iframeStyle.textContent = await customPrintStyles.text();
 
         newChild.classList.add(PRINT_IFRAME_IMG_CLASS);
         newChildImg.src = qrCodeURL.value;
@@ -989,16 +975,6 @@ function getParsedUrl() {
     page-break-inside: avoid;
     break-after: avoid;
     break-inside: avoid;
-}
-.mohit-qrcode-customPrint-img {
-    width: 99vw;
-    height: 99vh;
-    max-height: 100vh;
-    margin: 0px;
-    padding: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .qrcode-popup-transition-enter-active, .qrcode-popup-transition-leave-active {
