@@ -82,7 +82,7 @@
                         <button v-if="iframeSupported" @click="printQRCode()" :style="printImageCursor" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
                             <FontAwesomeIcon :icon="printImageIcon" :spin-pulse="(actions.printImage == 1)" />
                         </button>
-                        <a v-if="(qrCodeURL != undefined)" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
+                        <a v-if="qrcodeUrlCreated" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
                             <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
                         </a>
                     </div>
@@ -121,7 +121,7 @@ import Lenis from 'lenis';
 import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
-const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban'];
+const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban', 'fa-hourglass-end'];
 const IMAGE_STATUS = ['png', 'svg'];
 
 const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
@@ -139,6 +139,7 @@ var autoscrollTimeout = null;
 
 /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing the qr code. */
 var printIframe = null;
+var printIframeNeedsRerender = true;
 
 const { width: windowWidth, height: windowHeight } = useMohitWindowSize();
 const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage("popup-shareLink");
@@ -153,7 +154,7 @@ const qrcodeImageMode = ref(0);
 
 /** @type {import('vue').ShallowRef<Blob>} This blob is used for the backgorund image and to download the qr code. */
 const qrCodeBlob = shallowRef(null);
-const qrCodeURL = useObjectUrl(qrCodeBlob);
+const qrCodeURL = shallowRef("");
 
 const showMainPopup = ref(false);
 const showShareOptions = ref(-1);
@@ -169,7 +170,8 @@ const shareCloseRef = useTemplateRef('sharePopup-close');
 const hoverOverCloseBtn = useElementHover(shareCloseRef);
 
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
-const qrcodeBg = computed(() => { return { 'background-image': ((qrCodeURL.value != undefined) ? 'url(' + qrCodeURL.value + ')' : '') }});
+const qrcodeUrlCreated = computed(() => { return (qrCodeURL.value.length > 0); });
+const qrcodeBg = computed(() => { return { 'background-image': (qrcodeUrlCreated.value ? 'url(' + qrCodeURL.value + ')' : '') }});
 const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.value] ?? ''); });
 const qrcodeImageCopySupported = computed(() => { return ((qrcodeImageMode.value == 0) ? webData.copyImageSupported : webData.copySvgSupported); });
 
@@ -263,7 +265,11 @@ function unmountSharePopup() {
 
     if(lenis != null) { lenis.destroy(); }
     if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
-    setTimeout(() => { sharePopupAbortController.abort(); }, 450);
+
+    setTimeout(() => {
+        sharePopupAbortController.abort();
+        deleteCurrentQrcodeURL();
+    }, 450);
 }
 
 /** This function sets the link for the Share Popup. */
@@ -342,7 +348,9 @@ async function setQRCodeLink() {
     }
 
     try {
+        deleteCurrentQrcodeURL();
         qrCodeBlob.value = await qrcode.value.getRawData(qrcodeImageSuffix.value);
+        qrCodeURL.value = URL.createObjectURL(qrCodeBlob.value);
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -354,7 +362,17 @@ async function setQRCodeLink() {
  */
 async function changeImageType(newType = 0) {
     qrcodeImageMode.value = newType;
-    setQRCodeLink();
+    await setQRCodeLink();
+}
+
+/** This function deletes the current QR Code URL. */
+function deleteCurrentQrcodeURL() {
+    URL.revokeObjectURL(qrCodeURL.value);
+    qrCodeURL.value = "";
+
+    if(printIframe != null) { document.body.removeChild(printIframe); }
+    printIframe = null;
+    printIframeNeedsRerender = true;
 }
 
 /**
@@ -549,7 +567,7 @@ async function saveQRCode() {
 
 /** This function lets the user download the QR Code as a .png file. */
 function downloadQRCode() {
-    if(actions.value.downloadImage > 0 || !qrCodeURL.value) { return; }
+    if(actions.value.downloadImage > 0 || !qrCodeBlob.value) { return; }
     actions.value.downloadImage = 1;
 
     try {
@@ -596,7 +614,7 @@ async function copyQRCode() {
 
 /** This function lets the user print the QR Code rendered by the user. */
 async function printQRCode() {
-    if(actions.value.printImage > 0 || !iframeSupported.value || !qrCodeURL.value) { return; }
+    if(actions.value.printImage > 0 || !iframeSupported.value || !qrCodeBlob.value) { return; }
     actions.value.printImage = 1;
     var cancelTimeout = false;
 
@@ -605,54 +623,60 @@ async function printQRCode() {
     const QRCODE_EDGE_LENGTH = 450;
 
     try {
-        if(printIframe != null) { document.body.removeChild(printIframe); }
-        printIframe = document.createElement("iframe");
-        printIframe.id = PRINT_IFRAME_ID;
-        printIframe.classList.add(PRINT_IFRAME_ID);
+        if(printIframeNeedsRerender) {
+            if(printIframe != null) { document.body.removeChild(printIframe); }
+            printIframe = document.createElement("iframe");
+            printIframe.id = PRINT_IFRAME_ID;
+            printIframe.classList.add(PRINT_IFRAME_ID);
 
-        await new Promise(async (resolve, reject) => {
-            document.body.append(printIframe);
-            const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
+            await new Promise(async (resolve, reject) => {
+                document.body.append(printIframe);
+                const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
 
-            if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-                resolve("IFrame Loaded");
-            } else {
-                printIframe.onload = () => { resolve("IFrame Loaded"); }
-                sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-            }
-        });
+                if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
+                    resolve("IFrame Loaded");
+                } else {
+                    printIframe.onload = () => { resolve("IFrame Loaded"); }
+                    sleep(7000).then(() => { reject(new Error("Timeout Error")); });
+                }
+            });
 
-        const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
-        printIframeDocument.title = DEFAULT_IMAGE_FILENAME;
+            const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+            printIframeDocument.title = DEFAULT_IMAGE_FILENAME;
 
-        const newChild = printIframeDocument.createElement("div");
-        const newChildImg = printIframeDocument.createElement("img");
-        const iframeStyle = printIframeDocument.createElement("style");
+            const newChild = printIframeDocument.createElement("div");
+            const newChildImg = printIframeDocument.createElement("img");
+            const iframeStyle = printIframeDocument.createElement("style");
 
-        const customPrintStyles = await fetch("/printstyles.css");
-        if(!customPrintStyles.ok) { throw new Error("Failed To Load Print CSS Stylesheet."); }
-        iframeStyle.textContent = await customPrintStyles.text();
+            const customPrintStyles = await fetch("/printstyles.css");
+            if(!customPrintStyles.ok) { throw new Error("Failed To Load Print CSS Stylesheet."); }
+            iframeStyle.textContent = await customPrintStyles.text();
 
-        newChild.classList.add(PRINT_IFRAME_IMG_CLASS);
-        newChildImg.src = qrCodeURL.value;
+            newChild.classList.add(PRINT_IFRAME_IMG_CLASS);
+            newChildImg.src = qrCodeURL.value;
 
-        newChildImg.width = QRCODE_EDGE_LENGTH;
-        newChildImg.height = QRCODE_EDGE_LENGTH;
-        newChildImg.draggable = false;
-        newChildImg.style.borderRadius = "10px";
+            newChildImg.width = QRCODE_EDGE_LENGTH;
+            newChildImg.height = QRCODE_EDGE_LENGTH;
+            newChildImg.draggable = false;
+            newChildImg.style.borderRadius = "10px";
 
-        printIframeDocument.body.appendChild(iframeStyle);
-        printIframeDocument.body.appendChild(newChild);
-        await waitTwoFrames();
+            printIframeDocument.body.appendChild(iframeStyle);
+            printIframeDocument.body.appendChild(newChild);
+            await waitTwoFrames();
 
-        newChild.appendChild(newChildImg);
-        await new Promise((resolve, reject) => {
-            if(newChildImg.complete) {
-                resolve();
-            } else {
-                newChildImg.onload = () => { resolve(); }
-            }
-        });
+            newChild.appendChild(newChildImg);
+            await new Promise((resolve, reject) => {
+                if(newChildImg.complete) {
+                    resolve();
+                } else {
+                    newChildImg.onload = () => { resolve(); }
+                    sleep(7000).then(() => { reject(new Error("Timeout Error")); });
+                }
+            });
+
+            // This sets that the print iframe made for this print function can be reused.
+            printIframeNeedsRerender = false;
+        }
 
         if(webData.showSharePopupImmediate) {
             // This triggers the print function at the end to open the popup.
@@ -663,11 +687,13 @@ async function printQRCode() {
         } else {
             if(printIframe != null) { document.body.removeChild(printIframe); }
             printIframe = null;
+            printIframeNeedsRerender = true;
+
             cancelTimeout = true;
             actions.value.printImage = 0;
         }
     } catch(e) {
-        actions.value.printImage = 3;
+        actions.value.printImage = ((e.message === "Timeout Error") ? 4 : 3);
     } finally {
         if(timeouts.printImage != null) { clearTimeout(timeouts.printImage); }
         timeouts.printImage = (cancelTimeout ? null : setTimeout(() => {

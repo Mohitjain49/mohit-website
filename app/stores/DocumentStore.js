@@ -65,13 +65,6 @@ export const useDocumentStore = defineStore("document-store", () => {
      * An array of the object URLs for the images representing the rendered PDF used by the PDF navigation menu.
      */
     const docImageUrls = shallowRef([]);
-
-    /**
-     * @type {import('vue').ShallowRef<Array<String>>}
-     * An array of the object URLs for the images representing the rendered PDF used by the custom print functionality.
-     */
-    const docPrintImageUrls = shallowRef([]);
-
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const currentObservedPage = ref(-1);
     const contextMenuPageNumber = ref(0);
@@ -267,7 +260,29 @@ export const useDocumentStore = defineStore("document-store", () => {
                     }
                 });
             } else {
-                printIframe = await renderCustomPrintIframe(documentFile.url);
+                if(hostedDocuments[currentDocumentRouteNumber].printBlobCreated.value) {
+                    printIframe = document.createElement("iframe");
+                    printIframe.id = PRINT_IFRAME_ID;
+                    printIframe.classList.add(PRINT_IFRAME_ID);
+                    
+                    printIframe.src = hostedDocuments[currentDocumentRouteNumber].printObjectUrl.value;
+                    document.body.append(printIframe);
+
+                    await new Promise(async (resolve, reject) => {
+                        const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
+                        if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
+                            resolve("IFrame Loaded");
+                        } else {
+                            printIframe.onload = () => { resolve("IFrame Loaded"); }
+                            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
+                        }
+                    });
+                } else {
+                    // Creates the custom HTML and saves it if the print function has not been called before.
+                    printIframe = await renderCustomPrintIframe(documentFile.url);
+                    const serializedHtml = new XMLSerializer().serializeToString(printIframe.contentDocument || printIframe.contentWindow.document);
+                    hostedDocuments[currentDocumentRouteNumber].setPrintBlob(serializedHtml);
+                }
             }
 
             if(currentDocumentRouteNumber == currentDocumentRoute.value && !webData.showSharePopupImmediate) {
@@ -533,13 +548,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
 
         for(let i = 0; i < docImageUrls.value.length; i++) { URL.revokeObjectURL(docImageUrls.value[i]); }
-        for(let j = 0; j < docPrintImageUrls.value.length; j++) { URL.revokeObjectURL(docPrintImageUrls.value[j]); }
-
         docImageUrls.value = [];
-        docPrintImageUrls.value = [];
-
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
+
         setWindowSizeWatchers(false, false);
+        if(printIframe != null) { document.body.removeChild(printIframe); }
+        printIframe = null;
     }
 
     /**
@@ -717,14 +731,19 @@ export const useDocumentStore = defineStore("document-store", () => {
 function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false, withMd = false) {
     path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
     const router = useRouter();
+    const link = shallowRef("");
 
     /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
-    const link = shallowRef("");
+
+    /** @type {import('vue').ShallowRef<Blob>} This Blob represents HTML text used for the custom print functionality to speed up repeated calls. */
+    const printBlob = shallowRef(null);
+    const printObjectUrl = shallowRef("");
 
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
+    const printBlobCreated = computed(() => { return (printBlob.value != null && printObjectUrl.value !== ""); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
@@ -744,9 +763,13 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     function deleteBlob() {
         if(!blobCreated.value) { return; }
         URL.revokeObjectURL(objectUrl.value);
+        URL.revokeObjectURL(printObjectUrl.value);
 
         blob.value = null;
+        printBlob.value = null;
+
         objectUrl.value = "";
+        printObjectUrl.value = "";
 
         metadata.setDefaultValues();
         changeLink("default");
@@ -778,6 +801,16 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     }
 
     /**
+     * This function sets the Print Blob so that it can be used for the custom print functionality.
+     * @param {String} htmlText The HTML code as a string.
+     */
+    function setPrintBlob(htmlText = "") {
+        if(printBlobCreated.value) { URL.revokeObjectURL(printObjectUrl.value); }
+        printBlob.value = new Blob([htmlText], { type: "text/html" });
+        printObjectUrl.value = URL.createObjectURL(printBlob.value);
+    }
+
+    /**
      * This function checks whether the path associated with this hosted document is equivalent to another given path.
      * @param {String} pathname The path parameter.
      */
@@ -787,7 +820,8 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
     }
 
-    return { path, onRoute, file, fileSize, name, suffix, link, blob, blobCreated, objectUrl, metadata, originLink, withMd,
-        initBlob, setNewBlob, deleteBlob, checkPath, changeLink
+    return { path, onRoute, file, fileSize, name, suffix, link, originLink, withMd,
+        blob, blobCreated, objectUrl, printBlob, printBlobCreated, printObjectUrl, metadata,
+        initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintBlob
     }
 }

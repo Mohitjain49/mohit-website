@@ -9,7 +9,7 @@
 
 <NuxtLoadingIndicator :color="LOADING_BAR_COLOR" :height="2" />
 <WebCover v-if="useWebpageCover" :zIndex="500" />
-<div id="invisible-css-layout"></div>
+<Teleport to="body"> <div id="invisible-css-layout"></div> </Teleport>
 </template>
 
 <script setup>

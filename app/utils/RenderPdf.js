@@ -160,18 +160,10 @@ export async function renderCustomPrintIframe(url = "") {
             canvasContext
         });
 
-        // This renders the PDF so it can be converted into an image.
+        // This renders the PDF and creates an image element out of it.
         await canvasRenderTask.promise;
-
-        /** @type {Blob} The image blob gotten from creating the canvas. */
-        const imgBlob = await new Promise((resolve, reject) => {
-            if(!canvasElement) { resolve(null); }
-            canvasElement.toBlob((result) => { resolve(result); }, imageType, 1);
-        });
-
         const printPageImage = printIframeDocument.createElement("img");
-        const printPageImageSrc = URL.createObjectURL(imgBlob);
-        printPageImage.src = printPageImageSrc;
+        printPageImage.src = canvasElement.toDataURL(imageType, 1);
 
         printPageImage.width = imageWidth;
         printPageImage.height = imageHeight
@@ -180,13 +172,10 @@ export async function renderCustomPrintIframe(url = "") {
         printPageContainer.appendChild(printPageImage);
         await new Promise((resolve, reject) => {
             if(printPageImage.complete) {
-                URL.revokeObjectURL(printPageImageSrc);
                 resolve();
             } else {
-                printPageImage.onload = () => {
-                    URL.revokeObjectURL(printPageImageSrc);
-                    resolve();
-                }
+                printPageImage.onload = () => { resolve(); }
+                sleep(7000).then(() => { reject(new Error("Timeout Error")); });
             }
         });
 
