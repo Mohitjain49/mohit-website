@@ -65,13 +65,6 @@ export const useDocumentStore = defineStore("document-store", () => {
      * An array of the object URLs for the images representing the rendered PDF used by the PDF navigation menu.
      */
     const docImageUrls = shallowRef([]);
-
-    /**
-     * @type {import('vue').ShallowRef<Array<String>>}
-     * An array of the object URLs for the images representing the rendered PDF used by the custom print functionality.
-     */
-    const docPrintImageUrls = shallowRef([]);
-
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const currentObservedPage = ref(-1);
     const contextMenuPageNumber = ref(0);
@@ -555,13 +548,12 @@ export const useDocumentStore = defineStore("document-store", () => {
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
 
         for(let i = 0; i < docImageUrls.value.length; i++) { URL.revokeObjectURL(docImageUrls.value[i]); }
-        for(let j = 0; j < docPrintImageUrls.value.length; j++) { URL.revokeObjectURL(docPrintImageUrls.value[j]); }
-
         docImageUrls.value = [];
-        docPrintImageUrls.value = [];
-
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
+
         setWindowSizeWatchers(false, false);
+        if(printIframe != null) { document.body.removeChild(printIframe); }
+        printIframe = null;
     }
 
     /**

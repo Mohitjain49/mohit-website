@@ -367,9 +367,11 @@ async function changeImageType(newType = 0) {
 
 /** This function deletes the current QR Code URL. */
 function deleteCurrentQrcodeURL() {
-    if(!qrcodeUrlCreated.value) { return; }
     URL.revokeObjectURL(qrCodeURL.value);
     qrCodeURL.value = "";
+
+    if(printIframe != null) { document.body.removeChild(printIframe); }
+    printIframe = null;
     printIframeNeedsRerender = true;
 }
 
@@ -672,7 +674,7 @@ async function printQRCode() {
                 }
             });
 
-            // This sets that the print IFrame made for this print function can be reused.
+            // This sets that the print iframe made for this print function can be reused.
             printIframeNeedsRerender = false;
         }
 
