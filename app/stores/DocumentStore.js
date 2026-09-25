@@ -244,7 +244,8 @@ export const useDocumentStore = defineStore("document-store", () => {
             } else {
                 // Creates the custom HTML and saves it if the print function has not been called before.
                 printIframe = await renderCustomPrintIframe(documentFile.url);
-                const serializedHtml = new XMLSerializer().serializeToString(printIframe.contentDocument || printIframe.contentWindow.document);
+                const printIFrameDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+                const serializedHtml = printIFrameDocument.documentElement.outerHTML;
                 hostedDocuments[currentDocumentRouteNumber].setPrintHtml(serializedHtml);
             }
 
