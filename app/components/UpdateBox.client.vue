@@ -2,7 +2,7 @@
 <Transition :name="((windowWidth > 600) ? 'update-box-transition' : 'update-box-mobile-transition')">
     <div v-if="installStore.showUpdateBox" class="update-box">
         <div class="update-box-desc">
-            <FontAwesomeIcon class="update-box-desc-mainIcon"
+            <FontAwesomeIcon :class="['update-box-desc-mainIcon', (installStore.swUpdating ? 'updating' : '')]"
                 :spin-pulse="installStore.swUpdating"
                 :icon="(installStore.swUpdating ? 'fa-spinner' : 'fa-triangle-exclamation')"
             />
@@ -111,8 +111,13 @@ function getPlural(num = 1) { return (((num > 1) ? "s" : "") + " ago"); }
     flex-direction: row;
 }
 .update-box-desc-mainIcon {
+    position: relative;
+    bottom: 1px;
     width: 22px;
     height: 22px;
+}
+.update-box-desc-mainIcon.updating {
+    bottom: 2px;
 }
 
 .update-box-buttons {
