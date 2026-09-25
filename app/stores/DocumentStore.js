@@ -52,6 +52,9 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** @type {AbortController} This abort controller manages the event listeners fired when the page resizes. */
     var pdfDimensionsController = null;
+
+    /** @type {AbortController} This abort controller manages the event listeners fired when the user focuses on the window. */
+    var windowFocusAbortController = null;
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
@@ -223,66 +226,29 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function printDoc(customPrint = false) {
         if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
-        const customPrintRequired = !browserPdfViewerPresent.value;
+        const printActionString = (!browserPdfViewerPresent.value ? "both" : (customPrint ? "custom" : "standard"));
         var cancelTimeout = false;
 
-        if(customPrintRequired) {
-            documentPrintStatus.value = 1;
-            documentCustomPrintStatus.value = 1;
-        } else if(customPrint) {
-            documentCustomPrintStatus.value = 1;
-        } else {
-            documentPrintStatus.value = 1;
-        }
+        // Sets the specified print action to "Pending".
+        setPrintActionNumbers(printActionString, 1);
 
         try {
             const documentFile = getCurrentPDFObject();
             const currentDocumentRouteNumber = currentDocumentRoute.value;
-
             if(!documentFile || currentDocumentRouteNumber == -1) { throw new Error("Document Does Not Exist."); }
-            if(printIframe != null) { document.body.removeChild(printIframe); }
+            removePrintIFrame(true);
 
             if(browserPdfViewerPresent.value && !customPrint) {
-                printIframe = document.createElement("iframe");
-                printIframe.id = PRINT_IFRAME_ID;
-                printIframe.classList.add(PRINT_IFRAME_ID);
-                
-                printIframe.src = documentFile.url;
-                document.body.append(printIframe);
-
-                await new Promise(async (resolve, reject) => {
-                    const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
-                    if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-                        resolve("IFrame Loaded");
-                    } else {
-                        printIframe.onload = () => { resolve("IFrame Loaded"); }
-                        sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                    }
-                });
+                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
+            } else if(hostedDocuments[currentDocumentRouteNumber].printHtmlCreated.value) {
+                const printHtmlText = hostedDocuments[currentDocumentRouteNumber].printHtml.value;
+                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printHtmlText });
             } else {
-                if(hostedDocuments[currentDocumentRouteNumber].printBlobCreated.value) {
-                    printIframe = document.createElement("iframe");
-                    printIframe.id = PRINT_IFRAME_ID;
-                    printIframe.classList.add(PRINT_IFRAME_ID);
-                    
-                    printIframe.src = hostedDocuments[currentDocumentRouteNumber].printObjectUrl.value;
-                    document.body.append(printIframe);
-
-                    await new Promise(async (resolve, reject) => {
-                        const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
-                        if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-                            resolve("IFrame Loaded");
-                        } else {
-                            printIframe.onload = () => { resolve("IFrame Loaded"); }
-                            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                        }
-                    });
-                } else {
-                    // Creates the custom HTML and saves it if the print function has not been called before.
-                    printIframe = await renderCustomPrintIframe(documentFile.url);
-                    const serializedHtml = new XMLSerializer().serializeToString(printIframe.contentDocument || printIframe.contentWindow.document);
-                    hostedDocuments[currentDocumentRouteNumber].setPrintBlob(serializedHtml);
-                }
+                // Creates the custom HTML and saves it if the print function has not been called before.
+                printIframe = await renderCustomPrintIframe(documentFile.url);
+                const printIFrameDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
+                const serializedHtml = printIFrameDocument.documentElement.outerHTML;
+                hostedDocuments[currentDocumentRouteNumber].setPrintHtml(serializedHtml);
             }
 
             if(currentDocumentRouteNumber == currentDocumentRoute.value && !webData.showSharePopupImmediate) {
@@ -290,42 +256,18 @@ export const useDocumentStore = defineStore("document-store", () => {
                 const printIframeWin = printIframe.contentWindow;
                 printIframeWin.focus();
                 printIframeWin.print();
-                
-                if(customPrintRequired) {
-                    documentPrintStatus.value = 2;
-                    documentCustomPrintStatus.value = 2;
-                } else if(customPrint) {
-                    documentCustomPrintStatus.value = 2;
-                } else {
-                    documentPrintStatus.value = 2;
-                }
+                setPrintActionNumbers(printActionString, 2);
             } else {
                 // This removes the print IFrame if the user performs an action that aborts the print functionality.
-                if(printIframe != null) { document.body.removeChild(printIframe); }
-                printIframe = null;
                 cancelTimeout = true;
-
-                documentPrintStatus.value = 0;
-                documentCustomPrintStatus.value = 0;
+                removePrintIFrame(true);
+                setPrintActionNumbers("both", 0);
             }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
-            const errorNum = ((e.message === "Timeout Error") ? 4 : 3);
-
-            if(customPrintRequired) {
-                documentPrintStatus.value = errorNum;
-                documentCustomPrintStatus.value = errorNum;
-            } else if(customPrint) {
-                documentCustomPrintStatus.value = errorNum;
-            } else {
-                documentPrintStatus.value = errorNum;
-            }
+            setPrintActionNumbers(printActionString, ((e.message === "Timeout Error") ? 4 : 3));
         } finally {
-            if(cancelTimeout) { return; }
-            setTimeout(() => {
-                documentPrintStatus.value = 0;
-                documentCustomPrintStatus.value = 0;
-            }, 3000);
+            if(!cancelTimeout) { setTimeout(() => { setPrintActionNumbers("both", 0); }, 3000); }
         }
     }
 
@@ -381,6 +323,25 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(!onDocumentRoute.value) { return null; }
         const docActive = hostedDocuments[currentDocumentRoute.value];
         return { blob: docActive.blob.value, url: docActive.objectUrl.value, name: docActive.name, suffix: docActive.suffix }
+    }
+
+    /**
+     * This helper function sets the print action numbers.
+     * @param {"both" | "custom" | "standard" | "none"} type The Print Action type to set.
+     * @param {Number} value The value to give the specified print action.
+     */
+    function setPrintActionNumbers(type = "both", value = 0) {
+        if(!type || (!value && value !== 0) || typeof type !== "string" || typeof value !== "number") { return; }
+        type = type.toLowerCase();
+
+        if(type === "both") {
+            documentCustomPrintStatus.value = value;
+            documentPrintStatus.value = value;
+        } else if(type === "custom") {
+            documentCustomPrintStatus.value = value;
+        } else if(type === "standard") {
+            documentPrintStatus.value = value;
+        }
     }
 
     /**
@@ -515,6 +476,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         pdfViewerStyleBlock.textContent = pdfViewerStyles;
         document.head.appendChild(pdfViewerStyleBlock);
 
+        // This sets event listeners to delete the print IFrame when the user focuses on the window and a print action is available.
+        setWindowFocusEventListeners(true);
+
         // This checks to see all possible image types a canvas can be converted into.
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = 1;
@@ -552,8 +516,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
 
         setWindowSizeWatchers(false, false);
-        if(printIframe != null) { document.body.removeChild(printIframe); }
-        printIframe = null;
+        removePrintIFrame(true);
     }
 
     /**
@@ -635,6 +598,23 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function removes the print iframe from the DOM.
+     * @param {Boolean} bypassChecks If true, this deletes the print iframe without checking if it should not be deleted.
+     * @returns A boolean indicating whether deleting the iframe was successful or not.
+     */
+    function removePrintIFrame(bypassChecks = false) {
+        try {
+            if(!bypassChecks && (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0)) { return false; }
+            if(printIframe != null) { document.body.removeChild(printIframe); }
+            printIframe = null;
+            return true;
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            return false;
+        }
+    }
+
+    /**
      * This function sets the window size watchers that set the PDF size.
      * @param {Boolean | "toggle"} status The new status of the watchers. If "toggle", it flips the current state.
      * @param {Boolean} force If true, the function will ignore the current state of the watchers when pausing or resuming them.
@@ -653,6 +633,19 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
             pdfDimensionsController = null;
         }
+    }
+
+    /**
+     * This function sets the event listeners for when the user focuses on the window and aborts the old ones.
+     * @param {Boolean} status If false, this function aborts the old event listeners without setting new ones.
+     */
+    function setWindowFocusEventListeners(status = true) {
+        if(!import.meta.client) { return; }
+        if(windowFocusAbortController != null) { windowFocusAbortController.abort(); }
+        windowFocusAbortController = new AbortController();
+
+        if(!status) { return; }
+        window.addEventListener("focus", () => { removePrintIFrame(false); }, { signal: windowFocusAbortController.signal });
     }
 
     /** This function sets the full screen for the element containing the document. */
@@ -737,13 +730,12 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
 
-    /** @type {import('vue').ShallowRef<Blob>} This Blob represents HTML text used for the custom print functionality to speed up repeated calls. */
-    const printBlob = shallowRef(null);
-    const printObjectUrl = shallowRef("");
+    /** @type {import('vue').ShallowRef<String>} This is HTML text used for the custom print functionality to speed up repeated calls. */
+    const printHtml = shallowRef("");
 
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
-    const printBlobCreated = computed(() => { return (printBlob.value != null && printObjectUrl.value !== ""); });
+    const printHtmlCreated = computed(() => { return (printHtml.value.length > 0); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
@@ -763,13 +755,10 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     function deleteBlob() {
         if(!blobCreated.value) { return; }
         URL.revokeObjectURL(objectUrl.value);
-        URL.revokeObjectURL(printObjectUrl.value);
 
         blob.value = null;
-        printBlob.value = null;
-
+        printHtml.value = "";
         objectUrl.value = "";
-        printObjectUrl.value = "";
 
         metadata.setDefaultValues();
         changeLink("default");
@@ -804,11 +793,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * This function sets the Print Blob so that it can be used for the custom print functionality.
      * @param {String} htmlText The HTML code as a string.
      */
-    function setPrintBlob(htmlText = "") {
-        if(printBlobCreated.value) { URL.revokeObjectURL(printObjectUrl.value); }
-        printBlob.value = new Blob([htmlText], { type: "text/html" });
-        printObjectUrl.value = URL.createObjectURL(printBlob.value);
-    }
+    function setPrintHtml(htmlText = "") { printHtml.value = htmlText; }
 
     /**
      * This function checks whether the path associated with this hosted document is equivalent to another given path.
@@ -821,7 +806,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     }
 
     return { path, onRoute, file, fileSize, name, suffix, link, originLink, withMd,
-        blob, blobCreated, objectUrl, printBlob, printBlobCreated, printObjectUrl, metadata,
-        initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintBlob
+        blob, blobCreated, objectUrl, printHtml, printHtmlCreated, metadata,
+        initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintHtml
     }
 }

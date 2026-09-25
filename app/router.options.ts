@@ -84,7 +84,7 @@ export default {
             ];
 
             // Checks the conditions and waits for the scroll store to be mounted.
-            if(-1 != NO_SCROLL_CONDITIONS.findIndex((item) => { return item; })) { return; }
+            if(-1 != NO_SCROLL_CONDITIONS.findIndex((item) => { return item; })) { return false; }
             secondsTasksPending = 0;
 
             while(!scrollStore.mounted && secondsTasksPending < TASKS_PENDING_WAIT_SECONDS) {

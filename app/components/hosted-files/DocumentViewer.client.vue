@@ -138,7 +138,7 @@ function getPageElement(index = 1) {
 
 /** This function renders the PDF so it can be displayed. */
 async function renderPDF() {
-    scrollToTop(true, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if(renderAborted()) { return; }
 
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
@@ -526,24 +526,28 @@ function scrollToPdfDest(pageNumber = 1, y = 0) {
 
 /** This function lets the user scroll to the current PDF Destination using the URL. */
 function scrollToCurrentPdfDest() {
-    const linkUrl = new URL(router.currentRoute.value.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
-    const searchParams = linkUrl.searchParams;
-    const hashPageNumber = parseInt(linkUrl.hash.replaceAll("#page_", ""));
+    try {
+        const linkUrl = new URL(router.currentRoute.value.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
+        const searchParams = linkUrl.searchParams;
+        const hashPageNumber = parseInt(linkUrl.hash.replaceAll("#page_", ""));
 
-    const pageQuery = (searchParams.has("page") ? parseInt(searchParams.get("page")) : NaN);
-    const validPageQuery = !Number.isNaN(pageQuery);
-    const yQuery = (searchParams.has("y") ? parseFloat(searchParams.get("y")) : NaN);
+        const pageQuery = (searchParams.has("page") ? parseInt(searchParams.get("page")) : NaN);
+        const validPageQuery = !Number.isNaN(pageQuery);
+        const yQuery = (searchParams.has("y") ? parseFloat(searchParams.get("y")) : NaN);
 
-    if(linkUrl.hash === "#footer") {
-        goToPageSection("footer");
-    } else if(validPageQuery && !Number.isNaN(yQuery)) {
-        scrollToPdfDest(pageQuery, yQuery);
-    } else if(validPageQuery) {
-        documentStore.scrollToPage(pageQuery);
-    } else if(!Number.isNaN(hashPageNumber)) {
-        documentStore.scrollToPage(hashPageNumber);
-    } else {
-        scrollToTop(false, 10);
+        if(linkUrl.hash === "#footer") {
+            goToPageSection("footer");
+        } else if(validPageQuery && !Number.isNaN(yQuery)) {
+            scrollToPdfDest(pageQuery, yQuery);
+        } else if(validPageQuery) {
+            documentStore.scrollToPage(pageQuery);
+        } else if(!Number.isNaN(hashPageNumber)) {
+            documentStore.scrollToPage(hashPageNumber);
+        } else {
+            scrollToTop(false, 10);
+        }
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
     }
 }
 
