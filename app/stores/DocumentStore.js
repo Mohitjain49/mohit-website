@@ -223,17 +223,11 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function printDoc(customPrint = false) {
         if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
-        const customPrintRequired = !browserPdfViewerPresent.value;
+        const printActionString = (!browserPdfViewerPresent.value ? "both" : (customPrint ? "custom" : "standard"));
         var cancelTimeout = false;
 
-        if(customPrintRequired) {
-            documentPrintStatus.value = 1;
-            documentCustomPrintStatus.value = 1;
-        } else if(customPrint) {
-            documentCustomPrintStatus.value = 1;
-        } else {
-            documentPrintStatus.value = 1;
-        }
+        // Sets the specified print action to "Pending".
+        setPrintActionNumbers(printActionString, 1);
 
         try {
             const documentFile = getCurrentPDFObject();
@@ -244,14 +238,14 @@ export const useDocumentStore = defineStore("document-store", () => {
 
             if(browserPdfViewerPresent.value && !customPrint) {
                 printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
-            } else if(hostedDocuments[currentDocumentRouteNumber].printBlobCreated.value) {
-                const printBlobText = await hostedDocuments[currentDocumentRouteNumber].printBlob.value.text();
-                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printBlobText });
+            } else if(hostedDocuments[currentDocumentRouteNumber].printHtmlCreated.value) {
+                const printHtmlText = hostedDocuments[currentDocumentRouteNumber].printHtml.value;
+                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printHtmlText });
             } else {
                 // Creates the custom HTML and saves it if the print function has not been called before.
                 printIframe = await renderCustomPrintIframe(documentFile.url);
                 const serializedHtml = new XMLSerializer().serializeToString(printIframe.contentDocument || printIframe.contentWindow.document);
-                hostedDocuments[currentDocumentRouteNumber].setPrintBlob(serializedHtml);
+                hostedDocuments[currentDocumentRouteNumber].setPrintHtml(serializedHtml);
             }
 
             if(currentDocumentRouteNumber == currentDocumentRoute.value && !webData.showSharePopupImmediate) {
@@ -259,42 +253,19 @@ export const useDocumentStore = defineStore("document-store", () => {
                 const printIframeWin = printIframe.contentWindow;
                 printIframeWin.focus();
                 printIframeWin.print();
-                
-                if(customPrintRequired) {
-                    documentPrintStatus.value = 2;
-                    documentCustomPrintStatus.value = 2;
-                } else if(customPrint) {
-                    documentCustomPrintStatus.value = 2;
-                } else {
-                    documentPrintStatus.value = 2;
-                }
+                setPrintActionNumbers(printActionString, 2);
             } else {
                 // This removes the print IFrame if the user performs an action that aborts the print functionality.
                 if(printIframe != null) { document.body.removeChild(printIframe); }
                 printIframe = null;
                 cancelTimeout = true;
-
-                documentPrintStatus.value = 0;
-                documentCustomPrintStatus.value = 0;
+                setPrintActionNumbers("both", 0);
             }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
-            const errorNum = ((e.message === "Timeout Error") ? 4 : 3);
-
-            if(customPrintRequired) {
-                documentPrintStatus.value = errorNum;
-                documentCustomPrintStatus.value = errorNum;
-            } else if(customPrint) {
-                documentCustomPrintStatus.value = errorNum;
-            } else {
-                documentPrintStatus.value = errorNum;
-            }
+            setPrintActionNumbers(printActionString, ((e.message === "Timeout Error") ? 4 : 3));
         } finally {
-            if(cancelTimeout) { return; }
-            setTimeout(() => {
-                documentPrintStatus.value = 0;
-                documentCustomPrintStatus.value = 0;
-            }, 3000);
+            if(!cancelTimeout) { setTimeout(() => { setPrintActionNumbers("both", 0); }, 3000); }
         }
     }
 
@@ -350,6 +321,25 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(!onDocumentRoute.value) { return null; }
         const docActive = hostedDocuments[currentDocumentRoute.value];
         return { blob: docActive.blob.value, url: docActive.objectUrl.value, name: docActive.name, suffix: docActive.suffix }
+    }
+
+    /**
+     * This helper function sets the print action numbers.
+     * @param {"both" | "custom" | "standard" | "none"} type The Print Action type to set.
+     * @param {Number} value The value to give the specified print action.
+     */
+    function setPrintActionNumbers(type = "both", value = 0) {
+        if(!type || (!value && value !== 0) || typeof type !== "string" || typeof value !== "number") { return; }
+        type = type.toLowerCase();
+
+        if(type === "both") {
+            documentCustomPrintStatus.value = value;
+            documentPrintStatus.value = value;
+        } else if(type === "custom") {
+            documentCustomPrintStatus.value = value;
+        } else if(type === "standard") {
+            documentPrintStatus.value = value;
+        }
     }
 
     /**
@@ -706,12 +696,12 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
 
-    /** @type {import('vue').ShallowRef<Blob>} This Blob represents HTML text used for the custom print functionality to speed up repeated calls. */
-    const printBlob = shallowRef(null);
+    /** @type {import('vue').ShallowRef<String>} This is HTML text used for the custom print functionality to speed up repeated calls. */
+    const printHtml = shallowRef("");
 
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
-    const printBlobCreated = computed(() => { return (printBlob.value != null); });
+    const printHtmlCreated = computed(() => { return (printHtml.value.length > 0); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
@@ -733,7 +723,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         URL.revokeObjectURL(objectUrl.value);
 
         blob.value = null;
-        printBlob.value = null;
+        printHtml.value = "";
         objectUrl.value = "";
 
         metadata.setDefaultValues();
@@ -769,9 +759,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * This function sets the Print Blob so that it can be used for the custom print functionality.
      * @param {String} htmlText The HTML code as a string.
      */
-    function setPrintBlob(htmlText = "") {
-        printBlob.value = new Blob([htmlText], { type: "text/html" });
-    }
+    function setPrintHtml(htmlText = "") { printHtml.value = htmlText; }
 
     /**
      * This function checks whether the path associated with this hosted document is equivalent to another given path.
@@ -784,7 +772,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     }
 
     return { path, onRoute, file, fileSize, name, suffix, link, originLink, withMd,
-        blob, blobCreated, objectUrl, printBlob, printBlobCreated, metadata,
-        initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintBlob
+        blob, blobCreated, objectUrl, printHtml, printHtmlCreated, metadata,
+        initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintHtml
     }
 }
