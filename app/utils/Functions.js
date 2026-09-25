@@ -94,3 +94,47 @@ export function create2dPromiseArray(totalPromises = 1, maxPromisesPerArray = DO
     // Returns the 2D Array.
     return pageRenderPromises;
 }
+
+/**
+ * This function creates an Iframe for printing out a document.
+ * @param {Object} params A set of parameters for creating the new iframe.
+ * @param {String} params.id The ID of the iframe.
+ * @param {"src" | "srcdoc" | "none"} params.attribute An attribute to set before appending the document to the DOM.
+ * @param {String} params.value The value to fill into the specified parameter attribute.
+ */
+export async function createIFrameForPrint(params = { id: "", attribute: "none", value: "" }) {
+    if(!import.meta.client) { return null; }
+    if(!params) { params = { id: "", attribute: "src", value: "" }; }
+
+    if(!params.id || typeof params.id !== "string") { params.id = ""; }
+    if(!params.attribute || typeof params.attribute !== "string") { params.attribute = "none"; }
+    if(!params.value || typeof params.attribute !== "string") { params.value = ""; }
+
+    const printIFrame = document.createElement("iframe");
+    if(params.id !== "") {
+        printIFrame.id = params.id;
+        printIFrame.classList.add(params.id);
+    }
+
+    if(params.attribute === "src") {
+        printIFrame.src = params.value;
+    } else if(params.attribute === "srcdoc") {
+        printIFrame.srcdoc = params.value;
+    }
+
+    // This waits for the IFrame to be loaded in before giving it to the print action.
+    await new Promise(async (resolve, reject) => {
+        document.body.append(printIFrame);
+        const tempIframeDocument = (printIFrame.contentDocument || printIFrame.contentWindow?.document);
+
+        if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
+            resolve("IFrame Loaded");
+        } else {
+            printIFrame.onload = () => { resolve("IFrame Loaded"); }
+            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
+        }
+    });
+
+    // This returns the now fully appended IFrame that is ready to be printed.
+    return printIFrame;
+}

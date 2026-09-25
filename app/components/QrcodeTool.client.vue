@@ -623,23 +623,9 @@ async function printQRCode() {
     const QRCODE_EDGE_LENGTH = 450;
 
     try {
-        if(printIframeNeedsRerender) {
+        if(printIframeNeedsRerender || printIframe == null) {
             if(printIframe != null) { document.body.removeChild(printIframe); }
-            printIframe = document.createElement("iframe");
-            printIframe.id = PRINT_IFRAME_ID;
-            printIframe.classList.add(PRINT_IFRAME_ID);
-
-            await new Promise(async (resolve, reject) => {
-                document.body.append(printIframe);
-                const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
-
-                if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-                    resolve("IFrame Loaded");
-                } else {
-                    printIframe.onload = () => { resolve("IFrame Loaded"); }
-                    sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                }
-            });
+            printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "none", value: "" });
 
             const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
             printIframeDocument.title = DEFAULT_IMAGE_FILENAME;

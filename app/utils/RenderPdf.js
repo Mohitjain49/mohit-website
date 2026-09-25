@@ -81,21 +81,8 @@ export async function renderCustomPrintIframe(url = "") {
     const PRINT_IFRAME_PAGE_ID_PREFIX = "mohit-customPrint-page_";
     const LETTER_WIDTH = 816;
 
-    var printIframe = document.createElement("iframe");
-    printIframe.id = PRINT_IFRAME_ID;
-    printIframe.classList.add(PRINT_IFRAME_ID);
-
-    await new Promise(async (resolve, reject) => {
-        document.body.append(printIframe);
-        const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
-
-        if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-            resolve("IFrame Loaded");
-        } else {
-            printIframe.onload = () => { resolve("IFrame Loaded"); }
-            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-        }
-    });
+    /** This is the IFrame where the HTML should be rendered onto. */
+    var printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "none", value: "" });
 
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
     const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");

@@ -243,46 +243,15 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(printIframe != null) { document.body.removeChild(printIframe); }
 
             if(browserPdfViewerPresent.value && !customPrint) {
-                printIframe = document.createElement("iframe");
-                printIframe.id = PRINT_IFRAME_ID;
-                printIframe.classList.add(PRINT_IFRAME_ID);
-                
-                printIframe.src = documentFile.url;
-                document.body.append(printIframe);
-
-                await new Promise(async (resolve, reject) => {
-                    const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
-                    if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-                        resolve("IFrame Loaded");
-                    } else {
-                        printIframe.onload = () => { resolve("IFrame Loaded"); }
-                        sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                    }
-                });
+                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
+            } else if(hostedDocuments[currentDocumentRouteNumber].printBlobCreated.value) {
+                const printBlobText = await hostedDocuments[currentDocumentRouteNumber].printBlob.value.text();
+                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printBlobText });
             } else {
-                if(hostedDocuments[currentDocumentRouteNumber].printBlobCreated.value) {
-                    printIframe = document.createElement("iframe");
-                    printIframe.id = PRINT_IFRAME_ID;
-                    printIframe.classList.add(PRINT_IFRAME_ID);
-                    
-                    printIframe.src = hostedDocuments[currentDocumentRouteNumber].printObjectUrl.value;
-                    document.body.append(printIframe);
-
-                    await new Promise(async (resolve, reject) => {
-                        const tempIframeDocument = (printIframe.contentDocument || printIframe.contentWindow?.document);
-                        if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
-                            resolve("IFrame Loaded");
-                        } else {
-                            printIframe.onload = () => { resolve("IFrame Loaded"); }
-                            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                        }
-                    });
-                } else {
-                    // Creates the custom HTML and saves it if the print function has not been called before.
-                    printIframe = await renderCustomPrintIframe(documentFile.url);
-                    const serializedHtml = new XMLSerializer().serializeToString(printIframe.contentDocument || printIframe.contentWindow.document);
-                    hostedDocuments[currentDocumentRouteNumber].setPrintBlob(serializedHtml);
-                }
+                // Creates the custom HTML and saves it if the print function has not been called before.
+                printIframe = await renderCustomPrintIframe(documentFile.url);
+                const serializedHtml = new XMLSerializer().serializeToString(printIframe.contentDocument || printIframe.contentWindow.document);
+                hostedDocuments[currentDocumentRouteNumber].setPrintBlob(serializedHtml);
             }
 
             if(currentDocumentRouteNumber == currentDocumentRoute.value && !webData.showSharePopupImmediate) {
@@ -739,11 +708,10 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
 
     /** @type {import('vue').ShallowRef<Blob>} This Blob represents HTML text used for the custom print functionality to speed up repeated calls. */
     const printBlob = shallowRef(null);
-    const printObjectUrl = shallowRef("");
 
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
-    const printBlobCreated = computed(() => { return (printBlob.value != null && printObjectUrl.value !== ""); });
+    const printBlobCreated = computed(() => { return (printBlob.value != null); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
@@ -763,13 +731,10 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     function deleteBlob() {
         if(!blobCreated.value) { return; }
         URL.revokeObjectURL(objectUrl.value);
-        URL.revokeObjectURL(printObjectUrl.value);
 
         blob.value = null;
         printBlob.value = null;
-
         objectUrl.value = "";
-        printObjectUrl.value = "";
 
         metadata.setDefaultValues();
         changeLink("default");
@@ -805,9 +770,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * @param {String} htmlText The HTML code as a string.
      */
     function setPrintBlob(htmlText = "") {
-        if(printBlobCreated.value) { URL.revokeObjectURL(printObjectUrl.value); }
         printBlob.value = new Blob([htmlText], { type: "text/html" });
-        printObjectUrl.value = URL.createObjectURL(printBlob.value);
     }
 
     /**
@@ -821,7 +784,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     }
 
     return { path, onRoute, file, fileSize, name, suffix, link, originLink, withMd,
-        blob, blobCreated, objectUrl, printBlob, printBlobCreated, printObjectUrl, metadata,
+        blob, blobCreated, objectUrl, printBlob, printBlobCreated, metadata,
         initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintBlob
     }
 }
