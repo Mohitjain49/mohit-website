@@ -52,6 +52,9 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** @type {AbortController} This abort controller manages the event listeners fired when the page resizes. */
     var pdfDimensionsController = null;
+
+    /** @type {AbortController} This abort controller manages the event listeners fired when the user focuses on the window. */
+    var windowFocusAbortController = null;
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
@@ -232,9 +235,8 @@ export const useDocumentStore = defineStore("document-store", () => {
         try {
             const documentFile = getCurrentPDFObject();
             const currentDocumentRouteNumber = currentDocumentRoute.value;
-
             if(!documentFile || currentDocumentRouteNumber == -1) { throw new Error("Document Does Not Exist."); }
-            if(printIframe != null) { document.body.removeChild(printIframe); }
+            removePrintIFrame(true);
 
             if(browserPdfViewerPresent.value && !customPrint) {
                 printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
@@ -257,9 +259,8 @@ export const useDocumentStore = defineStore("document-store", () => {
                 setPrintActionNumbers(printActionString, 2);
             } else {
                 // This removes the print IFrame if the user performs an action that aborts the print functionality.
-                if(printIframe != null) { document.body.removeChild(printIframe); }
-                printIframe = null;
                 cancelTimeout = true;
+                removePrintIFrame(true);
                 setPrintActionNumbers("both", 0);
             }
         } catch(e) {
@@ -475,6 +476,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         pdfViewerStyleBlock.textContent = pdfViewerStyles;
         document.head.appendChild(pdfViewerStyleBlock);
 
+        // This sets event listeners to delete the print IFrame when the user focuses on the window and a print action is available.
+        setWindowFocusEventListeners(true);
+
         // This checks to see all possible image types a canvas can be converted into.
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = 1;
@@ -512,8 +516,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
 
         setWindowSizeWatchers(false, false);
-        if(printIframe != null) { document.body.removeChild(printIframe); }
-        printIframe = null;
+        removePrintIFrame(true);
     }
 
     /**
@@ -595,6 +598,23 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function removes the print iframe from the DOM.
+     * @param {Boolean} bypassChecks If true, this deletes the print iframe without checking if it should not be deleted.
+     * @returns A boolean indicating whether deleting the iframe was successful or not.
+     */
+    function removePrintIFrame(bypassChecks = false) {
+        try {
+            if(!bypassChecks && (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0)) { return false; }
+            if(printIframe != null) { document.body.removeChild(printIframe); }
+            printIframe = null;
+            return true;
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            return false;
+        }
+    }
+
+    /**
      * This function sets the window size watchers that set the PDF size.
      * @param {Boolean | "toggle"} status The new status of the watchers. If "toggle", it flips the current state.
      * @param {Boolean} force If true, the function will ignore the current state of the watchers when pausing or resuming them.
@@ -613,6 +633,19 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
             pdfDimensionsController = null;
         }
+    }
+
+    /**
+     * This function sets the event listeners for when the user focuses on the window and aborts the old ones.
+     * @param {Boolean} status If false, this function aborts the old event listeners without setting new ones.
+     */
+    function setWindowFocusEventListeners(status = true) {
+        if(!import.meta.client) { return; }
+        if(windowFocusAbortController != null) { windowFocusAbortController.abort(); }
+        windowFocusAbortController = new AbortController();
+
+        if(!status) { return; }
+        window.addEventListener("focus", () => { removePrintIFrame(false); }, { signal: windowFocusAbortController.signal });
     }
 
     /** This function sets the full screen for the element containing the document. */
