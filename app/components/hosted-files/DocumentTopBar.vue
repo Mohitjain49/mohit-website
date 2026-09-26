@@ -1,5 +1,5 @@
 <template>
-<div ref="document-options" :class="['mohit-document-topBar', (documentStore.onMarkdownRoute ? 'markdown' : '')]">
+<div ref="document-options" class="mohit-document-topBar">
     <div class="mohit-document-topBar-sideSection">
         <button class="doc-save-opt" @click="documentStore.downloadDoc()" :style="documentStore.downloadCursor" :title="documentStore.documentDownloadTitle" v-pulse-loop>
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
@@ -28,7 +28,7 @@
         </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
-        <button class="flame largeSvg" v-if="documentStore.onMainResumeRoute" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" v-pulse-loop>
+        <button class="flame largeSvg" v-if="documentStore.onResumeRoute" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" v-pulse-loop>
             <FontAwesomeIcon icon="fa-gears" />
         </button>
         <button class="flame" v-if="documentStore.onCreateGithubRepoRoute" @click="documentStore.scrollToPage(2)" title="Scroll To Table Of Contents" v-pulse-loop>

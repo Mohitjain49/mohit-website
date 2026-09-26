@@ -26,7 +26,7 @@ function disableScrollOnQueryChange(to: RouteLocationNormalizedGeneric, from: Ro
 
 /** This function determines if the next autoscroll should be based off of certain scroll params on a hosted document page. */
 function checkDocumentScrollParams(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric, documentStore: any) {
-    if(!documentStore.onDocumentRoute || documentStore.onMarkdownRoute || !documentStore.docLoaded.status) { return false; }
+    if(!documentStore.onDocumentRoute || !documentStore.docLoaded.status) { return false; }
     const documentQueryChanged = (-1 != QUERY_DOCUMENT_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== undefined); }));
     return (documentQueryChanged && (to.path === from.path));
 }
@@ -79,7 +79,7 @@ export default {
 
             /** An array of conditions where if one is true, no smooth auto-scroll takes place. */
             const NO_SCROLL_CONDITIONS = [
-                (documentStore.onDocumentRoute && !documentStore.onMarkdownRoute && !documentStore.docLoaded.status),
+                (documentStore.onDocumentRoute && !documentStore.docLoaded.status),
                 disableScrollOnQueryChange(to, from)
             ];
 

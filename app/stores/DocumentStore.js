@@ -32,10 +32,10 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** These are the hosted documents used to set the document pages. */
     const hostedDocuments = [
-        useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false, true),
-        useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false, false),
+        useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false),
+        useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false),
         useHostedDocument(GEN_AI_APPLICATIONS_PAPER_ROUTE, Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper,
-            "Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper", ".pdf", GEN_AI_APPLICATIONS_PAPER_LINK, false, false
+            "Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper", ".pdf", GEN_AI_APPLICATIONS_PAPER_LINK, false
         )
     ];
 
@@ -99,7 +99,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentUploadToGoogleDriveCanceled = ref(false);
 
     const routePath = computed(() => { return router.currentRoute.value.path; });
-    const onMarkdownRoute = computed(() => { return (routePath.value.includes("markdown")); });
     const onDocumentRoute = computed(() => { return (-1 != currentDocumentRoute.value); });
 
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
@@ -110,13 +109,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
-    const onMainResumeRoute = computed(() => { return (onResumeRoute.value && !onMarkdownRoute.value); });
 
     const customPrintTitle = computed(() => { return (browserPdfViewerPresent.value ? "Print Document (Standard)" : "Print Document"); });
     const documentDownloadTitle = computed(() => { return ("Download Document (" + currentDocumentFileSize.value + ")"); });
-    const showPdfPageNav = computed(() => {
-        return (!onMarkdownRoute.value && docLoaded.value.status && (docLoaded.value.totalPages > 1) && (docImageUrls.value.length > 0));
-    });
+    const showPdfPageNav = computed(() => { return (docLoaded.value.status && (docLoaded.value.totalPages > 1) && (docImageUrls.value.length > 0)); });
 
     const downloadIcon = computed(() => {
         const downloadInt = documentDownloadStatus.value;
@@ -501,7 +497,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             await hostedDocuments[currentDocumentRoute.value].initBlob();
         }
 
-        if(onMarkdownRoute.value) { return; }
         const scaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
         mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
     }
@@ -650,7 +645,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function sets the full screen for the element containing the document. */
     async function toggleDocumentFullScreen() {
-        if(!import.meta.client || (!onMarkdownRoute.value && !docLoaded.value.status) || fsStateChanging.value) { return; }
+        if(!import.meta.client || !docLoaded.value.status || fsStateChanging.value) { return; }
         const element = document.getElementById("resume-container");
         if(!element) { return; }
 
@@ -704,7 +699,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,
         downloadCursor, saveDocCursor, shareCursor, printCursor, uploadToGoogleDriveCursor,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
-        onDocumentRoute, onMainResumeRoute, onResumeRoute, onMarkdownRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
+        onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, getPdfAsImages,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, checkPdfjsWorker, getPdfjsStylesheet
@@ -719,9 +714,8 @@ export const useDocumentStore = defineStore("document-store", () => {
  * @param {".pdf" | ".docx"} suffix The suffix of the file being displayed.
  * @param {String} originLink The link where that file is stored online.
  * @param {Boolean} useBlobLink If true, this utility uses the blob object url as the link instead of the passed in link.
- * @param {Boolean} withMd If true, this utility treats (path + "/markdown") as a viable route as well.
  */
-function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false, withMd = false) {
+function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false) {
     path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
     const router = useRouter();
     const link = shallowRef("");
@@ -801,11 +795,10 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      */
     function checkPath(pathname) {
         if(pathname.endsWith("/")) { pathname = pathname.substring(0, (pathname.length - 1)); }
-        const mainCheck = (path === pathname || (path + "/") === pathname);
-        return (mainCheck || (withMd && ((path + "/markdown") === pathname || (path + "/markdown/") === pathname)));
+        return (path === pathname || (path + "/") === pathname);
     }
 
-    return { path, onRoute, file, fileSize, name, suffix, link, originLink, withMd,
+    return { path, onRoute, file, fileSize, name, suffix, link, originLink,
         blob, blobCreated, objectUrl, printHtml, printHtmlCreated, metadata,
         initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintHtml
     }

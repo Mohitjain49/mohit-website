@@ -871,8 +871,7 @@ export const FEATURE_ENTITIES = [
         link: "/library/#documents",
         color: "var(--website-text)",
         desc: "I used multiple modules to display my resume and other documents on this website. " +
-            "This includes using PDF.js to natively display the PDF as a whole and the \"@nuxt/content\" " +
-            "plugin to display my resume in a markdown format.",
+            "This includes using PDF.js to natively display the PDF as a whole.",
 
         icon: {
             id: "fa-folder-open",
