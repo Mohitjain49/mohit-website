@@ -8,16 +8,23 @@
         <div v-if="scriptsStore.scriptBlobCreated" ref="script-options" class="mohit-main-script-top">
             <div class="mohit-main-script-top-sideSection">
                 <div class="mohit-main-script-top-group">
-                    <button class="script-save-opt" @click="scriptsStore.downloadScript()" :style="scriptsStore.downloadCursor" title="Download Code Script" v-pulse-loop>
+                    <button class="script-save-opt" @click="scriptsStore.downloadScript()"
+                        :style="scriptsStore.downloadCursor"
+                        :title="scriptsStore.downloadTitle" v-pulse-loop>
+
                         <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
                     </button>
                     <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)"
-                        :style="scriptsStore.saveDocCursor" @click="scriptsStore.saveScript()"
-                        title="Save Code Script" v-pulse-loop>
+                        @click="scriptsStore.saveScript()"
+                        :style="scriptsStore.saveDocCursor"
+                        :title="scriptsStore.saveScriptTitle" v-pulse-loop>
                         
                         <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
                     </button>
-                    <button class="script-save-opt" @click="scriptsStore.copyScript()" :style="scriptsStore.copyDocCursor" title="Copy Raw Code Script" v-pulse-loop>
+                    <button class="script-save-opt" @click="scriptsStore.copyScript()"
+                        :style="scriptsStore.copyDocCursor"
+                        :title="scriptsStore.copyTitle" v-pulse-loop>
+
                         <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
                     </button>
                 </div>

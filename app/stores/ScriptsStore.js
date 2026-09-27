@@ -9,13 +9,14 @@ import gamepad_store_utility_code from "~/stores/GamepadStore.js?raw";
 import gamepad_component_code from "~/components/GamepadComponent.client.vue?raw";
 import gamepad_events_code from "~/gamepad-events.js?raw";
 
+import prettyBytes from "pretty-bytes";
 export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "default", "default"];
 export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban"];
 export const SCRIPT_ACTION_PENDING = 1;
 
-const SCRIPT_DOWNLOAD_ACTION_TITLES = ["Download Script", "Downloading Script...", "Script Downloaded!", "Error While Downloading Script."];
-const SCRIPT_SAVE_ACTION_TITLES = ["Save Script", "Saving Script...", "Script Saved!", "Error While Saving Script."];
-const SCRIPT_COPY_ACTION_TITLES = ["Copy Script", "Copying Script...", "Script Copied!", "Error While Copying Script."];
+const SCRIPT_DOWNLOAD_ACTION_TITLES = ["Download Code Script", "Downloading Code Script...", "Code Script Downloaded!", "Error While Downloading Code Script."];
+const SCRIPT_SAVE_ACTION_TITLES = ["Save Code Script", "Saving Code Script...", "Code Script Saved!", "Error While Saving Code Script."];
+const SCRIPT_COPY_ACTION_TITLES = ["Copy Raw Code Script", "Copying Raw Code Script...", "Raw Code Script Copied!", "Error While Copying Raw Code Script."];
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
@@ -56,6 +57,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     const onScriptRoute = computed(() => { return (currentScriptRoute.value != -1); });
     const scriptBlobCreated = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].blobCreated.value : false); });
+    const currentScriptFileSize = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].fileSize.value : ""); });
     const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
 
     const downloadIcon = computed(() => {
@@ -71,6 +73,16 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         return ((copyInt == 0) ? "fa-copy" : SCRIPT_ACTION_STATUS_ICONS[copyInt]);
     });
 
+    const downloadTitle = computed(() => {
+        const downloadInt = scriptDownloadStatus.value;
+        return (SCRIPT_DOWNLOAD_ACTION_TITLES[downloadInt] + ((downloadInt == 0) ? " (" + currentScriptFileSize.value + ")" : ""));
+    });
+    const saveScriptTitle = computed(() => {
+        const saveInt = scriptSaveStatus.value;
+        return (SCRIPT_SAVE_ACTION_TITLES[saveInt] + ((saveInt == 0) ? " (" + currentScriptFileSize.value + ")" : ""));
+    });
+
+    const copyTitle = computed(() => { return (SCRIPT_COPY_ACTION_TITLES[scriptCopyStatus.value] + ""); });
     const downloadCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptDownloadStatus.value] }});
     const saveDocCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptSaveStatus.value] }});
     const copyDocCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptCopyStatus.value] }});
@@ -448,7 +460,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, currentScriptLink, scriptBlobCreated,
         downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
-        copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement, downloadCursor, saveDocCursor, copyDocCursor,
+        downloadTitle, saveScriptTitle, copyTitle, downloadCursor, saveDocCursor, copyDocCursor,
+        copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
         setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
@@ -472,6 +485,7 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
     const router = useRouter();
 
     const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
+    const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted script. */
@@ -489,5 +503,5 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         return (path === pathname || (path + "/") === pathname);
     }
 
-    return { path, code, onRoute, name, suffix, link, blob, blobCreated, html, initBlob, checkPath }
+    return { path, code, onRoute, name, suffix, link, blob, blobCreated, fileSize, html, initBlob, checkPath }
 }

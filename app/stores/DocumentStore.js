@@ -337,7 +337,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(browserPdfViewerPresent.value && !customPrint) {
                 printIFrame = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
             } else if(hostedDocuments[currentDocumentRouteNumber].printHtmlCreated.value) {
-                const printHtmlText = hostedDocuments[currentDocumentRouteNumber].printHtml.value;
+                const printHtmlText = await hostedDocuments[currentDocumentRouteNumber].printHtml.value.text();
                 printIFrame = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printHtmlText });
             } else {
                 // Creates the custom HTML and saves it if the print function has not been called before.
@@ -829,12 +829,12 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
 
-    /** @type {import('vue').ShallowRef<String>} This is HTML text used for the custom print functionality to speed up repeated calls. */
-    const printHtml = shallowRef("");
+    /** @type {import('vue').ShallowRef<Blob>} This is HTML text used for the custom print functionality to speed up repeated calls. */
+    const printHtml = shallowRef(null);
 
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
-    const printHtmlCreated = computed(() => { return (printHtml.value.length > 0); });
+    const printHtmlCreated = computed(() => { return (printHtml.value != null); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
@@ -856,7 +856,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         URL.revokeObjectURL(objectUrl.value);
 
         blob.value = null;
-        printHtml.value = "";
+        printHtml.value = null;
         objectUrl.value = "";
 
         metadata.setDefaultValues();
@@ -892,7 +892,9 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * This function sets the Print Blob so that it can be used for the custom print functionality.
      * @param {String} htmlText The HTML code as a string.
      */
-    function setPrintHtml(htmlText = "") { printHtml.value = htmlText; }
+    function setPrintHtml(htmlText = "") {
+        printHtml.value = new Blob([htmlText], { type: "text/html" });
+    }
 
     /**
      * This function checks whether the path associated with this hosted document is equivalent to another given path.
