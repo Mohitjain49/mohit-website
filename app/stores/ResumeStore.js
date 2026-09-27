@@ -34,7 +34,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         } else {
             mountedOnce.value = true;
             const routeQuery = router.currentRoute.value.query;
-            const onMainResumeRoute = documentStore.onMainResumeRoute;
+            const onMainResumeRoute = documentStore.onResumeRoute;
 
             qrcodeAdded.value = (onMainResumeRoute && routeQuery.qrcodeAdded && routeQuery.qrcodeAdded === "true");
             linksRemoved.value = (onMainResumeRoute && routeQuery.linksRemoved && routeQuery.linksRemoved === "true");
@@ -101,7 +101,12 @@ export const useResumeStore = defineStore("resume-store", () => {
 
         const scaleFactor = documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].metadata.pageHeightToWidthRatio;
         documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
-        if(fullScreenSetBeforeReset) { await documentStore.toggleDocumentFullScreen(); }
+
+        // If the full screen was set before changing the resume, this applies it after the document is fully rendered in again.
+        if(fullScreenSetBeforeReset) {
+            await documentStore.awaitDocLoaded();
+            await documentStore.toggleDocumentFullScreen();
+        }
     }
 
     /** This function updates the query based on the resume customization options. */
@@ -117,7 +122,7 @@ export const useResumeStore = defineStore("resume-store", () => {
     /** This function sets a flag that tells if the URL query parameters reflect the state of the resume. */
     function checkQueryOutOfSync() {
         queryOutOfSync.value = false;
-        if(blobCreated.value != 2 || !documentStore.onMainResumeRoute) { return; }
+        if(blobCreated.value != 2 || !documentStore.onResumeRoute) { return; }
 
         const routeQuery = router.currentRoute.value.query;
         if(qrcodeAdded.value !== (routeQuery?.qrcodeAdded === "true")) { queryOutOfSync.value = true; }

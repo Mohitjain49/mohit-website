@@ -39,18 +39,16 @@ const scriptsStore = useScriptsStore();
 
 const fullScreenSet = getFullScreenSet();
 const { width: windowWidth } = useMohitWindowSize();
-const { onDocumentRoute, onMarkdownRoute, currentObservedPage } = storeToRefs(documentStore);
+const { onDocumentRoute, currentObservedPage } = storeToRefs(documentStore);
 
 const widgetPageNumber = ref("1");
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
 
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
-const largeWindowWidth = computed(() => { return (onDocumentRoute.value && !onMarkdownRoute.value && (windowWidth.value > documentStore.customPdfWidth + 150)); });
+const largeWindowWidth = computed(() => { return (onDocumentRoute.value && (windowWidth.value > documentStore.customPdfWidth + 150)); });
 const showMinimizeWidget = computed(() => { return (fullScreenSet.value && (!hfBottomBarVisible.value || largeWindowWidth.value)); });
-const showPageNavigationWidget = computed(() => {
-    return (onDocumentRoute.value && !onMarkdownRoute.value && documentStore.docLoaded.status && (documentStore.docLoaded.totalPages > 1));
-});
+const showPageNavigationWidget = computed(() => { return (onDocumentRoute.value && documentStore.docLoaded.status && (documentStore.docLoaded.totalPages > 1)); });
 
 const onFirstPage = computed(() => { return (currentObservedPage.value <= 1); });
 const onLastPage = computed(() => { return (currentObservedPage.value >= documentStore.docLoaded.totalPages); });

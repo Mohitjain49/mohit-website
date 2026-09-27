@@ -33,7 +33,7 @@ const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
 const router = useRouter();
 
-const { onDocumentRoute, onMarkdownRoute } = storeToRefs(documentStore);
+const { onDocumentRoute } = storeToRefs(documentStore);
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
 const wholeFileInView = useState("whole-hosted-file-in-view", () => { return false; });
 
@@ -44,7 +44,7 @@ const barVisible = useElementVisibility(bottomOptionsBar);
 onMountedAdvanced(() => { hfBottomBarVisible.value = barVisible.value; });
 watch(barVisible, (newValue) => { hfBottomBarVisible.value = newValue; });
 
-const hostedFileClass = computed(() => { return (onDocumentRoute.value ? (onMarkdownRoute.value ? "document-markdown" : "document") : "script"); });
+const hostedFileClass = computed(() => { return (onDocumentRoute.value ? "document" : "script"); });
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
 
@@ -99,15 +99,6 @@ function onWakeLockButtonClick(event) {
     flex-direction: row;
     margin: 10px;
     gap: 5px;
-}
-
-.mohit-hostedFile-bottom.document-markdown {
-    width: calc(100% - 40px);
-    max-width: 1030px;
-    background-color: rgb(28, 28, 28);
-}
-:fullscreen .mohit-hostedFile-bottom.document-markdown {
-    max-width: none;
 }
 
 .mohit-hostedFile-bottom.document {

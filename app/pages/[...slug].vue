@@ -117,8 +117,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/ivue/my-role", "/worldsivue/my-role", "/wiv/my-role"], replacement: "/#ivue" },
     { routes: ["/webpages/**", "/footer/**"], replacement: "/#footer" },
 
-    { routes: ["/documents/resume"], replacement: "/resume/" },
-    { routes: ["/documents/resume/markdown"], replacement: "/resume/markdown" },
+    { routes: ["/documents/resume/**"], replacement: "/resume/" },
     { routes: ["/documents/create-github-repo"], replacement: "/create-github-repo" },
 
     { routes: ["/gamepad/store", "/gamepad/utility", "/scripts/gamepad/**"], replacement: "/gamepad/store-and-utility" },

@@ -6,6 +6,7 @@ To use a custom port, run "npm run serve -- --port {port goes here}"
 
 import http from "node:http";
 import fs from "node:fs";
+import path from "node:path";
 import handler from "serve-handler";
 import readline from "node:readline"
 import { execSync } from 'node:child_process';
@@ -79,25 +80,34 @@ function openUrl(message = "") {
 
 /** This function runs the main JS for the script. */
 function main() {
-    server = http.createServer((request, response) => {
-        return handler(request, response, { public: PUBLIC_DIR });
-    });
+    try {
+        if(!fs.existsSync(path.resolve('.output/public'))) {
+            throw new Error("The Build Output Does Not Exist.");
+        }
 
-    process.on("SIGINT", () => shutdownServer("SIGINT"));
-    process.on("SIGTERM", () => shutdownServer("SIGTERM"));
+        server = http.createServer((request, response) => {
+            return handler(request, response, { public: PUBLIC_DIR });
+        });
 
-    process.stdin.on("keypress", (chunk = "", key) => {
-        if(key.name === "c" && key.ctrl) { shutdownServer("SIGINT"); }
-        if(key.name === "q") { shutdownServer("Q"); }
-        if(key.name === "o") { openUrl(`Opened ${SERVE_URL}`); }
-    });
+        process.on("SIGINT", () => shutdownServer("SIGINT"));
+        process.on("SIGTERM", () => shutdownServer("SIGTERM"));
 
-    server.listen(PORT, () => {
-        serverListening = true;
-        console.log(`Serving ${PUBLIC_DIR}`);
-        console.log(`Server running at ${SERVE_URL}`);
-        if(args.indexOf("--no-open") == -1) { openUrl(); }
-    });
+        process.stdin.on("keypress", (chunk = "", key) => {
+            if(key.name === "c" && key.ctrl) { shutdownServer("SIGINT"); }
+            if(key.name === "q") { shutdownServer("Q"); }
+            if(key.name === "o") { openUrl(`Opened ${SERVE_URL}`); }
+        });
+
+        server.listen(PORT, () => {
+            serverListening = true;
+            console.log(`Serving ${PUBLIC_DIR}`);
+            console.log(`Server running at ${SERVE_URL}`);
+            if(args.indexOf("--no-open") == -1) { openUrl(); }
+        });
+    } catch(e) {
+        console.error(e);
+        process.exit(1);
+    }
 }
 
 // Runs the main function.

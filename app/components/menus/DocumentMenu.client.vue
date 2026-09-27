@@ -10,25 +10,11 @@
 
         <div class="mohit-navMenu-opt-group">
             <template v-if="documentStore.onResumeRoute">
-                <template v-if="documentStore.onMainResumeRoute">
-                    <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-                        <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(RESUME_MENU)" v-pulse-loop>
-                            <font-awesome-icon icon="fa-gears" />
-                            <span> Edit Resume Components </span>
-                        </button>
-                    </div>
-                    <div class="mohit-navMenu-opt light">
-                        <RouterLink to="/resume/markdown/" class="mohit-navMenu-mainOpt" v-pulse-loop>
-                            <font-awesome-icon icon="fa-brands fa-markdown" />
-                            <span> See My Main Resume (Markdown) </span>
-                        </RouterLink>
-                    </div>
-                </template>
-                <div v-else class="mohit-navMenu-opt light">
-                    <RouterLink to="/resume/" class="mohit-navMenu-mainOpt" v-pulse-loop>
-                        <font-awesome-icon icon="fa-file-lines" />
-                        <span> See My Main Resume </span>
-                    </RouterLink>
+                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
+                    <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(RESUME_MENU)" v-pulse-loop>
+                        <font-awesome-icon icon="fa-gears" />
+                        <span> Edit Resume Components </span>
+                    </button>
                 </div>
             </template>
             <template v-else-if="documentStore.onCreateGithubRepoRoute">
