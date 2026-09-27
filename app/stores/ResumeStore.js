@@ -101,7 +101,12 @@ export const useResumeStore = defineStore("resume-store", () => {
 
         const scaleFactor = documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].metadata.pageHeightToWidthRatio;
         documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
-        if(fullScreenSetBeforeReset) { await documentStore.toggleDocumentFullScreen(); }
+
+        // If the full screen was set before changing the resume, this applies it after the document is fully rendered in again.
+        if(fullScreenSetBeforeReset) {
+            await documentStore.awaitDocLoaded();
+            await documentStore.toggleDocumentFullScreen();
+        }
     }
 
     /** This function updates the query based on the resume customization options. */

@@ -643,6 +643,25 @@ export const useDocumentStore = defineStore("document-store", () => {
         window.addEventListener("focus", () => { removePrintIFrame(false); }, { signal: windowFocusAbortController.signal });
     }
 
+    /** This function lets a function wait for when the PDF Document is fully rendered on the webpage before performing its tasks. */
+    async function awaitDocLoaded() {
+        await new Promise(async (resolve, reject) => {
+            if(!onDocumentRoute.value || docLoaded.value.status) { resolve(null); }
+            var msPassed = 0;
+
+            while(msPassed < 10000 && !docLoaded.value.status) {
+                await sleep(50);
+                msPassed += 50
+            }
+
+            if(docLoaded.value.status) {
+                resolve(null);
+            } else {
+                reject(new Error("Timeout Error"));
+            }
+        })
+    }
+
     /** This function sets the full screen for the element containing the document. */
     async function toggleDocumentFullScreen() {
         if(!import.meta.client || !docLoaded.value.status || fsStateChanging.value) { return; }
@@ -700,7 +719,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadCursor, saveDocCursor, shareCursor, printCursor, uploadToGoogleDriveCursor,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
         onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, getPdfAsImages,
+        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, getPdfAsImages, awaitDocLoaded,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, checkPdfjsWorker, getPdfjsStylesheet
     }

@@ -106,13 +106,12 @@ const showFsWebCover = computed(() => {
 onMountedAdvanced(async() => {
     try {
         if(renderAborted()) { return; }
-        styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
-        await renderPDF();
-
         const signal = eventAbortController.signal;
+        window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
+
+        await renderPDF();
         window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
         window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
-        window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -139,6 +138,7 @@ function getPageElement(index = 1) {
 /** This function renders the PDF so it can be displayed. */
 async function renderPDF() {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
     if(renderAborted()) { return; }
 
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
