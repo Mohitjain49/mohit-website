@@ -92,20 +92,24 @@ export const useResumeStore = defineStore("resume-store", () => {
      * @param {Boolean} options.updateQuery If true (which is the default), this will update the URL to show the modifications.
      */
     async function resetBlob(options) {
-        const fullScreenSetBeforeReset = fullScreenSet.value;
-        deleteCurrentBlob();
-        documentStore.unmountDocumentPage();
+        try {
+            const fullScreenSetBeforeReset = fullScreenSet.value;
+            deleteCurrentBlob();
+            documentStore.unmountDocumentPage();
 
-        await sleep(100);
-        await initBlob(options);
+            await sleep(100);
+            await initBlob(options);
 
-        const scaleFactor = documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].metadata.pageHeightToWidthRatio;
-        documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
+            const scaleFactor = documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].metadata.pageHeightToWidthRatio;
+            documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
 
-        // If the full screen was set before changing the resume, this applies it after the document is fully rendered in again.
-        if(fullScreenSetBeforeReset) {
-            await documentStore.awaitDocLoaded();
-            await documentStore.toggleDocumentFullScreen();
+            // If the full screen was set before changing the resume, this applies it after the document is fully rendered in again.
+            if(fullScreenSetBeforeReset) {
+                await documentStore.awaitDocLoaded();
+                await documentStore.toggleDocumentFullScreen();
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
         }
     }
 

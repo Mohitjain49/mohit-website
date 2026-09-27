@@ -232,7 +232,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             const documentFile = getCurrentPDFObject();
             const currentDocumentRouteNumber = currentDocumentRoute.value;
             if(!documentFile || currentDocumentRouteNumber == -1) { throw new Error("Document Does Not Exist."); }
-            removePrintIFrame(true);
+            await removePrintIFrame(true);
 
             if(browserPdfViewerPresent.value && !customPrint) {
                 printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
@@ -256,7 +256,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             } else {
                 // This removes the print IFrame if the user performs an action that aborts the print functionality.
                 cancelTimeout = true;
-                removePrintIFrame(true);
+                await removePrintIFrame(true);
                 setPrintActionNumbers("both", 0);
             }
         } catch(e) {
@@ -594,12 +594,29 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /**
      * This function removes the print iframe from the DOM.
-     * @param {Boolean} bypassChecks If true, this deletes the print iframe without checking if it should not be deleted.
+     * @param {Boolean} bypassChecks If true, this deletes the print iframe without checking if it should not be deleted,
+     *      otherwise it waits for ten seconds for the checks to pass.
      * @returns A boolean indicating whether deleting the iframe was successful or not.
      */
-    function removePrintIFrame(bypassChecks = false) {
+    async function removePrintIFrame(bypassChecks = false) {
         try {
-            if(!bypassChecks && (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0)) { return false; }
+            await new Promise(async (resolve, reject) => {
+                if(bypassChecks) { return resolve("Bypassed"); }
+                if(documentPrintStatus.value <= 0 && documentCustomPrintStatus.value <= 0) { return resolve("Passed"); }
+                var msPassed = 0;
+
+                while(msPassed < 10000 && (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0)) {
+                    await sleep(50);
+                    msPassed += 50;
+                }
+
+                if(documentPrintStatus.value <= 0 && documentCustomPrintStatus.value <= 0) {
+                    return resolve("Passed");
+                } else {
+                    return reject("Checks Not Passed");
+                }
+            })
+
             if(printIframe != null) { document.body.removeChild(printIframe); }
             printIframe = null;
             return true;
