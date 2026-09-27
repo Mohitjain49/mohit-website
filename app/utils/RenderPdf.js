@@ -70,20 +70,35 @@ export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH, us
 /**
  * This function takes a PDF and renders it into an iframe for printing.
  * @param {String} url The URL of the PDF.
+ * @param {AbortSignal} signal A signal to abort rendering the iframe.
  */
-export async function renderCustomPrintIframe(url = "") {
+export async function renderCustomPrintIframe(url = "", signal = null) {
     if(!import.meta.client || !url || url === "") { throw new Error("URL Invalid."); }
+
+    /** @type {HTMLIFrameElement} This is the IFrame where the HTML should be rendered onto. */
+    var printIframe = null;
+
+    /** This returns a boolean determining whether the iframe render was aborted or not. */
+    function renderAborted() {
+        const abortStatus = ((!signal || !(signal instanceof AbortSignal)) ? false : signal.aborted);
+        if(abortStatus && printIframe != null) { printIframe.remove(); }
+        return abortStatus;
+    }
+
+    if(renderAborted()) { return null; }
     const documentStore = useDocumentStore();
     await documentStore.checkPdfjsWorker();
 
+    if(renderAborted()) { return null; }
     const PRINT_IFRAME_ID = "mohit-doc-customPrint";
     const PRINT_IFRAME_PAGE_CLASS = "mohit-doc-customPrint-page";
     const PRINT_IFRAME_PAGE_ID_PREFIX = "mohit-customPrint-page_";
     const LETTER_WIDTH = 816;
 
     /** This is the IFrame where the HTML should be rendered onto. */
-    var printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "none", value: "" });
+    printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "none", value: "" });
 
+    if(renderAborted()) { return null; }
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
     const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
 
@@ -91,10 +106,12 @@ export async function renderCustomPrintIframe(url = "") {
     const imageOutputScale = 2;
     const imageType = "image/png";
 
+    if(renderAborted()) { return null; }
     const pdfLoadingTask = getDocument({ url });
     const pdf = await pdfLoadingTask.promise;
     const numPages = pdf.numPages;
 
+    if(renderAborted()) { return null; }
     const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
     const iframeStyle = printIframeDocument.createElement("style");
     const pdfjsStylesheet = printIframeDocument.createElement("style");
@@ -107,6 +124,7 @@ export async function renderCustomPrintIframe(url = "") {
 
     printIframeDocument.body.appendChild(iframeStyle);
     printIframeDocument.head.appendChild(pdfjsStylesheet);
+    if(renderAborted()) { return null; }
 
     // Creates Containers for each page.
     for(let i = 1; i <= numPages; i++) {
@@ -120,6 +138,7 @@ export async function renderCustomPrintIframe(url = "") {
 
     /** This function renders a single page for print.  */
     async function renderPrintPage(pageNum = 1) {
+        if(renderAborted()) { return; }
         const printPageContainer = printIframeDocument.getElementById(PRINT_IFRAME_PAGE_ID_PREFIX + String(pageNum));
         if(!printPageContainer) { throw new Error("Page Container Not Found."); }
 
@@ -127,6 +146,7 @@ export async function renderCustomPrintIframe(url = "") {
         const defaultViewport = pdfPage.getViewport({ scale: 1 });
         const viewport = pdfPage.getViewport({ scale: (LETTER_WIDTH / defaultViewport.width) });
 
+        if(renderAborted()) { return; }
         printPageContainer.style.setProperty("--mohit-customPrint-pdfjs-raw-width", String(defaultViewport.width));
         printPageContainer.style.setProperty("--mohit-customPrint-pdfjs-raw-height", String(defaultViewport.height));
         printPageContainer.style.setProperty("--min-font-size", 1);
@@ -147,8 +167,9 @@ export async function renderCustomPrintIframe(url = "") {
             canvasContext
         });
 
-        // This renders the PDF and creates an image element out of it.
+        if(renderAborted()) { return; }
         await canvasRenderTask.promise;
+
         const printPageImage = printIframeDocument.createElement("img");
         printPageImage.src = canvasElement.toDataURL(imageType, 1);
 
@@ -156,6 +177,7 @@ export async function renderCustomPrintIframe(url = "") {
         printPageImage.height = imageHeight
         printPageImage.draggable = false;
 
+        if(renderAborted()) { return; }
         printPageContainer.appendChild(printPageImage);
         await new Promise((resolve, reject) => {
             if(printPageImage.complete) {
@@ -166,6 +188,7 @@ export async function renderCustomPrintIframe(url = "") {
             }
         });
 
+        if(renderAborted()) { return; }
         const printPageText = document.createElement("div");
         printPageText.classList.add("textLayer");
         printPageContainer.appendChild(printPageText);
@@ -179,9 +202,9 @@ export async function renderCustomPrintIframe(url = "") {
             viewport: viewport
         });
         
+        if(renderAborted()) { return; }
         await textRenderTask.render();
         const annotations = await pdfPage.getAnnotations({ intent: 'print' });
-        // console.log(annotations);
 
         if(annotations && annotations.length > 0) {
             const printPageAnnotations = document.createElement("div");
@@ -195,10 +218,14 @@ export async function renderCustomPrintIframe(url = "") {
                 linkService: defaultLinkService
             });
 
+            if(renderAborted()) { return; }
             await waitTwoFrames();
             await annotationLayer.render({ annotations });
         }
     }
+
+    // Returns null if the render was aborted.
+    if(renderAborted()) { return null; }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
     const pageRenderPromises = create2dPromiseArray(numPages, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
@@ -212,7 +239,7 @@ export async function renderCustomPrintIframe(url = "") {
         }
     }
 
-    // This runs all the arrays of promises and returns the Array of Images.
+    // This runs all the arrays of promises and returns the print iframe.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-    return printIframe;
+    return (renderAborted() ? null : printIframe);
 }
