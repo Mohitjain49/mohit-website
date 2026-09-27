@@ -74,13 +74,14 @@ export async function renderPdfAsPng(url = "", width = DEFAULT_PDF_MAX_WIDTH, us
  */
 export async function renderCustomPrintIframe(url = "", signal = null) {
     if(!import.meta.client || !url || url === "") { throw new Error("URL Invalid."); }
+    if(!(signal instanceof AbortSignal)) { signal = null; }
 
     /** @type {HTMLIFrameElement} This is the IFrame where the HTML should be rendered onto. */
     var printIframe = null;
 
     /** This returns a boolean determining whether the iframe render was aborted or not. */
     function renderAborted() {
-        const abortStatus = ((!signal || !(signal instanceof AbortSignal)) ? false : signal.aborted);
+        const abortStatus = (!signal ? false : signal.aborted);
         if(abortStatus && printIframe != null) { printIframe.remove(); }
         return abortStatus;
     }
@@ -179,12 +180,36 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
 
         if(renderAborted()) { return; }
         printPageContainer.appendChild(printPageImage);
-        await new Promise((resolve, reject) => {
-            if(printPageImage.complete) {
+
+        // This awaits for the image to load with proper error handling.
+        await new Promise(async (resolve, reject) => {
+            if(printPageImage.complete) { return resolve(); }
+            var msPassed = 0;
+            var resolved = 0;
+
+            printPageImage.onload = () => {
+                resolved = 1;
                 resolve();
-            } else {
-                printPageImage.onload = () => { resolve(); }
-                sleep(7000).then(() => { reject(new Error("Timeout Error")); });
+            }
+            printPageImage.onerror = () => {
+                resolved = 2;
+                if(renderAborted()) {
+                    resolve();
+                } else {
+                    reject(new Error("Error Loading Image"));
+                }
+            }
+
+            while(msPassed < 7000 && resolved == 0 && !renderAborted()) {
+                await sleep(50);
+                msPassed += 50;
+            }
+
+
+            if(resolved == 1 || renderAborted()) {
+                resolve();
+            } else if(resolved == 0) {
+                reject(new Error("Timeout Error"));
             }
         });
 

@@ -9,8 +9,13 @@ import gamepad_store_utility_code from "~/stores/GamepadStore.js?raw";
 import gamepad_component_code from "~/components/GamepadComponent.client.vue?raw";
 import gamepad_events_code from "~/gamepad-events.js?raw";
 
+export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "default", "default"];
 export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban"];
 export const SCRIPT_ACTION_PENDING = 1;
+
+const SCRIPT_DOWNLOAD_ACTION_TITLES = ["Download Script", "Downloading Script...", "Script Downloaded!", "Error While Downloading Script."];
+const SCRIPT_SAVE_ACTION_TITLES = ["Save Script", "Saving Script...", "Script Saved!", "Error While Saving Script."];
+const SCRIPT_COPY_ACTION_TITLES = ["Copy Script", "Copying Script...", "Script Copied!", "Error While Copying Script."];
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
@@ -66,13 +71,13 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         return ((copyInt == 0) ? "fa-copy" : SCRIPT_ACTION_STATUS_ICONS[copyInt]);
     });
 
+    const downloadCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptDownloadStatus.value] }});
+    const saveDocCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptSaveStatus.value] }});
+    const copyDocCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptCopyStatus.value] }});
+
     const downloadPending = computed(() => { return (scriptDownloadStatus.value == SCRIPT_ACTION_PENDING); });
     const savePending = computed(() => { return (scriptSaveStatus.value == SCRIPT_ACTION_PENDING); });
     const copyPending = computed(() => { return (scriptCopyStatus.value == SCRIPT_ACTION_PENDING); });
-
-    const downloadCursor = computed(() => { return { cursor: ((scriptDownloadStatus.value > 0) ? "default" : "") }});
-    const saveDocCursor = computed(() => { return { cursor: ((scriptSaveStatus.value > 0) ? "default" : "") }});
-    const copyDocCursor = computed(() => { return { cursor: ((scriptCopyStatus.value > 0) ? "default" : "") }});
 
     const wrapIcon = computed(() => { return (wrapCode.value ? "fa-align-left" : "fa-arrows-left-right-to-line"); });
     const wrapStatement = computed(() => { return (wrapCode.value ? "Let Code Overflow" : "Wrap Code"); });

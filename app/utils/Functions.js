@@ -131,6 +131,7 @@ export async function createIFrameForPrint(params = { id: "", attribute: "none",
             resolve("IFrame Loaded");
         } else {
             printIFrame.onload = () => { resolve("IFrame Loaded"); }
+            printIFrame.onerror = () => { reject("Error Loading IFrame"); }
             sleep(7000).then(() => { reject(new Error("Timeout Error")); });
         }
     });
