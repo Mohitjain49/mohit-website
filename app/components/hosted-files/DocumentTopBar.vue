@@ -1,25 +1,36 @@
 <template>
 <div ref="document-options" class="mohit-document-topBar">
     <div class="mohit-document-topBar-sideSection">
-        <button class="doc-save-opt" @click="documentStore.downloadDoc()" :style="documentStore.downloadCursor" :title="documentStore.documentDownloadTitle" v-pulse-loop>
+        <button class="doc-save-opt" @click="documentStore.downloadDoc()"
+            :style="documentStore.downloadCursor"
+            :title="documentStore.downloadTitle" v-pulse-loop>
+
             <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
         </button>
-        <button class="doc-save-opt" v-if="webData.saveAsSupported" @click="documentStore.saveDoc()" :style="documentStore.saveDocCursor" title="Save Document" v-pulse-loop>
+        <button class="doc-save-opt" v-if="webData.saveAsSupported"
+            @click="documentStore.saveDoc()"
+            :style="documentStore.saveDocCursor"
+            :title="documentStore.saveDocTitle" v-pulse-loop>
+
             <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
         </button>
-        <button class="doc-save-opt" v-if="webData.shareSupported" @click="documentStore.shareDoc()" :style="documentStore.shareCursor" title="Share Document" v-pulse-loop>
+        <button class="doc-save-opt" v-if="webData.shareSupported"
+            @click="documentStore.shareDoc()"
+            :style="documentStore.shareCursor"
+            :title="documentStore.shareTitle" v-pulse-loop>
+
             <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
         </button>
 
         <button class="doc-save-opt" v-if="iframeSupported"
-            @click="documentStore.printDoc(true)"
-            :style="documentStore.printCursor"
+            @click="documentStore.callCustomPrint()"
+            :style="documentStore.customPrintCursor"
             :title="documentStore.customPrintTitle" v-pulse-loop>
 
             <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
         </button>
-        <button v-if="(iframeSupported && documentStore.browserPdfViewerPresent)"
-            class="doc-save-opt" title="Print Document (Browser)"
+        <button class="doc-save-opt" v-if="(iframeSupported && documentStore.browserPdfViewerPresent)"
+            :title="documentStore.printTitle"
             @click="documentStore.printDoc(false)"
             :style="documentStore.printCursor" v-pulse-loop>
 

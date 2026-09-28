@@ -16,6 +16,13 @@ const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
 const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
+const DOCUMENT_DOWNLOAD_ACTION_TITLES = ["Download Document", "Downloading Document...", "Document Downloaded!", "Error While Downloading Document."];
+const DOCUMENT_SAVE_ACTION_TITLES = ["Save Document", "Saving Document...", "Document Saved!", "Error While Saving Document."];
+const DOCUMENT_SHARE_ACTION_TITLES = ["Share Document", "Sharing Document...", "Document Shared!", "Error While Sharing Document."];
+const DOCUMENT_PRINT_ACTION_TITLES = ["Print Document", "Printing Document...", "Document Printed!", "Error While Printing Document."];
+const DOCUMENT_CUSTOM_PRINT_CANCEL_TITLE = "Printing Document. Click Here To Cancel."
+
+export const DOCUMENT_ACTION_CURSORS = ["", "wait", "default", "default", "default"];
 export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const DOCUMENT_ACTION_PENDING = 1;
 export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
@@ -86,8 +93,11 @@ export const useDocumentStore = defineStore("document-store", () => {
     const customPdfScaleFactor = ref(1.295);
 
     /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing a document. */
-    var printIframe = null;
+    var printIFrame = null;
     var chooseGoogleDriveFolderForUpload = false;
+
+    /** @type {AbortController} This abort controller manages aborting the render print IFrame task when necessary. */
+    var renderIFrameController = null;
 
     const documentDownloadStatus = ref(0);
     const documentSaveStatus = ref(0);
@@ -104,15 +114,38 @@ export const useDocumentStore = defineStore("document-store", () => {
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
     const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
     const currentDocumentFileSize = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].fileSize.value : ""); });
+    const currentDocumentPrintHtmlCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].printHtmlCreated.value : false); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
-
-    const customPrintTitle = computed(() => { return (browserPdfViewerPresent.value ? "Print Document (Standard)" : "Print Document"); });
-    const documentDownloadTitle = computed(() => { return ("Download Document (" + currentDocumentFileSize.value + ")"); });
     const showPdfPageNav = computed(() => { return (docLoaded.value.status && (docLoaded.value.totalPages > 1) && (docImageUrls.value.length > 0)); });
+
+    const downloadTitle = computed(() => {
+        const downloadInt = documentDownloadStatus.value;
+        return (DOCUMENT_DOWNLOAD_ACTION_TITLES[downloadInt] + ((downloadInt == 0) ? (" (" + currentDocumentFileSize.value + ")") : ""));
+    });
+    const saveDocTitle = computed(() => {
+        const saveInt = documentSaveStatus.value;
+        return (DOCUMENT_SAVE_ACTION_TITLES[saveInt] + ((saveInt == 0) ? (" (" + currentDocumentFileSize.value + ")") : ""));
+    });
+    const shareTitle = computed(() => {
+        const shareInt = documentShareStatus.value;
+        return (DOCUMENT_SHARE_ACTION_TITLES[shareInt] + ((shareInt == 0) ? (" (" + currentDocumentFileSize.value + ")") : ""));
+    });
+    const printTitle = computed(() => {
+        const printInt = documentPrintStatus.value;
+        return (DOCUMENT_PRINT_ACTION_TITLES[printInt] + ((printInt == 0) ? (" (Browser)") : ""));
+    });
+    const customPrintTitle = computed(() => {
+        const customPrintInt = documentCustomPrintStatus.value;
+        const customPrintAvailable = (customPrintInt == 0);
+
+        const defaultTitleEnd = ((browserPdfViewerPresent.value && customPrintAvailable) ? (" (Standard)") : "");
+        const progressTitleEnd = ((!currentDocumentPrintHtmlCreated.value && customPrintInt == 1) ? DOCUMENT_CUSTOM_PRINT_CANCEL_TITLE : "");
+        return ((progressTitleEnd.length > 0) ? progressTitleEnd : (DOCUMENT_PRINT_ACTION_TITLES[customPrintInt] + defaultTitleEnd));
+    });
 
     const downloadIcon = computed(() => {
         const downloadInt = documentDownloadStatus.value;
@@ -122,6 +155,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         const saveInt = documentSaveStatus.value;
         return ((saveInt == 0) ? 'fa-floppy-disk' : DOCUMENT_ACTION_STATUS_ICONS[saveInt]);
     });
+    const shareIcon = computed(() => {
+        const shareInt = documentShareStatus.value;
+        return ((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]);
+    });
     const printIcon = computed(() => {
         const printInt = documentPrintStatus.value;
         return ((printInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[printInt]);
@@ -130,16 +167,21 @@ export const useDocumentStore = defineStore("document-store", () => {
         const customPrintInt = documentCustomPrintStatus.value;
         return ((customPrintInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[customPrintInt]);
     });
-    const shareIcon = computed(() => {
-        const shareInt = documentShareStatus.value;
-        return ((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]);
-    });
     const uploadToGoogleDriveIcon = computed(() => {
+        if(uploadToGoogleDrivePending.value) { return DOCUMENT_ACTION_STATUS_ICONS[DOCUMENT_ACTION_PENDING]; }
         const uploadInt = documentUploadToGoogleDriveStatus.value;
-        const uploadPending = uploadToGoogleDrivePending.value;
-        
-        if(uploadPending) { return DOCUMENT_ACTION_STATUS_ICONS[DOCUMENT_ACTION_PENDING]; }
         return ((uploadInt == 0) ? "fa-brands fa-google-drive" : DOCUMENT_ACTION_STATUS_ICONS[uploadInt]);
+    });
+
+
+    const downloadCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentDownloadStatus.value] }});
+    const saveDocCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentSaveStatus.value] }});
+    const shareCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentShareStatus.value] }});
+
+    const printCursor = computed(() => { return { cursor: (anyPrintPending.value ? "wait" : (anyPrintUnavailable.value ? "default" : "")) }});
+    const customPrintCursor = computed(() => {
+        const waitCursor = (currentDocumentPrintHtmlCreated.value ? "wait" : "progress");
+        return { cursor: (anyPrintPending.value ? waitCursor : (anyPrintUnavailable.value ? "default" : "")) }
     });
 
     const downloadPending = computed(() => { return (documentDownloadStatus.value == DOCUMENT_ACTION_PENDING); });
@@ -148,17 +190,15 @@ export const useDocumentStore = defineStore("document-store", () => {
     const customPrintPending = computed(() => { return (documentCustomPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
 
-    const printCursor = computed(() => { return { cursor: ((documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0) ? "default" : "") }});
-    const downloadCursor = computed(() => { return { cursor: ((documentDownloadStatus.value > 0) ? "default" : "") }});
-    const saveDocCursor = computed(() => { return { cursor: ((documentSaveStatus.value > 0) ? "default" : "") }});
-    const shareCursor = computed(() => { return { cursor: ((documentShareStatus.value > 0) ? "default" : "") }});
-
     const uploadToGoogleDrivePending = computed(() => {
         return (documentUploadToGoogleDriveStatus.value == DOCUMENT_ACTION_PENDING || googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
     });
     const uploadToGoogleDriveCursor = computed(() => {
         return { cursor: ((documentUploadToGoogleDriveStatus.value > 0 || googleDriveOptAvailable.value > 0) ? "default" : "") }
     });
+
+    const anyPrintPending = computed(() => { return (printPending.value || customPrintPending.value); });
+    const anyPrintUnavailable = computed(() => { return (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0); });
 
     /**
      * ---------------------------------------------------------------------------
@@ -213,57 +253,6 @@ export const useDocumentStore = defineStore("document-store", () => {
             documentSaveStatus.value = 3;
         } finally {
             setTimeout(() => { documentSaveStatus.value = 0; }, 3000);
-        }
-    }
-
-    /**
-     * This function opens the browser's print popup so the user can print a document.
-     * @param {Boolean} customPrint If true, this function forces the website to render the PDF into images instead of using the PDF Viewer.
-     */
-    async function printDoc(customPrint = false) {
-        if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
-        const printActionString = (!browserPdfViewerPresent.value ? "both" : (customPrint ? "custom" : "standard"));
-        var cancelTimeout = false;
-
-        // Sets the specified print action to "Pending".
-        setPrintActionNumbers(printActionString, 1);
-
-        try {
-            const documentFile = getCurrentPDFObject();
-            const currentDocumentRouteNumber = currentDocumentRoute.value;
-            if(!documentFile || currentDocumentRouteNumber == -1) { throw new Error("Document Does Not Exist."); }
-            removePrintIFrame(true);
-
-            if(browserPdfViewerPresent.value && !customPrint) {
-                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
-            } else if(hostedDocuments[currentDocumentRouteNumber].printHtmlCreated.value) {
-                const printHtmlText = hostedDocuments[currentDocumentRouteNumber].printHtml.value;
-                printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printHtmlText });
-            } else {
-                // Creates the custom HTML and saves it if the print function has not been called before.
-                printIframe = await renderCustomPrintIframe(documentFile.url);
-                const printIFrameDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
-                const serializedHtml = printIFrameDocument.documentElement.outerHTML;
-                hostedDocuments[currentDocumentRouteNumber].setPrintHtml(serializedHtml);
-            }
-
-            if(currentDocumentRouteNumber == currentDocumentRoute.value && !webData.showSharePopupImmediate) {
-                // This triggers the print function at the end to open the popup.
-                const printIframeWin = printIframe.contentWindow;
-                printIframeWin.focus();
-                printIframeWin.print();
-                setPrintActionNumbers(printActionString, 2);
-            } else {
-                // This removes the print IFrame if the user performs an action that aborts the print functionality.
-                cancelTimeout = true;
-                removePrintIFrame(true);
-                setPrintActionNumbers("both", 0);
-            }
-        } catch(e) {
-            if(import.meta.dev) { console.error(e); }
-            setPrintActionNumbers(printActionString, ((e.message === "Timeout Error") ? 4 : 3));
-        } finally {
-            if(!cancelTimeout) { setTimeout(() => { setPrintActionNumbers("both", 0); }, 3000); }
         }
     }
 
@@ -322,6 +311,76 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * ---------------------------------------------------------------------------------
+     * These functions are made for letting users print a hosted document on my website.
+     * ---------------------------------------------------------------------------------
+     */
+
+    /**
+     * This function opens the browser's print popup so the user can print a document.
+     * @param {Boolean} customPrint If true, this function forces the website to render the PDF into images instead of using the PDF Viewer.
+     */
+    async function printDoc(customPrint = false) {
+        if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
+        const printActionString = (!browserPdfViewerPresent.value ? "both" : (customPrint ? "custom" : "standard"));
+        var cancelTimeout = false;
+
+        // Sets the specified print action to "Pending".
+        setPrintActionNumbers(printActionString, 1);
+
+        try {
+            const documentFile = getCurrentPDFObject();
+            const currentDocumentRouteNumber = currentDocumentRoute.value;
+            if(!documentFile || currentDocumentRouteNumber == -1) { throw new Error("Document Does Not Exist."); }
+            await removePrintIFrame(true);
+
+            if(browserPdfViewerPresent.value && !customPrint) {
+                printIFrame = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "src", value: documentFile.url });
+            } else if(hostedDocuments[currentDocumentRouteNumber].printHtmlCreated.value) {
+                const printHtmlText = await hostedDocuments[currentDocumentRouteNumber].printHtml.value.text();
+                printIFrame = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printHtmlText });
+            } else {
+                // Creates the custom HTML and saves it if the print function has not been called before.
+                setRenderIFrameController(true);
+                printIFrame = await renderCustomPrintIframe(documentFile.url, renderIFrameController.signal);
+
+                if(printIFrame != null) {
+                    const printIFrameDocument = (printIFrame.contentDocument || printIFrame.contentWindow.document);
+                    hostedDocuments[currentDocumentRouteNumber].setPrintHtml(printIFrameDocument.documentElement.outerHTML);
+                    setRenderIFrameController(false);
+                }
+            }
+
+            if((printIFrame != null) && (currentDocumentRouteNumber == currentDocumentRoute.value) && !webData.showSharePopupImmediate) {
+                // This triggers the print function at the end to open the popup.
+                const printIFrameWin = printIFrame.contentWindow;
+                printIFrameWin.focus();
+                printIFrameWin.print();
+                setPrintActionNumbers(printActionString, 2);
+            } else {
+                // This removes the print IFrame if the user performs an action that aborts the print functionality.
+                cancelTimeout = true;
+                await removePrintIFrame(true);
+                setPrintActionNumbers("both", 0);
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            setPrintActionNumbers(printActionString, ((e.message === "Timeout Error") ? 4 : 3));
+        } finally {
+            if(!cancelTimeout) { setTimeout(() => { setPrintActionNumbers("both", 0); }, 3000); }
+        }
+    }
+
+    /** This function manages when the user clicks on the "Custom Print" Action. */
+    async function callCustomPrint() {
+        if(customPrintPending.value && !currentDocumentPrintHtmlCreated.value) {
+            try { setRenderIFrameController(false); } catch(e) {}
+        } else {
+            await printDoc(true);
+        }
+    }
+
+    /**
      * This helper function sets the print action numbers.
      * @param {"both" | "custom" | "standard" | "none"} type The Print Action type to set.
      * @param {Number} value The value to give the specified print action.
@@ -337,6 +396,50 @@ export const useDocumentStore = defineStore("document-store", () => {
             documentCustomPrintStatus.value = value;
         } else if(type === "standard") {
             documentPrintStatus.value = value;
+        }
+    }
+
+    /**
+     * This function sets a new status for the render IFrame controller.
+     * @param {Boolean} status The new status of the Abort Controller.
+     */
+    function setRenderIFrameController(status = false) {
+        if(!import.meta.client) { return; }
+        if(renderIFrameController != null) { renderIFrameController.abort(); }
+        renderIFrameController = (status ? new AbortController() : null);
+    }
+
+    /**
+     * This function removes the print iframe from the DOM.
+     * @param {Boolean} bypassChecks If true, this deletes the print iframe without checking if it should not be deleted,
+     *      otherwise it waits for ten seconds for the checks to pass.
+     * @returns A boolean indicating whether deleting the iframe was successful or not.
+     */
+    async function removePrintIFrame(bypassChecks = false) {
+        try {
+            await new Promise(async (resolve, reject) => {
+                if(bypassChecks) { return resolve("Bypassed"); }
+                if(!anyPrintUnavailable.value) { return resolve("Passed"); }
+                var msPassed = 0;
+
+                while(msPassed < 10000 && anyPrintUnavailable.value) {
+                    await sleep(50);
+                    msPassed += 50;
+                }
+
+                if(!anyPrintUnavailable.value) {
+                    return resolve("Passed");
+                } else {
+                    return reject("Checks Not Passed");
+                }
+            });
+
+            if(printIFrame != null) { document.body.removeChild(printIFrame); }
+            printIFrame = null;
+            return true;
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+            return false;
         }
     }
 
@@ -490,7 +593,6 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function mounts a page that hosts a document. */
     async function mountDocumentPage() {
-        await nextTick();
         if(onResumeRoute.value) {
             await resumeStore.initBlob({ addQrcode: false, removeLinks: false, updateQuery: false });
         } else if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
@@ -511,6 +613,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
 
         setWindowSizeWatchers(false, false);
+        setRenderIFrameController(false);
         removePrintIFrame(true);
     }
 
@@ -590,23 +693,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(!document || !document.documentElement) { return; }
         document.documentElement.style.setProperty(PDF_WIDTH_CSS_PROPERTY, (String(customPdfWidth.value) + "px"));
         document.documentElement.style.setProperty(PDF_HEIGHT_CSS_PROPERTY, (String(customPdfHeight.value) + "px"));
-    }
-
-    /**
-     * This function removes the print iframe from the DOM.
-     * @param {Boolean} bypassChecks If true, this deletes the print iframe without checking if it should not be deleted.
-     * @returns A boolean indicating whether deleting the iframe was successful or not.
-     */
-    function removePrintIFrame(bypassChecks = false) {
-        try {
-            if(!bypassChecks && (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0)) { return false; }
-            if(printIframe != null) { document.body.removeChild(printIframe); }
-            printIframe = null;
-            return true;
-        } catch(e) {
-            if(import.meta.dev) { console.error(e); }
-            return false;
-        }
     }
 
     /**
@@ -713,13 +799,13 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     return { hostedDocuments, docImageUrls, docLoaded, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
-        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, documentDownloadTitle, customPrintTitle,
+        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle,
         downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,
-        downloadCursor, saveDocCursor, shareCursor, printCursor, uploadToGoogleDriveCursor,
+        downloadCursor, saveDocCursor, shareCursor, printCursor, customPrintCursor, uploadToGoogleDriveCursor,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
         onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, printDoc, shareDoc, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, getPdfAsImages, awaitDocLoaded,
+        downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, getPdfAsImages, awaitDocLoaded,
         toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, initGoogleTokenClient, initGooglePickerAPI,
         mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage, checkPdfjsWorker, getPdfjsStylesheet
     }
@@ -743,12 +829,12 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
 
-    /** @type {import('vue').ShallowRef<String>} This is HTML text used for the custom print functionality to speed up repeated calls. */
-    const printHtml = shallowRef("");
+    /** @type {import('vue').ShallowRef<Blob>} This is HTML text used for the custom print functionality to speed up repeated calls. */
+    const printHtml = shallowRef(null);
 
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
-    const printHtmlCreated = computed(() => { return (printHtml.value.length > 0); });
+    const printHtmlCreated = computed(() => { return (printHtml.value != null); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
@@ -770,7 +856,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         URL.revokeObjectURL(objectUrl.value);
 
         blob.value = null;
-        printHtml.value = "";
+        printHtml.value = null;
         objectUrl.value = "";
 
         metadata.setDefaultValues();
@@ -806,7 +892,9 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * This function sets the Print Blob so that it can be used for the custom print functionality.
      * @param {String} htmlText The HTML code as a string.
      */
-    function setPrintHtml(htmlText = "") { printHtml.value = htmlText; }
+    function setPrintHtml(htmlText = "") {
+        printHtml.value = new Blob([htmlText], { type: "text/html" });
+    }
 
     /**
      * This function checks whether the path associated with this hosted document is equivalent to another given path.

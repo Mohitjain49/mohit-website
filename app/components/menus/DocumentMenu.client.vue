@@ -38,32 +38,44 @@
             <div class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()"
                     :style="documentStore.downloadCursor"
-                    :title="documentStore.documentDownloadTitle" v-pulse-loop>
+                    :title="documentStore.downloadTitle" v-pulse-loop>
 
                     <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
                     <span> Download Document </span>
                 </button>
             </div>
             <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()" :style="documentStore.saveDocCursor" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()"
+                    :title="documentStore.saveDocTitle"
+                    :style="documentStore.saveDocCursor" v-pulse-loop>
+
                     <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
                     <span> Save Document </span>
                 </button>
             </div>
             <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()" :style="documentStore.shareCursor" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()"
+                    :title="documentStore.shareTitle"
+                    :style="documentStore.shareCursor" v-pulse-loop>
+
                     <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
                     <span> Share Document </span>
                 </button>
             </div>
             <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(true)" :style="documentStore.printCursor" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.callCustomPrint()"
+                    :title="documentStore.customPrintTitle"
+                    :style="documentStore.customPrintCursor" v-pulse-loop>
+
                     <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
-                    <span> {{ documentStore.customPrintTitle }} </span>
+                    <span> {{ (documentStore.browserPdfViewerPresent ? 'Print Document (Standard)' : 'Print Document') }} </span>
                 </button>
             </div>
             <div v-if="(documentStore.iframeSupported && documentStore.browserPdfViewerPresent)" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)" :style="documentStore.printCursor" v-pulse-loop>
+                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)"
+                    :title="documentStore.printTitle"
+                    :style="documentStore.printCursor" v-pulse-loop>
+
                     <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
                     <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
                     <span> Print Document (Browser) </span>

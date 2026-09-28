@@ -114,12 +114,15 @@ export async function createIFrameForPrint(params = { id: "", attribute: "none",
     if(params.id !== "") {
         printIFrame.id = params.id;
         printIFrame.classList.add(params.id);
+        await waitTwoFrames();
     }
 
     if(params.attribute === "src") {
         printIFrame.src = params.value;
+        await waitTwoFrames();
     } else if(params.attribute === "srcdoc") {
         printIFrame.srcdoc = params.value;
+        await waitTwoFrames();
     }
 
     // This waits for the IFrame to be loaded in before giving it to the print action.
@@ -131,6 +134,7 @@ export async function createIFrameForPrint(params = { id: "", attribute: "none",
             resolve("IFrame Loaded");
         } else {
             printIFrame.onload = () => { resolve("IFrame Loaded"); }
+            printIFrame.onerror = () => { reject("Error Loading IFrame"); }
             sleep(7000).then(() => { reject(new Error("Timeout Error")); });
         }
     });
