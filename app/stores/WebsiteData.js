@@ -38,6 +38,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const mounted = ref(0);
     const menuOpen = ref(-1);
     const previousMenuOpen = ref(-1);
+    const wakeLockChanging = ref(false);
 
     const openShareOnMount = ref(true);
     const navFooterPresent = ref(false);
@@ -357,21 +358,25 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /** This function toggles the wake lock for the website. */
     async function toggleWakeLock() {
-        if(!wakeLock.isSupported.value) { return; }
-        if(wakeLock.isActive.value) {
-            await wakeLock.release();
-        } else {
-            try {
+        if(!wakeLock.isSupported.value || wakeLockChanging.value) { return; }
+        wakeLockChanging.value = true;
+
+        try {
+            if(wakeLock.isActive.value) {
+                await wakeLock.release();
+            } else {
                 await wakeLock.request("screen");
-            } catch(e) {
-                console.error(e);
-            }
+            } 
+        } catch(e) {
+            console.error(e);
+        } finally {
+            wakeLockChanging.value = false;
         }
     }
 
     /** This function sets whether "Save As" buttons are supported in their browser or not. */
     function setSaveAsSupported() {
-        const newStatus = (window.isSecureContext && typeof window.showSaveFilePicker === 'function');
+        const newStatus = (Boolean(window.isSecureContext) && typeof window.showSaveFilePicker === 'function');
         if(saveAsSupported.value !== newStatus) { saveAsSupported.value = newStatus; }
     }
 

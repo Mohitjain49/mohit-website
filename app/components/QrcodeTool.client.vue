@@ -124,6 +124,14 @@ import isMailtoURI from 'validator/es/lib/isMailtoURI';
 const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban', 'fa-hourglass-end'];
 const IMAGE_STATUS = ['png', 'svg'];
 
+/** @type {Array<FilePickerAcceptType>} These are all the types in which a file can be saved. */
+const SAVE_FILE_OPTIONS = [
+    { description: "PNG Image", accept: { 'image/png': ['.png'] }},
+    { description: "JPEG Image", accept: { 'image/jpeg': ['.jpg', '.jpeg'] }},
+    { description: "WebP Image", accept: { 'image/webp': ['.webp'] }},
+    { description: "SVG Image", accept: { 'image/svg+xml': ['.svg'] }},
+]
+
 const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
 const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
 const SHARE_POPUP_MIN_VIEWPORT_EDGE = 675;
@@ -538,16 +546,31 @@ function shareQRCode() {
 
 /** This function saves the actual QR Code image. */
 async function saveQRCode() {
-    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrCodeBlob.value) { return; }
+    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrcode.value || !qrCodeBlob.value) { return; }
     actions.value.saveImage = 1;
 
     try {
-        const blob = qrCodeBlob.value;
         const saveHandle = await window.showSaveFilePicker({
             suggestedName: getImageFilename(),
-            types: [{ description: "QR Code", accept: { [blob.type]: ['.' + qrcodeImageSuffix.value] }}]
+            types: SAVE_FILE_OPTIONS
         });
 
+        const saveHandleName = saveHandle.name;
+        const currentBlobImageType = ('.' + qrcodeImageSuffix.value);
+        var blob = qrCodeBlob.value;
+
+        if(saveHandleName.endsWith(currentBlobImageType)) {
+            blob = qrCodeBlob.value;
+        } else if(saveHandleName.endsWith('.svg')) {
+            blob = await qrcode.value.getRawData("svg");
+        } else if(saveHandleName.endsWith('.webp')) {
+            blob = await qrcode.value.getRawData("webp");
+        } else if(saveHandleName.endsWith('.jpg') || saveHandleName.endsWith('.jpeg')) {
+            blob = await qrcode.value.getRawData("jpeg");
+        } else {
+            blob = await qrcode.value.getRawData("png");
+        }
+        
         const writable = await saveHandle.createWritable();
         await writable.write(blob);
         await writable.close();
