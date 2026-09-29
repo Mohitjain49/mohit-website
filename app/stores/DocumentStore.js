@@ -22,7 +22,7 @@ const DOCUMENT_SHARE_ACTION_TITLES = ["Share Document", "Sharing Document...", "
 const DOCUMENT_PRINT_ACTION_TITLES = ["Print Document", "Printing Document...", "Document Printed!", "Error While Printing Document."];
 const DOCUMENT_CUSTOM_PRINT_CANCEL_TITLE = "Printing Document. Click Here To Cancel."
 
-export const DOCUMENT_ACTION_CURSORS = ["", "wait", "default", "default", "default"];
+export const DOCUMENT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed"];
 export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const DOCUMENT_ACTION_PENDING = 1;
 export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
