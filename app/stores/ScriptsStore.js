@@ -10,8 +10,8 @@ import gamepad_component_code from "~/components/GamepadComponent.client.vue?raw
 import gamepad_events_code from "~/gamepad-events.js?raw";
 
 import prettyBytes from "pretty-bytes";
-export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "default", "default"];
-export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban"];
+export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed"];
+export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
 export const SCRIPT_ACTION_PENDING = 1;
 
 const SCRIPT_DOWNLOAD_ACTION_TITLES = ["Download Code Script", "Downloading Code Script...", "Code Script Downloaded!", "Error While Downloading Code Script."];

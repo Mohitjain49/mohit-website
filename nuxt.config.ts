@@ -18,6 +18,11 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/gamepad/store-and-utility", "/gamepad/vuejs-component", "/gamepad/custom-events",
 ];
 
+const TS_TYPES = [
+    'unplugin-info/client', '@types/node', '@types/validator', '@types/lodash-es',
+    '@types/google.picker', '@types/wicg-file-system-access'
+];
+
 /** This function prevents any auto-scrolling before the website's internal JS can kick in. */
 const NO_SCROLL_FUNCTION = "if(\'scrollRestoration\' in history) { history.scrollRestoration = \'manual\'; }";
 
@@ -153,7 +158,5 @@ export default defineNuxtConfig({
     },
 
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },
-    typescript: { tsConfig: { compilerOptions: { types:
-        ['unplugin-info/client', '@types/node', '@types/validator', '@types/lodash-es', '@types/google.picker']
-    }}}
+    typescript: { tsConfig: { compilerOptions: { types: TS_TYPES }}}
 });

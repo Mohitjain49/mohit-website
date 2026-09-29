@@ -70,16 +70,16 @@
                         <button v-if="webData.shareSupported" @click="shareQRCode()" :style="shareImageCursor" class="qrcode-mainPopup-btn yellow" title="Share QR Code">
                             <FontAwesomeIcon :icon="shareImageIcon" :spin-pulse="(actions.shareImage == 1)" />
                         </button>
-                        <button @click="downloadQRCode()" :style="downloadImageCursor" class="qrcode-mainPopup-btn yellow" title="Download QR Code.">
+                        <button @click="downloadQRCode()" :style="downloadImageCursor" class="qrcode-mainPopup-btn yellow" title="Download QR Code">
                             <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
                         </button>
-                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" :style="saveImageCursor" class="qrcode-mainPopup-btn yellow" title="Save QR Code.">
+                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" :style="saveImageCursor" class="qrcode-mainPopup-btn yellow" title="Save QR Code">
                             <FontAwesomeIcon :icon="saveImageIcon" :spin-pulse="(actions.saveImage == 1)" />
                         </button>
-                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" :style="copyImageCursor" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image.">
+                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" :style="copyImageCursor" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
                         </button>
-                        <button v-if="iframeSupported" @click="printQRCode()" :style="printImageCursor" class="qrcode-mainPopup-btn yellow" title="Print QR Code.">
+                        <button v-if="iframeSupported" @click="printQRCode()" :style="printImageCursor" class="qrcode-mainPopup-btn yellow" title="Print QR Code">
                             <FontAwesomeIcon :icon="printImageIcon" :spin-pulse="(actions.printImage == 1)" />
                         </button>
                         <a v-if="qrcodeUrlCreated" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
@@ -121,8 +121,17 @@ import Lenis from 'lenis';
 import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
+const STATUS_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed"];
 const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban', 'fa-hourglass-end'];
 const IMAGE_STATUS = ['png', 'svg'];
+
+/** @type {Array<FilePickerAcceptType>} These are all the types in which a file can be saved. */
+const SAVE_FILE_OPTIONS = [
+    { description: "PNG Image", accept: { 'image/png': ['.png'] }},
+    { description: "JPEG Image", accept: { 'image/jpeg': ['.jpg', '.jpeg'] }},
+    { description: "WebP Image", accept: { 'image/webp': ['.webp'] }},
+    { description: "SVG Image", accept: { 'image/svg+xml': ['.svg'] }},
+]
 
 const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
 const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
@@ -218,13 +227,13 @@ const copyImageIcon = computed(() => { return ((actions.value.copyImage == 0) ? 
 const printImageIcon = computed(() => { return ((actions.value.printImage == 0) ? 'fa-print' : STATUS_ICONS[actions.value.printImage]); });
 const saveImageIcon = computed(() => { return ((actions.value.saveImage == 0) ? 'fa-floppy-disk' : STATUS_ICONS[actions.value.saveImage]); });
 
-const copyLinkCursor = computed (() => { return { cursor: ((actions.value.copy > 0) ? 'default' : '') }});
-const shareLinkCursor = computed (() => { return { cursor: ((actions.value.share > 0) ? 'default' : '') }});
-const shareImageCursor = computed (() => { return { cursor: ((actions.value.shareImage > 0) ? 'default' : '') }});
-const downloadImageCursor = computed (() => { return { cursor: ((actions.value.downloadImage > 0) ? 'default' : '') }});
-const copyImageCursor = computed (() => { return { cursor: ((actions.value.copyImage > 0) ? 'default' : '') }});
-const printImageCursor = computed (() => { return { cursor: ((actions.value.printImage > 0) ? 'default' : '') }});
-const saveImageCursor = computed (() => { return { cursor: ((actions.value.saveImage > 0) ? 'default' : '') }});
+const copyLinkCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.copy] }});
+const shareLinkCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.share] }});
+const shareImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.shareImage] }});
+const downloadImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.downloadImage] }});
+const copyImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.copyImage] }});
+const printImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.printImage] }});
+const saveImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.saveImage] }});
 
 // This mounts the share popup and all of its functionality.
 onMounted(async() => {
@@ -277,7 +286,7 @@ async function setQRCodeLink() {
     const data = qrdata.value;
     const route = router.currentRoute.value;
     if(!data) { return; }
-    // await sleep(50000); For testing purposes if the waiting screen needs to be edited.
+    // await sleep(50000); // For testing purposes if the waiting screen needs to be edited.
 
     if(data === "main") {
         const linkUrl = getParsedUrl();
@@ -538,16 +547,31 @@ function shareQRCode() {
 
 /** This function saves the actual QR Code image. */
 async function saveQRCode() {
-    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrCodeBlob.value) { return; }
+    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrcode.value || !qrCodeBlob.value) { return; }
     actions.value.saveImage = 1;
 
     try {
-        const blob = qrCodeBlob.value;
         const saveHandle = await window.showSaveFilePicker({
             suggestedName: getImageFilename(),
-            types: [{ description: "QR Code", accept: { [blob.type]: ['.' + qrcodeImageSuffix.value] }}]
+            types: SAVE_FILE_OPTIONS
         });
 
+        const saveHandleName = saveHandle.name;
+        const currentBlobImageType = ('.' + qrcodeImageSuffix.value);
+        var blob = qrCodeBlob.value;
+
+        if(saveHandleName.endsWith(currentBlobImageType)) {
+            blob = qrCodeBlob.value;
+        } else if(saveHandleName.endsWith('.svg')) {
+            blob = await qrcode.value.getRawData("svg");
+        } else if(saveHandleName.endsWith('.webp')) {
+            blob = await qrcode.value.getRawData("webp");
+        } else if(saveHandleName.endsWith('.jpg') || saveHandleName.endsWith('.jpeg')) {
+            blob = await qrcode.value.getRawData("jpeg");
+        } else {
+            blob = await qrcode.value.getRawData("png");
+        }
+        
         const writable = await saveHandle.createWritable();
         await writable.write(blob);
         await writable.close();
@@ -782,6 +806,7 @@ function getParsedUrl() {
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
 }
 
 #mohit-qrcode canvas, #mohit-qrcode svg {
