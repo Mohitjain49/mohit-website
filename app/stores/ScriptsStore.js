@@ -241,7 +241,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
 
-                if(webData.saveAsSupported && event.shiftKey) {
+                if(webData.saveAsSupported && (event.shiftKey || event.altKey)) {
                     saveScript();
                 } else {
                     downloadScript();

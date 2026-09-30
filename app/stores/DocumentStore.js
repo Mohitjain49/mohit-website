@@ -30,7 +30,6 @@ export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
 export const DEFAULT_PDF_MAX_WIDTH = 850;
 export const DEFAULT_PDF_MIN_WIDTH = 320;
 export const PDF_LETTER_SCALE = 1.295;
-export const PDF_CERTIFICATE_SCALE = 0.79875;
 
 /** This store manages multiple files and documents (not to be confused with the Document Object Model) that I showcase on my website. */
 export const useDocumentStore = defineStore("document-store", () => {
@@ -285,12 +284,12 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(keyLetter === "p") {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
-                printDoc(!event.altKey);
+                printDoc(!event.altKey && !event.shiftKey);
             } else if(keyLetter === "s") {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
 
-                if(webData.saveAsSupported && event.shiftKey) {
+                if(webData.saveAsSupported && (event.shiftKey || event.altKey)) {
                     saveDoc();
                 } else {
                     downloadDoc();
@@ -570,7 +569,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         // This adds the PDF.js Viewer Styles to the DOM to ensure the rendered documents are visually appealing.
         const pdfViewerStyleBlock = document.createElement("style");
-        pdfViewerStyleBlock.textContent = pdfViewerStyles;
+        pdfViewerStyleBlock.textContent = getPdfjsStylesheet();
         document.head.appendChild(pdfViewerStyleBlock);
 
         // This sets event listeners to delete the print IFrame when the user focuses on the window and a print action is available.
@@ -728,6 +727,9 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** This function initializes an API that will be used to let users choose the folder they want to save one of my documents to. */
     function initGooglePickerAPI() { gapi.load("picker", () => { googleDrivePickerAPILoaded.value = true; }); }
 
+    /** This function returns the PDF.js Viewer Styles if they need it. */
+    function getPdfjsStylesheet() { return pdfViewerStyles; }
+
     /**
      * ----------------------------------------------------------------------------------------------
      * These functions are extra functions such as event listeners or setters used by document pages.
@@ -826,9 +828,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         const id = ("page_" + pageNum);
         if(document.getElementById(id) != null) { router.push(routePath.value + "#" + id); }
     }
-
-    /** This function returns the PDF.js Viewer Styles if they need it. */
-    function getPdfjsStylesheet() { return pdfViewerStyles; }
 
     /**
      * This function sets the current observed page.

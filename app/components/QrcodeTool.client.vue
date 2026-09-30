@@ -67,10 +67,10 @@
                 </button>
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
-                        <button v-if="webData.shareSupported" @click="shareQRCode()" :style="shareImageCursor" class="qrcode-mainPopup-btn yellow" title="Share QR Code">
+                        <button v-if="webData.shareSupported" @click="shareQRCode()" :style="shareImageCursor" class="qrcode-mainPopup-btn yellow" :title="shareImageTitle">
                             <FontAwesomeIcon :icon="shareImageIcon" :spin-pulse="(actions.shareImage == 1)" />
                         </button>
-                        <button @click="downloadQRCode()" :style="downloadImageCursor" class="qrcode-mainPopup-btn yellow" title="Download QR Code">
+                        <button @click="downloadQRCode()" :style="downloadImageCursor" class="qrcode-mainPopup-btn yellow" :title="downloadImageTitle">
                             <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
                         </button>
                         <button v-if="webData.saveAsSupported" @click="saveQRCode()" :style="saveImageCursor" class="qrcode-mainPopup-btn yellow" title="Save QR Code">
@@ -118,6 +118,7 @@ import QRCodeStyling from 'qr-code-styling';
 import ParsePhoneNumber from 'libphonenumber-js';
 import Lenis from 'lenis';
 
+import prettyBytes from 'pretty-bytes';
 import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
@@ -179,6 +180,7 @@ const shareCloseRef = useTemplateRef('sharePopup-close');
 const hoverOverCloseBtn = useElementHover(shareCloseRef);
 
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
+const qrcodeFileSize = computed(() => { return ((qrCodeBlob.value == null) ? "" : prettyBytes(qrCodeBlob.value.size, { binary: true })); });
 const qrcodeUrlCreated = computed(() => { return (qrCodeURL.value.length > 0); });
 const qrcodeBg = computed(() => { return { 'background-image': (qrcodeUrlCreated.value ? 'url(' + qrCodeURL.value + ')' : '') }});
 const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.value] ?? ''); });
@@ -227,13 +229,16 @@ const copyImageIcon = computed(() => { return ((actions.value.copyImage == 0) ? 
 const printImageIcon = computed(() => { return ((actions.value.printImage == 0) ? 'fa-print' : STATUS_ICONS[actions.value.printImage]); });
 const saveImageIcon = computed(() => { return ((actions.value.saveImage == 0) ? 'fa-floppy-disk' : STATUS_ICONS[actions.value.saveImage]); });
 
-const copyLinkCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.copy] }});
-const shareLinkCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.share] }});
-const shareImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.shareImage] }});
-const downloadImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.downloadImage] }});
-const copyImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.copyImage] }});
-const printImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.printImage] }});
-const saveImageCursor = computed (() => { return { cursor: STATUS_CURSORS[actions.value.saveImage] }});
+const copyLinkCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.copy] }});
+const shareLinkCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.share] }});
+const shareImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.shareImage] }});
+const downloadImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.downloadImage] }});
+const copyImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.copyImage] }});
+const printImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.printImage] }});
+const saveImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.saveImage] }});
+
+const downloadImageTitle = computed(() => { return ("Download QR Code (" + qrcodeFileSize.value + ")"); });
+const shareImageTitle = computed(() => { return ("Share QR Code (" + qrcodeFileSize.value + ")"); });
 
 // This mounts the share popup and all of its functionality.
 onMounted(async() => {
@@ -455,7 +460,7 @@ function onSharePopupKeydown(event = undefined) {
             event.preventDefault();
             setImageOptions(true);
 
-            if(webData.saveAsSupported && event.shiftKey) {
+            if(webData.saveAsSupported && (event.shiftKey || event.altKey)) {
                 saveQRCode();
             } else {
                 downloadQRCode();
@@ -547,7 +552,7 @@ function shareQRCode() {
 
 /** This function saves the actual QR Code image. */
 async function saveQRCode() {
-    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrcode.value || !qrCodeBlob.value) { return; }
+    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrcode.value) { return; }
     actions.value.saveImage = 1;
 
     try {
@@ -560,7 +565,7 @@ async function saveQRCode() {
         const currentBlobImageType = ('.' + qrcodeImageSuffix.value);
         var blob = qrCodeBlob.value;
 
-        if(saveHandleName.endsWith(currentBlobImageType)) {
+        if(saveHandleName.endsWith(currentBlobImageType) && blob != null) {
             blob = qrCodeBlob.value;
         } else if(saveHandleName.endsWith('.svg')) {
             blob = await qrcode.value.getRawData("svg");
