@@ -13,18 +13,19 @@
 
     <Transition name="file-widgets-transition" appear>
         <div v-if="showPageNavigationWidget" class="page-navigation-widget">
-            <button :class="['page-nav-side-button', (onFirstPage ? 'inactive' : '')]" @click="navigatePage('down')" :title="previousPageScrollTitle">
+            <button @click="navigatePage('down')" :title="previousPageScrollTitle" :class="getNavArrowClasses(onFirstPage)">
                 <FontAwesomeIcon icon="fa-chevron-left" />
             </button>
             <div class="page-nav-center">
                 <input id="page-number-mohit" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done"
                     v-model="widgetPageNumber"
+                    :readonly="isAutoScrolling"
                     @input="() => { onWidgetPageNumberChange(); }"
                     @keydown="(event) => { onPageNumberKeydown(event); }"
                 />
                 <span>{{ ('/ ' + documentStore.docLoaded.totalPages) }}</span>  
             </div>
-            <button :class="['page-nav-side-button', (onLastPage ? 'inactive' : '')]" @click="navigatePage('up')" :title="nextPageScrollTitle">
+            <button @click="navigatePage('up')" :title="nextPageScrollTitle" :class="getNavArrowClasses(onLastPage)">
                 <FontAwesomeIcon icon="fa-chevron-right" />
             </button>
         </div>
@@ -40,6 +41,7 @@ const scriptsStore = useScriptsStore();
 const fullScreenSet = getFullScreenSet();
 const { width: windowWidth } = useMohitWindowSize();
 const { onDocumentRoute, currentObservedPage } = storeToRefs(documentStore);
+const { isAutoScrolling } = storeToRefs(useScrollStore());
 
 const widgetPageNumber = ref("1");
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
@@ -85,10 +87,19 @@ function resetWidgetPageNumber() {
 }
 
 /**
+ * This function returns the classes for a navigation arrow.
+ * @param {Boolean} isInactive If true OR if the website is auto-scrolling, the "inactive" class is added.
+ */
+function getNavArrowClasses(isInactive = false) {
+    return ['page-nav-side-button', ((isInactive || isAutoScrolling.value) ? 'inactive' : '')];
+}
+
+/**
  * This function navigates a page either up or down one page.
  * @param {"up" | "down"} direction The direction to go.
  */
 function navigatePage(direction = "up") {
+    if(isAutoScrolling.value) { return; }
     if(direction === "up" && !onLastPage.value) {
         documentStore.scrollToPage(Math.max(1, (currentObservedPage.value + 1)));
     } else if(direction === "down" && !onFirstPage.value) {

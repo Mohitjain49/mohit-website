@@ -10,7 +10,7 @@
 
         <div class="mohit-navMenu-opt-group">
             <template v-if="documentStore.onResumeRoute">
-                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
+                <div v-if="documentStore.docLoaded.status" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
                     <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(RESUME_MENU)" v-pulse-loop>
                         <font-awesome-icon icon="fa-gears" />
                         <span> Edit Resume Components </span>

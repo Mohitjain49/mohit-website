@@ -309,7 +309,7 @@ async function renderPDF() {
     if(renderAborted()) { return; }
 
     try {
-        await documentStore.getPdfAsImages();
+        await documentStore.setPdfNavigationCanvases(true);
         await rerenderCanvases();
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
@@ -379,7 +379,7 @@ async function rerenderCanvases() {
 
     // This runs all the arrays of promises.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-    if(!pixelRatioUnchanged) { await documentStore.getPdfAsImages(); }
+    if(!pixelRatioUnchanged) { await documentStore.setPdfNavigationCanvases(true); }
 }
 
 /** This function checks if the render abort signal has been sent or not. */

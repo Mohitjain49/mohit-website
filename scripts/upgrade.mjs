@@ -86,8 +86,8 @@ async function main() {
 
         if(rejectDepsBool == null) {
             runCommand('npx npm-check-updates');
-            const rejectDeps = await rl.question(rejectDepsQuestion);
-            rejectDepsBool = (rejectDeps.toLowerCase() === "y" || rejectDeps.toLowerCase() === "yes");
+            const rejectDeps = (await rl.question(rejectDepsQuestion)).toLowerCase();
+            rejectDepsBool = (rejectDeps === "y" || rejectDeps === "yes");
         } else {
             console.log(rejectDepsQuestion + (rejectDepsBool ? 'yes' : 'no'));
         }
@@ -98,8 +98,8 @@ async function main() {
         if(rejectDepsBool && rejectDepsCommandOption.length == 0) {
             var rejectDepsInput = "";
             while(rejectDepsInput != "_stop_" && rejectDepsInput != "_no_") {
-                rejectDepsInput = await rl.question('Type in the name of a package, or the string \"_stop_\" if you would like to stop: ');
-                if(rejectDepsInput != "_stop_" && rejectDepsInput != "_no_") { rejectDepsArray.push(rejectDepsInput.toLowerCase()); }
+                rejectDepsInput = (await rl.question('Type in the name of a package, or the string \"_stop_\" if you would like to stop: ')).toLowerCase();
+                if(rejectDepsInput != "_stop_" && rejectDepsInput != "_no_") { rejectDepsArray.push(rejectDepsInput); }
             }
             console.log("✅ Packages Recorded.\n\n")
         } else if(rejectDepsCommandOption.length > 0) {
@@ -120,8 +120,8 @@ async function main() {
 
         if(updateDepsBool == null) {
             if(rejectDepsCommandOption !== "") { runCommand('npx npm-check-updates' + rejectDepsCommandOption); }
-            const updateDeps = await rl.question(updateDepsQuestion);
-            updateDepsBool = (updateDeps.toLowerCase() === "y" || updateDeps.toLowerCase() === "yes");
+            const updateDeps = (await rl.question(updateDepsQuestion)).toLowerCase();
+            updateDepsBool = (updateDeps === "y" || updateDeps === "yes");
         } else {
             console.log(updateDepsQuestion + (updateDepsBool ? 'yes' : 'no'));
         }
@@ -138,18 +138,18 @@ async function main() {
         const updateVersionQuestion = 'Do you want to update Your Website\'s version number? (y/n): ';
 
         if(updateVersionBool == null) {
-            const updateVersion = await rl.question(updateVersionQuestion);
-            updateVersionBool = (updateVersion.toLowerCase() === "y" || updateVersion.toLowerCase() === "yes");
+            const updateVersion = (await rl.question(updateVersionQuestion)).toLowerCase();
+            updateVersionBool = (updateVersion === "y" || updateVersion === "yes");
         } else {
             console.log(updateVersionQuestion + (updateVersionBool ? 'yes' : 'no'));
         }
 
         if(updateVersionBool) {
             const versionPattern = /^\d+\.\d+\.\d+$/;
-            var versionType = await rl.question('Please Enter the Version Number Here (M.m.p): ');
+            var versionType = (await rl.question('Please Enter the Version Number Here (M.m.p): ')).toLowerCase();
 
-            while(!versionPattern.test(versionType) && versionType != "patch" && versionType != "minor" && versionType != "major" && versionType != "same") {
-                versionType = await rl.question('Invalid Input. Please Try Again (M.m.p): ');
+            while(!versionPattern.test(versionType) && versionType !== "patch" && versionType !== "minor" && versionType !== "major" && versionType !== "same") {
+                versionType = (await rl.question('Invalid Input. Please Try Again (M.m.p): ')).toLowerCase();
             }
             if(versionType === "same") {
                 versionType = JSON.parse(await readFile('./package.json', 'utf-8')).version;
@@ -188,8 +188,8 @@ async function main() {
         const confirmInstallQuestion = 'Confirm Install Dependencies? (y/n): ';
 
         if(confirmInstallBool == null) {
-            const confirmInstall = await rl.question(confirmInstallQuestion);
-            confirmInstallBool = (confirmInstall.toLowerCase() === "y" || confirmInstall.toLowerCase() === "yes");
+            const confirmInstall = (await rl.question(confirmInstallQuestion)).toLowerCase();
+            confirmInstallBool = (confirmInstall === "y" || confirmInstall === "yes");
         } else {
             console.log(confirmInstallQuestion + (confirmInstallBool ? 'yes' : 'no'));
         }
@@ -221,8 +221,8 @@ async function main() {
         const updateGitHooksQuestion = 'Update Git Hooks (y/n): ';
 
         if(updateGitHooksBool == null) {
-            const updateGitHooks = await rl.question(updateGitHooksQuestion);
-            updateGitHooksBool = (updateGitHooks.toLowerCase() === "y" || updateGitHooks.toLowerCase() === "yes");
+            const updateGitHooks = (await rl.question(updateGitHooksQuestion)).toLowerCase();
+            updateGitHooksBool = (updateGitHooks === "y" || updateGitHooks === "yes");
         } else {
             console.log(updateGitHooksQuestion + (updateGitHooksBool ? 'yes' : 'no'));
         }
