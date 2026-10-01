@@ -7,8 +7,7 @@ export enum HideOverflow {
 }
 
 export enum HideCursor {
-    WEBSITE_COVER,
-    GAMEPAD
+    WEBSITE_COVER
 }
 
 export enum DisableUserSelect {

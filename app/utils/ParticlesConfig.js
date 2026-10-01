@@ -2,7 +2,7 @@
 // Refer to the tsParticles docs: https://particles.js.org/docs/documents/tsParticles_Engine.Options_Particles_Shape.html
 import {
     faCopyright, faStar, faCertificate, faQuestion, faBookBookmark, faCube,
-    faDiamondTurnRight, faCode, faGamepad, faFolderOpen, faBurst, faSquare, faSun
+    faDiamondTurnRight, faCode, faFolderOpen, faBurst, faSquare, faSun
 } from '@fortawesome/free-solid-svg-icons';
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
@@ -372,43 +372,6 @@ export const COPYRIGHT_BACKGROUND = ref({
         },
     },
     detectRetina: true,
-});
-
-/** @type {Ref<import('@tsparticles/engine').IOptions>} */
-export const GAMEPAD_CONTROLS_BACKGROUND = ref({
-    background: { color: "#000000" },
-    fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
-    particles: {
-        // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
-        move: {
-            direction: "none",
-            enable: true,
-            outModes: { default: "out" },
-            random: true,
-            speed: 0.75,
-            straight: false,
-        },
-        number: {
-            density: { enable: true, area: 1200 },
-            value: 350
-        },
-        opacity: {
-            value: { min: 0.1, max: 0.75 },
-            animation: { enable: true, speed: 1.5, sync: false },
-        },
-        shape: {
-            type: "image",
-            options: {
-                image: [{ src: getFontAwesomeSvg(faGamepad, "#2E8B57"), width: 100, height: 100 }]
-            }
-        },
-        size: {
-            value: { min: 7, max: 7 },
-        },
-    },
-    detectRetina: true,
-    tRetina: true,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */

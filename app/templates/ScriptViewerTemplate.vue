@@ -52,7 +52,6 @@
     <template v-if="fullScreenStore.fullScreenSet">
         <QrcodeTool v-if="(webData.showSharePopup)" />
         <FullScreenScrollBar :fs-element-id="'script-page'" />
-        <GamepadComponent />
     </template>
 
     <template v-if="scriptsStore.scriptBlobCreated">
@@ -100,24 +99,6 @@ const PAGE_METADATA = [
         route: "aws-deploy-script",
         desc: "This page shows my AWS deployment script that I use for my websites and web applications.",
         type: "default"
-    },
-    {
-        title: "Mohit Jain | Gamepad Controls | Pinia Store and Gamepad Utility Code",
-        route: "gamepad/store-and-utility",
-        desc: "This page shows the main code that this website uses to implement Gamepad functionality.",
-        type: "gamepad-extra"
-    },
-    {
-        title: "Mohit Jain | Gamepad Controls | Vue.js Component Code",
-        route: "gamepad/vuejs-component",
-        desc: "This page shows the code that displays the gamepad cursor and other components activated by the gamepad on this website.",
-        type: "gamepad-extra"
-    },
-    {
-        title: "Mohit Jain | Gamepad Controls | Custom Events",
-        route: "gamepad/custom-events",
-        desc: "This page shows the code that fires and handles the custom gamepad events I made on my website.",
-        type: "gamepad-extra"
     },
     {
         title: "Mohit Jain | My Unix Shell",

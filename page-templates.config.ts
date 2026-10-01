@@ -20,13 +20,10 @@ export default function usePageTemplates(pages: Array<NuxtPage>) {
     ];
     const routesToScriptTemplate: Array<NuxtPage> = [
         { path: '/aws-deploy-script', file: SCRIPT_TEMPLATE, props: { index: 0 } },
-        { path: '/gamepad/store-and-utility', file: SCRIPT_TEMPLATE, props: { index: 1 } },
-        { path: '/gamepad/vuejs-component', file: SCRIPT_TEMPLATE, props: { index: 2 } },
-        { path: '/gamepad/custom-events', file: SCRIPT_TEMPLATE, props: { index: 3 } },
-        { path: '/unix-shell', file: SCRIPT_TEMPLATE, props: { index: 4 } },
-        { path: '/upgrade-script', file: SCRIPT_TEMPLATE, props: { index: 5 } },
-        { path: '/threadpool', file: SCRIPT_TEMPLATE, props: { index: 6 } },
-        { path: '/use-docker-script', file: SCRIPT_TEMPLATE, props: { index: 7 } },
+        { path: '/unix-shell', file: SCRIPT_TEMPLATE, props: { index: 1 } },
+        { path: '/upgrade-script', file: SCRIPT_TEMPLATE, props: { index: 2 } },
+        { path: '/threadpool', file: SCRIPT_TEMPLATE, props: { index: 3 } },
+        { path: '/use-docker-script', file: SCRIPT_TEMPLATE, props: { index: 4 } },
     ];
 
     const REDIRECT_PAGES = [

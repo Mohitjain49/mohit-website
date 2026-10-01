@@ -12,7 +12,7 @@ export const WEBSITE_DESC = "My personal website showcases all of my professiona
  * @param {String} pageRoute The link to the route.
  * @param {String} pageDesc The document meta description.
  * @param {String} bgColor This is the default background color for the webpage.
- * @param { "default" | "gamepad-extra" } type The type of webpage. Used if a page needs custom head tags compared to the default ones.
+ * @param { "default" } type The type of webpage. Used if a page needs custom head tags compared to the default ones.
  */
 export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WEBSITE_DESC, bgColor = "#000000", type = "default") {
     const WEBSITE_PATH = (PERSONAL_WEBSITE_LINK + pageRoute);
@@ -20,10 +20,6 @@ export function getMeta(pageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WE
         { "@type": "ListItem", "position": 1, "name": "Mohit Jain", "item": PERSONAL_WEBSITE_LINK },
         { "@type": "ListItem", "position": ((type === "default") ? 2 : 3), "name": pageTitle, "item": WEBSITE_PATH }
     ];
-
-    if(type === "gamepad-extra") {
-        itemListElement.splice(1, 0, { "@type": "ListItem", "position": 2, "name": "Mohit Jain | Gamepad Controls", "item": (PERSONAL_WEBSITE_LINK + "gamepad") });
-    }
     
     /** @type {import("@unhead/vue").UseHeadInput} The resulting meta tags for the heading. */
     const output = {
@@ -100,7 +96,7 @@ export function getHomeMeta(pageTitle = WEBSITE_TITLE) {
  * @param {String} pageRoute The link to the route.
  * @param {String} pageDesc The document meta description.
  * @param {String} initialBgColor This is the default background color for the webpage.
- * @param { "default" | "gamepad-extra" } type The type of webpage. Used if a page needs custom head tags compared to the default ones.
+ * @param { "default" } type The type of webpage. Used if a page needs custom head tags compared to the default ones.
  */
 export function useReactiveMeta(initialPageTitle = WEBSITE_TITLE, pageRoute = "", pageDesc = WEBSITE_DESC, bgColor = "#000000", type = "default") {
     const pageTitleRef = shallowRef(initialPageTitle);

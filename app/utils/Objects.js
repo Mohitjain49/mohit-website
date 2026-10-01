@@ -45,11 +45,6 @@ export const PERSONAL_USE_DOCKER_SCRIPT_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK
 export const PERSONAL_UNIX_SHELL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/mysh.c");
 export const PERSONAL_THREADPOOL_LINK = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/scripts/c/threadpool.c");
 
-export const GAMEPAD_ICON_SOURCE = "https://kenney.nl/assets/input-prompts";
-export const GAMEPAD_EVENTS_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/gamepad-events.js");
-export const GAMEPAD_STORE_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/stores/GamepadStore.js");
-export const GAMEPAD_COMPONENT_FILE = (PERSONAL_WEBSITE_REPOSITORY_LINK + "/blob/main/src/components/GamepadComponent.client.vue");
-
 export const MND_PROJECT_LINK = "https://mnd.mohit-jain.com/";
 export const TICTACTOE_PROJECT_LINK = "https://tictactoe.mohit-jain.com/";
 export const EEG_PROJECT_LINK = "https://eeg-ai.mohit-jain.com/";
@@ -802,19 +797,6 @@ export const PROJECT_ENTITIES = [
 
 export const FEATURE_ENTITIES = [
     {
-        name: "Gamepads",
-        link: "/gamepad/",
-        color: "var(--website-light-text)",
-        desc: "I integrated the Web Gamepad API into my website with joypad.js so that visitors can freely use a " +
-            "PS5, Xbox, Nintendo Switch, and other controllers with my website.",
-
-        icon: {
-            id: "fa-gamepad",
-            faIcon: true,
-            size: "100"
-        }
-    },
-    {
         name: "Barcode Reader",
         link: "/code-scanner/",
         color: "var(--blue-cobalt)",
@@ -884,7 +866,7 @@ export const FEATURE_ENTITIES = [
         link: "/library/#scripts",
         color: "var(--script-page-main-color)",
         desc: "I use the \"Shiki\" module to display code on my website. " +
-            "Currently, I only display my AWS Deployment Script and some of my Web Gamepad API code here.",
+            "This mainly includes Developer Operation (DevOps) Scripts that help make updating my website far easier.",
 
         icon: {
             id: "fa-file-code",

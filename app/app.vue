@@ -1,6 +1,5 @@
 <template>
 <NavigationMain />
-<GamepadComponent />
 <QrcodeTool v-if="showShare" />
 <UpdateBox />
 

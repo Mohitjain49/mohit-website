@@ -56,7 +56,7 @@ onMountedAdvanced(async() => {
 
 useHead(getMeta("Mohit Jain | Features", "features",
     "My website utilizes multiple code libraries and Web APIs to make unique features " +
-        "such as gamepad support and compatibility, a barcode and qrcode reader, and a screen wake lock."
+        "such as a screen wake lock and a barcode and qrcode reader."
 ));
 </script>
 

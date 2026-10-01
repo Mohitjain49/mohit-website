@@ -14,8 +14,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
     "/ivue", "/ivuemedia", "/ivuerobotics", "/worldsivue", "/wiv", "/worlds-ivue", "/floridaman",
     "/email", "/github", "/gitlab", "/linkedin", "/discord", "/steam",
-    "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap",
-    "/gamepad/store-and-utility", "/gamepad/vuejs-component", "/gamepad/custom-events",
+    "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
 ];
 
 const TS_TYPES = [

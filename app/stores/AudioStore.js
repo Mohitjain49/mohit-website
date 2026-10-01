@@ -4,18 +4,13 @@ import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
     const CLICK_VOLUME_MUTED_KEY = "mohit-audio-clickVolume-muted";
-
     const webData = useWebsiteDataStore();
-    var volumeGamepadMenuTimeout = null;
 
     /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect. */
     const audioClickClip = ref(null);
 
     /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the scan sound effect. */
     const audioScanClip = ref(null);
-
-    const showVolumeGamepadMenu = ref(false);
-    const volumeChangingWithGamepad = ref(false);
 
     const volumeInput = ref("50");
     const audioMuted = ref(false);
@@ -66,15 +61,6 @@ export const useAudioStore = defineStore("audio-store", () => {
 
     // This runs the update function whenever the speech to text mode gets a new value.
     watch(sttUtility.result, () => { sttUpdateFunc(sttUtility.result.value); });
-
-    watch(volumeChangingWithGamepad, () => {
-        if(volumeGamepadMenuTimeout != null) { clearTimeout(volumeGamepadMenuTimeout); }
-        if(volumeChangingWithGamepad.value) {
-            showVolumeGamepadMenu.value = true;
-        } else {
-            volumeGamepadMenuTimeout = setTimeout(() => { showVolumeGamepadMenu.value = false; }, 1000);
-        }
-    });
 
     /**
      * This function sets up the click audio for my website.
@@ -155,7 +141,6 @@ export const useAudioStore = defineStore("audio-store", () => {
      * @param {Number} amount the amount to add to the volume.
      */
     function addToVolume(amount = 1) {
-        volumeChangingWithGamepad.value = (!webData.navMenuOpen);
         const volumeInt = (parseInt(volumeInput.value) + amount);
         volumeInput.value = String(Math.max(0, Math.min(100, volumeInt)));
         changeAudioVolume();
@@ -227,10 +212,10 @@ export const useAudioStore = defineStore("audio-store", () => {
     }
 
     return { audioClickClip, audioScanClip, audioMuted, volumeInput, volumeInputIcon, volumeInputTitle,
-        showVolumeGamepadMenu, volumeChangingWithGamepad, ttsAvailable, ttsPlaying, ttsIcon, ttsTitle,
-        sttUtility, sttUtilityIcon, sttUtilityTitle, manageSTT, changeSTTUpdateFunc,
-        checkTTSAvailable, manageTTS, cancelTTS, startTTS, setupClickAudio, changeAudioVolume, confirmClickSound,
-        addToVolume, setAudioMuted, playClickSound, playScanSound
+        ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, sttUtility, sttUtilityIcon, sttUtilityTitle,
+        manageSTT, changeSTTUpdateFunc, checkTTSAvailable, manageTTS, cancelTTS, startTTS,
+        setupClickAudio, changeAudioVolume, confirmClickSound, addToVolume, setAudioMuted,
+        playClickSound, playScanSound
     }
 });
 

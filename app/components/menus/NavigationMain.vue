@@ -92,12 +92,6 @@
             </button>
         </div>
 
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <RouterLink class="mohit-navMenu-mainOpt" to="/gamepad/" @click="(event) => { flashNavOpt(event, '/gamepad'); }" v-pulse-loop>
-                <font-awesome-icon icon="fa-gamepad" />
-                <span> Gamepad Controls </span>
-            </RouterLink>
-        </div>
         <div v-if="isMounted" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
             <button class="mohit-navMenu-mainOpt" @click="(event) => { onWakeLockButtonClick(event); }" :title="webData.wakeLockTitle" v-pulse-loop>
                 <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
@@ -139,13 +133,6 @@
             :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
         />
     </button>
-    <RouterLink to="/gamepad/" v-if="gamepadStore.gamepadConnected"
-        @click="(event) => { flashNavOpt(event, '/gamepad'); }"
-        title="A gamepad is currently connected. Click Here to See More."
-        class="mohit-navBar-statusIcon" v-pulse-loop>
-
-        <font-awesome-icon icon="fa-gamepad" />
-    </RouterLink>
     <button v-if="resumeStore.queryOutOfSync" :title="RESUME_QUERY_UNSYNC_TITLE"
         @click="() => { reloadNuxtApp({ force: true }); }"
         class="mohit-navBar-statusIcon resume-unsynced" v-pulse-loop>
@@ -179,7 +166,6 @@ const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
-const gamepadStore = useGamepadStore();
 const resumeStore = useResumeStore();
 const installStore = useInstallStore();
 
@@ -209,7 +195,7 @@ const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdat
 const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
 const showNavLeftWidgets = computed(() => {
-    return (import.meta.client && (showWakeLockWidget.value || gamepadStore.gamepadConnected || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
+    return (import.meta.client && (showWakeLockWidget.value || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
 });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.noMenuOpen || webData.websiteMenuMode == 1)); });
 

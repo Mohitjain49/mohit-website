@@ -132,7 +132,6 @@ const SECONDARY_ROUTES = [
     { name: "Website Features", path: "/features/", icon: "fa-bolt-lightning", color: "var(--lightning-yellow)" },
     { name: "Copyright Notice", path: "/copyright/", icon: "fa-copyright", color: "var(--blue-cobalt)" },
     { name: "My Icons", path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-two)" },
-    { name: "Gamepad Controls", path: "/gamepad/", icon: "fa-gamepad", color: "var(--website-light-text)" },
     { name: "Wake Lock", path: "/wakelock/", icon: "fa-lock", color: "var(--vibrant-flame)" },
 ]
 

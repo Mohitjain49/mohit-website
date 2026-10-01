@@ -217,17 +217,6 @@ export const useScrollStore = defineStore("scroll-store", () => {
         });
     }
 
-    /** This function handles auto scrolling for the gamepad. */
-    async function gamepadScrollToTop() {
-        if(!mounted.value || !lenis) { return; }
-        const routerObj = router.currentRoute.value;
-        if(routerObj.hash !== "") { router.push(routerObj.path); }
-
-        webData.closeNavMenu();
-        cancelAutoscroll();
-        await scrollToTop(false, 10);
-    }
-
     /**
      * This function scrolls by adding an increment to the current scroll.
      * @param {Number} increment The increment scroll.
@@ -306,7 +295,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     return { mounted, scrollProgress, isAutoScrolling,
         mountScrollStore, unmountScrollStore, cancelAutoscroll, waitForAutoScroll,
-        scrollToId, scrollToTop, scrollToTarget, scrollByIncrement, gamepadScrollToTop
+        scrollToId, scrollToTop, scrollToTarget, scrollByIncrement
     }
 });
 

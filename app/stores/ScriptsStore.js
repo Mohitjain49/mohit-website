@@ -5,10 +5,6 @@ import use_docker_code from "@scripts/use-docker.mjs?raw";
 import my_unix_shell from "@scripts/c/mysh.c?raw";
 import my_threadpool from "@scripts/c/threadpool.c?raw";
 
-import gamepad_store_utility_code from "~/stores/GamepadStore.js?raw";
-import gamepad_component_code from "~/components/GamepadComponent.client.vue?raw";
-import gamepad_events_code from "~/gamepad-events.js?raw";
-
 import prettyBytes from "pretty-bytes";
 export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed"];
 export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
@@ -23,9 +19,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** This stores basic object data for each of the scripts hosted on my website. */
     const scripts = [
         useHostedScript("/aws-deploy-script", deploy_code, "deploy", ".mjs", PERSONAL_DEPLOY_SCRIPT_LINK),
-        useHostedScript("/gamepad/store-and-utility", gamepad_store_utility_code, "GamepadStore", ".js", GAMEPAD_STORE_FILE),
-        useHostedScript("/gamepad/vuejs-component", gamepad_component_code, "GamepadComponent", ".client.vue", GAMEPAD_COMPONENT_FILE),
-        useHostedScript("/gamepad/custom-events", gamepad_events_code, "gamepad-events", ".js", GAMEPAD_EVENTS_FILE),
         useHostedScript("/unix-shell", my_unix_shell, "mysh", ".c", PERSONAL_UNIX_SHELL_LINK),
         useHostedScript("/upgrade-script", upgrade_code, "upgrade", ".mjs", PERSONAL_UPGRADE_SCRIPT_LINK),
         useHostedScript("/threadpool", my_threadpool, "threadpool", ".c", PERSONAL_THREADPOOL_LINK),

@@ -120,10 +120,6 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/documents/resume/**"], replacement: "/resume/" },
     { routes: ["/documents/create-github-repo"], replacement: "/create-github-repo" },
 
-    { routes: ["/gamepad/store", "/gamepad/utility", "/scripts/gamepad/**"], replacement: "/gamepad/store-and-utility" },
-    { routes: ["/gamepad/component", "/gamepad/vue.js-component"], replacement: "/gamepad/vuejs-component" },
-    { routes: ["/gamepad/events"], replacement: "/gamepad/custom-events" },
-
     { routes: ["/documents/aws-deploy-script", "/deploy-script/**"], replacement: "/aws-deploy-script" },
     { routes: ["/google-mockup/directions/**"], replacement: "/google-mockup/#directions" },
     { routes: ["/code-reader"], replacement: "/code-scanner" }

@@ -24,13 +24,6 @@ const SCRIPTS_TABS = [
             "It's made with Node.js and uses a few dependencies, but it is highly customizable."
     },
     {
-        id: "gamepad-tab",
-        link: "/gamepad/#scripts",
-        header: { faIcon: true, img: "fa-gamepad", size: 0, title: "Web Gamepad Code" },
-        desc: "This website uses the Web Gamepad API to allow visitors to navigate through its pages " +
-            "using any standard gaming controller. You can view the code for this controller by clicking here."
-    },
-    {
         id: "unix-shell-tab",
         link: "/unix-shell/",
         header: { faIcon: false, img: c_programming_icon, size: 35, title: "My Unix Shell" },
@@ -260,14 +253,6 @@ useIntersectionObserver(tabRefs, (entry) => {
     box-shadow: 0px 0px 12px 12px #a9bacd79;
 }
 
-.scripts-section-tab#gamepad-tab {
-    color: var(--website-light-text);
-    border-color: var(--website-light-text);
-}
-.scripts-section-tab#gamepad-tab:hover {
-    box-shadow: 0px 0px 12px 12px rgba(126, 90, 0, 0.25);
-}
-
 @include dynamic-less-equal-width-rule(975) {
     .scripts-section-tab p { font-size: 17px; }
 }
@@ -285,7 +270,6 @@ useIntersectionObserver(tabRefs, (entry) => {
 }
 @include dynamic-less-equal-width-rule(500) {
     #scripts-section-title { font-size: 70px; }
-    #gamepad-tab .scripts-section-tab-header { font-size: 22px; }
     #use-docker-script-tab .scripts-section-tab-header { font-size: 22px; }
     .scripts-section-tab { width: 87.5%; }
 

@@ -18,7 +18,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     var wakeLockTimeout = null;
     var saveAsSupportedCheckInterval = null;
 
-    const gamepadStore = useGamepadStore();
     const scriptsStore = useScriptsStore();
     const documentStore = useDocumentStore();
     const installStore = useInstallStore();
@@ -146,7 +145,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         resizePageComponents();
 
         window.addEventListener("animation-resize", () => { resizePageComponents(); }, { signal });
-        window.addEventListener("mousemove", () => { gamepadStore.hideAllCursors(); }, { signal });
         window.addEventListener("unhandledrejection", (event) => { onUnhandledRejection(event); }, { signal });
 
         document.body.addEventListener("click", (event) => { onDocumentBodyClick(event); }, { signal });
@@ -158,8 +156,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         saveAsSupportedCheckInterval = setInterval(() => { setSaveAsSupported(); }, 1000);
         signal.addEventListener("abort", () => { clearInterval(saveAsSupportedCheckInterval); }, { once: true });
 
-        // This imports the gamepad-events JS file to make sure gamepads work on the website.
-        await import("~/gamepad-events.js");
+        // This sets the website stores as mounted and ready for use.
         mounted.value = 2;
     }
 
@@ -168,14 +165,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(mounted.value != 2) { return; }
         controller.abort();
         controller = new AbortController();
-
-        gamepadStore.stopAllCursors();
         mounted.value = 0;
     }
 
     /** This sets the size of crucial components within the website. */
     function resizePageComponents() {
-        gamepadStore.resetCursorPositions();
         scriptsStore.closeLineOptions();
         documentStore.setContextMenuPageNumber(0);
     }
