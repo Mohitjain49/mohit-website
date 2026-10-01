@@ -74,12 +74,15 @@ const fullScreenStore = useFullScreenStore();
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
 
-const isMounted = onMountedAdvanced(() => { scriptsStore.mountScriptPage(); });
+const isMounted = onMountedAdvanced(() => { scriptsStore.mountScriptPage(numLines); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
 
 const script = scriptsStore.scripts[props.index];
-const { html } = await renderCodeScript(script.code, script.suffix, script.path);
+const { html, success, numLines } = await renderCodeScript(script.code, script.suffix, script.path);
+
+// This throws an error if the HTML could not be rendered properly for the script.
+if(!success) { throw createError({ status: 500, message: "Could Not Render HTML For Script." }); }
 
 /** This determines if the Full Screen Web Cover should be visible or not. */
 const showFsWebCover = computed(() => {

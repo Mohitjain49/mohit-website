@@ -1,18 +1,21 @@
 /**
  * This function returns a string consisting of HTML that can be displayed to a user.
  * @param {String} code This is the actual code that should be rendered into HTML.
- * @param {".mjs" | ".js" | ".cjs" | ".vue" | ".client.vue" | ".c"} suffix The suffix of the code file.
+ * @param {".mjs" | ".js" | ".cjs" | ".c"} suffix The suffix of the code file.
  * @param {String} path The path of the webpage.
  */
 export async function renderCodeScript(code = "", suffix = "", path) {
     try {
         var numLines = 0;
         var highlightLang = "";
+        var highlightLangBuild = null
 
         if(suffix.endsWith("js")) {
             highlightLang = "javascript";
+            highlightLangBuild = await import("shiki/dist/langs/javascript.mjs");
         } else if(suffix.endsWith("c")) {
             highlightLang = "c";
+            highlightLangBuild = await import("shiki/dist/langs/c.mjs");
         } else {
             throw new Error("Internal Error: File Suffix Not Recognized.");
         }
@@ -23,10 +26,7 @@ export async function renderCodeScript(code = "", suffix = "", path) {
         const themeMaterialOcean = (await import("shiki/dist/themes/material-theme-ocean.mjs"));
         const mainShikiHightlighterCore = await createHighlighterCore({
             themes: [themeMaterialOcean],
-            langs: [(highlightLang === "javascript" ?
-                await import("shiki/dist/langs/javascript.mjs") :
-                await import("shiki/dist/langs/c.mjs")
-            )],
+            langs: [highlightLangBuild],
             engine: createOnigurumaEngine(await import('shiki/wasm')) 
         });
 

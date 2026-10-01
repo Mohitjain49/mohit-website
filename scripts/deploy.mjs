@@ -63,9 +63,7 @@ async function sendS3Command(command) {
     return await s3Client.send(command);
 }
 
-/**
- * This function returns all the put object commands that will be sent by the S3 client.
- */
+/** This function returns all the put object commands that will be sent by the S3 client. */
 function getPutObjectCommands() {
     /** @type {Array<String>} All the filenames from the build output. */
     const allFiles = fs.readdirSync(outDir, { recursive: true });
@@ -97,9 +95,7 @@ function getPutObjectCommands() {
     return commands;
 }
 
-/**
- * This function returns commands to delete ALL the objects currently in an array.
- */
+/** This function returns commands to delete ALL the objects currently in an array. */
 async function getDeleteObjectCommands() {
     // This gets all the current objects in the bucket.
     const paginator = paginateListObjectsV2(
@@ -139,9 +135,7 @@ const cloudfrontClient = new CloudFrontClient({
     }
 });
 
-/**
- * This function sends an Invalidation command to the website's cloudfront distribution.
- */
+/** This function sends an Invalidation command to the website's cloudfront distribution. */
 async function sendCloudfrontInvalidation() {
     return cloudfrontClient.send(new CreateInvalidationCommand({
         DistributionId: AWS_CLOUDFRONT_DIST_ID,

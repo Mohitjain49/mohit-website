@@ -38,7 +38,13 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const mounted = ref(false);
     const wrapCode = ref(false);
     const fsStateChanging = ref(false);
-    const lineOptions = ref({ num: -1, oldNum: -1, style: { left: "0px", top: "0px", borderRadius: "10px 10px 10px 10px" }, timeout: null, lastCopied: "" });
+    const maxLinesInScript = ref(Number.MAX_SAFE_INTEGER);
+
+    /** This manages the status of the line options menu. */
+    const lineOptions = ref({
+        num: -1, oldNum: -1, timeout: null, lastCopied: "",
+        style: { left: "0px", top: "0px", borderRadius: "10px 10px 10px 10px" }
+    });
 
     const scriptDownloadStatus = ref(0);
     const scriptSaveStatus = ref(0);
@@ -237,9 +243,14 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         mounted.value = true;
     }
 
-    /** This function mounts a page that hosts a script. */
-    async function mountScriptPage() {
+    /**
+     * This function mounts a page that hosts a script.
+     * @param {Number} numLinesInScript This is the number of lines in the script.
+     */
+    async function mountScriptPage(numLinesInScript = Number.MAX_SAFE_INTEGER) {
         if(!onScriptRoute.value) { return; }
+        maxLinesInScript.value = numLinesInScript;
+
         const hashStr = router.currentRoute.value.hash.substring(1);
         manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
 
@@ -252,6 +263,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     function unmountScriptPage() {
         fullScreenStore.exitFullScreen();
         setScriptAbortController(false);
+        maxLinesInScript.value = Number.MAX_SAFE_INTEGER;
     }
 
     /**
@@ -438,7 +450,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function manageLineNumberFocus(newLine = -1, oldLine = -1, styleSet = 0) {
         const CLASS_NAME = (styleSet == 0 ? "num-highlight" : "num-highlight-optionsOpen");
-        const numCodeLines = Number.POSITIVE_INFINITY;
+        const numCodeLines = maxLinesInScript.value;
         
         if(Number.isNaN(newLine) || !Number.isInteger(newLine)) { newLine = -1; }
         if(Number.isNaN(oldLine) || !Number.isInteger(oldLine)) { oldLine = -1; }

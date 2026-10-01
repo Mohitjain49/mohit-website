@@ -1,3 +1,5 @@
+import Bowser from "bowser";
+
 /** This store manages everything related to dynamically changing the styles of the website with JavaScript. */
 export const useStyleStore = defineStore("style-store", () => {
     const ZOOM_CSS_PROPERTY = "--webpage-zoom-factor";
@@ -12,6 +14,9 @@ export const useStyleStore = defineStore("style-store", () => {
     const viewportWidth = shallowRef(Number.POSITIVE_INFINITY);
     const viewportHeight = shallowRef(Number.POSITIVE_INFINITY);
     const recordedDevicePixelRatio = shallowRef(1);
+    
+    /** @type {import('vue').ShallowRef<OrientationType>} This is the recorded orientation type of the website. */
+    const recordedOrientation = shallowRef("");
 
     const cssViewportWidth = shallowRef(Number.POSITIVE_INFINITY);
     const cssViewportHeight = shallowRef(Number.POSITIVE_INFINITY);
@@ -29,6 +34,9 @@ export const useStyleStore = defineStore("style-store", () => {
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the element that records the website's true CSS viewport dimensions. */
     var cssLayoutElementObserver = null;
 
+    /** @type {AbortController} This abort controller is designed to properly disable the dynamic zoom factor's event listeners. */
+    var zoomFactorAbortController = null;
+
     /** @type {AbortController} This abort controller is designed to properly disable the dynamic breakpoints' event listeners. */
     var breakpointsAbortController = null;
 
@@ -40,9 +48,11 @@ export const useStyleStore = defineStore("style-store", () => {
 
     const mounted = ref(false);
     const zoomFactor = ref(1.0);
+    const onMobileDevice = ref(false);
     const viewportRafRanOnce = ref(false);
 
     const viewportRafEnabled = shallowRef(false);
+    const dynamicZoomFactorEnabled = shallowRef(false);
     const breakpointsEnabled = ref(false);
     const cssLayoutObserverEnabled = ref(false);
     const trueViewportVariablesEnabled = ref(false);
@@ -66,9 +76,6 @@ export const useStyleStore = defineStore("style-store", () => {
     watch(disableUserSelect, (newValue) => { setDisableUserSelectClass(newValue); });
     watch(fullScreenSet, () => { setDisableUserSelectClass(disableUserSelect.value); });
 
-    // This changes the Zoom CSS Property for the webpage when the viewport height changes properly.
-    watch(viewportHeight, (newValue) => { changeZoomFactor(((newValue > 450) ? 1.0 : 0.5)); });
-
     /** This function returns whether the website is able to use client-only features like the DOM. */
     function validateClientMode() { return (import.meta.client && document && document.documentElement); }
 
@@ -77,10 +84,12 @@ export const useStyleStore = defineStore("style-store", () => {
         if(mounted.value) { return; }
         await nextTick();
 
-        changeZoomFactor((window.innerHeight > 450) ? 1.0 : 0.5);
-        startViewportRaf();
+        // This determines whether the user is using a phone to view this website or not.
+        const platformType = (("userAgent" in navigator) ? Bowser.parse(navigator.userAgent).platform.type : undefined);
+        onMobileDevice.value = (platformType === "mobile" || platformType === "tablet");
 
-        await waitForFirstViewportCalculation();
+        await startViewportRaf();
+        if(onMobileDevice.value) { await enableDynamicZoomFactor(); }
         await enableCssLayoutObserver();
         await enableBreakpoints();
         await enableTrueViewportVariables();
@@ -88,16 +97,6 @@ export const useStyleStore = defineStore("style-store", () => {
 
         if(validateClientMode()) { document.documentElement.classList.add("js__active"); }
         mounted.value = true;
-    }
-
-    /**
-     * This function changes the zoom factor for the webpage.
-     * @param {Number} newFactor This is the new zoom factor for the webpage.
-     */
-    function changeZoomFactor(newFactor = 1.0) {
-        if(!validateClientMode()) { return; }
-        document.documentElement.style.setProperty(ZOOM_CSS_PROPERTY, newFactor);
-        zoomFactor.value = newFactor;
     }
 
     /**
@@ -260,16 +259,21 @@ export const useStyleStore = defineStore("style-store", () => {
         const oldViewportWidth = viewportWidth.value;
         const oldViewportHeight = viewportHeight.value;
         const oldDevicePixelRatio = recordedDevicePixelRatio.value;
+        const oldOrientationType = recordedOrientation.value
 
         viewportWidth.value = window.innerWidth;
         viewportHeight.value = window.innerHeight;
         recordedDevicePixelRatio.value = (window.devicePixelRatio || 1);
+        recordedOrientation.value = (window.screen.orientation.type || "");
 
         if(viewportWidth.value !== oldViewportWidth || viewportHeight.value !== oldViewportHeight) {
             window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "resize" }}));
         }
         if(recordedDevicePixelRatio.value !== oldDevicePixelRatio) {
             window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "pixel-ratio" }}));
+        }
+        if(recordedOrientation.value !== oldOrientationType) {
+            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "orientation" }}));
         }
 
         if(!document || !document.getElementById) { getNewCssViewport = false; }
@@ -303,11 +307,13 @@ export const useStyleStore = defineStore("style-store", () => {
     }
 
     /** This function starts the animation frame loop that records the viewport's dimensions. */
-    function startViewportRaf() {
+    async function startViewportRaf() {
         if(viewportRafEnabled.value) { return; }
         if(windowSizeAnimationFrame != null) { cancelAnimationFrame(windowSizeAnimationFrame); }
+
         viewportRafEnabled.value = true;
         recordViewportDimensionsWithRaf();
+        await waitForFirstViewportCalculation();
     }
 
     /** This function stops the animation frame loop that records the viewport's dimensions. */
@@ -334,6 +340,63 @@ export const useStyleStore = defineStore("style-store", () => {
                 reject("Timeout Error");
             }
         });
+    }
+
+    /**
+     * ---------------------------------------------------------------------------
+     * These functions manage setting a dyanmic Website Zoom Factor automatically.
+     * ---------------------------------------------------------------------------
+     */
+
+    /** Based on the current viewport, this function sets a new zoom factor for the website. */
+    function setDynamicZoomFactor() {
+        if(!validateClientMode()) { return; }
+        const properOrientationType = recordedOrientation.value.startsWith("landscape");
+        const baseViewportHeight = (viewportHeight.value < 450);
+        const mobileDevice = onMobileDevice.value;
+
+        const newZoomFactor = ((properOrientationType && baseViewportHeight && mobileDevice) ? 0.5 : 1.0);
+        if(newZoomFactor == zoomFactor.value) { return; }
+
+        document.documentElement.style.setProperty(ZOOM_CSS_PROPERTY, newZoomFactor);
+        zoomFactor.value = newZoomFactor;
+    }
+
+    /** This function enables the event listeners for automatically setting the website's Dynamic Zoom Factor. */
+    async function enableDynamicZoomFactor() {
+        if(dynamicZoomFactorEnabled.value) { return; }
+        if(zoomFactorAbortController != null) { zoomFactorAbortController.abort(); }
+        zoomFactorAbortController = new AbortController();
+
+        await nextTick();
+        await sleep(10);
+        if(!validateClientMode()) { return; }
+
+        const signal = zoomFactorAbortController.signal;
+        window.addEventListener("animation-resize", () => { setDynamicZoomFactor(); }, { signal });
+        window.addEventListener("router-before-change", () => { setDynamicZoomFactor(); }, { signal });
+        window.addEventListener("router-after-change", () => { setDynamicZoomFactor(); }, { signal });
+
+        await sleep(50);
+        setDynamicZoomFactor();
+        dynamicZoomFactorEnabled.value = true;
+    }
+
+    /** This function disables the event listeners for automatically setting the website's Dynamic Zoom Factor. */
+    function disableDynamicZoomFactor() {
+        if(dynamicZoomFactorEnabled.value) { return; }
+        if(zoomFactorAbortController != null) { zoomFactorAbortController.abort(); }
+        zoomFactorAbortController = null;
+
+        if(validateClientMode()) { document.documentElement.style.setProperty(ZOOM_CSS_PROPERTY, 1.0); }
+        zoomFactor.value = 1.0
+        dynamicZoomFactorEnabled.value = false;
+    }
+
+    /** This function runs both the disable and enable function for the dynamic zoom factor. */
+    async function resetDynamicZoomFactor() {
+        disableDynamicZoomFactor();
+        await enableDynamicZoomFactor();
     }
 
     /**
@@ -637,6 +700,7 @@ export const useStyleStore = defineStore("style-store", () => {
         viewportWidth, viewportHeight, recordedDevicePixelRatio, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray, waitForFirstViewportCalculation,
         enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
+        enableDynamicZoomFactor, disableDynamicZoomFactor, resetDynamicZoomFactor,
         enableMousePositionRecorder, disableMousePositionRecorder, resetMousePositionRecorder,
         enableCssLayoutObserver, disableCssLayoutObserver, resetCssLayoutObserver,
         enableBreakpoints, disableBreakpoints, resetBreakpoints, startViewportRaf, stopViewportRaf
