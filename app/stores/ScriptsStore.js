@@ -16,6 +16,8 @@ const SCRIPT_COPY_ACTION_TITLES = ["Copy Raw Code Script", "Copying Raw Code Scr
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
+    const SCRIPT_HTML_ID = "mohit-scriptPage-code";
+
     /** This stores basic object data for each of the scripts hosted on my website. */
     const scripts = [
         useHostedScript("/aws-deploy-script", deploy_code, "deploy", ".mjs", PERSONAL_DEPLOY_SCRIPT_LINK),
@@ -115,8 +117,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
         try {
             const scriptFile = getCurrentScript();
-            const link = document.createElement('a');
+            if(!scriptFile) { throw new Error("Script Does Not Exist!"); }
 
+            const link = document.createElement('a');
             link.href = URL.createObjectURL(scriptFile.blob.value);
             link.download = (scriptFile.name + scriptFile.suffix);
         
@@ -137,6 +140,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
         try {
             const scriptFile = getCurrentScript();
+            if(!scriptFile) { throw new Error("Script Does Not Exist!"); }
+
             await navigator.clipboard.writeText(scriptFile.code);
             scriptCopyStatus.value = 2;
         } catch(e) {
@@ -153,13 +158,23 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
         try {
             const scriptFile = getCurrentScript();
-            var typeObj = { description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] } }
-            if(!scriptFile.suffix.endsWith("js")) { typeObj = { description: "JS File", accept: { 'text/plain': [scriptFile.suffix] }}}
+            if(!scriptFile) { throw new Error("Script Does Not Exist!"); }
 
-            const saveHandle = await window.showSaveFilePicker({ suggestedName: scriptFile.name, types: [typeObj] });
+            const saveHandle = await window.showSaveFilePicker({
+                suggestedName: scriptFile.name,
+                types: [
+                    (scriptFile.jsScript ?
+                        { description: "JS File", accept: { 'text/javascript': [scriptFile.suffix] }} :
+                        { description: "Code File", accept: { 'text/plain': [scriptFile.suffix] }}
+                    ),
+                    { description: "Text File", accept: { 'text/plain': ['.txt'] } }
+                ]
+            });
+
+            const blob = (saveHandle.name.endsWith('txt') ? scriptFile.textBlob.value : scriptFile.blob.value);
             const writable = await saveHandle.createWritable();
 
-            await writable.write(scriptFile.blob.value);
+            await writable.write(blob);
             await writable.close();
             scriptSaveStatus.value = 2;
         } catch(err) {
@@ -167,50 +182,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         } finally {
             setTimeout(() => { scriptSaveStatus.value = 0; }, 3000);
         }
-    }
-
-    /** This function returns the script the website is currently using. */
-    function getCurrentScript() {
-        if(!onScriptRoute.value) { return null; }
-        return scripts[currentScriptRoute.value];
-    }
-
-    /**
-     * ------------------------------------------------------------------------------------
-     * These functions are for initializing certain objects necessary for the script pages.
-     * ------------------------------------------------------------------------------------
-     */
-
-    /**
-     * This function mounts the scripts store so the website can properly use it.
-     * It also sets a function for the window to open options for each line of code displayed.
-     */
-    function mountScriptsStore() {
-        for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
-        mounted.value = true;
-    }
-
-    /** This function mounts a page that hosts a script. */
-    async function mountScriptPage() {
-        if(!onScriptRoute.value) { return; }
-        await nextTick();
-        await sleep(10);
-
-        const hashStr = router.currentRoute.value.hash.substring(1);
-        manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
-
-        if(scriptAbortController != null) { scriptAbortController.abort(); }
-        scriptAbortController = new AbortController();
-
-        window.addEventListener("keydown", (event) => { onScriptPageKeydown(event); }, { signal: scriptAbortController.signal });
-        await setLineNumberEventListeners();
-    }
-
-    /** This function unmounts a page that hosts a script. */
-    function unmountScriptPage() {
-        fullScreenStore.exitFullScreen();
-        if(scriptAbortController != null) { scriptAbortController.abort(); }
-        scriptAbortController = null;
     }
 
     /**
@@ -243,6 +214,54 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
         }
+    }
+
+    /** This function returns the script the website is currently using. */
+    function getCurrentScript() {
+        if(!onScriptRoute.value) { return null; }
+        return scripts[currentScriptRoute.value];
+    }
+
+    /**
+     * ------------------------------------------------------------------------------------
+     * These functions are for initializing certain objects necessary for the script pages.
+     * ------------------------------------------------------------------------------------
+     */
+
+    /**
+     * This function mounts the scripts store so the website can properly use it.
+     * It also sets a function for the window to open options for each line of code displayed.
+     */
+    function mountScriptsStore() {
+        for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
+        mounted.value = true;
+    }
+
+    /** This function mounts a page that hosts a script. */
+    async function mountScriptPage() {
+        if(!onScriptRoute.value) { return; }
+        const hashStr = router.currentRoute.value.hash.substring(1);
+        manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
+
+        setScriptAbortController(true);
+        window.addEventListener("keydown", (event) => { onScriptPageKeydown(event); }, { signal: scriptAbortController.signal });
+        await setLineNumberEventListeners();
+    }
+
+    /** This function unmounts a page that hosts a script. */
+    function unmountScriptPage() {
+        fullScreenStore.exitFullScreen();
+        setScriptAbortController(false);
+    }
+
+    /**
+     * This function sets the script abort controller.
+     * @param {Boolean} status The new status of the abort controller.
+     */
+    function setScriptAbortController(status = false) {
+        if(!import.meta.client) { return; }
+        if(scriptAbortController != null) { scriptAbortController.abort(); }
+        scriptAbortController = (status ? new AbortController() : null);
     }
 
     /** This function sets fresh event listeners for the script line numbers. */
@@ -444,7 +463,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** Based on the current status of the "wrapCode" boolean, this function sets the styles for wrapping the code text. */
     function setWrapCodeStyles() {
-        const preElement = document.getElementById("mohit-scriptPage-code");
+        const preElement = document.getElementById(SCRIPT_HTML_ID);
         if(preElement != null) {
             preElement.style.textWrap = (wrapCode.value ? "wrap" : "nowrap");
             preElement.style.overflowWrap = (wrapCode.value ? "break-word" : "normal");
@@ -466,24 +485,28 @@ export const useScriptsStore = defineStore("scripts-store", () => {
  * @param {String} path The path in the website that displays this script.
  * @param {String} code The actual code that this script has.
  * @param {String} name The name of the file.
- * @param {".mjs" | ".js" | ".cjs" | ".vue" | ".client.vue" | ".c"} suffix The suffix of the file.
+ * @param {".mjs" | ".js" | ".cjs" | ".c"} suffix The suffix of the file.
  * @param {String} link A link where this file would be stored online. Most likely a GitHub Link.
  */
 function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link = "") {
     path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
-
-    /** @type {Ref<Blob>} This Blob represents the raw data of the file passed in. */
-    const blob = ref(null);
-    const blobCreated = ref(false);
     const router = useRouter();
 
-    const html = ref("<pre> <div class=\"loading-spinner\"></div> </pre>");
+    /** @type {import("vue").ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
+    const blob = shallowRef(null);
+    const blobCreated = ref(false);
+
+    /** @type {import("vue").ShallowRef<Blob>} This Blob represents the raw data of the file passed in using the text/plain mime type. */
+    const textBlob = ref(null);
+    const jsScript = suffix.endsWith("js");
+
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
 
     /** This functions initializes the blob value for this hosted script. */
     function initBlob() {
-        blob.value = new Blob([code], { type: (suffix.endsWith("js") ? "text/javascript" : "text/plain") });
+        blob.value = new Blob([code], { type: (jsScript ? "text/javascript" : "text/plain") });
+        textBlob.value = new Blob([code], { type: "text/plain" });
         blobCreated.value = true;
     }
 
@@ -496,5 +519,8 @@ function useHostedScript(path = "", code = "", name = "", suffix = ".mjs", link 
         return (path === pathname || (path + "/") === pathname);
     }
 
-    return { path, code, onRoute, name, suffix, link, blob, blobCreated, fileSize, html, initBlob, checkPath }
+    return { path, code, onRoute, name, suffix, jsScript,
+        link, blob, textBlob, blobCreated, fileSize,
+        initBlob, checkPath
+    }
 }

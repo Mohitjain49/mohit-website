@@ -1,6 +1,3 @@
-/** @type {import('shiki/dist/core.mjs').HighlighterCore} This is the universal highlighter core used by all Shiki Instances. */
-var mainShikiHightlighterCore = null;
-
 /**
  * This function returns a string consisting of HTML that can be displayed to a user.
  * @param {String} code This is the actual code that should be rendered into HTML.
@@ -9,33 +6,29 @@ var mainShikiHightlighterCore = null;
  */
 export async function renderCodeScript(code = "", suffix = "", path) {
     try {
-        if(mainShikiHightlighterCore == null) {
-            const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
-            const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
-
-            const themeMaterialOcean = (await import("shiki/dist/themes/material-theme-ocean.mjs"));
-            mainShikiHightlighterCore = await createHighlighterCore({
-                themes: [themeMaterialOcean],
-                langs: [await import("shiki/dist/langs/javascript.mjs"),
-                    await import("shiki/dist/langs/vue.mjs"),
-                    await import("shiki/dist/langs/c.mjs")
-                ],
-                engine: createOnigurumaEngine(await import('shiki/wasm')) 
-            });
-        }
-
         var numLines = 0;
         var highlightLang = "";
 
         if(suffix.endsWith("js")) {
             highlightLang = "javascript";
-        } else if(suffix.endsWith("vue")) {
-            highlightLang = "vue";
         } else if(suffix.endsWith("c")) {
             highlightLang = "c";
         } else {
             throw new Error("Internal Error: File Suffix Not Recognized.");
         }
+
+        const createHighlighterCore = (await import("shiki/dist/core.mjs")).createHighlighterCore;
+        const createOnigurumaEngine = (await import("shiki/dist/engine-oniguruma.mjs")).createOnigurumaEngine;
+
+        const themeMaterialOcean = (await import("shiki/dist/themes/material-theme-ocean.mjs"));
+        const mainShikiHightlighterCore = await createHighlighterCore({
+            themes: [themeMaterialOcean],
+            langs: [(highlightLang === "javascript" ?
+                await import("shiki/dist/langs/javascript.mjs") :
+                await import("shiki/dist/langs/c.mjs")
+            )],
+            engine: createOnigurumaEngine(await import('shiki/wasm')) 
+        });
 
         const html = mainShikiHightlighterCore.codeToHtml(code, {
             theme: "material-theme-ocean",
@@ -49,6 +42,8 @@ export async function renderCodeScript(code = "", suffix = "", path) {
                 }
             }]
         });
+
+        mainShikiHightlighterCore.dispose();
         return { success: true, html, numLines }
     } catch(e) {
         console.error(e);

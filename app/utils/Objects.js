@@ -607,8 +607,7 @@ export const LANGUAGES_SKILL_NOTES = [
         link: "https://www.c-language.org/",
         color: "#A9BACD",
         desc: "C is a programming language that most modern programming languages like JavaScript and Python are built on top of. " +
-            "It is capable of talking directly to a computer's memory and processor. " +
-            "I learned quite a lot about it in my Operating Systems class at Kennesaw State University and even made my own Unix Shell.",
+            "I used the C programming language during my internship with the U.S. Air Force to help develop an electronics warfare system.",
 
         icon: {
             id: c_programming_icon,
@@ -797,14 +796,27 @@ export const PROJECT_ENTITIES = [
 
 export const FEATURE_ENTITIES = [
     {
-        name: "Barcode Reader",
-        link: "/code-scanner/",
-        color: "var(--blue-cobalt)",
-        desc: "This page is capable of reading values from Barcodes and Qr Codes. " +
-            "It uses the \"vue-qrocde-reader\" dependency to do so.",
+        name: "Documents",
+        link: "/library/#documents",
+        color: "var(--website-text)",
+        desc: "I used multiple modules to display my resume and other documents on this website. " +
+            "This includes using PDF.js to natively display the PDF as a whole.",
 
         icon: {
-            id: "fa-barcode",
+            id: "fa-folder-open",
+            faIcon: true,
+            size: "100"
+        }
+    },
+    {
+        name: "Scripts",
+        link: "/library/#scripts",
+        color: "var(--script-page-main-color)",
+        desc: "I use the \"Shiki\" module to display code on my website. " +
+            "This mainly includes Developer Operation (DevOps) Scripts that help make updating my website far easier.",
+
+        icon: {
+            id: "fa-file-code",
             faIcon: true,
             size: "100"
         }
@@ -849,32 +861,6 @@ export const FEATURE_ENTITIES = [
         }
     },
     {
-        name: "Documents",
-        link: "/library/#documents",
-        color: "var(--website-text)",
-        desc: "I used multiple modules to display my resume and other documents on this website. " +
-            "This includes using PDF.js to natively display the PDF as a whole.",
-
-        icon: {
-            id: "fa-folder-open",
-            faIcon: true,
-            size: "100"
-        }
-    },
-    {
-        name: "Scripts",
-        link: "/library/#scripts",
-        color: "var(--script-page-main-color)",
-        desc: "I use the \"Shiki\" module to display code on my website. " +
-            "This mainly includes Developer Operation (DevOps) Scripts that help make updating my website far easier.",
-
-        icon: {
-            id: "fa-file-code",
-            faIcon: true,
-            size: "100"
-        }
-    },
-    {
         name: "tsParticles",
         link: "https://particles.js.org/",
         color: "black",
@@ -885,6 +871,19 @@ export const FEATURE_ENTITIES = [
             id: tsparticles,
             faIcon: false,
             size: "200"
+        }
+    },
+    {
+        name: "Barcode Reader",
+        link: "/code-scanner/",
+        color: "var(--blue-cobalt)",
+        desc: "This page is capable of reading values from Barcodes and QR Codes. " +
+            "It uses the \"vue-qrocde-reader\" dependency to do so.",
+
+        icon: {
+            id: "fa-barcode",
+            faIcon: true,
+            size: "100"
         }
     },
     {

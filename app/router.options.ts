@@ -37,7 +37,7 @@ export default {
     async scrollBehavior(to, from, savedPosition) {
         try {
             // console.log({ to, from, savedPosition });
-            if(!import.meta.client) { return (savedPosition || { top: 0, left: 0, behavior: "instant" }); }
+            if(!import.meta.client) { return { top: 0, left: 0, behavior: "instant" }; }
             window.history.scrollRestoration = "manual";
 
             // Initialize Stores, Variables, and Conditions.
