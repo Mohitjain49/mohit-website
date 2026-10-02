@@ -58,20 +58,20 @@ export default {
 
                 pageFinishHookRunning.value = false;
                 window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            }
+            } else {
+                var secondsTasksPending = 0;
+                while(pageFinishHookRunning.value && secondsTasksPending < TASKS_PENDING_WAIT_SECONDS) {
+                    await sleep(50);
+                    secondsTasksPending += 0.05;
+                }
 
-            var secondsTasksPending = 0;
-            while(pageFinishHookRunning.value && secondsTasksPending < TASKS_PENDING_WAIT_SECONDS) {
-                await sleep(50);
-                secondsTasksPending += 0.05;
+                // If the page:finish hook is still running on one call of this function, this stops this call of the function.
+                if(pageFinishHookRunning.value) { return false; }
             }
-
-            // If the page:finish hook is still running on one call of this function, this stops this call of the function.
-            if(pageFinishHookRunning.value) { return false; }
 
             // Wait for all elements and itself to be properly rendered in.
             await nextTick();
-            await new Promise<void>((resolve) => { onNuxtReady(() => { resolve(); }); });
+            // await new Promise<void>((resolve) => { onNuxtReady(() => { resolve(); }); });
 
             // These are two stores required for making a unique autoscroll
             const scrollStore = (await import('~/stores/ScrollStore.js')).useScrollStore($pinia);
@@ -85,7 +85,7 @@ export default {
 
             // Checks the conditions and waits for the scroll store to be mounted.
             if(-1 != NO_SCROLL_CONDITIONS.findIndex((item) => { return item; })) { return false; }
-            secondsTasksPending = 0;
+            var secondsTasksPending = 0;
 
             while(!scrollStore.mounted && secondsTasksPending < TASKS_PENDING_WAIT_SECONDS) {
                 await sleep(50);
