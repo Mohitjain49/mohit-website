@@ -33,7 +33,7 @@
     text-shadow: var(--globe-green) 1px 0 30px;
 }
 
-@include dynamic-less-equal-width-rule(1100) {
+@include dynamic-less-equal-width-rule-scopedBlock(1100) {
     .main-nav-page {
         width: 750px;
         grid-template-columns: repeat(2, 1fr);
@@ -43,7 +43,7 @@
         left: 50%;
     }
 }
-@include dynamic-less-equal-width-rule(750) {
+@include dynamic-less-equal-width-rule-scopedBlock(750) {
     .main-nav-page {
         width: 100%;
         grid-template-columns: 1fr;
@@ -55,7 +55,7 @@
         left: 0%;
     }
 }
-@include dynamic-greater-equal-width-rule(1450) {
+@include dynamic-greater-equal-width-rule-scopedBlock(1450) {
     .main-nav-page.extra-column {
         grid-template-columns: repeat(4, 1fr);
         width: 1450px;

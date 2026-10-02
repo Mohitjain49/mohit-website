@@ -389,11 +389,11 @@
     width: calc(100% - 14px);
 }
 
-@include dynamic-less-equal-width-rule(850) {
+@include dynamic-less-equal-width-rule-noScopedBlock(850) {
     .markdown-body h1 { font-size: 20px; }
     .markdown-body p, .markdown-body li, .markdown-body div { font-size: 13px; }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-noScopedBlock(600) {
     .markdown-body h1 { font-size: 17px; }
     .markdown-body p, .markdown-body li, .markdown-body div { font-size: 11px; }
 

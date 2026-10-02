@@ -266,7 +266,7 @@ button {
 }
 
 .animate__slowLess { --animate-duration: 1.5s !important; }
-@include dynamic-less-equal-width-rule(375) {
+@include dynamic-less-equal-width-rule-noScopedBlock(375) {
     body, & { overflow-x: auto; }
 }
 
@@ -283,7 +283,7 @@ button {
     color: var(--website-text);
     text-align: center;
 }
-@include dynamic-less-equal-width-rule(700) {
+@include dynamic-less-equal-width-rule-noScopedBlock(700) {
     .redirect-statement { font-size: 15px; }
 }
 

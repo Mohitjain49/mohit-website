@@ -200,13 +200,13 @@ useIntersectionObserver(tabRefs, (entry) => {
     box-shadow: 0px 0px 20px 5px var(--script-page-main-color);
 }
 
-@include dynamic-less-equal-width-rule(975) {
+@include dynamic-less-equal-width-rule-scopedBlock(975) {
     .library-section-tab p { font-size: 17px; }
 }
-@include dynamic-less-equal-width-rule(825) {
+@include dynamic-less-equal-width-rule-scopedBlock(825) {
     #library-section-desc { text-align: left; }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     #library-section-title {
         height: 90px;
         font-size: 70px;
@@ -214,7 +214,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     .library-section-tabs-container { height: calc(v-bind(NUM_LIBRARY_TABS) * 200px); }
     .library-section-tab { height: 150px; }
 }
-@include dynamic-less-equal-width-rule(500) {
+@include dynamic-less-equal-width-rule-scopedBlock(500) {
     #library-section-title { font-size: 55px; }
     .library-section-tab { width: 87.5%; }
 

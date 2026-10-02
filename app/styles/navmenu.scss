@@ -702,10 +702,10 @@
  * Below contain specific styles like transitions and dynamic dimension rules.
  */
 
-@include dynamic-less-equal-width-rule(700) {
+@include dynamic-less-equal-width-rule-scopedBlock(700) {
     .mohit-navBar-mainLinks { display: none; }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     .mohit-navMenu {
         left: 0px;
         top: 0px;
@@ -715,7 +715,7 @@
         max-height: calc(100% - 40px);
     }
 }
-@include dynamic-less-equal-width-rule(550) {
+@include dynamic-less-equal-width-rule-scopedBlock(550) {
     .mohit-navBar-statusIcon {
         width: 16px;
         height: 16px;

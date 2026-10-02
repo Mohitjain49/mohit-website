@@ -246,7 +246,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     color: #D3B62A;
 }
 
-@include dynamic-less-equal-width-rule(1200) {
+@include dynamic-less-equal-width-rule-scopedBlock(1200) {
     .skills-category {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
@@ -258,7 +258,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     }
 }
 
-@include dynamic-less-equal-width-rule(825) {
+@include dynamic-less-equal-width-rule-scopedBlock(825) {
     .skills-category {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
@@ -276,7 +276,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     }
 }
 
-@include dynamic-less-equal-width-rule(450) {
+@include dynamic-less-equal-width-rule-scopedBlock(450) {
     .skills-category-header {
         width: 325px;
         left: calc((100% - 325px) / 2);

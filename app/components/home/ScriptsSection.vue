@@ -253,13 +253,13 @@ useIntersectionObserver(tabRefs, (entry) => {
     box-shadow: 0px 0px 12px 12px #a9bacd79;
 }
 
-@include dynamic-less-equal-width-rule(975) {
+@include dynamic-less-equal-width-rule-scopedBlock(975) {
     .scripts-section-tab p { font-size: 17px; }
 }
-@include dynamic-less-equal-width-rule(825) {
+@include dynamic-less-equal-width-rule-scopedBlock(825) {
     #scripts-section-desc { text-align: left; }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     #scripts-section-title {
         height: 90px;
         font-size: 80px;
@@ -268,7 +268,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     .scripts-section-tabs-container { height: calc(v-bind(NUM_SCRIPTS_TABS) * 200px); }
     .scripts-section-tab { height: 150px; }
 }
-@include dynamic-less-equal-width-rule(500) {
+@include dynamic-less-equal-width-rule-scopedBlock(500) {
     #scripts-section-title { font-size: 70px; }
     #use-docker-script-tab .scripts-section-tab-header { font-size: 22px; }
     .scripts-section-tab { width: 87.5%; }

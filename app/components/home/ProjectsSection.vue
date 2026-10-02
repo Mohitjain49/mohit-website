@@ -142,7 +142,7 @@ function setProjectsTransitions(isVisible) {
     box-shadow: 0px 0px 20px var(--lightning-yellow);
 }
 
-@include dynamic-less-equal-width-rule(1200) {
+@include dynamic-less-equal-width-rule-scopedBlock(1200) {
     .projects-section {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
@@ -153,7 +153,7 @@ function setProjectsTransitions(isVisible) {
     }
 }
 
-@include dynamic-less-equal-width-rule(825) {
+@include dynamic-less-equal-width-rule-scopedBlock(825) {
     .projects-section {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
@@ -190,7 +190,7 @@ function setProjectsTransitions(isVisible) {
     }
 }
 
-@include dynamic-less-equal-width-rule(500) {
+@include dynamic-less-equal-width-rule-scopedBlock(500) {
     .projects-main-textContainer {
         width: 340px;
         position: relative;

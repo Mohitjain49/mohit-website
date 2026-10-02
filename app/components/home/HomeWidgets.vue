@@ -39,7 +39,7 @@ onMountedAdvanced(() => { setBottomCornerWidgetAnimation("ksu-widget"); });
     user-select: none;
 }
 
-@include dynamic-less-equal-width-rule(525) {
+@include dynamic-less-equal-width-rule-scopedBlock(525) {
     #ksu-widget {
         height: 45px;
         width: 45px;

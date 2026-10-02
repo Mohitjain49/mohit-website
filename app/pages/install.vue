@@ -96,7 +96,7 @@ useHead(getMeta("Mohit Jain | Install My Portfolio", "install",
     color: var(--lightning-yellow);
 }
 
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     .install-box {
         width: 300px;
         height: 250px;

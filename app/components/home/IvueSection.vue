@@ -293,35 +293,21 @@ const DISCORD_TITLE = "This is the iVue Discord Channel. If you would like to jo
     border-color: #5865f2;
 }
 
-@include dynamic-less-equal-width-rule(850) {
-    .ivue-section-tab p {
-        font-size: 16px;
-    }
+@include dynamic-less-equal-width-rule-scopedBlock(850) {
+    .ivue-section-tab p { font-size: 16px; }
 }
-@include dynamic-less-equal-width-rule(825) {
-    #ivue-section-desc {
-        text-align: left;
-    }
+@include dynamic-less-equal-width-rule-scopedBlock(825) {
+    #ivue-section-desc { text-align: left; }
 }
-@include dynamic-less-equal-width-rule(600) {
-    #ivue-section-title {
-        height: 90px;
-    }
-    #ivue-section-title > a > img {
-        height: 80px;
-    }
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
+    #ivue-section-title { height: 90px; }
+    #ivue-section-title > a > img { height: 80px; }
     
-    .ivue-section-tabs-container {
-        height: 925px;
-    }
-    .ivue-section-tab {
-        height: 175px;
-    }
-    .ivue-section-tab p {
-        font-size: 15px;
-    }
+    .ivue-section-tabs-container { height: 925px; }
+    .ivue-section-tab { height: 175px; }
+    .ivue-section-tab p { font-size: 15px; }
 }
-@include dynamic-less-equal-width-rule(500) {
+@include dynamic-less-equal-width-rule-scopedBlock(500) {
     .ivue-section-tab {
         width: 87.5%;
     }

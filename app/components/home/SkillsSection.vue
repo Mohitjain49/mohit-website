@@ -108,7 +108,7 @@ function setSkillsTransitions(isVisible = false) {
     align-items: center;
 }
 
-@include dynamic-less-equal-width-rule(1200) {
+@include dynamic-less-equal-width-rule-scopedBlock(1200) {
     .skills-section {
         grid-template-columns: repeat(2, 1fr);
         width: 800px;
@@ -119,7 +119,7 @@ function setSkillsTransitions(isVisible = false) {
     }
 }
 
-@include dynamic-less-equal-width-rule(825) {
+@include dynamic-less-equal-width-rule-scopedBlock(825) {
     .skills-section {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
@@ -147,7 +147,7 @@ function setSkillsTransitions(isVisible = false) {
         text-align: left;
     }
 }
-@include dynamic-less-equal-width-rule(500) {
+@include dynamic-less-equal-width-rule-scopedBlock(500) {
     .skills-main-textContainer {
         width: 330px;
         position: relative;
@@ -158,7 +158,7 @@ function setSkillsTransitions(isVisible = false) {
     }
 }
 
-@include dynamic-less-equal-width-rule(375) {
+@include dynamic-less-equal-width-rule-scopedBlock(375) {
     .skills-main-header a { font-size: 68px; }
 }
 </style>

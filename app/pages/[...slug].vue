@@ -181,7 +181,7 @@ const EXTERNAL_REDIRECTS = [
     background-color: rgba(248, 206, 171, 0.9);
 }
 
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-noScopedBlock(600) {
     .incomplete-title { font-size: 42px; }
 }
 </style>

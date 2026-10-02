@@ -465,14 +465,14 @@
     bottom: 30px;
 }
 
-@include dynamic-greater-equal-width-rule(750) {
+@include dynamic-greater-equal-width-rule-scopedBlock(750) {
     .contact-alert-box { left: calc(50% - 300px); }
 }
-@include dynamic-less-equal-width-rule(1100) {
+@include dynamic-less-equal-width-rule-scopedBlock(1100) {
     .contact-boxes-container { grid-template-columns: 1fr; }
     .contact-me-box { left: calc(50% - 237px) !important; }
 }
-@include dynamic-less-equal-width-rule(525) {
+@include dynamic-less-equal-width-rule-scopedBlock(525) {
     #contact-page { padding-top: 50px; }
     .contact-boxes-container { grid-template-columns: 1fr; }
     .contact-share-btn { display: none; }

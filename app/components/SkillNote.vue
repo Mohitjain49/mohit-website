@@ -145,7 +145,7 @@ function getFAIconStyle() { return { color: props.color, fontSize: (props.size +
     color: inherit;
 }
 
-@include dynamic-less-equal-width-rule(450) {
+@include dynamic-less-equal-width-rule-scopedBlock(450) {
     .mohit-note { width: 325px; }
 }
 </style>

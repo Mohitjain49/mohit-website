@@ -391,7 +391,13 @@ function renderAborted() {
  * @param {Event} event The event fired by resizing the screen.
  */
 function resizePdfViewer(event) {
-    if(webData.pdfNavMenuOpen && event && event.detail.type === "pixel-ratio") { webData.closeNavMenu(); }
+    if(!import.meta.client || !event || !event.detail) { return; }
+    const eventDetail = event.detail;
+    const pixelRatioEvent = (eventDetail.type === "pixel-ratio");
+
+    if(webData.pdfNavMenuOpen && pixelRatioEvent) { webData.closeNavMenu(); }
+    if(!pixelRatioEvent && !(eventDetail.type.includes("resize") && eventDetail.width)) { return; }
+
     if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
     resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
 }

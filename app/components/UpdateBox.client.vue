@@ -198,7 +198,7 @@ function getPlural(num = 1) { return (((num > 1) ? "s" : "") + " ago"); }
     transform: translateY(0px);
 }
 
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     .update-box { right: calc(50% - 152px) !important; }
 }
 </style>

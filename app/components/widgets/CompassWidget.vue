@@ -54,7 +54,7 @@ onMountedAdvanced(() => { setBottomCornerWidgetAnimation("compass-widget"); });
     border-color: var(--blue-one);
 }
 
-@include dynamic-less-equal-width-rule(525) {
+@include dynamic-less-equal-width-rule-scopedBlock(525) {
     #compass-widget {
         height: 45px;
         width: 45px;

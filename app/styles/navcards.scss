@@ -275,6 +275,6 @@
 }
 
 
-@include dynamic-less-equal-width-rule(400) {
+@include dynamic-less-equal-width-rule-scopedBlock(400) {
     .nav-newCard { width: 315px; }
 }

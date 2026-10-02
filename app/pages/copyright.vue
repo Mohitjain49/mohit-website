@@ -230,16 +230,16 @@ onMountedAdvanced(() => {
     width: 14px;
 }
 
-@include dynamic-less-equal-width-rule(680) {
+@include dynamic-less-equal-width-rule-scopedBlock(680) {
     .copyright-body-header { font-size: 40px; }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     .copyright-body-header { font-size: 28px; }
     .copyright-body-subheader { font-size: 12px; }
     .copyright-body-desc { font-size: 16px; }
     .copyright-body-subheader.small { font-size: 9px; }
 }
-@include dynamic-less-equal-width-rule(450) {
+@include dynamic-less-equal-width-rule-scopedBlock(450) {
     .copyright-body-header {
         font-size: 24px;
         gap: 3px;

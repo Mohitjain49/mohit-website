@@ -56,7 +56,7 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
     box-shadow: 0px 0px 20px var(--lightning-yellow);
 }
 
-@include dynamic-less-equal-width-rule(400) {
+@include dynamic-less-equal-width-rule-scopedBlock(400) {
     #main-projects-features-btn { width: 325px; }
 }
 </style>

@@ -201,15 +201,15 @@ useIntersectionObserver(tabRefs, (entry) => {
     box-shadow: 0px 0px 12px 12px rgba(211, 211, 211, 0.25);
 }
 
-@include dynamic-less-equal-width-rule(975) {
+@include dynamic-less-equal-width-rule-scopedBlock(975) {
     .documents-section-tab p {
         font-size: 17px;
     }
 }
-@include dynamic-less-equal-width-rule(825) {
+@include dynamic-less-equal-width-rule-scopedBlock(825) {
     #documents-section-desc { text-align: left; }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     #documents-section-title {
         height: 90px;
         font-size: 80px;
@@ -217,7 +217,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     .documents-section-tabs-container { height: calc(v-bind(NUM_DOCUMENT_TABS) * 200px); }
     .documents-section-tab { height: 150px; }
 }
-@include dynamic-less-equal-width-rule(500) {
+@include dynamic-less-equal-width-rule-scopedBlock(500) {
     #documents-section-title { font-size: 70px; }
     #github-tab .documents-section-tab-header { font-size: 22px; }
     #research-paper-tab .documents-section-tab-header { font-size: 22px; }

@@ -370,7 +370,7 @@ function clickOnQrcodeCapture() {
     color: white;
 }
 
-@include dynamic-less-equal-width-rule(1050) {
+@include dynamic-less-equal-width-rule-scopedBlock(1050) {
     .code-scanner-main {
         flex-direction: column-reverse;
         min-height: 1200px;
@@ -382,7 +382,7 @@ function clickOnQrcodeCapture() {
         width: calc(90% - 4px);
     }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     .scanner-itemMenu {
         width: 300px;
         height: 200px;

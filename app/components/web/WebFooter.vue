@@ -366,7 +366,7 @@ const EXTRA_ROUTES = [
     scale: 1.1;
 }
 
-@include dynamic-less-equal-width-rule(1200) {
+@include dynamic-less-equal-width-rule-scopedBlock(1200) {
     .footer-body {
         grid-template-columns: repeat(3, 1fr);
         left: calc(50% - 375px);
@@ -377,7 +377,7 @@ const EXTRA_ROUTES = [
         margin-bottom: 20px;
     }
 }
-@include dynamic-less-equal-width-rule(750) {
+@include dynamic-less-equal-width-rule-scopedBlock(750) {
     .footer-body {
         grid-template-columns: repeat(2, 1fr);
         left: calc(50% - 275px);
@@ -387,7 +387,7 @@ const EXTRA_ROUTES = [
         grid-column: span 2;
     }
 }
-@include dynamic-less-equal-width-rule(550) {
+@include dynamic-less-equal-width-rule-scopedBlock(550) {
     .footer-body {
         grid-template-columns: repeat(1, 1fr);
         left: 0px;

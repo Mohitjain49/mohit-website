@@ -266,8 +266,14 @@ export const useStyleStore = defineStore("style-store", () => {
         recordedDevicePixelRatio.value = (window.devicePixelRatio || 1);
         recordedOrientation.value = (window.screen.orientation.type || "");
 
-        if(viewportWidth.value !== oldViewportWidth || viewportHeight.value !== oldViewportHeight) {
-            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "resize" }}));
+        const viewportWidthChanged = (viewportWidth.value !== oldViewportWidth);
+        const viewportHeightChanged = (viewportHeight.value !== oldViewportHeight);
+
+        if(viewportWidthChanged || viewportHeightChanged) {
+            window.dispatchEvent(new CustomEvent("animation-resize", {
+                cancelable: false,
+                detail: { type: "resize", width: viewportWidthChanged, height: viewportHeightChanged }
+            }));
         }
         if(recordedDevicePixelRatio.value !== oldDevicePixelRatio) {
             window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "pixel-ratio" }}));
@@ -289,14 +295,23 @@ export const useStyleStore = defineStore("style-store", () => {
             cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
             cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
 
+            const cssViewportWidthChanged = (cssViewportWidth.value !== oldCssViewportWidth);
+            const cssViewportHeightChanged = (cssViewportHeight.value !== oldCssViewportHeight);
+
             if(cssViewportWidth.value !== oldCssViewportWidth || cssViewportHeight.value !== oldCssViewportHeight) {
-                window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "css-resize" }}));
+                window.dispatchEvent(new CustomEvent("animation-resize", {
+                    cancelable: false,
+                    detail: { type: "css-resize", width: cssViewportWidthChanged, height: cssViewportHeightChanged }
+                }));
             }
         }
 
         if(!viewportRafRanOnce.value) {
             viewportRafRanOnce.value = true;
-            window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "init-resize" }}));
+            window.dispatchEvent(new CustomEvent("animation-resize", {
+                cancelable: false,
+                detail: { type: "init-resize", width: true, height: true }
+            }));
         }
     }
 
@@ -320,6 +335,7 @@ export const useStyleStore = defineStore("style-store", () => {
     function stopViewportRaf() {
         if(!viewportRafEnabled.value) { return; }
         if(windowSizeAnimationFrame != null) { cancelAnimationFrame(windowSizeAnimationFrame); }
+
         windowSizeAnimationFrame = null;
         viewportRafEnabled.value = false;
         viewportRafRanOnce.value = false;
@@ -362,6 +378,14 @@ export const useStyleStore = defineStore("style-store", () => {
         zoomFactor.value = newZoomFactor;
     }
 
+    /** This function sets the dynamic zoom factor specifically on an "animation-resize" event call. */
+    function setDynamicZoomFactorOnResize(event) {
+        if(!event || !event.detail) { return; }
+        const orientationEventType = (event.detail.type === "orientation");
+        const properEventType = (event.detail.type.includes("resize") && event.detail.height);
+        if(orientationEventType || properEventType) { setDynamicZoomFactor(); }
+    }
+
     /** This function enables the event listeners for automatically setting the website's Dynamic Zoom Factor. */
     async function enableDynamicZoomFactor() {
         if(dynamicZoomFactorEnabled.value) { return; }
@@ -373,9 +397,9 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
 
         const signal = zoomFactorAbortController.signal;
-        window.addEventListener("animation-resize", () => { setDynamicZoomFactor(); }, { signal });
         window.addEventListener("router-before-change", () => { setDynamicZoomFactor(); }, { signal });
         window.addEventListener("router-after-change", () => { setDynamicZoomFactor(); }, { signal });
+        window.addEventListener("animation-resize", (event) => { setDynamicZoomFactorOnResize(event); }, { signal });
 
         await sleep(50);
         setDynamicZoomFactor();

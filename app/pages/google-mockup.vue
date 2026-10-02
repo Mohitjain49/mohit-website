@@ -232,7 +232,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     box-shadow: 0px 0px 10px red;
 }
 
-@include dynamic-less-equal-width-rule(500) {
+@include dynamic-less-equal-width-rule-scopedBlock(500) {
     .gMockup-title { font-size: 70px; }
 }
 </style>

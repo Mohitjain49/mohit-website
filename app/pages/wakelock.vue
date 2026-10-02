@@ -187,7 +187,7 @@ function toggleMenuState() { menuState.value = ((menuState.value == 0) ? 1 : 0);
     border-radius: 5px;
 }
 
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     .wakeLock-box {
         width: 300px;
         height: 250px;

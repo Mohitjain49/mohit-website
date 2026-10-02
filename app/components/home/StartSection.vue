@@ -367,11 +367,11 @@ const MAIN_BTNS = [
     border-bottom: none;
 }
 
-@include dynamic-less-equal-width-rule(640) {
+@include dynamic-less-equal-width-rule-scopedBlock(640) {
     .start-buttonRow.main { width: 100%; }
     .start-buttonRow.contact-links { width: calc(100% - 120px); }
 }
-@include dynamic-less-equal-width-rule(600) {
+@include dynamic-less-equal-width-rule-scopedBlock(600) {
     .start-section { height: 450px; }
     .start-btn-caption { font-size: 9.5px; }
 
@@ -397,7 +397,7 @@ const MAIN_BTNS = [
         scale: 0.75;
     }
 }
-@include dynamic-less-equal-width-rule(450) {
+@include dynamic-less-equal-width-rule-scopedBlock(450) {
     .start-section-title {
         font-size: 62px;
         margin-bottom: 10px;

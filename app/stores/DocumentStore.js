@@ -78,7 +78,6 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
-    const windowSizeWatchersEnabled = ref(false);
     const browserPdfViewerPresent = ref(false);
     const iframeSupported = ref(false);
     const confirmedImageTypes = ref(["image/png"]);
@@ -608,7 +607,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         setPdfNavigationCanvases(false);
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
 
-        setWindowSizeWatchers(false, false);
+        setWindowSizeWatchers(false);
         setRenderIFrameController(false);
         removePrintIFrame(true);
     }
@@ -625,7 +624,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfScaleFactor.value = scaleFactor;
 
         setPdfSize();
-        setWindowSizeWatchers(true, false);
+        setWindowSizeWatchers(true);
     }
 
     /** This function checks if the PDF.js Worker Source has been added yet. If not, this function adds it. */
@@ -747,24 +746,19 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
-     * This function sets the window size watchers that set the PDF size.
-     * @param {Boolean | "toggle"} status The new status of the watchers. If "toggle", it flips the current state.
-     * @param {Boolean} force If true, the function will ignore the current state of the watchers when pausing or resuming them.
+     * This function sets the window size event listener that sets the PDF size.
+     * @param {Boolean} status The new status of the watchers.
      */
-    function setWindowSizeWatchers(status = false, force = false) {
-        if(status === "toggle") { status = !windowSizeWatchersEnabled.value; }
-        if(status && (force || !windowSizeWatchersEnabled.value)) {
-            windowSizeWatchersEnabled.value = true;
-            if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
-
-            pdfDimensionsController = new AbortController();
-            const signal = pdfDimensionsController.signal;
-            window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal });
-        } else if(!status && (force || windowSizeWatchersEnabled.value)) {
-            windowSizeWatchersEnabled.value = false;
-            if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
-            pdfDimensionsController = null;
-        }
+    function setWindowSizeWatchers(status = false) {
+        if(!import.meta.client) { return; }
+        if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
+        pdfDimensionsController = (status ? new AbortController() : null);
+       
+        if(!status) { return; }
+        window.addEventListener("animation-resize", (event) => {
+            const properEvent = (event.detail && event.detail.type.includes("resize") && event.detail.width);
+            if(properEvent) { setPdfSize(); }
+        }, { signal: pdfDimensionsController.signal });
     }
 
     /**
