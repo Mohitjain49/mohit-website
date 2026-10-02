@@ -93,7 +93,7 @@
         </div>
 
         <div v-if="isMounted" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-            <button class="mohit-navMenu-mainOpt" @click="(event) => { onWakeLockButtonClick(event); }" :title="webData.wakeLockTitle" v-pulse-loop>
+            <button class="mohit-navMenu-mainOpt" @click="(event) => { webData.onWakeLockButtonClick(event); }" :title="webData.wakeLockTitle" v-pulse-loop>
                 <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
                 <span> {{ webData.wakeLockStatement }} </span>
             </button>
@@ -119,14 +119,15 @@
 </Transition>
 
 <div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
-    <button v-if="showUpdateWebsiteWidget" class="mohit-navBar-statusIcon yellow" @click="openUpdateBox()" v-pulse-loop
+    <button v-if="showUpdateWebsiteWidget" @click="openUpdateBox()" v-pulse-loop
+        :class="['mohit-navBar-statusIcon', 'yellow', (installStore.updateNeeded ? '' : 'noAction')]"
         :title="(installStore.swUpdating ? 'Updating Website...' : 'This Is An Old Version Of My Website. Click Here To Update It.')">
 
         <font-awesome-icon v-if="!installStore.swUpdating" icon="fa-triangle-exclamation" />
         <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
     </button>
     <button v-if="showWakeLockWidget" :title="webData.wakeLockTitle" v-pulse-loop
-        @click="(event) => { onWakeLockButtonClick(event); }"
+        @click="(event) => { webData.onWakeLockButtonClick(event); }"
         class="mohit-navBar-statusIcon wakelock">
 
         <font-awesome-icon :flip="webData.wakeLockChangeFresh"
@@ -209,22 +210,6 @@ function flashNavOpt(event = new MouseEvent("click"), path = "/") {
     if(routePath.value !== path && routePath.value !== (path + "/")) { return; }
     scrollToTop(false, 0);
     webData.closeNavMenu();
-}
-
-/**
- * This function triggers whenever someone clicks on the Wake Lock Button.
- * @param {PointerEvent} event The Click event to draw from.
- */
-function onWakeLockButtonClick(event) {
-    if(event.ctrlKey) {
-        if(routePath.value !== "/wakelock" && routePath.value !== "/wakelock/") {
-            router.push("/wakelock/");
-        } else {
-            flashNavOpt(event, "/wakelock");
-        }
-    } else {
-        webData.toggleWakeLock();
-    }
 }
 
 /** This function lets users copy the webpage link  */

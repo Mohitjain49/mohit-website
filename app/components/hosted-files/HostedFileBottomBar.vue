@@ -1,21 +1,28 @@
 <template>
 <div ref="hosted-file-bottom-options" :class="['mohit-hostedFile-bottom', hostedFileClass]">
     <div class="mohit-document-topBar-sideSection">
-        <button @click="setFS()" :title="minimizeTitle" :style="getColorStyles('var(--lightning-yellow)')" v-pulse-loop>
+        <button @click="setFS()" class="yellow" :title="minimizeTitle" v-pulse-loop>
             <font-awesome-icon :icon="fullScreenStore.faIcon" />
         </button>
-    </div>
+        <button v-show="showUpdateWebsite" @click="openUpdateBox()" v-pulse-loop
+            :class="['yellow', (installStore.updateNeeded ? '' : 'noAction')]"
+            :title="(installStore.swUpdating ? 'Updating Website...' : 'This Is An Old Version Of My Website. Click Here To Update It.')">
 
-    <div class="mohit-document-topBar-sideSection">
-        <button v-show="(webData.wakeLock.isActive || webData.wakeLockChangeFresh)" v-pulse-loop
-            @click="(event) => { onWakeLockButtonClick(event); }"
+            <font-awesome-icon v-if="!installStore.swUpdating" icon="fa-triangle-exclamation" />
+            <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
+        </button>
+        <button v-show="(webData.wakeLock.isActive || webData.wakeLockChangeFresh)"
+            @click="(event) => { webData.onWakeLockButtonClick(event); }"
             :style="getColorStyles('var(--vibrant-flame)')"
-            :title="webData.wakeLockTitle">
+            :title="webData.wakeLockTitle" v-pulse-loop>
 
             <font-awesome-icon :flip="webData.wakeLockChangeFresh"
                 :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
             />
         </button>
+    </div>
+
+    <div class="mohit-document-topBar-sideSection">
         <button @click="openWebsiteMenu()" :title="fileOptionsTitle" :style="getColorStyles('var(--website-light-text)')" v-pulse-loop>
             <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
         </button>
@@ -31,7 +38,7 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
-const router = useRouter();
+const installStore = useInstallStore();
 
 const { onDocumentRoute } = storeToRefs(documentStore);
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
@@ -47,6 +54,9 @@ watch(barVisible, (newValue) => { hfBottomBarVisible.value = newValue; });
 const hostedFileClass = computed(() => { return (onDocumentRoute.value ? "document" : "script"); });
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
+const showUpdateWebsite = computed(() => {
+    return (!installStore.showUpdateBox || fullScreenStore.fullScreenSet) && (installStore.updateNeeded || installStore.swUpdating);
+});
 
 /** This function sets the full screen mode for a hosted file. */
 function setFS() {
@@ -63,17 +73,11 @@ function openWebsiteMenu() {
     webData.setMenuOpen((onDocumentRoute.value ? DOCUMENT_MENU : SCRIPTS_MENU), true);
 }
 
-/**
- * This function triggers whenever someone clicks on the Wake Lock Button.
- * @param {PointerEvent} event The Click event to draw from.
- */
-function onWakeLockButtonClick(event) {
-    const routePath = router.currentRoute.value.path;
-    if(event.ctrlKey && routePath !== "/wakelock" && routePath !== "/wakelock/") {
-        router.push("/wakelock/");
-    } else {
-        webData.toggleWakeLock();
-    }
+/** This opens the update box only if an update is needed. */
+function openUpdateBox() {
+    if(!installStore.updateNeeded) { return; }
+    if(fullScreenStore.fullScreenSet) { setFS(); }
+    installStore.setUpdateBox(true);
 }
 </script>
 
@@ -124,5 +128,13 @@ function onWakeLockButtonClick(event) {
 .mohit-hostedFile-bottom button:hover, .mohit-hostedFile-bottom a:hover {
     scale: 1.1;
     background-color: black;
+}
+
+.mohit-hostedFile-bottom button.yellow, .mohit-hostedFile-bottom a.yellow {
+    color: var(--lightning-yellow);
+    border-color: var(--lightning-yellow);
+}
+.mohit-hostedFile-bottom button.noAction {
+    cursor: default !important;
 }
 </style>

@@ -368,18 +368,39 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         }
     }
 
+    /**
+     * This function is ran when the user clicks on a button that can set the screen wake lock.
+     * @param {PointerEvent} event The event from clicking the button.
+     */
+    async function onWakeLockButtonClick(event = null) {
+        try {
+            const routePath = router.currentRoute.value.path;
+            const properEvent = (event && event.ctrlKey && event.type === "click");
+
+            if(properEvent && routePath !== "/wakelock" && routePath !== "/wakelock/") {
+                await router.push("/wakelock/");
+            } else {
+                await toggleWakeLock();
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+        }
+    }
+
     /** This function sets whether "Save As" buttons are supported in their browser or not. */
     function setSaveAsSupported() {
         const newStatus = (Boolean(window.isSecureContext) && typeof window.showSaveFilePicker === 'function');
         if(saveAsSupported.value !== newStatus) { saveAsSupported.value = newStatus; }
     }
 
-    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable, copyImageSupported, copySvgSupported, saveAsSupported,
-        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen, pdfNavMenuOpen,
+    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable,
+        copyImageSupported, copySvgSupported, saveAsSupported, menuOpen, noMenuOpen, navMenuOpen,
+        compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen, pdfNavMenuOpen,
         openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
-        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, setQRCodePopup, openQRCodePopup, getWebsiteMenuElement,
-        shareText, shareLink, shareFile, setEventListeners, removeEventListeners, scrollToAndFromFooter, bypassBodyClick
+        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
+        setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, scrollToAndFromFooter, bypassBodyClick,
+        shareText, shareLink, shareFile, setEventListeners, removeEventListeners,
     }
 });
 
