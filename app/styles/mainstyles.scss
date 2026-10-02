@@ -122,6 +122,7 @@ button {
     width: 100%;
     min-width: 340px;
     background: var(--webpage-static-background);
+    overflow-x: hidden;
 }
 .personal-web-body.transparent {
     background: transparent;
@@ -196,8 +197,8 @@ button {
     position: fixed;
     top: 0px;
     left: 0px;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background: transparent;
     padding: 0px;
     margin: 0px;

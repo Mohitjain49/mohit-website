@@ -9,6 +9,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     router.beforeEach((to, from) => {
         if(window) { window.dispatchEvent(new Event("router-before-change", { cancelable: false })); }
         if(to.path !== from.path) { scrollStore.cancelAutoscroll(); }
+        if(to.path === from.path) { webData.closeNavMenu(); }
         return true;
     });
 

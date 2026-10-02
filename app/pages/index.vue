@@ -43,5 +43,6 @@ function changePageTitle() {
     background: rgba(0, 0, 0, 0.25);
     padding-top: 0px;
     min-height: 100%;
+    overflow-x: hidden;
 }
 </style>

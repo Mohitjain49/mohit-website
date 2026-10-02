@@ -12,35 +12,46 @@
 
     <div class="mohit-navBar-top">
         <div class="mohit-navBar-icons left">
-            <RouterLink to="/" class="mohit-navBar-banner" @click="(event) => { flashNavOpt(event, '/') }" title="Home Page" v-pulse-loop>
+            <RouterLink to="/" :class="['mohit-navBar-banner', (currentPathEquals('/') ? 'focused' : '')]" title="Home Page" v-pulse-loop>
                 <img :src="mkj_text" draggable="false" />
             </RouterLink>
         </div>
 
         <div class="mohit-navBar-mainLinks">
-            <RouterLink v-for="link in CENTER_LINKS" :to="link.path"
-                @click="(event) => { flashNavOpt(event, link.path) }"
-                :style="getColorStyles(link.color)"
-                class="mohit-navBar-link" v-pulse-loop>
-
+            <RouterLink v-for="link in CENTER_LINKS" :to="link.path" :class="getNavBarCenterAnchorClasses(link.extraClass, link.path)" v-pulse-loop>
                 <span> {{ link.title }} </span>
             </RouterLink>
         </div>
 
         <div class="mohit-navBar-icons right">
-            <RouterLink to="/contact/" title="Contact Me!" @click="(event) => { flashNavOpt(event, '/contact/') }" class="mohit-navBar-icon" v-pulse-loop>
+            <RouterLink to="/contact/" :class="['mohit-navBar-icon', (currentPathEquals('/contact/') ? 'focused' : '')]" title="Contact Me!" v-pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
-            <button v-if="webData.compassMenuAvailable" class="mohit-navBar-icon light" @click="webData.setMenuOpen(COMPASS_MENU, true)" title="Navigate This Page" v-pulse-loop>
+            <button v-if="webData.compassMenuAvailable"
+                class="mohit-navBar-icon light"
+                :title="(webData.compassMenuOpen ? 'Close Compass Menu' : 'Navigate This Page')"
+                @click="webData.setMenuOpen(COMPASS_MENU, true)" v-pulse-loop>
+
                 <font-awesome-icon icon="fa-compass" />
             </button>
-            <button v-else-if="showScriptOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(SCRIPTS_MENU, true)" title="Script Options" v-pulse-loop>
+            <button v-else-if="showScriptOptionsBtn"
+                class="mohit-navBar-icon light"
+                :title="(webData.scriptsMenuOpen ? 'Close Script Options' : 'See Script Options')"
+                @click="webData.setMenuOpen(SCRIPTS_MENU, true)" v-pulse-loop>
+
                 <font-awesome-icon icon="fa-file-export" />
             </button>
-            <button v-else-if="showDocumentOptionsBtn" class="mohit-navBar-icon light" @click="webData.setMenuOpen(DOCUMENT_MENU, true)" title="Document Options" v-pulse-loop>
+            <button v-else-if="showDocumentOptionsBtn"
+                class="mohit-navBar-icon light"
+                :title="(webData.documentMenuOpen ? 'Close Document Options' : 'See Document Options')"
+                @click="webData.setMenuOpen(DOCUMENT_MENU, true)" v-pulse-loop>
+
                 <font-awesome-icon icon="fa-file-pdf" />
             </button>
-            <button class="mohit-navBar-icon light" @click="webData.setMenuOpen(NAVIGATION_MENU, true)" title="Open Navigation Menu" v-pulse-loop>
+            <button class="mohit-navBar-icon light"
+                :title="((webData.navMenuOpen ? 'Close ' : '') + 'Navigation Menu')"
+                @click="webData.setMenuOpen(NAVIGATION_MENU, true)"v-pulse-loop>
+
                 <font-awesome-icon icon="fa-bars" />
             </button>
         </div>
@@ -51,16 +62,16 @@
     <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="navMenu">
         <MenuTop />
 
-        <div v-for="btn in MAIN_BTNS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-            <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }" v-pulse-loop>
+        <div v-for="btn in MAIN_BTNS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
+            <RouterLink :class="getNavMenuAnchorClasses(btn.path)" :to="btn.path" v-pulse-loop>
                 <font-awesome-icon :icon="btn.icon" />
                 <span> {{ btn.title }} </span>
             </RouterLink>
         </div>
         <div class="mohit-navMenu-opt-break"></div>
 
-        <div v-for="btn in NAV_MENU_EXTRAS" class="mohit-navMenu-opt" :style="getColorStyles(btn.color)">
-            <RouterLink class="mohit-navMenu-mainOpt" :to="btn.path" @click="(event) => { flashNavOpt(event, btn.path) }" v-pulse-loop>
+        <div v-for="btn in NAV_MENU_EXTRAS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
+            <RouterLink :class="getNavMenuAnchorClasses(btn.path)" :to="btn.path" v-pulse-loop>
                 <font-awesome-icon :icon="btn.icon" />
                 <span> {{ btn.title }} </span>
             </RouterLink>
@@ -93,7 +104,10 @@
         </div>
 
         <div v-if="isMounted" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-            <button class="mohit-navMenu-mainOpt" @click="(event) => { webData.onWakeLockButtonClick(event); }" :title="webData.wakeLockTitle" v-pulse-loop>
+            <button class="mohit-navMenu-mainOpt"
+                @click="(event) => { webData.onWakeLockButtonClick(event); }"
+                :title="webData.wakeLockTitle" v-pulse-loop>
+
                 <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
                 <span> {{ webData.wakeLockStatement }} </span>
             </button>
@@ -196,21 +210,17 @@ const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdat
 const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
 const showNavLeftWidgets = computed(() => {
-    return (import.meta.client && (showWakeLockWidget.value || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
+    return (isMounted.value && (showWakeLockWidget.value || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
 });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.noMenuOpen || webData.websiteMenuMode == 1)); });
 
-/**
- * This function makes a button flash if it will do nothing.
- * @param event The event made when the user clicks on the navigation option.
- * @param path The route the option leads to.
- */
-function flashNavOpt(event = new MouseEvent("click"), path = "/") {
-    path = (path.endsWith("/") ? path.slice(0, -1) : path);
-    if(routePath.value !== path && routePath.value !== (path + "/")) { return; }
-    scrollToTop(false, 0);
-    webData.closeNavMenu();
-}
+/** This is a reactive function that can be used to check if a string equals the curent router path. */
+const currentPathEquals = computed(() => { return (path = "") => {
+    return (path === routePath.value || path.substring(0, (path.length - 1)) === routePath.value);
+}});
+
+/** This opens the update box only if an update is needed. */
+function openUpdateBox() { if(installStore.updateNeeded) { installStore.setUpdateBox(true); }}
 
 /** This function lets users copy the webpage link  */
 async function copyWebpageLink() {
@@ -232,8 +242,22 @@ async function copyWebpageLink() {
     }
 }
 
-/** This opens the update box only if an update is needed. */
-function openUpdateBox() { if(installStore.updateNeeded) { installStore.setUpdateBox(true); }}
+/**
+ * This function gets the classes for a navigation menu anchor element.
+ * @param {String} path The path for said anchor element.
+ */
+function getNavMenuAnchorClasses(path = "/") {
+    return ['mohit-navMenu-mainOpt', (currentPathEquals.value(path) ? 'focused' : '')];
+}
+
+/**
+ * This function gets the classes for a navigation menu anchor element.
+ * @param {String} extraClass an extra class for the element.
+ * @param {String} path The path for said anchor element.
+ */
+function getNavBarCenterAnchorClasses(extraClass = "", path = "/") {
+    return ['mohit-navBar-link', extraClass, (currentPathEquals.value(path) ? 'focused' : '')];
+}
 
 const MAIN_BTNS = [
     { path: "/", icon: "fa-house", color: "var(--website-light-text)", title: "Home Page" },
@@ -245,10 +269,10 @@ const MAIN_BTNS = [
 ];
 
 const CENTER_LINKS = [
-    { path: "/skills/", icon: "fa-code", color: "var(--blue-three)", title: "Skills" },
-    { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "Experience" },
-    { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "Projects" },
-    { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "Resume" },
+    { path: "/skills/", icon: "fa-code", extraClass: "skills", title: "Skills" },
+    { path: "/experience/", icon: "fa-file-code", extraClass: "", title: "Experience" },
+    { path: "/projects/", icon: "fa-cubes", extraClass: "projects", title: "Projects" },
+    { path: "/resume/", icon: "fa-file-lines", extraClass: "", title: "Resume" },
 ];
 
 const NAV_MENU_EXTRAS = [
