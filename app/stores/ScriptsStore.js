@@ -482,10 +482,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, mounted, wrapCode, lineOptions, onScriptRoute, currentScriptLink, scriptBlobCreated,
+    return { scripts, mounted, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
         downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
         downloadTitle, saveScriptTitle, copyTitle, downloadCursor, saveDocCursor, copyDocCursor,
-        copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
+        currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
         setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink

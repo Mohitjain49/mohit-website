@@ -87,7 +87,7 @@ function stopButtonAnimations() {
 function onLineOptionsNumChange() {
     stopButtonAnimations();
     const newNum = lineOptionsNum.value;
-    if(newNum > 0 && newNum < Number.POSITIVE_INFINITY) { viewableLineOptionsNum.value = newNum; }
+    if(newNum > 0 && newNum <= scriptsStore.maxLinesInScript) { viewableLineOptionsNum.value = newNum; }
 }
 
 /**

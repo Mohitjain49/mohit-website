@@ -42,14 +42,14 @@ export function getColorStyles(color = "var(--website-text)") {
 export function getMohitInnerWidth() {
     if(!import.meta.client || !document) { return 0; }
     const element = document.getElementById("invisible-css-layout");
-    return (element == null ? 0 : element.clientWidth);
+    return (element == null ? 0 : (element.clientWidth + (window.innerWidth - document.documentElement.clientWidth)));
 }
 
 /** This returns the css inner height. */
 export function getMohitInnerHeight() {
     if(!import.meta.client || !document) { return 0; }
     const element = document.getElementById("invisible-css-layout");
-    return (element == null ? 0 : element.clientHeight);
+    return (element == null ? 0 : (element.clientHeight + (window.innerHeight - document.documentElement.clientHeight)));
 }
 
 /**

@@ -4,7 +4,6 @@ import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
     const CLICK_VOLUME_MUTED_KEY = "mohit-audio-clickVolume-muted";
-    const webData = useWebsiteDataStore();
 
     /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect. */
     const audioClickClip = ref(null);

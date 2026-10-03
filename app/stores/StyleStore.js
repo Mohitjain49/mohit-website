@@ -1,4 +1,5 @@
 import Bowser from "bowser";
+const DYNAMIC_ZOOM_ON_ANY = false;
 
 /** This store manages everything related to dynamically changing the styles of the website with JavaScript. */
 export const useStyleStore = defineStore("style-store", () => {
@@ -11,15 +12,15 @@ export const useStyleStore = defineStore("style-store", () => {
     const fullScreenStore = useFullScreenStore();
     const fullScreenSet = getFullScreenSet();
 
-    const viewportWidth = shallowRef(Number.POSITIVE_INFINITY);
-    const viewportHeight = shallowRef(Number.POSITIVE_INFINITY);
+    const viewportWidth = shallowRef(Number.MAX_SAFE_INTEGER);
+    const viewportHeight = shallowRef(Number.MAX_SAFE_INTEGER);
     const recordedDevicePixelRatio = shallowRef(1);
     
     /** @type {import('vue').ShallowRef<OrientationType>} This is the recorded orientation type of the website. */
     const recordedOrientation = shallowRef("");
 
-    const cssViewportWidth = shallowRef(Number.POSITIVE_INFINITY);
-    const cssViewportHeight = shallowRef(Number.POSITIVE_INFINITY);
+    const cssViewportWidth = shallowRef(Number.MAX_SAFE_INTEGER);
+    const cssViewportHeight = shallowRef(Number.MAX_SAFE_INTEGER);
     const cssToWindowWidthRatio = shallowRef(1.0);
     const cssToWindowHeightRatio = shallowRef(1.0);
 
@@ -89,7 +90,7 @@ export const useStyleStore = defineStore("style-store", () => {
         onMobileDevice.value = (platformType === "mobile" || platformType === "tablet");
 
         await startViewportRaf();
-        if(onMobileDevice.value) { await enableDynamicZoomFactor(); }
+        if(onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY) { await enableDynamicZoomFactor(); }
         await enableCssLayoutObserver();
         await enableBreakpoints();
         await enableTrueViewportVariables();
@@ -290,8 +291,8 @@ export const useStyleStore = defineStore("style-store", () => {
             const oldCssViewportWidth = cssViewportWidth.value;
             const oldCssViewportHeight = cssViewportHeight.value;
 
-            cssViewportWidth.value = cssLayoutElement.clientWidth;
-            cssViewportHeight.value = cssLayoutElement.clientHeight;
+            cssViewportWidth.value = (cssLayoutElement.clientWidth + (viewportWidth.value - document.documentElement.clientWidth));
+            cssViewportHeight.value = (cssLayoutElement.clientHeight + (viewportHeight.value - document.documentElement.clientHeight));
             cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
             cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
 
@@ -369,7 +370,7 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
         const properOrientationType = recordedOrientation.value.startsWith("landscape");
         const baseViewportHeight = (viewportHeight.value < 450);
-        const mobileDevice = onMobileDevice.value;
+        const mobileDevice = (onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY);
 
         const newZoomFactor = ((properOrientationType && baseViewportHeight && mobileDevice) ? 0.5 : 1.0);
         if(newZoomFactor == zoomFactor.value) { return; }
