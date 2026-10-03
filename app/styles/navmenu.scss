@@ -292,14 +292,15 @@
     background-color: var(--dark-background);
 }
 
-.mohit-navMenu.flame { border-color: var(--vibrant-flame); }
-.mohit-navMenu.pdf-nav { width: 300px; }
-
 .mohit-navMenu.vertical-overflow-atTop {
     border-top-right-radius: 1px;
 }
 .mohit-navMenu.vertical-overflow-atBottom {
     border-bottom-right-radius: 1px;
+}
+
+.mohit-navMenu.flame {
+    border-color: var(--vibrant-flame);
 }
 :fullscreen .mohit-navMenu {
     left: 0px;
@@ -698,46 +699,14 @@
     background: var(--c-color);
 }
 
-.mohit-pdfNav-tab {
-    cursor: pointer;
-    width: fit-content;
-    height: fit-content;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin: 0px auto;
-    margin-top: 10px;
-    padding: 10px;
-    padding-bottom: 0px;
-    border: var(--empty-border);
-    border-radius: 10px;
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: bold;
-    transition: var(--default-transition);
-}
-.mohit-pdfNav-tab:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    border: 2px solid white;
-}
-
-.mohit-pdfNav-tab p {
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: bold;
-    color: white;
-    margin: 3px 0px;
-}
-
 /**
  * Below contain specific styles like transitions and dynamic dimension rules.
  */
 
-@include dynamic-less-equal-width-rule-scopedBlock(700) {
+@include dynamic-less-equal-width-rule-noScopedBlock(700) {
     .mohit-navBar-mainLinks { display: none; }
 }
-@include dynamic-less-equal-width-rule-scopedBlock(600) {
+@include dynamic-less-equal-width-rule-noScopedBlock(600) {
     .mohit-navMenu {
         left: 0px;
         top: 0px;
@@ -747,7 +716,7 @@
         max-height: calc(100% - 40px);
     }
 }
-@include dynamic-less-equal-width-rule-scopedBlock(550) {
+@include dynamic-less-equal-width-rule-noScopedBlock(550) {
     .mohit-navBar-statusIcon {
         width: 16px;
         height: 16px;

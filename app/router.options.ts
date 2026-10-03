@@ -69,10 +69,6 @@ export default {
                 if(pageFinishHookRunning.value) { return false; }
             }
 
-            // Wait for all elements and itself to be properly rendered in.
-            await nextTick();
-            // await new Promise<void>((resolve) => { onNuxtReady(() => { resolve(); }); });
-
             // These are two stores required for making a unique autoscroll
             const scrollStore = (await import('~/stores/ScrollStore.js')).useScrollStore($pinia);
             const documentStore = (await import('~/stores/DocumentStore.js')).useDocumentStore($pinia);

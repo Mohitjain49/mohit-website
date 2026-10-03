@@ -22,4 +22,3 @@ export const SCRIPTS_MENU = 2;
 export const DOCUMENT_MENU = 3;
 export const RESUME_MENU = 3.2;
 export const DOCUMENT_METADATA_MENU = 3.3;
-export const PDF_NAVIGATION_MENU = 3.4;

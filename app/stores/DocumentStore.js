@@ -69,9 +69,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => { return (googleDriveOptAvailable.value >= 0); });
 
-    /** @type {import('vue').ShallowRef<Array<HTMLCanvasElement>>} An array of the canvas elements used by the PDF navigation menu. */
-    const pdfNavigationCanvases = shallowRef([]);
-
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const currentObservedPage = ref(-1);
     const contextMenuPageNumber = ref(0);
@@ -116,7 +113,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
     const onResearchPaperRoute = computed(() => { return hostedDocuments[2].onRoute.value; });
-    const showPdfPageNav = computed(() => { return (docLoaded.value.status && (docLoaded.value.totalPages > 1) && (pdfNavigationCanvases.value.length > 0)); });
 
     const downloadTitle = computed(() => {
         const downloadInt = documentDownloadStatus.value;
@@ -168,7 +164,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         const uploadInt = documentUploadToGoogleDriveStatus.value;
         return ((uploadInt == 0) ? "fa-brands fa-google-drive" : DOCUMENT_ACTION_STATUS_ICONS[uploadInt]);
     });
-
 
     const downloadCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentDownloadStatus.value] }});
     const saveDocCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentSaveStatus.value] }});
@@ -564,7 +559,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         const userAgentExists = ("userAgent" in navigator);
         const notOnDesktop = (userAgentExists && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
         browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && userAgentExists && !notOnDesktop);
-        iframeSupported.value = (!!document.createElement("iframe"));
+        iframeSupported.value = Boolean(document.createElement("iframe"));
 
         // This adds the PDF.js Viewer Styles to the DOM to ensure the rendered documents are visually appealing.
         const pdfViewerStyleBlock = document.createElement("style");
@@ -603,8 +598,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     function unmountDocumentPage() {
         fullScreenStore.exitFullScreen();
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
-
-        setPdfNavigationCanvases(false);
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
 
         setWindowSizeWatchers(false);
@@ -632,73 +625,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(workerSrcAdded.value) { return; }
         (await import("pdfjs-dist")).GlobalWorkerOptions.workerSrc = workerSrcUrl;
         workerSrcAdded.value = true;
-    }
-
-    /**
-     * This function creates new canvases for the PDF Navigation Menu.
-     * @param {Boolean} newStatus If true, makes new images for the PDF Navigation canvases, else it deletes them all.
-     */
-    async function setPdfNavigationCanvases(newStatus = false) {
-        pdfNavigationCanvases.value = [];
-        if(!newStatus || !import.meta.client) { return; }
-
-        const documentFile = getCurrentPDFObject();
-        if(!docLoaded.value.status || docLoaded.value.totalPages <= 1 || !documentFile) { return; }
-        await checkPdfjsWorker();
-
-        try {
-            const pdfLoadingTask = (await import("pdfjs-dist")).getDocument({ url: documentFile.url });
-            const pdf = await pdfLoadingTask.promise;
-            const numPages = pdf.numPages;
-
-            /** @type {Array<HTMLCanvasElement>} An array of Object URLs representing every page as a PNG. */
-            const newCanvasElements = Array.from({ length: numPages }, () => { return null; });
-            const outputScale = useStyleStore().recordedDevicePixelRatio;
-
-            /** This function renders a specific page in the PDF as a PNG. */
-            async function renderPageAsCanvas(pageNum = 1) {
-                const pdfPage = await pdf.getPage(pageNum);
-                const defaultViewport = pdfPage.getViewport({ scale: 1 });
-                const viewport = pdfPage.getViewport({ scale: (200 / defaultViewport.width) });
-
-                const canvasElement = document.createElement("canvas");
-                const canvasContext = canvasElement.getContext("2d");
-
-                canvasElement.id = ("mohit-pdfNav-tab_page_canvas_" + String(pageNum));
-                canvasElement.height = Math.floor(viewport.height * outputScale);
-                canvasElement.width = Math.floor(viewport.width * outputScale);
-
-                canvasElement.style.width = "200px";
-                canvasElement.style.height = "auto";
-                canvasElement.style.aspectRatio = (String(Math.floor(viewport.width)) + " / " + String(Math.floor(viewport.height)));
-
-                const canvasRenderTask = pdfPage.render({
-                    viewport: viewport,
-                    transform: [outputScale, 0, 0, outputScale, 0, 0],
-                    canvasContext
-                });
-
-                await canvasRenderTask.promise;
-                newCanvasElements[pageNum - 1] = canvasElement;
-            }
-
-            /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
-            const pageRenderPromises = create2dPromiseArray(numPages, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
-            const numPromiseArrays = pageRenderPromises.length;
-
-            for(let i = 0; i < numPromiseArrays; i++) {
-                const numPromiseForIArray = pageRenderPromises[i].length;
-                for(let j = 0; j < numPromiseForIArray; j++) {
-                    pageRenderPromises[i][j] = renderPageAsCanvas(pageRenderPromises[i][j]);
-                }
-            }
-
-            for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-            pdfNavigationCanvases.value = newCanvasElements;
-        } catch(e) {
-            if(import.meta.dev) { console.error(e); }
-            pdfNavigationCanvases.value = [];
-        }
     }
 
     /** This function initializes a token client for OAuth 2 necessary for the "Save To Google Drive" Feature. */
@@ -839,18 +765,18 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(index >= 0 && index <= docLoaded.value.totalPages) { contextMenuPageNumber.value = index; }
     }
 
-    return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber, pdfNavigationCanvases,
+    return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle,
         downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
         downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,
         downloadCursor, saveDocCursor, shareCursor, printCursor, customPrintCursor, uploadToGoogleDriveCursor,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, showPdfPageNav,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
         onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
-        checkPdfjsWorker, getPdfjsStylesheet, setPdfNavigationCanvases
+        checkPdfjsWorker, getPdfjsStylesheet
     }
 });
 

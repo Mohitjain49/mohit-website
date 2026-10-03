@@ -1,7 +1,3 @@
-<style scoped lang="scss">
-@use "~/styles/navmenu";
-</style>
-
 <template>
 <div class="mohit-navMenu-top">
     <div class="mohit-navBar-icons menu-top left">

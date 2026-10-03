@@ -1,17 +1,12 @@
-<style scoped lang="scss">
-@use "~/styles/navmenu";
-</style>
-
 <template>
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu" ref="compassMenu">
         <MenuTop />
 
         <div v-for="section in routes" class="mohit-navMenu-opt" :style="getColorStyles(section.color)">
-            <RouterLink class="mohit-navMenu-mainOpt" v-pulse-loop
-                @click="webData.closeNavMenu()"
+            <RouterLink :to="(routePath + '#' + section.id)" v-pulse-loop
                 :title="('Scroll To The ' + section.title + ' Section')"
-                :to="getSectionLink(section.id)">
+                :class="['mohit-navMenu-mainOpt', (currentHashEquals(section.id) ? 'focused' : '')]">
 
                 <template v-if="section.title === 'iVue'">
                     <img :src="section.icon" draggable="false" />
@@ -58,19 +53,13 @@ const compassMenu = shallowRef(null);
 
 const topPath = useRoutePathWithQuery();
 const routePath = computed(() => { return router.currentRoute.value.path; });
+const routeHash = computed(() => { return router.currentRoute.value.hash; });
 const footerRoute = computed(() => { return (topPath.value + (webData.webFooterVisibility ? '' :'#footer')); });
+
+/** This is a computed function that can be used to see if a route's hash is equal to where the option will direct it to. */
+const currentHashEquals = computed(() => { return (id = "") => { return (("#" + id) === routeHash.value); }});
 
 onMountedAdvanced(() => { webData.compassMenuAvailable = true; });
 onBeforeUnmount(() => { webData.compassMenuAvailable = false; });
 useWebsiteMenuUtility(compassMenu);
-
-/**
- * This function makes a route for the main section.
- * @param {String} id The ID of the main element in the section.
- */
-function getSectionLink(id) {
-    const routerPath = routePath.value;
-    const suffix = ("/#" + id);
-    return (routerPath.endsWith("/") ? (routerPath.substring(0, routerPath.length - 1) + suffix) : (routerPath + suffix));
-}
 </script>

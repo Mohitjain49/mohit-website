@@ -76,7 +76,7 @@ export default defineNuxtConfig({
     components: [{ path: '~/components', pathPrefix: false, extensions: ['vue'] }],
     imports: { dirs: ['~/stores/**', '~/utils/**'] },
     pinia: { storesDirs: ['./stores/**'] },
-    css: ['@fortawesome/fontawesome-svg-core/styles.css'],
+    css: ['@fortawesome/fontawesome-svg-core/styles.css', '~/styles/mainstyles.scss', '~/styles/navmenu.scss'],
     build: {
         transpile: [
             '@fortawesome/fontawesome-svg-core',

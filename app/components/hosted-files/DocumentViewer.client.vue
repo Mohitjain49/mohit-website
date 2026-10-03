@@ -33,7 +33,6 @@
     <DocumentPageContextMenu />
 
     <DocumentMenu />
-    <PdfPageNavigationMenu v-if="documentStore.showPdfPageNav" />
     <DocMetadataMenu :objectUrl="url" />
     <slot></slot>
 </main>
@@ -305,14 +304,9 @@ async function renderPDF() {
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     documentStore.setCurrentObservedPage(1);
     setSingleDocLoaded(numPages - 1);
-    if(renderAborted()) { return; }
 
-    try {
-        await documentStore.setPdfNavigationCanvases(true);
-        await rerenderCanvases();
-    } catch(e) {
-        if(import.meta.dev) { console.error(e); }
-    }
+    if(renderAborted()) { return; }
+    await rerenderCanvases();
 }
 
 /** This function rerenders the canvases for the PDF. */
@@ -378,7 +372,6 @@ async function rerenderCanvases() {
 
     // This runs all the arrays of promises.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-    if(!pixelRatioUnchanged) { await documentStore.setPdfNavigationCanvases(true); }
 }
 
 /** This function checks if the render abort signal has been sent or not. */
@@ -393,11 +386,8 @@ function renderAborted() {
 function resizePdfViewer(event) {
     if(!import.meta.client || !event || !event.detail) { return; }
     const eventDetail = event.detail;
-    const pixelRatioEvent = (eventDetail.type === "pixel-ratio");
 
-    if(webData.pdfNavMenuOpen && pixelRatioEvent) { webData.closeNavMenu(); }
-    if(!pixelRatioEvent && !(eventDetail.type.includes("resize") && eventDetail.width)) { return; }
-
+    if(eventDetail.type !== "pixel-ratio" && !(eventDetail.type.includes("resize") && eventDetail.width)) { return; }
     if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
     resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
 }

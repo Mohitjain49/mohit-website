@@ -5,8 +5,7 @@ export const WEBSITE_MENUS = [
     { id: "mohit-scriptsMenu", num: SCRIPTS_MENU },
     { id: "mohit-docMenu", num: DOCUMENT_MENU },
     { id: "mohit-resumeMenu", num: RESUME_MENU },
-    { id: "mohit-metadata-docMenu", num: DOCUMENT_METADATA_MENU },
-    { id: "mohit-docMenu-pdfNav", num: PDF_NAVIGATION_MENU }
+    { id: "mohit-metadata-docMenu", num: DOCUMENT_METADATA_MENU }
 ];
 
 /** This is the general pinia store for the website that manages general components like the website menus. */
@@ -55,7 +54,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const documentMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_MENU); });
     const resumeMenuOpen = computed(() => { return (menuOpen.value == RESUME_MENU); });
     const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_METADATA_MENU); });
-    const pdfNavMenuOpen = computed(() => { return (menuOpen.value == PDF_NAVIGATION_MENU); });
 
     const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
@@ -395,7 +393,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable,
         copyImageSupported, copySvgSupported, saveAsSupported, menuOpen, noMenuOpen, navMenuOpen,
-        compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen, pdfNavMenuOpen,
+        compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
         openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,

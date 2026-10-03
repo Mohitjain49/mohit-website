@@ -1,7 +1,3 @@
-<style scoped lang="scss">
-@use "~/styles/navmenu";
-</style>
-
 <template>
 <!-- <WebCover v-if="(documentMetadataMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">

@@ -1,7 +1,3 @@
-<style scoped lang="scss">
-@use "~/styles/navmenu";
-</style>
-
 <template>
 <nav id="mohit-navBar" ref="navBar">
     <Transition name="fade-exit-transition" fade>

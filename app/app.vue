@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-import "~/styles/mainstyles.scss";
 import '~build/console';
 const LOADING_BAR_COLOR = "linear-gradient(to right, var(--blue-one) 0%, var(--blue-two) 100%)";
 

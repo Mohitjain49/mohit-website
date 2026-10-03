@@ -1,7 +1,3 @@
-<style scoped lang="scss">
-@use "~/styles/navmenu";
-</style>
-
 <template>
 <!-- <WebCover v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
@@ -115,12 +111,6 @@
                 <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" v-pulse-loop>
                     <font-awesome-icon icon="fa-database" />
                     <span> See Document Properties </span>
-                </button>
-            </div>
-            <div v-if="documentStore.showPdfPageNav" class="mohit-navMenu-opt" :style="getColorStyles('var(--lightning-yellow)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(PDF_NAVIGATION_MENU)" v-pulse-loop>
-                    <font-awesome-icon icon="fa-compass" />
-                    <span> Open PDF Navigation </span>
                 </button>
             </div>
         </div>

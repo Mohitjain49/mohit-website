@@ -92,8 +92,8 @@ export const useStyleStore = defineStore("style-store", () => {
         await startViewportRaf();
         if(onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY) { await enableDynamicZoomFactor(); }
         await enableCssLayoutObserver();
-        await enableBreakpoints();
         await enableTrueViewportVariables();
+        await enableBreakpoints();
         await enableMousePositionRecorder();
 
         if(validateClientMode()) { document.documentElement.classList.add("js__active"); }
@@ -463,7 +463,7 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
 
         const signal = trueViewportVariablesController.signal;
-        window.addEventListener("animation-resize", () => { setTrueViewportVariables(); }, { signal });
+        window.addEventListener("animation-resize", (event) => { setTrueViewportVariablesOnResize(event); }, { signal });
         window.addEventListener("router-before-change", () => { setTrueViewportVariables(); }, { signal });
         window.addEventListener("router-after-change", () => { setTrueViewportVariables(); }, { signal });
 
@@ -479,6 +479,14 @@ export const useStyleStore = defineStore("style-store", () => {
 
         document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, (String(vhNum) + "px"));
         document.documentElement.style.setProperty(TRUE_100VW_CSS_PROPERTY, (String(vwNum) + "px"));
+    }
+
+    /**
+     * This function should check the "animation-resize" event to make sure it is the correct type before setting the true viewport CSS Variables.
+     * @param {CustomEvent} event The event fired by the device. 
+     */
+    function setTrueViewportVariablesOnResize(event) {
+        if(event && event.detail && event.detail.type.includes("resize")) { setTrueViewportVariables(); }
     }
 
     /** This function unsets the true viewport CSS variables and reverts them back to the css viewport values. */
