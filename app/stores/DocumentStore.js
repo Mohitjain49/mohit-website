@@ -17,13 +17,13 @@ const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/av
 const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
 const DOCUMENT_DOWNLOAD_ACTION_TITLES = ["Download Document", "Downloading Document...", "Document Downloaded!", "Error While Downloading Document."];
-const DOCUMENT_SAVE_ACTION_TITLES = ["Save Document", "Saving Document...", "Document Saved!", "Error While Saving Document."];
+const DOCUMENT_SAVE_ACTION_TITLES = ["Save Document", "Saving Document...", "Document Saved!", "Error While Saving Document.", "Save Timed Out.", "Save Canceled."];
 const DOCUMENT_SHARE_ACTION_TITLES = ["Share Document", "Sharing Document...", "Document Shared!", "Error While Sharing Document."];
-const DOCUMENT_PRINT_ACTION_TITLES = ["Print Document", "Printing Document...", "Document Printed!", "Error While Printing Document."];
+const DOCUMENT_PRINT_ACTION_TITLES = ["Print Document", "Printing Document...", "Document Printed!", "Error While Printing Document.", "Print Timed Out."];
 const DOCUMENT_CUSTOM_PRINT_CANCEL_TITLE = "Printing Document. Click Here To Cancel."
 
-export const DOCUMENT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed"];
-export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
+export const DOCUMENT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
+export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end", "fa-circle-stop"];
 export const DOCUMENT_ACTION_PENDING = 1;
 export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
 
@@ -38,10 +38,10 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** These are the hosted documents used to set the document pages. */
     const hostedDocuments = [
-        useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK, false),
-        useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK, false),
+        useHostedDocument("/resume", Mohit_Jain_Resume, "Mohit_Jain_Resume", ".pdf", PERSONAL_RESUME_LINK),
+        useHostedDocument("/create-github-repo", Create_Github_Repo, "Create_Github_Repo", ".pdf", CREATE_GITHUB_REPO_DOC_LINK),
         useHostedDocument(GEN_AI_APPLICATIONS_PAPER_ROUTE, Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper,
-            "Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper", ".pdf", GEN_AI_APPLICATIONS_PAPER_LINK, false
+            "Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper", ".pdf", GEN_AI_APPLICATIONS_PAPER_LINK
         )
     ];
 
@@ -141,33 +141,33 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const downloadIcon = computed(() => {
         const downloadInt = documentDownloadStatus.value;
-        return ((downloadInt == 0) ? 'fa-file-download' : DOCUMENT_ACTION_STATUS_ICONS[downloadInt]);
+        return (((downloadInt == 0) ? 'fa-file-download' : DOCUMENT_ACTION_STATUS_ICONS[downloadInt]) ?? "fa-circle-question");
     });
     const saveDocIcon = computed(() => {
         const saveInt = documentSaveStatus.value;
-        return ((saveInt == 0) ? 'fa-floppy-disk' : DOCUMENT_ACTION_STATUS_ICONS[saveInt]);
+        return (((saveInt == 0) ? 'fa-floppy-disk' : DOCUMENT_ACTION_STATUS_ICONS[saveInt]) ?? "fa-circle-question");
     });
     const shareIcon = computed(() => {
         const shareInt = documentShareStatus.value;
-        return ((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]);
+        return (((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]) ?? "fa-circle-question");
     });
     const printIcon = computed(() => {
         const printInt = documentPrintStatus.value;
-        return ((printInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[printInt]);
+        return (((printInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[printInt]) ?? "fa-circle-question");
     });
     const customPrintIcon = computed(() => {
         const customPrintInt = documentCustomPrintStatus.value;
-        return ((customPrintInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[customPrintInt]);
+        return (((customPrintInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[customPrintInt]) ?? "fa-circle-question");
     });
     const uploadToGoogleDriveIcon = computed(() => {
-        if(uploadToGoogleDrivePending.value) { return DOCUMENT_ACTION_STATUS_ICONS[DOCUMENT_ACTION_PENDING]; }
+        if(uploadToGoogleDrivePending.value) { return (DOCUMENT_ACTION_STATUS_ICONS[DOCUMENT_ACTION_PENDING] ?? "fa-circle-question"); }
         const uploadInt = documentUploadToGoogleDriveStatus.value;
-        return ((uploadInt == 0) ? "fa-brands fa-google-drive" : DOCUMENT_ACTION_STATUS_ICONS[uploadInt]);
+        return (((uploadInt == 0) ? "fa-brands fa-google-drive" : DOCUMENT_ACTION_STATUS_ICONS[uploadInt]) ?? "fa-circle-question");
     });
 
-    const downloadCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentDownloadStatus.value] }});
-    const saveDocCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentSaveStatus.value] }});
-    const shareCursor = computed(() => { return { cursor: DOCUMENT_ACTION_CURSORS[documentShareStatus.value] }});
+    const downloadCursor = computed(() => { return { cursor: (DOCUMENT_ACTION_CURSORS[documentDownloadStatus.value] ?? "") }});
+    const saveDocCursor = computed(() => { return { cursor: (DOCUMENT_ACTION_CURSORS[documentSaveStatus.value] ?? "") }});
+    const shareCursor = computed(() => { return { cursor: (DOCUMENT_ACTION_CURSORS[documentShareStatus.value] ?? "") }});
 
     const printCursor = computed(() => { return { cursor: (anyPrintPending.value ? "wait" : (anyPrintUnavailable.value ? "default" : "")) }});
     const customPrintCursor = computed(() => {
@@ -241,7 +241,9 @@ export const useDocumentStore = defineStore("document-store", () => {
             // Sets the action as completed.
             documentSaveStatus.value = 2;
         } catch(err) {
-            documentSaveStatus.value = 3;
+            /** @type {Error} The error made by canceling the save. */
+            const newErr = err;
+            documentSaveStatus.value = ((newErr.name && newErr.name === "AbortError") ? 5 : 3);
         } finally {
             setTimeout(() => { documentSaveStatus.value = 0; }, 3000);
         }
@@ -787,9 +789,8 @@ export const useDocumentStore = defineStore("document-store", () => {
  * @param {String} name The name of the file.
  * @param {".pdf" | ".docx"} suffix The suffix of the file being displayed.
  * @param {String} originLink The link where that file is stored online.
- * @param {Boolean} useBlobLink If true, this utility uses the blob object url as the link instead of the passed in link.
  */
-function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "", useBlobLink = false) {
+function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", originLink = "") {
     path = (path.endsWith("/") ? path.substring(0, (path.length - 1)) : path);
     const router = useRouter();
     const link = shallowRef("");
@@ -850,11 +851,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
      * @param {String} newLink The new link or "default" if the website should set it itself.
      */
     function changeLink(newLink = "") {
-        if(newLink === "default") {
-            link.value = (useBlobLink ? objectUrl.value : originLink);
-        } else {
-            link.value = newLink;
-        }
+        link.value = ((newLink === "default") ? originLink : newLink);
     }
 
     /**

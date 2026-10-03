@@ -74,7 +74,7 @@
                             <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
                         </button>
                         <button v-if="webData.saveAsSupported" @click="saveQRCode()" :style="saveImageCursor" class="qrcode-mainPopup-btn yellow" title="Save QR Code">
-                            <FontAwesomeIcon :icon="saveImageIcon" :spin-pulse="(actions.saveImage == 1)" />
+                            <FontAwesomeIcon :icon="saveImageIcon" :spin-pulse="(actions.saveImage == 1)" :style="{ 'color': ((actions.saveImage == 5) ? 'red' : '') }" />
                         </button>
                         <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" :style="copyImageCursor" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image">
                             <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
@@ -122,8 +122,8 @@ import prettyBytes from 'pretty-bytes';
 import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
-const STATUS_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed"];
-const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban', 'fa-hourglass-end'];
+const STATUS_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
+const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban', 'fa-hourglass-end', 'fa-octagon'];
 const IMAGE_STATUS = ['png', 'svg'];
 
 /** @type {Array<FilePickerAcceptType>} These are all the types in which a file can be saved. */
@@ -221,21 +221,21 @@ const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyIm
 var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null, saveImage: null }
 var sharePopupAbortController = new AbortController();
 
-const copyLinkIcon = computed(() => { return ((actions.value.copy == 0) ? 'fa-link' : STATUS_ICONS[actions.value.copy]); });
-const shareLinkIcon = computed(() => { return ((actions.value.share == 0) ? 'fa-share' : STATUS_ICONS[actions.value.share]); });
-const shareImageIcon = computed(() => { return ((actions.value.shareImage == 0) ? 'fa-share' : STATUS_ICONS[actions.value.shareImage]); });
-const downloadImageIcon = computed(() => { return ((actions.value.downloadImage == 0) ? 'fa-download' : STATUS_ICONS[actions.value.downloadImage]); });
-const copyImageIcon = computed(() => { return ((actions.value.copyImage == 0) ? 'fa-clone' : STATUS_ICONS[actions.value.copyImage]); });
-const printImageIcon = computed(() => { return ((actions.value.printImage == 0) ? 'fa-print' : STATUS_ICONS[actions.value.printImage]); });
-const saveImageIcon = computed(() => { return ((actions.value.saveImage == 0) ? 'fa-floppy-disk' : STATUS_ICONS[actions.value.saveImage]); });
+const copyLinkIcon = computed(() => { return (((actions.value.copy == 0) ? 'fa-link' : STATUS_ICONS[actions.value.copy]) ?? 'fa-circle-question'); });
+const shareLinkIcon = computed(() => { return (((actions.value.share == 0) ? 'fa-share' : STATUS_ICONS[actions.value.share]) ?? 'fa-circle-question'); });
+const shareImageIcon = computed(() => { return (((actions.value.shareImage == 0) ? 'fa-share' : STATUS_ICONS[actions.value.shareImage]) ?? 'fa-circle-question'); });
+const downloadImageIcon = computed(() => { return (((actions.value.downloadImage == 0) ? 'fa-download' : STATUS_ICONS[actions.value.downloadImage]) ?? 'fa-circle-question'); });
+const copyImageIcon = computed(() => { return (((actions.value.copyImage == 0) ? 'fa-clone' : STATUS_ICONS[actions.value.copyImage]) ?? 'fa-circle-question'); });
+const printImageIcon = computed(() => { return (((actions.value.printImage == 0) ? 'fa-print' : STATUS_ICONS[actions.value.printImage]) ?? 'fa-circle-question'); });
+const saveImageIcon = computed(() => { return (((actions.value.saveImage == 0) ? 'fa-floppy-disk' : STATUS_ICONS[actions.value.saveImage]) ?? 'fa-circle-question'); });
 
-const copyLinkCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.copy] }});
-const shareLinkCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.share] }});
-const shareImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.shareImage] }});
-const downloadImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.downloadImage] }});
-const copyImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.copyImage] }});
-const printImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.printImage] }});
-const saveImageCursor = computed(() => { return { cursor: STATUS_CURSORS[actions.value.saveImage] }});
+const copyLinkCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.copy] ?? "") }});
+const shareLinkCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.share] ?? "") }});
+const shareImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.shareImage] ?? "") }});
+const downloadImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.downloadImage] ?? "") }});
+const copyImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.copyImage] ?? "") }});
+const printImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.printImage] ?? "") }});
+const saveImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.saveImage] ?? "") }});
 
 const downloadImageTitle = computed(() => { return ("Download QR Code (" + qrcodeFileSize.value + ")"); });
 const shareImageTitle = computed(() => { return ("Share QR Code (" + qrcodeFileSize.value + ")"); });
@@ -584,7 +584,9 @@ async function saveQRCode() {
         // Marks the action as completed!
         actions.value.saveImage = 2; 
     } catch(e) {
-        actions.value.saveImage = 3;
+        /** @type {Error} The error made by canceling the save. */
+        const newErr = e;
+        actions.value.saveImage = ((newErr.name && newErr.name === "AbortError") ? 5 : 3);
     } finally {
         if(timeouts.saveImage != null) { clearTimeout(timeouts.saveImage); }
         timeouts.saveImage = setTimeout(() => {

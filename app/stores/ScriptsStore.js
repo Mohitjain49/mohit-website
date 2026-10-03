@@ -6,12 +6,12 @@ import my_unix_shell from "@scripts/c/mysh.c?raw";
 import my_threadpool from "@scripts/c/threadpool.c?raw";
 
 import prettyBytes from "pretty-bytes";
-export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed"];
-export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end"];
+export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
+export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end", "circle-stop"];
 export const SCRIPT_ACTION_PENDING = 1;
 
 const SCRIPT_DOWNLOAD_ACTION_TITLES = ["Download Code Script", "Downloading Code Script...", "Code Script Downloaded!", "Error While Downloading Code Script."];
-const SCRIPT_SAVE_ACTION_TITLES = ["Save Code Script", "Saving Code Script...", "Code Script Saved!", "Error While Saving Code Script."];
+const SCRIPT_SAVE_ACTION_TITLES = ["Save Code Script", "Saving Code Script...", "Code Script Saved!", "Error While Saving Code Script.", "Save Timed Out.", "Save Canceled."];
 const SCRIPT_COPY_ACTION_TITLES = ["Copy Raw Code Script", "Copying Raw Code Script...", "Raw Code Script Copied!", "Error While Copying Raw Code Script."];
 
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
@@ -63,15 +63,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     const downloadIcon = computed(() => {
         const downloadInt = scriptDownloadStatus.value;
-        return ((downloadInt == 0) ? 'fa-file-download' : SCRIPT_ACTION_STATUS_ICONS[downloadInt]);
+        return (((downloadInt == 0) ? 'fa-file-download' : SCRIPT_ACTION_STATUS_ICONS[downloadInt]) ?? "fa-circle-question");
     });
     const saveScriptIcon = computed(() => {
         const saveInt = scriptSaveStatus.value;
-        return ((saveInt == 0) ? "fa-floppy-disk" : SCRIPT_ACTION_STATUS_ICONS[saveInt]);
+        return (((saveInt == 0) ? "fa-floppy-disk" : SCRIPT_ACTION_STATUS_ICONS[saveInt]) ?? "fa-circle-question");
     });
     const copyIcon = computed(() => {
         const copyInt = scriptCopyStatus.value;
-        return ((copyInt == 0) ? "fa-copy" : SCRIPT_ACTION_STATUS_ICONS[copyInt]);
+        return (((copyInt == 0) ? "fa-copy" : SCRIPT_ACTION_STATUS_ICONS[copyInt]) ?? "fa-circle-question");
     });
 
     const downloadTitle = computed(() => {
@@ -83,10 +83,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         return (SCRIPT_SAVE_ACTION_TITLES[saveInt] + ((saveInt == 0) ? " (" + currentScriptFileSize.value + ")" : ""));
     });
 
-    const copyTitle = computed(() => { return (SCRIPT_COPY_ACTION_TITLES[scriptCopyStatus.value] + ""); });
-    const downloadCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptDownloadStatus.value] }});
-    const saveDocCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptSaveStatus.value] }});
-    const copyDocCursor = computed(() => { return { cursor: SCRIPT_ACTION_CURSORS[scriptCopyStatus.value] }});
+    const copyTitle = computed(() => { return (SCRIPT_COPY_ACTION_TITLES[scriptCopyStatus.value] ?? ""); });
+    const downloadCursor = computed(() => { return { cursor: (SCRIPT_ACTION_CURSORS[scriptDownloadStatus.value] ?? "") }});
+    const saveDocCursor = computed(() => { return { cursor: (SCRIPT_ACTION_CURSORS[scriptSaveStatus.value] ?? "") }});
+    const copyDocCursor = computed(() => { return { cursor: (SCRIPT_ACTION_CURSORS[scriptCopyStatus.value] ?? "") }});
 
     const downloadPending = computed(() => { return (scriptDownloadStatus.value == SCRIPT_ACTION_PENDING); });
     const savePending = computed(() => { return (scriptSaveStatus.value == SCRIPT_ACTION_PENDING); });
@@ -184,7 +184,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
             await writable.close();
             scriptSaveStatus.value = 2;
         } catch(err) {
-            scriptSaveStatus.value = 3;
+            /** @type {Error} The error made by canceling the save. */
+            const newErr = err;
+            scriptSaveStatus.value = ((newErr.name && newErr.name === "AbortError") ? 5 : 3);
         } finally {
             setTimeout(() => { scriptSaveStatus.value = 0; }, 3000);
         }
