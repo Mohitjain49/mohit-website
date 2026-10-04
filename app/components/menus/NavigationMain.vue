@@ -159,7 +159,7 @@
         </span>
     </div>
     <button v-if="showCopyLinkButton" title="Copy Webpage Link" @click="copyWebpageLink()" class="mohit-navBar-statusIcon share yellow" v-pulse-loop>
-        <font-awesome-icon :icon="COPY_STATUS_ICONS[copyStatus]" :spin-pulse="(copyStatus == 1)" />
+        <FontAwesomeActionIcon :baseIcon="'fa-link'" :status="copyStatus" />
     </button>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" v-pulse-loop>
         <font-awesome-icon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
@@ -171,7 +171,6 @@
 <script setup>
 import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const { scrollProgress } = storeToRefs(useScrollStore());
-var copyTimeout = null;
 
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
@@ -230,11 +229,7 @@ async function copyWebpageLink() {
     } catch(e) {
         copyStatus.value = 3;
     } finally {
-        if(copyTimeout != null) { clearTimeout(copyTimeout); }
-        copyTimeout = setTimeout(() => {
-            copyStatus.value = 0;
-            copyTimeout = null;
-        }, 3000); 
+        setTimeout(() => { copyStatus.value = 0; }, 3000); 
     }
 }
 
@@ -278,5 +273,4 @@ const NAV_MENU_EXTRAS = [
 ];
 
 const RESUME_QUERY_UNSYNC_TITLE = "Please reload this page here to apply your changes to customizing my resume.";
-const COPY_STATUS_ICONS = ['fa-link', 'fa-spinner', 'fa-check', 'fa-ban'];
 </script>

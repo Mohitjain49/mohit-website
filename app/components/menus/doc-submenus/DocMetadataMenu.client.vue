@@ -37,7 +37,7 @@
                     <h3> {{ focusedMetadata.header }} </h3>
                     <div class="metadata-docMenu-focused-options">
                         <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)" v-pulse-loop>
-                            <FontAwesomeIcon :icon="COPY_ACTION_ICONS[metadataCopyState]" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="metadataCopyState" />
                         </button>
                         <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" v-pulse-loop>
                             <FontAwesomeIcon icon="fa-xmark" />
@@ -156,7 +156,4 @@ const METADATA_FIELDS_3 = [
     { header: 'File Size (Decimal)', tabs: 5, content: pdfMetadata.fileSize },
     { header: 'File Size (Binary)', tabs: 6, content: pdfMetadata.fileSizeBinary }
 ];
-
-/** These are the icons needed for the copy action. */
-const COPY_ACTION_ICONS = ["fa-copy", "fa-spinner", "fa-check", "fa-ban"];
 </script>

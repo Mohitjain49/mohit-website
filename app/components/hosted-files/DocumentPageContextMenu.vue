@@ -13,7 +13,8 @@
             </div>
         </div>
         <button @click="copyPageLink()">
-            <span> Copy Page Link </span> <FontAwesomeIcon :icon="COPY_STATUS_ICON[copyStatus]" :spin-pulse="(copyStatus == 1)" />
+            <span> Copy Page Link </span>
+            <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="copyStatus" />
         </button>
         <button class="share" @click="sharePageLink()">
             <span> Share Page Link </span> <FontAwesomeIcon icon="fa-share-from-square" />
@@ -24,7 +25,6 @@
 
 <script setup>
 const CONTEXT_MENU_ID = "mohit-document-contextMenu";
-const COPY_STATUS_ICON = ["fa-copy", "fa-spinner", "fa-check", "fa-ban"];
 const router = useRouter();
 
 const webData = useWebsiteDataStore();
