@@ -16,14 +16,17 @@ const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
 const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
+export const DOCUMENT_DOWNLOAD_BASE_ICON = "fa-file-download";
+export const DOCUMENT_SAVE_BASE_ICON = "fa-floppy-disk";
+export const DOCUMENT_SHARE_BASE_ICON = "fa-share";
+export const DOCUMENT_PRINT_BASE_ICON = "fa-print";
+
 const DOCUMENT_DOWNLOAD_ACTION_TITLES = ["Download Document", "Downloading Document...", "Document Downloaded!", "Error While Downloading Document."];
 const DOCUMENT_SAVE_ACTION_TITLES = ["Save Document", "Saving Document...", "Document Saved!", "Error While Saving Document.", "Save Timed Out.", "Save Canceled."];
 const DOCUMENT_SHARE_ACTION_TITLES = ["Share Document", "Sharing Document...", "Document Shared!", "Error While Sharing Document."];
 const DOCUMENT_PRINT_ACTION_TITLES = ["Print Document", "Printing Document...", "Document Printed!", "Error While Printing Document.", "Print Timed Out."];
-const DOCUMENT_CUSTOM_PRINT_CANCEL_TITLE = "Printing Document. Click Here To Cancel."
+const DOCUMENT_CUSTOM_PRINT_CANCEL_TITLE = "Printing Document. Click Here To Cancel.";
 
-export const DOCUMENT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
-export const DOCUMENT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end", "fa-circle-stop"];
 export const DOCUMENT_ACTION_PENDING = 1;
 export const DOCUMENT_RENDER_TASK_PARTITION_SIZE = 10;
 
@@ -139,35 +142,14 @@ export const useDocumentStore = defineStore("document-store", () => {
         return ((progressTitleEnd.length > 0) ? progressTitleEnd : (DOCUMENT_PRINT_ACTION_TITLES[customPrintInt] + defaultTitleEnd));
     });
 
-    const downloadIcon = computed(() => {
-        const downloadInt = documentDownloadStatus.value;
-        return (((downloadInt == 0) ? 'fa-file-download' : DOCUMENT_ACTION_STATUS_ICONS[downloadInt]) ?? "fa-circle-question");
-    });
-    const saveDocIcon = computed(() => {
-        const saveInt = documentSaveStatus.value;
-        return (((saveInt == 0) ? 'fa-floppy-disk' : DOCUMENT_ACTION_STATUS_ICONS[saveInt]) ?? "fa-circle-question");
-    });
-    const shareIcon = computed(() => {
-        const shareInt = documentShareStatus.value;
-        return (((shareInt == 0) ? "fa-share" : DOCUMENT_ACTION_STATUS_ICONS[shareInt]) ?? "fa-circle-question");
-    });
-    const printIcon = computed(() => {
-        const printInt = documentPrintStatus.value;
-        return (((printInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[printInt]) ?? "fa-circle-question");
-    });
-    const customPrintIcon = computed(() => {
-        const customPrintInt = documentCustomPrintStatus.value;
-        return (((customPrintInt == 0) ? "fa-print" : DOCUMENT_ACTION_STATUS_ICONS[customPrintInt]) ?? "fa-circle-question");
-    });
-    const uploadToGoogleDriveIcon = computed(() => {
-        if(uploadToGoogleDrivePending.value) { return (DOCUMENT_ACTION_STATUS_ICONS[DOCUMENT_ACTION_PENDING] ?? "fa-circle-question"); }
-        const uploadInt = documentUploadToGoogleDriveStatus.value;
-        return (((uploadInt == 0) ? "fa-brands fa-google-drive" : DOCUMENT_ACTION_STATUS_ICONS[uploadInt]) ?? "fa-circle-question");
-    });
+    const downloadCursor = useActionCursor(documentDownloadStatus);
+    const saveDocCursor = useActionCursor(documentSaveStatus);
+    const shareCursor = useActionCursor(documentShareStatus);
 
-    const downloadCursor = computed(() => { return { cursor: (DOCUMENT_ACTION_CURSORS[documentDownloadStatus.value] ?? "") }});
-    const saveDocCursor = computed(() => { return { cursor: (DOCUMENT_ACTION_CURSORS[documentSaveStatus.value] ?? "") }});
-    const shareCursor = computed(() => { return { cursor: (DOCUMENT_ACTION_CURSORS[documentShareStatus.value] ?? "") }});
+    const uploadToGoogleDriveIconNumber = computed(() => {
+        const loadingScripts = (googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
+        return (loadingScripts ? DOCUMENT_ACTION_PENDING : documentUploadToGoogleDriveStatus.value);
+    });
 
     const printCursor = computed(() => { return { cursor: (anyPrintPending.value ? "wait" : (anyPrintUnavailable.value ? "default" : "")) }});
     const customPrintCursor = computed(() => {
@@ -175,18 +157,8 @@ export const useDocumentStore = defineStore("document-store", () => {
         return { cursor: (anyPrintPending.value ? waitCursor : (anyPrintUnavailable.value ? "default" : "")) }
     });
 
-    const downloadPending = computed(() => { return (documentDownloadStatus.value == DOCUMENT_ACTION_PENDING); });
-    const savePending = computed(() => { return (documentSaveStatus.value == DOCUMENT_ACTION_PENDING); });
     const printPending = computed(() => { return (documentPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const customPrintPending = computed(() => { return (documentCustomPrintStatus.value == DOCUMENT_ACTION_PENDING); });
-    const sharePending = computed(() => { return (documentShareStatus.value == DOCUMENT_ACTION_PENDING); });
-
-    const uploadToGoogleDrivePending = computed(() => {
-        return (documentUploadToGoogleDriveStatus.value == DOCUMENT_ACTION_PENDING || googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
-    });
-    const uploadToGoogleDriveCursor = computed(() => {
-        return { cursor: ((documentUploadToGoogleDriveStatus.value > 0 || googleDriveOptAvailable.value > 0) ? "default" : "") }
-    });
 
     const anyPrintPending = computed(() => { return (printPending.value || customPrintPending.value); });
     const anyPrintUnavailable = computed(() => { return (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0); });
@@ -770,11 +742,9 @@ export const useDocumentStore = defineStore("document-store", () => {
     return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle,
-        downloadIcon, saveDocIcon, customPrintIcon, printIcon, shareIcon, uploadToGoogleDriveIcon, documentUploadToGoogleDriveCanceled,
-        downloadPending, savePending, printPending, customPrintPending, sharePending, uploadToGoogleDrivePending,
-        downloadCursor, saveDocCursor, shareCursor, printCursor, customPrintCursor, uploadToGoogleDriveCursor,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth,
-        onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
+        documentDownloadStatus, documentSaveStatus, documentShareStatus, documentPrintStatus, documentCustomPrintStatus,
+        uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, downloadCursor, saveDocCursor, shareCursor, printCursor, customPrintCursor,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,

@@ -28,10 +28,10 @@
             </RouterLink>
 
             <button @click="copyQRCodeLink()" :style="copyLinkCursor" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
-                <FontAwesomeIcon :icon="copyLinkIcon" :spin-pulse="(actions.copy == 1)" />
+                <FontAwesomeActionIcon :baseIcon="'fa-link'" :status="actions.copy" />
             </button>
             <button v-if="showCustomLinkShare" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
-                <FontAwesomeIcon :icon="shareLinkIcon" :spin-pulse="(actions.share == 1)" />
+                <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.share" />
             </button>
             
             <div v-if="(sharePopupMode != 2)" class="qrcode-mainPopup-btn_v2">
@@ -41,7 +41,7 @@
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 1)" class="qrcode-image-options">
                         <button v-if="webData.shareSupported" @click="shareQRCodeLink()" :style="shareLinkCursor" class="qrcode-mainPopup-btn light" title="Share Link">
-                            <FontAwesomeIcon :icon="shareLinkIcon" :spin-pulse="(actions.share == 1)" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.share" />
                         </button>
                         <a :href="shareEmail" class="qrcode-mainPopup-btn" title="Share This Link By Email!">
                             <FontAwesomeIcon icon="fa-envelope" />
@@ -68,19 +68,19 @@
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
                         <button v-if="webData.shareSupported" @click="shareQRCode()" :style="shareImageCursor" class="qrcode-mainPopup-btn yellow" :title="shareImageTitle">
-                            <FontAwesomeIcon :icon="shareImageIcon" :spin-pulse="(actions.shareImage == 1)" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.shareImage" />
                         </button>
                         <button @click="downloadQRCode()" :style="downloadImageCursor" class="qrcode-mainPopup-btn yellow" :title="downloadImageTitle">
-                            <FontAwesomeIcon :icon="downloadImageIcon" :spin-pulse="(actions.downloadImage == 1)" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-download'" :status="actions.downloadImage" />
                         </button>
                         <button v-if="webData.saveAsSupported" @click="saveQRCode()" :style="saveImageCursor" class="qrcode-mainPopup-btn yellow" title="Save QR Code">
-                            <FontAwesomeIcon :icon="saveImageIcon" :spin-pulse="(actions.saveImage == 1)" :style="{ 'color': ((actions.saveImage == 5) ? 'red' : '') }" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-floppy-disk'" :status="actions.saveImage" />
                         </button>
                         <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" :style="copyImageCursor" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image">
-                            <FontAwesomeIcon :icon="copyImageIcon" :spin-pulse="(actions.copyImage == 1)" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-clone'" :status="actions.copyImage" />
                         </button>
                         <button v-if="iframeSupported" @click="printQRCode()" :style="printImageCursor" class="qrcode-mainPopup-btn yellow" title="Print QR Code">
-                            <FontAwesomeIcon :icon="printImageIcon" :spin-pulse="(actions.printImage == 1)" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-print'" :status="actions.printImage" />
                         </button>
                         <a v-if="qrcodeUrlCreated" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
                             <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
@@ -123,7 +123,6 @@ import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
 const STATUS_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
-const STATUS_ICONS = ['', 'fa-spinner', 'fa-check', 'fa-ban', 'fa-hourglass-end', 'fa-octagon'];
 const IMAGE_STATUS = ['png', 'svg'];
 
 /** @type {Array<FilePickerAcceptType>} These are all the types in which a file can be saved. */
@@ -221,21 +220,13 @@ const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyIm
 var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null, saveImage: null }
 var sharePopupAbortController = new AbortController();
 
-const copyLinkIcon = computed(() => { return (((actions.value.copy == 0) ? 'fa-link' : STATUS_ICONS[actions.value.copy]) ?? 'fa-circle-question'); });
-const shareLinkIcon = computed(() => { return (((actions.value.share == 0) ? 'fa-share' : STATUS_ICONS[actions.value.share]) ?? 'fa-circle-question'); });
-const shareImageIcon = computed(() => { return (((actions.value.shareImage == 0) ? 'fa-share' : STATUS_ICONS[actions.value.shareImage]) ?? 'fa-circle-question'); });
-const downloadImageIcon = computed(() => { return (((actions.value.downloadImage == 0) ? 'fa-download' : STATUS_ICONS[actions.value.downloadImage]) ?? 'fa-circle-question'); });
-const copyImageIcon = computed(() => { return (((actions.value.copyImage == 0) ? 'fa-clone' : STATUS_ICONS[actions.value.copyImage]) ?? 'fa-circle-question'); });
-const printImageIcon = computed(() => { return (((actions.value.printImage == 0) ? 'fa-print' : STATUS_ICONS[actions.value.printImage]) ?? 'fa-circle-question'); });
-const saveImageIcon = computed(() => { return (((actions.value.saveImage == 0) ? 'fa-floppy-disk' : STATUS_ICONS[actions.value.saveImage]) ?? 'fa-circle-question'); });
-
-const copyLinkCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.copy] ?? "") }});
-const shareLinkCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.share] ?? "") }});
-const shareImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.shareImage] ?? "") }});
-const downloadImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.downloadImage] ?? "") }});
-const copyImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.copyImage] ?? "") }});
-const printImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.printImage] ?? "") }});
-const saveImageCursor = computed(() => { return { cursor: (STATUS_CURSORS[actions.value.saveImage] ?? "") }});
+const copyLinkCursor = useActionCursor(toRef(actions.value, "copy"));
+const shareLinkCursor = useActionCursor(toRef(actions.value, "share"));
+const shareImageCursor = useActionCursor(toRef(actions.value, "shareImage"));
+const downloadImageCursor = useActionCursor(toRef(actions.value, "downloadImage"));
+const copyImageCursor = useActionCursor(toRef(actions.value, "copyImage"));
+const printImageCursor = useActionCursor(toRef(actions.value, "printImage"));
+const saveImageCursor = useActionCursor(toRef(actions.value, "saveImage"));
 
 const downloadImageTitle = computed(() => { return ("Download QR Code (" + qrcodeFileSize.value + ")"); });
 const shareImageTitle = computed(() => { return ("Share QR Code (" + qrcodeFileSize.value + ")"); });

@@ -12,20 +12,20 @@
                         :style="scriptsStore.downloadCursor"
                         :title="scriptsStore.downloadTitle" v-pulse-loop>
 
-                        <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
+                        <FontAwesomeActionIcon :baseIcon="SCRIPT_DOWNLOAD_BASE_ICON" :status="scriptsStore.scriptDownloadStatus" />
                     </button>
                     <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)"
                         @click="scriptsStore.saveScript()"
-                        :style="scriptsStore.saveDocCursor"
+                        :style="scriptsStore.saveScriptCursor"
                         :title="scriptsStore.saveScriptTitle" v-pulse-loop>
                         
-                        <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
+                        <FontAwesomeActionIcon :baseIcon="SCRIPT_SAVE_BASE_ICON" :status="scriptsStore.scriptSaveStatus" />
                     </button>
                     <button class="script-save-opt" @click="scriptsStore.copyScript()"
-                        :style="scriptsStore.copyDocCursor"
+                        :style="scriptsStore.copyCursor"
                         :title="scriptsStore.copyTitle" v-pulse-loop>
 
-                        <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
+                        <FontAwesomeActionIcon :baseIcon="SCRIPT_COPY_BASE_ICON" :status="scriptsStore.scriptCopyStatus" />
                     </button>
                 </div>
                 <a class="white" v-if="(scriptsStore.currentScriptLink != '')" :href="scriptsStore.currentScriptLink" title="See Code On Github" v-pulse-loop>

@@ -4,11 +4,11 @@ import use_docker_code from "@scripts/use-docker.mjs?raw";
 
 import my_unix_shell from "@scripts/c/mysh.c?raw";
 import my_threadpool from "@scripts/c/threadpool.c?raw";
-
 import prettyBytes from "pretty-bytes";
-export const SCRIPT_ACTION_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
-export const SCRIPT_ACTION_STATUS_ICONS = ["", "fa-spinner", "fa-check", "fa-ban", "fa-hourglass-end", "circle-stop"];
-export const SCRIPT_ACTION_PENDING = 1;
+
+export const SCRIPT_DOWNLOAD_BASE_ICON = "fa-file-download";
+export const SCRIPT_SAVE_BASE_ICON = "fa-floppy-disk";
+export const SCRIPT_COPY_BASE_ICON = "fa-copy";
 
 const SCRIPT_DOWNLOAD_ACTION_TITLES = ["Download Code Script", "Downloading Code Script...", "Code Script Downloaded!", "Error While Downloading Code Script."];
 const SCRIPT_SAVE_ACTION_TITLES = ["Save Code Script", "Saving Code Script...", "Code Script Saved!", "Error While Saving Code Script.", "Save Timed Out.", "Save Canceled."];
@@ -61,19 +61,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const currentScriptFileSize = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].fileSize.value : ""); });
     const currentScriptLink = computed(() => { return (onScriptRoute.value ? scripts[currentScriptRoute.value].link : ""); });
 
-    const downloadIcon = computed(() => {
-        const downloadInt = scriptDownloadStatus.value;
-        return (((downloadInt == 0) ? 'fa-file-download' : SCRIPT_ACTION_STATUS_ICONS[downloadInt]) ?? "fa-circle-question");
-    });
-    const saveScriptIcon = computed(() => {
-        const saveInt = scriptSaveStatus.value;
-        return (((saveInt == 0) ? "fa-floppy-disk" : SCRIPT_ACTION_STATUS_ICONS[saveInt]) ?? "fa-circle-question");
-    });
-    const copyIcon = computed(() => {
-        const copyInt = scriptCopyStatus.value;
-        return (((copyInt == 0) ? "fa-copy" : SCRIPT_ACTION_STATUS_ICONS[copyInt]) ?? "fa-circle-question");
-    });
-
     const downloadTitle = computed(() => {
         const downloadInt = scriptDownloadStatus.value;
         return (SCRIPT_DOWNLOAD_ACTION_TITLES[downloadInt] + ((downloadInt == 0) ? " (" + currentScriptFileSize.value + ")" : ""));
@@ -84,13 +71,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     });
 
     const copyTitle = computed(() => { return (SCRIPT_COPY_ACTION_TITLES[scriptCopyStatus.value] ?? ""); });
-    const downloadCursor = computed(() => { return { cursor: (SCRIPT_ACTION_CURSORS[scriptDownloadStatus.value] ?? "") }});
-    const saveDocCursor = computed(() => { return { cursor: (SCRIPT_ACTION_CURSORS[scriptSaveStatus.value] ?? "") }});
-    const copyDocCursor = computed(() => { return { cursor: (SCRIPT_ACTION_CURSORS[scriptCopyStatus.value] ?? "") }});
-
-    const downloadPending = computed(() => { return (scriptDownloadStatus.value == SCRIPT_ACTION_PENDING); });
-    const savePending = computed(() => { return (scriptSaveStatus.value == SCRIPT_ACTION_PENDING); });
-    const copyPending = computed(() => { return (scriptCopyStatus.value == SCRIPT_ACTION_PENDING); });
+    const downloadCursor = useActionCursor(scriptDownloadStatus);
+    const saveScriptCursor = useActionCursor(scriptSaveStatus);
+    const copyCursor = useActionCursor(scriptCopyStatus);
 
     const wrapIcon = computed(() => { return (wrapCode.value ? "fa-align-left" : "fa-arrows-left-right-to-line"); });
     const wrapStatement = computed(() => { return (wrapCode.value ? "Let Code Overflow" : "Wrap Code"); });
@@ -485,8 +468,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     return { scripts, mounted, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
-        downloadIcon, saveScriptIcon, copyIcon, downloadPending, savePending, copyPending,
-        downloadTitle, saveScriptTitle, copyTitle, downloadCursor, saveDocCursor, copyDocCursor,
+        scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus,
+        downloadTitle, saveScriptTitle, copyTitle, downloadCursor, saveScriptCursor, copyCursor,
         currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
         setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,

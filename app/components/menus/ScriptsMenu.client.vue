@@ -10,25 +10,25 @@
                     :style="scriptsStore.downloadCursor"
                     :title="scriptsStore.downloadTitle" v-pulse-loop>
 
-                    <font-awesome-icon :icon="scriptsStore.downloadIcon" :spin-pulse="scriptsStore.downloadPending" />
+                    <FontAwesomeActionIcon :baseIcon="SCRIPT_DOWNLOAD_BASE_ICON" :status="scriptsStore.scriptDownloadStatus" />
                     <span> Download Code Script </span>
                 </button>
             </div>
             <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="scriptsStore.saveScript()"
-                    :style="scriptsStore.saveDocCursor"
+                    :style="scriptsStore.saveScriptCursor"
                     :title="scriptsStore.saveScriptTitle" v-pulse-loop>
 
-                    <font-awesome-icon :icon="scriptsStore.saveScriptIcon" :spin-pulse="scriptsStore.savePending" />
+                    <FontAwesomeActionIcon :baseIcon="SCRIPT_SAVE_BASE_ICON" :status="scriptsStore.scriptSaveStatus" />
                     <span> Save Code Script </span>
                 </button>
             </div>
             <div class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="scriptsStore.copyScript()"
-                    :style="scriptsStore.copyDocCursor"
+                    :style="scriptsStore.copyCursor"
                     :title="scriptsStore.copyTitle" v-pulse-loop>
 
-                    <font-awesome-icon :icon="scriptsStore.copyIcon" :spin-pulse="scriptsStore.copyPending" />
+                    <FontAwesomeActionIcon :baseIcon="SCRIPT_COPY_BASE_ICON" :status="scriptsStore.scriptCopyStatus" />
                     <span> Copy Raw Code Script </span>
                 </button>
             </div>

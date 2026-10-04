@@ -5,21 +5,21 @@
             :style="documentStore.downloadCursor"
             :title="documentStore.downloadTitle" v-pulse-loop>
 
-            <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
+            <FontAwesomeActionIcon :baseIcon="DOCUMENT_DOWNLOAD_BASE_ICON" :status="documentStore.documentDownloadStatus" />
         </button>
         <button class="doc-save-opt" v-if="webData.saveAsSupported"
             @click="documentStore.saveDoc()"
             :style="documentStore.saveDocCursor"
             :title="documentStore.saveDocTitle" v-pulse-loop>
 
-            <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
+            <FontAwesomeActionIcon :baseIcon="DOCUMENT_SAVE_BASE_ICON" :status="documentStore.documentSaveStatus" />
         </button>
         <button class="doc-save-opt" v-if="webData.shareSupported"
             @click="documentStore.shareDoc()"
             :style="documentStore.shareCursor"
             :title="documentStore.shareTitle" v-pulse-loop>
 
-            <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
+            <FontAwesomeActionIcon :baseIcon="DOCUMENT_SHARE_BASE_ICON" :status="documentStore.documentShareStatus" />
         </button>
 
         <button class="doc-save-opt" v-if="iframeSupported"
@@ -27,15 +27,14 @@
             :style="documentStore.customPrintCursor"
             :title="documentStore.customPrintTitle" v-pulse-loop>
 
-            <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
+            <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentCustomPrintStatus" />
         </button>
         <button class="doc-save-opt" v-if="(iframeSupported && documentStore.browserPdfViewerPresent)"
             :title="documentStore.printTitle"
             @click="documentStore.printDoc(false)"
             :style="documentStore.printCursor" v-pulse-loop>
 
-            <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
-            <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
+            <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentPrintStatus" :browserPrint="true" />
         </button>
     </div>
     <div class="mohit-document-topBar-sideSection">
@@ -56,8 +55,6 @@
 </template>
 
 <script setup>
-import standard_print_icon from "~/assets/Standard_Print_Icon.svg";
-
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();

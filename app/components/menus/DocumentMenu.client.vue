@@ -36,7 +36,7 @@
                     :style="documentStore.downloadCursor"
                     :title="documentStore.downloadTitle" v-pulse-loop>
 
-                    <font-awesome-icon :icon="documentStore.downloadIcon" :spin-pulse="documentStore.downloadPending" />
+                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_DOWNLOAD_BASE_ICON" :status="documentStore.documentDownloadStatus" />
                     <span> Download Document </span>
                 </button>
             </div>
@@ -45,7 +45,7 @@
                     :title="documentStore.saveDocTitle"
                     :style="documentStore.saveDocCursor" v-pulse-loop>
 
-                    <font-awesome-icon :icon="documentStore.saveDocIcon" :spin-pulse="documentStore.savePending" />
+                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_SAVE_BASE_ICON" :status="documentStore.documentSaveStatus" />
                     <span> Save Document </span>
                 </button>
             </div>
@@ -54,7 +54,7 @@
                     :title="documentStore.shareTitle"
                     :style="documentStore.shareCursor" v-pulse-loop>
 
-                    <font-awesome-icon :icon="documentStore.shareIcon" :spin-pulse="documentStore.sharePending" />
+                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_SHARE_BASE_ICON" :status="documentStore.documentShareStatus" />
                     <span> Share Document </span>
                 </button>
             </div>
@@ -63,7 +63,7 @@
                     :title="documentStore.customPrintTitle"
                     :style="documentStore.customPrintCursor" v-pulse-loop>
 
-                    <font-awesome-icon :icon="documentStore.customPrintIcon" :spin-pulse="documentStore.customPrintPending" />
+                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentCustomPrintStatus" />
                     <span> {{ (documentStore.browserPdfViewerPresent ? 'Print Document (Standard)' : 'Print Document') }} </span>
                 </button>
             </div>
@@ -72,8 +72,7 @@
                     :title="documentStore.printTitle"
                     :style="documentStore.printCursor" v-pulse-loop>
 
-                    <img v-if="(documentStore.printIcon === 'fa-print')" :src="standard_print_icon" draggable="false" />
-                    <font-awesome-icon v-else :icon="documentStore.printIcon" :spin-pulse="documentStore.printPending" />
+                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentPrintStatus" :browserPrint="true" />
                     <span> Print Document (Browser) </span>
                 </button>
             </div>
@@ -83,7 +82,7 @@
         <div class="mohit-navMenu-opt-group" v-if="documentStore.googleDriveOptionAvailable">
             <div class="mohit-navMenu-sectionheader" :style="getColorStyles('#34A853')">
                 <span> Google Drive </span>
-                <font-awesome-icon :icon="documentStore.uploadToGoogleDriveIcon" :spin-pulse="documentStore.uploadToGoogleDrivePending" />
+                <FontAwesomeActionIcon :baseIcon="'fa-brands fa-google-drive'" :status="documentStore.uploadToGoogleDriveIconNumber" />
             </div>
             <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE" v-pulse-loop>
