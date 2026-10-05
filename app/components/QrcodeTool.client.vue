@@ -27,10 +27,10 @@
                 <FontAwesomeIcon icon="fa-diamond-turn-right" />
             </RouterLink>
 
-            <button @click="copyQRCodeLink()" :style="copyLinkCursor" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')">
+            <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')" v-action-cursor="actions.copy">
                 <FontAwesomeActionIcon :baseIcon="'fa-link'" :status="actions.copy" />
             </button>
-            <button v-if="showCustomLinkShare" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link">
+            <button v-if="showCustomLinkShare" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link" v-action-cursor="actions.share">
                 <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.share" />
             </button>
             
@@ -40,7 +40,10 @@
                 </button>
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 1)" class="qrcode-image-options">
-                        <button v-if="webData.shareSupported" @click="shareQRCodeLink()" :style="shareLinkCursor" class="qrcode-mainPopup-btn light" title="Share Link">
+                        <button v-if="webData.shareSupported" @click="shareQRCodeLink()"
+                            class="qrcode-mainPopup-btn light" title="Share Link"
+                            v-action-cursor="actions.share">
+
                             <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.share" />
                         </button>
                         <a :href="shareEmail" class="qrcode-mainPopup-btn" title="Share This Link By Email!">
@@ -67,19 +70,19 @@
                 </button>
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
-                        <button v-if="webData.shareSupported" @click="shareQRCode()" :style="shareImageCursor" class="qrcode-mainPopup-btn yellow" :title="shareImageTitle">
+                        <button v-if="webData.shareSupported" @click="shareQRCode()" class="qrcode-mainPopup-btn yellow" :title="shareImageTitle" v-action-cursor="actions.shareImage">
                             <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.shareImage" />
                         </button>
-                        <button @click="downloadQRCode()" :style="downloadImageCursor" class="qrcode-mainPopup-btn yellow" :title="downloadImageTitle">
+                        <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow" :title="downloadImageTitle" v-action-cursor="actions.downloadImage">
                             <FontAwesomeActionIcon :baseIcon="'fa-download'" :status="actions.downloadImage" />
                         </button>
-                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" :style="saveImageCursor" class="qrcode-mainPopup-btn yellow" title="Save QR Code">
+                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" class="qrcode-mainPopup-btn yellow" title="Save QR Code" v-action-cursor="actions.saveImage">
                             <FontAwesomeActionIcon :baseIcon="'fa-floppy-disk'" :status="actions.saveImage" />
                         </button>
-                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" :style="copyImageCursor" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image">
+                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image" v-action-cursor="actions.copyImage">
                             <FontAwesomeActionIcon :baseIcon="'fa-clone'" :status="actions.copyImage" />
                         </button>
-                        <button v-if="iframeSupported" @click="printQRCode()" :style="printImageCursor" class="qrcode-mainPopup-btn yellow" title="Print QR Code">
+                        <button v-if="iframeSupported" @click="printQRCode()" class="qrcode-mainPopup-btn yellow" title="Print QR Code" v-action-cursor="actions.printImage">
                             <FontAwesomeActionIcon :baseIcon="'fa-print'" :status="actions.printImage" />
                         </button>
                         <a v-if="qrcodeUrlCreated" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
@@ -219,14 +222,6 @@ const openNewTabButtonTitle = computed(() => {
 const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyImage: 0, printImage: 0, saveImage: 0 });
 var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null, saveImage: null }
 var sharePopupAbortController = new AbortController();
-
-const copyLinkCursor = useActionCursor(toRef(actions.value, "copy"));
-const shareLinkCursor = useActionCursor(toRef(actions.value, "share"));
-const shareImageCursor = useActionCursor(toRef(actions.value, "shareImage"));
-const downloadImageCursor = useActionCursor(toRef(actions.value, "downloadImage"));
-const copyImageCursor = useActionCursor(toRef(actions.value, "copyImage"));
-const printImageCursor = useActionCursor(toRef(actions.value, "printImage"));
-const saveImageCursor = useActionCursor(toRef(actions.value, "saveImage"));
 
 const downloadImageTitle = computed(() => { return ("Download QR Code (" + qrcodeFileSize.value + ")"); });
 const shareImageTitle = computed(() => { return ("Share QR Code (" + qrcodeFileSize.value + ")"); });

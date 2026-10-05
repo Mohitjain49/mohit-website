@@ -71,10 +71,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     });
 
     const copyTitle = computed(() => { return (SCRIPT_COPY_ACTION_TITLES[scriptCopyStatus.value] ?? ""); });
-    const downloadCursor = useActionCursor(scriptDownloadStatus);
-    const saveScriptCursor = useActionCursor(scriptSaveStatus);
-    const copyCursor = useActionCursor(scriptCopyStatus);
-
     const wrapIcon = computed(() => { return (wrapCode.value ? "fa-align-left" : "fa-arrows-left-right-to-line"); });
     const wrapStatement = computed(() => { return (wrapCode.value ? "Let Code Overflow" : "Wrap Code"); });
 
@@ -468,8 +464,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     return { scripts, mounted, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
-        scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus,
-        downloadTitle, saveScriptTitle, copyTitle, downloadCursor, saveScriptCursor, copyCursor,
+        scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus, downloadTitle, saveScriptTitle, copyTitle,
         currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
         setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,

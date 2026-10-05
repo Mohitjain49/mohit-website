@@ -2,22 +2,22 @@
 <div ref="document-options" class="mohit-document-topBar">
     <div class="mohit-document-topBar-sideSection">
         <button class="doc-save-opt" @click="documentStore.downloadDoc()"
-            :style="documentStore.downloadCursor"
-            :title="documentStore.downloadTitle" v-pulse-loop>
+            :title="documentStore.downloadTitle"
+            v-action-cursor="documentStore.documentDownloadStatus" v-pulse-loop>
 
             <FontAwesomeActionIcon :baseIcon="DOCUMENT_DOWNLOAD_BASE_ICON" :status="documentStore.documentDownloadStatus" />
         </button>
         <button class="doc-save-opt" v-if="webData.saveAsSupported"
             @click="documentStore.saveDoc()"
-            :style="documentStore.saveDocCursor"
-            :title="documentStore.saveDocTitle" v-pulse-loop>
+            :title="documentStore.saveDocTitle"
+            v-action-cursor="documentStore.documentSaveStatus" v-pulse-loop>
 
             <FontAwesomeActionIcon :baseIcon="DOCUMENT_SAVE_BASE_ICON" :status="documentStore.documentSaveStatus" />
         </button>
         <button class="doc-save-opt" v-if="webData.shareSupported"
             @click="documentStore.shareDoc()"
-            :style="documentStore.shareCursor"
-            :title="documentStore.shareTitle" v-pulse-loop>
+            :title="documentStore.shareTitle"
+            v-action-cursor="documentStore.documentShareStatus" v-pulse-loop>
 
             <FontAwesomeActionIcon :baseIcon="DOCUMENT_SHARE_BASE_ICON" :status="documentStore.documentShareStatus" />
         </button>

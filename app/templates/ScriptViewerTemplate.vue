@@ -9,21 +9,21 @@
             <div class="mohit-main-script-top-sideSection">
                 <div class="mohit-main-script-top-group">
                     <button class="script-save-opt" @click="scriptsStore.downloadScript()"
-                        :style="scriptsStore.downloadCursor"
-                        :title="scriptsStore.downloadTitle" v-pulse-loop>
+                        :title="scriptsStore.downloadTitle"
+                        v-action-cursor="scriptsStore.scriptDownloadStatus" v-pulse-loop>
 
                         <FontAwesomeActionIcon :baseIcon="SCRIPT_DOWNLOAD_BASE_ICON" :status="scriptsStore.scriptDownloadStatus" />
                     </button>
                     <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)"
                         @click="scriptsStore.saveScript()"
-                        :style="scriptsStore.saveScriptCursor"
-                        :title="scriptsStore.saveScriptTitle" v-pulse-loop>
+                        :title="scriptsStore.saveScriptTitle"
+                        v-action-cursor="scriptsStore.scriptSaveStatus" v-pulse-loop>
                         
                         <FontAwesomeActionIcon :baseIcon="SCRIPT_SAVE_BASE_ICON" :status="scriptsStore.scriptSaveStatus" />
                     </button>
                     <button class="script-save-opt" @click="scriptsStore.copyScript()"
-                        :style="scriptsStore.copyCursor"
-                        :title="scriptsStore.copyTitle" v-pulse-loop>
+                        :title="scriptsStore.copyTitle"
+                        v-action-cursor="scriptsStore.scriptCopyStatus" v-pulse-loop>
 
                         <FontAwesomeActionIcon :baseIcon="SCRIPT_COPY_BASE_ICON" :status="scriptsStore.scriptCopyStatus" />
                     </button>

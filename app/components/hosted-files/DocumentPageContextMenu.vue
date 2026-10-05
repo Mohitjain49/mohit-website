@@ -12,7 +12,7 @@
                 </button>
             </div>
         </div>
-        <button @click="copyPageLink()">
+        <button @click="copyPageLink()" v-action-cursor="copyStatus">
             <span> Copy Page Link </span>
             <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="copyStatus" />
         </button>

@@ -10,19 +10,6 @@ export function useMohitWindowSize() {
 }
 
 /**
- * This returns a reactive object that can be used to set the cursor for a file action button.
- * @param {import('vue').ShallowRef<Number>} status The reactive status of the action.
- */
-export function useActionCursor(status = null) {
-    if(!status) { throw new Error("Improper Status."); }
-    const FALLBACK_CURSOR = "pointer";
-    const CURSORS = ["pointer", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
-
-    const result = computed(() => { return { cursor: (CURSORS[status.value] ?? FALLBACK_CURSOR) }; });
-    return result;
-}
-
-/**
  * This function returns how much an element has scrolled from its starting point to its end both horizontally and vertically.
  * @param {String} elementId The id of the element.
  */

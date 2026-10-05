@@ -36,7 +36,9 @@
                 <div class="top-section">
                     <h3> {{ focusedMetadata.header }} </h3>
                     <div class="metadata-docMenu-focused-options">
-                        <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)" v-pulse-loop>
+                        <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)"
+                            v-action-cursor="metadataCopyState" v-pulse-loop>
+
                             <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="metadataCopyState" />
                         </button>
                         <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" v-pulse-loop>

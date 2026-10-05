@@ -33,8 +33,8 @@
         <div class="mohit-navMenu-opt-group">
             <div class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()"
-                    :style="documentStore.downloadCursor"
-                    :title="documentStore.downloadTitle" v-pulse-loop>
+                    :title="documentStore.downloadTitle"
+                    v-action-cursor="documentStore.documentDownloadStatus" v-pulse-loop>
 
                     <FontAwesomeActionIcon :baseIcon="DOCUMENT_DOWNLOAD_BASE_ICON" :status="documentStore.documentDownloadStatus" />
                     <span> Download Document </span>
@@ -43,7 +43,7 @@
             <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()"
                     :title="documentStore.saveDocTitle"
-                    :style="documentStore.saveDocCursor" v-pulse-loop>
+                    v-action-cursor="documentStore.documentSaveStatus" v-pulse-loop>
 
                     <FontAwesomeActionIcon :baseIcon="DOCUMENT_SAVE_BASE_ICON" :status="documentStore.documentSaveStatus" />
                     <span> Save Document </span>
@@ -52,7 +52,7 @@
             <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
                 <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()"
                     :title="documentStore.shareTitle"
-                    :style="documentStore.shareCursor" v-pulse-loop>
+                    v-action-cursor="documentStore.documentShareStatus" v-pulse-loop>
 
                     <FontAwesomeActionIcon :baseIcon="DOCUMENT_SHARE_BASE_ICON" :status="documentStore.documentShareStatus" />
                     <span> Share Document </span>

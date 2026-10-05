@@ -142,10 +142,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         return ((progressTitleEnd.length > 0) ? progressTitleEnd : (DOCUMENT_PRINT_ACTION_TITLES[customPrintInt] + defaultTitleEnd));
     });
 
-    const downloadCursor = useActionCursor(documentDownloadStatus);
-    const saveDocCursor = useActionCursor(documentSaveStatus);
-    const shareCursor = useActionCursor(documentShareStatus);
-
     const uploadToGoogleDriveIconNumber = computed(() => {
         const loadingScripts = (googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
         return (loadingScripts ? DOCUMENT_ACTION_PENDING : documentUploadToGoogleDriveStatus.value);
@@ -743,7 +739,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle,
         documentDownloadStatus, documentSaveStatus, documentShareStatus, documentPrintStatus, documentCustomPrintStatus,
-        uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, downloadCursor, saveDocCursor, shareCursor, printCursor, customPrintCursor,
+        uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, printCursor, customPrintCursor,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
