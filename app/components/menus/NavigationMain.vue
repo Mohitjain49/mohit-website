@@ -158,7 +158,11 @@
             {{ documentStore.docLoaded.loadedPages + '/' + documentStore.docLoaded.totalPages }}
         </span>
     </div>
-    <button v-if="showCopyLinkButton" title="Copy Webpage Link" @click="copyWebpageLink()" class="mohit-navBar-statusIcon share yellow" v-pulse-loop>
+    <button v-if="showCopyLinkButton" @click="copyWebpageLink()"
+        class="mohit-navBar-statusIcon share yellow"
+        :title="(COPY_STATUS_TITLE[copyStatus] ?? 'Copy Webpage Link')"
+        v-action-cursor="copyStatus" v-pulse-loop>
+
         <FontAwesomeActionIcon :baseIcon="'fa-link'" :status="copyStatus" />
     </button>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" v-pulse-loop>
@@ -273,4 +277,5 @@ const NAV_MENU_EXTRAS = [
 ];
 
 const RESUME_QUERY_UNSYNC_TITLE = "Please reload this page here to apply your changes to customizing my resume.";
+const COPY_STATUS_TITLE = ["Copy Webpage Link", "Copying Link...", "Link Copied!", "Error Copying Webpage Link."]
 </script>

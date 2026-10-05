@@ -1,4 +1,6 @@
 import { fileURLToPath } from "node:url";
+import { globSync } from 'fast-glob';
+
 import { addComponent } from "@nuxt/kit";
 import { imagetools } from "vite-imagetools";
 import type { Plugin } from "vite";
@@ -8,6 +10,11 @@ import pwaConfig from "./pwa.config";
 
 const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
+
+const VUE_DIRECTIVE_PLUGINS = globSync("app/directives/**/*.{ts,js}", {
+    cwd: __dirname,
+    absolute: true
+});
 
 const SITEMAP_EXCLUDED_ROUTES = [
     "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
@@ -73,6 +80,8 @@ export default defineNuxtConfig({
             })
         }
     ],
+
+    plugins: [...VUE_DIRECTIVE_PLUGINS],
     components: [{ path: '~/components', pathPrefix: false, extensions: ['vue'] }],
     imports: { dirs: ['~/stores/**', '~/utils/**'] },
     pinia: { storesDirs: ['./stores/**'] },

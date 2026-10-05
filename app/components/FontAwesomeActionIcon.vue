@@ -1,6 +1,6 @@
 <template>
 <img v-if="useBrowserPrintIcon" :src="standard_print_icon" draggable="false" />
-<FontAwesomeIcon v-else-if="useTimeoutIcon" :icon="(TIMEOUT_STATUS_ICONS[timeoutIconNum] ?? 'fa-hourglass-end')" :shake="true" />
+<FontAwesomeIcon v-else-if="useTimeoutIcon" :icon="(TIMEOUT_STATUS_ICONS[timeoutIconNum] ?? 'fa-hourglass-end')" />
 <FontAwesomeIcon v-else :class="classes" :icon="statusIcon" :spin-pulse="(status == 1)" :style="{ color: (status == 5 ? 'red' : '') }" />
 </template>
 
