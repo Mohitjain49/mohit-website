@@ -70,8 +70,8 @@ export default {
             }
 
             // These are two stores required for making a unique autoscroll
-            const scrollStore = (await import('~/stores/ScrollStore.js')).useScrollStore($pinia);
-            const documentStore = (await import('~/stores/DocumentStore.js')).useDocumentStore($pinia);
+            const scrollStore = useScrollStore($pinia);
+            const documentStore = useDocumentStore($pinia);
 
             /** An array of conditions where if one is true, no smooth auto-scroll takes place. */
             const NO_SCROLL_CONDITIONS = [

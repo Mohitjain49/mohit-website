@@ -56,7 +56,7 @@ const WINDOW_RELOAD_PLUGIN: Plugin = {
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    compatibilityDate: '2026-05-08',
+    compatibilityDate: '2026-10-05',
     devtools: { enabled: false },
     ssr: true,
     app: {
@@ -95,6 +95,7 @@ export default defineNuxtConfig({
         ]
     },
     nitro: {
+        externals: { inline: [/[\\/]node_modules[\\/]nuxt[\\/]dist[\\/]/] },
         static: true,
         prerender: { concurrency: 1 },
         preset: "static"
