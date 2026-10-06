@@ -1,7 +1,7 @@
 <template>
 <!-- <WebCover v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" ref="docMenu">
+    <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" v-web-menu>
         <MenuTop />
 
         <div class="mohit-navMenu-opt-group">
@@ -148,16 +148,12 @@
 </template>
 
 <script setup>
-import standard_print_icon from "~/assets/Standard_Print_Icon.svg";
 import pdfjs_icon from "~/assets/PDFJS_logo.svg";
 const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
-
-const docMenu = shallowRef(null);
-useWebsiteMenuUtility(docMenu);
 
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";
 const GOOGLE_CHOOSE_FOLDER_TITLE = "Choose The Folder In Your Google Drive Where You Would Like To Keep My Document.";

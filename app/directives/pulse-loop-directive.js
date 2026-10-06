@@ -51,9 +51,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     /** This function manages the verify interval, activating and deactivating it when necessary. */
     function manageVerifyInterval() {
-        const activate = (webData.mounted == 2);
         if(verifyInterval != null) { clearInterval(verifyInterval); }
-        verifyInterval = (activate ? setInterval(() => { verifyAnimatedElements(); }, 2000) : null);
+        verifyInterval = (webData.checkPartiallyMounted() ? setInterval(() => { verifyAnimatedElements(); }, 500) : null);
     }
 
     /**

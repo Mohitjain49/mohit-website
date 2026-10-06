@@ -22,6 +22,6 @@ const showShare = computed(() => { return (webData.showSharePopup && !fullScreen
 const showShareImmediate = computed(() => { return (webData.showSharePopupImmediate && !fullScreenSet.value); });
 const useWebpageCover = computed(() => { return (showShareImmediate.value || (webData.menuOpen != NO_MENU && webData.websiteMenuMode == 1)); });
 
-onMounted(async() => { await webData.setEventListeners(); });
-onBeforeUnmount(() => { webData.removeEventListeners(); });
+onMounted(async() => { await webData.mountStore(); });
+onBeforeUnmount(() => { webData.unmountStore(); });
 </script>

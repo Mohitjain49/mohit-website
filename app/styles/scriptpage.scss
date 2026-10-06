@@ -20,6 +20,11 @@
     margin: 10px;
 }
 
+.code-file-inHTML {
+    scrollbar-width: auto;
+    scrollbar-color: white transparent;
+}
+
 #mohit-scriptPage-code {
     width: 100%;
     height: fit-content;
@@ -264,25 +269,6 @@
     background-color: var(--dark-background);
     font-size: 15px;
     width: calc(100% - 14px);
-}
-
-.code-file-inHTML ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    border: none;
-    background: transparent;
-    border-radius: 20px;
-}
-.code-file-inHTML ::-webkit-scrollbar-thumb {
-    background-color: white;
-    transition: background-color 0.2s;
-    border-radius: 20px;
-}
-.code-file-inHTML ::-webkit-scrollbar-thumb:hover {
-    background-color: lightslategrey;
-}
-.code-file-inHTML ::-webkit-scrollbar-button {
-    display: none;
 }
 
 .code-file-loading-container {

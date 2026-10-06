@@ -1,7 +1,7 @@
 <template>
 <!-- <WebCover v-if="(resumeMenuOpen && fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="resumeMenuOpen" class="mohit-navMenu flame" id="mohit-resumeMenu" ref="resumeMenu">
+    <div v-show="resumeMenuOpen" class="mohit-navMenu flame" id="mohit-resumeMenu" v-web-menu>
         <MenuTop />
 
         <div class="mohit-navMenu-sectionheader" :style="getColorStyles('var(--website-light-text)')">
@@ -60,9 +60,6 @@
 const webData = useWebsiteDataStore();
 const resumeStore = useResumeStore();
 const { resumeMenuOpen } = storeToRefs(webData);
-
-const resumeMenu = shallowRef(null);
-useWebsiteMenuUtility(resumeMenu);
 
 const resumeOptions = ref([
     { name: "qrcode", title: "Add QR Code", faIcon: "fa-qrcode", color: 'var(--blue-one)', status: false },

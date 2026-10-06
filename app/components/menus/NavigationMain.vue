@@ -55,7 +55,7 @@
 </nav>
 
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" ref="navMenu">
+    <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" v-web-menu>
         <MenuTop />
 
         <div v-for="btn in MAIN_BTNS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
@@ -186,9 +186,6 @@ const installStore = useInstallStore();
 const router = useRouter();
 const isMounted = onMountedAdvanced();
 const copyStatus = shallowRef(0);
-
-const navMenu = shallowRef(null);
-useWebsiteMenuUtility(navMenu);
 
 const reloadBtnRef = useTemplateRef('reload-btn');
 const onReloadHover = useElementHover(reloadBtnRef);

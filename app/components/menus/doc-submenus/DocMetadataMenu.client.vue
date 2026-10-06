@@ -1,7 +1,7 @@
 <template>
 <!-- <WebCover v-if="(documentMetadataMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu" ref="docMetadataMenu">
+    <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu" v-web-menu>
         <MenuTop :show-doc-options-btn="true" />
 
         <template v-if="!pdfMetadata.parsingPdf.value && pdfMetadata.metadataReceived.value">
@@ -66,11 +66,9 @@ const computedUrl = computed(() => { return props.objectUrl; });
 
 const pdfMetadata = usePdfMetadata(computedUrl);
 const loadingInterval = useIntervalFn(() => { incrementLoadingCount(); }, 400, { immediate: true });
-const docMetadataMenu = shallowRef(null);
 
 // This watcher closes the bottom section when the user closes or opens this website menu.
 watch(documentMetadataMenuOpen, () => { setFocusedMetadata(false, "", ""); });
-useWebsiteMenuUtility(docMetadataMenu);
 
 /** This manages the state of this menu's bottom section. */
 const focusedMetadata = ref({ show: false, header: "", content: "", fontSize: "10px" });

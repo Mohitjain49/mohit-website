@@ -11,7 +11,6 @@ export const WEBSITE_MENUS = [
 /** This is the general pinia store for the website that manages general components like the website menus. */
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
-    const nuxtReady = ref(false);
 
     var controller = new AbortController();
     var wakeLockTimeout = null;
@@ -63,7 +62,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const sharePopupClosing = ref(false);
     const showSharePopupImmediate = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
-        return (nuxtReady.value && data != null && typeof data === "string");
+        return (mounted.value >= 1.25 && data != null && typeof data === "string");
     });
 
     const wakeLockIcon = computed(() => {
@@ -119,8 +118,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     // This lets the website menu track the previous website menu open before the current website menu open.
     watch(menuOpen, (newValue, oldValue) => { previousMenuOpen.value = oldValue; });
 
-    /** This function adds event listeners to the website as soon as its loaded. */
-    async function setEventListeners() {
+    /** This function mounts the website data store. */
+    async function mountStore() {
         if(mounted.value != 0) { return; }
         mounted.value = 1;
         window.history.scrollRestoration = "manual";
@@ -129,19 +128,21 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         await onNuxtReadyAdvanced();
         setSaveAsSupported();
 
-        nuxtReady.value = true;
+        mounted.value = 1.25;
         copyImageSupported.value = ClipboardItem.supports("image/png");
         copySvgSupported.value = ClipboardItem.supports("image/svg+xml");
         const signal = controller.signal;
 
         await styleStore.mountStyleStore();
+        mounted.value = 1.5;
+
         audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
         documentStore.mountDocumentStore();
         scriptsStore.mountScriptsStore();
         installStore.mountInstallStore();
-        resizePageComponents();
 
+        resizePageComponents();
         window.addEventListener("animation-resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("unhandledrejection", (event) => { onUnhandledRejection(event); }, { signal });
 
@@ -149,8 +150,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         document.body.addEventListener("keydown", (event) => { onKeyDown(event); }, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
 
-        // This sets a new function in the window object to let static HTML elements access the share popup.
-        window.openShareMenu = (param = "") => { setQRCodePopup(param); }
+        mounted.value = 1.75;
         saveAsSupportedCheckInterval = setInterval(() => { setSaveAsSupported(); }, 1000);
         signal.addEventListener("abort", () => { clearInterval(saveAsSupportedCheckInterval); }, { once: true });
 
@@ -158,13 +158,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         mounted.value = 2;
     }
 
-    /** This function removes event listeners to the website as soon as its loaded. */
-    function removeEventListeners() {
+    /** This function unmounts the website data store. */
+    function unmountStore() {
         if(mounted.value != 2) { return; }
         controller.abort();
         controller = new AbortController();
         mounted.value = 0;
     }
+
+    /** This function checks if the website data store is partially mounted. */
+    function checkPartiallyMounted() { return (mounted.value >= 1.25); }
 
     /** This sets the size of crucial components within the website. */
     function resizePageComponents() {
@@ -398,7 +401,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
         setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, scrollToAndFromFooter, bypassBodyClick,
-        shareText, shareLink, shareFile, setEventListeners, removeEventListeners,
+        shareText, shareLink, shareFile, mountStore, unmountStore, checkPartiallyMounted
     }
 });
 

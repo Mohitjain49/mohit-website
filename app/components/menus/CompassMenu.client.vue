@@ -1,6 +1,6 @@
 <template>
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu" ref="compassMenu">
+    <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu" v-web-menu>
         <MenuTop />
 
         <div v-for="section in routes" class="mohit-navMenu-opt" :style="getColorStyles(section.color)">
@@ -49,7 +49,6 @@ const props = defineProps({ routes: { type: Array, default: [] } });
 
 const router = useRouter();
 const webData = useWebsiteDataStore();
-const compassMenu = shallowRef(null);
 
 const topPath = useRoutePathWithQuery();
 const routePath = computed(() => { return router.currentRoute.value.path; });
@@ -61,5 +60,4 @@ const currentHashEquals = computed(() => { return (id = "") => { return (("#" + 
 
 onMountedAdvanced(() => { webData.compassMenuAvailable = true; });
 onBeforeUnmount(() => { webData.compassMenuAvailable = false; });
-useWebsiteMenuUtility(compassMenu);
 </script>

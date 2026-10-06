@@ -1,7 +1,7 @@
 <template>
 <!-- <WebCover v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" ref="scriptsMenu">
+    <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" v-web-menu>
         <MenuTop />
 
         <div class="mohit-navMenu-opt-group">
@@ -94,9 +94,6 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const scriptsStore = useScriptsStore();
 const router = useRouter();
-
-const scriptsMenu = shallowRef(null);
-useWebsiteMenuUtility(scriptsMenu);
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my documents on this website. Click here to see more about Shiki.";
