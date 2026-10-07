@@ -398,6 +398,7 @@ const MAIN_BTNS = [
 }
 
 @include dynamic-less-equal-width-rule-scopedBlock(640) {
+    #start-innerContainer { width: 100%; }
     .start-buttonRow.main { width: 100%; }
     .start-buttonRow.contact-links { width: calc(100% - 120px); }
 }

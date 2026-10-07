@@ -4,7 +4,6 @@
 @use "./documentpage";
 
 :root {
-    --main-scrollbar-width: 10px;
     --webpage-zoom-factor: 1.0;
     --true-100vh: 100vh;
     --true-100vw: 100vw;
@@ -61,6 +60,8 @@ html {
     overflow-x: hidden;
     overflow-y: auto;
     zoom: var(--webpage-zoom-factor);
+    scrollbar-width: auto !important;
+    scrollbar-color: var(--website-text) #1C1C1C;
 }
 body {
     margin: 0;

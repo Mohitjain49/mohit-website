@@ -741,9 +741,3 @@ export const useStyleStore = defineStore("style-store", () => {
         enableBreakpoints, disableBreakpoints, resetBreakpoints, startViewportRaf, stopViewportRaf
     }
 });
-
-/** This function returns a computed variable of the zoom factor implemeneted by the website. */
-export function getCurrentZoomFactor() {
-    const { zoomFactor } = storeToRefs(useStyleStore());
-    return computed(() => { return zoomFactor.value; });
-}
