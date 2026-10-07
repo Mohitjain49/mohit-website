@@ -78,7 +78,7 @@ export const useStyleStore = defineStore("style-store", () => {
     watch(fullScreenSet, () => { setDisableUserSelectClass(disableUserSelect.value); });
 
     /** This function returns whether the website is able to use client-only features like the DOM. */
-    function validateClientMode() { return (import.meta.client && document && document.documentElement); }
+    function validateClientMode() { return Boolean(import.meta.client && document && document.documentElement); }
 
     /** This function mounts the style store to ensure it is ready to use. */
     async function mountStyleStore() {
@@ -254,8 +254,7 @@ export const useStyleStore = defineStore("style-store", () => {
 
     /** This function records the viewports' inner width and inner height (its dimensions). */
     function recordViewportDimensions() {
-        if(!window) { return; }
-        var getNewCssViewport = true;
+        if(!window || !validateClientMode()) { return; }
 
         const oldViewportWidth = viewportWidth.value;
         const oldViewportHeight = viewportHeight.value;
@@ -283,28 +282,31 @@ export const useStyleStore = defineStore("style-store", () => {
             window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "orientation" }}));
         }
 
-        if(!document || !document.getElementById) { getNewCssViewport = false; }
         const cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
-        if(!cssLayoutElement) { getNewCssViewport = false; }
+        const getNewCssViewport = Boolean(cssLayoutElement);
+
+        const oldCssViewportWidth = cssViewportWidth.value;
+        const oldCssViewportHeight = cssViewportHeight.value;
 
         if(getNewCssViewport) {
-            const oldCssViewportWidth = cssViewportWidth.value;
-            const oldCssViewportHeight = cssViewportHeight.value;
-
             cssViewportWidth.value = (cssLayoutElement.clientWidth + (viewportWidth.value - document.documentElement.clientWidth));
             cssViewportHeight.value = (cssLayoutElement.clientHeight + (viewportHeight.value - document.documentElement.clientHeight));
-            cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
-            cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
+        } else {
+            cssViewportWidth.value = viewportWidth.value;
+            cssViewportHeight.value = viewportHeight.value;
+        }
 
-            const cssViewportWidthChanged = (cssViewportWidth.value !== oldCssViewportWidth);
-            const cssViewportHeightChanged = (cssViewportHeight.value !== oldCssViewportHeight);
+        cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
+        cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
 
-            if(cssViewportWidth.value !== oldCssViewportWidth || cssViewportHeight.value !== oldCssViewportHeight) {
-                window.dispatchEvent(new CustomEvent("animation-resize", {
-                    cancelable: false,
-                    detail: { type: "css-resize", width: cssViewportWidthChanged, height: cssViewportHeightChanged }
-                }));
-            }
+        const cssViewportWidthChanged = (cssViewportWidth.value !== oldCssViewportWidth);
+        const cssViewportHeightChanged = (cssViewportHeight.value !== oldCssViewportHeight);
+
+        if(cssViewportWidth.value !== oldCssViewportWidth || cssViewportHeight.value !== oldCssViewportHeight) {
+            window.dispatchEvent(new CustomEvent("animation-resize", {
+                cancelable: false,
+                detail: { type: "css-resize", width: cssViewportWidthChanged, height: cssViewportHeightChanged }
+            }));
         }
 
         if(!viewportRafRanOnce.value) {

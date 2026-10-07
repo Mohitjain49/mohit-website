@@ -1,6 +1,6 @@
 <template>
 <div id="start" class="start-section">
-    <div id="start-innerContainer" ref="startContent">
+    <div :id="START_INNER_CONTAINER_ID" ref="startContent">
         <div class="start-section-title">Mohit Jain</div>
         <div class="start-section-subtitle">
             Lead Software Developer At 
@@ -66,22 +66,35 @@
 
 <script setup>
 const CONTACT_DROPDOWN_ID = "start-contact-dropdown";
+const START_INNER_CONTAINER_ID = "start-innerContainer";
 
-const webData = useWebsiteDataStore();
-const router = useRouter();
+const WIDTH_START_SCALE = 1280;
+const HEIGHT_START_SCALE = 775;
 var abortController = null;
 
-const startContent = ref(null);
+const webData = useWebsiteDataStore();
+const styleStore = useStyleStore();
+const router = useRouter();
+
+const startContent = useTemplateRef('startContent');
 const startContactObj = ref("");
 
 // This sets up event listeners that close the contact dropdown when the user clicks outside the dropdown itself or an assoicated button for it.
-const isMounted = onMountedAdvanced(() => {
-    abortController = new AbortController();
-    const signal = abortController.signal;
+const isMounted = onMountedAdvanced(async () => {
+    try {
+        abortController = new AbortController();
+        const signal = abortController.signal;
 
-    window.addEventListener("pointerdown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
-    window.addEventListener("mousedown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
-    window.addEventListener("touchstart", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+        window.addEventListener("pointerdown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+        window.addEventListener("mousedown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+        window.addEventListener("touchstart", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+
+        await styleStore.waitForFirstViewportCalculation();
+        setStartSectionScale();
+        window.addEventListener("animation-resize", () => { setStartSectionScale(); }, { signal });
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
 });
 
 onBeforeUnmount(() => { if(abortController != null) { abortController.abort(); }});
@@ -102,6 +115,23 @@ function checkContactDropdownStayVisible(event) {
     if(contactDropdownElement == null || !(contactDropdownElement instanceof Element)) { return; }
     if(contactDropdownElement === element || contactDropdownElement.contains(element) || element.closest(".start-buttonRow-btn")) { return; }
     hideStartContactDropdown();
+}
+
+/** This function sets the scale for the start section's inner container so that it is easier to read on larger viewports. */
+function setStartSectionScale() {
+    const element = document.getElementById(START_INNER_CONTAINER_ID);
+    if(!element) { return; }
+
+    const currentWidth = styleStore.cssViewportWidth;
+    const currentHeight = styleStore.cssViewportHeight;
+
+    if(currentWidth <= WIDTH_START_SCALE || currentHeight <= HEIGHT_START_SCALE) {
+        element.style.scale = "1.0";
+    } else {
+        const scaleOnWidth = (Math.round((currentWidth * 100) / WIDTH_START_SCALE) / 100);
+        const scaleOnHeight = (Math.round((currentHeight * 100) / HEIGHT_START_SCALE) / 100);
+        element.style.scale = String(Math.min(scaleOnWidth, scaleOnHeight));
+    }
 }
 
 /**
@@ -131,7 +161,7 @@ function onContactBtnClick(event, obj) {
 function setNameTransitions(isVisible) {
     if(!isVisible) {
         hideStartContactDropdown();
-        document.getElementById("start-innerContainer")?.classList.remove("animate__animated", "animate__fadeIn");
+        document.getElementById(START_INNER_CONTAINER_ID)?.classList.remove("animate__animated", "animate__fadeIn");
         document.getElementsByClassName("start-section-title").item(0)?.classList.remove("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
         document.getElementsByClassName("start-section-subtitle").item(1)?.classList.remove("animate__animated", "animate__lightSpeedInRight");
@@ -141,7 +171,7 @@ function setNameTransitions(isVisible) {
     }
 
     if(getMohitInnerWidth() <= 450) {
-        document.getElementById("start-innerContainer")?.classList.add("animate__animated", "animate__fadeIn");
+        document.getElementById(START_INNER_CONTAINER_ID)?.classList.add("animate__animated", "animate__fadeIn");
     } else {
         document.getElementsByClassName("start-section-title").item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");
         document.getElementsByClassName("start-section-subtitle").item(0)?.classList.add("animate__animated", "animate__lightSpeedInRight");
@@ -197,7 +227,7 @@ const MAIN_BTNS = [
 }
 #start-innerContainer {
     height: fit-content;
-    width: 100%;
+    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
