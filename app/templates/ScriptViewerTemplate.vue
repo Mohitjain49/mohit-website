@@ -14,7 +14,7 @@
 
                         <FontAwesomeActionIcon :baseIcon="SCRIPT_DOWNLOAD_BASE_ICON" :status="scriptsStore.scriptDownloadStatus" />
                     </button>
-                    <button class="script-save-opt" v-if="(webData.saveAsSupported && isMounted)"
+                    <button class="script-save-opt" v-if="webData.saveAsSupported"
                         @click="scriptsStore.saveScript()"
                         :title="scriptsStore.saveScriptTitle"
                         v-action-cursor="scriptsStore.scriptSaveStatus" v-pulse-loop>
@@ -74,7 +74,7 @@ const fullScreenStore = useFullScreenStore();
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
 
-const isMounted = onMountedAdvanced(() => { scriptsStore.mountScriptPage(numLines); });
+onMountedAdvanced(() => { scriptsStore.mountScriptPage(numLines); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
 

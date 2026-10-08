@@ -46,13 +46,14 @@
                             </div>
                         </div>
                     </div>
-                    <textarea class="contact-input-tab-textbox contact-input-tab-textarea"
+                    <textarea name="mohit-contact-textarea"
+                        class="contact-input-tab-textbox contact-input-tab-textarea"
                         placeholder="Type your message here (minimum 50 characters)..."
                         v-model="msgMain"
                         @click="setAlertBox('')"
                     ></textarea>
                     <div :class="['contact-input-tab-characterCount', (messageLong ? 'good' : '')]">
-                        <span class="main-count"> {{ (msgMain.length) + ' / ' + MIN_MESSAGE_LENGTH }} </span>
+                        <span class="main-count"> {{ (msgMain.length + ' / ' + MIN_MESSAGE_LENGTH) }} </span>
                         <span class="small-text"> required characters </span>
                     </div>
                 </div>
@@ -82,7 +83,7 @@
                     <div class="contact-input-tab-btn-container">
                         <button class="contact-input-tab-btn" @click="sendEmail()" v-pulse-loop>
                             <span> Send Message </span>
-                            <FontAwesomeIcon :icon="sendMessageIcon" :spinPulse="sendMessageState.pending" />
+                            <FontAwesomeActionIcon :baseIcon="'fa-arrow-right-from-bracket'" :status="sendMessageState" />
                         </button>
                     </div>
                 </div>
@@ -151,13 +152,13 @@ const MIN_MESSAGE_LENGTH = 50;
 const webData = useWebsiteDataStore();
 const audioStore = useAudioStore();
 const router = useRouter();
-
-const titleInput = ref();
-const alertBoxText = ref("");
+const titleInput = useTemplateRef('titleInput');
 
 var alertBoxTimeout = null;
 var sendMessageTimeout = null;
+var contactAbortController = null;
 
+const alertBoxText = ref("");
 const msgTitle = ref("");
 const msgMain = ref("");
 const senderName = ref("");
@@ -165,13 +166,12 @@ const senderEmail = ref("");
 
 const routeHash = computed(() => { return router.currentRoute.value.hash; });
 const messageLong = computed(() => { return (msgMain.value.length >= MIN_MESSAGE_LENGTH); });
-const sendMessageState = ref({ pending: false, sent: false, error: false });
+const sendMessageState = ref(0);
 
-const sendMessageIcon = computed(() => {
-    const sendMessageObj = sendMessageState.value;
-    return ("fa-" + (sendMessageObj.error ? "ban" : (sendMessageObj.sent ? "check" : (sendMessageObj.pending ? "spinner" : "arrow-right-from-bracket"))));
-});
-useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple links to platforms where you can contact me.", "rgb(248, 206, 171)"));
+useHead(getMeta("Mohit Jain | Contact Me", "contact",
+    "This page hosts multiple links to platforms where you can contact me.",
+    "rgb(248, 206, 171)"
+));
 
 /**
  * ----------------------------------------------------------------------------
@@ -179,25 +179,26 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact", "This page hosts multiple 
  * ----------------------------------------------------------------------------
  */
 
-// This adds a transition to the contact boxes if the screen width is large enough.
+// This mounts the contact page by setting its animations and event listeners.
 /** */
 const isMounted = onMountedAdvanced(() => {
     manageSocialTabGlow();
-    audioStore.changeSTTUpdateFunc((str) => { updateMainMsg(str); });
+    audioStore.changeSTTUpdateFunc((str) => { msgMain.value += str; });
+
+    contactAbortController = new AbortController();
+    window.addEventListener("keydown", (event) => { onContactPageKeydown(event); }, { signal: contactAbortController.signal });
     if(getMohitInnerWidth() <= 525 || routeHash.value !== "") { return; }
 
-    const contactBoxes = [
-        document.getElementsByClassName("contact-me-box").item(0),
-        document.getElementsByClassName("contact-me-box").item(1)
-    ];
-
-    for(let i = 0; i < contactBoxes.length; i++) {
-        const box = contactBoxes[i];
-        if(box && (typeof box.classList !== "undefined") && (box.classList instanceof DOMTokenList)) {
-            box.classList.add("animate__animated", "animate__fadeInDown");
-        }
-    }
+    const contactBoxes = document.getElementsByClassName("contact-me-box");
+    contactBoxes.item(0)?.classList.add("animate__animated", "animate__fadeInDown");
+    contactBoxes.item(1)?.classList.add("animate__animated", "animate__fadeInDown");
 });
+
+// This unmounts the contact page.
+onBeforeUnmount(() => {
+    audioStore.changeSTTUpdateFunc((str) => {});
+    if(contactAbortController != null) { contactAbortController.abort(); }
+})
 
 // This changes which, if any, social tab "glows" based on the router hash.
 watch(routeHash, (newValue, oldValue) => { manageSocialTabGlow(oldValue); });
@@ -214,10 +215,7 @@ function manageSocialTabGlow(oldValue = "") {
     if(oldValue !== "" && oldValue.length > 0) {
         const oldIndex = SOCIALS.findIndex(item => item.id === oldValue.substring(1));
         if(oldIndex != -1 && oldIndex != 2) {
-            const oldTab = document.getElementById(SOCIALS[oldIndex].id);
-            if(oldTab && typeof (oldTab.classList !== "undefined") && (oldTab.classList instanceof DOMTokenList)) {
-                oldTab.classList.remove("glowing");
-            }
+            document.getElementById(SOCIALS[oldIndex].id)?.classList.remove("glowing");
         }
     }
 
@@ -226,20 +224,17 @@ function manageSocialTabGlow(oldValue = "") {
     if(hash !== "" && hash.length > 0) {
         const newIndex = SOCIALS.findIndex(item => item.id === hash.substring(1));
         if(newIndex != -1 && newIndex != 2) {
-            const socialTab = document.getElementById(SOCIALS[newIndex].id);
-            if(socialTab && typeof (socialTab.classList !== "undefined") && (socialTab.classList instanceof DOMTokenList)) {
-                socialTab.classList.add("glowing");
-            }
+            document.getElementById(SOCIALS[newIndex].id)?.classList.add("glowing");
         }
     }
 }
 
 /**
- * This function can be used by event listeners to update the main message on the contact page.
- * @param {String} str The new string that will become the main message.
+ * This function is triggered when the user presses a key while on the contact page.
+ * @param {KeyboardEvent} event The event of pressing the key.
  */
-function updateMainMsg(str = "") {
-    msgMain.value += str;
+function onContactPageKeydown(event = null) {
+    if(event && event.key === "Enter" && event.ctrlKey) { sendEmail(); }
 }
 
 /**
@@ -248,47 +243,46 @@ function updateMainMsg(str = "") {
  * ----------------------------------------------
  */
 
-/**
- * This function calls a AWS Lambda Function via Amazon API Gateway to send an email to me.
- */
-function sendEmail() {
-    // Stores the necessary parameters for the message.
-    sendMessageState.value.pending = true;
-    const body = {
-        title: msgTitle.value,
-        msgBody: msgMain.value,
-        name: senderName.value,
-        emailAddress: senderEmail.value
-    }
+/** This function calls a AWS Lambda Function via Amazon API Gateway to send an email to me. */
+async function sendEmail() {
+    if(sendMessageState.value != 0) { return; }
+    sendMessageState.value = 1;
 
-    if(AWS_API_LINK === "") {
-        setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + getAPIErrorRedirect());
-        onSendEmailError();
-        return;
-    } else if(!checkAPIParameters(body)) {
-        onSendEmailError();
-        return;
-    }
+    try {
+        if(AWS_API_LINK === "") {
+            setAlertBox("This feature is momentarily unavailable. I apologize for the inconvenience." + getAPIErrorRedirect());
+            throw new Error("Custom Error");
+        }
 
-    ofetch.raw(AWS_API_LINK, { method: 'POST', body }).then((response) => {
-        if(response.status !== 200) { return; }
+        const body = {
+            title: msgTitle.value,
+            msgBody: msgMain.value,
+            name: senderName.value,
+            emailAddress: senderEmail.value
+        }
+
+        if(!checkAPIParameters(body)) { throw new Error("Custom Error"); }
+        const response = await ofetch.raw(AWS_API_LINK, { method: 'POST', body });
+
+        if(response.status !== 200) { throw new Error("Unexpected Error"); }
         setAlertBox("Message sent successfully! I will make sure to respond to you within the next 48 hours.");
+        sendMessageState.value = 2;
+    } catch(e) {
+        const isUnexpectedError = (e.message !== "Custom Error");
+        if(import.meta.dev && isUnexpectedError) { console.error(e); }
+        sendMessageState.value = 3;
 
-        // This changes an icon to show the message was sent successfully.
-        sendMessageState.value.pending = false;
-        sendMessageState.value.error = false;
-        sendMessageState.value.sent = true;
-
+        await sleep(150);
+        if(alertBoxText.value.length <= 0 || isUnexpectedError) {
+            setAlertBox("This feature is not working at the moment." + getAPIErrorRedirect());
+        }
+    } finally {
         if(sendMessageTimeout != null) { clearTimeout(sendMessageTimeout); }
         sendMessageTimeout = setTimeout(() => {
-            sendMessageState.value.sent = false;
+            sendMessageState.value = 0;
             sendMessageTimeout = null;
-        }, 4000);
-    }).catch((e) => {
-        console.error(e);
-        onSendEmailError();
-        setAlertBox("This feature is not working at the moment." + getAPIErrorRedirect());
-    });
+        }, 3000);
+    }
 }
 
 /**
@@ -318,25 +312,14 @@ function checkAPIParameters(message) {
         senderEmail.value = "";
         return true;
     }
+
+    // Returns false if an issue was found.
     return false;
 }
 
 /** This returns a string redirecting visitors to email my work email. */
 function getAPIErrorRedirect() {
     return (" You can email me directly with my work email: " + getLinkString(SOCIALS[0].link, SOCIALS[0].displayLink));
-}
-
-/** This function runs whenever an error is detected when sendng an email to me. */
-function onSendEmailError() {
-    sendMessageState.value.pending = false;
-    sendMessageState.value.sent = false;
-    sendMessageState.value.error = true;
-
-    if(sendMessageTimeout != null) { clearTimeout(sendMessageTimeout); }
-    sendMessageTimeout = setTimeout(() => {
-        sendMessageState.value.error = false;
-        sendMessageTimeout = null;
-    }, 4000);
 }
 
 /**
@@ -351,16 +334,12 @@ function onSendEmailError() {
  */
 function setAlertBox(text = "") {
     alertBoxText.value = text;
-    if(alertBoxTimeout != null) {
-        clearTimeout(alertBoxTimeout);
-        alertBoxTimeout = null;
-    }
+    if(alertBoxTimeout != null) { clearTimeout(alertBoxTimeout); }
 
-    if(text === "") { return; }
-    alertBoxTimeout = setTimeout(() => {
+    alertBoxTimeout = ((text === "") ? null : setTimeout(() => {
         alertBoxText.value = "";
         alertBoxTimeout = null;
-    }, 5000);
+    }, 5000));
 }
 
 /**
@@ -389,9 +368,7 @@ function copyUsername(name = "") {
 }
 
 /** This simply calls the "openQRCodePopupWithData" function. */
-function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) {
-    webData.setQRCodePopup(link);
-}
+function openSocialQrcode(link = PERSONAL_WEBSITE_LINK) { webData.setQRCodePopup(link); }
 
 /**
  * This function returns a HTML element in string form for JS functions here.

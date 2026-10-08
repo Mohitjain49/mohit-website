@@ -377,7 +377,7 @@ const MAIN_BTNS = [
     align-items: center;
     flex-direction: row;
     gap: 2.5px;
-    border-bottom: 1px dotted;
+    border-bottom: 1px solid;
     transition: background-color 0.2s, text-shadow 0.2s;
 }
 .start-contactBtn-dropdown-button:hover {

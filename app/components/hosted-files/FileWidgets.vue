@@ -124,7 +124,7 @@ function onWidgetPageNumberChange() {
  * @param {KeyboardEvent} event The event fired by clicking a key.
  */
 function onPageNumberKeydown(event) {
-    if(event.key !== "Enter") { return; }
+    if(!event || event.key !== "Enter") { return; }
     onWidgetPageNumberChange();
 
     const editedNumber = parseInt(widgetPageNumber.value, 10);
