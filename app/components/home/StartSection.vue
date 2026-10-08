@@ -39,11 +39,16 @@
                     </button>
 
                     <Transition name="fade-context-menu-transition">
-                        <div v-if="(startContactObj === contact.id)" class="start-contactBtn-dropdown" :id="CONTACT_DROPDOWN_ID"
+                        <div :id="CONTACT_DROPDOWN_ID" v-if="(startContactObj === contact.id)"
+                            :class="['start-contactBtn-dropdown', (contactDropdownShareHover ? 'share-hover' : '')]"
                             :style="getContactDropdownStyles(contact.color)">
 
-                            <button class="start-contactBtn-dropdown-button top" @click="shareContactLink(contact.link)" :title="contact.shareBtn">
-                                Share <FontAwesomeIcon icon="fa-share-from-square" />
+                            <button :id="CONTACT_DROPDOWN_SHARE_ID" class="start-contactBtn-dropdown-button"
+                                :title="contact.shareBtn"
+                                @click="shareContactLink(contact.link)">
+
+                                <span> Share </span>
+                                <FontAwesomeIcon icon="fa-share-from-square" />
                             </button>
                             <RouterLink class="start-contactBtn-dropdown-button" :to="('/contact/#' + contact.id)" title="Go To Contact Page">
                                 Go To Contact Page <FontAwesomeIcon icon="fa-link" />
@@ -65,12 +70,14 @@
 </template>
 
 <script setup>
-const CONTACT_DROPDOWN_ID = "start-contact-dropdown";
 const START_INNER_CONTAINER_ID = "start-innerContainer";
+const CONTACT_DROPDOWN_ID = "start-contact-dropdown";
+const CONTACT_DROPDOWN_SHARE_ID = "start-contact-dropdown-share";
 
+/** @type {AbortController} This abort controller manages all the events for this component. */
+var abortController = null;
 const WIDTH_START_SCALE = 1280;
 const HEIGHT_START_SCALE = 775;
-var abortController = null;
 
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
@@ -78,12 +85,20 @@ const router = useRouter();
 
 const startContent = useTemplateRef('startContent');
 const startContactObj = ref("");
+const contactDropdownShareHover = ref(false);
+
+/** This manages an Raf loop that records whether the user is hovering over the contact dropdown share button or not. */
+const shareHoverWatcher = useRafFn(() => {
+    const currentMouseElement = styleStore.mouseElement;
+    contactDropdownShareHover.value = (currentMouseElement ? Boolean(currentMouseElement.closest("#" + CONTACT_DROPDOWN_SHARE_ID)) : false);
+}, { immediate: false });
 
 // This sets up event listeners that close the contact dropdown when the user clicks outside the dropdown itself or an assoicated button for it.
 const isMounted = onMountedAdvanced(async () => {
     try {
         abortController = new AbortController();
         const signal = abortController.signal;
+        shareHoverWatcher.resume();
 
         window.addEventListener("pointerdown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
         window.addEventListener("mousedown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
@@ -364,6 +379,10 @@ const MAIN_BTNS = [
     border-style: solid;
     border-color: transparent transparent black transparent;
     filter: var(--filter-drop-shadow);
+    transition: border 0.2s;
+}
+.start-contactBtn-dropdown.share-hover::before {
+    border-color: transparent transparent var(--dark-background) transparent;
 }
 
 .start-contactBtn-dropdown-button {
@@ -385,7 +404,7 @@ const MAIN_BTNS = [
     text-shadow: 0px 0px 8px;
 }
 
-.start-contactBtn-dropdown-button.top {
+.start-contactBtn-dropdown-button#start-contact-dropdown-share {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     font-size: 16px;

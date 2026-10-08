@@ -75,7 +75,7 @@ const currentDocumentSize = ref(0);
 const currentPixelRatio = ref(1);
 
 // This observer tracks which page the user is currently viewing.
-useIntersectionObserver(pageRefs, (entry) => {
+const pageObserver = useIntersectionObserver(pageRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const entryItem = entry[i];
         const itemRatio = entryItem.intersectionRatio;
@@ -85,7 +85,7 @@ useIntersectionObserver(pageRefs, (entry) => {
         bestPageRatio = itemRatio;
         documentStore.setCurrentObservedPage(newPageNumber);
     }
-}, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] });
+}, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], immediate: false });
 
 /** @type {import('vue').ShallowRef<import('pdfjs-dist').PDFDocumentProxy>} The pdf document loaded in by the viewer. */
 const pdfDoc = shallowRef(null);
@@ -151,6 +151,8 @@ async function renderPDF() {
 
     pages.value = numPages;
     setInnerPagesArray(numPages);
+    if(numPages > 1) { pageObserver.resume(); }
+
     await nextTick();
     if(renderAborted()) { return; }
 
@@ -199,7 +201,7 @@ async function renderPDF() {
         });
 
         if(renderAborted()) { return; }
-        try { await canvasRenderTask.promise; } catch(e) {}
+        await canvasRenderTask.promise;
 
         if(props.annontations) {
             const textLayerDiv = document.getElementById('pdf_text_layer_'+ i);
@@ -213,7 +215,7 @@ async function renderPDF() {
             });
             
             if(renderAborted()) { return; }
-            try { await textRenderTask.render(); } catch(e) {}
+            await textRenderTask.render();
 
             textLayerDiv.style.setProperty("--min-font-size", 1);
             const annotationLayerDiv = document.getElementById('pdf_annotation_layer_' + i);
@@ -311,67 +313,69 @@ async function renderPDF() {
 
 /** This function rerenders the canvases for the PDF. */
 async function rerenderCanvases() {
-    resizeTimeout = null;
-    const documentSizeUnchanged = (currentDocumentSize.value == documentStore.customPdfWidth);
-    const pixelRatioUnchanged = (currentPixelRatio.value == styleStore.recordedDevicePixelRatio);
+    try {
+        resizeTimeout = null;
+        const documentSizeUnchanged = (currentDocumentSize.value == documentStore.customPdfWidth);
+        const pixelRatioUnchanged = (currentPixelRatio.value == styleStore.recordedDevicePixelRatio);
 
-    if(documentSizeUnchanged && pixelRatioUnchanged) { return; }
-    if(renderAbortController != null) { renderAbortController.abort(); }
-    renderAbortController = new AbortController();
+        if(documentSizeUnchanged && pixelRatioUnchanged) { return; }
+        if(renderAbortController != null) { renderAbortController.abort(); }
+        renderAbortController = new AbortController();
 
-    currentDocumentSize.value = documentStore.customPdfWidth;
-    currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
+        currentDocumentSize.value = documentStore.customPdfWidth;
+        currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
 
-    /** This function renders a singular canvas  */
-    async function renderSingularCanvas(i = 1) {
-        if(renderAborted()) { return; }
-        const page = await pdfDoc.value.getPage(i);
-        const defaultViewport = page.getViewport({ scale: 1 });
+        /** This function renders a singular canvas  */
+        async function renderSingularCanvas(i = 1) {
+            if(renderAborted()) { return; }
+            const page = await pdfDoc.value.getPage(i);
+            const defaultViewport = page.getViewport({ scale: 1 });
 
-        const pageElement = getPageElement(i);
-        pageElement.setAttribute(CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE, String(defaultViewport.width));
-        pageElement.setAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE, String(defaultViewport.height));
+            const pageElement = getPageElement(i);
+            pageElement.setAttribute(CUSTOM_PDFJS_RAW_WIDTH_ATTRIBUTE, String(defaultViewport.width));
+            pageElement.setAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE, String(defaultViewport.height));
 
-        // Sets a properly scaled viewport so it works on every necessary size.
-        const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
-        setPdfPageScaleFactor(i);
+            // Sets a properly scaled viewport so it works on every necessary size.
+            const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
+            setPdfPageScaleFactor(i);
 
-        /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
-        var canvas = document.getElementById("pdf_canvas_" + i);
-        var context = canvas.getContext("2d");
+            /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
+            var canvas = document.getElementById("pdf_canvas_" + i);
+            var context = canvas.getContext("2d");
 
-        context.imageSmoothingEnabled = true;
-        context.imageSmoothingQuality = 'high';
+            context.imageSmoothingEnabled = true;
+            context.imageSmoothingQuality = 'high';
 
-        canvas.width = Math.floor(viewport.width * currentPixelRatio.value);
-        canvas.height = Math.floor(viewport.height * currentPixelRatio.value);
-        canvas.style.width = 'var(--mohit-custom-pdf-width)';
-        canvas.style.height =  'var(--mohit-custom-pdf-height)';
+            canvas.width = Math.floor(viewport.width * currentPixelRatio.value);
+            canvas.height = Math.floor(viewport.height * currentPixelRatio.value);
+            canvas.style.width = 'var(--mohit-custom-pdf-width)';
+            canvas.style.height =  'var(--mohit-custom-pdf-height)';
 
-        const canvasRenderTask = page.render({
-            canvasContext: context,
-            transform: [currentPixelRatio.value, 0, 0, currentPixelRatio.value, 0, 0],
-            viewport: viewport
-        });
+            const canvasRenderTask = page.render({
+                canvasContext: context,
+                transform: [currentPixelRatio.value, 0, 0, currentPixelRatio.value, 0, 0],
+                viewport: viewport
+            });
 
-        if(renderAborted()) { return; }
-        try { await canvasRenderTask.promise; } catch(e) {}
-    }
-
-    /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
-    const pageRenderPromises = create2dPromiseArray(pages.value, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
-    const numPromiseArrays = pageRenderPromises.length;
-
-    // This fills all the numbers in the Array with Promises.
-    for(let i = 0; i < numPromiseArrays; i++) {
-        const numPromiseForIArray = pageRenderPromises[i].length;
-        for(let j = 0; j < numPromiseForIArray; j++) {
-            pageRenderPromises[i][j] = renderSingularCanvas(pageRenderPromises[i][j]);
+            if(renderAborted()) { return; }
+            await canvasRenderTask.promise;
         }
-    }
 
-    // This runs all the arrays of promises.
-    for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
+        /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
+        const pageRenderPromises = create2dPromiseArray(pages.value, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
+        const numPromiseArrays = pageRenderPromises.length;
+
+        // This fills all the numbers in the Array with Promises.
+        for(let i = 0; i < numPromiseArrays; i++) {
+            const numPromiseForIArray = pageRenderPromises[i].length;
+            for(let j = 0; j < numPromiseForIArray; j++) {
+                pageRenderPromises[i][j] = renderSingularCanvas(pageRenderPromises[i][j]);
+            }
+        }
+
+        // This runs all the arrays of promises.
+        for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
+    } catch(e) {}
 }
 
 /** This function checks if the render abort signal has been sent or not. */
