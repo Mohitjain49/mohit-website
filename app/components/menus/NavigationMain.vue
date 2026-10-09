@@ -166,8 +166,7 @@
         <FontAwesomeActionIcon :baseIcon="'fa-link'" :status="copyStatus" />
     </button>
     <button :title="SHARE_PAGE_TITLE" @click="webData.openQRCodePopup()" class="mohit-navBar-statusIcon share" v-pulse-loop>
-        <font-awesome-icon v-if="!webData.sharePopupClosing" icon="fa-share-from-square" />
-        <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
+        <font-awesome-icon icon="fa-share-from-square" />
     </button>
 </div>
 </template>

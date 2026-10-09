@@ -9,7 +9,7 @@
     <ProjectsSection />
     <LibrarySection />
 
-    <HomeWidgets />
+    <CompassWidget />
     <WebFooter />
 </main>
 </template>

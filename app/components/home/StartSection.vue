@@ -31,8 +31,8 @@
                     <button v-else class="start-buttonRow-btn"
                         :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
                         :style="getSpecialBtnStyles(contact.color)"
-                        @click="(event) => onContactBtnClick(event, contact)"
-                        @contextmenu="(event) => onContactBtnClick(event, contact)"
+                        @click="(event) => { onContactBtnClick(event, contact); }"
+                        @contextmenu="(event) => { onContactBtnClick(event, contact); }"
                         @dblclick="shareContactLink(contact.link)">
 
                         <font-awesome-icon :icon="contact.linkIcon" />
@@ -370,8 +370,13 @@ $height-start-scale: 775;
     filter: var(--filter-drop-shadow);
     transition: border 0.2s;
 }
+
 .start-contactBtn-dropdown.share-hover::before {
     border-color: transparent transparent var(--dark-background) transparent;
+}
+.start-contactBtn-dropdown.share-hover .start-contactBtn-dropdown-button#start-contact-dropdown-share {
+    background-color: var(--dark-background);
+    text-shadow: 0px 0px 8px;
 }
 
 .start-contactBtn-dropdown-button {

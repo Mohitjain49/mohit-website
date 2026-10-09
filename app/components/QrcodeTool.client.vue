@@ -125,9 +125,6 @@ import prettyBytes from 'pretty-bytes';
 import isURL from 'validator/es/lib/isURL';
 import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
-const STATUS_CURSORS = ["", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
-const IMAGE_STATUS = ['png', 'svg'];
-
 /** @type {Array<FilePickerAcceptType>} These are all the types in which a file can be saved. */
 const SAVE_FILE_OPTIONS = [
     { description: "PNG Image", accept: { 'image/png': ['.png'] }},
@@ -136,6 +133,7 @@ const SAVE_FILE_OPTIONS = [
     { description: "SVG Image", accept: { 'image/svg+xml': ['.svg'] }},
 ]
 
+const IMAGE_STATUS = ['png', 'svg'];
 const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
 const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
 const SHARE_POPUP_MIN_VIEWPORT_EDGE = 675;
@@ -148,6 +146,7 @@ const styleStore = useStyleStore();
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
 var autoscrollTimeout = null;
+var unmountTimeout = null;
 
 /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing the qr code. */
 var printIframe = null;
@@ -227,13 +226,28 @@ const downloadImageTitle = computed(() => { return ("Download QR Code (" + qrcod
 const shareImageTitle = computed(() => { return ("Share QR Code (" + qrcodeFileSize.value + ")"); });
 
 // This mounts the share popup and all of its functionality.
-onMounted(async() => {
+onMounted(async() => { await mountSharePopup(); });
+
+// This watches for changes to the QR Code Data so the popup changes reactively.
+watch(qrdata, () => { setQRCodeLink(); });
+
+// This watcher closes the main share popup and disables all the JS.
+watch(showSharePopupImmediate, (newValue) => {
+    if(newValue) {
+        reverseSharePopupUnmount();
+    } else {
+        unmountSharePopup(true);
+    }
+});
+
+/** This function mounts the share popup. */
+async function mountSharePopup() {
     styleStore.setHideOverflowArray(HideOverflow.SHARE_POPUP, true);
     await nextTick();
 
     showMainPopup.value = true;
     await nextTick();
-    setQRCodeLink();
+    await setQRCodeLink();
 
     // This creates and starts the Lenis auto scrolling for this popup.
     lenis = new Lenis({ autoRaf: true, orientation: "horizontal",
@@ -245,31 +259,45 @@ onMounted(async() => {
     manageLenisScrolling();
     calculateSharePopupScale();
 
+    if(sharePopupAbortController != null) { sharePopupAbortController.abort(); }
+    sharePopupAbortController = new AbortController();
     const signal = sharePopupAbortController.signal;
+
     window.addEventListener("animation-resize", () => { calculateSharePopupScale(); }, { signal });
     window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal });
     window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
-});
+}
 
-// This watches for changes to the QR Code Data so the popup changes reactively.
-watch(qrdata, () => { setQRCodeLink(); });
-
-// This watcher closes the main share popup and disables all the JS.
-watch(showSharePopupImmediate, (newValue) => { if(!newValue) { unmountSharePopup(); } });
-
-/** This function is used to unmount the share popup. */
-function unmountSharePopup() {
+/**
+ * This function is used to unmount the share popup.
+ * @param {Boolean} useTimeout If true, the last actions in the unmount process use a timeout to have them execute as late as possible.
+ */
+function unmountSharePopup(useTimeout = true) {
     showMainPopup.value = false;
     showShareOptions.value = -1;
     styleStore.setHideOverflowArray(HideOverflow.SHARE_POPUP, false);
 
     if(lenis != null) { lenis.destroy(); }
     if(autoscrollTimeout != null) { clearTimeout(autoscrollTimeout); }
+    if(unmountTimeout != null) { clearTimeout(unmountTimeout); }
 
-    setTimeout(() => {
-        sharePopupAbortController.abort();
+    if(useTimeout) {
+        unmountTimeout = setTimeout(() => {
+            if(sharePopupAbortController != null) { sharePopupAbortController.abort(); }
+            deleteCurrentQrcodeURL();
+            unmountTimeout = null;
+        }, 450);
+    } else {
+        if(sharePopupAbortController != null) { sharePopupAbortController.abort(); }
         deleteCurrentQrcodeURL();
-    }, 450);
+        unmountTimeout = null;
+    }
+}
+
+/** This function reverses a share popup unmount. */
+async function reverseSharePopupUnmount() {
+    unmountSharePopup(false);
+    await mountSharePopup();
 }
 
 /** This function sets the link for the Share Popup. */
@@ -305,47 +333,47 @@ async function setQRCodeLink() {
     }
 
     if(qrcode.value != null) {
-        qrcode.value.update({
-            type: ((qrcodeImageMode.value == 0) ? 'canvas' : 'svg'),
-            data: newQRCodeLink
-        });
-    } else {
-        qrcode.value = new QRCodeStyling({
-            width: 450,
-            height: 450,
-            type: ((qrcodeImageMode.value == 0) ? 'canvas' : 'svg'),
-            data: newQRCodeLink,
-            image: "/static-icons/Personal_Icon_Expanded_Rounded.png",
-            margin: 10,
-            dotsOptions: {
-                color: 'black',
-                type: 'rounded'
-            },
-            cornersSquareOptions: {
-                color: 'black',
-                type: 'extra-rounded'
-            },
-            cornersDotOptions: {
-                color: 'black',
-                type: 'dot'
-            },
-            imageOptions: {
-                hideBackgroundDots: true,
-                imageSize: 0.4,
-                margin: 5,
-                crossOrigin: 'anonymous',
-            },
-            qrOptions: {
-                typeNumber: 0,
-                mode: 'Byte',
-                errorCorrectionLevel: 'Q',
-            },
-            backgroundOptions: { color: '#E5E5E5' },
-        });
-
-        qrcode.value.append(document.getElementById("mohit-qrcode"));
-        qrCodeDisplay.value = true;
+        const formerQrcode = getQrcodeContainer()?.querySelector("canvas, svg");
+        if(formerQrcode) { formerQrcode.remove(); }
     }
+
+    // This creates the New QR Code.
+    qrcode.value = new QRCodeStyling({
+        width: 450,
+        height: 450,
+        type: ((qrcodeImageMode.value == 0) ? 'canvas' : 'svg'),
+        data: newQRCodeLink,
+        image: "/static-icons/Personal_Icon_Expanded_Rounded.png",
+        margin: 10,
+        dotsOptions: {
+            color: 'black',
+            type: 'rounded'
+        },
+        cornersSquareOptions: {
+            color: 'black',
+            type: 'extra-rounded'
+        },
+        cornersDotOptions: {
+            color: 'black',
+            type: 'dot'
+        },
+        imageOptions: {
+            hideBackgroundDots: true,
+            imageSize: 0.4,
+            margin: 5,
+            crossOrigin: 'anonymous',
+        },
+        qrOptions: {
+            typeNumber: 0,
+            mode: 'Byte',
+            errorCorrectionLevel: 'Q',
+        },
+        backgroundOptions: { color: '#E5E5E5' },
+    });
+
+    // This appends the newly created QR Code.
+    qrcode.value.append(getQrcodeContainer());
+    qrCodeDisplay.value = true;
 
     try {
         deleteCurrentQrcodeURL();
@@ -408,8 +436,10 @@ function setImageTypesOptions(status = "toggle") {
  */
 function focusOnQrcode(event = undefined) {
     try {
+        if(event && event.type && event.type.toLowerCase() === "contextmenu" && event.ctrlKey) { return; }
         if(event) { event.preventDefault(); }
-        document.getElementById("mohit-qrcode").focus({ preventScroll: true, focusVisible: true });
+
+        getQrcodeContainer().focus({ preventScroll: true, focusVisible: true });
         setImageOptions(true);
         triggerClickSound();
     } catch(e) {
@@ -425,7 +455,7 @@ function focusOnQrcode(event = undefined) {
 function onSharePopupKeydown(event = undefined) {
     try {
         if(!event || !event.ctrlKey || event.repeat || !qrCodeBlob.value) { return; }
-        const qrcodeActiveElement = (document.activeElement === document.getElementById("mohit-qrcode"));
+        const qrcodeActiveElement = (document.activeElement === getQrcodeContainer());
         const keyLetter = event.key.toLowerCase();
 
         if(keyLetter === "c") {
@@ -742,6 +772,9 @@ function getImageFilename() { return (DEFAULT_IMAGE_FILENAME + "." + qrcodeImage
 /** This function returns a formatted phone number for the share popup to display. */
 function formatPhoneNumber() { return ParsePhoneNumber(qrCodeLink.value.substring(4), "US").formatNational(); }
 
+/** This function returns the QR Code Canvas Container. */
+function getQrcodeContainer() { return document.getElementById("mohit-qrcode"); }
+
 /** This function returns the current full URL as a string with the QR Data search parameter removed. */
 function getParsedUrl() {
     const tempUrl = new URL(PERSONAL_WEBSITE_LINK + router.currentRoute.value.fullPath.substring(1));
@@ -780,7 +813,7 @@ function getParsedUrl() {
     width: 450px;
     height: 450px;
     border-radius: 15px;
-    overflow: clip;
+    overflow: hidden;
     border: 2px dashed black;
     background: #E5E5E5;
     background-image: url('/qrcode/Homepage_Qrcode.webp');

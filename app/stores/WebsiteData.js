@@ -14,6 +14,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     var controller = new AbortController();
     var wakeLockTimeout = null;
+    var sharePopupClosingTimeout = null;
     var saveAsSupportedCheckInterval = null;
 
     const scriptsStore = useScriptsStore();
@@ -103,15 +104,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     // This sets how the share popup should behave as opposed to its webpage cover.
     watch(showSharePopupImmediate, async (newValue) => {
+        if(sharePopupClosingTimeout != null) { clearTimeout(sharePopupClosingTimeout); }
+
         if(newValue) {
-            if(sharePopupClosing.value) { return; }
             showSharePopup.value = true;
+            sharePopupClosing.value = false;
         } else {
             sharePopupClosing.value = true;
-            await sleep(505);
-            showSharePopup.value = false;
-            await sleep(5);
-            sharePopupClosing.value = false;
+            sharePopupClosingTimeout = setTimeout(() => {
+                showSharePopup.value = false;
+                sharePopupClosing.value = false;
+                sharePopupClosingTimeout = null;
+            }, 505);
         }
     });
 
@@ -307,14 +311,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {String} qrdata The URL or mode to pass into the QR Code Popup.
      */
     function setQRCodePopup(qrdata = "") {
-        if(sharePopupClosing.value) { return; }
-        const route = router.currentRoute.value;
-
         if(qrdata === "quit" || qrdata === "") {
+            const route = router.currentRoute.value;
             router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata: undefined }});
         } else if(qrdata === "toggle") {
             setQRCodePopup(showSharePopup.value ? "quit" : "main");
         } else {
+            const route = router.currentRoute.value;
             router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata }}).then(() => {
                 sleep(10).then(() => { closeNavMenu(); });
             });

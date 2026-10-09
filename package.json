@@ -10,7 +10,7 @@
     "scripts": {
         "dev": "nuxt dev",
         "build": "nuxt generate && node scripts/postbuild.mjs",
-        "preview": "npm run serve",
+        "preview": "npm run serve -- --no-open",
         "nuxt:preview": "nuxt preview",
         "postinstall": "nuxt prepare",
         "open": "nuxt dev --open",
@@ -73,7 +73,7 @@
         "@types/node": "^26.6.4",
         "@types/validator": "^13.15.10",
         "@types/wicg-file-system-access": "^2023.10.7",
-        "dotenv": "^18.0.6",
+        "dotenv": "^18.0.7",
         "glob": "^13.0.6",
         "jest": "^30.5.2",
         "mime-types": "^3.0.2",
