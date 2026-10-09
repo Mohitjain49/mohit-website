@@ -76,8 +76,7 @@ const CONTACT_DROPDOWN_SHARE_ID = "start-contact-dropdown-share";
 
 /** @type {AbortController} This abort controller manages all the events for this component. */
 var abortController = null;
-const WIDTH_START_SCALE = 1280;
-const HEIGHT_START_SCALE = 775;
+var contextMenuTimeout = null;
 
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
@@ -103,10 +102,6 @@ const isMounted = onMountedAdvanced(async () => {
         window.addEventListener("pointerdown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
         window.addEventListener("mousedown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
         window.addEventListener("touchstart", (event) => { checkContactDropdownStayVisible(event); }, { signal });
-
-        await styleStore.waitForFirstViewportCalculation();
-        setStartSectionScale();
-        window.addEventListener("animation-resize", () => { setStartSectionScale(); }, { signal });
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -132,23 +127,6 @@ function checkContactDropdownStayVisible(event) {
     hideStartContactDropdown();
 }
 
-/** This function sets the scale for the start section's inner container so that it is easier to read on larger viewports. */
-function setStartSectionScale() {
-    const element = document.getElementById(START_INNER_CONTAINER_ID);
-    if(!element) { return; }
-
-    const currentWidth = styleStore.cssViewportWidth;
-    const currentHeight = styleStore.cssViewportHeight;
-
-    if(currentWidth <= WIDTH_START_SCALE || currentHeight <= HEIGHT_START_SCALE) {
-        element.style.scale = "1.0";
-    } else {
-        const scaleOnWidth = (Math.round((currentWidth * 100) / WIDTH_START_SCALE) / 100);
-        const scaleOnHeight = (Math.round((currentHeight * 100) / HEIGHT_START_SCALE) / 100);
-        element.style.scale = String(Math.min(scaleOnWidth, scaleOnHeight));
-    }
-}
-
 /**
  * This function triggers whenever the a button for a social media link is clicked.
  * @param {PointerEvent} event The pointer event from the contact button.
@@ -166,7 +144,12 @@ function onContactBtnClick(event, obj) {
         router.push('/contact/#' + obj.id); // If the Shift key is pressed, the key opens up the social tab on the contact page for the button.
     } else if(startContactObj.value === obj.id) {
         hideStartContactDropdown();
-        if(event.type.toLowerCase() === "contextmenu") { sleep(100).then(() => { startContactObj.value = obj.id; }); }
+        if(contextMenuTimeout != null) { clearTimeout(contextMenuTimeout); }
+
+        contextMenuTimeout = ((event.type.toLowerCase() !== "contextmenu") ? null : setTimeout(() => {
+            startContactObj.value = obj.id;
+            contextMenuTimeout = null;
+        }, 100));
     } else {
         startContactObj.value = obj.id;
     }
@@ -228,6 +211,9 @@ const MAIN_BTNS = [
 </script>
 
 <style scoped lang="scss">
+$width-start-scale: 1280;
+$height-start-scale: 775; 
+
 .start-section {
     position: relative;
     height: 640px;
@@ -249,7 +235,10 @@ const MAIN_BTNS = [
     flex-direction: column;
     font-family: inherit;
     color: inherit;
+    --custom-scale-var: 1.0;
+    --width-start-scale: 1280
     --animate-duration: 1.2s;
+    scale: var(--custom-scale-var, 1.0);
 }
 
 .start-section-title {
@@ -458,6 +447,23 @@ const MAIN_BTNS = [
     }
     .start-buttonRow.start-buttonRow.main {
         margin-top: 32px;
+    }
+}
+
+@include dynamic-greater-equal-width-rule-scopedBlock($width-start-scale) {
+    #start-innerContainer {
+        --custom-scale-var: min(
+            calc(var(--true-100vw, 100vw) / (#{$width-start-scale} * 1px)),
+            max(1, calc(var(--true-100vh, 100vh) / (#{$height-start-scale} * 1px)))
+        );
+    }
+}
+@include dynamic-greater-equal-height-rule-scopedBlock($height-start-scale) {
+    #start-innerContainer {
+        --custom-scale-var: min(
+            calc(var(--true-100vh, 100vh) / (#{$height-start-scale} * 1px)),
+            max(1, calc(var(--true-100vw, 100vw) / (#{$width-start-scale} * 1px)))
+        );
     }
 }
 </style>

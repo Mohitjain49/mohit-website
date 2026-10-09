@@ -20,16 +20,22 @@ export default defineNuxtPlugin((nuxtApp) => {
      * @param {PointerEvent} event The event where the user hovers over or leaves the button.
      */
     function animate(event) {
-        /** @type {HTMLElement} This is the element that classes are being added and removed from. */
-        const element = event.target;
+        try {
+            // console.log(event);
+            if(!event || !event.target) { return; }
 
-        if(event.type === "pointerenter" && event.pointerType === "mouse") {
-            if(element.classList.contains('animate__animated')) { return; }
-            element.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
-        } else {
-            if(!element.classList.contains('animate__pulse')) { return; }
-            element.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
-        }
+            /** @type {HTMLElement} This is the element that classes are being added and removed from. */
+            const element = event.target;
+            if(!(element instanceof Element)) { return; }
+
+            if(event.type === "pointerenter" && event.pointerType === "mouse") {
+                if(element.classList.contains('animate__animated')) { return; }
+                element.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
+            } else {
+                if(!element.classList.contains('animate__pulse')) { return; }
+                element.classList.remove('animate__animated', 'animate__pulse', 'animate__infinite');
+            }
+        } catch(e) {}
     }
 
     /** This function verifies that only the elements that the user is hovering over have the pulse loop class. */
@@ -60,7 +66,7 @@ export default defineNuxtPlugin((nuxtApp) => {
      * @param {HTMLElement} el The HTML Element used in the directive. 
      * @param {import("vue").DirectiveBinding<any>} binding The Binding with the directive.
      */
-    function onDirectiveElementMounted(el, binding) {
+    function mountDirectiveElement(el, binding) {
         if(findElement(el) != -1) { return; }
         const animationAbortController = new AbortController();
         const signal = animationAbortController.signal;
@@ -75,7 +81,7 @@ export default defineNuxtPlugin((nuxtApp) => {
      * @param {HTMLElement} el The HTML Element used in the directive. 
      * @param {import("vue").DirectiveBinding<any>} binding The Binding with the directive.
      */
-    function beforeDirectiveElementUnmount(el, binding) {
+    function unmountDirectiveElement(el, binding) {
         const itemIndex = findElement(el);
         if(itemIndex == -1) { return; }
         animatedElementsList[itemIndex].controller.abort();
@@ -84,7 +90,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     // This makes a new directive that allows any element to use the pulse-loop animation when hovered over.
     nuxtApp.vueApp.directive('pulse-loop', {
-        mounted(el, binding) { onDirectiveElementMounted(el, binding); },
-        beforeUnmount(el, binding) { beforeDirectiveElementUnmount(el, binding); }
+        mounted(el, binding) { mountDirectiveElement(el, binding); },
+        beforeUnmount(el, binding) { unmountDirectiveElement(el, binding); }
     });
 });
