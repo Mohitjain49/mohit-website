@@ -73,11 +73,8 @@ export default {
             const scrollStore = useScrollStore($pinia);
             const documentStore = useDocumentStore($pinia);
 
-            /** An array of conditions where if one is true, no smooth auto-scroll takes place. */
-            const NO_SCROLL_CONDITIONS = [
-                (documentStore.onDocumentRoute && !documentStore.docLoaded.status),
-                disableScrollOnQueryChange(to, from)
-            ];
+            /** An array of conditions where if at least one condition is true, no smooth auto-scroll takes place. */
+            const NO_SCROLL_CONDITIONS = [documentStore.checkDocNotLoaded(), disableScrollOnQueryChange(to, from)];
 
             // Checks the conditions and waits for the scroll store to be mounted.
             if(-1 != NO_SCROLL_CONDITIONS.findIndex((item) => { return item; })) { return false; }

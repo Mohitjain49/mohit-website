@@ -865,7 +865,7 @@ function getParsedUrl() {
     overflow: hidden;
     border: 2px dashed black;
     background: #E5E5E5;
-    background-image: url('/qrcode/Homepage_Qrcode.webp');
+    background-image: url('/Homepage_Qrcode.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

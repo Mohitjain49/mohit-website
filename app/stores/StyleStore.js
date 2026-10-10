@@ -59,9 +59,9 @@ export const useStyleStore = defineStore("style-store", () => {
     const trueViewportVariablesEnabled = ref(false);
     const mousePositionRecorderEnabled = ref(false);
 
-    const hideOverflowArray = ref([false, false, false, false, false]);
-    const hideCursorArray = ref([false, false]);
-    const disableUserSelectArray = ref([false, false]);
+    const hideOverflowArray = ref(Array.from({ length: HideOverflow.LENGTH }, () => { return false }));
+    const hideCursorArray = ref(Array.from({ length: HideCursor.LENGTH }, () => { return false }));
+    const disableUserSelectArray = ref(Array.from({ length: DisableUserSelect.LENGTH }, () => { return false }));
 
     const hideOverflow = computed(() => { return (-1 != hideOverflowArray.value.findIndex((item) => { return item; })); });
     const hideCursor = computed(() => { return (-1 != hideCursorArray.value.findIndex((item) => { return item; })); });

@@ -3,16 +3,19 @@ export enum HideOverflow {
     SCANNED_ITEM_POPUP,
     GOOGLE_DRIVE_PICKER,
     WEBSITE_MENU,
-    LOADING_DOCUMENT
+    LOADING_DOCUMENT,
+    LENGTH
 }
 
 export enum HideCursor {
-    WEBSITE_COVER
+    WEBSITE_COVER,
+    LENGTH
 }
 
 export enum DisableUserSelect {
     FS_SCROLL_BAR,
-    WEBSITE_COVER
+    WEBSITE_COVER,
+    LENGTH
 }
 
 export const NO_MENU = -1;

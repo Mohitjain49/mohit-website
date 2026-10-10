@@ -736,6 +736,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(index >= 0 && index <= docLoaded.value.totalPages) { contextMenuPageNumber.value = index; }
     }
 
+    /** This function returns if a document is NOT loaded on a document page. */
+    function checkDocNotLoaded() { return (onDocumentRoute.value && !docLoaded.value.status); }
+
     return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle,
@@ -745,7 +748,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
-        checkPdfjsWorker, getPdfjsStylesheet
+        checkPdfjsWorker, getPdfjsStylesheet, checkDocNotLoaded
     }
 });
 

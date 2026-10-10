@@ -296,7 +296,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Boolean} toggle If true AND the menu to be opened is already open, this function wil then close the menu.
      */
     function setMenuOpen(index = NO_MENU, toggle = false) {
-        const setMenuClosed = (scrollStore.isAutoScrolling || (toggle && menuOpen.value == index));
+        const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || (toggle && menuOpen.value == index));
         menuOpen.value = (setMenuClosed ? NO_MENU : index);
     }
 
