@@ -13,6 +13,7 @@ const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
 const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
+const DOCUMENT_ACTION_CURSORS = ["pointer", "wait", "var(--checkmark-cursor)", "not-allowed", "not-allowed", "not-allowed"];
 const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
 const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
@@ -146,17 +147,17 @@ export const useDocumentStore = defineStore("document-store", () => {
         const loadingScripts = (googleDriveOptAvailable.value == DOCUMENT_ACTION_PENDING);
         return (loadingScripts ? DOCUMENT_ACTION_PENDING : documentUploadToGoogleDriveStatus.value);
     });
-
-    const printCursor = computed(() => { return { cursor: (anyPrintPending.value ? "wait" : (anyPrintUnavailable.value ? "default" : "")) }});
+    const printCursor = computed(() => {
+        if(documentCustomPrintStatus.value > 0) { return { cursor: "not-allowed" }; }
+        return { cursor: (DOCUMENT_ACTION_CURSORS[documentPrintStatus.value] ?? "pointer") };
+    });
     const customPrintCursor = computed(() => {
+        if(documentPrintStatus.value > 0) { return { cursor: "not-allowed" }; }
         const waitCursor = (currentDocumentPrintHtmlCreated.value ? "wait" : "progress");
-        return { cursor: (anyPrintPending.value ? waitCursor : (anyPrintUnavailable.value ? "default" : "")) }
+        return { cursor: (customPrintPending.value ? waitCursor : (DOCUMENT_ACTION_CURSORS[documentCustomPrintStatus.value] ?? "pointer")) }
     });
 
-    const printPending = computed(() => { return (documentPrintStatus.value == DOCUMENT_ACTION_PENDING); });
     const customPrintPending = computed(() => { return (documentCustomPrintStatus.value == DOCUMENT_ACTION_PENDING); });
-
-    const anyPrintPending = computed(() => { return (printPending.value || customPrintPending.value); });
     const anyPrintUnavailable = computed(() => { return (documentPrintStatus.value > 0 || documentCustomPrintStatus.value > 0); });
 
     /**
@@ -283,7 +284,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     async function printDoc(customPrint = false) {
         if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
-        const printActionString = (!browserPdfViewerPresent.value ? "both" : (customPrint ? "custom" : "standard"));
+        const printActionString = ((!browserPdfViewerPresent.value || customPrint) ? "custom" : "standard");
         var cancelTimeout = false;
 
         // Sets the specified print action to "Pending".

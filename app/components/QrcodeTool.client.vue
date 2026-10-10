@@ -1,5 +1,4 @@
 <template>
-<!-- <WebCover v-if="(showSharePopupImmediate && fullScreenSet)" :zIndex="1500" /> -->
 <Transition name="qrcode-popup-transition" appear fade>
     <div v-if="showMainPopup" id="share-popup" class="qrcode-mainPopup">
         <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
@@ -27,10 +26,13 @@
                 <FontAwesomeIcon icon="fa-diamond-turn-right" />
             </RouterLink>
 
-            <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="((actions.copy == 2) ? 'Copied Link!' : 'Copy Link')" v-action-cursor="actions.copy">
+            <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="copyLinkTitle" v-action-cursor="actions.copy">
                 <FontAwesomeActionIcon :baseIcon="'fa-link'" :status="actions.copy" />
             </button>
-            <button v-if="showCustomLinkShare" @click="shareQRCodeLink()" class="qrcode-mainPopup-btn light" title="Share Link" v-action-cursor="actions.share">
+            <button v-if="showCustomLinkShare" @click="shareQRCodeLink()"
+                class="qrcode-mainPopup-btn light"
+                :title="shareLinkTitle" v-action-cursor="actions.share">
+
                 <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.share" />
             </button>
             
@@ -40,8 +42,9 @@
                 </button>
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 1)" class="qrcode-image-options">
-                        <button v-if="webData.shareSupported" @click="shareQRCodeLink()"
-                            class="qrcode-mainPopup-btn light" title="Share Link"
+                        <button v-if="webData.shareSupported" class="qrcode-mainPopup-btn light"
+                            @click="shareQRCodeLink()"
+                            :title="shareLinkTitle"
                             v-action-cursor="actions.share">
 
                             <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.share" />
@@ -49,13 +52,22 @@
                         <a :href="shareEmail" class="qrcode-mainPopup-btn" title="Share This Link By Email!">
                             <FontAwesomeIcon icon="fa-envelope" />
                         </a>
-                        <a :href="shareLinkedIn" target="_blank" class="qrcode-mainPopup-btn" title="Share This Link On LinkedIn!" :style="getColorStyles('#0072B1')">
+                        <a :href="shareLinkedIn" target="_blank" class="qrcode-mainPopup-btn"
+                            title="Share This Link On LinkedIn!"
+                            :style="getColorStyles('#0072B1')">
+
                             <FontAwesomeIcon icon="fa-brands fa-linkedin" />
                         </a>
-                        <a :href="shareWhatsApp" target="_blank" class="qrcode-mainPopup-btn" title="Share This Link On WhatsApp!" :style="getColorStyles('#2DED64')">
+                        <a :href="shareWhatsApp" target="_blank" class="qrcode-mainPopup-btn"
+                            title="Share This Link On WhatsApp!"
+                            :style="getColorStyles('#2DED64')">
+
                             <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
                         </a>
-                        <a :href="shareFacebook" target="_blank" class="qrcode-mainPopup-btn" title="Share This Link On Facebook!" :style="getColorStyles('#0A65FE')">
+                        <a :href="shareFacebook" target="_blank" class="qrcode-mainPopup-btn"
+                            title="Share This Link On Facebook!"
+                            :style="getColorStyles('#0A65FE')">
+
                             <FontAwesomeIcon icon="fa-brands fa-facebook" />
                         </a>
                     </div>
@@ -70,22 +82,40 @@
                 </button>
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
-                        <button v-if="webData.shareSupported" @click="shareQRCode()" class="qrcode-mainPopup-btn yellow" :title="shareImageTitle" v-action-cursor="actions.shareImage">
+                        <button v-if="webData.shareSupported" @click="shareQRCode()"
+                            class="qrcode-mainPopup-btn yellow"
+                            :title="shareImageTitle" v-action-cursor="actions.shareImage">
+
                             <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.shareImage" />
                         </button>
-                        <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow" :title="downloadImageTitle" v-action-cursor="actions.downloadImage">
+                        <button @click="downloadQRCode()" class="qrcode-mainPopup-btn yellow"
+                            :title="downloadImageTitle"
+                            v-action-cursor="actions.downloadImage">
+
                             <FontAwesomeActionIcon :baseIcon="'fa-download'" :status="actions.downloadImage" />
                         </button>
-                        <button v-if="webData.saveAsSupported" @click="saveQRCode()" class="qrcode-mainPopup-btn yellow" title="Save QR Code" v-action-cursor="actions.saveImage">
+                        <button v-if="webData.saveAsSupported" @click="saveQRCode()"
+                            class="qrcode-mainPopup-btn yellow"
+                            :title="saveImageTitle" v-action-cursor="actions.saveImage">
+
                             <FontAwesomeActionIcon :baseIcon="'fa-floppy-disk'" :status="actions.saveImage" />
                         </button>
-                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()" class="qrcode-mainPopup-btn yellow" title="Copy QR Code As Image" v-action-cursor="actions.copyImage">
+                        <button v-if="qrcodeImageCopySupported" @click="copyQRCode()"
+                            class="qrcode-mainPopup-btn yellow"
+                            :title="copyImageTitle" v-action-cursor="actions.copyImage">
+
                             <FontAwesomeActionIcon :baseIcon="'fa-clone'" :status="actions.copyImage" />
                         </button>
-                        <button v-if="iframeSupported" @click="printQRCode()" class="qrcode-mainPopup-btn yellow" title="Print QR Code" v-action-cursor="actions.printImage">
+                        <button v-if="iframeSupported" @click="printQRCode()"
+                            class="qrcode-mainPopup-btn yellow"
+                            :title="printImageTitle" v-action-cursor="actions.printImage">
+
                             <FontAwesomeActionIcon :baseIcon="'fa-print'" :status="actions.printImage" />
                         </button>
-                        <a v-if="qrcodeUrlCreated" :href="qrCodeURL" target="mohit-qrcode" class="qrcode-mainPopup-btn white" title="Open QR Code in New Tab">
+                        <a v-if="qrcodeUrlCreated" :href="qrCodeURL" target="mohit-qrcode"
+                            class="qrcode-mainPopup-btn white"
+                            title="Open QR Code in New Tab">
+
                             <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
                         </a>
                     </div>
@@ -138,10 +168,17 @@ const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
 const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
 const SHARE_POPUP_MIN_VIEWPORT_EDGE = 675;
 
+const COPY_LINK_TITLES = ["Copy Link", "Copying Link...", "Link Copied!", "Error While Copying Link."];
+const SHARE_LINK_TITLES = ["Share Link", "Sharing Link...", "Link Shared!", "Error While Sharing Link."];
+const COPY_IMAGE_TITLES = ["Copy QR Code", "Copying QR Code...", "QR Code Copied!", "Error While Copying QR Code."];
+const SAVE_IMAGE_TITLES = ["Save QR Code", "Saving QR Code...", "QR Code Saved!", "Error While Saving QR Code.", "Save Timed Out.", "Save Canceled."];
+const PRINT_IMAGE_TITLES = ["Print QR Code", "Printing QR Code...", "QR Code Printed!", "Error While Printing QR Code.", "Print Timed Out."];
+const DOWNLOAD_IMAGE_TITLES = ["Download QR Code", "Downloading QR Code...", "QR Code Downloaded!", "Error While Downloading QR Code."];
+const SHARE_IMAGE_TITLES = ["Share QR Code", "Sharing QR Code...", "QR Code Shared!", "Error While Sharing QR Code."];
+
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
-// const fullScreenSet = getFullScreenSet();
 
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
@@ -222,8 +259,20 @@ const actions = ref({ copy: 0, share: 0, shareImage: 0, downloadImage: 0, copyIm
 var timeouts = { copy: null, share: null, shareImage: null, downloadImage: null, copyImage: null, printImage: null, saveImage: null }
 var sharePopupAbortController = new AbortController();
 
-const downloadImageTitle = computed(() => { return ("Download QR Code (" + qrcodeFileSize.value + ")"); });
-const shareImageTitle = computed(() => { return ("Share QR Code (" + qrcodeFileSize.value + ")"); });
+const copyLinkTitle = computed(() => { return (COPY_LINK_TITLES[actions.value.copy] ?? "Copy Link"); });
+const shareLinkTitle = computed(() => { return (SHARE_LINK_TITLES[actions.value.share] ?? "Share Link"); });
+const copyImageTitle = computed(() => { return (COPY_IMAGE_TITLES[actions.value.copyImage] ?? "Copy QR Code"); });
+const saveImageTitle = computed(() => { return (SAVE_IMAGE_TITLES[actions.value.saveImage] ?? "Save QR Code"); });
+const printImageTitle = computed(() => { return (PRINT_IMAGE_TITLES[actions.value.printImage] ?? "Print QR Code"); });
+
+const downloadImageTitle = computed(() => {
+    const status = actions.value.downloadImage;
+    return ((DOWNLOAD_IMAGE_TITLES[status] ?? "Download QR Code") + ((status == 0) ? (" (" + qrcodeFileSize.value + ")") : ""));
+});
+const shareImageTitle = computed(() => {
+    const status = actions.value.shareImage;
+    return ((SHARE_IMAGE_TITLES[status] ?? "Share QR Code") + ((status == 0) ? (" (" + qrcodeFileSize.value + ")") : ""));
+});
 
 // This mounts the share popup and all of its functionality.
 onMounted(async() => { await mountSharePopup(); });

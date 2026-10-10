@@ -1,6 +1,7 @@
 export default defineNuxtPlugin((nuxtApp) => {
     const FALLBACK_CURSOR = "pointer";
-    const CURSORS = ["pointer", "wait", "default", "not-allowed", "not-allowed", "not-allowed"];
+    const ERROR_CURSOR = "not-allowed";
+    const CURSORS = ["pointer", "wait", "var(--checkmark-cursor)", "not-allowed", "not-allowed", "not-allowed"];
 
     /**
      * This function is ran when an element using the directive is mounted.
@@ -10,7 +11,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     function setActionButtonCursor(el, binding) {
         try {
             if(!el || (!binding.value && binding.value != 0)) { return; }
-            el.style.cursor = (CURSORS[binding.value] ?? FALLBACK_CURSOR);
+            const newCursor = ((binding.value > 2) ? ERROR_CURSOR : (CURSORS[binding.value] ?? FALLBACK_CURSOR))
+            el.style.cursor = newCursor;
         } catch(e) {}
     }
 

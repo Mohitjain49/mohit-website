@@ -95,7 +95,6 @@ export default defineNuxtConfig({
         ]
     },
     nitro: {
-        externals: { inline: [/[\\/]node_modules[\\/]nuxt[\\/]dist[\\/]/] },
         static: true,
         prerender: { concurrency: 1 },
         preset: "static"
