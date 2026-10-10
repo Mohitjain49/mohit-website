@@ -5,7 +5,7 @@
  */
 export async function renderCustomPrintIframe(url = "", signal = null) {
     if(!import.meta.client || !url || url === "") { throw new Error("URL Invalid."); }
-    if(!(signal instanceof AbortSignal)) { signal = null; }
+    if(!signal || !(signal instanceof AbortSignal)) { signal = null; }
 
     /** @type {HTMLIFrameElement} This is the IFrame where the HTML should be rendered onto. */
     var printIframe = null;
@@ -28,7 +28,7 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
     const LETTER_WIDTH = 816;
 
     /** This is the IFrame where the HTML should be rendered onto. */
-    printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "none", value: "" });
+    printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "none", value: "", signal });
 
     if(renderAborted()) { return null; }
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
@@ -113,38 +113,9 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
         printPageContainer.appendChild(printPageImage);
 
         // This awaits for the image to load with proper error handling.
-        await new Promise(async (resolve, reject) => {
-            if(printPageImage.complete) { return resolve(); }
-            var msPassed = 0;
-            var resolved = 0;
-
-            printPageImage.onload = () => {
-                resolved = 1;
-                resolve();
-            }
-            printPageImage.onerror = () => {
-                resolved = 2;
-                if(renderAborted()) {
-                    resolve();
-                } else {
-                    reject(new Error("Error Loading Image"));
-                }
-            }
-
-            while(msPassed < 7000 && resolved == 0 && !renderAborted()) {
-                await sleep(50);
-                msPassed += 50;
-            }
-
-
-            if(resolved == 1 || renderAborted()) {
-                resolve();
-            } else if(resolved == 0) {
-                reject(new Error("Timeout Error"));
-            }
-        });
-
+        await waitForImageLoad(printPageImage, 7000, signal);
         if(renderAborted()) { return; }
+
         const printPageText = document.createElement("div");
         printPageText.classList.add("textLayer");
         printPageContainer.appendChild(printPageText);

@@ -747,16 +747,7 @@ async function printQRCode() {
             await waitTwoFrames();
 
             newChild.appendChild(newChildImg);
-            await new Promise((resolve, reject) => {
-                if(newChildImg.complete) {
-                    resolve();
-                } else {
-                    newChildImg.onload = () => { resolve(); }
-                    sleep(7000).then(() => { reject(new Error("Timeout Error")); });
-                }
-            });
-
-            // This sets that the print iframe made for this print function can be reused.
+            await waitForImageLoad(newChildImg, 7000, null);
             printIframeNeedsRerender = false;
         }
 
@@ -775,6 +766,7 @@ async function printQRCode() {
             actions.value.printImage = 0;
         }
     } catch(e) {
+        if(import.meta.dev) { console.error(e); }
         actions.value.printImage = ((e.message === "Timeout Error") ? 4 : 3);
     } finally {
         if(timeouts.printImage != null) { clearTimeout(timeouts.printImage); }

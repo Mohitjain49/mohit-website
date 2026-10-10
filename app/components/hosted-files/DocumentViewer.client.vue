@@ -54,11 +54,13 @@ var pdfDocLoadingTask = null;
 var resizeTimeout = null;
 var bestPageRatio = 0;
 
+const router = useRouter();
 const webData = useWebsiteDataStore();
-const fullScreenSet = getFullScreenSet();
 const documentStore = useDocumentStore();
 const styleStore = useStyleStore();
-const router = useRouter();
+const scrollStore = useScrollStore();
+
+const fullScreenSet = getFullScreenSet();
 const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
 
 const props = defineProps({
@@ -101,7 +103,7 @@ const showFsWebCover = computed(() => {
 });
 
 // These manage the PDF Viewer when it is mounted an unmounted.
-onMountedAdvanced(async() => {
+onMounted(async() => {
     try {
         if(renderAborted()) { return; }
         const signal = eventAbortController.signal;
@@ -109,7 +111,7 @@ onMountedAdvanced(async() => {
 
         await renderPDF();
         window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
-        window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(); }, { signal });
+        window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(false); }, { signal });
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -433,7 +435,7 @@ function setSingleDocLoaded(index = 1) {
     }
 
     documentStore.docLoaded = { status: (numPagesLoaded >= totalPages), totalPages, loadedPages: numPagesLoaded }
-    if(documentStore.docLoaded.status) { scrollToCurrentPdfDest(); }
+    if(documentStore.docLoaded.status) { scrollToCurrentPdfDest(true); }
 }
 
 /**
@@ -523,9 +525,13 @@ function scrollToPdfDest(pageNumber = 1, y = 0) {
     scrollToTarget(top);
 }
 
-/** This function lets the user scroll to the current PDF Destination using the URL. */
-function scrollToCurrentPdfDest() {
+/**
+ * This function lets the user scroll to the current PDF Destination using the URL.
+ * @param {Boolean} awaitScrollStore If true, this function will wait for the scroll store to be mounted before executing its tasks.
+ */
+async function scrollToCurrentPdfDest(awaitScrollStore = false) {
     try {
+        if(awaitScrollStore) { await scrollStore.waitForMounted(); }
         const linkUrl = new URL(router.currentRoute.value.fullPath.substring(1), PERSONAL_WEBSITE_LINK);
         const searchParams = linkUrl.searchParams;
         const hashPageNumber = parseInt(linkUrl.hash.replaceAll("#page_", ""));

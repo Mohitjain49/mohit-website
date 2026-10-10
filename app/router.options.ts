@@ -3,7 +3,7 @@ import type { RouteLocationNormalizedGeneric } from "vue-router";
 
 const QUERY_NO_SCROLL_PARAMS = ["qrdata", "qrcodeAdded", "linksRemoved"];
 const QUERY_DOCUMENT_SCROLL_PARAMS = ["page", "y"];
-const TASKS_PENDING_WAIT_SECONDS = 1.5;
+const TASKS_PENDING_WAIT_MILLISECONDS = 1500;
 
 /** If true, a call to the scrol behavior function is waiting for the page:finish hook to be resolved. */
 const pageFinishHookRunning = ref(false);
@@ -60,9 +60,9 @@ export default {
                 window.scrollTo({ top: 0, left: 0, behavior: "instant" });
             } else {
                 var secondsTasksPending = 0;
-                while(pageFinishHookRunning.value && secondsTasksPending < TASKS_PENDING_WAIT_SECONDS) {
+                while(pageFinishHookRunning.value && secondsTasksPending < TASKS_PENDING_WAIT_MILLISECONDS) {
                     await sleep(50);
-                    secondsTasksPending += 0.05;
+                    secondsTasksPending += 50;
                 }
 
                 // If the page:finish hook is still running on one call of this function, this stops this call of the function.
@@ -78,15 +78,7 @@ export default {
 
             // Checks the conditions and waits for the scroll store to be mounted.
             if(-1 != NO_SCROLL_CONDITIONS.findIndex((item) => { return item; })) { return false; }
-            var secondsTasksPending = 0;
-
-            while(!scrollStore.mounted && secondsTasksPending < TASKS_PENDING_WAIT_SECONDS) {
-                await sleep(50);
-                secondsTasksPending += 0.05;
-            }
-
-            // If the scroll store is not mounted yet, this function does not do anything.
-            if(!scrollStore.mounted) { return false; }
+            await scrollStore.waitForMounted(TASKS_PENDING_WAIT_MILLISECONDS);
 
             // This function cancels any ongoing autoscroll.
             if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }

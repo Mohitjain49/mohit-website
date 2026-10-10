@@ -356,7 +356,7 @@ export const useStyleStore = defineStore("style-store", () => {
             if(viewportRafRanOnce.value) {
                 resolve("Wait Time: " + msPassed + " milliseconds");
             } else {
-                reject("Timeout Error");
+                reject(new Error("Timeout Error"));
             }
         });
     }

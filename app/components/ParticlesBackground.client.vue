@@ -89,7 +89,7 @@ async function waitForParticles() {
         if(particlesLoaded.value) {
             resolve("Wait Time: " + msPassed + " milliseconds");
         } else {
-            reject("Timeout Error");
+            reject(new Error("Timeout Error"));
         }
     });
 }

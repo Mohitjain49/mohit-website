@@ -7,7 +7,6 @@ import dayjs from "dayjs";
  * @see {@link https://easings.net/en | Easing Functions}
  */
 export const useScrollStore = defineStore("scroll-store", () => {
-    const router = useRouter();
     const webData = useWebsiteDataStore();
     const scriptsStore = useScriptsStore();
     const documentStore = useDocumentStore();
@@ -116,6 +115,28 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(webData.websiteMenuMode == 0 || customEventType === "no-scroll") { webData.closeNavMenu(); }
         scriptsStore.closeLineOptions();
         documentStore.setContextMenuPageNumber(0);
+    }
+
+    /**
+     * This function lets another function wait for the Scroll Store to mount before performing its tasks.
+     * @param {Number} timeout The amount of time in milliseconds to wait before throwing out a timeout error.
+     */
+    async function waitForMounted(timeout = 10000) {
+        await new Promise(async (resolve, reject) => {
+            if(lenis && mounted.value) { resolve(null); }
+            var msPassed = 0;
+
+            while(msPassed < timeout && !(mounted.value && lenis)) {
+                await sleep(50);
+                msPassed += 50;
+            }
+
+            if(mounted.value && lenis) {
+                resolve(null);
+            } else {
+                reject(new Error("Timeout Error"));
+            }
+        });
     }
 
     /**
@@ -294,7 +315,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
     return { mounted, scrollProgress, isAutoScrolling,
-        mountScrollStore, unmountScrollStore, cancelAutoscroll, waitForAutoScroll,
+        mountScrollStore, unmountScrollStore, cancelAutoscroll, waitForAutoScroll, waitForMounted,
         scrollToId, scrollToTop, scrollToTarget, scrollByIncrement
     }
 });

@@ -101,14 +101,16 @@ export function create2dPromiseArray(totalPromises = 1, maxPromisesPerArray = DO
  * @param {String} params.id The ID of the iframe.
  * @param {"src" | "srcdoc" | "none"} params.attribute An attribute to set before appending the document to the DOM.
  * @param {String} params.value The value to fill into the specified parameter attribute.
+ * @param {AbortSignal} params.signal An optional abort signal that can be used to abort loading the iframe.
  */
-export async function createIFrameForPrint(params = { id: "", attribute: "none", value: "" }) {
+export async function createIFrameForPrint(params = { id: "", attribute: "none", value: "", signal: null }) {
     if(!import.meta.client) { return null; }
-    if(!params) { params = { id: "", attribute: "src", value: "" }; }
+    if(!params) { params = { id: "", attribute: "src", value: "", signal: null }; }
 
     if(!params.id || typeof params.id !== "string") { params.id = ""; }
     if(!params.attribute || typeof params.attribute !== "string") { params.attribute = "none"; }
     if(!params.value || typeof params.attribute !== "string") { params.value = ""; }
+    if(!params.signal || !(params.signal instanceof AbortSignal)) { params.signal = null; }
 
     const printIFrame = document.createElement("iframe");
     if(params.id !== "") {
@@ -125,20 +127,89 @@ export async function createIFrameForPrint(params = { id: "", attribute: "none",
         await waitTwoFrames();
     }
 
+    /** This returns whether loading the IFrame has been aborted or not. */
+    function renderAborted() { return (params.signal ? params.signal.aborted : false); }
+
     // This waits for the IFrame to be loaded in before giving it to the print action.
     await new Promise(async (resolve, reject) => {
+        if(renderAborted()) { return resolve("Aborted"); }
         document.body.append(printIFrame);
-        const tempIframeDocument = (printIFrame.contentDocument || printIFrame.contentWindow?.document);
 
-        if(tempIframeDocument && tempIframeDocument.readyState === "complete") {
+        const tempIframeDocument = (printIFrame.contentDocument || printIFrame.contentWindow?.document);
+        if(!tempIframeDocument) { return reject("IFrame DOM Does Not Exist."); }
+        if(tempIframeDocument.readyState === "complete") { return resolve("IFrame Loaded"); }
+
+        var msPassed = 0;
+        var resolved = 0;
+
+        printIFrame.onload(() => {
+            resolved = 1;
             resolve("IFrame Loaded");
-        } else {
-            printIFrame.onload = () => { resolve("IFrame Loaded"); }
-            printIFrame.onerror = () => { reject("Error Loading IFrame"); }
-            sleep(7000).then(() => { reject(new Error("Timeout Error")); });
+        });
+        printIFrame.onerror(() => {
+            resolved = 2;
+            if(renderAborted()) {
+                resolve("Aborted");
+            } else {
+                reject("Error Loading IFrame");
+            }
+        });
+
+        while(msPassed < 7000 && resolved == 0 && !renderAborted()) {
+            await sleep(50);
+            msPassed += 50;
+        }
+
+        if(resolved == 1 || tempIframeDocument.readyState === "complete" || renderAborted()) {
+            resolve();
+        } else if(resolved == 0) {
+            reject(new Error("Timeout Error"));
         }
     });
 
     // This returns the now fully appended IFrame that is ready to be printed.
-    return printIFrame;
+    return (renderAborted() ? null : printIFrame);
+}
+
+/**
+ * This function can be used to wait for an image to be loaded into the DOM before continuing with other tasks.
+ * @param {HTMLImageElement} imageEl The Image Element to be loaded into the DOM.
+ * @param {Number} timeout The amount of time in milliseconds to wait before passing in a timeout error (Default is 7000).
+ * @param {AbortSignal} signal An optional signal that can be used to abort the process if necessary.
+ */
+export async function waitForImageLoad(imageEl = null, timeout = 7000, signal = null) {
+    /** This function checks if the waiting for the image to load is aborted or not. */
+    function imageLoadAborted() { return ((signal == null || !(signal instanceof AbortSignal)) ? false : signal.aborted); }
+    
+    await new Promise(async (resolve, reject) => {
+        if(!imageEl || imageEl.tagName !== "IMG") { return reject(new Error("Image Not Passed In")); }
+        if(imageEl.complete || imageLoadAborted()) { return resolve(); }
+
+        var msPassed = 0;
+        var resolved = 0;
+
+        imageEl.onload = () => {
+            resolved = 1;
+            resolve();
+        }
+        imageEl.onerror = () => {
+            resolved = 2;
+            if(renderAborted()) {
+                resolve();
+            } else {
+                reject(new Error("Error Loading Image"));
+            }
+        }
+
+        while(msPassed < timeout && resolved == 0 && !imageLoadAborted()) {
+            await sleep(50);
+            msPassed += 50;
+        }
+
+        if(resolved == 1 || imageEl.complete || imageLoadAborted()) {
+            resolve();
+        } else if(resolved == 0) {
+            reject(new Error("Timeout Error"));
+        }
+    });
 }
