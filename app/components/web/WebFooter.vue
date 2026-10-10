@@ -2,7 +2,7 @@
 <footer id="footer" ref="mohit-footer">
     <div class="footer-body">
         <div class="footer-main-icon">
-            <RouterLink to="/" @click="footerScrollToTop('/')" title="Home Page" v-pulse-loop>
+            <RouterLink to="/" title="Home Page" v-pulse-loop>
                 <img :src="mkj_icon" draggable="false" />
             </RouterLink>
         </div>
@@ -11,8 +11,7 @@
             <h2 class="footer-routes-header light"> Main Pages </h2>
             <RouterLink v-for="tab in MAIN_ROUTES" :to="tab.path" v-pulse-loop
                 :style="getColorStyles(tab.color)"
-                class="footer-routes-opt"
-                @click="footerScrollToTop(tab.path)">
+                class="footer-routes-opt">
 
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
@@ -23,8 +22,7 @@
             <h2 class="footer-routes-header"> Secondary Pages </h2>
             <RouterLink v-for="tab in SECONDARY_ROUTES" :to="tab.path" v-pulse-loop
                 :style="getColorStyles(tab.color)"
-                class="footer-routes-opt"
-                @click="footerScrollToTop(tab.path)">
+                class="footer-routes-opt">
 
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
@@ -35,8 +33,7 @@
             <h2 class="footer-routes-header light"> Extra Pages </h2>
             <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path" v-pulse-loop
                 :style="getColorStyles(tab.color)"
-                class="footer-routes-opt"
-                @click="footerScrollToTop(tab.path)">
+                class="footer-routes-opt">
 
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
@@ -68,7 +65,7 @@
     </div>
 
     <div class="footer-bottom">
-        <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Notice" @click="footerScrollToTop('/copyright')" v-pulse-loop>
+        <RouterLink to="/copyright/" class="copyright-statement" title="Copyright Notice" v-pulse-loop>
             <font-awesome-icon icon="fa-copyright" />
             <span> {{ copyrightText }} </span>
         </RouterLink>
@@ -77,7 +74,7 @@
             <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" v-pulse-loop>
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
-            <RouterLink v-show="isMounted" :to="topPath" @click="webData.scrollToAndFromFooter()" title="Scroll To The Top" v-pulse-loop>
+            <RouterLink v-show="isMounted" :to="topPath" title="Scroll To The Top" v-pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />
             </RouterLink>
         </div>
@@ -89,7 +86,6 @@
 import mkj_icon from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 import ivue_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 
-const router = useRouter();
 const webData = useWebsiteDataStore();
 const { $websiteBuild } = useNuxtApp();
 
@@ -104,18 +100,7 @@ onBeforeUnmount(() => {
 });
 
 const topPath = useRoutePathWithQuery();
-const routePath = computed(() => { return router.currentRoute.value.path; });
-const copyrightText = ref($websiteBuild.coprightYear + " Mohit Jain");
-
-/**
- * This scrolls to the top of the webpage if the user won't change routes.
- * @param {String} routeStr The route the button is attached to.
- */
-function footerScrollToTop(routeStr = "/") {
-    if(routeStr.endsWith("/")) { routeStr = routeStr.substring(0, (routeStr.length - 1)); }
-    if(routeStr !== routePath.value && (routeStr + "/") !== routePath.value) { return; }
-    scrollToTop(false, 0);
-}
+const copyrightText = useState("footer-copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 
 const MAIN_ROUTES = [
     { name: "Home Page", path: "/", icon: "fa-house", color: "var(--website-light-text)" },

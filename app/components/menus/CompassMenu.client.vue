@@ -20,7 +20,7 @@
             </RouterLink>
         </div>
         <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
-            <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" @click="webData.scrollToAndFromFooter()" v-pulse-loop>
+            <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" v-pulse-loop>
                 <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
                 <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
             </RouterLink>

@@ -182,7 +182,7 @@ export async function waitForImageLoad(imageEl = null, timeout = 7000, signal = 
     function imageLoadAborted() { return ((signal == null || !(signal instanceof AbortSignal)) ? false : signal.aborted); }
     
     await new Promise(async (resolve, reject) => {
-        if(!imageEl || imageEl.tagName !== "IMG") { return reject(new Error("Image Not Passed In")); }
+        if(!imageEl || imageEl.tagName.toUpperCase() !== "IMG") { return reject(new Error("Image Not Passed In")); }
         if(imageEl.complete || imageLoadAborted()) { return resolve(); }
 
         var msPassed = 0;

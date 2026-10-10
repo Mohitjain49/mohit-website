@@ -33,6 +33,8 @@ const battery = useBattery();
 const particlesLoadedOnce = ref(false);
 const particlesLoaded = ref(false);
 const batteryLow = ref(false);
+
+const particlesHalved = ref(false);
 const webpageHidden = computed(() => { return (visibility.value === "hidden"); });
 
 /**
@@ -102,6 +104,7 @@ async function setAllParticlesSettings(mounting = true) {
     if(!mounting) {
         particlesOptionsCopy.value = props.particlesOptions;
         batteryLow.value = false;
+        particlesHalved.value = false;
 
         visibilityWatcher.pause();
         batteryLevelWatcher.pause();
@@ -144,12 +147,16 @@ async function onBatteryStatusChange(reset = true) {
     const prevStatus = batteryLow.value;
     batteryLow.value = (battery.level.value <= BATTERY_LOW_THRESHOLD && !battery.charging.value);
 
-    if(batteryLow.value && !prevStatus) {
+    if(batteryLow.value && !prevStatus && !particlesHalved.value) {
         particlesOptionsCopy.value.particles.number.value *= 0.5;
+        particlesHalved.value = true;
+
         if(reset) { await resetParticles(); }
         return true;
-    } else if(!batteryLow.value && prevStatus) {
+    } else if(!batteryLow.value && prevStatus && particlesHalved.value) {
         particlesOptionsCopy.value.particles.number.value *= 2;
+        particlesHalved.value = false;
+
         if(reset) { await resetParticles(); }
         return true;
     } else {

@@ -59,11 +59,11 @@ export function useScrollPercentage(elementId = "") {
 export async function onNuxtReadyAdvanced(callback = () => {}) {
     return new Promise((resolve, reject) => {
         try {
-            onNuxtReady(() => { callback(); });
-            onNuxtReady(() => { resolve(null); });
-        } catch(e) {
-            reject(e);
-        }
+            onNuxtReady(() => {
+                callback();
+                resolve(null);
+            });
+        } catch(e) { reject(e); }
     })
 }
 
@@ -78,8 +78,8 @@ export function onMountedAdvanced(callback = () => {}) {
 
     onMounted(async() => {
         try {
-            await onNuxtReadyAdvanced();
             await nextTick();
+            await onNuxtReadyAdvanced();
         } catch(e) {}
 
         isMounted.value = true;

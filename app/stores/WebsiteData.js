@@ -268,13 +268,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(event.reason?.name === "AbortException") { event.preventDefault(); }
     }
 
-    /** This function scrolls to the footer of the webpage if it exists. */
-    function scrollToAndFromFooter() {
-        if(!navFooterPresent.value) { return; }
-        closeNavMenu();
-        if(webFooterVisibility.value) { scrollToTop(false, 0); }
-    }
-
     /**
      * This function gets the HTML Element representing the current website menu open.
      * @param {"current" | "previous"} mode The website menu to obtain.
@@ -403,13 +396,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
-        setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, scrollToAndFromFooter, bypassBodyClick,
+        setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick,
         shareText, shareLink, shareFile, mountStore, unmountStore, checkPartiallyMounted
     }
 });
-
-/** This function returns a computed value of whether "Save As" buttons are supported on the browser or not. */
-export function getSaveAsSupported() {
-    const { saveAsSupported } = storeToRefs(useWebsiteDataStore());
-    return computed(() => { return saveAsSupported.value; });
-}

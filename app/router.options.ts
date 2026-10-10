@@ -59,17 +59,17 @@ export default {
                 pageFinishHookRunning.value = false;
                 window.scrollTo({ top: 0, left: 0, behavior: "instant" });
             } else {
-                var secondsTasksPending = 0;
-                while(pageFinishHookRunning.value && secondsTasksPending < TASKS_PENDING_WAIT_MILLISECONDS) {
+                var msPassed = 0;
+                while(pageFinishHookRunning.value && msPassed < TASKS_PENDING_WAIT_MILLISECONDS) {
                     await sleep(50);
-                    secondsTasksPending += 50;
+                    msPassed += 50;
                 }
 
                 // If the page:finish hook is still running on one call of this function, this stops this call of the function.
                 if(pageFinishHookRunning.value) { return false; }
             }
 
-            // These are two stores required for making a unique autoscroll
+            // These are the two stores required for making a unique autoscroll.
             const scrollStore = useScrollStore($pinia);
             const documentStore = useDocumentStore($pinia);
 

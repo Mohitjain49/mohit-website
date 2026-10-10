@@ -188,8 +188,6 @@ var unmountTimeout = null;
 /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing the qr code. */
 var printIframe = null;
 var printIframeNeedsRerender = true;
-
-const { width: windowWidth, height: windowHeight } = useMohitWindowSize();
 const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage("popup-shareLink");
 
 /** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
@@ -298,23 +296,22 @@ async function mountSharePopup() {
     await nextTick();
     await setQRCodeLink();
 
-    // This creates and starts the Lenis auto scrolling for this popup.
+    if(sharePopupAbortController != null) { sharePopupAbortController.abort(); }
+    sharePopupAbortController = new AbortController();
+    const signal = sharePopupAbortController.signal;
+
+    window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal });
+    window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
+
+    // This creates the Lenis auto scrolling for this popup.
     lenis = new Lenis({ autoRaf: true, orientation: "horizontal",
         wrapper: document.getElementsByClassName("popup-qr-text").item(0),
         content: document.getElementsByClassName("popup-qr-text").item(0).querySelector("p"),
         easing: (x = 0) => { return x; }
     });
 
+    // This starts the Lenis auto scrolling for this popup.
     manageLenisScrolling();
-    calculateSharePopupScale();
-
-    if(sharePopupAbortController != null) { sharePopupAbortController.abort(); }
-    sharePopupAbortController = new AbortController();
-    const signal = sharePopupAbortController.signal;
-
-    window.addEventListener("animation-resize", () => { calculateSharePopupScale(); }, { signal });
-    window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal });
-    window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
 }
 
 /**
@@ -777,20 +774,6 @@ async function printQRCode() {
     }
 }
 
-/** This function calculates and sets the scale property for the share popup. */
-function calculateSharePopupScale() {
-    const width = windowWidth.value;
-    const height = windowHeight.value;
-    if(!document || !document.documentElement) { return; }
-
-    if(width >= SHARE_POPUP_MIN_VIEWPORT_EDGE && height >= SHARE_POPUP_MIN_VIEWPORT_EDGE) {
-        document.documentElement.style.setProperty(SHARE_POPUP_SCALE_CSS_VAR, "1"); // Sets the scale to 1 if the viewport is big enough.
-    } else {
-        const newScale = (((width < height) ? width : height) / SHARE_POPUP_MIN_VIEWPORT_EDGE);
-        document.documentElement.style.setProperty(SHARE_POPUP_SCALE_CSS_VAR, String(newScale)); // Sets the scale based on the viewport.
-    }
-}
-
 /** This function triggers all parts of the lenis autoscroll for this popup. */
 async function triggerLenisAutoScroll() {
     lenis.scrollTo("left", { immediate: true });
@@ -825,6 +808,8 @@ function getParsedUrl() {
 </script>
 
 <style lang="scss">
+$share-popup-min-edge: 675;
+
 .qrcode-mainPopup {
     position: fixed;
     top: calc((100% - 585px) / 2);
@@ -1091,5 +1076,24 @@ function getParsedUrl() {
 .qrcode-popup-transition-enter-to, .qrcode-popup-transition-leave-from {
     opacity: 1;
     transform: scale(1);
+}
+
+@include dynamic-less-equal-width-rule-noScopedBlock($share-popup-min-edge) {
+    & {
+        --mohit-share-popup-scale: min(
+            1,
+            calc(var(--true-100vw, 100vw) / (#{$share-popup-min-edge} * 1px)),
+            calc(var(--true-100vh, 100vw) / (#{$share-popup-min-edge} * 1px))
+        );
+    }
+}
+@include dynamic-less-equal-height-rule-noScopedBlock($share-popup-min-edge) {
+    & {
+        --mohit-share-popup-scale: min(
+            1,
+            calc(var(--true-100vw, 100vw) / (#{$share-popup-min-edge} * 1px)),
+            calc(var(--true-100vh, 100vw) / (#{$share-popup-min-edge} * 1px))
+        );
+    }
 }
 </style>

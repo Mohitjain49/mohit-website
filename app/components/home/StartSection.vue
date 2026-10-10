@@ -87,17 +87,16 @@ const startContactObj = ref("");
 const contactDropdownShareHover = ref(false);
 
 /** This manages an Raf loop that records whether the user is hovering over the contact dropdown share button or not. */
-const shareHoverWatcher = useRafFn(() => {
+useRafFn(() => {
     const currentMouseElement = styleStore.mouseElement;
     contactDropdownShareHover.value = (currentMouseElement ? Boolean(currentMouseElement.closest("#" + CONTACT_DROPDOWN_SHARE_ID)) : false);
-}, { immediate: false });
+}, { immediate: true });
 
 // This sets up event listeners that close the contact dropdown when the user clicks outside the dropdown itself or an assoicated button for it.
-const isMounted = onMountedAdvanced(async () => {
+const isMounted = onMountedAdvanced(async() => {
     try {
         abortController = new AbortController();
         const signal = abortController.signal;
-        shareHoverWatcher.resume();
 
         window.addEventListener("pointerdown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
         window.addEventListener("mousedown", (event) => { checkContactDropdownStayVisible(event); }, { signal });

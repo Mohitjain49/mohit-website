@@ -29,6 +29,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** @type {AbortController} This abort controller manages the event listeners for a script page. */
     var scriptAbortController = null;
+    var lineOptionsCloseTimeout = null;
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
@@ -299,12 +300,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         if(event.type.toLowerCase() === "contextmenu" && event.ctrlKey) { return; }
 
         event.preventDefault();
-        if(lineNum == lineOptions.value.num) {
-            closeLineOptions();
-            sleep(100).then(() => { setLineOptions(lineNum); });
-        } else {
-            setLineOptions(lineNum);
-        }
+        setLineOptions(lineNum);
     }
 
     /** This checks if the script abort controller's "abort()" function was called or not. */
@@ -328,12 +324,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         } else {
             const currentLineNum = lineOptions.value.num;
             lineOptions.value.num = -1;
-            if(currentLineNum != -1) { await sleep(100); }
+            if(lineOptionsCloseTimeout != null) { clearTimeout(lineOptionsCloseTimeout); }
 
-            lineOptions.value.oldNum = currentLineNum;
-            lineOptions.value.num = lineNum;
-            placeLineOptionsOnCode(lineNum);
-            manageLineNumberFocus(lineNum, lineOptions.value.oldNum, 1)
+            lineOptionsCloseTimeout = setTimeout(() => {
+                lineOptions.value.oldNum = currentLineNum;
+                lineOptions.value.num = lineNum;
+                placeLineOptionsOnCode(lineNum);
+                manageLineNumberFocus(lineNum, lineOptions.value.oldNum, 1);
+                lineOptionsCloseTimeout = null;
+            }, 100);
         }
     }
 

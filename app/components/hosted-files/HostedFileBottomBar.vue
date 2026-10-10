@@ -26,9 +26,9 @@
         <button @click="openWebsiteMenu()" :title="fileOptionsTitle" :style="getColorStyles('var(--website-light-text)')" v-pulse-loop>
             <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
         </button>
-        <button v-if="!wholeFileInView" @click="scrollToTop(false, 0)" title="Scroll To The Top" v-pulse-loop>
+        <RouterLink :to="routePath" v-if="!wholeFileInView" title="Scroll To The Top" v-pulse-loop>
             <font-awesome-icon icon="fa-turn-up" />
-        </button>
+        </RouterLink>
     </div>
 </div>
 </template>
@@ -46,6 +46,7 @@ const wholeFileInView = useState("whole-hosted-file-in-view", () => { return fal
 
 const bottomOptionsBar = useTemplateRef('hosted-file-bottom-options');
 const barVisible = useElementVisibility(bottomOptionsBar);
+const routePath = useRoutePathWithQuery();
 
 // These two functions update the state on whether the hosted file bottom bar is visible or not.
 onMountedAdvanced(() => { hfBottomBarVisible.value = barVisible.value; });

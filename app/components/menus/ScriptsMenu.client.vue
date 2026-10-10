@@ -49,7 +49,7 @@
             </button>
         </div>
         <div class="mohit-navMenu-opt">
-            <RouterLink :to="routePath" class="mohit-navMenu-mainOpt" @click="scrollToTop(false, 0)" v-pulse-loop>
+            <RouterLink :to="routePath" class="mohit-navMenu-mainOpt" v-pulse-loop>
                 <font-awesome-icon icon="fa-turn-up" />
                 <span> Scroll To The Top </span>
             </RouterLink>
@@ -93,8 +93,7 @@ const SHIKI_LINK = "https://shiki.style/";
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const scriptsStore = useScriptsStore();
-const router = useRouter();
 
-const routePath = computed(() => { return router.currentRoute.value.path; });
+const routePath = useRoutePathWithQuery();
 const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my documents on this website. Click here to see more about Shiki.";
 </script>

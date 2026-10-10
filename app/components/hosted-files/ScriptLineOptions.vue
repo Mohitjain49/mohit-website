@@ -18,7 +18,7 @@
         <button @click="scriptsStore.copyLineAttribute('link')">
             <span> Copy Permalink </span> <FontAwesomeIcon :icon="scriptsStore.copyCodePermalinkIcon" />
         </button>
-        <button class="share" @click="scriptsStore.shareLinePermalink()">
+        <button class="share" @click="openSharePopupForPermalink()">
             <span> Share Permalink </span> <FontAwesomeIcon icon="fa-share-from-square" />
         </button>
     </div>
@@ -69,6 +69,12 @@ function openScriptsMenu() {
     closeLineOptionsMenu();
     webData.bypassBodyClick();
     webData.setMenuOpen(SCRIPTS_MENU, false);
+}
+
+/** This opens the share popup for the Line Permalink. */
+function openSharePopupForPermalink() {
+    closeLineOptionsMenu();
+    scriptsStore.shareLinePermalink();
 }
 
 /** This function closes the line options menu. */
