@@ -89,6 +89,10 @@ export const useStyleStore = defineStore("style-store", () => {
         const platformType = (("userAgent" in navigator) ? Bowser.parse(navigator.userAgent).platform.type : undefined);
         onMobileDevice.value = (platformType === "mobile" || platformType === "tablet");
 
+        setHideOverflowClass(hideOverflow.value);
+        setHideCursorClass(hideCursor.value);
+        setDisableUserSelectClass(disableUserSelect.value);
+
         await startViewportRaf();
         if(onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY) { await enableDynamicZoomFactor(); }
         await enableCssLayoutObserver();

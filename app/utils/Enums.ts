@@ -4,6 +4,7 @@ export enum HideOverflow {
     GOOGLE_DRIVE_PICKER,
     WEBSITE_MENU,
     LOADING_DOCUMENT,
+    EXPERIENCE_PAGE,
     LENGTH
 }
 

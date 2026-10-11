@@ -132,10 +132,6 @@
             </div>
         </div>
     </div>
-
-    <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
-        <RouterLink to="/" class="linkBtn-blue" v-pulse-loop> Back To Home </RouterLink>
-    </div>
     <WebFooter />
 </main>
 </template>
@@ -171,20 +167,24 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     background: transparent;
     padding-top: 0px;
     min-height: 100%;
+    --skills-columns: min(5,
+        round(down, calc((var(--true-100vw, 100vw) - 25px) / 400px))
+    );
 }
 .skills-body {
     height: fit-content;
     min-height: var(--true-100vh, 100vh);
     width: 100%;
+    margin-bottom: 40px;
 }
 
 .skills-category {
     height: fit-content;
-    width: 1200px;
-    padding: 0px calc(50% - 600px);
+    width: calc(var(--skills-columns) * 400px);
+    margin: 0px auto;
     padding-bottom: 40px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(var(--skills-columns), 1fr);
 }
 .skills-category#vuejs {
     padding-top: 60px;
@@ -208,7 +208,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     font-size: 50px;
     font-family: 'Lexend', sans-serif;
     font-weight: bold;
-    grid-column: span 3;
+    grid-column: span var(--skills-columns);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -246,42 +246,30 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     color: #D3B62A;
 }
 
-@include dynamic-less-equal-width-rule-scopedBlock(1200) {
-    .skills-category {
-        grid-template-columns: repeat(2, 1fr);
-        width: 800px;
-        padding: 0px calc(50% - 400px);
-        padding-bottom: 40px;
-    }
-    .skills-category-header {
-        grid-column: span 2;
-    }
-}
-
 @include dynamic-less-equal-width-rule-scopedBlock(825) {
     .skills-category {
         grid-template-columns: 1fr;
         width: calc(100% - 20px);
         padding: 0px 10px;
+        margin: 0px;
         padding-bottom: 40px;
     }
     .skills-category-header {
         grid-column: span 1;
-        margin-left: 10px;
-        position: relative;
-        left: calc((100% - 400px) / 2);
+        margin: 0px auto;
+        margin-top: 100px;
     }
-    .skills-entity-container {
-        min-width: 0px;
-    }
+
+    .skills-category-header.vue { margin-top: 20px; }
+    .skills-entity-container { min-width: 0px; }
 }
 
 @include dynamic-less-equal-width-rule-scopedBlock(450) {
     .skills-category-header {
         width: 325px;
-        left: calc((100% - 325px) / 2);
+        margin: 0px auto;
+        margin-top: 100px;
         font-size: 45px;
-        margin-left: 0px;
     }
     .skills-category-header img, .skills-category-header svg {
         font-size: 45px;
