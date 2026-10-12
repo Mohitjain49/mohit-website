@@ -54,7 +54,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     const resumeStore = useResumeStore();
     const styleStore = useStyleStore();
     const fullScreenStore = useFullScreenStore();
-    const windowSize = useMohitWindowSize();
 
     const SCRIPT_TAG_OPTIONS = { async: true, defer: true, immediate: false, manual: true }
     const googleAccountsTag = useScriptTag("https://accounts.google.com/gsi/client", (el) => { initGoogleTokenClient(); }, SCRIPT_TAG_OPTIONS);
@@ -65,6 +64,9 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** @type {AbortController} This abort controller manages the event listeners fired when the user focuses on the window. */
     var windowFocusAbortController = null;
+
+    /** @type {google.picker.Picker} This is the picker instance used for uploading a document to a google drive. */
+    var googleDrivePickerInstance = null;
     var googleTokenClient = { requestAccessToken: () => {} };
     var googleAPIAccessToken = "";
 
@@ -413,42 +415,67 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function opens a view that lets the user pick the folder they want to upload my document to. */
     async function openGoogleDrivePicker() {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        await nextTick();
+        await nextTick();
+        styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, true);
+
         const docsView = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
             .setIncludeFolders(true)
             .setSelectFolderEnabled(true)
             .setOwnedByMe(true);
 
-        const picker = new google.picker.PickerBuilder()
+        googleDrivePickerInstance = new google.picker.PickerBuilder()
             .addView(docsView)
-            .setTitle("Select A Folder Where You Would Like To Save This Document To.")
+            .setTitle("Select The Folder Where You Will Save The Document In.")
             .setOAuthToken(googleAPIAccessToken)
             .setDeveloperKey(GOOGLE_CLOUD_API_KEY)
             .setCallback((data) => { googleDrivePickerCallback(data); })
             .setAppId(GOOGLE_CLOUD_APP_ID)
             .build();
-        picker.setVisible(true);
+
+        // Displays the Google Drive Picker to the user.
+        await nextTick();
+        googleDrivePickerInstance.setVisible(true);
     }
 
     /**
      * This function is a callback that is performed once the user performs an action on the google drive picker UI.
      * @param {Object} data The data received by the picker to use for the callback.
-     * @param {String} data.action The type of action the user took to save the file.
+     * @param {"loaded" | "cancel" | "picked"} data.action The type of action the user took to save the file.
      */
     function googleDrivePickerCallback(data = { action: "loaded" }) {
         if(data.action === "loaded") {
             styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, true);
+            window.dispatchEvent(new Event("resize"));
+            sleep(150).then(() => { window.dispatchEvent(new Event("resize")); });
         } else if(data.action === "cancel") {
-            styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
-            webData.setMenuOpen(DOCUMENT_MENU);
-
-            documentUploadToGoogleDriveCanceled.value = true;
-            setTimeout(() => { documentUploadToGoogleDriveCanceled.value = false; }, 3000);
+            closeGooglePicker(true);
         } else if(data.action === "picked") {
-            styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
+            closeGooglePicker(false);
             const firstFolder = data.docs[0];
 
             if(firstFolder.type === "folder" && typeof firstFolder.id === "string") {
                 uploadDocToGoogleDrive(firstFolder.id);
+            }
+        }
+    }
+
+    /**
+     * This function closes the google picker if it is open.
+     * @param {Boolean} canceled If true, the google picker is being canceled on purpose by the user.
+     */
+    function closeGooglePicker(canceled = true) {
+        try {
+            if(googleDrivePickerInstance != null) { googleDrivePickerInstance.dispose(); }
+        } finally {
+            googleDrivePickerInstance = null;
+            styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
+
+            if(canceled) {
+                nextTick(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
+                documentUploadToGoogleDriveCanceled.value = true;
+                setTimeout(() => { documentUploadToGoogleDriveCanceled.value = false; }, 3000);
             }
         }
     }
@@ -463,7 +490,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         chooseGoogleDriveFolderForUpload = false;
 
         try {
-            webData.setMenuOpen(DOCUMENT_MENU);
+            webData.setMenuOpen(DOCUMENT_MENU, false);
             const documentFile = getCurrentPDFObject();
             const form = new FormData();
 
@@ -497,11 +524,13 @@ export const useDocumentStore = defineStore("document-store", () => {
                 await googleAccountsTag.load(true);
                 await googleApiTag.load(true);
 
-                var secondsPassed = 0;
-                while((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) && secondsPassed < 10) {
-                    await sleep(1000);
-                    secondsPassed++;
+                var msPassed = 0;
+                while((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) && msPassed < 10000) {
+                    await sleep(50);
+                    msPassed += 50;
                 }
+
+                // This records whether the option for the Google Drive Support should be available or not based on whether the Google Scripts loaded.
                 googleDriveOptAvailable.value = ((!googleDriveUploadSupported.value || !googleDrivePickerAPILoaded.value) ? -2 : 2);
             }
 
@@ -571,6 +600,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
         docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
 
+        closeGooglePicker(false);
         setWindowSizeWatchers(false);
         setRenderIFrameController(false);
         removePrintIFrame(true);
@@ -604,14 +634,13 @@ export const useDocumentStore = defineStore("document-store", () => {
             client_id: GOOGLE_CLOUD_CLIENT_ID,
             scope: 'https://www.googleapis.com/auth/drive.file',
             callback: (response) => {
-                if(response.access_token) {
-                    googleAPIAccessToken = response.access_token;
-                    // uploadDocToGoogleDrive();
-                    if(chooseGoogleDriveFolderForUpload) {
-                        openGoogleDrivePicker();
-                    } else {
-                        uploadDocToGoogleDrive();
-                    }
+                if(!response.access_token) { return; }
+                googleAPIAccessToken = response.access_token;
+
+                if(chooseGoogleDriveFolderForUpload) {
+                    openGoogleDrivePicker();
+                } else {
+                    uploadDocToGoogleDrive();
                 }
             },
         });
@@ -634,7 +663,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf. */
     function setPdfSize() {
-        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (windowSize.width.value - 30)));
+        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (styleStore.cssViewportWidth - 30)));
         customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
 
         if(!document || !document.documentElement) { return; }

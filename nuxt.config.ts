@@ -16,6 +16,7 @@ const VUE_DIRECTIVE_PLUGINS = globSync("app/directives/**/*.{ts,js}", {
     absolute: true
 });
 
+/** This is a list containing all routes that should be excluded from the sitemap on build. */
 const SITEMAP_EXCLUDED_ROUTES = [
     "/repo", "/repository", "/code", "/codesandbox", "/code-sandbox", "/commits",
     "/globe", "/mnd", "/pizza", "/sublo", "/code-scanner",
@@ -24,9 +25,11 @@ const SITEMAP_EXCLUDED_ROUTES = [
     "/static-icons/**", "/mohit-website/**", "/mohit-website", "/sitemap"
 ];
 
+/** This is a list of all the TypeScript dependencies used to make developing code easier. */
 const TS_TYPES = [
     'unplugin-info/client', '@types/node', '@types/validator', '@types/lodash-es',
-    '@types/google.picker', '@types/wicg-file-system-access'
+    '@types/google.picker', '@types/google.accounts', '@types/gapi',
+    '@types/wicg-file-system-access'
 ];
 
 /** This function prevents any auto-scrolling before the website's internal JS can kick in. */

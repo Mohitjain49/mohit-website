@@ -145,10 +145,12 @@ async function main() {
         }
 
         if(updateVersionBool) {
-            const versionPattern = /^\d+\.\d+\.\d+$/;
+            const versionPattern = /^(?:\d+\.\d+\.\d+|patch|minor|major|same)$/;
+            var failedOnce = false;
             var versionType = (await rl.question('Please Enter the Version Number Here (M.m.p): ')).toLowerCase();
 
-            while(!versionPattern.test(versionType) && versionType !== "patch" && versionType !== "minor" && versionType !== "major" && versionType !== "same") {
+            while(!versionPattern.test(versionType)) {
+                failedOnce = true;
                 versionType = (await rl.question('Invalid Input. Please Try Again (M.m.p): ')).toLowerCase();
             }
             if(versionType === "same") {
@@ -156,6 +158,7 @@ async function main() {
             }
 
             // This uses the "npm version" command to update the project version.
+            if(failedOnce) { console.log(); }
             runCommand(`npm version ${versionType} --no-git-tag-version --allow-same-version`);
             const packageData = JSON.parse(await readFile('./package.json', 'utf-8'));
 
