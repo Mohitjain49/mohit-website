@@ -10,7 +10,7 @@ const pwaConfig: PwaModuleOptions = {
     client: { periodicSyncForUpdates: 600 },
     workbox: {
         cacheId: `mohit-website-pwa-cache-id-v4.0.0-${Date.now()}`,
-        globPatterns: ['**/*', '_fonts/**'],
+        globPatterns: ['**/*', '_nuxt/fonts/**'],
         ignoreURLParametersMatching: [/.*/],
         globIgnores: ["**\/node_modules\/**\/*", '**/node_modules/**/*', "**/_headers"],
         dontCacheBustURLsMatching: /_nuxt\/builds\//,

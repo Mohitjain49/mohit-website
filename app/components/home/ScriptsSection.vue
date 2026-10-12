@@ -91,7 +91,7 @@ useIntersectionObserver(tabRefs, (entry) => {
 .scripts-section {
     background: transparent;
     height: fit-content;
-    min-height: var(--true-100vh, 100vh);
+    min-height: var(--true-100vh-safe);
     width: 100%;
     padding: 70px 0px;
 }

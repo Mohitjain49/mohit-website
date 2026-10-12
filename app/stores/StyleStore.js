@@ -89,18 +89,22 @@ export const useStyleStore = defineStore("style-store", () => {
         const platformType = (("userAgent" in navigator) ? Bowser.parse(navigator.userAgent).platform.type : undefined);
         onMobileDevice.value = (platformType === "mobile" || platformType === "tablet");
 
+        // This sets classes for the document element for hiding certain website behaviors.
         setHideOverflowClass(hideOverflow.value);
         setHideCursorClass(hideCursor.value);
         setDisableUserSelectClass(disableUserSelect.value);
 
+        // This activates all the automated features in the Style Store.
         await startViewportRaf();
-        if(onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY) { await enableDynamicZoomFactor(); }
-        await enableCssLayoutObserver();
-        await enableTrueViewportVariables();
-        await enableBreakpoints();
-        await enableMousePositionRecorder();
+        await Promise.all([
+            ((onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY) ? enableDynamicZoomFactor() : null),
+            enableCssLayoutObserver(),
+            enableTrueViewportVariables(),
+            enableBreakpoints(),
+            enableMousePositionRecorder(),
+        ])
 
-        if(validateClientMode()) { document.documentElement.classList.add("js__active"); }
+        // This sets the style store as mounted.
         mounted.value = true;
     }
 
@@ -639,6 +643,7 @@ export const useStyleStore = defineStore("style-store", () => {
 
         await sleep(50);
         setDynamicBreakpoints();
+        document.documentElement.classList.add("js__active");
     }
 
     /** This function sets breakpoints on the website as attributes for the website's document element based on the window's dimensions. */

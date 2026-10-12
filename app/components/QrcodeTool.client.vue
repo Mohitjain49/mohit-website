@@ -810,6 +810,14 @@ function getParsedUrl() {
 <style lang="scss">
 $share-popup-min-edge: 675;
 
+html {
+    --mohit-share-popup-scale: min(
+        1,
+        calc(var(--true-100vw-safe) / (#{$share-popup-min-edge} * 1px)),
+        calc(var(--true-100vh-safe) / (#{$share-popup-min-edge} * 1px))
+    ) !important;
+}
+
 .qrcode-mainPopup {
     position: fixed;
     top: calc((100% - 585px) / 2);
@@ -1076,24 +1084,5 @@ $share-popup-min-edge: 675;
 .qrcode-popup-transition-enter-to, .qrcode-popup-transition-leave-from {
     opacity: 1;
     transform: scale(1);
-}
-
-@include dynamic-less-equal-width-rule-noScopedBlock($share-popup-min-edge) {
-    & {
-        --mohit-share-popup-scale: min(
-            1,
-            calc(var(--true-100vw, 100vw) / (#{$share-popup-min-edge} * 1px)),
-            calc(var(--true-100vh, 100vw) / (#{$share-popup-min-edge} * 1px))
-        );
-    }
-}
-@include dynamic-less-equal-height-rule-noScopedBlock($share-popup-min-edge) {
-    & {
-        --mohit-share-popup-scale: min(
-            1,
-            calc(var(--true-100vw, 100vw) / (#{$share-popup-min-edge} * 1px)),
-            calc(var(--true-100vh, 100vw) / (#{$share-popup-min-edge} * 1px))
-        );
-    }
 }
 </style>

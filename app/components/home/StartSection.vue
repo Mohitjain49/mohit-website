@@ -216,7 +216,7 @@ $height-start-scale: 775;
 .start-section {
     position: relative;
     height: 640px;
-    min-height: var(--true-100vh, 100vh);
+    min-height: var(--true-100vh-safe);
     width: 100%;
     padding-bottom: 10px;
     color: var(--website-text);
@@ -234,9 +234,14 @@ $height-start-scale: 775;
     flex-direction: column;
     font-family: inherit;
     color: inherit;
-    --custom-scale-var: 1.0;
-    --width-start-scale: 1280
     --animate-duration: 1.2s;
+
+    --custom-scale-var: max(1.0,
+        min(
+            calc(var(--true-100vw-safe) / (#{$width-start-scale} * 1px)),
+            calc(var(--true-100vh-safe) / (#{$height-start-scale} * 1px))
+        )
+    );
     scale: var(--custom-scale-var, 1.0);
 }
 
@@ -451,23 +456,6 @@ $height-start-scale: 775;
     }
     .start-buttonRow.start-buttonRow.main {
         margin-top: 32px;
-    }
-}
-
-@include dynamic-greater-equal-width-rule-scopedBlock($width-start-scale) {
-    #start-innerContainer {
-        --custom-scale-var: min(
-            calc(var(--true-100vw, 100vw) / (#{$width-start-scale} * 1px)),
-            max(1, calc(var(--true-100vh, 100vh) / (#{$height-start-scale} * 1px)))
-        );
-    }
-}
-@include dynamic-greater-equal-height-rule-scopedBlock($height-start-scale) {
-    #start-innerContainer {
-        --custom-scale-var: min(
-            calc(var(--true-100vh, 100vh) / (#{$height-start-scale} * 1px)),
-            max(1, calc(var(--true-100vw, 100vw) / (#{$width-start-scale} * 1px)))
-        );
     }
 }
 </style>

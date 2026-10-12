@@ -5,13 +5,16 @@
 
 :root {
     --webpage-zoom-factor: 1.0;
-    --true-100vh: 100vh;
-    --true-100vw: 100vw;
     --mohit-custom-pdf-width: 850px;
     --mohit-custom-pdf-height: 1100px;
-    --mohit-share-popup-scale: 1;
+    --mohit-share-popup-scale: 1.0;
 
-    --body-height: calc(var(--true-100vh, 100vh) - 50px);
+    --true-100vh: 100vh;
+    --true-100vw: 100vw;
+    --true-100vh-safe: var(--true-100vh, 100vh);
+    --true-100vw-safe: var(--true-100vw, 100vw);
+
+    --body-height: calc(var(--true-100vh-safe) - 50px);
     --checkmark-cursor: url("/checkmark_cursor.svg") 15 15, default;
 
     --blue-cobalt: #0047ab;

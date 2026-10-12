@@ -87,7 +87,7 @@ onMountedAdvanced(() => {
 
 .copyright-body-exterior {
     height: fit-content;
-    min-height: calc(var(--true-100vh, 100vh) - 115px);
+    min-height: calc(var(--true-100vh-safe) - 115px);
     padding: 30px 20px;
     width: calc(100% - 40px);
     display: flex;

@@ -75,7 +75,7 @@ function toggleMenuState() { menuState.value = ((menuState.value == 0) ? 1 : 0);
 }
 .wakeLock-body {
     width: 100%;
-    height: calc(var(--true-100vh, 100vh) + 10px);
+    height: calc(var(--true-100vh-safe) + 10px);
     min-height: 400px;
     display: flex;
     justify-content: center;

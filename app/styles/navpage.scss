@@ -3,7 +3,7 @@
 .main-nav-page-container {
     width: 100%;
     height: fit-content;
-    min-height: var(--true-100vh, 100vh);
+    min-height: var(--true-100vh-safe);
     display: flex;
     justify-content: left;
     align-items: center;

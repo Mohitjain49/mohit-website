@@ -168,12 +168,12 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     padding-top: 0px;
     min-height: 100%;
     --skills-columns: min(5,
-        round(down, calc((var(--true-100vw, 100vw) - 25px) / 400px))
+        round(down, calc((var(--true-100vw-safe) - 25px) / 400px))
     );
 }
 .skills-body {
     height: fit-content;
-    min-height: var(--true-100vh, 100vh);
+    min-height: var(--true-100vh-safe);
     width: 100%;
     margin-bottom: 40px;
 }
