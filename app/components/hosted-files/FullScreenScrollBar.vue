@@ -30,8 +30,17 @@ watch(mouseY, (newY, oldY) => { if(mousePressed.value) { scrollFsElement((window
 watch(mousePressed, () => { setUserSelect(mousePressed.value); });
 watch(showScrollBar, (newValue) => { manageOverflowClass(!newValue); });
 
-onMounted(() => { onEnterFS(); });
-onBeforeUnmount(() => { onExitFS(); });
+// This sets a few variables after the component is mounted.
+onAfterMounted(() => {
+    manageOverflowClass(!showScrollBar.value);
+    getFsElement()?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+});
+
+// This unsets a few variables before removing the component.
+onBeforeUnmount(() => {
+    setUserSelect(false);
+    manageOverflowClass(false);
+});
 
 /**
  * This function scrolls within the Full Screen element.
@@ -69,18 +78,6 @@ function manageOverflowClass(noOverflow = false) {
     } else if(!noOverflow) {
         element.classList.remove(className);
     }
-}
-
-/** This function runs when the user enters full screen mode. */
-function onEnterFS() {
-    manageOverflowClass(!showScrollBar.value);
-    getFsElement()?.scrollTo({ top: 0, left: 0, behavior: "instant" });
-}
-
-/** This function runs when the user exits full screen mode. */
-function onExitFS() {
-    setUserSelect(false);
-    manageOverflowClass(false);
 }
 
 /** This function returns the Full Screen element for it to be adjusted by the Full Screen Element. */

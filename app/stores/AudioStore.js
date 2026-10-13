@@ -61,9 +61,7 @@ export const useAudioStore = defineStore("audio-store", () => {
     // This runs the update function whenever the speech to text mode gets a new value.
     watch(sttUtility.result, () => { sttUpdateFunc(sttUtility.result.value); });
 
-    /**
-     * This function sets up the click audio for my website.
-     */
+    /** This function sets up the click audio for my website. */
     function setupClickAudio() {
         checkTTSAvailable();
         audioClickClip.value = new Audio(click_sound);
@@ -80,9 +78,7 @@ export const useAudioStore = defineStore("audio-store", () => {
         changeAudioVolume();
     }
 
-    /**
-     * This function changes the audio volume based on the "volumeInput" variable.
-     */
+    /** This function changes the audio volume based on the "volumeInput" variable. */
     function changeAudioVolume() {
         localStorage.setItem(CLICK_VOLUME_KEY, volumeInput.value);
         const newVolume = (parseInt(volumeInput.value) / 100);
@@ -102,10 +98,10 @@ export const useAudioStore = defineStore("audio-store", () => {
 
     /**
      * This function confirms whether a click should trigger the click sound or not.
-     * @param {MouseEvent} event The click event.
+     * @param {PointerEvent} event The click event.
      */
     function confirmClickSound(event) {
-        if(event.type !== "click" && event.isTrusted) { return; }
+        if(event.type !== "click" || (event.pointerId == -1) || !event.isTrusted) { return; }
         const foundElement = event.target;
 
         const usuableLink = foundElement?.closest('a');
@@ -113,9 +109,7 @@ export const useAudioStore = defineStore("audio-store", () => {
         if(usuableLink || usuableButton) { playClickSound(); }
     }
 
-    /**
-     * This function plays the click sound effect.
-     */
+    /** This function plays the click sound effect. */
     function playClickSound() {
         if(audioMuted.value) { return; }
         try {
@@ -124,9 +118,7 @@ export const useAudioStore = defineStore("audio-store", () => {
         } catch(e) {}
     }
 
-    /**
-     * This function plays the scan sound effect.
-     */
+    /** This function plays the scan sound effect. */
     function playScanSound() {
         if(audioMuted.value) { return; }
         try {
@@ -145,9 +137,7 @@ export const useAudioStore = defineStore("audio-store", () => {
         changeAudioVolume();
     }
 
-    /**
-     * This sets whether or not speech synthesis is available for this browser.
-     */
+    /** This sets whether or not speech synthesis is available for this browser. */
     function checkTTSAvailable() {
         ttsAvailable.value = ('speechSynthesis' in window);
     }
@@ -164,9 +154,7 @@ export const useAudioStore = defineStore("audio-store", () => {
         }
     }
 
-    /**
-     * this function stops TTS from continuing.
-     */
+    /** This function stops TTS from continuing. */
     function cancelTTS() {
         if(!ttsAvailable.value) { return; }
         window.speechSynthesis.cancel();

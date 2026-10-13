@@ -17,6 +17,7 @@ const SCRIPT_COPY_ACTION_TITLES = ["Copy Raw Code Script", "Copying Raw Code Scr
 /** This store specifically handles Code Scripts I include on my website. It has similar functions to the document store. */
 export const useScriptsStore = defineStore("scripts-store", () => {
     const SCRIPT_HTML_ID = "mohit-scriptPage-code";
+    const SCRIPT_LINE_BUTTON_CLASS = "mohit-scriptPage-code-lineNum-innerButton";
 
     /** This stores basic object data for each of the scripts hosted on my website. */
     const scripts = [
@@ -177,8 +178,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function onScriptPageKeydown(event) {
         try {
-            if(!event || webData.showSharePopup) { return; }
-            if(!event.ctrlKey || event.repeat) { return; }
+            if(!event || !event.ctrlKey || event.repeat || !event.key || webData.showSharePopup) { return; }
             const keyLetter = event.key.toLowerCase();
 
             if(keyLetter === "c") {
@@ -264,7 +264,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
                 if(eventsAborted()) { return reject("Process Aborted"); }
 
                 /** @type {HTMLCollectionOf<HTMLButtonElement>} This is the new website for  */
-                const lineButtons = document.getElementsByClassName("mohit-scriptPage-code-lineNum-innerButton");
+                const lineButtons = document.getElementsByClassName(SCRIPT_LINE_BUTTON_CLASS);
                 const numLineButtons = lineButtons.length;
                 const signal = scriptAbortController.signal;
 
@@ -278,6 +278,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
                     element.addEventListener("click", (event) => { openLineOptionsMenu(event, lineNum); }, { signal });
                     element.addEventListener("contextmenu", (event) => { openLineOptionsMenu(event, lineNum); }, { signal });
+                    element.addEventListener("keydown", (event) => { openLineOptionsMenuOnEnter(event, lineNum); }, { signal });
                 }
 
                 // This resolves the promise when all the event listeners are added.
@@ -294,25 +295,45 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {PointerEvent} event The event from clicking the button.
      * @param {Number} lineNum The number of the line in the code file.
      */
-    function openLineOptionsMenu(event = null, lineNum = null) {
-        if(!event || !event.type || !lineNum || !(event instanceof PointerEvent)) { return; }
-        const isContextMenuEvent = (event.type.toLowerCase() === "contextmenu");
-        if(isContextMenuEvent && event.ctrlKey) { return; }
+    function openLineOptionsMenu(event = null, lineNum = 0) {
+        // console.log(event);
+        if(!event || (event.pointerId == -1) || !event.type || !lineNum || !(event instanceof PointerEvent)) { return; }
 
-        if(isContextMenuEvent && !event.ctrlKey) {
-            event.preventDefault();
-            triggerClickSound();
-            setLineOptions(lineNum);
-        } else if(!isContextMenuEvent) {
-            if(event.ctrlKey) {
-                closeLineOptions();
-                router.push(router.currentRoute.value.path + "#L" + String(lineNum));
-            } else if(event.shiftKey) {
-                closeLineOptions();
-                shareLinePermalink(lineNum);
-            } else {
+        if(event.type.toLowerCase() === "contextmenu") {
+            if(!event.ctrlKey) {
+                event.preventDefault();
+                triggerClickSound();
                 setLineOptions(lineNum);
             }
+        } else if(event.ctrlKey) {
+            closeLineOptions();
+            router.push(router.currentRoute.value.path + "#L" + String(lineNum));
+        } else if(event.shiftKey) {
+            closeLineOptions();
+            shareLinePermalink(lineNum);
+        } else {
+            setLineOptions(lineNum);
+        }
+    }
+
+    /**
+     * This function opens the script line options menu for a specific line of code when the user hits the enter key.
+     * @param {KeyboardEvent} event The event from clicking the button.
+     * @param {Number} lineNum The number of the line in the code file.
+     */
+    function openLineOptionsMenuOnEnter(event = null, lineNum = 0) {
+        if(!event || !event.key || !lineNum) { return; }
+        const key = event.key.toLowerCase();
+
+        if(key === "enter" && !event.repeat) {
+            setLineOptions(lineNum);
+            triggerClickSound();
+        } else if(key === "arrowup" || key === "w") {
+            event.preventDefault();
+            focusOnLineNumberButton(lineNum - 1);
+        } else if(key === "arrowdown" || key === "s") {
+            event.preventDefault();
+            focusOnLineNumberButton(lineNum + 1);
         }
     }
 
@@ -392,7 +413,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {Number} lineNum The number of the line to share. If invalid, uses the number for the line options menu instead.
      */
     function shareLinePermalink(lineNum = 0) {
-        if(lineNum < 1 || lineNum > maxLinesInScript.value || isNaN(lineNum)) { lineNum = lineOptions.value.num; }
+        if(!checkLineNumber(lineNum)) { lineNum = lineOptions.value.num; }
         const element = document.getElementById("L" + lineNum);
         if(element != null) { webData.setQRCodePopup(element.getAttribute("mohit-code-as-link")); }
     }
@@ -437,14 +458,30 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {0 | 1} styleSet The style set that should be applied to the class.
      */
     function manageLineNumberFocus(newLine = -1, oldLine = -1, styleSet = 0) {
-        const CLASS_NAME = (styleSet == 0 ? "num-highlight" : "num-highlight-optionsOpen");
-        const numCodeLines = maxLinesInScript.value;
-        
         if(Number.isNaN(newLine) || !Number.isInteger(newLine)) { newLine = -1; }
         if(Number.isNaN(oldLine) || !Number.isInteger(oldLine)) { oldLine = -1; }
 
-        if(oldLine > 0 && oldLine <= numCodeLines) { document.getElementById("L" + oldLine)?.classList.remove(CLASS_NAME); }
-        if(newLine > 0 && newLine <= numCodeLines) { document.getElementById("L" + newLine)?.classList.add(CLASS_NAME); }
+        const CLASS_NAME = (styleSet == 0 ? "num-highlight" : "num-highlight-optionsOpen");
+        if(checkLineNumber(oldLine)) { document.getElementById("L" + oldLine)?.classList.remove(CLASS_NAME); }
+        if(checkLineNumber(newLine)) { document.getElementById("L" + newLine)?.classList.add(CLASS_NAME); }
+    }
+
+    /**
+     * This function focuses on a button for the line number.
+     * @param {Number} lineNum The line number to focus on.
+     */
+    function focusOnLineNumberButton(lineNum) {
+        if(!checkLineNumber(lineNum)) { return; }
+        const buttonElement = document.getElementById("L" + lineNum).querySelector("." + SCRIPT_LINE_BUTTON_CLASS);
+        if(buttonElement && ('focus' in buttonElement)) { buttonElement.focus(); }
+    }
+
+    /**
+     * This function checks if a number is a valid line number in the script being displayed.
+     * @param {Number} lineNum The number to check.
+     */
+    function checkLineNumber(lineNum = 0) {
+        return (lineNum >= 1 && lineNum <= maxLinesInScript.value && Number.isInteger(lineNum));
     }
 
     /**
@@ -473,7 +510,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     return { scripts, mounted, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
         scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus, downloadTitle, saveScriptTitle, copyTitle,
         currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
-        downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen,
+        downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen, checkLineNumber,
         setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
     }

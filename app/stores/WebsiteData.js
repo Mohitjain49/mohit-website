@@ -224,8 +224,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {KeyboardEvent} event The event given by the listener.
      */
     function onKeyDown(event) {
+        if(!event || !event.key || event.repeat) { return; }
         const key = event.key;
-        if(event.repeat) { return; }
 
         if(event.ctrlKey && event.altKey) {
             if(key === "w" || key === "W") {

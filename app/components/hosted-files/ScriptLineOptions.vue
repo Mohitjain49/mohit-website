@@ -99,7 +99,7 @@ function stopButtonAnimations() {
 function onLineOptionsNumChange() {
     stopButtonAnimations();
     const newNum = lineOptionsNum.value;
-    if(newNum > 0 && newNum <= scriptsStore.maxLinesInScript) { viewableLineOptionsNum.value = newNum; }
+    if(scriptsStore.checkLineNumber(newNum)) { viewableLineOptionsNum.value = newNum; }
 }
 
 /**

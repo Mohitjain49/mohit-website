@@ -234,7 +234,7 @@ function manageSocialTabGlow(oldValue = "") {
  * @param {KeyboardEvent} event The event of pressing the key.
  */
 function onContactPageKeydown(event = null) {
-    if(event && event.key === "Enter" && event.ctrlKey) { sendEmail(); }
+    if(event && !event.repeat && event.key === "Enter" && event.ctrlKey) { sendEmail(); }
 }
 
 /**

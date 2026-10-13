@@ -30,8 +30,8 @@
     height: fit-content;
     overflow-y: hidden;
     overflow-x: auto;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
     background-color: rgb(15, 17, 26) !important;
 }
 #mohit-scriptPage-code-inner {
@@ -52,7 +52,7 @@
     scroll-margin-top: apply-zoom-factor(90);
 }
 .mohit-scriptPage-code-line-content {
-    width: calc(100% - 45px);
+    width: calc(100% - 55px);
     height: auto;
     padding-bottom: 2px;
     padding-left: 5px;
@@ -60,8 +60,9 @@
 }
 
 .mohit-scriptPage-code-lineNum {
+    position: relative;
     height: auto;
-    width: 32px;
+    width: 42px;
     display: inline-block;
     text-align: right;
     padding: 1px 0px;
@@ -70,7 +71,8 @@
 }
 
 .mohit-scriptPage-code-lineNum a, .mohit-scriptPage-code-lineNum button {
-    width: 27px;
+    position: relative;
+    width: 37px;
     height: calc(100% - 1px);
     font-size: 12px;
     text-align: right;
@@ -84,13 +86,30 @@
     font-family: 'Roboto', sans-serif;
     transition: var(--default-transition);
 }
-.mohit-scriptPage-code-lineNum a:hover, .mohit-scriptPage-code-lineNum button:hover {
+.mohit-scriptPage-code-lineNum a:hover, .mohit-scriptPage-code-lineNum a:focus,
+.mohit-scriptPage-code-lineNum button:hover, .mohit-scriptPage-code-lineNum button:focus {
     color: var(--website-light-text);
     border-right: 3px solid !important;
     border-color:  var(--website-light-text);
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
     background-color: rgba(255, 255, 255, 0.25);
+}
+
+.mohit-scriptPage-code-lineNum-bullet {
+    position: absolute;
+    left: 4px;
+    top: 5px;
+    height: 4px;
+    width: 4px;
+    border-radius: 50%;
+    background-color: var(--website-light-text);
+    display: none;
+    transition: background-color 0.2s;
+}
+.mohit-scriptPage-code-lineNum a:focus .mohit-scriptPage-code-lineNum-bullet,
+.mohit-scriptPage-code-lineNum button:focus .mohit-scriptPage-code-lineNum-bullet {
+    display: block;
 }
 
 .mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-line-content,
@@ -103,6 +122,10 @@
     border-color: var(--vibrant-flame) !important;
     background-color: rgba(255, 255, 255, 0.2);
     font-weight: bold;
+
+    .mohit-scriptPage-code-lineNum-bullet {
+        background-color: var(--vibrant-flame) !important;
+    }
 }
 .mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum a,
 .mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum button {
@@ -110,6 +133,10 @@
     border-color: var(--blue-two) !important;
     background-color: rgba(255, 255, 255, 0.2);
     font-weight: bold;
+
+    .mohit-scriptPage-code-lineNum-bullet {
+        background-color: var(--blue-two) !important;
+    }
 }
 
 .mohit-main-script-top {

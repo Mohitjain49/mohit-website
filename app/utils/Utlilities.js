@@ -90,6 +90,25 @@ export function onMountedAdvanced(callback = () => {}) {
     return isMounted;
 }
 
+/**
+ * This function awaits the Next Tick after the component is mounted before running a callback.
+ * @param {Function} callback The callback function that is triggered.
+ * @returns A reference boolean that can be used to tell the user that the component is mounted.
+ */
+export function onAfterMounted(callback = () => {}) {
+    /** A boolean that tells the developer if the component is fully mounted. */
+    const isMounted = shallowRef(false);
+
+    onMounted(async() => {
+        try { await nextTick(); } catch(e) {}
+        isMounted.value = true;
+        callback()
+    });
+
+    // Returns a boolean that tracks if the component is mounted.
+    return isMounted;
+}
+
 /** This function returns a computed instance of the route path with the query string. */
 export function useRoutePathWithQuery() {
     const documentStore = useDocumentStore();

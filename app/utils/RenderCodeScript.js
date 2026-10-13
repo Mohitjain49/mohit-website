@@ -77,16 +77,25 @@ function transformCodeLine(addClassToHast, node, lineNum, path) {
         type: "element",
         tagName: "div",
         properties: { className: "mohit-scriptPage-code-lineNum" },
-        children: [{
-            type: "element",
-            tagName: "button",
-            properties: {
-                className: "mohit-scriptPage-code-lineNum-innerButton",
-                title: "See Options for Line " + String(lineNum) + " Of This Code Script.",
-                "line-number": String(lineNum)
+        children: [
+            {
+                type: "element",
+                tagName: "button",
+                properties: {
+                    className: "mohit-scriptPage-code-lineNum-innerButton",
+                    title: "See Options for Line " + String(lineNum) + " Of This Code Script.",
+                    "line-number": String(lineNum)
+                },
+                children: [
+                    { type: "text", value: String(lineNum) },
+                    {
+                        type: "element",
+                        tagName: "div",
+                        properties: { className: "mohit-scriptPage-code-lineNum-bullet" }
+                    }
+                ]
             },
-            children: [{ type: "text", value: String(lineNum) }]
-        }]
+        ]
     });
 }
 
