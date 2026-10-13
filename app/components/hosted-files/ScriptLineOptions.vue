@@ -55,9 +55,14 @@ onMountedAdvanced(() => {
     lineOptionsAbortController = new AbortController();
     const signal = lineOptionsAbortController.signal;
 
-    window.addEventListener("pointerdown", (event) => { checkComponentStayVisible(event); }, { signal });
-    window.addEventListener("mousedown", (event) => { checkComponentStayVisible(event); }, { signal });
-    window.addEventListener("touchstart", (event) => { checkComponentStayVisible(event); }, { signal });
+    if('onpointerdown' in window){
+        window.addEventListener("pointerdown", (event) => { checkComponentStayVisible(event); }, { signal });
+    } else {
+        window.addEventListener("mousedown", (event) => { checkComponentStayVisible(event); }, { signal });
+        window.addEventListener("touchstart", (event) => { checkComponentStayVisible(event); }, { signal, passive: false });
+    }
+
+    // This manages what happens if the user right clicks on the Line Options Menu.
     document.getElementById(LINE_OPTIONS_ELEMENT_ID).addEventListener("contextmenu", (event) => { onMenuRightClick(event); }, { signal });
 });
 
@@ -73,8 +78,9 @@ function openScriptsMenu() {
 
 /** This opens the share popup for the Line Permalink. */
 function openSharePopupForPermalink() {
+    const currentLineNum = lineOptionsNum.value;
     closeLineOptionsMenu();
-    scriptsStore.shareLinePermalink();
+    scriptsStore.shareLinePermalink(currentLineNum);
 }
 
 /** This function closes the line options menu. */
@@ -98,7 +104,7 @@ function onLineOptionsNumChange() {
 
 /**
  * Given an element, this closes the Line Options Menu if the element is not a valid element to click.
- * @param {Event} event The event fired from the window event listener.
+ * @param {PointerEvent} event The event fired from the window event listener.
  */
 function checkComponentStayVisible(event = null) {
     // console.log(event);
@@ -110,6 +116,17 @@ function checkComponentStayVisible(event = null) {
 
     if(lineOptionsElement == null || !(element instanceof Element)) { return; }
     if(lineOptionsElement === element || lineOptionsElement.contains(element)) { return; }
+
+    const clickOnLine = Boolean(element.closest("#L" + lineOptionsNum.value));
+    const eventType = event.type;
+
+    if(clickOnLine) {
+        if((eventType === "pointerdown") && (event.pointerType !== "mouse" || event.buttons == 1)) { return; }
+        if(eventType === "mousedown" && event.buttons == 1) { return; }
+        if(eventType === "touchstart") { return; }
+    }
+
+    // Closes the line options menu if all conditions have been met.
     scriptsStore.closeLineOptions();
 }
 
@@ -118,15 +135,14 @@ function checkComponentStayVisible(event = null) {
  * @param {PointerEvent} event The emitted event.
  */
 function onMenuRightClick(event) {
-    if(!event) { return; }
+    if(!event || !event.target) { return; }
     event.preventDefault();
     
     /** @type {HTMLElement} The element right clicked on. */
     const element = event.target;
-    const closestButton = element.closest("button");
-    const closestLink = element.closest("link");
+    if(!(element instanceof Element)) { return; }
 
+    const closestButton = element.closest("button, a, link");
     if(closestButton) { closestButton.click(); }
-    if(closestLink) { closestLink.click(); }
 }
 </script>

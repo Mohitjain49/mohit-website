@@ -29,7 +29,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** @type {AbortController} This abort controller manages the event listeners for a script page. */
     var scriptAbortController = null;
-    var lineOptionsCloseTimeout = null;
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
@@ -296,17 +295,29 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {Number} lineNum The number of the line in the code file.
      */
     function openLineOptionsMenu(event = null, lineNum = null) {
-        if(!event || !lineNum || !(event instanceof PointerEvent)) { return; }
-        if(event.type.toLowerCase() === "contextmenu" && event.ctrlKey) { return; }
+        if(!event || !event.type || !lineNum || !(event instanceof PointerEvent)) { return; }
+        const isContextMenuEvent = (event.type.toLowerCase() === "contextmenu");
+        if(isContextMenuEvent && event.ctrlKey) { return; }
 
-        event.preventDefault();
-        setLineOptions(lineNum);
+        if(isContextMenuEvent && !event.ctrlKey) {
+            event.preventDefault();
+            triggerClickSound();
+            setLineOptions(lineNum);
+        } else if(!isContextMenuEvent) {
+            if(event.ctrlKey) {
+                closeLineOptions();
+                router.push(router.currentRoute.value.path + "#L" + String(lineNum));
+            } else if(event.shiftKey) {
+                closeLineOptions();
+                shareLinePermalink(lineNum);
+            } else {
+                setLineOptions(lineNum);
+            }
+        }
     }
 
     /** This checks if the script abort controller's "abort()" function was called or not. */
-    function eventsAborted() {
-        if((scriptAbortController == null) ? true : scriptAbortController.signal.aborted);
-    }
+    function eventsAborted() { if((scriptAbortController == null) ? true : scriptAbortController.signal.aborted); }
 
     /**
      * -------------------------------------------------------------------------------
@@ -322,17 +333,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         if(lineNum == -1 || !lineNum || lineOptions.value.num == lineNum) {
             closeLineOptions();
         } else {
-            const currentLineNum = lineOptions.value.num;
-            lineOptions.value.num = -1;
-            if(lineOptionsCloseTimeout != null) { clearTimeout(lineOptionsCloseTimeout); }
-
-            lineOptionsCloseTimeout = setTimeout(() => {
-                lineOptions.value.oldNum = currentLineNum;
-                lineOptions.value.num = lineNum;
-                placeLineOptionsOnCode(lineNum);
-                manageLineNumberFocus(lineNum, lineOptions.value.oldNum, 1);
-                lineOptionsCloseTimeout = null;
-            }, 100);
+            lineOptions.value.oldNum = lineOptions.value.num;
+            lineOptions.value.num = lineNum;
+            placeLineOptionsOnCode(lineNum);
+            manageLineNumberFocus(lineNum, lineOptions.value.oldNum, 1);
         }
     }
 
@@ -383,9 +387,13 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         });
     }
 
-    /** This function opens the share popup for a line's permalink. */
-    function shareLinePermalink() {
-        const element = document.getElementById("L" + lineOptions.value.num);
+    /**
+     * This function opens the share popup for a line's permalink.
+     * @param {Number} lineNum The number of the line to share. If invalid, uses the number for the line options menu instead.
+     */
+    function shareLinePermalink(lineNum = 0) {
+        if(lineNum < 1 || lineNum > maxLinesInScript.value || isNaN(lineNum)) { lineNum = lineOptions.value.num; }
+        const element = document.getElementById("L" + lineNum);
         if(element != null) { webData.setQRCodePopup(element.getAttribute("mohit-code-as-link")); }
     }
 

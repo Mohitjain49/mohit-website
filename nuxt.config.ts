@@ -11,6 +11,7 @@ import pwaConfig from "./pwa.config";
 const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
 
+/** This fetches all the Vue.js Directive Plugins that this project uses so they are registered here. */
 const VUE_DIRECTIVE_PLUGINS = globSync("app/directives/**/*.{ts,js}", {
     cwd: __dirname,
     absolute: true
@@ -62,6 +63,7 @@ export default defineNuxtConfig({
     compatibilityDate: '2026-10-05',
     devtools: { enabled: false },
     ssr: true,
+    devServer: { port: 5700, host: "localhost" },
     app: {
         baseURL: "/",
         head: {
@@ -70,7 +72,6 @@ export default defineNuxtConfig({
             meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
         }
     },
-    devServer: { port: 5700, host: "localhost" },
     modules: [
         '@vueuse/nuxt', '@pinia/nuxt', '@vite-pwa/nuxt', '@nuxt/fonts',
         '@nuxtjs/sitemap', '@nuxtjs/robots', 'unplugin-info/nuxt',
