@@ -30,8 +30,6 @@
     height: fit-content;
     overflow-y: hidden;
     overflow-x: auto;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
     background-color: rgb(15, 17, 26) !important;
 }
 #mohit-scriptPage-code-inner {
@@ -70,7 +68,16 @@
     user-select: none;
 }
 
-.mohit-scriptPage-code-lineNum a, .mohit-scriptPage-code-lineNum button {
+#mohit-scriptPage-code .mohit-scriptPage-code-line:first-child .mohit-scriptPage-code-lineNum {
+    border-top-left-radius: 5px;
+    .mohit-scriptPage-code-lineNum-innerButton { border-top-left-radius: 5px; }
+}
+#mohit-scriptPage-code .mohit-scriptPage-code-line:last-child .mohit-scriptPage-code-lineNum {
+    border-bottom-left-radius: 5px;
+    .mohit-scriptPage-code-lineNum-innerButton { border-bottom-left-radius: 5px; }
+}
+
+.mohit-scriptPage-code-lineNum-innerButton {
     position: relative;
     width: 37px;
     height: calc(100% - 1px);
@@ -84,10 +91,11 @@
     border-right: 1px solid lightgray;
     color: white;
     font-family: 'Roboto', sans-serif;
+    scroll-margin-top: apply-zoom-factor(90);
     transition: var(--default-transition);
 }
-.mohit-scriptPage-code-lineNum a:hover, .mohit-scriptPage-code-lineNum a:focus,
-.mohit-scriptPage-code-lineNum button:hover, .mohit-scriptPage-code-lineNum button:focus {
+.mohit-scriptPage-code-lineNum-innerButton:hover,
+.mohit-scriptPage-code-lineNum-innerButton:focus {
     color: var(--website-light-text);
     border-right: 3px solid !important;
     border-color:  var(--website-light-text);
@@ -107,8 +115,7 @@
     display: none;
     transition: background-color 0.2s;
 }
-.mohit-scriptPage-code-lineNum a:focus .mohit-scriptPage-code-lineNum-bullet,
-.mohit-scriptPage-code-lineNum button:focus .mohit-scriptPage-code-lineNum-bullet {
+.mohit-scriptPage-code-lineNum-innerButton:focus .mohit-scriptPage-code-lineNum-bullet {
     display: block;
 }
 
@@ -116,8 +123,7 @@
 .mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-line-content {
     background-color: rgba(255, 255, 255, 0.1);
 }
-.mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-lineNum a,
-.mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-lineNum button {
+.mohit-scriptPage-code-line.num-highlight .mohit-scriptPage-code-lineNum-innerButton {
     color: var(--vibrant-flame);
     border-color: var(--vibrant-flame) !important;
     background-color: rgba(255, 255, 255, 0.2);
@@ -127,8 +133,7 @@
         background-color: var(--vibrant-flame) !important;
     }
 }
-.mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum a,
-.mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum button {
+.mohit-scriptPage-code-line.num-highlight-optionsOpen .mohit-scriptPage-code-lineNum-innerButton {
     color: var(--blue-two);
     border-color: var(--blue-two) !important;
     background-color: rgba(255, 255, 255, 0.2);
@@ -208,8 +213,10 @@
 .mohit-script-lineOptions {
     position: absolute;
     overflow: hidden;
-    bottom: 95px;
-    left: 15px;
+    --calc-position: calc(100% + 4px);
+    top: var(--calc-position);
+    left: var(--calc-position);
+    bottom: auto;
     background-color: black;
     border: 2px solid var(--blue-one);
     height: fit-content;
@@ -229,6 +236,17 @@
     align-items: center;
     flex-direction: row;
     padding: 0px 5px;
+}
+
+.mohit-script-lineOptions.above-num {
+    border-radius: 10px 10px 10px 0px;
+    bottom: var(--calc-position);
+    top: auto;
+}
+.mohit-script-lineOptions.below-num {
+    border-radius: 0px 10px 10px 10px;
+    top: var(--calc-position);
+    bottom: auto;
 }
 
 .mohit-script-lineOptions-top > h3 {

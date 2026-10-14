@@ -34,7 +34,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const router = useRouter();
     const webData = useWebsiteDataStore();
     const fullScreenStore = useFullScreenStore();
-    const { cssToWindowWidthRatio, cssToWindowHeightRatio } = useMohitWindowSize();
+    const styleStore = useStyleStore();
+    const scrollStore = useScrollStore();
 
     const mounted = ref(false);
     const wrapCode = ref(false);
@@ -42,10 +43,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const maxLinesInScript = ref(Number.MAX_SAFE_INTEGER);
 
     /** This manages the status of the line options menu. */
-    const lineOptions = ref({
-        num: -1, oldNum: -1, timeout: null, lastCopied: "",
-        style: { left: "0px", top: "0px", borderRadius: "10px 10px 10px 10px" }
-    });
+    const lineOptions = ref({ num: -1, oldNum: -1, timeout: null, lastCopied: "", extraClass: "below-num" });
 
     const scriptDownloadStatus = ref(0);
     const scriptSaveStatus = ref(0);
@@ -349,14 +347,15 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /**
      * This function sets the status of the line options menu.
      * @param {Number} lineNum The number of the line to be opened. -1 closes the options menu.
+     * @param {Boolean} noStylesChange If true, this function will not run the "placeLineOptionsOnCode" function.
      */
-    async function setLineOptions(lineNum = -1) {
+    async function setLineOptions(lineNum = -1, noStylesChange = false) {
         if(lineNum == -1 || !lineNum || lineOptions.value.num == lineNum) {
             closeLineOptions();
         } else {
             lineOptions.value.oldNum = lineOptions.value.num;
             lineOptions.value.num = lineNum;
-            placeLineOptionsOnCode(lineNum);
+            if(!noStylesChange) { placeLineOptionsOnCode(lineNum); }
             manageLineNumberFocus(lineNum, lineOptions.value.oldNum, 1);
         }
     }
@@ -373,20 +372,32 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {Number} lineNum The Line number.
      */
     async function placeLineOptionsOnCode(lineNum = -1) {
-        const element = document.getElementById("L" + lineNum);
+        const element = getLineElement(lineNum);
         if(element == null) { return; }
 
-        const mainRect = element.getBoundingClientRect();
-        const vertInView = (mainRect.top <= getMohitInnerHeight()) && ((mainRect.top + mainRect.height) >= 60);
-        if(!vertInView) { await scrollToLine(lineNum); }
+        const rect = element.querySelector(".mohit-scriptPage-code-lineNum")?.getBoundingClientRect();
+        if(!rect) { return; }
 
-        const rect = element.querySelector(".mohit-scriptPage-code-lineNum").getBoundingClientRect();
-        const optionsAboveLine = (((rect.top * cssToWindowHeightRatio.value) + 140) > getMohitInnerHeight());
-        const rectTop = (rect.top + window.scrollY);
+        const heightRatio = styleStore.cssToWindowHeightRatio;
+        const lineOptionsPosition = ((rect.top + (170 / heightRatio)) * heightRatio);
+        const optionsAboveViewport = (lineOptionsPosition > styleStore.cssViewportHeight);
 
-        const yNum = ((optionsAboveLine ? (rectTop * cssToWindowHeightRatio.value - 122) : ((rectTop + rect.height) * cssToWindowHeightRatio.value + 3)));
-        const borderRadius = (optionsAboveLine ? "10px 10px 10px 0px" : "0px 10px 10px 10px")
-        lineOptions.value.style = { left: ((((rect.left + rect.width + 4 + window.scrollX) * cssToWindowWidthRatio.value)) + "px"), top: (yNum + "px"), borderRadius }
+        const preElement = document.getElementById(SCRIPT_HTML_ID);
+        var optionsAbovePre = false
+
+        if(Boolean(preElement)) {
+            const preElementBottomRect = ((preElement.getBoundingClientRect().bottom - 10) * heightRatio);
+            optionsAbovePre = (lineOptionsPosition > preElementBottomRect);
+            
+            if(preElementBottomRect < 325) {
+                closeLineOptions();
+                scrollStore.scrollByIncrement(-170 / heightRatio);
+                setLineOptions(lineNum, true);
+            }
+        }
+
+        // Based on the numbers above, this will determine if the line options menu appears above or below the line of code.
+        lineOptions.value.extraClass = ((optionsAboveViewport || optionsAbovePre) ? "above-num" : "below-num");
     }
 
     /**
@@ -394,7 +405,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {String} attribute The attribute to copy.
      */
     function copyLineAttribute(attribute = "text") {
-        const element = document.getElementById("L" + lineOptions.value.num);
+        const element = getLineElement(lineOptions.value.num);
         if(element == null) { return; }
 
         navigator.clipboard.writeText(element.getAttribute("mohit-code-as-" + attribute)).then(() => {
@@ -414,16 +425,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function shareLinePermalink(lineNum = 0) {
         if(!checkLineNumber(lineNum)) { lineNum = lineOptions.value.num; }
-        const element = document.getElementById("L" + lineNum);
+        const element = getLineElement(lineNum);
         if(element != null) { webData.setQRCodePopup(element.getAttribute("mohit-code-as-link")); }
-    }
-
-    /**
-     * This function scrolls to any particular line of code specified by the user.
-     * @param {Number} lineNum The Line number. The default value is the number the line options is open for.
-     */
-    async function scrollToLine(lineNum = lineOptions.value.num) {
-        await goToPageSection(("L" + lineNum), (fullScreenStore.fullScreenSet ? 30 : 80), 0)
     }
 
     /**
@@ -462,8 +465,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         if(Number.isNaN(oldLine) || !Number.isInteger(oldLine)) { oldLine = -1; }
 
         const CLASS_NAME = (styleSet == 0 ? "num-highlight" : "num-highlight-optionsOpen");
-        if(checkLineNumber(oldLine)) { document.getElementById("L" + oldLine)?.classList.remove(CLASS_NAME); }
-        if(checkLineNumber(newLine)) { document.getElementById("L" + newLine)?.classList.add(CLASS_NAME); }
+        if(checkLineNumber(oldLine)) { getLineElement(oldLine)?.classList.remove(CLASS_NAME); }
+        if(checkLineNumber(newLine)) { getLineElement(newLine)?.classList.add(CLASS_NAME); }
     }
 
     /**
@@ -472,8 +475,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function focusOnLineNumberButton(lineNum) {
         if(!checkLineNumber(lineNum)) { return; }
-        const buttonElement = document.getElementById("L" + lineNum).querySelector("." + SCRIPT_LINE_BUTTON_CLASS);
-        if(buttonElement && ('focus' in buttonElement)) { buttonElement.focus(); }
+        const buttonElement = (getLineElement(lineNum)?.querySelector("." + SCRIPT_LINE_BUTTON_CLASS) ?? null);
+        if(buttonElement && ('focus' in buttonElement)) { buttonElement.focus({ preventScroll: false, focusVisible: true }); }
     }
 
     /**
@@ -482,6 +485,14 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function checkLineNumber(lineNum = 0) {
         return (lineNum >= 1 && lineNum <= maxLinesInScript.value && Number.isInteger(lineNum));
+    }
+
+     /**
+     * This function returns the Element representing the line of code in the script webpage.
+     * @param {Number} lineNum The number to use.
+     */
+    function getLineElement(lineNum = 0) {
+        return (checkLineNumber(lineNum) ? document.getElementById("L" + String(lineNum)) : null);
     }
 
     /**
@@ -511,7 +522,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus, downloadTitle, saveScriptTitle, copyTitle,
         currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen, checkLineNumber,
-        setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, scrollToLine, placeLineOptionsOnCode,
+        setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
     }
 });

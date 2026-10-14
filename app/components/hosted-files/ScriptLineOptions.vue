@@ -1,28 +1,30 @@
 <template>
-<Transition name="fade-context-menu-transition">
-    <div v-show="showLineOptions" :style="lineOptions.style" :id="LINE_OPTIONS_ELEMENT_ID" class="mohit-script-lineOptions">
-        <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
-            <h3> Line <span id="lineOptions-num" v-html="viewableLineOptionsNum"></span> </h3>
-            <div class="mohit-script-lineOptions-topOpts">
-                <button class="web-menu" @click="openScriptsMenu()" ref="options-open-web-menu-btn" title="Open Scripts Menu">
-                    <FontAwesomeIcon icon="fa-file-export" :jello="animateWebMenuButton" />
-                </button>
-                <button @click="closeLineOptionsMenu()" ref="options-close-btn" :title="('Close Options For Line ' + viewableLineOptionsNum)">
-                    <FontAwesomeIcon icon="fa-xmark" :jello="animateCloseButton" />
-                </button>
+<Teleport :to="teleportQuery">
+    <Transition name="fade-context-menu-transition">
+        <div v-show="showLineOptions" :id="LINE_OPTIONS_ELEMENT_ID" :class="['mohit-script-lineOptions', lineOptions.extraClass]">
+            <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
+                <h3> Line <span id="lineOptions-num" v-html="viewableLineOptionsNum"></span> </h3>
+                <div class="mohit-script-lineOptions-topOpts">
+                    <button class="web-menu" @click="openScriptsMenu()" ref="options-open-web-menu-btn" title="Open Scripts Menu">
+                        <FontAwesomeIcon icon="fa-file-export" :jello="animateWebMenuButton" />
+                    </button>
+                    <button @click="closeLineOptionsMenu()" ref="options-close-btn" :title="('Close Options For Line ' + viewableLineOptionsNum)">
+                        <FontAwesomeIcon icon="fa-xmark" :jello="animateCloseButton" />
+                    </button>
+                </div>
             </div>
+            <button @click="scriptsStore.copyLineAttribute('text')">
+                <span> Copy Text </span> <FontAwesomeIcon :icon="scriptsStore.copyCodeTextIcon" />
+            </button>
+            <button @click="scriptsStore.copyLineAttribute('link')">
+                <span> Copy Permalink </span> <FontAwesomeIcon :icon="scriptsStore.copyCodePermalinkIcon" />
+            </button>
+            <button class="share" @click="openSharePopupForPermalink()">
+                <span> Share Permalink </span> <FontAwesomeIcon icon="fa-share-from-square" />
+            </button>
         </div>
-        <button @click="scriptsStore.copyLineAttribute('text')">
-            <span> Copy Text </span> <FontAwesomeIcon :icon="scriptsStore.copyCodeTextIcon" />
-        </button>
-        <button @click="scriptsStore.copyLineAttribute('link')">
-            <span> Copy Permalink </span> <FontAwesomeIcon :icon="scriptsStore.copyCodePermalinkIcon" />
-        </button>
-        <button class="share" @click="openSharePopupForPermalink()">
-            <span> Share Permalink </span> <FontAwesomeIcon icon="fa-share-from-square" />
-        </button>
-    </div>
-</Transition>
+    </Transition>
+</Teleport>
 </template>
 
 <script setup>
@@ -36,6 +38,9 @@ const closeButton = useTemplateRef('options-close-btn');
 const webMenuButton = useTemplateRef('options-open-web-menu-btn');
 const hoverOnCloseButton = useElementHover(closeButton);
 const hoverOnWebMenuButton = useElementHover(webMenuButton);
+
+/** This is the teleport query that should be used by the Vue.js Teleport Component. */
+const teleportQuery = computed(() => { return ("#L" + String(viewableLineOptionsNum.value) + " .mohit-scriptPage-code-lineNum"); });
 
 /** @type {AbortController} The abort controller for the event listeners here. */
 var lineOptionsAbortController = null;
@@ -135,7 +140,7 @@ function checkComponentStayVisible(event = null) {
  * @param {PointerEvent} event The emitted event.
  */
 function onMenuRightClick(event) {
-    if(!event || !event.target) { return; }
+    if(!event || !event.target || event.ctrlKey) { return; }
     event.preventDefault();
     
     /** @type {HTMLElement} The element right clicked on. */

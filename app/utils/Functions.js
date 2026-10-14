@@ -40,16 +40,25 @@ export function getColorStyles(color = "var(--website-text)") {
 
 /** This returns the css inner width. */
 export function getMohitInnerWidth() {
-    if(!import.meta.client || !document) { return 0; }
+    if(!import.meta.client || !document || !window) { return 0; }
     const element = document.getElementById("invisible-css-layout");
-    return (element == null ? 0 : (element.clientWidth + (window.innerWidth - document.documentElement.clientWidth)));
+    const defaultWidth = window.innerWidth;
+
+    return (element == null ? defaultWidth : (element.clientWidth + (defaultWidth - document.documentElement.clientWidth)));
 }
 
 /** This returns the css inner height. */
 export function getMohitInnerHeight() {
-    if(!import.meta.client || !document) { return 0; }
+    if(!import.meta.client || !document || !window) { return 0; }
     const element = document.getElementById("invisible-css-layout");
-    return (element == null ? 0 : (element.clientHeight + (window.innerHeight - document.documentElement.clientHeight)));
+    const defaultHeight = window.innerHeight;
+    return (element == null ? defaultHeight : (element.clientHeight + (defaultHeight - document.documentElement.clientHeight)));
+}
+
+/** This returns the "Scroll Y" that should be used for calculations. */
+export function getScrollY() {
+    if(!import.meta.client || !document || !window) { return 0; }
+    return (Boolean(document.fullscreenElement) ? document.fullscreenElement.scrollTop : window.scrollY);
 }
 
 /**

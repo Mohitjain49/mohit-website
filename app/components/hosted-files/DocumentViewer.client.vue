@@ -519,9 +519,8 @@ function scrollToPdfDest(pageNumber = 1, y = 0) {
     const destY = (Math.abs(y - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
     const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue(PDFJS_SCALE_CSS_PROPERTY));
 
-    const scrollY = (fullScreenSet.value ? document.fullscreenElement.scrollTop : window.scrollY);
     const destPixels = (((destY * destScalar) - (fullScreenSet.value ? 20 : 90)) / cssToWindowHeightRatio.value);
-    const top = (pageElement.getBoundingClientRect().top + scrollY + destPixels);
+    const top = (pageElement.getBoundingClientRect().top + getScrollY() + destPixels);
     scrollToTarget(top);
 }
 
