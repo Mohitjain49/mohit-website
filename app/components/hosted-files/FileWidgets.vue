@@ -124,17 +124,30 @@ function onWidgetPageNumberChange() {
  * @param {KeyboardEvent} event The event fired by clicking a key.
  */
 function onPageNumberKeydown(event) {
-    if(!event || event.repeat || event.key !== "Enter") { return; }
-    onWidgetPageNumberChange();
+    if(!event || !event.key) { return; }
+    const key = event.key.toLowerCase();
 
-    const editedNumber = parseInt(widgetPageNumber.value, 10);
-    if(editedNumber === currentObservedPage.value) { return; }
-    document.getElementById("page-number-mohit")?.blur();
+    if(key === "enter" && !event.repeat) {
+        onWidgetPageNumberChange();
+        const editedNumber = parseInt(widgetPageNumber.value, 10);
 
-    if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
-        resetWidgetPageNumber();
-    } else {
-        documentStore.scrollToPage(editedNumber);
+        if(editedNumber === currentObservedPage.value) { return; }
+        document.getElementById("page-number-mohit")?.blur();
+
+        if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
+            resetWidgetPageNumber();
+        } else {
+            documentStore.scrollToPage(editedNumber);
+            triggerClickSound();
+        }
+    } else if(key === "arrowup" || key === "w") {
+        event.preventDefault();
+        widgetPageNumber.value++;
+        onWidgetPageNumberChange();
+    } else if(key === "arrowdown" || key === "s") {
+        event.preventDefault();
+        widgetPageNumber.value--;
+        onWidgetPageNumberChange();
     }
 }
 </script>

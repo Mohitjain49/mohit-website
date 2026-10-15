@@ -289,26 +289,29 @@
     scrollbar-width: auto !important;
     scrollbar-color: var(--website-text) transparent;
 }
-
-.mohit-navMenu.doc-metadata {
-    border-color: var(--c-color);
-    background-color: var(--dark-background);
-}
-.mohit-navMenu.webMenu-vertical-overflow {
-    border-top-right-radius: 1px;
-    border-bottom-right-radius: 1px;
-}
-
-.mohit-navMenu.flame {
-    border-color: var(--vibrant-flame);
-}
-:fullscreen .mohit-navMenu {
+@mixin mohit-navMenu-mohit_2() {
     left: 0px;
     top: 0px;
     right: 0px;
     bottom: 0px;
     margin: auto;
     max-height: calc(100% - 40px);
+}
+
+.mohit-navMenu.webMenu-vertical-overflow {
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    width: 335px;
+}
+:fullscreen .mohit-navMenu { @include mohit-navMenu-mohit_2(); }
+.mohit-navMenu.menu-mode_2 { @include mohit-navMenu-mohit_2(); }
+
+.mohit-navMenu.doc-metadata {
+    border-color: var(--c-color);
+    background-color: var(--dark-background);
+}
+.mohit-navMenu.flame {
+    border-color: var(--vibrant-flame);
 }
 
 .mohit-navMenu-top {
@@ -707,14 +710,7 @@
     .mohit-navBar-mainLinks { display: none; }
 }
 @include dynamic-less-equal-width-rule-noScopedBlock(600) {
-    .mohit-navMenu {
-        left: 0px;
-        top: 0px;
-        right: 0px;
-        bottom: 0px;
-        margin: auto;
-        max-height: calc(100% - 40px);
-    }
+    .mohit-navMenu { @include mohit-navMenu-mohit_2(); }
 }
 @include dynamic-less-equal-width-rule-noScopedBlock(550) {
     .mohit-navBar-statusIcon {

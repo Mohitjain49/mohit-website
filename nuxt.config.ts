@@ -161,12 +161,21 @@ export default defineNuxtConfig({
             AUTO_ALT_PLUGIN,
             WINDOW_RELOAD_PLUGIN
         ],
+        optimizeDeps: {
+            entries: ['./app/**/*.vue', './app/**/*.ts', './app/**/*.js'],
+            include: ["shiki/wasm",
+                "shiki/dist/langs/javascript.mjs",
+                "shiki/dist/langs/c.mjs",
+                "shiki/dist/core.mjs",
+                "shiki/dist/engine-oniguruma.mjs",
+                "shiki/dist/themes/material-theme-ocean.mjs"
+            ]
+        },
         css: {
             preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;\n' }},
             lightningcss: { errorRecovery: true },
         },
         build: { cssMinify: "lightningcss" },
-        optimizeDeps: { entries: ['./app/**/*.vue', './app/**/*.ts', './app/**/*.js'] }
     },
 
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },

@@ -148,6 +148,9 @@ function onMenuRightClick(event) {
     if(!(element instanceof Element)) { return; }
 
     const closestButton = element.closest("button, a, link");
-    if(closestButton) { closestButton.click(); }
+    if(!closestButton) { return; }
+
+    closestButton.click();
+    triggerClickSound();
 }
 </script>

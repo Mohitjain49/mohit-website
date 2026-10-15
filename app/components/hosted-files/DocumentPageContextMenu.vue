@@ -122,16 +122,18 @@ function checkComponentStayVisible(event = null) {
  * @param {PointerEvent} event The emitted event.
  */
 function onMenuRightClick(event) {
-    if(!event) { return; }
+    if(!event || !event.target || event.ctrlKey) { return; }
     event.preventDefault();
     
     /** @type {HTMLElement} The element right clicked on. */
     const element = event.target;
-    const closestButton = element.closest("button");
-    const closestLink = element.closest("link");
+    if(!(element instanceof Element)) { return; }
 
-    if(closestButton) { closestButton.click(); }
-    if(closestLink) { closestLink.click(); }
+    const closestButton = element.closest("button, a, link");
+    if(!closestButton) { return; }
+
+    closestButton.click();
+    triggerClickSound();
 }
 
 /** This function sets the current position of the context menu based on the position of the user's mouse. */
