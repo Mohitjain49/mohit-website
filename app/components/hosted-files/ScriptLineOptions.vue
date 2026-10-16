@@ -13,11 +13,15 @@
                     </button>
                 </div>
             </div>
-            <button @click="scriptsStore.copyLineAttribute('text')">
-                <span> Copy Text </span> <FontAwesomeIcon :icon="scriptsStore.copyCodeTextIcon" />
+            <button @click="scriptsStore.copyLineAttribute('text')" v-action-cursor="(copyingText ? lineOptions.copyStatus : 0)">
+                <span> Copy Text </span>
+                <FontAwesomeActionIcon v-if="copyingText" :baseIcon="SCRIPT_COPY_BASE_ICON" :status="lineOptions.copyStatus" />
+                <FontAwesomeIcon v-else :icon="SCRIPT_COPY_BASE_ICON" />
             </button>
-            <button @click="scriptsStore.copyLineAttribute('link')">
-                <span> Copy Permalink </span> <FontAwesomeIcon :icon="scriptsStore.copyCodePermalinkIcon" />
+            <button @click="scriptsStore.copyLineAttribute('link')" v-action-cursor="(copyingLink ? lineOptions.copyStatus : 0)">
+                <span> Copy Permalink </span>
+                <FontAwesomeActionIcon v-if="copyingLink" :baseIcon="SCRIPT_PERMALINK_COPY_BASE_ICON" :status="lineOptions.copyStatus" />
+                <FontAwesomeIcon v-else :icon="SCRIPT_PERMALINK_COPY_BASE_ICON" />
             </button>
             <button class="share" @click="openSharePopupForPermalink()">
                 <span> Share Permalink </span> <FontAwesomeIcon icon="fa-share-from-square" />
@@ -39,17 +43,20 @@ const webMenuButton = useTemplateRef('options-open-web-menu-btn');
 const hoverOnCloseButton = useElementHover(closeButton);
 const hoverOnWebMenuButton = useElementHover(webMenuButton);
 
+const viewableLineOptionsNum = ref(1);
+const animateCloseButton = ref(false);
+const animateWebMenuButton = ref(false);
+
 /** This is the teleport query that should be used by the Vue.js Teleport Component. */
 const teleportQuery = computed(() => { return ("#L" + String(viewableLineOptionsNum.value) + " .mohit-scriptPage-code-lineNum"); });
 
 /** @type {AbortController} The abort controller for the event listeners here. */
 var lineOptionsAbortController = null;
 const lineOptionsNum = computed(() => { return lineOptions.value.num; });
-const showLineOptions = computed(() => { return (lineOptionsNum.value > 0); });
+const showLineOptions = computed(() => { return scriptsStore.checkLineNumber(lineOptionsNum.value); });
 
-const viewableLineOptionsNum = ref(1);
-const animateCloseButton = ref(false);
-const animateWebMenuButton = ref(false);
+const copyingText = computed(() => { return (lineOptions.value.lastCopied === "text"); });
+const copyingLink = computed(() => { return (lineOptions.value.lastCopied === "link"); });
 
 watch(hoverOnCloseButton, (newValue) => { animateCloseButton.value = newValue; });
 watch(hoverOnWebMenuButton, (newValue) => { animateWebMenuButton.value = newValue; });

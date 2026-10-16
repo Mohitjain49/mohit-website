@@ -34,6 +34,8 @@
 </template>
 
 <script setup>
+const PAGE_NUMBER_REGEX = /^[0-9]*$/;
+
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
@@ -107,15 +109,19 @@ function navigatePage(direction = "up") {
     }
 }
 
-/** This function runs when the widget page number changes. */
-function onWidgetPageNumberChange() {
+/**
+ * This function runs when the widget page number changes.
+ * @param {Boolean} strict If true, the number must be no more than the max number of pages in the document. 
+ */
+function onWidgetPageNumberChange(strict = false) {
     if(widgetPageNumber.value === "") { return; }
     const editedNumber = Number(widgetPageNumber.value);
+    const maxNum = (strict ? documentStore.docLoaded.totalPages : 999);
 
-    if(isNaN(editedNumber) || editedNumber > 999) {
+    if(!PAGE_NUMBER_REGEX.test(widgetPageNumber.value) || isNaN(editedNumber) || editedNumber > maxNum) {
         resetWidgetPageNumber();
     } else {
-        widgetPageNumber.value = String(Math.max(1, (Math.min(999, editedNumber.toFixed(0)))));
+        widgetPageNumber.value = String(Math.max(1, (Math.min(maxNum, editedNumber.toFixed(0)))));
     }
 }
 
@@ -142,12 +148,12 @@ function onPageNumberKeydown(event) {
         }
     } else if(key === "arrowup" || key === "w") {
         event.preventDefault();
-        widgetPageNumber.value++;
-        onWidgetPageNumberChange();
+        if(widgetPageNumber.value < documentStore.docLoaded.totalPages) { widgetPageNumber.value++; }
+        onWidgetPageNumberChange(false);
     } else if(key === "arrowdown" || key === "s") {
         event.preventDefault();
-        widgetPageNumber.value--;
-        onWidgetPageNumberChange();
+        if(widgetPageNumber.value > 1) { widgetPageNumber.value--; }
+        onWidgetPageNumberChange(false);
     }
 }
 </script>

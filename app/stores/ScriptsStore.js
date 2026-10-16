@@ -9,6 +9,7 @@ import prettyBytes from "pretty-bytes";
 export const SCRIPT_DOWNLOAD_BASE_ICON = "fa-file-download";
 export const SCRIPT_SAVE_BASE_ICON = "fa-floppy-disk";
 export const SCRIPT_COPY_BASE_ICON = "fa-copy";
+export const SCRIPT_PERMALINK_COPY_BASE_ICON = "fa-clone";
 
 const SCRIPT_DOWNLOAD_ACTION_TITLES = ["Download Code Script", "Downloading Code Script...", "Code Script Downloaded!", "Error While Downloading Code Script."];
 const SCRIPT_SAVE_ACTION_TITLES = ["Save Code Script", "Saving Code Script...", "Code Script Saved!", "Error While Saving Code Script.", "Save Timed Out.", "Save Canceled."];
@@ -30,6 +31,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** @type {AbortController} This abort controller manages the event listeners for a script page. */
     var scriptAbortController = null;
+    var codeLineCopyTimeout = null;
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
@@ -43,7 +45,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const maxLinesInScript = ref(Number.MAX_SAFE_INTEGER);
 
     /** This manages the status of the line options menu. */
-    const lineOptions = ref({ num: -1, oldNum: -1, timeout: null, lastCopied: "", extraClass: "below-num" });
+    const lineOptions = ref({ num: -1, oldNum: -1, timeout: null, copyStatus: 0, lastCopied: "", extraClass: "below-num" });
 
     const scriptDownloadStatus = ref(0);
     const scriptSaveStatus = ref(0);
@@ -402,21 +404,32 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /**
      * This function lets the user copy an attribute of a specific line.
-     * @param {String} attribute The attribute to copy.
+     * @param {"text" | "link"} attribute The attribute to copy.
      */
-    function copyLineAttribute(attribute = "text") {
-        const element = getLineElement(lineOptions.value.num);
-        if(element == null) { return; }
-
-        navigator.clipboard.writeText(element.getAttribute("mohit-code-as-" + attribute)).then(() => {
+    async function copyLineAttribute(attribute = "text") {
+        if(lineOptions.value.copyStatus == 1) { return; }
+        if(codeLineCopyTimeout != null) { clearTimeout(codeLineCopyTimeout); }
+        codeLineCopyTimeout = null;
+        
+        try {
+            if(attribute !== "text" && attribute !== "link") { throw new Error("Invalid Attribute"); }
             lineOptions.value.lastCopied = attribute;
-            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
-            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
-        }).catch(() => {
-            lineOptions.value.lastCopied = "error";
-            if(lineOptions.value.timeout != null) { clearTimeout(lineOptions.value.timeout); }
-            lineOptions.value.timeout = setTimeout(() => { lineOptions.value.timeout = null; }, 3000);
-        });
+            lineOptions.value.copyStatus = 1;
+
+            const element = getLineElement(lineOptions.value.num);
+            if(element == null) { throw new Error("Element Not Found"); }
+
+            await navigator.clipboard.writeText(element.getAttribute("mohit-code-as-" + attribute));
+            lineOptions.value.copyStatus = 2;
+        } catch(e) {
+            lineOptions.value.copyStatus = 3;
+        } finally {
+            if(codeLineCopyTimeout != null) { clearTimeout(codeLineCopyTimeout); }
+            codeLineCopyTimeout = setTimeout(() => {
+                lineOptions.value.copyStatus = 0;
+                codeLineCopyTimeout = null;
+            }, 3000);
+        }
     }
 
     /**
