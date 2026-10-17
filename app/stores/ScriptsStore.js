@@ -525,7 +525,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** Based on the current status of the "wrapCode" boolean, this function sets the styles for wrapping the code text. */
     function setWrapCodeStyles() {
         const preElement = document.getElementById(SCRIPT_HTML_ID);
-        if(preElement != null) {
+        if(Boolean(preElement)) {
             preElement.style.textWrap = (wrapCode.value ? "wrap" : "nowrap");
             preElement.style.overflowWrap = (wrapCode.value ? "break-word" : "normal");
         }

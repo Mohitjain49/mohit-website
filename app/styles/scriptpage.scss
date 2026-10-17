@@ -1,5 +1,13 @@
 @use "@/styles/_dynamicrules.scss" as *;
 
+#script-page {
+    background: transparent;
+}
+.code-file-inHTML {
+    scrollbar-width: auto !important;
+    scrollbar-color: white transparent;
+}
+
 .mohit-main-script {
     padding: 10px 20px;
     margin: 30px auto 20px auto;
@@ -18,11 +26,6 @@
     max-width: none;
     min-height: 0px;
     margin: 10px;
-}
-
-.code-file-inHTML {
-    scrollbar-width: auto !important;
-    scrollbar-color: white transparent;
 }
 
 #mohit-scriptPage-code {

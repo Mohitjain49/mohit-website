@@ -67,7 +67,7 @@ onMountedAdvanced(() => {
     lineOptionsAbortController = new AbortController();
     const signal = lineOptionsAbortController.signal;
 
-    if('onpointerdown' in window){
+    if('onpointerdown' in window) {
         window.addEventListener("pointerdown", (event) => { checkComponentStayVisible(event); }, { signal });
     } else {
         window.addEventListener("mousedown", (event) => { checkComponentStayVisible(event); }, { signal });

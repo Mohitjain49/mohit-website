@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<main id="script-page" class="personal-web-body transparent">
+<main id="script-page" class="personal-web-body">
     <div class="mohit-main-script" id="mohit-main-script">
         <ScriptTopBar />
         <div ref="script-html" class="code-file-inHTML" v-html="html"></div>
