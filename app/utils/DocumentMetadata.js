@@ -84,8 +84,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
             return true;
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
-            metadataReceived.value = false;
-            parsingPdf.value = false;
+            setDefaultValues();
             return false;
         }
     }
@@ -116,7 +115,9 @@ export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
         fileSize.value = "";
         fileSizeBinary.value = "";
         fileSizeInBytes.value = 0;
+
         metadataReceived.value = false;
+        parsingPdf.value = false;
     }
 
     /**

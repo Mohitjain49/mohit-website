@@ -1,78 +1,68 @@
 <template>
 <!-- <WebCover v-if="(documentMetadataMenuOpen && fullScreenStore.fullScreenSet)" /> -->
-<Transition :name="webData.websiteMenuTransition">
+<Transition :name="websiteMenuTransition">
     <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu" v-web-menu>
         <MenuTop :show-doc-options-btn="true" />
 
-        <template v-if="!pdfMetadata.parsingPdf.value && pdfMetadata.metadataReceived.value">
-            <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
-                @click="setFocusedMetadata(true, field.header, field.content.value)"
-                :title="('Show ' + field.header + ' Options')">
+        <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
+            @click="setFocusedMetadata(true, field.header, field.content.value)"
+            :title="('Show ' + field.header + ' Options')">
 
-                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-                <span class="content" v-html="field.content.value"></span>
-            </button>
-            <div class="mohit-navMenu-opt-break"></div>
+            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+            <span class="content" v-html="field.content.value"></span>
+        </button>
+        <div class="mohit-navMenu-opt-break"></div>
 
-            <button v-for="field in METADATA_FIELDS_2" class="mohit-navMenu-info clickable"
-                @click="setFocusedMetadata(true, field.header, field.content.value)"
-                :title="('Show ' + field.header + ' Options')">
+        <button v-for="field in METADATA_FIELDS_2" class="mohit-navMenu-info clickable"
+            @click="setFocusedMetadata(true, field.header, field.content.value)"
+            :title="('Show ' + field.header + ' Options')">
 
-                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-                <span class="content" v-html="field.content.value"></span>
-            </button>
-            <div class="mohit-navMenu-opt-break"></div>
+            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+            <span class="content" v-html="field.content.value"></span>
+        </button>
+        <div class="mohit-navMenu-opt-break"></div>
 
-            <button v-for="field in METADATA_FIELDS_3" class="mohit-navMenu-info clickable"
-                @click="setFocusedMetadata(true, field.header, field.content.value)"
-                :title="('Show ' + field.header + ' Options')">
+        <button v-for="field in METADATA_FIELDS_3" class="mohit-navMenu-info clickable"
+            @click="setFocusedMetadata(true, field.header, field.content.value)"
+            :title="('Show ' + field.header + ' Options')">
 
-                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-                <span class="content" v-html="field.content.value"></span>
-            </button>
-            <div v-if="focusedMetadata.show" class="mohit-navMenu-opt-break"></div>
+            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+            <span class="content" v-html="field.content.value"></span>
+        </button>
+        <div v-if="focusedMetadata.show" class="mohit-navMenu-opt-break"></div>
 
-            <div v-if="focusedMetadata.show" class="metadata-docMenu-focused">
-                <div class="top-section">
-                    <h3> {{ focusedMetadata.header }} </h3>
-                    <div class="metadata-docMenu-focused-options">
-                        <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)"
-                            v-action-cursor="metadataCopyState" v-pulse-loop>
+        <div v-if="focusedMetadata.show" class="metadata-docMenu-focused">
+            <div class="top-section">
+                <h3> {{ focusedMetadata.header }} </h3>
+                <div class="metadata-docMenu-focused-options">
+                    <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)"
+                        v-action-cursor="metadataCopyState" v-pulse-loop>
 
-                            <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="metadataCopyState" />
-                        </button>
-                        <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" v-pulse-loop>
-                            <FontAwesomeIcon icon="fa-xmark" />
-                        </button>
-                    </div>
+                        <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="metadataCopyState" />
+                    </button>
+                    <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" v-pulse-loop>
+                        <FontAwesomeIcon icon="fa-xmark" />
+                    </button>
                 </div>
-                <p :style="{ 'font-size': focusedMetadata.fontSize }"> {{ focusedMetadata.content }} </p>
             </div>
-        </template>
-
-        <div class="metadata-docMenu-loadingBar" v-if="pdfMetadata.parsingPdf.value">
-            <div class="inner" :style="('width:' + (metadataLoadingCount * 20) + '%')"></div>
+            <p :style="{ 'font-size': focusedMetadata.fontSize }"> {{ focusedMetadata.content }} </p>
         </div>
     </div>
 </Transition>
 </template>
 
 <script setup>
-const webData = useWebsiteDataStore();
-const { documentMetadataMenuOpen } = storeToRefs(webData);
-
-const props = defineProps({ objectUrl: { type: String, default: "" }});
-const computedUrl = computed(() => { return props.objectUrl; });
-
-const pdfMetadata = usePdfMetadata(computedUrl);
-const loadingInterval = useIntervalFn(() => { incrementLoadingCount(); }, 400, { immediate: true });
+const { documentMetadataMenuOpen, websiteMenuTransition } = storeToRefs(useWebsiteDataStore());
+const documentStore = useDocumentStore();
 
 // This watcher closes the bottom section when the user closes or opens this website menu.
 watch(documentMetadataMenuOpen, () => { setFocusedMetadata(false, "", ""); });
 
+/** This is the PDF Metadata that is shown for this menu. */
+const pdfMetadata = documentStore.getCurrentDocumentMetadata();
+
 /** This manages the state of this menu's bottom section. */
 const focusedMetadata = ref({ show: false, header: "", content: "", fontSize: "10px" });
-const metadataLoadingCount = ref(0);
 const metadataCopyState = shallowRef(0);
 var metadataCopyTimeout = null;
 
@@ -123,17 +113,6 @@ async function copyMetadataField() {
             metadataCopyState.value = 0;
             metadataCopyTimeout = null;
         }, 2000); 
-    }
-}
-
-/** This function increments the loading count. */
-function incrementLoadingCount() {
-    if(!pdfMetadata.parsingPdf.value) {
-        loadingInterval.pause()
-    } else if(metadataLoadingCount.value > 6) {
-        metadataLoadingCount.value = 0;
-    } else {
-        metadataLoadingCount.value++;
     }
 }
 

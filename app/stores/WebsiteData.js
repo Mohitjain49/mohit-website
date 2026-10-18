@@ -243,10 +243,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 toggleNavMenu();
                 triggerClickSound();
             } else if(key === "w") {
-                router.push("/wakelock/");
-                triggerClickSound();
-            } else if(key === "i") {
-                router.push("/install/");
+                toggleWakeLock();
                 triggerClickSound();
             }
         } else if(key === "Escape") {

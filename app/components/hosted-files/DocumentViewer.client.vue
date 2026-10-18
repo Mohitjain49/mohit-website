@@ -33,7 +33,7 @@
     <DocumentPageContextMenu />
 
     <DocumentMenu />
-    <DocMetadataMenu :objectUrl="url" />
+    <DocMetadataMenu v-if="documentStore.currentDocumentMetadataParsed" />
     <slot></slot>
 </main>
 </template>
@@ -102,7 +102,6 @@ const showFsWebCover = computed(() => {
     return (webData.showSharePopupImmediate || (webData.menuOpen >= DOCUMENT_MENU && webData.menuOpen < (DOCUMENT_MENU + 1)));
 });
 
-// These manage the PDF Viewer when it is mounted an unmounted.
 onMounted(async() => {
     try {
         if(renderAborted()) { return; }
@@ -110,8 +109,14 @@ onMounted(async() => {
         window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
 
         await renderPDF();
+        if(renderAborted()) { return; }
+
         window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
         window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(false); }, { signal });
+
+        // This sets a flag indicating that the custom scroll event listener is active for the Hosted Document Viewer.
+        documentStore.documentScrollEventListenerEnabled = true;
+        signal.addEventListener("abort", () => { documentStore.documentScrollEventListenerEnabled = false; }, { once: true });
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }

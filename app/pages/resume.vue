@@ -1,3 +1,7 @@
+<style lang="scss">
+@use "~/styles/documentpage";
+</style>
+
 <template>
 <DocumentViewer v-if="(resumeStore.blobCreated == 2)"
     :url="resumeStore.objectUrl"

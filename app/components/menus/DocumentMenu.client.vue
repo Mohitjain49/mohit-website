@@ -106,7 +106,7 @@
                     <span> Open Document In New Tab </span>
                 </a>
             </div>
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
+            <div v-if="documentStore.currentDocumentMetadataParsed" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
                 <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" v-pulse-loop>
                     <font-awesome-icon icon="fa-database" />
                     <span> See Document Properties </span>

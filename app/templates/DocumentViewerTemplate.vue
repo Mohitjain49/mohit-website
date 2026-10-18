@@ -1,3 +1,7 @@
+<style lang="scss">
+@use "~/styles/documentpage";
+</style>
+
 <template>
 <DocumentViewer v-if="documentStore.hostedDocuments[index].blobCreated"
     :url="documentStore.hostedDocuments[index].objectUrl"

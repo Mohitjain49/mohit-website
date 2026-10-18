@@ -1,5 +1,5 @@
 import Mohit_Jain_Resume from "/Mohit_Jain_Resume.pdf";
-import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper from "/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper.pdf"
+import Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper from "/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper.pdf";
 import Create_Github_Repo from "/Create_Github_Repo.pdf";
 
 import workerSrcUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
@@ -82,8 +82,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
     const browserPdfViewerPresent = ref(false);
+    const onFirefox = ref(false);
     const iframeSupported = ref(false);
     const confirmedImageTypes = ref(["image/png"]);
+    const documentScrollEventListenerEnabled = ref(false);
 
     const customPdfWidth = ref(DEFAULT_PDF_MAX_WIDTH);
     const customPdfMaxWidth = ref(DEFAULT_PDF_MAX_WIDTH);
@@ -113,6 +115,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
     const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
     const currentDocumentFileSize = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].fileSize.value : ""); });
+    const currentDocumentMetadataParsed = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].metadataParsed.value : false); });
     const currentDocumentPrintHtmlCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].printHtmlCreated.value : false); });
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
 
@@ -261,6 +264,10 @@ export const useDocumentStore = defineStore("document-store", () => {
                 } else {
                     downloadDoc();
                 }
+            } else if(keyLetter === "i" && !event.shiftKey && currentDocumentMetadataParsed.value && !onFirefox.value) {
+                event.preventDefault();
+                webData.setMenuOpen(DOCUMENT_METADATA_MENU, true);
+                triggerClickSound();
             }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
@@ -557,9 +564,14 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         // This sets whether the user is able to print a document on the website using the native PDF Viewer.
         const userAgentExists = ("userAgent" in navigator);
-        const notOnDesktop = (userAgentExists && Bowser.parse(navigator.userAgent).platform.type !== "desktop");
+        const parsedUserAgent = (userAgentExists ? Bowser.parse(navigator.userAgent) : null)
+
+        const notOnDesktop = (userAgentExists ? parsedUserAgent.platform.type !== "desktop" : true);
         browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && userAgentExists && !notOnDesktop);
         iframeSupported.value = Boolean(document.createElement("iframe"));
+
+        // This records if the user is on a firefox browser or not.
+        onFirefox.value = ((Boolean(parsedUserAgent.browser.name) && userAgentExists) ? (parsedUserAgent.browser.name === "Firefox") : false);
 
         // This adds the PDF.js Viewer Styles to the DOM to ensure the rendered documents are visually appealing.
         const pdfViewerStyleBlock = document.createElement("style");
@@ -584,14 +596,15 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function mounts a page that hosts a document. */
     async function mountDocumentPage() {
+        if(!onDocumentRoute.value) { return; }
         if(onResumeRoute.value) {
             await resumeStore.initBlob({ addQrcode: false, removeLinks: false, updateQuery: false });
         } else if(!hostedDocuments[currentDocumentRoute.value].blobCreated.value) {
             await hostedDocuments[currentDocumentRoute.value].initBlob();
         }
 
-        const scaleFactor = hostedDocuments[currentDocumentRoute.value].metadata.pageHeightToWidthRatio.value;
-        mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
+        const scaleFactor = getCurrentDocumentMetadata()?.pageHeightToWidthRatio.value;
+        if(Boolean(scaleFactor)) { mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor); }
     }
 
     /** This function unmounts a page that hosts a document. */
@@ -654,6 +667,11 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function returns the PDF.js Viewer Styles if they need it. */
     function getPdfjsStylesheet() { return pdfViewerStyles; }
+
+    /** This function returns the metadata object of the current hosted document. */
+    function getCurrentDocumentMetadata() {
+        return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].metadata : null);
+    }
 
     /**
      * ----------------------------------------------------------------------------------------------
@@ -768,16 +786,17 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** This function returns if a document is NOT loaded on a document page. */
     function checkDocNotLoaded() { return (onDocumentRoute.value && !docLoaded.value.status); }
 
-    return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber,
+    return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber, documentScrollEventListenerEnabled,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
-        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle,
+        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, currentDocumentMetadataParsed,
+        downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle, printCursor, customPrintCursor,
         documentDownloadStatus, documentSaveStatus, documentShareStatus, documentPrintStatus, documentCustomPrintStatus,
-        uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, printCursor, customPrintCursor,
-        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
+        uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, customPdfWidth, customPdfHeight,
+        customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
-        checkPdfjsWorker, getPdfjsStylesheet, checkDocNotLoaded
+        checkPdfjsWorker, getPdfjsStylesheet, getCurrentDocumentMetadata, checkDocNotLoaded
     }
 });
 
@@ -804,6 +823,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
     const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
     const printHtmlCreated = computed(() => { return (printHtml.value != null); });
+    const metadataParsed = computed(() => { return (metadata.metadataReceived.value); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
@@ -870,8 +890,8 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         return (path === pathname || (path + "/") === pathname);
     }
 
-    return { path, onRoute, file, fileSize, name, suffix, link, originLink,
-        blob, blobCreated, objectUrl, printHtml, printHtmlCreated, metadata,
+    return { path, onRoute, file, fileSize, name, suffix, link, originLink, blob,
+        blobCreated, objectUrl, printHtml, printHtmlCreated, metadata, metadataParsed,
         initBlob, setNewBlob, deleteBlob, checkPath, changeLink, setPrintHtml
     }
 }
