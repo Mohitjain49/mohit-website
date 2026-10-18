@@ -224,19 +224,25 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {KeyboardEvent} event The event given by the listener.
      */
     function onKeyDown(event) {
+        audioStore.onKeydownForAudio(event);
         if(!event || !event.key || event.repeat) { return; }
-        const key = event.key;
+        const key = event.key.toLocaleLowerCase();
 
         if(event.ctrlKey && event.altKey) {
-            if(key === "w" || key === "W") {
+            if(key === "w") {
                 toggleWakeLock();
                 triggerClickSound();
-            } else if(key === "q" || key === "Q") {
+            } else if(key === "q") {
                 setQRCodePopup("toggle");
                 triggerClickSound();
             }
+        } else if(event.ctrlKey) {
+            if(key === "m") {
+                toggleNavMenu();
+                triggerClickSound();
+            }
         } else if(event.altKey) {
-            if(key === "q" || key === "Q") {
+            if(key === "q") {
                 setQRCodePopup("toggle");
                 triggerClickSound();
             } else if(key === "m") {
@@ -246,7 +252,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 toggleWakeLock();
                 triggerClickSound();
             }
-        } else if(key === "Escape") {
+        } else if(key === "escape") {
             triggerClickSound();
             event.preventDefault();
 

@@ -248,14 +248,20 @@ export const useDocumentStore = defineStore("document-store", () => {
     function onHostedDocumentPageKeydown(event = undefined) {
         try {
             if(!event || webData.showSharePopup || !currentDocumentBlobCreated.value) { return; }
-            if(!event.ctrlKey || event.repeat) { return; }
-            const keyLetter = event.key.toLowerCase();
+            if(!event.key || event.repeat) { return; }
 
-            if(keyLetter === "p") {
+            const keyLetter = event.key.toLowerCase();
+            const specialKeyForMetadata = ((event.ctrlKey || event.altKey) && !event.shiftKey);
+
+            if(specialKeyForMetadata && keyLetter === "i" && currentDocumentMetadataParsed.value && !onFirefox.value) {
+                event.preventDefault();
+                webData.setMenuOpen(DOCUMENT_METADATA_MENU, true);
+                triggerClickSound();
+            } else if(keyLetter === "p" && event.ctrlKey) {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
                 printDoc(!event.altKey && !event.shiftKey);
-            } else if(keyLetter === "s") {
+            } else if(keyLetter === "s" && event.ctrlKey) {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
 
@@ -264,10 +270,6 @@ export const useDocumentStore = defineStore("document-store", () => {
                 } else {
                     downloadDoc();
                 }
-            } else if(keyLetter === "i" && !event.shiftKey && currentDocumentMetadataParsed.value && !onFirefox.value) {
-                event.preventDefault();
-                webData.setMenuOpen(DOCUMENT_METADATA_MENU, true);
-                triggerClickSound();
             }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }

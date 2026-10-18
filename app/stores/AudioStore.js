@@ -4,6 +4,7 @@ import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
     const CLICK_VOLUME_MUTED_KEY = "mohit-audio-clickVolume-muted";
+    const webData = useWebsiteDataStore();
 
     /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect. */
     const audioClickClip = ref(null);
@@ -94,6 +95,23 @@ export const useAudioStore = defineStore("audio-store", () => {
     function setAudioMuted(status = "toggle") {
         audioMuted.value = ((status === "toggle") ? !audioMuted.value : status);
         localStorage.setItem(CLICK_VOLUME_MUTED_KEY, JSON.stringify(audioMuted.value));
+    }
+
+    /**
+     * This function runs whenever the user hits a key.
+     * @param {KeyboardEvent} event The event given by the listener.
+     */
+    function onKeydownForAudio(event) {
+        if(!event || !event.key || !event.ctrlKey || !event.shiftKey) { return; }
+        const key = event.key.toLocaleLowerCase();
+        
+        if(key === ">") {
+            if(!webData.navMenuOpen) { webData.setMenuOpen(NAVIGATION_MENU, false); }
+            addToVolume(1);
+        } else if(key === "<") {
+            if(!webData.navMenuOpen) { webData.setMenuOpen(NAVIGATION_MENU, false); }
+            addToVolume(-1);
+        }
     }
 
     /**
@@ -202,7 +220,7 @@ export const useAudioStore = defineStore("audio-store", () => {
         ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, sttUtility, sttUtilityIcon, sttUtilityTitle,
         manageSTT, changeSTTUpdateFunc, checkTTSAvailable, manageTTS, cancelTTS, startTTS,
         setupClickAudio, changeAudioVolume, confirmClickSound, addToVolume, setAudioMuted,
-        playClickSound, playScanSound
+        playClickSound, playScanSound, onKeydownForAudio
     }
 });
 
