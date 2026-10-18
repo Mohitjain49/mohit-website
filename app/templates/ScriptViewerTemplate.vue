@@ -13,6 +13,7 @@
     <template v-if="fullScreenStore.fullScreenSet">
         <QrcodeTool v-if="(webData.showSharePopup)" />
         <FullScreenScrollBar :fs-element-id="'script-page'" />
+        <VolumeWidget />
     </template>
 
     <template v-if="scriptsStore.scriptBlobCreated">

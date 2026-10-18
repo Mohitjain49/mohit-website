@@ -4,7 +4,9 @@ import scan_sound from "@/assets/sounds/scan_sound_effect.mp3";
 export const useAudioStore = defineStore("audio-store", () => {
     const CLICK_VOLUME_KEY = "mohit-audio-clickVolume";
     const CLICK_VOLUME_MUTED_KEY = "mohit-audio-clickVolume-muted";
+
     const webData = useWebsiteDataStore();
+    var volumeWidgetTimeout = null;
 
     /** @type {Ref<HTMLAudioElement>} This is an audio reference variable for the click sound effect. */
     const audioClickClip = ref(null);
@@ -14,14 +16,15 @@ export const useAudioStore = defineStore("audio-store", () => {
 
     const volumeInput = ref("50");
     const audioMuted = ref(false);
+    const showVolumeWidget = ref(false);
+
+    const volumeInputAsNum = computed(() => { return parseInt(volumeInput.value); });
+    const volumeInputTitle = computed(() => { return (audioMuted.value ? 'Unmute Volume' : "Mute Volume"); });
 
     const volumeInputIcon = computed(() => {
         const volumeInt = parseInt(volumeInput.value);
         if(audioMuted.value) { return "fa-volume-xmark"; }
         return ((volumeInt == 0) ? 'fa-volume-off' : ((volumeInt < 50) ? "fa-volume-low" : "fa-volume-high"));
-    });
-    const volumeInputTitle = computed(() => {
-        return (audioMuted.value ? 'Unmute Volume' : "Mute Volume");
     });
 
     /** @type {SpeechSynthesisUtterance | null} This is the utterance for the speech synthesis. */
@@ -106,11 +109,26 @@ export const useAudioStore = defineStore("audio-store", () => {
         const key = event.key.toLocaleLowerCase();
         
         if(key === ">") {
-            if(!webData.navMenuOpen) { webData.setMenuOpen(NAVIGATION_MENU, false); }
+            setVolumeWidget(!webData.navMenuOpen);
             addToVolume(1);
         } else if(key === "<") {
-            if(!webData.navMenuOpen) { webData.setMenuOpen(NAVIGATION_MENU, false); }
+            setVolumeWidget(!webData.navMenuOpen);
             addToVolume(-1);
+        }
+    }
+
+    /**
+     * This function sets the status of the volume widget. After a moment of inactivity, the widget will close itself.
+     * @param {Boolean | "timeout"} newStatus The new status for the widget. Pass in "recursive" if the timeout calls this function.
+     */
+    function setVolumeWidget(newStatus = true) {
+        if(volumeWidgetTimeout != null && newStatus !== "timeout") { clearTimeout(volumeWidgetTimeout); }
+        if(newStatus && newStatus !== "timeout") {
+            showVolumeWidget.value = true;
+            volumeWidgetTimeout = setTimeout(() => { setVolumeWidget("timeout"); }, 1000);
+        } else {
+            showVolumeWidget.value = false;
+            volumeWidgetTimeout = null;
         }
     }
 
@@ -216,11 +234,10 @@ export const useAudioStore = defineStore("audio-store", () => {
         sttUpdateFunc = updateFunc;
     }
 
-    return { audioClickClip, audioScanClip, audioMuted, volumeInput, volumeInputIcon, volumeInputTitle,
-        ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, sttUtility, sttUtilityIcon, sttUtilityTitle,
-        manageSTT, changeSTTUpdateFunc, checkTTSAvailable, manageTTS, cancelTTS, startTTS,
-        setupClickAudio, changeAudioVolume, confirmClickSound, addToVolume, setAudioMuted,
-        playClickSound, playScanSound, onKeydownForAudio
+    return { audioClickClip, audioScanClip, audioMuted, showVolumeWidget, volumeInput, volumeInputAsNum,
+        volumeInputIcon, volumeInputTitle, ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, sttUtility, sttUtilityIcon, sttUtilityTitle,
+        manageSTT, changeSTTUpdateFunc, checkTTSAvailable, manageTTS, cancelTTS, startTTS, setupClickAudio,
+        changeAudioVolume, confirmClickSound, addToVolume, setAudioMuted, playClickSound, playScanSound, onKeydownForAudio
     }
 });
 

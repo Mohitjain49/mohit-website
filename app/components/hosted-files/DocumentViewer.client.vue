@@ -24,6 +24,7 @@
     <template v-if="fullScreenSet">
         <FullScreenScrollBar :fs-element-id="'resume-container'" />
         <QrcodeTool v-if="webData.showSharePopup" />
+        <VolumeWidget />
     </template>
 
     <WebCover v-if="showFsWebCover" :zIndex="500" />

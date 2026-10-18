@@ -2,6 +2,7 @@
 <NavigationMain />
 <QrcodeTool v-if="showShare" />
 <UpdateBox />
+<VolumeWidget />
 
 <NuxtPage />
 <VitePwaManifest />
