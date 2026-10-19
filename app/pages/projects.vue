@@ -32,7 +32,7 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
 ));
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use "~/styles/navpage";
 #main-projects-features-btn {
     display: flex;
@@ -40,7 +40,7 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
     align-items: center;
     flex-direction: row;
     gap: 3px;
-    width: 340px;
+    width: min(340px, max(325px, calc(var(--true-100vw-safe) * 0.8125)));;
     margin: 20px auto 0px;
     padding: 10px 0px;
     font-size: 25px;
@@ -54,9 +54,5 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
 }
 #main-projects-features-btn:hover {
     box-shadow: 0px 0px 20px var(--lightning-yellow);
-}
-
-@include dynamic-less-equal-width-rule-scopedBlock(400) {
-    #main-projects-features-btn { width: 325px; }
 }
 </style>

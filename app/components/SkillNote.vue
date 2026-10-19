@@ -68,13 +68,13 @@ const isExternalLink = computed(() => {
 function getFAIconStyle() { return { color: props.color, fontSize: (props.size + "px") }}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .mohit-note-container {
     display: contents !important;
 }
 .mohit-note {
     height: 400px;
-    width: 360px;
+    width: min(360px, max(325px, calc(var(--true-100vw-safe) * 0.7222)));
     border: 3px solid var(--website-light-text);
     border-radius: 20px;
     overflow: hidden;
@@ -134,18 +134,18 @@ function getFAIconStyle() { return { color: props.color, fontSize: (props.size +
 }
 
 .mohit-note-header {
-    font-size: 35px;
+    font-size: min(35px, max(32px, calc(var(--true-100vw-safe) * 0.0711)));
     color: inherit;
     margin-bottom: 12px;
     font-weight: bold;
     font-family: 'Lexend', sans-serif;
+    text-wrap: nowrap;
+    width: 100%;
+    height: fit-content;
+    text-align: left;
 }
 .mohit-note-desc {
     font-size: 16px;
     color: inherit;
-}
-
-@include dynamic-less-equal-width-rule-scopedBlock(450) {
-    .mohit-note { width: 325px; }
 }
 </style>

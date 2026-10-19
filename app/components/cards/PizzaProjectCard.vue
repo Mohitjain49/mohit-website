@@ -39,6 +39,6 @@ import ts_icon from "~/assets/TypeScript_Icon.png";
 onMountedAdvanced(() => { setNavCardAnimation("pizza-nav-newCard"); });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use "~/styles/navcards";
 </style>

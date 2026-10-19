@@ -23,6 +23,6 @@ useHead(getMeta("Mohit Jain | My Experience", "experience/",
 ));
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use "~/styles/navpage";
 </style>

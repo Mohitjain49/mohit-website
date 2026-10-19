@@ -44,6 +44,6 @@ const DEV_STACK = [
 ];
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use "~/styles/navcards";
 </style>

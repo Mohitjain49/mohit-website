@@ -38,6 +38,6 @@ import nuxt_icon from "~/assets/Nuxt_Icon.png";
 onMountedAdvanced(() => { setNavCardAnimation("tictactoe-nav-newCard"); });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use "~/styles/navcards";
 </style>
