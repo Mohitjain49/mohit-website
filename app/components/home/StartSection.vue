@@ -360,7 +360,7 @@ $height-start-scale: 775;
     border: 2px solid;
     border-color: inherit;
     border-radius: 10px;
-    transition: left 0.2s, opacity 0.5s, color 0.2s;
+    transition: opacity 0.5s, color 0.2s !important;
     --filter-drop-shadow: drop-shadow(0 -2px 0 white);
 }
 .start-contactBtn-dropdown::before {

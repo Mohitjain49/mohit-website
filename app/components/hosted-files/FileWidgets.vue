@@ -175,7 +175,7 @@ function onPageNumberKeydown(event) {
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    transition: var(--default-transition), scale 0.2s, opacity 0.25s, bottom 0.25s;
+    transition: var(--default-transition), scale 0.2s, opacity 0.5s, transform 0.5s;
 }
 #minimizeScreen-widget:hover {
     box-shadow: 0px 0px 10px 1px var(--lightning-yellow);
@@ -198,7 +198,7 @@ function onPageNumberKeydown(event) {
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    transition: var(--default-transition), scale 0.2s, opacity 0.5s, bottom 0.5s;
+    transition: var(--default-transition), scale 0.2s, opacity 0.5s, transform 0.5s;
 }
 #download-file-widget:hover {
     box-shadow: 0px 0px 10px 1px var(--website-light-text);
@@ -272,14 +272,14 @@ function onPageNumberKeydown(event) {
 .page-nav-side-button:hover { background-color: rgba(255, 255, 255, 0.25); }
 
 .file-widgets-transition-enter-active, .file-widgets-transition-leave-active {
-    transition: opacity 0.5s, bottom 0.5s !important;
+    transition: opacity 0.5s, transform 0.5s !important;
 }
 .file-widgets-transition-enter-from, .file-widgets-transition-leave-to {
     opacity: 0;
-    bottom: -64px !important;
+    transform: translateY(74px);
 }   
 .file-widgets-transition-enter-to, .file-widgets-transition-leave-from {
     opacity: 1;
-    bottom: 12px !important;
+    transform: translateY(0px);
 }
 </style>

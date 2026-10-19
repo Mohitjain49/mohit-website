@@ -724,15 +724,15 @@
 }
 
 .navMenu-transition_1-enter-active, .navMenu-transition_1-leave-active {
-    transition: opacity 0.5s, top 0.5s !important;
+    transition: opacity 0.5s, transform 0.5s !important;
 }
 .navMenu-transition_1-enter-from, .navMenu-transition_1-leave-to {
     opacity: 0;
-    top: 50px;
+    transform: translateY(-10px);
 }
 .navMenu-transition_1-enter-to, .navMenu-transition_1-leave-from {
     opacity: 1;
-    top: 60px;
+    transform: translateY(0px);
 }
 .navMenu-transition_1-leave-to, .navMenu-transition_1-leave-from {
     z-index: 498 !important;

@@ -32,7 +32,7 @@
                         @click="setAlertBox('')"
                     >
                 </div>
-                <div class="contact-input-tab" style="height: calc(100% - 70px);">
+                <div class="contact-input-tab contact-input-textarea">
                     <div class="contact-input-tab-header-container withOptions">
                         <div class="contact-input-tab-header">
                             <span style="margin-right: 10px;"> Your Message </span>
