@@ -11,7 +11,7 @@
 .nav-newCard {
     cursor: pointer;
     text-decoration: none;
-    width: 330px;
+    width: min(330px, max(315px, calc(var(--true-100vw-safe) * 0.7875)));
     min-width: 290px;
     max-width: 400px;
     height: fit-content;
@@ -272,9 +272,4 @@
 }
 .nav-newCard#pizza-nav-newCard:hover .nav-newCard-desc {
     border-color: #F5F5DC;
-}
-
-
-@include dynamic-less-equal-width-rule-scopedBlock(400) {
-    .nav-newCard { width: 315px; }
 }

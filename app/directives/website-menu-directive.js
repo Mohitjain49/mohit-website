@@ -54,7 +54,7 @@ export default defineNuxtPlugin((nuxtApp) => {
      * This function is triggered when the user enacts a pointer event on a website menu.
      * @param {PointerEvent} event The Pointer Event. 
      */
-    function onMenuPointerEvent(event = new PointerEvent()) {
+    function onMenuPointerEvent(event) {
         if(event.pointerType !== "mouse" || typeof event.clientY !== "number") { return; }
         if(event.type === "pointerdown" && !webMenuTouched.value) {
             webData.bypassBodyClick();
@@ -72,7 +72,7 @@ export default defineNuxtPlugin((nuxtApp) => {
      * This function is triggered when the user enacts a mouse event on a website menu.
      * @param {MouseEvent} event The Pointer Event. 
      */
-    function onMenuMouseEvent(event = new PointerEvent()) {
+    function onMenuMouseEvent(event) {
         if(typeof event.clientY !== "number") { return; }
         if(event.type === "mousedown" && !webMenuTouched.value) {
             webData.bypassBodyClick();
@@ -90,7 +90,7 @@ export default defineNuxtPlugin((nuxtApp) => {
      * This function is triggered when the user enacts a touch event on a website menu.
      * @param {TouchEvent} event The Touch Event. 
      */
-    function onMenuTouchEvent(event = new TouchEvent()) {
+    function onMenuTouchEvent(event) {
         if(event.type === "touchstart" && !webMenuTouched.value) {
             webData.bypassBodyClick();
             if(cancelMenuCloseOnSwipe(event.target, true)) { return; }

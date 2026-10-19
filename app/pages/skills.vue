@@ -160,9 +160,11 @@ useIntersectionObserver(cardRefs, (entry) => {
 useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"));
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use "~/styles/navpage";
+</style>
 
+<style scoped lang="scss">
 #skills-page {
     background: transparent;
     padding-top: 0px;
