@@ -2,7 +2,9 @@
 <Transition name="fade-context-menu-transition">
     <div v-show="showDocumentContextMenu" :style="contextMenuPosition" :id="CONTEXT_MENU_ID" class="mohit-hostedDoc-contextMenu">
         <div class="mohit-hostedDoc-contextMenu-top">
-            <h3> Page <span id="mohit-document-contextMenu-pageNum" v-html="viewablePageNumber"></span> </h3>
+            <h3 v-if="!onResumeRoute"> Page <span id="mohit-document-contextMenu-pageNum" v-html="viewablePageNumber"></span> </h3>
+            <h3 v-if="onResumeRoute"> <span id="mohit-document-contextMenu-pageNum"> My Resume </span> </h3>
+
             <div class="mohit-hostedDoc-contextMenu-topOpts">
                 <button class="web-menu" @click="openDocumentMenu()" ref="options-open-web-menu-btn" title="Open Document Menu">
                     <FontAwesomeIcon icon="fa-file-pdf" :jello="animateWebMenuButton" />
@@ -30,7 +32,7 @@ const router = useRouter();
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
 const documentStore = useDocumentStore();
-const { contextMenuPageNumber } = storeToRefs(documentStore);
+const { contextMenuPageNumber, onResumeRoute } = storeToRefs(documentStore);
 
 const closeButton = useTemplateRef('options-close-btn');
 const webMenuButton = useTemplateRef('options-open-web-menu-btn');
@@ -50,13 +52,6 @@ const animateWebMenuButton = ref(false);
 watch(hoverOnCloseButton, (newValue) => { animateCloseButton.value = newValue; });
 watch(hoverOnWebMenuButton, (newValue) => { animateWebMenuButton.value = newValue; });
 watch(contextMenuPageNumber, () => { onContextMenuPageNumberChange(); });
-
-/** This function is the permalink for a specific page. */
-const pagePermalink = computed(() => {
-    var routePath = router.currentRoute.value.path.substring(1);
-    if(routePath.endsWith("/")) { routePath = routePath.substring(0, routePath.length - 1); }
-    return (PERSONAL_WEBSITE_LINK + routePath + "/#page_" + viewablePageNumber.value);
-})
 
 // This mounts a few event listeners that help close the hosted document context menu if the proper HTML Element is not clicked.
 onMountedAdvanced(() => {
@@ -151,10 +146,10 @@ async function setContextMenuPosition() {
     await nextTick();
     const docContextMenuRect = document.getElementById(CONTEXT_MENU_ID).getBoundingClientRect();
 
-    if((mouseX + docContextMenuRect.width) > (window.innerWidth - 20)) {
+    if((mouseX + docContextMenuRect.width) > (styleStore.viewportWidth - (20 / styleStore.cssToWindowWidthRatio))) {
         newPosition.left = (String((mouseX - docContextMenuRect.width) * styleStore.cssToWindowWidthRatio) + "px");
     }
-    if((mouseY + docContextMenuRect.height) > (window.innerHeight - 20)) {
+    if((mouseY + docContextMenuRect.height) > (styleStore.viewportHeight - (20 / styleStore.cssToWindowWidthRatio))) {
         newPosition.top = (String((mouseY - docContextMenuRect.height) * styleStore.cssToWindowHeightRatio) + "px");
     }
 
@@ -165,7 +160,7 @@ async function setContextMenuPosition() {
 /** This function opens the share popup for the page link. */
 function sharePageLink() {
     closeDocumentContextMenu();
-    webData.setQRCodePopup(pagePermalink.value);
+    webData.setQRCodePopup(onResumeRoute.value ? "filter" : getPageLink());
 }
 
 /** This function lets the user copy the Page Link. */
@@ -174,12 +169,23 @@ async function copyPageLink() {
     copyStatus.value = 1;
 
     try {
-        await navigator.clipboard.writeText(pagePermalink.value);
+        await navigator.clipboard.writeText(getPageLink());
         copyStatus.value = 2;
     } catch(e) {
         copyStatus.value = 3;
     } finally {
         setTimeout(() => { copyStatus.value = 0; }, 3000);
+    }
+}
+
+/** This function returns the permalink for a specific page. */
+function getPageLink() {
+    if(onResumeRoute.value) {
+        return (PERSONAL_WEBSITE_LINK + "resume/");
+    } else {
+        var routePath = router.currentRoute.value.path.substring(1);
+        if(routePath.endsWith("/")) { routePath = routePath.substring(0, routePath.length - 1); }
+        return (PERSONAL_WEBSITE_LINK + routePath + "/#page_" + viewablePageNumber.value);
     }
 }
 </script>

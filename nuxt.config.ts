@@ -168,7 +168,8 @@ export default defineNuxtConfig({
                 "shiki/dist/langs/c.mjs",
                 "shiki/dist/core.mjs",
                 "shiki/dist/engine-oniguruma.mjs",
-                "shiki/dist/themes/material-theme-ocean.mjs"
+                "shiki/dist/themes/material-theme-ocean.mjs",
+                "validator/es/lib/isEmail"
             ]
         },
         css: {

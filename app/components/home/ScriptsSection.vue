@@ -104,7 +104,7 @@ useIntersectionObserver(tabRefs, (entry) => {
     position: absolute;
     top: 0px;
     left: 0px;
-    scroll-margin-top: apply-zoom-factor(90);
+    scroll-margin-top: 90px;
     height: 0px;
     width: 100%;
 }

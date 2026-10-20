@@ -142,10 +142,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /**
      * This function scrolls to the section the visitor requested using Lenis.
      * @param {String} id The element ID of the section. Make sure it doesn't start with a "#" character.
-     * @param {Number} offset The offset from where the element exists. (Works like "scroll-padding-top").
-     * @param {Number} delay How much time to delay the scroll before starting it.
      */
-    async function scrollToId(id = "start", offset = 0, delay = 0) {
+    async function scrollToId(id = "start") {
         return new Promise((resolve, reject) => {
             if(!verifyAutoscroll()) { reject("Autoscroll Unavailable."); }
             const target = document.getElementById(id);
@@ -167,14 +165,21 @@ export const useScrollStore = defineStore("scroll-store", () => {
             scrollProgress.value.duration = finalDuration;
             scrollStartTime = dayjs(new Date());
 
-            if(parseFloat(window.getComputedStyle(target).getPropertyValue('scroll-margin-top')) != 0) { offset = 0; }
-            sleep(delay + finalDuration + 1000).then(() => { resolve("timed out."); });
+            var offset = 0;
+            const addedScrollMargin = parseFloat(window.getComputedStyle(target).getPropertyValue('scroll-margin-top'));
 
-            sleep(delay).then(() => { lenis.scrollTo(target, {
-                offset, duration: finalDuration, lock: true,
-                onStart: () => { setScrollInterval(0); },
-                onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
-            }); });
+            if(!isNaN(addedScrollMargin) && addedScrollMargin != 0) {
+                offset = (addedScrollMargin - (addedScrollMargin / cssToWindowHeightRatio.value));
+            }
+
+            sleep(finalDuration + 1005).then(() => { resolve("timed out."); });
+            sleep(50).then(() => {
+                lenis.scrollTo(target, {
+                    offset, duration: finalDuration, lock: true,
+                    onStart: () => { setScrollInterval(0); },
+                    onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); },
+                });
+            })
         });
     }
 
@@ -323,11 +328,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
 /**
  * This scrolls to the section the visitor requested.
  * @param {String} id The element ID of the section.
- * @param {Number} offset The offset from where the element exists. (Works like "scroll-padding-top").
- * @param {Number} delay How much time to delay the scroll before starting it.
  */
-export async function goToPageSection(id = "start", offset = 0, delay = 0) {
-    return useScrollStore().scrollToId(id, offset, delay);
+export async function goToPageSection(id = "start") {
+    return useScrollStore().scrollToId(id);
 }
 
 /**

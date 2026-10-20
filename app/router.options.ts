@@ -84,7 +84,7 @@ export default {
             if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
 
             if(hashExists) {
-                await scrollStore.scrollToId(hash, 0, 0);
+                await scrollStore.scrollToId(hash);
             } else if(checkDocumentScrollParams(to, from, documentStore)) {
                 window.dispatchEvent(new CustomEvent("mohit-pdf-destination-scroll", { cancelable: false }));
             } else if(!hashExists && differentPage) {

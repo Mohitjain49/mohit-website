@@ -26,7 +26,7 @@ const wholeFileInView = useState("whole-hosted-file-in-view", () => { return fal
 const showScrollBar = computed(() => { return (vertical.value.inView < 100); });
 const innerScrollBarClasses = computed(() => { return ['inner', (mousePressed.value ? 'active' : '')]; });
 
-watch(mouseY, (newY, oldY) => { if(mousePressed.value) { scrollFsElement((window.innerHeight - 26) / (newY - oldY)); } });
+watch(mouseY, (newY, oldY) => { scrollFsElementOnMouseMove(newY, oldY); });
 watch(mousePressed, () => { setUserSelect(mousePressed.value); });
 watch(showScrollBar, (newValue) => { manageOverflowClass(!newValue); });
 
@@ -50,6 +50,16 @@ function scrollFsElement(divisor = 10) {
     const element = getFsElement();
     const newValue = (element.scrollTop + (element.scrollHeight / divisor));
     element.scrollTop = Math.max(0, Math.min(element.scrollHeight, newValue));
+}
+
+/**
+ * This function scrolls the FS Element when the mouse moves.
+ * @param {Number} newY The new Y position of the mouse.
+ * @param {Number} oldY The old Y position of the mouse.
+ */
+function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
+    if(!mousePressed.value) { return; }
+    scrollFsElement((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
 }
 
 /**

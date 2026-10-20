@@ -63,14 +63,14 @@
 }
 
 .pdf-page-innerContainer {
-    scroll-margin-top: apply-zoom-factor(67);
+    scroll-margin-top: 67px;
     position: relative;
     height: fit-content;
     width: fit-content;
     margin: 0px auto;
 }
 :fullscreen .pdf-page-innerContainer {
-    scroll-margin-top: apply-zoom-factor(20);
+    scroll-margin-top: 20px;
 }
 
 .mohit-pdf-linkAnnotation {

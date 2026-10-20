@@ -69,9 +69,6 @@ function getFAIconStyle() { return { color: props.color, fontSize: (props.size +
 </script>
 
 <style lang="scss">
-.mohit-note-container {
-    display: contents !important;
-}
 .mohit-note {
     height: 400px;
     width: min(360px, max(325px, calc(var(--true-100vw-safe) * 0.7222)));

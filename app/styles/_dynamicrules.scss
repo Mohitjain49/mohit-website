@@ -82,15 +82,6 @@
 @mixin dynamic-greater-equal-height-rule-scopedBlock($value) { @include dynamic-greater-equal-height-rule($value, 1) { @content; }}
 @mixin dynamic-greater-equal-height-rule-noScopedBlock($value) { @include dynamic-greater-equal-height-rule($value, -1) { @content; }}
 
-// This function applies the zoom factor to any numeric value.
-@function apply-zoom-factor($value) {
-    @if math.is-unitless($value) {
-        @return calc($value * 1px * var(--webpage-zoom-factor));
-    } @else {
-        @return calc($value * var(--webpage-zoom-factor));
-    }
-}
-
 // This function allows selectors like classes to be chained, allowing them to have cleaner priority assignment,
 @function chain-selector($selector, $count: 3) {
     $chained: "";

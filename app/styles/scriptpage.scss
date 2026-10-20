@@ -51,7 +51,7 @@
     justify-content: flex-start;
     align-items: stretch;
     flex-direction: row;
-    scroll-margin-top: apply-zoom-factor(90);
+    scroll-margin-top: 90px;
 }
 .mohit-scriptPage-code-line-content {
     width: calc(100% - 55px);
@@ -95,7 +95,7 @@
     border-right: 1px solid lightgray;
     color: white;
     font-family: 'Roboto', sans-serif;
-    scroll-margin-top: apply-zoom-factor(90);
+    scroll-margin-top: 90px;
     transition: var(--default-transition);
 }
 .mohit-scriptPage-code-lineNum-innerButton:hover,
