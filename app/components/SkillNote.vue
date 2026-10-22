@@ -71,7 +71,7 @@ function getFAIconStyle() { return { color: props.color, fontSize: (props.size +
 <style lang="scss">
 .mohit-note {
     height: 400px;
-    width: min(360px, max(325px, calc(var(--true-100vw-safe) * 0.7222)));
+    width: get-bounded-fluid-width(360px, 325px, 450px);
     border: 3px solid var(--website-light-text);
     border-radius: 20px;
     overflow: hidden;
@@ -131,7 +131,7 @@ function getFAIconStyle() { return { color: props.color, fontSize: (props.size +
 }
 
 .mohit-note-header {
-    font-size: min(35px, max(32px, calc(var(--true-100vw-safe) * 0.0711)));
+    font-size: get-bounded-fluid-width(35px, 32px, 450px);
     color: inherit;
     margin-bottom: 12px;
     font-weight: bold;

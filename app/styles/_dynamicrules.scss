@@ -82,6 +82,12 @@
 @mixin dynamic-greater-equal-height-rule-scopedBlock($value) { @include dynamic-greater-equal-height-rule($value, 1) { @content; }}
 @mixin dynamic-greater-equal-height-rule-noScopedBlock($value) { @include dynamic-greater-equal-height-rule($value, -1) { @content; }}
 
+// This function can replace dynamic breakpoints to make a width change fluidly as the screen width shrinks.
+@function get-bounded-fluid-width($max-width, $min-width, $vw-for-min) {
+    $multiplier: math.div(math.round(math.div($min-width, $vw-for-min) * 10000), 10000);
+    @return min(#{$max-width}, max(#{$min-width}, calc(var(--true-100vw-safe) * #{$multiplier})));
+}
+
 // This function allows selectors like classes to be chained, allowing them to have cleaner priority assignment,
 @function chain-selector($selector, $count: 3) {
     $chained: "";

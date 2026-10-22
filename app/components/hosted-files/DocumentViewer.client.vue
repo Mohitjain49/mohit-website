@@ -112,6 +112,7 @@ onMounted(async() => {
         await renderPDF();
         if(renderAborted()) { return; }
 
+        document.addEventListener("copy", (event) => { documentStore.onHostedDocumentPageCopy(event); }, { signal });
         window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
         window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(false); }, { signal });
 

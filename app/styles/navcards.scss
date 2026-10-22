@@ -11,7 +11,7 @@
 .nav-newCard {
     cursor: pointer;
     text-decoration: none;
-    width: min(330px, max(315px, calc(var(--true-100vw-safe) * 0.7875)));
+    width: get-bounded-fluid-width(330px, 315px, 400px);
     min-width: 290px;
     max-width: 400px;
     height: fit-content;

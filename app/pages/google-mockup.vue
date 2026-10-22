@@ -67,7 +67,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 ));
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 #google-mockup-page {
     background-color: white;
     color: #121212;
@@ -90,7 +90,7 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 
 .gMockup-title {
     color: #3670ee;
-    font-size: 80px;
+    font-size: get-bounded-fluid-width(80px, 70px, 500px);
     margin-bottom: 20px;
     font-family: 'Monserrat', sans-serif;
 }
@@ -232,7 +232,53 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     box-shadow: 0px 0px 10px red;
 }
 
-@include dynamic-less-equal-width-rule-scopedBlock(500) {
-    .gMockup-title { font-size: 70px; }
+.markdown-body {
+    width: calc(100% - 70px);
+    max-width: 1000px;
+    padding: 15px;
+    border-radius: 5px;
+    height: fit-content;
+    margin: 0px auto;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+}
+:fullscreen .markdown-body {
+    min-width: 0px;
+    max-width: none;
+}
+
+.markdown-body h1, .markdown-body p, .markdown-body li, .markdown-body div {
+    color: black !important;
+    font-family: 'Roboto', sans-serif;
+}
+.markdown-body a {
+    color: #517ac7;
+    text-decoration: underline;
+    font-family: 'Roboto', sans-serif;
+}
+
+.markdown-body h1 {
+    font-size: 27px;
+}
+.markdown-body ul {
+    margin-top: 0px;
+}
+
+.markdown-body a {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    transition: background-color 0.2s;
+}
+.markdown-body a:hover {
+    background-color: rgb(0, 110, 255, 0.2);
+}
+
+@include dynamic-less-equal-width-rule-noScopedBlock(850) {
+    .markdown-body h1 { font-size: 20px; }
+    .markdown-body p, .markdown-body li, .markdown-body div { font-size: 13px; }
+}
+@include dynamic-less-equal-width-rule-noScopedBlock(600) {
+    .markdown-body h1 { font-size: 17px; }
+    .markdown-body p, .markdown-body li, .markdown-body div { font-size: 11px; }
 }
 </style>

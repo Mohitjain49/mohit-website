@@ -40,7 +40,7 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
     align-items: center;
     flex-direction: row;
     gap: 3px;
-    width: min(340px, max(325px, calc(var(--true-100vw-safe) * 0.8125)));;
+    width: get-bounded-fluid-width(330px, 315px, 400px);
     margin: 20px auto 0px;
     padding: 10px 0px;
     font-size: 25px;

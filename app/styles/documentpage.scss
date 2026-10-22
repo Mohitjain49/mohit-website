@@ -104,7 +104,6 @@
     width: 100% !important;
     height: 100% !important;
 }
-
 .mohit-rendered-pdf .textLayer {
     color-scheme: only light;
     position: absolute;
@@ -124,73 +123,15 @@
     --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
     --min-font-size-inv: calc(1 / var(--min-font-size));
 }
+
 .mohit-rendered-pdf .textLayer ::selection {
     background: #0000ff40 !important;
     color: transparent !important;
 }
-
 #resume-container:fullscreen .pdf-doc-mohit-container {
     min-height: calc(100% - 100px);
 }
-.markdown-body h1, .markdown-body p, .markdown-body li, .markdown-body div {
-    color: black !important;
-    font-family: 'Roboto', sans-serif;
-}
-.markdown-body a {
-    color: #517ac7;
-    text-decoration: underline;
-    font-family: 'Roboto', sans-serif;
-}
 
-.markdown-body h1 {
-    font-size: 27px;
-}
-.markdown-body ul {
-    margin-top: 0px;
-}
-
-.markdown-body a {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    transition: background-color 0.2s;
-}
-.markdown-body a:hover {
-    background-color: rgb(0, 110, 255, 0.2);
-}
-
-.resume-markdown-title {
-    font-size: 40px !important;
-}
-.resume-markdown-mainLinks, .resume-markdown-mainSummary {
-    margin-bottom: 20px;
-}
-.resume-markdown-mainSummary {
-    font-style: italic;
-    color: black;
-}
-
-.resume-markdown-subHeader {
-    margin-bottom: 5px;
-}
-.resume-markdown-section-title a {
-    text-decoration: none;
-    color: black;
-    transition: text-shadow 0.2s;
-    background-color: transparent !important;
-}
-.resume-markdown-section-title a:hover {
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
-}
-
-.resume-markdown-section-subtitle a {
-    text-decoration: none;
-    color: black;
-    transition: text-shadow 0.2s;
-    background-color: transparent !important;
-}
-.resume-markdown-section-subtitle a:hover {
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
-}
 
 .mohit-document-topBar {
     width: var(--mohit-custom-pdf-width, calc(100% - 70px));
@@ -389,14 +330,7 @@
     width: calc(100% - 14px);
 }
 
-@include dynamic-less-equal-width-rule-noScopedBlock(850) {
-    .markdown-body h1 { font-size: 20px; }
-    .markdown-body p, .markdown-body li, .markdown-body div { font-size: 13px; }
-}
 @include dynamic-less-equal-width-rule-noScopedBlock(600) {
-    .markdown-body h1 { font-size: 17px; }
-    .markdown-body p, .markdown-body li, .markdown-body div { font-size: 11px; }
-
     .pdf-doc-linkBtn {
         width: 25px;
         height: 25px;

@@ -706,6 +706,31 @@ export const useDocumentStore = defineStore("document-store", () => {
             if(properEvent) { setPdfSize(); }
         }, { signal: pdfDimensionsController.signal });
     }
+    
+    /**
+     * This function is ran whenever the user triggers a copy action on a hosted document page.
+     * @param {ClipboardEvent} event The event fired by triggering the copy action.
+     */
+    function onHostedDocumentPageCopy(event = null) {
+        try {
+            if(!event || !event.target) { return; }
+
+            /** @type {HTMLElement} The element being copied my the user. */
+            const element = event.target;
+            if(!(element instanceof Element) || !element.closest(".mohit-rendered-pdf")) { return; }
+
+            const selection = window.getSelection();
+            if(!selection) { return; }
+
+            const originalText = selection.toString();
+            const cleanedText = originalText.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').replace(/\s*●\s*/g, "\n");
+
+            event.clipboardData.setData('text/plain', cleanedText.trim());
+            event.preventDefault();
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+        }
+    }
 
     /**
      * This function sets the event listeners for when the user focuses on the window and aborts the old ones.
@@ -798,7 +823,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
-        checkPdfjsWorker, getPdfjsStylesheet, getCurrentDocumentMetadata, checkDocNotLoaded
+        checkPdfjsWorker, getPdfjsStylesheet, getCurrentDocumentMetadata, checkDocNotLoaded, onHostedDocumentPageCopy
     }
 });
 
