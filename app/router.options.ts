@@ -8,14 +8,6 @@ const TASKS_PENDING_WAIT_MILLISECONDS = 1500;
 /** If true, a call to the scrol behavior function is waiting for the page:finish hook to be resolved. */
 const pageFinishHookRunning = ref(false);
 
-/**
- * This function is a generic sleep function that lets a function wait before performing the next act.
- * @param ms The number of milliseconds you want the function to sleep.
- */
-async function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(() => { resolve(null); }, ms));
-}
-
 /** This function determines if a scroll should be disabled based off a query change. */
 function disableScrollOnQueryChange(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
     const queryChanged = (-1 != QUERY_NO_SCROLL_PARAMS.findIndex((item) => { return (to.query[item] !== from.query[item]); }));
@@ -39,6 +31,11 @@ export default {
             // console.log({ to, from, savedPosition });
             if(!import.meta.client) { return { top: 0, left: 0, behavior: "instant" }; }
             window.history.scrollRestoration = "manual";
+
+            const lowercasePath = to.path.toLowerCase();
+            if(lowercasePath === "/google-mockup" || lowercasePath === "/google-mockup/") {
+                return { top: 0, left: 0, behavior: "instant" };
+            }
 
             // Initialize Stores, Variables, and Conditions.
             const hash = to.hash.substring(1);

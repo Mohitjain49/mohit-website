@@ -37,18 +37,23 @@ const router = useRouter();
 const gSearchInput = ref("");
 
 const isDarkMode = ref(false);
-const directionsOpen = computed(() => { return (router.currentRoute.value.hash === "#directions"); });
+const routeHash = computed(() => { return router.currentRoute.value.hash; });
+const directionsOpen = useState("g-mockup-directions-open", () => { return false; });
 
-onMountedAdvanced(() => {
+// This watcher watches the route hash to update if the directions should be open or not.
+const directionsWatcher = watch(routeHash, () => { updateDirectionsState(); }, { immediate: false });
+
+onMounted(() => {
+    updateDirectionsState();
+    directionsWatcher.resume();
+
     if((typeof window !== 'undefined') && (typeof window.matchMedia === 'function')) {
         if(window.matchMedia('(prefers-color-scheme: dark)').matches) { toggleDarkMode(); }
     }
 });
 
 /** This function toggles whether the page is in dark mode or not. */
-function toggleDarkMode() {
-    isDarkMode.value = !isDarkMode.value;
-}
+function toggleDarkMode() { isDarkMode.value = !isDarkMode.value; }
 
 /** This function toggles whether the directions for the assignments are open or not. */
 function toggleDirections() {
@@ -60,6 +65,9 @@ function searchOnGoogle() {
     if(gSearchInput.value === "") { return; }
     window.open(`https://www.google.com/search?q=${encodeURIComponent(gSearchInput.value)}`, "_blank"); 
 }
+
+/** This function updates the directions state on if it needs to be open or not. */
+function updateDirectionsState() { directionsOpen.value = (routeHash.value === "#directions"); }
 
 useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     "This is a simple project I give to new frontend developers to introduce them to Vue.js development.",
@@ -81,7 +89,8 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
 
 .gMockup-center {
     height: fit-content;
-    min-height: calc(var(--true-100vh-safe) - 100px);
+    min-height: calc(var(--true-100vh-safe) - 160px);
+    padding: 30px 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -239,12 +248,12 @@ useHead(getMeta("Mohit Jain | Google Mockup", "google-mockup",
     border-radius: 5px;
     height: fit-content;
     margin: 0px auto;
-    background-color: white;
+    background-color: #f2f2f2;
     font-family: 'Roboto', sans-serif;
+    border: 2px solid black;
 }
-:fullscreen .markdown-body {
-    min-width: 0px;
-    max-width: none;
+.dark-mode .markdown-body {
+    background-color: #FFFFFF;
 }
 
 .markdown-body h1, .markdown-body p, .markdown-body li, .markdown-body div {
