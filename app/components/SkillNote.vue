@@ -71,7 +71,7 @@ function getFAIconStyle() { return { color: props.color, fontSize: (props.size +
 <style lang="scss">
 .mohit-note {
     height: 400px;
-    width: get-bounded-fluid-width(360px, 325px, 450px);
+    width: get-bounded-fluid-width(360px, 315px, 450px);
     border: 3px solid var(--website-light-text);
     border-radius: 20px;
     overflow: hidden;

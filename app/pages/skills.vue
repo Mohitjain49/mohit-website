@@ -5,9 +5,8 @@
 
 <main id="skills-page" class="personal-web-body">
     <div class="skills-body">
-        <client-only> <div style="color: rgba(0, 0, 0, 0)">H</div> </client-only>
         <div id="vuejs" class="skills-category">
-            <div class="skills-category-header vue" :ref="(el) => {titleRefs[0] = el}">
+            <div class="skills-category-header vue" :ref="(el) => { titleRefs[0] = el; }">
                 <img :src="vuejs_icon" draggable="false" style="margin-right: 0px;" />
                 <span> ue.js </span>
             </div>
@@ -25,7 +24,7 @@
         </div>
 
         <div id="frontend" class="skills-category">
-            <div class="skills-category-header frontend" :ref="(el) => {titleRefs[1] = el}">
+            <div class="skills-category-header frontend" :ref="(el) => { titleRefs[1] = el; }">
                 <font-awesome-icon icon="fa-brands fa-js" />
                 <span> Frontend </span>
             </div>
@@ -43,7 +42,7 @@
         </div>
 
         <div id="aws" class="skills-category">
-            <div class="skills-category-header aws" :ref="(el) => {titleRefs[2] = el}">
+            <div class="skills-category-header aws" :ref="(el) => { titleRefs[2] = el; }">
                 <img :src="aws_icon" draggable="false" />
                 <span> AWS </span>
             </div>
@@ -61,7 +60,7 @@
         </div>
 
         <div id="google" class="skills-category">
-            <div class="skills-category-header google" :ref="(el) => {titleRefs[3] = el}">
+            <div class="skills-category-header google" :ref="(el) => { titleRefs[3] = el; }">
                 <font-awesome-icon icon="fa-brands fa-google" />
                 <span> oogle </span>
             </div>
@@ -79,7 +78,7 @@
         </div>
 
         <div id="modules" class="skills-category">
-            <div class="skills-category-header modules" :ref="(el) => {titleRefs[4] = el}">
+            <div class="skills-category-header modules" :ref="(el) => { titleRefs[4] = el; }">
                 <font-awesome-icon icon="fa-brands fa-node-js" />
                 <span> Modules </span>
             </div>
@@ -97,7 +96,7 @@
         </div>
 
         <div id="languages" class="skills-category">
-            <div class="skills-category-header languages" :ref="(el) => {titleRefs[5] = el}">
+            <div class="skills-category-header languages" :ref="(el) => { titleRefs[5] = el; }">
                 <font-awesome-icon icon="fa-laptop-code" />
                 <span> Languages </span>
             </div>
@@ -115,7 +114,7 @@
         </div>
 
         <div id="icons" class="skills-category">
-            <div class="skills-category-header icons" :ref="(el) => {titleRefs[6] = el}">
+            <div class="skills-category-header icons" :ref="(el) => { titleRefs[6] = el; }">
                 <font-awesome-icon icon="fa-brands fa-font-awesome" />
                 <span> Icons </span>
             </div>
@@ -170,7 +169,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     padding-top: 0px;
     min-height: 100%;
     --skills-columns: min(5,
-        round(down, calc((var(--true-100vw-safe) - 25px) / 400px))
+        round(down, calc((var(--true-100vw-safe) - 35px) / 400px))
     );
 }
 .skills-body {
@@ -189,7 +188,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     grid-template-columns: repeat(var(--skills-columns), 1fr);
 }
 .skills-category#vuejs {
-    padding-top: 60px;
+    padding-top: 75px;
 }
 
 .skills-entity-container {
@@ -202,7 +201,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
 }
 
 .skills-category-header {
-    width: 375px;
+    width: get-bounded-fluid-width(375px, 315px, 450px);
     height: fit-content;
     margin-left: 10px;
     margin-top: 100px;
@@ -268,7 +267,6 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
 
 @include dynamic-less-equal-width-rule-scopedBlock(450) {
     .skills-category-header {
-        width: 325px;
         margin: 0px auto;
         margin-top: 100px;
         font-size: 45px;
@@ -276,6 +274,9 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     .skills-category-header img, .skills-category-header svg {
         font-size: 45px;
         width: 45px;
+    }
+    .skills-category-header.vue {
+        margin-top: 20px;
     }
 }
 </style>

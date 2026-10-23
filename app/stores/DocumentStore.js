@@ -788,7 +788,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function scrollToPage(pageNum = 1) {
         if(typeof pageNum !== 'number') { pageNum = Number(pageNum); }
-        if(isNaN(pageNum)) { return; }
+        if(isNaN(pageNum) || !Number.isInteger(pageNum)) { return; }
 
         const id = ("page_" + pageNum);
         if(document.getElementById(id) != null) { router.push(routePath.value + "#" + id); }

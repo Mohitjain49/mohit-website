@@ -299,8 +299,7 @@
 }
 
 .mohit-navMenu.webMenu-vertical-overflow {
-    border-top-right-radius: 1px;
-    border-bottom-right-radius: 1px;
+    border-radius: 5px;
     width: 335px;
 }
 :fullscreen .mohit-navMenu { @include mohit-navMenu-mohit_2(); }
