@@ -24,13 +24,14 @@ export function useScrollPercentage(elementId = "") {
 
     /** A simple object that can be used by vertical custom scrollbars. */
     const vScrollbarStyle = computed(() => {
-        const topNum = ((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / 100) * (100 - vertical.value.inView) * (100 / vertical.value.inView)));
+        const topNum = String((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / vertical.value.inView) * (100 - vertical.value.inView)));
         return { height: (vertical.value.inView + "%"), transform: ("translateY(" + topNum + "%)") }
     });
+
     /** A simple object that can be used by horizontal custom scrollbars. */
     const hScrollbarStyle = computed(() => {
-        const leftNum = ((horizontal.value.inView >= 100) ? 0 : ((horizontal.value.main / 100) * (100 - horizontal.value.inView)));
-        return { width: (horizontal.value.inView + "%"), left: (leftNum + "%") }
+        const leftNum = String((horizontal.value.inView >= 100) ? 0 : ((horizontal.value.main / horizontal.value.inView) * (100 - horizontal.value.inView)));
+        return { width: (horizontal.value.inView + "%"), transform: ("translateX(" + leftNum + "%)") }
     });
 
     /** This function calculates both the horizontal and vertical percentages. */

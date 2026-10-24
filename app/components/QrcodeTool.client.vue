@@ -919,6 +919,7 @@ html {
     border-radius: 5px;
     overflow: hidden;
     background-color: black;
+    position: relative;
 }
 .popup-qr-text-scrollBar .inner {
     position: relative;

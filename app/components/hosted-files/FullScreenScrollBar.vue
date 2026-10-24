@@ -5,14 +5,14 @@
     </div>
 </Transition>
 
-<div v-if="showScrollBar" class="mohit-scrollBar">
-    <button :id="SCROLLBAR_TOP_BUTTON_ID" :class="['top', ((mousePressedOnArrow == -1) ? 'active' : ''), (atTop ? 'no-action' : '')]" no-sound>
+<div v-if="showScrollBar" class="mohit-scrollBar" @contextmenu.prevent>
+    <button :id="SCROLLBAR_TOP_BUTTON_ID" :class="topArrowClasses" no-sound>
         <FontAwesomeIcon icon="fa-play" :rotation="'270'" />
     </button>
     <div class="mohit-scrollBar-body">
-        <div :id="SCROLLBAR_THUMB_ID" :class="innerScrollBarClasses" :style="vScrollbarStyle"></div>
+        <div :id="SCROLLBAR_THUMB_ID" :class="thumbClasses" :style="vScrollbarStyle"></div>
     </div>
-    <button :id="SCROLLBAR_BOTTOM_BUTTON_ID" :class="['bottom', ((mousePressedOnArrow == 1) ? 'active' : ''), (atBottom ? 'no-action' : '')]" no-sound>
+    <button :id="SCROLLBAR_BOTTOM_BUTTON_ID" :class="bottomArrowClasses" no-sound>
         <FontAwesomeIcon icon="fa-play" :rotation="'90'" />
     </button>
 </div>
@@ -43,7 +43,14 @@ const wholeFileInView = useState("whole-hosted-file-in-view", () => { return fal
 const { vScrollbarStyle, vertical, atTop, atBottom } = useScrollPercentage(props.fsElementId);
 
 const showScrollBar = computed(() => { return (vertical.value.inView < 100); });
-const innerScrollBarClasses = computed(() => { return ['inner', (mousePressedOnThumb.value ? 'active' : '')]; });
+const thumbClasses = computed(() => { return ['inner', (mousePressedOnThumb.value ? 'active' : '')]; });
+
+const topArrowClasses = computed(() => {
+    return ['top', ((mousePressedOnArrow.value == -1) ? 'active' : ''), (atTop.value ? 'no-action' : '')];
+});
+const bottomArrowClasses = computed(() => {
+    return ['bottom', ((mousePressedOnArrow.value == 1) ? 'active' : ''), (atBottom.value ? 'no-action' : '')];
+});
 
 watch(mouseY, (newY, oldY) => { scrollFsElementOnMouseMove(newY, oldY); });
 watch(mousePressedOnThumb, (newValue) => { setUserSelect(newValue); });
@@ -52,7 +59,10 @@ watch(showScrollBar, (newValue) => { manageOverflowClass(!newValue); });
 // This sets a few variables after the component is mounted.
 onAfterMounted(() => {
     manageOverflowClass(!showScrollBar.value);
-    getFsElement()?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    const fsElement = getFsElement();
+
+    if(!fsElement) { throw new Error("Full Screen Element Not Detected."); }
+    fsElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
     eventsAbortController = new AbortController();
     const signal = eventsAbortController.signal;
@@ -61,12 +71,18 @@ onAfterMounted(() => {
     const arrowDownElement = document.getElementById(SCROLLBAR_BOTTOM_BUTTON_ID);
     const arrowUpElement = document.getElementById(SCROLLBAR_TOP_BUTTON_ID);
 
-    if(Boolean(thumbElement)) { thumbElement.addEventListener("pointerdown", (event) => { onFsThumbDown(event); }, { signal }); }
-    if(Boolean(arrowDownElement)) { arrowDownElement.addEventListener("pointerdown", (event) => { onArrowButtonPointerDown(event, "down"); }, { signal }); }
-    if(Boolean(arrowUpElement)) { arrowUpElement.addEventListener("pointerdown", (event) => { onArrowButtonPointerDown(event, "up"); }, { signal }); }
+    if(Boolean(thumbElement)) {
+        thumbElement.addEventListener("pointerdown", (event) => { onFsThumbDown(event); }, { signal });
+    }
+    if(Boolean(arrowDownElement)) {
+        arrowDownElement.addEventListener("pointerdown", (event) => { onArrowButtonPointerDown(event, "down"); }, { signal });
+    }
+    if(Boolean(arrowUpElement)) {
+        arrowUpElement.addEventListener("pointerdown", (event) => { onArrowButtonPointerDown(event, "up"); }, { signal });
+    }
 
     window.addEventListener("pointerup", (event) => { onFsPointerUp(event); }, { signal });
-    window.addEventListener("keydown", (event) => { onFsKeydown(event); }, { signal })
+    document.addEventListener("keydown", (event) => { onFsKeydown(event); }, { signal })
 });
 
 // This unsets a few variables before removing the component.
@@ -127,10 +143,10 @@ function manageOverflowClass(noOverflow = false) {
     }
 }
 
-/** This function has te website scroll by an increment each farme while the user presses down an arrow. */
+/** This function has the webpage scroll by an increment each frame while the user presses down an arrow. */
 function scrollRepeatedly() {
     const currentTime = performance.now();
-    const deltaTime = ((currentTime - lastTime) * 0.25);
+    const deltaTime = ((currentTime - lastTime) * 0.8);
     lastTime = currentTime;
 
     scrollStore.scrollByIncrement(mousePressedOnArrow.value * deltaTime);
@@ -167,7 +183,8 @@ function onArrowButtonPointerDown(event, type = "up") {
 
 /**
  * This function is triggered when the user stops holding down a button on the full screen element.
- * @param {PointerEvent | "bypass"} event The event on holding the button down. It it is "bypass", the function runs without interruption.
+ * @param {PointerEvent | "bypass"} event The event on holding the button down.
+ *  It it is "bypass", the function runs without interruption.
  */
 function onFsPointerUp(event = "bypass") {
     if(event !== "bypass" && (!event || event.pointerType !== "mouse")) { return; }
