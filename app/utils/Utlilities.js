@@ -17,6 +17,11 @@ export function useScrollPercentage(elementId = "") {
     const horizontal = ref({ main: 0, inView: 0 });
     const vertical = ref({ main: 0, inView: 0 });
 
+    const atTop = ref(false);
+    const atBottom = ref(false);
+    const atLeft = ref(false);
+    const atRight = ref(false);
+
     /** A simple object that can be used by vertical custom scrollbars. */
     const vScrollbarStyle = computed(() => {
         const topNum = ((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / 100) * (100 - vertical.value.inView)));
@@ -34,6 +39,12 @@ export function useScrollPercentage(elementId = "") {
         const element = document.getElementById(elementId);
         if(element == null) { return; }
 
+        // This records what edges the element is scrolled to.
+        atTop.value = (element.scrollTop === 0);
+        atBottom.value = ((element.scrollTop + element.clientHeight) >= element.scrollHeight);
+        atLeft.value = (element.scrollLeft === 0);
+        atRight.value = ((element.scrollLeft + element.clientWidth) >= element.scrollWidth);
+
         // This section calculates how far the user scrolled from the top of the element.
         vertical.value.main = (element.scrollTop / (element.scrollHeight - element.clientHeight));
         horizontal.value.main = (element.scrollLeft / (element.scrollWidth - element.clientWidth));
@@ -49,7 +60,7 @@ export function useScrollPercentage(elementId = "") {
     }
 
     useRafFn(() => { calculate(); }, { immediate: true, fpsLimit: 30, once: false });
-    return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, calculate }
+    return { horizontal, vertical, vScrollbarStyle, hScrollbarStyle, atTop, atBottom, atLeft, atRight, calculate }
 }
 
 /**

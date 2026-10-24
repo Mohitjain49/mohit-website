@@ -6,9 +6,15 @@
 </Transition>
 
 <div v-if="showScrollBar" class="mohit-scrollBar">
-    <button class="top" @click="scrollFsElement(-10)" title="Click Here To Scroll Up!"> <FontAwesomeIcon icon="fa-caret-up" /> </button>
-    <div class="mohit-scrollBar-body"> <div :class="innerScrollBarClasses" ref="scrollbar-inner" :style="vScrollbarStyle"></div> </div>
-    <button class="bottom" @click="scrollFsElement(10)" title="Click Here To Scroll Down!"> <FontAwesomeIcon icon="fa-caret-down" /> </button>
+    <button :class="['top', (atTop ? 'no-action' : '')]" @click="scrollFsElement(-10)" title="Click Here To Scroll Up!">
+        <FontAwesomeIcon icon="fa-play" :rotation="'270'" />
+    </button>
+    <div class="mohit-scrollBar-body">
+        <div :class="innerScrollBarClasses" ref="scrollbar-inner" :style="vScrollbarStyle"></div>
+    </div>
+    <button :class="['bottom', (atBottom ? 'no-action' : '')]" @click="scrollFsElement(10)" title="Click Here To Scroll Down!">
+        <FontAwesomeIcon icon="fa-play" :rotation="'90'" />
+    </button>
 </div>
 </template>
 
@@ -17,7 +23,7 @@ const styleStore = useStyleStore();
 const props = defineProps({ fsElementId: { type: String, required: true } });
 const interactiveScroll = useTemplateRef('scrollbar-inner');
 
-const { vScrollbarStyle, vertical } = useScrollPercentage(props.fsElementId);
+const { vScrollbarStyle, vertical, atTop, atBottom } = useScrollPercentage(props.fsElementId);
 const { pressed: mousePressed } = useMousePressed({ target: interactiveScroll, touch: false });
 const { scrollProgress } = storeToRefs(useScrollStore());
 const { mouseY } = storeToRefs(styleStore);
@@ -98,70 +104,57 @@ function getFsElement() { return document.getElementById(props.fsElementId); }
 .mohit-scrollBar {
     position: fixed;
     z-index: 15;
-    width: 12px;
-    height: calc(100% - 2px);
+    width: 14px;
+    height: 100%;
     right: 0px;
     top: 0px;
-    background-color: black;
-    border: 1px solid white;
-    border-radius: 0px;
-    overflow: hidden;
-}
-.mohit-scrollBar-replacement {
-    position: fixed;
-    z-index: 15;
-    width: 12px;
-    height: calc(100% - 2px);
-    right: 0px;
-    top: 0px;
-    background-color: var(--vibrant-flame);
-    border: 1px solid white;
+    background-color: #1C1C1C;
     border-radius: 0px;
     overflow: hidden;
 }
 
 .mohit-scrollBar-body {
-    height: calc(100% - 26px);
+    height: calc(100% - 34px);
     width: 100%;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
+    padding: 2px 0px;
 }
 .mohit-scrollBar-body .inner {
-    width: 100% !important;
-    background-color: var(--vibrant-flame);
+    width: 60% !important;
+    background-color: var(--website-text);
     transition: var(--default-transition);
     position: relative;
-    border-radius: 20px;
+    left: 20% !important;
+    border-radius: 30px;
 }
 
 .mohit-scrollBar-body .inner.active,
 .mohit-scrollBar-body .inner:hover {
-    background-color: var(--vibrant-flame-dark);
+    background-color: var(--website-light-text);
 }
 
 .mohit-scrollBar button {
+    cursor: default;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 12px;
-    color: white;
-    font-size: 12px;
+    height: 15px;
+    color: var(--website-text);
     transition: var(--default-transition);
 }
-.mohit-scrollBar button:hover {
-    background-color: #474747;
-    color: var(--vibrant-flame);
+.mohit-scrollBar button svg {
+    position: relative;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.mohit-scrollBar button.top svg {
-    position: relative;
-    top: 1px;
-}
-.mohit-scrollBar button.bottom svg {
-    position: relative;
-    bottom: 1px;
-}
+.mohit-scrollBar button.no-action { color: var(--website-text) !important; }
+.mohit-scrollBar button:hover { color: var(--website-light-text); }
+
+.mohit-scrollBar button.top svg { top: 1px; }
+.mohit-scrollBar button.bottom svg { bottom: 1px; }
 
 .mohit-fs-autoscroll-progressBar {
     position: fixed;
