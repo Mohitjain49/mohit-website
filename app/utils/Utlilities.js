@@ -24,8 +24,8 @@ export function useScrollPercentage(elementId = "") {
 
     /** A simple object that can be used by vertical custom scrollbars. */
     const vScrollbarStyle = computed(() => {
-        const topNum = ((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / 100) * (100 - vertical.value.inView)));
-        return { height: (vertical.value.inView + "%"), top: (topNum + "%") }
+        const topNum = ((vertical.value.inView >= 100) ? 0 : ((vertical.value.main / 100) * (100 - vertical.value.inView) * (100 / vertical.value.inView)));
+        return { height: (vertical.value.inView + "%"), transform: ("translateY(" + topNum + "%)") }
     });
     /** A simple object that can be used by horizontal custom scrollbars. */
     const hScrollbarStyle = computed(() => {

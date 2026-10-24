@@ -166,16 +166,16 @@ button {
     background: transparent;
 }
 #resume-container:fullscreen {
-    padding: 0px 12px 10px 0px;
-    width: calc(100% - 12px);
+    padding: 0px 15px 10px 0px;
+    width: calc(100% - 15px);
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;
     scrollbar-width: none !important;
 }
 #script-page:fullscreen {
-    padding: 0px 12px 0px 0px;
-    width: calc(100% - 12px);
+    padding: 0px 15px 0px 0px;
+    width: calc(100% - 15px);
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;

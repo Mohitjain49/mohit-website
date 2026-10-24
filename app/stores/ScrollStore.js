@@ -246,10 +246,13 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /**
      * This function scrolls by adding an increment to the current scroll.
      * @param {Number} increment The increment scroll.
+     * @param {Boolean} smooth If true, the increment scroll will be very smooth.
      */
-    function scrollByIncrement(increment) {
+    function scrollByIncrement(increment, smooth = false) {
         if(!verifyAutoscroll() || styleStore.hideOverflow) { return; }
-        lenis.scrollTo(lenis.scroll + increment, { immediate: true, force: true });
+        lenis.scrollTo((lenis.scroll + increment),
+            { immediate: !smooth, force: true, easing: (time) => { return time; }, duration: 0.15 }
+        );
         webData.closeNavMenu();
     }
 

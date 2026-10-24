@@ -278,7 +278,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
                     element.addEventListener("click", (event) => { openLineOptionsMenu(event, lineNum); }, { signal });
                     element.addEventListener("contextmenu", (event) => { openLineOptionsMenu(event, lineNum); }, { signal });
-                    element.addEventListener("keydown", (event) => { openLineOptionsMenuOnEnter(event, lineNum); }, { signal });
+                    element.addEventListener("keydown", (event) => { onLineNumberKeydown(event, lineNum); }, { signal });
                 }
 
                 // This resolves the promise when all the event listeners are added.
@@ -317,11 +317,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     }
 
     /**
-     * This function opens the script line options menu for a specific line of code when the user hits the enter key.
+     * This function runs when the user presses down a key while focused on a Script Line Number.
      * @param {KeyboardEvent} event The event from clicking the button.
      * @param {Number} lineNum The number of the line in the code file.
      */
-    function openLineOptionsMenuOnEnter(event = null, lineNum = 0) {
+    function onLineNumberKeydown(event = null, lineNum = 0) {
         if(!event || !event.key || !lineNum) { return; }
         const key = event.key.toLowerCase();
 
@@ -373,7 +373,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * This function sets the specific coords for where the popup should be on the code.
      * @param {Number} lineNum The Line number.
      */
-    async function placeLineOptionsOnCode(lineNum = -1) {
+    function placeLineOptionsOnCode(lineNum = -1) {
         const element = getLineElement(lineNum);
         if(element == null) { return; }
 
@@ -393,8 +393,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
             
             if(preElementBottomRect < 325) {
                 closeLineOptions();
-                scrollStore.scrollByIncrement(-170 / heightRatio);
-                setLineOptions(lineNum, true);
+                scrollStore.scrollByIncrement(((-325 + preElementBottomRect) / heightRatio), false);
+                sleep(100).then(() => { setLineOptions(lineNum, true); });
             }
         }
 

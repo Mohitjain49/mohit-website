@@ -138,11 +138,16 @@ export const useAudioStore = defineStore("audio-store", () => {
      */
     function confirmClickSound(event) {
         if(event.type !== "click" || (event.pointerId == -1) || !event.isTrusted) { return; }
-        const foundElement = event.target;
 
-        const usuableLink = foundElement?.closest('a');
-        const usuableButton = foundElement?.closest('button');
-        if(usuableLink || usuableButton) { playClickSound(); }
+        /** @type {HTMLElement} The Element that the user clicked on. */
+        const foundElement = event.target;
+        if(!foundElement || !(foundElement instanceof Element)) { return; }
+
+        const clickableElement = foundElement.closest('a, button');
+        if(!clickableElement) { return; }
+
+        const clickableElementAttribute = (clickableElement.getAttribute("no-sound") ?? null);
+        if((typeof clickableElementAttribute !== "string") || clickableElementAttribute === "false") { playClickSound(); }
     }
 
     /** This function plays the click sound effect. */
