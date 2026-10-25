@@ -149,7 +149,6 @@
 
 <script setup>
 import pdfjs_icon from "~/assets/PDFJS_logo.svg";
-const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
@@ -157,5 +156,5 @@ const documentStore = useDocumentStore();
 
 const GOOGLE_DEFAULT_SAVE_TITLE = "Use Your Drive's Default Save Folder. (Typically Your Root Google Drive Folder)";
 const GOOGLE_CHOOSE_FOLDER_TITLE = "Choose The Folder In Your Google Drive Where You Would Like To Keep My Document.";
-const PDFJS_TITLE = "This page uses PDF.js to render and display my documents on this website. Click here to see more about PDF.js.";
+const PDFJS_TITLE = "This page uses PDF.js to render and display my hosted document. Click here to see more about PDF.js.";
 </script>

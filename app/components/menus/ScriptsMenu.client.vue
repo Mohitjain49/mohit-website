@@ -88,12 +88,11 @@
 
 <script setup>
 import shiki_icon from "~/assets/Shiki_logo.svg";
-const SHIKI_LINK = "https://shiki.style/";
 
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const scriptsStore = useScriptsStore();
 
 const routePath = useRoutePathWithQuery();
-const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my documents on this website. Click here to see more about Shiki.";
+const SHIKI_TITLE = "This page uses the Shiki dependency to render and display my hosted script. Click here to see more about Shiki.";
 </script>

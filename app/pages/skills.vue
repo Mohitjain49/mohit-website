@@ -1,3 +1,27 @@
+<script setup>
+import vuejs_icon from "~/assets/Vuejs_Icon.png";
+import aws_icon from "~/assets/aws/AWS_Icon.png";
+
+const titleRefs = ref([]);
+const cardRefs = ref([]);
+
+useIntersectionObserver(titleRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        setFlipInXAnimation(observed.target, observed.isIntersecting);
+    }
+});
+useIntersectionObserver(cardRefs, (entry) => {
+    for(let i = 0; i < entry.length; i++) {
+        const observed = entry[i];
+        addNoteCardAnimation(observed.target, observed.isIntersecting);
+    }
+});
+
+// This defines the Page's SEO Tags.
+useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"));
+</script>
+
 <template>
 <ParticlesBackground :particlesOptions="BLUE_BACKGROUND" />
 <CompassMenu :routes="SKILLS_COMPASS" />
@@ -77,8 +101,26 @@
             </div>
         </div>
 
+        <div id="platforms" class="skills-category">
+            <div class="skills-category-header platforms" :ref="(el) => { titleRefs[4] = el; }">
+                <font-awesome-icon icon="fa-code-compare" />
+                <span> Platforms </span>
+            </div>
+
+            <div v-for="entity in PLATFORMS_SKILL_NOTES" class="skills-entity-container" ref="cardRefs">
+                <SkillNote :link="entity.link"
+                    :color="entity.color"
+                    :desc="entity.desc"
+                    :faIcon="entity.icon.faIcon"
+                    :id="entity.icon.id"
+                    :name="entity.name"
+                    :size="entity.icon.size"
+                />
+            </div>
+        </div>
+
         <div id="modules" class="skills-category">
-            <div class="skills-category-header modules" :ref="(el) => { titleRefs[4] = el; }">
+            <div class="skills-category-header modules" :ref="(el) => { titleRefs[5] = el; }">
                 <font-awesome-icon icon="fa-brands fa-node-js" />
                 <span> Modules </span>
             </div>
@@ -96,7 +138,7 @@
         </div>
 
         <div id="languages" class="skills-category">
-            <div class="skills-category-header languages" :ref="(el) => { titleRefs[5] = el; }">
+            <div class="skills-category-header languages" :ref="(el) => { titleRefs[6] = el; }">
                 <font-awesome-icon icon="fa-laptop-code" />
                 <span> Languages </span>
             </div>
@@ -114,7 +156,7 @@
         </div>
 
         <div id="icons" class="skills-category">
-            <div class="skills-category-header icons" :ref="(el) => { titleRefs[6] = el; }">
+            <div class="skills-category-header icons" :ref="(el) => { titleRefs[7] = el; }">
                 <font-awesome-icon icon="fa-brands fa-font-awesome" />
                 <span> Icons </span>
             </div>
@@ -134,30 +176,6 @@
     <WebFooter />
 </main>
 </template>
-
-<script setup>
-import vuejs_icon from "~/assets/Vuejs_Icon.png";
-import aws_icon from "~/assets/aws/AWS_Icon.png";
-
-const titleRefs = ref([]);
-const cardRefs = ref([]);
-
-useIntersectionObserver(titleRefs, (entry) => {
-    for(let i = 0; i < entry.length; i++) {
-        const observed = entry[i];
-        setFlipInXAnimation(observed.target, observed.isIntersecting);
-    }
-});
-useIntersectionObserver(cardRefs, (entry) => {
-    for(let i = 0; i < entry.length; i++) {
-        const observed = entry[i];
-        addNoteCardAnimation(observed.target, observed.isIntersecting);
-    }
-});
-
-// This defines the Page's SEO Tags.
-useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"));
-</script>
 
 <style lang="scss">
 @use "~/styles/navpage";
@@ -216,6 +234,7 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
     background-color: rgba(0, 0, 0, 1);
     border: 2px solid white;
     border-radius: 20px;
+    user-select: none;
 }
 .skills-category-header img, .skills-category-header svg {
     width: 50px;
@@ -233,6 +252,9 @@ useHead(getMeta("Mohit Jain | My Skills", "skills/", SKILLS_PAGE_DESC, "#0047AB"
 }
 .skills-category-header.google {
     color: #4c8bf5;
+}
+.skills-category-header.platforms {
+    color: #F58A27;
 }
 .skills-category-header.modules {
     color: #5C9E57;

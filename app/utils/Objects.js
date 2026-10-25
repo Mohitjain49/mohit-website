@@ -1,34 +1,36 @@
-import vue_icon from "../assets/Vuejs_Icon.png";
-import angular_icon from "../assets/Angular_Icon.webp";
-import react_icon from "../assets/React_Icon.png";
-import jest_icon from "../assets/jest_icon.png";
-import expo_icon from "../assets/sublo/Expo_Icon.svg";
-import vite_icon from "../assets/Vite_Icon.svg";
-import nuxt_icon from "../assets/Nuxt_Icon.png";
-import pinia_icon from "../assets/Pinia_Icon.svg";
-import unjs_icon from "../assets/UnJS_Icon.png";
-import fontsource_icon from "../assets/FontSource_Icon.png";
-import tauri_icon from "../assets/Tauri_Icon.png";
-import vite_pwa_icon from "../assets/Vite_PWA_Icon.png";
-import arduino_icon from "../assets/Arduino_Icon.svg";
-import r_icon from "../assets/R_Project_Icon.png";
-import c_programming_icon from "../assets/C_Programming_Icon.svg";
-import google_colab_icon from "../assets/Google_Colab_Icon.png";
+import vue_icon from "~/assets/Vuejs_Icon.png";
+import angular_icon from "~/assets/Angular_Icon.webp";
+import react_icon from "~/assets/React_Icon.png";
+import jest_icon from "~/assets/jest_icon.png";
+import expo_icon from "~/assets/sublo/Expo_Icon.svg";
+import vite_icon from "~/assets/Vite_Icon.svg";
+import nuxt_icon from "~/assets/Nuxt_Icon.png";
+import pinia_icon from "~/assets/Pinia_Icon.svg";
+import azure_devops_logo from "~/assets/Azure_Devops_Logo.png";
+import fontsource_icon from "~/assets/FontSource_Icon.png";
+import tauri_icon from "~/assets/Tauri_Icon.png";
+import vite_pwa_icon from "~/assets/Vite_PWA_Icon.png";
+import arduino_icon from "~/assets/Arduino_Icon.svg";
+import r_icon from "~/assets/R_Project_Icon.png";
+import c_programming_icon from "~/assets/C_Programming_Icon.svg";
+import google_colab_icon from "~/assets/Google_Colab_Icon.png";
+import pdfjs_logo from "~/assets/PDFJS_logo.svg";
+import shiki_logo from "~/assets/Shiki_logo.svg";
 
-import cesium_icon from "../assets/Cesium_Globe_Icon.svg";
-import mavlink_icon from "../assets/ivue/Mavlink_Icon.png";
-import ivue_black_text from "../assets/ivue/iVue_Black_Text_Cropped.png";
-import worlds_ivue_icon from "../assets/ivue/Worlds_iVue_Icon.png";
+import cesium_icon from "~/assets/Cesium_Globe_Icon.svg";
+import mavlink_icon from "~/assets/ivue/Mavlink_Icon.png";
+import ivue_black_text from "~/assets/ivue/iVue_Black_Text_Cropped.png";
+import worlds_ivue_icon from "~/assets/ivue/Worlds_iVue_Icon.png";
 import mnd_text from "/static-icons/MND_Icon_Transparent.png";
-import tsparticles from "../assets/TS_Particles_Banner.png";
+import tsparticles from "~/assets/TS_Particles_Banner.png";
 
-import aws_icons_logo from "../assets/aws/AWS_Icons_Logo.svg";
-import aws_icon from "@/assets/aws/AWS_Icon.png";
-import cognito_icon from "../assets/aws/AWS_Cognito_Icon.svg";
-import amplify_icon from "../assets/aws/AWS_Amplify_Icon.svg";
-import cloudfront_icon from "../assets/aws/AWS_CloudFront_Icon.svg";
-import ses_icon from "../assets/aws/AWS_SES_Icon.svg";
-import api_gateway_icon from "../assets/aws/AWS_API_Gateway_Icon.svg";
+import aws_icons_logo from "~/assets/aws/AWS_Icons_Logo.svg";
+import aws_icon from "~/assets/aws/AWS_Icon.png";
+import cognito_icon from "~/assets/aws/AWS_Cognito_Icon.svg";
+import amplify_icon from "~/assets/aws/AWS_Amplify_Icon.svg";
+import cloudfront_icon from "~/assets/aws/AWS_CloudFront_Icon.svg";
+import ses_icon from "~/assets/aws/AWS_SES_Icon.svg";
+import api_gateway_icon from "~/assets/aws/AWS_API_Gateway_Icon.svg";
 
 export const PERSONAL_WEBSITE_LINK = "https://www.mohit-jain.com/";
 export const PERSONAL_RESUME_LINK = (PERSONAL_WEBSITE_LINK + "Mohit_Jain_Resume.pdf");
@@ -65,6 +67,8 @@ export const VUEJS_WEBSITE_LINK = "https://vuejs.org/";
 export const REACT_NATIVE_WEBSITE_LINK = "https://reactnative.dev/";
 export const NUXT_WEBSITE_LINK = "https://nuxt.com/";
 export const MAVLINK_WEBSITE_LINK = "https://mavlink.io/";
+export const SHIKI_LINK = "https://shiki.style/";
+export const PDFJS_LINK = "https://mozilla.github.io/pdf.js/";
 
 export const GEN_AI_APPLICATIONS_PAPER_ROUTE = "/Generative_Artificial_Intelligence_Transforming_Industries_Research_Paper/";
 export const GEN_AI_APPLICATIONS_PAPER_LINK = "https://www.americanscholarspress.us/journals/IMR/pdf/IMR-1-2026/IMRv22N12026-art7.pdf";
@@ -478,6 +482,50 @@ export const GOOGLE_SKILL_NOTES = [
     }
 ];
 
+export const PLATFORMS_SKILL_NOTES = [
+    {
+        name: "GitHub",
+        link: "https://github.com/",
+        color: "black",
+        desc: "I use GitHub as my go to version control app for all my projects. " +
+            "It's extremely reliable for me and my team at iVue to use this for all projects, and it helps store archived code. " +
+            "With GitHub Actions, I can even set up CI/CD pipelines for my websites to autonomously deploy updates online.",
+
+        icon: {
+            id: "fa-brands fa-github",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
+        name: "Azure DevOps",
+        link: "https://azure.microsoft.com/en-us/products/devops/",
+        color: "#569DEC",
+        desc: "During my time as an intern working for the 402D Software Engineering Group of the U.S. Air Force, " +
+            "I built an automated Azure DevOps CI/CD Pipeline with a Custom Node.js Script that parses, converts, and ships " +
+            "Microsoft Word Documentation to stakeholders as Static and Easy To Use HTML Pages.",
+
+        icon: {
+            id: azure_devops_logo,
+            faIcon: false,
+            size: "110"
+        }
+    },
+    {
+        name: "Cloudflare",
+        link: "https://www.cloudflare.com/",
+        color: "#F58A27",
+        desc: "Cloudflare has a free platform called Cloudflare Pages that simplifies deploying full-stack applications to the web. " +
+            "It has a free version that I use to ensure that my web development projects run smoothly online.",
+
+        icon: {
+            id: "fa-brands fa-cloudflare",
+            faIcon: true,
+            size: "110"
+        }
+    },
+]
+
 export const MODULES_SKILL_NOTES = [
     {
         name: "Cesium",
@@ -508,20 +556,6 @@ export const MODULES_SKILL_NOTES = [
         }
     },
     {
-        name: "GitHub",
-        link: "https://github.com/",
-        color: "black",
-        desc: "I use GitHub as my go to version control app for all my projects. " +
-            "It's extremely reliable for me and my team at iVue to use this for all projects, and it helps store archived code. " +
-            "With GitHub Actions, I can even set up CI/CD pipelines for my websites to autonomously deploy updates online.",
-
-        icon: {
-            id: "fa-brands fa-github",
-            faIcon: true,
-            size: "110"
-        }
-    },
-    {
         name: "Jest",
         link: "https://jestjs.io/",
         color: "#99425B",
@@ -535,29 +569,30 @@ export const MODULES_SKILL_NOTES = [
         }
     },
     {
-        name: "UnJS",
-        link: "https://unjs.io/",
-        color: "#D3B62A",
-        desc: "UnJS is an ecosystem of JavaScript Modules that help with developing websites and apps. " +
-            "I use some of its modules within my own projects like this portfolio website and iVue's websites.",
+        name: "PDF.js",
+        link: PDFJS_LINK,
+        color: "#FF2600",
+        desc: "PDF.js is a PDF Rendering Library that allows developers to easily display PDFs on websites and web apps " +
+            "without needing to rely on a browser's native PDF Viewer. I use it on my website and other websites to do exactly that. " +
+            "I have even created my own print action using PDF.js.",
 
         icon: {
-            id: unjs_icon,
+            id: pdfjs_logo,
             faIcon: false,
             size: "105"
         }
     },
     {
-        name: "Cloudflare",
-        link: "https://www.cloudflare.com/",
-        color: "#F58A27",
-        desc: "Cloudflare has a free platform called Cloudflare Pages that simplifies deploying full-stack applications to the web. " +
-            "It has a free version that I use to ensure that my web development projects run smoothly online.",
+        name: "Shiki",
+        link: SHIKI_LINK,
+        color: "#4B9978",
+        desc: "I use Shiki on this website to display some of my Developer Operations (DevOps) Scripts so others can see my work " +
+            "and use the scripts should they want to.",
 
         icon: {
-            id: "fa-brands fa-cloudflare",
-            faIcon: true,
-            size: "110"
+            id: shiki_logo,
+            faIcon: false,
+            size: "105"
         }
     },
 ];
@@ -902,34 +937,35 @@ export const FEATURE_ENTITIES = [
 ];
 
 export const HOME_COMPASS = [
-    { title: "Start", id: "start", color: "var(--website-text)", faIcon: true, icon: "fa-house", offset: 0 },
-    { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code", offset: 0 },
-    { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon, offset: 0 },
-    { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes", offset: 0 },
-    { title: "My Library", id: "library", color: "var(--website-light-text)", faIcon: true, icon: "fa-book-open-reader", offset: 0 }
+    { title: "Start", id: "start", color: "var(--website-text)", faIcon: true, icon: "fa-house" },
+    { title: "My Skills", id: "skills", color: "var(--blue-zero)", faIcon: true, icon: "fa-code" },
+    { title: "iVue", id: "ivue", color: "white", faIcon: false, icon: worlds_ivue_icon },
+    { title: "My Projects", id: "projects", color: "var(--globe-green-light)", faIcon: true, icon: "fa-cubes" },
+    { title: "My Library", id: "library", color: "var(--website-light-text)", faIcon: true, icon: "fa-book-open-reader" }
 ];
 
 export const SKILLS_COMPASS = [
-    { title: "Vue.js", id: "vuejs", color: "#41B883", faIcon: false, icon: vue_icon, offset: 0 },
-    { title: "Frontend", id: "frontend", color: "#D3B62A", faIcon: true, icon: "fa-brands fa-js", offset: 0 },
-    { title: "AWS", id: "aws", color: "#5468ff", faIcon: false, icon: aws_icon, offset: 0 },
-    { title: "Google", id: "google", color: "#4c8bf5", faIcon: true, icon: "fa-brands fa-google", offset: 0 },
-    { title: "Modules", id: "modules", color: "#5C9E57", faIcon: true, icon: "fa-brands fa-node-js", offset: 0 },
-    { title: "Languages", id: "languages", color: "#E34E26", faIcon: true, icon: "fa-laptop-code", offset: 0 },
-    { title: "Icons", id: "icons", color: "rgb(83, 141, 215)", faIcon: true, icon: "fa-brands fa-font-awesome", offset: 0 }
+    { title: "Vue.js", id: "vuejs", color: "#41B883", faIcon: false, icon: vue_icon },
+    { title: "Frontend", id: "frontend", color: "#D3B62A", faIcon: true, icon: "fa-brands fa-js" },
+    { title: "AWS", id: "aws", color: "#5468ff", faIcon: false, icon: aws_icon },
+    { title: "Google", id: "google", color: "#4c8bf5", faIcon: true, icon: "fa-brands fa-google" },
+    { title: "Platforms", id: "platforms", color: "#F58A27", faIcon: true, icon: "fa-code-compare" },
+    { title: "Modules", id: "modules", color: "#5C9E57", faIcon: true, icon: "fa-brands fa-node-js" },
+    { title: "Languages", id: "languages", color: "#E34E26", faIcon: true, icon: "fa-laptop-code" },
+    { title: "Icons", id: "icons", color: "rgb(83, 141, 215)", faIcon: true, icon: "fa-brands fa-font-awesome" }
 ];
 
 export const CONTACT_COMPASS = [
-    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square", offset: 0 },
-    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope", offset: 0 },
-    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin", offset: 0 },
-    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github", offset: 0 },
-    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab", offset: 0 },
-    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam", offset: 0 }
+    { title: "Contact Form", id: "form", color: "var(--website-text)", faIcon: true, icon: "fa-pen-to-square" },
+    { title: "My Email", id: "work_email", color: "var(--website-light-text)", faIcon: true, icon: "fa-envelope" },
+    { title: "LinkedIn", id: "linkedin", color: "#0072B1", faIcon: true, icon: "fa-brands fa-linkedin" },
+    { title: "GitHub", id: "github", color: "#FFFFFF", faIcon: true, icon: "fa-brands fa-github" },
+    { title: "GitLab", id: "gitlab", color: "#E24329", faIcon: true, icon: "fa-brands fa-gitlab" },
+    { title: "Steam", id: "steam", color: "#167EB1", faIcon: true, icon: "fa-brands fa-steam" }
 ];
 
 export const LIBRARY_COMPASS = [
-    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open", offset: 0 },
-    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code", offset: 0 },
-    { title: "My C Scripts", id: "c", color: "var(--c-color)", faIcon: false, icon: c_programming_icon, offset: 0 }
+    { title: "My Documents", id: "documents", color: "var(--website-light-text)", faIcon: true, icon: "fa-folder-open" },
+    { title: "My Code", id: "scripts", color: "var(--script-page-main-color)", faIcon: true, icon: "fa-file-code" },
+    { title: "My C Scripts", id: "c", color: "var(--c-color)", faIcon: false, icon: c_programming_icon }
 ];
