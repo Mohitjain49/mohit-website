@@ -39,7 +39,7 @@ useIntersectionObserver(cardRefs, (entry) => {
 
 onMountedAdvanced(async() => {
     await nextTick();
-    if(getMohitInnerWidth() <= 450) { return; }
+    if(getCssInnerWidth() <= 450) { return; }
 
     const elements = [
         document.getElementsByClassName('features-main-header').item(0),

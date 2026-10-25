@@ -187,7 +187,7 @@ const isMounted = onMountedAdvanced(() => {
 
     contactAbortController = new AbortController();
     window.addEventListener("keydown", (event) => { onContactPageKeydown(event); }, { signal: contactAbortController.signal });
-    if(getMohitInnerWidth() <= 525 || routeHash.value !== "") { return; }
+    if(getCssInnerWidth() <= 525 || routeHash.value !== "") { return; }
 
     const contactBoxes = document.getElementsByClassName("contact-me-box");
     contactBoxes.item(0)?.classList.add("animate__animated", "animate__fadeInDown");

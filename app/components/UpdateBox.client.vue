@@ -1,5 +1,5 @@
 <template>
-<Transition :name="((windowWidth > 600) ? 'update-box-transition' : 'update-box-mobile-transition')">
+<Transition :name="((styleStore.cssViewportWidth > 600) ? 'update-box-transition' : 'update-box-mobile-transition')">
     <div v-if="installStore.showUpdateBox" class="update-box">
         <div class="update-box-desc">
             <FontAwesomeIcon :class="['update-box-desc-mainIcon', (installStore.swUpdating ? 'updating' : '')]"
@@ -26,9 +26,9 @@
 import dayjs from 'dayjs';
 
 const { $pwa, $websiteBuild } = useNuxtApp();
-const { width: windowWidth } = useMohitWindowSize();
 const currentNow = useNow({ scheduler: (fn) => useIntervalFn(fn, 1000) });
 
+const styleStore = useStyleStore();
 const installStore = useInstallStore();
 const UPDATE_DATE = ref("10/24/2025");
 

@@ -39,20 +39,27 @@ export function getColorStyles(color = "var(--website-text)") {
 }
 
 /** This returns the css inner width. */
-export function getMohitInnerWidth() {
-    if(!import.meta.client || !document || !window) { return 0; }
-    const element = document.getElementById("invisible-css-layout");
-    const defaultWidth = window.innerWidth;
-
-    return (element == null ? defaultWidth : (element.clientWidth + (defaultWidth - document.documentElement.clientWidth)));
+export function getCssInnerWidth() {
+    if(usePinia()) {
+        return useStyleStore().cssViewportWidth;
+    } else {
+        if(!import.meta.client || !document || !window) { return 0; }
+        const element = document.getElementById("invisible-css-layout");
+        const defaultWidth = window.innerWidth;
+        return (element == null ? defaultWidth : (element.clientWidth + (defaultWidth - document.documentElement.clientWidth)));
+    }
 }
 
 /** This returns the css inner height. */
-export function getMohitInnerHeight() {
-    if(!import.meta.client || !document || !window) { return 0; }
-    const element = document.getElementById("invisible-css-layout");
-    const defaultHeight = window.innerHeight;
-    return (element == null ? defaultHeight : (element.clientHeight + (defaultHeight - document.documentElement.clientHeight)));
+export function getCssInnerHeight() {
+    if(usePinia()) {
+        return useStyleStore().cssViewportHeight;
+    } else {
+        if(!import.meta.client || !document || !window) { return 0; }
+        const element = document.getElementById("invisible-css-layout");
+        const defaultHeight = window.innerHeight;
+        return (element == null ? defaultHeight : (element.clientHeight + (defaultHeight - document.documentElement.clientHeight)));
+    }
 }
 
 /** This returns the "Scroll Y" that should be used for calculations. */

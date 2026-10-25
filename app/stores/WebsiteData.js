@@ -26,7 +26,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const styleStore = useStyleStore();
 
     const { share, isSupported: shareSupported } = useShare();
-    const { width: windowWidth } = useMohitWindowSize();
     const wakeLock = useWakeLock();
 
     /** @type {Ref<HTMLElement>} This represents the website footer. */
@@ -55,7 +54,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const resumeMenuOpen = computed(() => { return (menuOpen.value == RESUME_MENU); });
     const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_METADATA_MENU); });
 
-    const websiteMenuMode = computed(() => { return ((windowWidth.value > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
+    const websiteMenuMode = computed(() => { return ((styleStore.cssViewportWidth > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
     const websiteMenuHideOverflow = computed(() => { return (!noMenuOpen.value && websiteMenuMode.value == 1); });
 

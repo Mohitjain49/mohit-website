@@ -13,7 +13,6 @@ export const useScrollStore = defineStore("scroll-store", () => {
     const styleStore = useStyleStore();
 
     const fullScreenSet = getFullScreenSet();
-    const { cssToWindowHeightRatio } = useMohitWindowSize();
     const mounted = ref(false);
 
     /** @type {Lenis} This contains the Lenis object for autoscrolling. */
@@ -159,7 +158,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
             }
 
             const initDuration = (Math.abs(targetY - scrollY) / 4000);
-            const finalDuration = Math.max(0.75, Math.min((initDuration * cssToWindowHeightRatio.value), 3));
+            const finalDuration = Math.max(0.75, Math.min((initDuration * styleStore.cssToWindowHeightRatio), 3));
 
             scrollProgress.value.targetElement = target;
             scrollProgress.value.duration = finalDuration;
@@ -169,7 +168,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
             const addedScrollMargin = parseFloat(window.getComputedStyle(target).getPropertyValue('scroll-margin-top'));
 
             if(!isNaN(addedScrollMargin) && addedScrollMargin != 0) {
-                offset = (addedScrollMargin - (addedScrollMargin / cssToWindowHeightRatio.value));
+                offset = (addedScrollMargin - (addedScrollMargin / styleStore.cssToWindowHeightRatio));
             }
 
             sleep(finalDuration + 1005).then(() => { resolve("timed out."); });
@@ -199,7 +198,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 return;
             }
 
-            const duration = Math.max(0.75, Math.min(((scrollY / 4000) * cssToWindowHeightRatio.value), 3));
+            const duration = Math.max(0.75, Math.min(((scrollY / 4000) * styleStore.cssToWindowHeightRatio), 3));
             scrollProgress.value.duration = duration;
             scrollStartTime = dayjs(new Date());
 

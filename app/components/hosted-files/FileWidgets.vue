@@ -39,9 +39,9 @@ const PAGE_NUMBER_REGEX = /^[0-9]*$/;
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
+const styleStore = useStyleStore();
 
 const fullScreenSet = getFullScreenSet();
-const { width: windowWidth } = useMohitWindowSize();
 const { onDocumentRoute, currentObservedPage } = storeToRefs(documentStore);
 const { isAutoScrolling } = storeToRefs(useScrollStore());
 
@@ -50,7 +50,7 @@ const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
 
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
-const largeWindowWidth = computed(() => { return (onDocumentRoute.value && (windowWidth.value > documentStore.customPdfWidth + 150)); });
+const largeWindowWidth = computed(() => { return (onDocumentRoute.value && (styleStore.cssViewportWidth > (documentStore.customPdfWidth + 150))); });
 const showMinimizeWidget = computed(() => { return (fullScreenSet.value && (!hfBottomBarVisible.value || largeWindowWidth.value)); });
 const showPageNavigationWidget = computed(() => { return (onDocumentRoute.value && documentStore.docLoaded.status && (documentStore.docLoaded.totalPages > 1)); });
 

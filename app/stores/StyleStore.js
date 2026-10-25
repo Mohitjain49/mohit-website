@@ -379,7 +379,7 @@ export const useStyleStore = defineStore("style-store", () => {
     function setDynamicZoomFactor() {
         if(!validateClientMode()) { return; }
         const properOrientationType = recordedOrientation.value.startsWith("landscape");
-        const baseViewportHeight = (viewportHeight.value < 450);
+        const baseViewportHeight = (viewportHeight.value <= 450);
         const mobileDevice = (onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY);
 
         const newZoomFactor = ((properOrientationType && baseViewportHeight && mobileDevice) ? 0.5 : 1.0);

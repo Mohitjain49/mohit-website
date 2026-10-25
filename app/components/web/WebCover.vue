@@ -33,10 +33,8 @@ const props = defineProps({
 const coverRef = useTemplateRef('mohit-website-cover');
 const { pressed: coverPressed } = useMousePressed({ target: coverRef });
 const { isOutside: mouseOutsideCover } = useMouseInElement(coverRef);
-const { mouseX: x, mouseY: y } = storeToRefs(styleStore);
-
+const { mouseX: x, mouseY: y, cssToWindowHeightRatio, cssToWindowWidthRatio } = storeToRefs(styleStore);
 const interval = useInterval(10, { controls: true, immediate: false });
-const { cssToWindowHeightRatio, cssToWindowWidthRatio } = useMohitWindowSize();
 
 const counter = computed(() => { return interval.counter.value; });
 const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex } });

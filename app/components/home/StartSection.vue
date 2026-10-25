@@ -167,7 +167,7 @@ function setNameTransitions(isVisible) {
         return;
     }
 
-    if(getMohitInnerWidth() <= 450) {
+    if(getCssInnerWidth() <= 450) {
         document.getElementById(START_INNER_CONTAINER_ID)?.classList.add("animate__animated", "animate__fadeIn");
     } else {
         document.getElementsByClassName("start-section-title").item(0)?.classList.add("animate__animated", "animate__lightSpeedInLeft");

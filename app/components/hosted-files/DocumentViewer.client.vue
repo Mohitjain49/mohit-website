@@ -60,9 +60,7 @@ const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
 const styleStore = useStyleStore();
 const scrollStore = useScrollStore();
-
 const fullScreenSet = getFullScreenSet();
-const { width: windowWidth, cssToWindowHeightRatio } = useMohitWindowSize();
 
 const props = defineProps({
     templateIndex: { type: Number, required: true },
@@ -96,7 +94,7 @@ const pages = ref(0);
 const docPages = ref([{ loaded: false, num: 0, showAnnotations: true }]);
 
 const showDocumentShareWidgets = computed(() => {
-    return (props.addShare && documentStore.docLoaded.status && (props.shareMinWidth <= windowWidth.value));
+    return (props.addShare && documentStore.docLoaded.status && (props.shareMinWidth <= styleStore.cssViewportWidth));
 });
 const showFsWebCover = computed(() => {
     if(!fullScreenSet.value) { return false; }
@@ -526,7 +524,7 @@ function scrollToPdfDest(pageNumber = 1, y = 0) {
     const destY = (Math.abs(y - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
     const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue(PDFJS_SCALE_CSS_PROPERTY));
 
-    const destPixels = (((destY * destScalar) - (fullScreenSet.value ? 20 : 90)) / cssToWindowHeightRatio.value);
+    const destPixels = (((destY * destScalar) - (fullScreenSet.value ? 20 : 90)) / styleStore.cssToWindowHeightRatio);
     const top = (pageElement.getBoundingClientRect().top + getScrollY() + destPixels);
     scrollToTarget(top);
 }

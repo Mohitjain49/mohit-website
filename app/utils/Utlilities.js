@@ -1,14 +1,3 @@
-/** This returns an object similar to "useWindowSize", but it records the css layout over the inner layout dimensions. */
-export function useMohitWindowSize() {
-    const styleStoreRefs = storeToRefs(useStyleStore());
-    const width = computed(() => { return styleStoreRefs.cssViewportWidth.value });
-    const height = computed(() => { return styleStoreRefs.cssViewportHeight.value });
-
-    const cssToWindowWidthRatio = computed(() => { return styleStoreRefs.cssToWindowWidthRatio.value });
-    const cssToWindowHeightRatio = computed(() => { return styleStoreRefs.cssToWindowHeightRatio.value });
-    return { width, height, cssToWindowWidthRatio, cssToWindowHeightRatio }
-}
-
 /**
  * This function returns how much an element has scrolled from its starting point to its end both horizontally and vertically.
  * @param {String} elementId The id of the element.

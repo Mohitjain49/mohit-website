@@ -66,7 +66,7 @@ export function setBottomCornerWidgetAnimation(widgetId = "") {
 export function setHomeTabAnimation(target, fromLeft = true, isVisible = true) {
     if(!isVisible || (findHomeTabTarget(target) != -1)) { return; }
     const animationClassList = ["animate__animated", "animate__fadeInLeft", "animate__fadeInRight", "animate__zoomIn"];
-    const animationClass = animationClassList[(getMohitInnerWidth() > 450) ? (fromLeft ? 1 : 2) : 3];
+    const animationClass = animationClassList[(getCssInnerWidth() > 450) ? (fromLeft ? 1 : 2) : 3];
 
     removeAnimationClasses(target);
     target.classList.add("animate__animated", animationClass);
