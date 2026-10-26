@@ -6,7 +6,13 @@
             <h3 v-if="onResumeRoute"> <span id="mohit-document-contextMenu-pageNum"> My Resume </span> </h3>
 
             <div class="mohit-hostedDoc-contextMenu-topOpts">
-                <button class="web-menu" @click="openDocumentMenu()" ref="options-open-web-menu-btn" title="Open Document Menu">
+                <button v-if="onResumeRoute" class="resume-menu" @click="openWebsiteMenu(RESUME_MENU)"
+                    ref="options-open-resume-menu-btn"
+                    title="Edit Resume Components">
+
+                    <FontAwesomeIcon icon="fa-gears" :jello="animateResumeMenuButton" />
+                </button>
+                <button class="web-menu" @click="openWebsiteMenu(DOCUMENT_MENU)" ref="options-open-web-menu-btn" title="Open Document Menu">
                     <FontAwesomeIcon icon="fa-file-pdf" :jello="animateWebMenuButton" />
                 </button>
                 <button @click="closeDocumentContextMenu()" ref="options-close-btn" title="Close Context Menu">
@@ -14,9 +20,9 @@
                 </button>
             </div>
         </div>
+
         <button @click="copyPageLink()" v-action-cursor="copyStatus">
-            <span> Copy Page Link </span>
-            <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="copyStatus" />
+            <span> Copy Page Link </span> <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="copyStatus" />
         </button>
         <button class="share" @click="sharePageLink()">
             <span> Share Page Link </span> <FontAwesomeIcon icon="fa-share-from-square" />
@@ -36,8 +42,11 @@ const { contextMenuPageNumber, onResumeRoute } = storeToRefs(documentStore);
 
 const closeButton = useTemplateRef('options-close-btn');
 const webMenuButton = useTemplateRef('options-open-web-menu-btn');
+const resumeMenuButton = useTemplateRef('options-open-resume-menu-btn');
+
 const hoverOnCloseButton = useElementHover(closeButton);
 const hoverOnWebMenuButton = useElementHover(webMenuButton);
+const hoverOnResumeMenuButton = useElementHover(resumeMenuButton);
 
 /** @type {AbortController} The abort controller for the event listeners here. */
 var docContextMenuAbortController = null;
@@ -46,11 +55,14 @@ const contextMenuPosition = ref({ left: "0px", top: "0px" });
 
 const viewablePageNumber = ref(1);
 const copyStatus = ref(0);
+
 const animateCloseButton = ref(false);
 const animateWebMenuButton = ref(false);
+const animateResumeMenuButton = ref(false);
 
 watch(hoverOnCloseButton, (newValue) => { animateCloseButton.value = newValue; });
 watch(hoverOnWebMenuButton, (newValue) => { animateWebMenuButton.value = newValue; });
+watch(hoverOnResumeMenuButton, (newValue) => { animateResumeMenuButton.value = newValue; });
 watch(contextMenuPageNumber, () => { onContextMenuPageNumberChange(); });
 
 // This mounts a few event listeners that help close the hosted document context menu if the proper HTML Element is not clicked.
@@ -67,11 +79,14 @@ onMountedAdvanced(() => {
 // This aborts the event listeners when the user leaves the webpage.
 onBeforeUnmount(() => { if(docContextMenuAbortController != null) { docContextMenuAbortController.abort(); }});
 
-/** This function opens the main hosted Document menu. */
-function openDocumentMenu() {
+/**
+ * This function opens a website menu
+ * @param {Number} num The number of the website menu
+ */
+function openWebsiteMenu(num = DOCUMENT_MENU) {
     closeDocumentContextMenu();
     webData.bypassBodyClick();
-    webData.setMenuOpen(DOCUMENT_MENU, false);
+    webData.setMenuOpen(num, false);
 }
 
 /** This function closes the hosted document context menu. */
@@ -84,6 +99,7 @@ function closeDocumentContextMenu() {
 function stopButtonAnimations() {
     animateCloseButton.value = false;
     animateWebMenuButton.value = false;
+    animateResumeMenuButton.value = false;
 }
 
 /** This function is triggered every time the page number for the context menu changes. */
@@ -92,7 +108,7 @@ function onContextMenuPageNumberChange() {
     setContextMenuPosition();
 
     const newNumber = contextMenuPageNumber.value;
-    if(newNumber >= 1 && newNumber <= documentStore.docLoaded.totalPages) { viewablePageNumber.value = newNumber; }
+    if(documentStore.checkValidPageNumber(newNumber)) { viewablePageNumber.value = newNumber; }
 }
 
 /**

@@ -795,11 +795,19 @@ export const useDocumentStore = defineStore("document-store", () => {
     }
 
     /**
+     * This function returns a boolean based on whether the number is a valid page number on the page itself.
+     * @param {Number} pageNum The page number to check.
+     */
+    function checkValidPageNumber(pageNum = 1) {
+        return (pageNum >= 1 && pageNum <= docLoaded.value.totalPages && Number.isInteger(pageNum));
+    }
+
+    /**
      * This function sets the current observed page.
      * @param {Number} index The Page Number.
      */
     function setCurrentObservedPage(index = 1) {
-        if(index >= 1 && index <= docLoaded.value.totalPages) { currentObservedPage.value = index; }
+        if(checkValidPageNumber(index)) { currentObservedPage.value = index; }
     }
 
     /**
@@ -807,7 +815,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Number} index The Page Number. 0 by default means that the contextmenu should be hidden.
      */
     function setContextMenuPageNumber(index = 0) {
-        if(index >= 0 && index <= docLoaded.value.totalPages) { contextMenuPageNumber.value = index; }
+        if(index == 0 || checkValidPageNumber(index)) { contextMenuPageNumber.value = index; }
     }
 
     /** This function returns if a document is NOT loaded on a document page. */
@@ -823,7 +831,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
-        checkPdfjsWorker, getPdfjsStylesheet, getCurrentDocumentMetadata, checkDocNotLoaded, onHostedDocumentPageCopy
+        checkPdfjsWorker, getPdfjsStylesheet, getCurrentDocumentMetadata, checkValidPageNumber, checkDocNotLoaded, onHostedDocumentPageCopy
     }
 });
 

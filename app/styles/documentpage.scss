@@ -34,21 +34,6 @@
     visibility: hidden;
 }
 
-.markdown-body {
-    width: calc(100% - 70px);
-    max-width: 1000px;
-    padding: 15px;
-    border-radius: 5px;
-    height: fit-content;
-    margin: 0px auto;
-    background-color: white;
-    font-family: 'Roboto', sans-serif;
-}
-:fullscreen .markdown-body {
-    min-width: 0px;
-    max-width: none;
-}
-
 .pdf-doc-mohit-container {
     height: fit-content;
     width: 100%;
@@ -300,6 +285,11 @@
     color: var(--website-light-text);
     border-color: var(--website-light-text);
 }
+.mohit-hostedDoc-contextMenu-top button.resume-menu {
+    color: var(--vibrant-flame);
+    border-color: var(--vibrant-flame);
+}
+
 .mohit-hostedDoc-contextMenu-top button:hover {
     background-color: var(--dark-background);
 }

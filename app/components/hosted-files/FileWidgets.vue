@@ -140,7 +140,7 @@ function onPageNumberKeydown(event) {
         if(editedNumber === currentObservedPage.value) { return; }
         document.getElementById("page-number-mohit")?.blur();
 
-        if(widgetPageNumber.value === "" || editedNumber < 1 || editedNumber > documentStore.docLoaded.totalPages) {
+        if(widgetPageNumber.value === "" || !documentStore.checkValidPageNumber(editedNumber)) {
             resetWidgetPageNumber();
         } else {
             documentStore.scrollToPage(editedNumber);

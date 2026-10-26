@@ -24,7 +24,6 @@ import worlds_ivue_icon from "~/assets/ivue/Worlds_iVue_Icon.png";
 import mnd_text from "/static-icons/MND_Icon_Transparent.png";
 import tsparticles from "~/assets/TS_Particles_Banner.png";
 
-import aws_icons_logo from "~/assets/aws/AWS_Icons_Logo.svg";
 import aws_icon from "~/assets/aws/AWS_Icon.png";
 import cognito_icon from "~/assets/aws/AWS_Cognito_Icon.svg";
 import amplify_icon from "~/assets/aws/AWS_Amplify_Icon.svg";
@@ -729,20 +728,6 @@ export const ICONS_SKILL_NOTES = [
             id: "fa-brands fa-font-awesome",
             faIcon: true,
             size: "100"
-        }
-    },
-    {
-        name: "AWS Icons",
-        link: "https://aws-icons.com/",
-        color: "#F59D0A",
-        desc: "Amazon Web Services (AWS) has an entire website dedicated to their icons. " +
-            "Nearly every AWS service and more has a specialized icon, " +
-            "and I use these icons on the AWS page and other places on my website.",
-
-        icon: {
-            id: aws_icons_logo,
-            faIcon: false,
-            size: "125"
         }
     },
     {
