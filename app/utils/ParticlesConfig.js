@@ -9,7 +9,7 @@ import {
 export const HOME_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         move: {
             direction: "bottom",
@@ -40,15 +40,18 @@ export const HOME_BACKGROUND = ref({
             value: { min: 5, max: 6 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const LIBRARY_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         move: {
             direction: "outside",
@@ -79,15 +82,18 @@ export const LIBRARY_BACKGROUND = ref({
             value: { min: 5, max: 6 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const BLUE_BACKGROUND = ref({
     background: { color: "#0047AB" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         // paint: { fill: { enable: true, color: { value: "rgb(187, 210, 255)" }}},
         move: {
@@ -116,15 +122,18 @@ export const BLUE_BACKGROUND = ref({
             value: { min: 5, max: 7 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const ORANGE_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         paint: { fill: { enable: true, color: { value: "rgb(126, 90, 0)" }}},
         move: {
@@ -153,15 +162,18 @@ export const ORANGE_BACKGROUND = ref({
             value: { min: 2, max: 3 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const GREEN_BACKGROUND = ref({
     background: { color: "rgb(0, 100, 0)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         paint: { fill: { enable: true, color: { value: "rgb(144, 238, 144)" }}},
         move: {
@@ -190,15 +202,18 @@ export const GREEN_BACKGROUND = ref({
             value: { min: 3, max: 5 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const INSTALL_BACKGROUND = ref({
     background: { color: "#232323" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         paint: [
             { fill: { enable: true, color: { value: "rgba(126, 90, 0, 0.9)" }}},
@@ -226,15 +241,18 @@ export const INSTALL_BACKGROUND = ref({
             value: { min: 2, max: 3 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const WAKE_LOCK_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         paint: { fill: { enable: true, color: { value: "#E92A60" }}},
         move: {
@@ -265,15 +283,18 @@ export const WAKE_LOCK_BACKGROUND = ref({
             value: { min: 7, max: 8 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const FEATURES_BACKGROUND = ref({
     background: { color: "#000000" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         // paint: { fill: { enable: true, color: { value: "#FFD700" }}},
         move: {
@@ -301,8 +322,11 @@ export const FEATURES_BACKGROUND = ref({
             value: { min: 7, max: 8 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
@@ -337,13 +361,18 @@ export const CODE_SCANNER_BACKGROUND = ref({
             },
         },
     },
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const COPYRIGHT_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         move: {
             direction: "none",
@@ -371,14 +400,18 @@ export const COPYRIGHT_BACKGROUND = ref({
             value: 10,
         },
     },
-    detectRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const INVALID_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
@@ -407,15 +440,18 @@ export const INVALID_BACKGROUND = ref({
             value: { min: 7, max: 7 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const REDIRECT_BACKGROUND = ref({
     background: { color: "rgb(248, 206, 171)" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         // paint: { fill: { enable: true, color: { value: "#DFC5FE" }}},
         move: {
@@ -446,15 +482,18 @@ export const REDIRECT_BACKGROUND = ref({
             value: { min: 7, max: 7 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const DOCUMENT_BACKGROUND = ref({
     background: { color: "#464646" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         // paint: { fill: { enable: true, color: { value: "white" }}},
         move: {
@@ -483,15 +522,18 @@ export const DOCUMENT_BACKGROUND = ref({
             value: { min: 7, max: 7 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
 
 /** @type {Ref<import('@tsparticles/engine').IOptions>} */
 export const CODE_ICON_BACKGROUND = ref({
     background: { color: "#4d3e3e" },
     fullScreen: { enable: true, zIndex: -1 },
-    fpsLimit: 30,
+    fpsLimit: 45,
     particles: {
         // paint: { fill: { enable: true, color: { value: "white" }}},
         move: {
@@ -520,6 +562,9 @@ export const CODE_ICON_BACKGROUND = ref({
             value: { min: 7, max: 7 },
         },
     },
-    detectRetina: true,
-    tRetina: true,
+    resize: {
+        enable: false,
+        delay: 0
+    },
+    detectRetina: false,
 });
