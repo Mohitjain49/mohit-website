@@ -186,7 +186,10 @@ const isMounted = onMountedAdvanced(() => {
     audioStore.changeSTTUpdateFunc((str) => { msgMain.value += str; });
 
     contactAbortController = new AbortController();
-    window.addEventListener("keydown", (event) => { onContactPageKeydown(event); }, { signal: contactAbortController.signal });
+    window.addEventListener("keydown",
+        (event) => { onContactPageKeydown(event); },
+        { signal: contactAbortController.signal, capture: true }
+    );
     if(getCssInnerWidth() <= 525 || routeHash.value !== "") { return; }
 
     const contactBoxes = document.getElementsByClassName("contact-me-box");

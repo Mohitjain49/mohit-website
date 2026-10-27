@@ -300,7 +300,7 @@ async function mountSharePopup() {
     sharePopupAbortController = new AbortController();
     const signal = sharePopupAbortController.signal;
 
-    window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal });
+    window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal, capture: true });
     window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
 
     // This creates the Lenis auto scrolling for this popup.

@@ -82,7 +82,7 @@ onAfterMounted(() => {
     }
 
     window.addEventListener("pointerup", (event) => { onFsPointerUp(event); }, { signal });
-    document.addEventListener("keydown", (event) => { onFsKeydown(event); }, { signal })
+    window.addEventListener("keydown", (event) => { onFsKeydown(event); }, { signal, capture: true });
 });
 
 // This unsets a few variables before removing the component.

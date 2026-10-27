@@ -105,7 +105,9 @@ onMounted(async() => {
     try {
         if(renderAborted()) { return; }
         const signal = eventAbortController.signal;
-        window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal });
+
+        window.addEventListener("keydown", (event) => { documentStore.onHostedDocumentPageKeydown(event); }, { signal, capture: true });
+        window.addEventListener("keydown", (event) => { documentStore.openMetadataMenuOnKeydown(event); }, { signal, capture: true });
 
         await renderPDF();
         if(renderAborted()) { return; }

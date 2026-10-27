@@ -236,7 +236,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         manageLineNumberFocus(parseInt(hashStr.substring(1), 10), -1, 0);
 
         setScriptAbortController(true);
-        window.addEventListener("keydown", (event) => { onScriptPageKeydown(event); }, { signal: scriptAbortController.signal });
+        window.addEventListener("keydown",
+            (event) => { onScriptPageKeydown(event); },
+            { signal: scriptAbortController.signal, capture: true }
+        );
         await setLineNumberEventListeners();
     }
 

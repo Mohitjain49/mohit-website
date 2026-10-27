@@ -148,9 +148,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         resizePageComponents();
         window.addEventListener("animation-resize", () => { resizePageComponents(); }, { signal });
         window.addEventListener("unhandledrejection", (event) => { onUnhandledRejection(event); }, { signal });
+        window.addEventListener("keydown", (event) => { onKeyDown(event); }, { signal, capture: true });
 
         document.body.addEventListener("click", (event) => { onDocumentBodyClick(event); }, { signal });
-        document.body.addEventListener("keydown", (event) => { onKeyDown(event); }, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
 
         mounted.value = 1.75;
@@ -225,7 +225,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function onKeyDown(event) {
         audioStore.onKeydownForAudio(event);
         if(!event || !event.key || event.repeat) { return; }
-        const key = event.key.toLocaleLowerCase();
+        const key = event.key.toLowerCase();
+
+        if(key === "m" && (event.ctrlKey || event.altKey)) {
+            toggleNavMenu();
+            triggerClickSound();
+        }
 
         if(event.ctrlKey && event.altKey) {
             if(key === "w") {
@@ -235,17 +240,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
                 setQRCodePopup("toggle");
                 triggerClickSound();
             }
-        } else if(event.ctrlKey) {
-            if(key === "m") {
-                toggleNavMenu();
-                triggerClickSound();
-            }
         } else if(event.altKey) {
             if(key === "q") {
                 setQRCodePopup("toggle");
-                triggerClickSound();
-            } else if(key === "m") {
-                toggleNavMenu();
                 triggerClickSound();
             } else if(key === "w") {
                 toggleWakeLock();

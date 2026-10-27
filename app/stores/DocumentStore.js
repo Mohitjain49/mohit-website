@@ -83,6 +83,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const fsStateChanging = ref(false);
     const browserPdfViewerPresent = ref(false);
     const onFirefox = ref(false);
+    const onSafari = ref(false);
     const iframeSupported = ref(false);
     const confirmedImageTypes = ref(["image/png"]);
     const documentScrollEventListenerEnabled = ref(false);
@@ -248,20 +249,14 @@ export const useDocumentStore = defineStore("document-store", () => {
     function onHostedDocumentPageKeydown(event = undefined) {
         try {
             if(!event || webData.showSharePopup || !currentDocumentBlobCreated.value) { return; }
-            if(!event.key || event.repeat) { return; }
-
+            if(!event.key || !event.ctrlKey || event.repeat) { return; }
             const keyLetter = event.key.toLowerCase();
-            const specialKeyForMetadata = ((event.ctrlKey || event.altKey) && !event.shiftKey);
 
-            if(specialKeyForMetadata && keyLetter === "i" && currentDocumentMetadataParsed.value && !onFirefox.value) {
-                event.preventDefault();
-                webData.setMenuOpen(DOCUMENT_METADATA_MENU, true);
-                triggerClickSound();
-            } else if(keyLetter === "p" && event.ctrlKey) {
+            if(keyLetter === "p") {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
                 printDoc(!event.altKey && !event.shiftKey);
-            } else if(keyLetter === "s" && event.ctrlKey) {
+            } else if(keyLetter === "s") {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
 
@@ -572,8 +567,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         browserPdfViewerPresent.value = ('pdfViewerEnabled' in navigator && navigator.pdfViewerEnabled && userAgentExists && !notOnDesktop);
         iframeSupported.value = Boolean(document.createElement("iframe"));
 
-        // This records if the user is on a firefox browser or not.
-        onFirefox.value = ((Boolean(parsedUserAgent.browser.name) && userAgentExists) ? (parsedUserAgent.browser.name === "Firefox") : false);
+        // This records if the user is on a firefox browser or Safari Browser for a specific keybind.
+        const browserNameExists = (userAgentExists && Boolean(parsedUserAgent.browser.name));
+        onFirefox.value = (browserNameExists ? (parsedUserAgent.browser.name === "Firefox") : true);
+        onSafari.value = (browserNameExists ? (parsedUserAgent.browser.name === "Safari") : true);
 
         // This adds the PDF.js Viewer Styles to the DOM to ensure the rendered documents are visually appealing.
         const pdfViewerStyleBlock = document.createElement("style");
@@ -745,6 +742,30 @@ export const useDocumentStore = defineStore("document-store", () => {
         window.addEventListener("focus", () => { removePrintIFrame(false); }, { signal: windowFocusAbortController.signal });
     }
 
+    /**
+     * This function opens the metadata menu on a keydown event.
+     * @param {KeyboardEvent} event The event of clicking down the key.
+     */
+    function openMetadataMenuOnKeydown(event = null) {
+        try {
+            if(!event || webData.showSharePopup || !currentDocumentBlobCreated.value) { return; }
+            if(!event.key || event.repeat) { return; }
+
+            const openMetadataBase = (event.key.toLowerCase() === "i" && currentDocumentMetadataParsed.value && !event.shiftKey);
+            const altIOpen = (event.altKey && !event.ctrlKey);
+            const ctrlIOpen = (event.ctrlKey && !event.altKey && !onFirefox.value);
+            const ctrlAltIOpen = (event.ctrlKey && event.altKey && !onSafari.value);
+
+            if(openMetadataBase && (altIOpen || ctrlIOpen || ctrlAltIOpen)) {
+                event.preventDefault();
+                webData.setMenuOpen(DOCUMENT_METADATA_MENU, true);
+                triggerClickSound();
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+        }
+    }
+
     /** This function lets a function wait for when the PDF Document is fully rendered on the webpage before performing its tasks. */
     async function awaitDocLoaded() {
         await new Promise(async (resolve, reject) => {
@@ -828,7 +849,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         documentDownloadStatus, documentSaveStatus, documentShareStatus, documentPrintStatus, documentCustomPrintStatus,
         uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, customPdfWidth, customPdfHeight,
         customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
-        downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown,
+        downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, openMetadataMenuOnKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
         checkPdfjsWorker, getPdfjsStylesheet, getCurrentDocumentMetadata, checkValidPageNumber, checkDocNotLoaded, onHostedDocumentPageCopy
