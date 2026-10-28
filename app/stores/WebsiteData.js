@@ -227,8 +227,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(!event || !event.key || event.repeat) { return; }
         const key = event.key.toLowerCase();
 
-        if(key === "m" && (event.ctrlKey || event.altKey)) {
-            toggleNavMenu();
+        // When the "M" Key is pressed with a special key, a website menu should open.
+        if(key === "m" && (event.ctrlKey || event.altKey) && !showSharePopup.value) {
+            const fullScreenSet = fullScreenStore.fullScreenSet;
+            var menuToSet = NAVIGATION_MENU;
+
+            if(fullScreenSet && documentStore.onDocumentRoute) {
+                menuToSet = DOCUMENT_MENU;
+            } else if(fullScreenSet && scriptsStore.onScriptRoute) {
+                menuToSet = SCRIPTS_MENU;
+            }
+
+            setMenuOpen(menuToSet, true);
             triggerClickSound();
         }
 
@@ -255,7 +265,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             if(fullScreenStore.fullScreenSet) {
                 fullScreenStore.exitFullScreen();
             } else if(showSharePopup.value) {
-                setQRCodePopup("quit");
+                if(!sharePopupClosing.value) { setQRCodePopup("quit"); }
             } else {
                 toggleNavMenu();
             }
@@ -288,8 +298,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Boolean} toggle If true AND the menu to be opened is already open, this function wil then close the menu.
      */
     function setMenuOpen(index = NO_MENU, toggle = false) {
-        const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || (toggle && menuOpen.value == index));
-        menuOpen.value = (setMenuClosed ? NO_MENU : index);
+        const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
+        menuOpen.value = ((setMenuClosed || (toggle && menuOpen.value == index)) ? NO_MENU : index);
     }
 
     /** This function closes any open Navigation Menu. */

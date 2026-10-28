@@ -289,6 +289,7 @@ watch(showSharePopupImmediate, (newValue) => {
 
 /** This function mounts the share popup. */
 async function mountSharePopup() {
+    webData.closeNavMenu();
     styleStore.setHideOverflowArray(HideOverflow.SHARE_POPUP, true);
     await nextTick();
 

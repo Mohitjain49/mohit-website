@@ -39,7 +39,7 @@ const coverPressed = ref(false);
 const counter = ref(0);
 
 const { mouseX: x, mouseY: y, cssToWindowHeightRatio, cssToWindowWidthRatio } = storeToRefs(styleStore);
-const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex } });
+const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex, touchAction: 'none' } });
 const showProgressRing = computed(() => { return (counter.value > 0); });
 const animateProgressRing = computed(() => { return (counter.value > (FINAL_COUNT / 4)); });
 
@@ -61,6 +61,7 @@ onAfterMounted(() => {
     document.addEventListener("visibilitychange", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("mohit-mouse-leave", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("pointerup", () => { resetCounter(); }, { signal, passive: true });
+    window.addEventListener("pointercancel", () => { resetCounter(); }, { signal, passive: true });
     coverRef.value.addEventListener("pointerdown", () => { onWebpageCoverPointerDown(); }, { signal, passive: true });
 });
 

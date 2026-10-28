@@ -130,7 +130,6 @@
 
 <div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
     <button v-if="showUpdateWebsiteWidget" @click="openUpdateBox()" v-pulse-loop
-        :no-sound="!installStore.updateNeeded"
         :class="['mohit-navBar-statusIcon', 'yellow', (installStore.updateNeeded ? '' : 'noAction')]"
         :title="(installStore.swUpdating ? 'Updating Website...' : 'This Is An Old Version Of My Website. Click Here To Update It.')">
 

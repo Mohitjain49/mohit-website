@@ -145,9 +145,11 @@ export const useAudioStore = defineStore("audio-store", () => {
 
         const clickableElement = foundElement.closest('a, button');
         if(!clickableElement) { return; }
-
         const clickableElementAttribute = (clickableElement.getAttribute("no-sound") ?? null);
-        if((typeof clickableElementAttribute !== "string") || clickableElementAttribute === "false") { playClickSound(); }
+
+        if((typeof clickableElementAttribute === "string") && clickableElementAttribute !== "false") { return; }
+        if(clickableElement.classList.contains("no-action") || clickableElement.classList.contains("noAction")) { return; }
+        playClickSound();
     }
 
     /** This function plays the click sound effect. */
