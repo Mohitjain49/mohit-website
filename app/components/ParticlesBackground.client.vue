@@ -1,5 +1,5 @@
 <template>
-<vue-particles v-if="(particlesOptionsCopy != null)"
+<vue-particles v-if="(particlesOptionsCopy != null && preliminaryChecksPassed)"
     :id="BACKGROUND_PARTICLES_ID"
     :options="particlesOptionsCopy"
     @particlesLoaded="(e) => { onParticlesLoaded(e); }"
@@ -30,6 +30,7 @@ const styleStore = useStyleStore();
 const visibility = useDocumentVisibility();
 const battery = useBattery();
 
+const preliminaryChecksPassed = ref(false);
 const particlesLoadedOnce = ref(false);
 const particlesLoaded = ref(false);
 const batteryLow = ref(false);
@@ -102,7 +103,9 @@ async function waitForParticles() {
  */
 async function setAllParticlesSettings(mounting = true) {
     if(!mounting) {
+        preliminaryChecksPassed.value = false;
         particlesOptionsCopy.value = props.particlesOptions;
+
         batteryLow.value = false;
         particlesHalved.value = false;
 
@@ -113,16 +116,14 @@ async function setAllParticlesSettings(mounting = true) {
     }
 
     setParticlesBackgroundColor();
-    await waitForParticles();
-
-    const batteryReset = await onBatteryStatusChange(false);
-    const densityReset = await setParticlesDensity(false);
+    await onBatteryStatusChange(false);
+    await setParticlesDensity(false);
+    preliminaryChecksPassed.value = true;
 
     batteryLevelWatcher.resume();
     batterySupportedWatcher.resume();
     batteryChargingWatcher.resume();
 
-    if(batteryReset || densityReset || !mounting) { await resetParticles(); }
     onWebpageVisibilityChange();
     visibilityWatcher.resume();
 }

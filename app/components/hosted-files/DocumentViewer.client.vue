@@ -10,7 +10,7 @@
                 <FontAwesomeIcon icon="fa-link" />
             </button>
 
-            <div :class="['mohit-rendered-pdf', ((pages > 1 && page.num != pages) ? 'multi-page' : '')]"
+            <div :class="[RENDERED_PDF_CLASS_NAME, ((pages > 1 && page.num != pages) ? 'multi-page' : '')]"
                 @contextmenu="(event) => { onPdfContentMenu(event, page.num); }">
 
                 <canvas :id="('pdf_canvas_' + page.num)"></canvas>
@@ -113,7 +113,7 @@ onMounted(async() => {
         if(renderAborted()) { return; }
 
         document.addEventListener("copy", (event) => { documentStore.onHostedDocumentPageCopy(event); }, { signal });
-        window.addEventListener("animation-resize", (event) => { resizePdfViewer(event); }, { signal });
+        window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal });
         window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(false); }, { signal });
 
         // This sets a flag indicating that the custom scroll event listener is active for the Hosted Document Viewer.
@@ -392,15 +392,8 @@ function renderAborted() {
     return ((renderAbortController == null) ? false : renderAbortController.signal.aborted);
 }
 
-/**
- * This function resizes all necessary components for the PDF Viewer when called.
- * @param {Event} event The event fired by resizing the screen.
- */
-function resizePdfViewer(event) {
-    if(!import.meta.client || !event || !event.detail) { return; }
-    const eventDetail = event.detail;
-
-    if(eventDetail.type !== "pixel-ratio" && !(eventDetail.type.includes("resize") && eventDetail.width)) { return; }
+/** This function resizes all necessary components for the PDF Viewer when called. */
+function resizePdfViewer() {
     if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
     resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
 }

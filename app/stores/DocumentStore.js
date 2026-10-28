@@ -17,6 +17,7 @@ const DOCUMENT_ACTION_CURSORS = ["pointer", "wait", "var(--checkmark-cursor)", "
 const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
 const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
+export const RENDERED_PDF_CLASS_NAME = "mohit-rendered-pdf";
 export const DOCUMENT_DOWNLOAD_BASE_ICON = "fa-file-download";
 export const DOCUMENT_SAVE_BASE_ICON = "fa-floppy-disk";
 export const DOCUMENT_SHARE_BASE_ICON = "fa-share";
@@ -680,10 +681,30 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf. */
     function setPdfSize() {
-        customPdfWidth.value = Math.min(customPdfMaxWidth.value, Math.max(customPdfMinWidth.value, (styleStore.cssViewportWidth - 30)));
-        customPdfHeight.value = (customPdfWidth.value * customPdfScaleFactor.value);
+        if(!import.meta.client || !document || !document.documentElement) { return; }
+        var largeViewportHeight = false;
 
-        if(!document || !document.documentElement) { return; }
+        const maxWidth = customPdfMaxWidth.value;
+        const scaleFactor = customPdfScaleFactor.value;
+        const defaultPdfWidth = (styleStore.cssViewportWidth - 30);
+
+        if(onResumeRoute.value && (maxWidth < defaultPdfWidth)) {
+            const firstPdfPage = document.getElementsByClassName(RENDERED_PDF_CLASS_NAME).item(0);
+
+            if(Boolean(firstPdfPage)) {
+                const viewportHeight = styleStore.cssViewportHeight;
+                const distanceFromTop = ((firstPdfPage.getBoundingClientRect().top + getScrollY() + 20) * styleStore.cssToWindowHeightRatio);
+
+                if(viewportHeight >= ((maxWidth * scaleFactor) + distanceFromTop)) {
+                    largeViewportHeight = true;
+                    customPdfWidth.value = Math.min(((viewportHeight - distanceFromTop) / scaleFactor), defaultPdfWidth);
+                }
+            }
+        }
+
+        if(!largeViewportHeight) { customPdfWidth.value = Math.min(maxWidth, Math.max(customPdfMinWidth.value, defaultPdfWidth)); }
+        customPdfHeight.value = (customPdfWidth.value * scaleFactor);
+
         document.documentElement.style.setProperty(PDF_WIDTH_CSS_PROPERTY, (String(customPdfWidth.value) + "px"));
         document.documentElement.style.setProperty(PDF_HEIGHT_CSS_PROPERTY, (String(customPdfHeight.value) + "px"));
     }
@@ -698,10 +719,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         pdfDimensionsController = (status ? new AbortController() : null);
        
         if(!status) { return; }
-        window.addEventListener("animation-resize", (event) => {
-            const properEvent = (event.detail && event.detail.type.includes("resize") && event.detail.width);
-            if(properEvent) { setPdfSize(); }
-        }, { signal: pdfDimensionsController.signal });
+        window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal: pdfDimensionsController.signal });
     }
     
     /**
@@ -714,7 +732,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
             /** @type {HTMLElement} The element being copied my the user. */
             const element = event.target;
-            if(!(element instanceof Element) || !element.closest(".mohit-rendered-pdf")) { return; }
+            if(!(element instanceof Element) || !element.closest("." + RENDERED_PDF_CLASS_NAME)) { return; }
 
             const selection = window.getSelection();
             if(!selection) { return; }
