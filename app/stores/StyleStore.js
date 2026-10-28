@@ -515,12 +515,6 @@ export const useStyleStore = defineStore("style-store", () => {
     /** This function enables the mouse position's recorder. */
     async function enableMousePositionRecorder() {
         if(mousePositionRecorderEnabled.value) { return; }
-        setMousePositionEventListeners();
-        mousePositionRecorderEnabled.value = true;
-    }
-
-    /** This function sets the mouse position's event listeners. */
-    async function setMousePositionEventListeners() {
         if(mousePositionController != null) { mousePositionController.abort(); }
         mousePositionController = new AbortController();
 
@@ -543,6 +537,9 @@ export const useStyleStore = defineStore("style-store", () => {
         window.addEventListener('touchmove', (event) => { recordMousePositionWithTouch(event); }, { signal });
         window.addEventListener('touchstart', (event) => { recordMousePositionWithTouch(event); }, { signal });
         window.addEventListener('touchend', (event) => { recordMousePositionWithTouch(event); }, { signal });
+
+        // This sets the mouse position recorder as enabled.
+        mousePositionRecorderEnabled.value = true;
     }
 
     /** This function disables the mouse position's event listeners. */
@@ -569,9 +566,17 @@ export const useStyleStore = defineStore("style-store", () => {
      */
     function recordMousePosition(event) {
         if(!event || typeof event.clientX !== 'number' || typeof event.clientY !== 'number') { return; }
-        mouseX.value = event.clientX;
-        mouseY.value = event.clientY;
+        const newX = event.clientX;
+        const newY = event.clientY;
+
+        mouseX.value = newX;
+        mouseY.value = newY;
         
+        // Dispatches an event when the user's mouse has left the webpage.
+        if(newX < 0 || newX > viewportWidth.value || newY < 0 || newY > viewportHeight.value) {
+            window.dispatchEvent(new CustomEvent("mohit-mouse-leave", { cancelable: false }));
+        }
+
         const newElement = event.target;
         mouseElement.value = ((newElement && newElement instanceof Element) ? newElement : null);
     }
@@ -583,13 +588,7 @@ export const useStyleStore = defineStore("style-store", () => {
     function recordMousePositionWithTouch(event) {
         if(!event.touches) { return; }
         const firstTouch = event.touches.item(0);
-        if(!firstTouch || typeof firstTouch?.clientX !== 'number' || typeof firstTouch?.clientY !== 'number') { return; }
-
-        mouseX.value = firstTouch.clientX;
-        mouseY.value = firstTouch.clientY;
-        
-        const newElement = firstTouch.target;
-        mouseElement.value = ((newElement && newElement instanceof Element) ? newElement : null);
+        recordMousePosition(firstTouch); // Calls the main record function as there are no apparent differences.
     }
 
     /**

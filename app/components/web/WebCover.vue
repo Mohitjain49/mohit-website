@@ -1,5 +1,5 @@
 <template>
-<div ref="mohit-website-cover" class="webpage-cover" :style="webpageCoverStyle" @mousedown="createSyntheticClick()">
+<div ref="mohit-website-cover" class="webpage-cover" :style="webpageCoverStyle">
     <Transition name="fade-transition" appear>
         <div v-if="!showProgressRing" class="webpage-cover-closeMsg"> Hold Cover To Close </div>
     </Transition>
@@ -10,7 +10,7 @@
     </Transition>
 </div>
 
-<div v-if="showProgressRing" class="webpage-cover-progressRing-container" :style="progressRingPosition">
+<div v-show="showProgressRing" class="webpage-cover-progressRing-container" :style="progressRingPosition">
     <svg class="webpage-cover-progressRing" viewBox="0 0 30 30">
         <circle class="webpage-cover-progressRing-track" cx="15" cy="15" r="13.5"></circle>
         <circle class="webpage-cover-progressRing-indicator" :style="progressRingInnerFill" cx="15" cy="15" r="13.5"></circle>
@@ -23,6 +23,10 @@
 const CIRCUMFERENCE = 84.82;
 const FINAL_COUNT = 125;
 
+/** @type {AbortController} This manages the event listeners needed for this component. */
+var eventsAbortController = null;
+var closeInterval = null;
+
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
 const props = defineProps({
@@ -31,12 +35,10 @@ const props = defineProps({
 });
 
 const coverRef = useTemplateRef('mohit-website-cover');
-const { pressed: coverPressed } = useMousePressed({ target: coverRef });
-const { isOutside: mouseOutsideCover } = useMouseInElement(coverRef);
-const { mouseX: x, mouseY: y, cssToWindowHeightRatio, cssToWindowWidthRatio } = storeToRefs(styleStore);
-const interval = useInterval(10, { controls: true, immediate: false });
+const coverPressed = ref(false);
+const counter = ref(0);
 
-const counter = computed(() => { return interval.counter.value; });
+const { mouseX: x, mouseY: y, cssToWindowHeightRatio, cssToWindowWidthRatio } = storeToRefs(styleStore);
 const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex } });
 const showProgressRing = computed(() => { return (counter.value > 0); });
 const animateProgressRing = computed(() => { return (counter.value > (FINAL_COUNT / 4)); });
@@ -50,18 +52,24 @@ const progressRingInnerFill = computed(() => {
     return { strokeDashoffset: (CIRCUMFERENCE - ((counter.value / FINAL_COUNT) * CIRCUMFERENCE)) }
 });
 
-// This sets the interval counter based on if the user is holding the webpage cover or not.
-watch(coverPressed, (newValue) => { if(newValue) { interval.resume(); } else { resetCounter(); } });
+// This sets the necessary event listeners for this component.
+onAfterMounted(() => {
+    if(!Boolean(coverRef.value) || !('PointerEvent' in window)) { return; }
+    eventsAbortController = new AbortController();
+    const signal = eventsAbortController.signal;
 
-// This resets the counter if the user's mouse moves outside the cover;
-watch(mouseOutsideCover, (newValue) => { if(newValue) { resetCounter(); } });
+    document.addEventListener("visibilitychange", () => { resetCounter(); }, { signal, passive: true });
+    window.addEventListener("mohit-mouse-leave", () => { resetCounter(); }, { signal, passive: true });
+    window.addEventListener("pointerup", () => { resetCounter(); }, { signal, passive: true });
+    coverRef.value.addEventListener("pointerdown", () => { onWebpageCoverPointerDown(); }, { signal, passive: true });
+});
 
-// This closes the popup using the webpage cover if the user has clicked on the webpage cover for long enough.
-watch(counter, (newValue) => { if(newValue == FINAL_COUNT) { closePopup(); } });
-
-// This disables user select whenever the progress ring is open.
-watch(showProgressRing, (newValue) => { setStyles(newValue); });
-onBeforeUnmount(() => { setStyles(false); });
+// This aborts all the event listeners before the component is unmounted.
+onBeforeUnmount(() => {
+    setStyles(false);
+    resetCounter();
+    if(eventsAbortController != null) { eventsAbortController.abort(); }
+});
 
 /** This closes any active popup that is on the screen at the moment. */
 function closePopup() {
@@ -78,8 +86,28 @@ function closePopup() {
 
 /** This function resets the interval and its counter. */
 function resetCounter() {
-    interval.reset();
-    interval.pause();
+    coverPressed.value = false;
+    counter.value = 0;
+    setStyles(false);
+
+    if(closeInterval != null) {
+        clearInterval(closeInterval);
+        closeInterval = null;
+    }
+}
+
+/** This function runs whenever the user holds down their pointer on the Webpage Cover. */
+function onWebpageCoverPointerDown() {
+    if(coverPressed.value) { return; }
+    coverPressed.value = true;
+    counter.value = 0;
+
+    if(closeInterval != null) { clearInterval(closeInterval); }
+    closeInterval = setInterval(() => { onIntervalCallback(); }, 10);
+    setStyles(true);
+
+    if(!Boolean(coverRef.value)) { return; }
+    coverRef.value.dispatchEvent(new PointerEvent("click", { bubbles: true, cancelable: true }));
 }
 
 /**
@@ -91,10 +119,13 @@ function setStyles(ringActive = true) {
     styleStore.setDisableUserSelectArray(DisableUserSelect.WEBSITE_COVER, ringActive);
 }
 
-/** This function creates a synthetic click event for the window so listeners in other menus can hear it. */
-function createSyntheticClick() {
-    if(!coverRef.value) { return; }
-    coverRef.value.dispatchEvent(new PointerEvent("click", { bubbles: true, cancelable: true }));
+/** This function runs whenever the interval callback is called by the closing interval. */
+function onIntervalCallback() {
+    counter.value++;
+    if(counter.value >= FINAL_COUNT) {
+        closePopup();
+        resetCounter();
+    }
 }
 </script>
 
