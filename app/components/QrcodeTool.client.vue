@@ -1,8 +1,12 @@
 <template>
 <Transition name="qrcode-popup-transition" appear fade>
     <div v-if="showMainPopup" id="share-popup" class="qrcode-mainPopup">
-        <button id="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" title="Copy Link"> <p> {{ qrCodeFormattedLink }} </p> </button>
-        <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar"> <div class="inner" :style="shareLinkScrollbarStyle"></div> </div>
+        <button :id="LINK_TEXT_ID" class="popup-qr-text" @click="copyQRCodeLink()" :title="copyLinkTitle" v-action-cursor="actions.copy">
+            <p> {{ qrCodeFormattedLink }} </p>
+        </button>
+        <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar">
+            <div class="inner" :style="shareLinkScrollbarStyle"></div>
+        </div>
 
         <button id="mohit-qrcode" v-show="qrCodeDisplay"
             @focus="setImageOptions(true)"
@@ -139,9 +143,7 @@
             </div>
         </div>
 
-        <button ref="sharePopup-close" @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-close" title="Close Popup">
-            <FontAwesomeIcon icon="fa-xmark" :jello="hoverOverCloseBtn" />
-        </button>
+        <AnimatedIconButton @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-close" title="Close Popup" :faIcon="'fa-xmark'" />
     </div>
 </Transition>
 </template>
@@ -165,8 +167,7 @@ const SAVE_FILE_OPTIONS = [
 
 const IMAGE_STATUS = ['png', 'svg'];
 const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
-const SHARE_POPUP_SCALE_CSS_VAR = "--mohit-share-popup-scale";
-const SHARE_POPUP_MIN_VIEWPORT_EDGE = 675;
+const LINK_TEXT_ID = "popup-shareLink";
 
 const COPY_LINK_TITLES = ["Copy Link", "Copying Link...", "Link Copied!", "Error While Copying Link."];
 const SHARE_LINK_TITLES = ["Share Link", "Sharing Link...", "Link Shared!", "Error While Sharing Link."];
@@ -188,7 +189,7 @@ var unmountTimeout = null;
 /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing the qr code. */
 var printIframe = null;
 var printIframeNeedsRerender = true;
-const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage("popup-shareLink");
+const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage(LINK_TEXT_ID);
 
 /** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
 const qrcode = ref(null);
@@ -211,9 +212,6 @@ const shareLinkedIn = ref("");
 const shareFacebook = ref("");
 const shareWhatsApp = ref("");
 const shareEmail = ref("");
-
-const shareCloseRef = useTemplateRef('sharePopup-close');
-const hoverOverCloseBtn = useElementHover(shareCloseRef);
 
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
 const qrcodeFileSize = computed(() => { return ((qrCodeBlob.value == null) ? "" : prettyBytes(qrCodeBlob.value.size, { binary: true })); });
@@ -303,11 +301,12 @@ async function mountSharePopup() {
 
     window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal, capture: true });
     window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
+    const linkTextElement = document.getElementById(LINK_TEXT_ID);
 
     // This creates the Lenis auto scrolling for this popup.
     lenis = new Lenis({ autoRaf: true, orientation: "horizontal",
-        wrapper: document.getElementsByClassName("popup-qr-text").item(0),
-        content: document.getElementsByClassName("popup-qr-text").item(0).querySelector("p"),
+        wrapper: linkTextElement,
+        content: linkTextElement.querySelector("p"),
         easing: (x = 0) => { return x; }
     });
 

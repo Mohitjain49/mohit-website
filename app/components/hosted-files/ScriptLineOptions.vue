@@ -5,12 +5,8 @@
             <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
                 <h3> Line <span id="lineOptions-num" v-html="viewableLineOptionsNum"></span> </h3>
                 <div class="mohit-script-lineOptions-topOpts">
-                    <button class="web-menu" @click="openScriptsMenu()" ref="options-open-web-menu-btn" title="Open Scripts Menu">
-                        <FontAwesomeIcon icon="fa-file-export" :jello="animateWebMenuButton" />
-                    </button>
-                    <button @click="closeLineOptionsMenu()" ref="options-close-btn" :title="('Close Options For Line ' + viewableLineOptionsNum)">
-                        <FontAwesomeIcon icon="fa-xmark" :jello="animateCloseButton" />
-                    </button>
+                    <AnimatedIconButton class="web-menu" @click="openScriptsMenu()" title="Open Scripts Menu" :faIcon="'fa-file-export'" />
+                    <AnimatedIconButton @click="closeLineOptionsMenu()" :title="('Close Options For Line ' + viewableLineOptionsNum)" :faIcon="'fa-xmark'" />
                 </div>
             </div>
             <button @click="scriptsStore.copyLineAttribute('text')" v-action-cursor="(copyingText ? lineOptions.copyStatus : 0)">
@@ -38,14 +34,8 @@ const webData = useWebsiteDataStore();
 const scriptsStore = useScriptsStore();
 const { lineOptions } = storeToRefs(scriptsStore);
 
-const closeButton = useTemplateRef('options-close-btn');
-const webMenuButton = useTemplateRef('options-open-web-menu-btn');
-const hoverOnCloseButton = useElementHover(closeButton);
-const hoverOnWebMenuButton = useElementHover(webMenuButton);
-
+/** This is the line options number displayed to the user so that it does not change to a non-existent number in the UI. */
 const viewableLineOptionsNum = ref(1);
-const animateCloseButton = ref(false);
-const animateWebMenuButton = ref(false);
 
 /** This is the teleport query that should be used by the Vue.js Teleport Component. */
 const teleportQuery = computed(() => { return ("#L" + String(viewableLineOptionsNum.value) + " .mohit-scriptPage-code-lineNum"); });
@@ -57,9 +47,6 @@ const showLineOptions = computed(() => { return scriptsStore.checkLineNumber(lin
 
 const copyingText = computed(() => { return (lineOptions.value.lastCopied === "text"); });
 const copyingLink = computed(() => { return (lineOptions.value.lastCopied === "link"); });
-
-watch(hoverOnCloseButton, (newValue) => { animateCloseButton.value = newValue; });
-watch(hoverOnWebMenuButton, (newValue) => { animateWebMenuButton.value = newValue; });
 watch(lineOptionsNum, () => { onLineOptionsNumChange(); });
 
 // This mounts a few event listeners that help close the line options menu if the proper HTML Element is not clicked.
@@ -96,20 +83,10 @@ function openSharePopupForPermalink() {
 }
 
 /** This function closes the line options menu. */
-function closeLineOptionsMenu() {
-    stopButtonAnimations();
-    scriptsStore.closeLineOptions();
-}
-
-/** This function stops animations for all buttons in this menu. */
-function stopButtonAnimations() {
-    animateCloseButton.value = false;
-    animateWebMenuButton.value = false;
-}
+function closeLineOptionsMenu() { scriptsStore.closeLineOptions(); }
 
 /** This function runs whenever the number for what code line the menu represents changes. */
 function onLineOptionsNumChange() {
-    stopButtonAnimations();
     const newNum = lineOptionsNum.value;
     if(scriptsStore.checkLineNumber(newNum)) { viewableLineOptionsNum.value = newNum; }
 }

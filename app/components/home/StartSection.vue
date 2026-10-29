@@ -144,11 +144,15 @@ function onContactBtnClick(event, obj) {
     } else if(startContactObj.value === obj.id) {
         hideStartContactDropdown();
         if(contextMenuTimeout != null) { clearTimeout(contextMenuTimeout); }
+        contextMenuTimeout = null;
 
-        contextMenuTimeout = ((event.type.toLowerCase() !== "contextmenu") ? null : setTimeout(() => {
-            startContactObj.value = obj.id;
-            contextMenuTimeout = null;
-        }, 100));
+        if(event.type.toLowerCase() === "contextmenu") {
+            triggerClickSound();
+            contextMenuTimeout = setTimeout(() => {
+                startContactObj.value = obj.id;
+                contextMenuTimeout = null;
+            }, 100);
+        }
     } else {
         startContactObj.value = obj.id;
     }

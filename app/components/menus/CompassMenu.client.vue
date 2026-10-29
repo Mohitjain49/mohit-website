@@ -58,6 +58,6 @@ const footerRoute = computed(() => { return (topPath.value + (webData.webFooterV
 /** This is a computed function that can be used to see if a route's hash is equal to where the option will direct it to. */
 const currentHashEquals = computed(() => { return (id = "") => { return (("#" + id) === routeHash.value); }});
 
-onMountedAdvanced(() => { webData.compassMenuAvailable = true; });
+onAfterMounted(() => { webData.compassMenuAvailable = true; });
 onBeforeUnmount(() => { webData.compassMenuAvailable = false; });
 </script>

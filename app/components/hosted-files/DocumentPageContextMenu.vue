@@ -6,18 +6,9 @@
             <h3 v-if="onResumeRoute"> <span id="mohit-document-contextMenu-pageNum"> My Resume </span> </h3>
 
             <div class="mohit-hostedDoc-contextMenu-topOpts">
-                <button v-if="onResumeRoute" class="resume-menu" @click="openWebsiteMenu(RESUME_MENU)"
-                    ref="options-open-resume-menu-btn"
-                    title="Edit Resume Components">
-
-                    <FontAwesomeIcon icon="fa-gears" :jello="animateResumeMenuButton" />
-                </button>
-                <button class="web-menu" @click="openWebsiteMenu(DOCUMENT_MENU)" ref="options-open-web-menu-btn" title="Open Document Menu">
-                    <FontAwesomeIcon icon="fa-file-pdf" :jello="animateWebMenuButton" />
-                </button>
-                <button @click="closeDocumentContextMenu()" ref="options-close-btn" title="Close Context Menu">
-                    <FontAwesomeIcon icon="fa-xmark" :jello="animateCloseButton" />
-                </button>
+                <AnimatedIconButton class="resume-menu" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" :faIcon="'fa-gears'" />
+                <AnimatedIconButton class="web-menu" @click="openWebsiteMenu(DOCUMENT_MENU)" title="Open Document Menu" :faIcon="'fa-file-pdf'" />
+                <AnimatedIconButton @click="closeDocumentContextMenu()" title="Close Context Menu" :faIcon="'fa-xmark'" />
             </div>
         </div>
 
@@ -40,14 +31,6 @@ const styleStore = useStyleStore();
 const documentStore = useDocumentStore();
 const { contextMenuPageNumber, onResumeRoute } = storeToRefs(documentStore);
 
-const closeButton = useTemplateRef('options-close-btn');
-const webMenuButton = useTemplateRef('options-open-web-menu-btn');
-const resumeMenuButton = useTemplateRef('options-open-resume-menu-btn');
-
-const hoverOnCloseButton = useElementHover(closeButton);
-const hoverOnWebMenuButton = useElementHover(webMenuButton);
-const hoverOnResumeMenuButton = useElementHover(resumeMenuButton);
-
 /** @type {AbortController} The abort controller for the event listeners here. */
 var docContextMenuAbortController = null;
 const showDocumentContextMenu = computed(() => { return (contextMenuPageNumber.value > 0); });
@@ -55,14 +38,6 @@ const contextMenuPosition = ref({ left: "0px", top: "0px" });
 
 const viewablePageNumber = ref(1);
 const copyStatus = ref(0);
-
-const animateCloseButton = ref(false);
-const animateWebMenuButton = ref(false);
-const animateResumeMenuButton = ref(false);
-
-watch(hoverOnCloseButton, (newValue) => { animateCloseButton.value = newValue; });
-watch(hoverOnWebMenuButton, (newValue) => { animateWebMenuButton.value = newValue; });
-watch(hoverOnResumeMenuButton, (newValue) => { animateResumeMenuButton.value = newValue; });
 watch(contextMenuPageNumber, () => { onContextMenuPageNumberChange(); });
 
 // This mounts a few event listeners that help close the hosted document context menu if the proper HTML Element is not clicked.
@@ -90,23 +65,11 @@ function openWebsiteMenu(num = DOCUMENT_MENU) {
 }
 
 /** This function closes the hosted document context menu. */
-function closeDocumentContextMenu() {
-    stopButtonAnimations();
-    documentStore.setContextMenuPageNumber(0);
-}
-
-/** This function stops animations for all buttons in this menu. */
-function stopButtonAnimations() {
-    animateCloseButton.value = false;
-    animateWebMenuButton.value = false;
-    animateResumeMenuButton.value = false;
-}
+function closeDocumentContextMenu() { documentStore.setContextMenuPageNumber(0); }
 
 /** This function is triggered every time the page number for the context menu changes. */
 function onContextMenuPageNumberChange() {
-    stopButtonAnimations();
     setContextMenuPosition();
-
     const newNumber = contextMenuPageNumber.value;
     if(documentStore.checkValidPageNumber(newNumber)) { viewablePageNumber.value = newNumber; }
 }

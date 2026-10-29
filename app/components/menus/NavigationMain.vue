@@ -121,9 +121,6 @@
                 />
                 <span> {{ (audioStore.volumeInput + '%') }} </span>
             </div>
-            <button @click="reloadNuxtApp({ force: true })" ref="reload-btn" class="mohit-navMenu-reload-webpage" title="Reload Website">
-                <font-awesome-icon icon="fa-rotate-right" :jello="onReloadHover" />
-            </button>
         </div>
     </div>
 </Transition>
@@ -185,9 +182,6 @@ const installStore = useInstallStore();
 const router = useRouter();
 const isMounted = onMountedAdvanced();
 const copyStatus = shallowRef(0);
-
-const reloadBtnRef = useTemplateRef('reload-btn');
-const onReloadHover = useElementHover(reloadBtnRef);
 
 const topPath = useRoutePathWithQuery();
 const routePath = computed(() => { return router.currentRoute.value.path; });
