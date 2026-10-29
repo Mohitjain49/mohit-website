@@ -132,29 +132,34 @@ function checkContactDropdownStayVisible(event) {
  * @param {{ link: String, id: String }} obj The custom object sent by the contact button.
  */
 function onContactBtnClick(event, obj) {
-    if(!event) { return; }
-    event.preventDefault();
+    try {
+        if(!event || !event.type || (event.type.toLowerCase() === "contextmenu" && event.ctrlKey)) { return; }
+        event.preventDefault();
 
-    if(event.altKey) {
-        shareContactLink(obj.link); // If the Alt key is pressed, the share popup is automatically opened.
-    } else if(event.ctrlKey) {
-        window.open(obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self")) // If the Ctrl key is pressed, the webpage itself is automatically opened.
-    } else if(event.shiftKey) {
-        router.push('/contact/#' + obj.id); // If the Shift key is pressed, the key opens up the social tab on the contact page for the button.
-    } else if(startContactObj.value === obj.id) {
-        hideStartContactDropdown();
-        if(contextMenuTimeout != null) { clearTimeout(contextMenuTimeout); }
-        contextMenuTimeout = null;
+        if(event.altKey) {
+            shareContactLink(obj.link);
+        } else if(event.ctrlKey) {
+            window.open(obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self"));
+        } else if(event.shiftKey) {
+            router.push('/contact/#' + obj.id);
+        } else if(startContactObj.value === obj.id) {
+            hideStartContactDropdown();
+            if(contextMenuTimeout != null) { clearTimeout(contextMenuTimeout); }
+            contextMenuTimeout = null;
 
-        if(event.type.toLowerCase() === "contextmenu") {
-            triggerClickSound();
-            contextMenuTimeout = setTimeout(() => {
-                startContactObj.value = obj.id;
-                contextMenuTimeout = null;
-            }, 100);
+            if(event.type.toLowerCase() === "contextmenu") {
+                triggerClickSound();
+                contextMenuTimeout = setTimeout(() => {
+                    startContactObj.value = obj.id;
+                    contextMenuTimeout = null;
+                }, 100);
+            }
+        } else {
+            if(event.type.toLowerCase() === "contextmenu") { triggerClickSound(); }
+            startContactObj.value = obj.id;
         }
-    } else {
-        startContactObj.value = obj.id;
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
     }
 }
 
