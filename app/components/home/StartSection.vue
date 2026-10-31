@@ -42,9 +42,10 @@
                         :class="['start-contactBtn-dropdown', (contactDropdownShareHover ? 'share-hover' : '')]"
                         :style="getContactDropdownStyles(contact.color)">
 
-                        <button :id="CONTACT_DROPDOWN_SHARE_ID" class="start-contactBtn-dropdown-button"
-                            :title="contact.shareBtn"
-                            @click="() => { shareContactLink(contact.link); }">
+                        <button :id="CONTACT_DROPDOWN_SHARE_ID" :title="contact.shareBtn" class="start-contactBtn-dropdown-button"
+                            @click="() => { shareContactLink(contact.link); }"
+                            @pointerenter="() => { contactDropdownShareHover = true; }"
+                            @pointerleave="() => { contactDropdownShareHover = false; }">
 
                             <span> Share </span>
                             <FontAwesomeIcon icon="fa-share-from-square" />
@@ -98,7 +99,8 @@ const contactDropdownShareHover = ref(false);
 /** This manages an Raf loop that records whether the user is hovering over the contact dropdown share button or not. */
 useRafFn(() => {
     const currentMouseElement = styleStore.mouseElement;
-    contactDropdownShareHover.value = (currentMouseElement ? Boolean(currentMouseElement.closest("#" + CONTACT_DROPDOWN_SHARE_ID)) : false);
+    if(Boolean(currentMouseElement) && Boolean(currentMouseElement.closest("#" + CONTACT_DROPDOWN_SHARE_ID))) { return; }
+    contactDropdownShareHover.value = false;
 }, { immediate: true });
 
 // This sets up event listeners that close the contact dropdown when the user clicks outside the dropdown itself or an assoicated button for it.
@@ -130,8 +132,10 @@ onMounted(async() => {
     }
 });
 
+// These are other utilities used by the homepage start section.
 onBeforeUnmount(() => { if(abortController != null) { abortController.abort(); }});
 useIntersectionObserver(startContent, ([{ isIntersecting }]) => { setNameTransitions(isIntersecting); });
+watch(startContactObj, () => { contactDropdownShareHover.value = false; });
 
 /**
  * Given an element, this closes the open Contact Button Dropdown if the element is not a valid element to click.
@@ -218,27 +222,31 @@ function onContactBtnDblClick(event) {
  */
 function onContactBtnKeydown(event) {
     try {
-        if(!event || !event.target || !event.key) { return; }
+        if(!event || !event.target || !event.key || event.repeat) { return; }
         const buttonAttributes = getContactButtonAttributes(event.target);
+
         if(!Boolean(buttonAttributes.id)) { return; }
-
         const key = event.key.toLowerCase();
-        const noCtrlKey = !event.ctrlKey;
-        const noRepeat = !event.repeat;
-        var buttonFocusNumber = -1;
 
-        if(key === "enter" && noRepeat) {
+        if(key === "enter") {
+            event.preventDefault();
             startContactObj.value = ((startContactObj.value === buttonAttributes.id) ? "" : buttonAttributes.id);
             triggerClickSound();
-        } else if((key === "arrowup" || key === "w") && noCtrlKey) {
+        }
+
+        // This stops all other actions if the CTRL key is not pressed.
+        if(event.ctrlKey) { return; }
+        var buttonFocusNumber = -1;
+
+        if(key === "arrowup" || key === "w") {
             event.preventDefault();
             hideStartContactDropdown();
-        } else if((key === "arrowdown" || key === "s") && noCtrlKey) {
+        } else if(key === "arrowdown" || key === "s") {
             event.preventDefault();
             startContactObj.value = buttonAttributes.id;
-        } else if((key === "arrowleft" || key === "a") && noCtrlKey && noRepeat) {
+        } else if(key === "arrowleft" || key === "a") {
             buttonFocusNumber = ((buttonAttributes.index <= 0) ? (SOCIALS_START.length - 1) : (buttonAttributes.index - 1));
-        } else if((key === "arrowright" || key === "d") && noCtrlKey && noRepeat) {
+        } else if(key === "arrowright" || key === "d") {
             buttonFocusNumber = ((buttonAttributes.index >= 3) ? 0 : (buttonAttributes.index + 1));
         }
 

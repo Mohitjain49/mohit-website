@@ -32,6 +32,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     /** @type {AbortController} This abort controller manages the event listeners for a script page. */
     var scriptAbortController = null;
     var codeLineCopyTimeout = null;
+    var enterKeydownTimeout = null;
 
     const router = useRouter();
     const webData = useWebsiteDataStore();
@@ -307,13 +308,13 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      */
     function openLineOptionsMenu(event = null, lineNum = 0) {
         // console.log(event);
-        if(!event || (event.pointerId == -1) || !event.type || !lineNum || !(event instanceof PointerEvent)) { return; }
+        if(!event || (event.pointerId == -1) || !event.type || !checkLineNumber(lineNum)) { return; }
 
         if(event.type.toLowerCase() === "contextmenu") {
             if(!event.ctrlKey) {
                 event.preventDefault();
-                triggerClickSound();
                 setLineOptions(lineNum);
+                triggerClickSound();
             }
         } else if(event.ctrlKey) {
             closeLineOptions();
@@ -332,20 +333,36 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * @param {Number} lineNum The number of the line in the code file.
      */
     function onLineNumberKeydown(event = null, lineNum = 0) {
-        if(!event || !event.key || !lineNum) { return; }
+        if(!event || !event.key || !checkLineNumber(lineNum)) { return; }
         const key = event.key.toLowerCase();
         const ctrlKey = event.ctrlKey;
+        const noRepeat = !event.repeat;
 
-        if(key === "enter" && !event.repeat) {
-            setLineOptions(lineNum);
+        if(key === "enter" && noRepeat) {
+            event.preventDefault();
             triggerClickSound();
+            if(enterKeydownTimeout != null) { clearTimeout(enterKeydownTimeout); }
+            
+            if(lineNum == lineOptions.value.num) {
+                closeLineOptions();
+                enterKeydownTimeout = null;
+            } else if(checkLineNumber(lineOptions.value.num)) {
+                closeLineOptions();
+                enterKeydownTimeout = setTimeout(() => {
+                    setLineOptions(lineNum);
+                    enterKeydownTimeout = null;
+                }, 125);
+            } else {
+                setLineOptions(lineNum);
+                enterKeydownTimeout = null;
+            }
         } else if((key === "arrowup" || key === "w") && !ctrlKey) {
             event.preventDefault();
             focusOnLineNumberButton(lineNum - 1);
         } else if((key === "arrowdown" || key === "s") && !ctrlKey) {
             event.preventDefault();
             focusOnLineNumberButton(lineNum + 1);
-        } else if(key === "c" && ctrlKey) {
+        } else if(key === "c" && ctrlKey && noRepeat) {
             const selection = window.getSelection();
             if(selection && selection.toString().trim().length > 0) { return; }
             
