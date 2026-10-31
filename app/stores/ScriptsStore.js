@@ -183,11 +183,18 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
             if(keyLetter === "c") {
                 const selection = window.getSelection();
+                const activeElement = document.activeElement;
+
+                if(Boolean(activeElement) && activeElement.closest("." + SCRIPT_LINE_BUTTON_CLASS)) { return; }
                 if(selection && selection.toString().trim().length > 0) { return; }
 
                 event.preventDefault();
-                waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
-                copyScript();
+                if(checkLineNumber(lineOptions.value.num)) {
+                    copyLineAttribute(event.altKey ? "link" : "text");
+                } else {
+                    waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
+                    copyScript();
+                }
             } else if(keyLetter === "s") {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
@@ -327,16 +334,29 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     function onLineNumberKeydown(event = null, lineNum = 0) {
         if(!event || !event.key || !lineNum) { return; }
         const key = event.key.toLowerCase();
+        const ctrlKey = event.ctrlKey;
 
         if(key === "enter" && !event.repeat) {
             setLineOptions(lineNum);
             triggerClickSound();
-        } else if(key === "arrowup" || key === "w") {
+        } else if((key === "arrowup" || key === "w") && !ctrlKey) {
             event.preventDefault();
             focusOnLineNumberButton(lineNum - 1);
-        } else if(key === "arrowdown" || key === "s") {
+        } else if((key === "arrowdown" || key === "s") && !ctrlKey) {
             event.preventDefault();
             focusOnLineNumberButton(lineNum + 1);
+        } else if(key === "c" && ctrlKey) {
+            const selection = window.getSelection();
+            if(selection && selection.toString().trim().length > 0) { return; }
+            
+            event.preventDefault();
+            closeLineOptions();
+
+            waitForAutoScroll().then(() => {
+                setLineOptions(lineNum);
+                copyLineAttribute(event.altKey ? "link" : "text");
+                triggerClickSound();
+            });
         }
     }
 

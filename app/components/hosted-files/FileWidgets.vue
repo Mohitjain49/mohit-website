@@ -146,11 +146,11 @@ function onPageNumberKeydown(event) {
             documentStore.scrollToPage(editedNumber);
             triggerClickSound();
         }
-    } else if(key === "arrowup" || key === "w") {
+    } else if((key === "arrowup" || key === "w" || key === "arrowright" || key === "d") && !event.ctrlKey) {
         event.preventDefault();
         if(widgetPageNumber.value < documentStore.docLoaded.totalPages) { widgetPageNumber.value++; }
         onWidgetPageNumberChange(false);
-    } else if(key === "arrowdown" || key === "s") {
+    } else if((key === "arrowdown" || key === "s" || key === "arrowleft" || key === "a")  && !event.ctrlKey) {
         event.preventDefault();
         if(widgetPageNumber.value > 1) { widgetPageNumber.value--; }
         onWidgetPageNumberChange(false);

@@ -51,14 +51,12 @@
     </div>
 
     <div class="footer-contact-section">
-        <template v-for="(contact, index) in SOCIALS">
-            <a v-if="(index != 2)" :href="contact.link" v-pulse-loop
-                :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
-                :style="getColorStyles(contact.color)">
+        <a v-for="(contact, index) in SOCIALS" :href="contact.link" v-pulse-loop
+            :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
+            :style="getColorStyles(contact.color)">
 
-                <font-awesome-icon :icon="contact.linkIcon" />
-            </a>
-        </template>
+            <font-awesome-icon :icon="contact.linkIcon" />
+        </a>
     </div>
     <div class="footer-job-title">
         Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" v-pulse-loop> <img :src="ivue_text" draggable="false" /> </a></span>

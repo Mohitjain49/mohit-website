@@ -95,40 +95,38 @@
                 <div class="gradient-text contact-box-title">My Socials</div>
             </div>
             <div class="contact-box-desc">
-                <p v-html="MY_SOCIALS_DESC"></p>
+                <p> {{ MY_SOCIALS_DESC }} </p>
             </div>
 
             <div class="contact-box-content">
-                <template v-for="(social, index) in SOCIALS">
-                    <div :id="social.id" class="social-tab" v-if="(index != 2)" :style="{ color: social.altColor }">
-                        <div class="social-tab-top">
-                            <h3 class="social-tab-header">
-                                {{ social.name }}
-                                <font-awesome-icon :icon="social.linkIcon" />
-                            </h3>
-                        </div>
-                        <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
+                <div v-for="social in SOCIALS" :id="social.id" class="social-tab" :style="{ color: social.altColor }">
+                    <div class="social-tab-top">
+                        <h3 class="social-tab-header">
+                            {{ social.name }}
+                            <font-awesome-icon :icon="social.linkIcon" />
+                        </h3>
+                    </div>
+                    <a :href="social.link" class="social-tab-link"> {{ social.displayLink }} </a>
 
-                        <div class="social-tab-options">
-                            <button @click="copyLink(social.displayLink)" :title="social.copyBtn" v-pulse-loop>
-                                <font-awesome-icon icon="fa-copy" />
-                            </button>
-                            <button @click="openSocialQrcode(social.link)" :title="social.shareBtn" v-pulse-loop>
-                                <font-awesome-icon icon="fa-share-from-square" />
-                            </button>
-                            <a :href="social.link" target="_blank" :title="social.linkBtn" v-pulse-loop>
-                                <font-awesome-icon icon="fa-up-right-from-square" />
-                            </a>
-                            <button v-if="social.showCopyUsername" title="Copy Username" @click="copyUsername(social.username)" v-pulse-loop>
-                                <font-awesome-icon icon="fa-signature" />
-                            </button>
-                        </div>
-
-                        <button @click="openSocialQrcode(social.link)" class="social-tab-qrcodeBtn" title="Get QR Code">
-                            <font-awesome-icon icon="fa-qrcode" />
+                    <div class="social-tab-options">
+                        <button @click="copyLink(social.displayLink)" :title="social.copyBtn" v-pulse-loop>
+                            <font-awesome-icon icon="fa-copy" />
+                        </button>
+                        <button @click="openSocialQrcode(social.link)" :title="social.shareBtn" v-pulse-loop>
+                            <font-awesome-icon icon="fa-share-from-square" />
+                        </button>
+                        <a :href="social.link" target="_blank" :title="social.linkBtn" v-pulse-loop>
+                            <font-awesome-icon icon="fa-up-right-from-square" />
+                        </a>
+                        <button v-if="social.showCopyUsername" title="Copy Username" @click="copyUsername(social.username)" v-pulse-loop>
+                            <font-awesome-icon icon="fa-signature" />
                         </button>
                     </div>
-                </template>
+
+                    <button @click="openSocialQrcode(social.link)" class="social-tab-qrcodeBtn" title="Get QR Code">
+                        <font-awesome-icon icon="fa-qrcode" />
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -217,18 +215,14 @@ function manageSocialTabGlow(oldValue = "") {
     // This section removes the glow effect from the old social tab.
     if(oldValue !== "" && oldValue.length > 0) {
         const oldIndex = SOCIALS.findIndex(item => item.id === oldValue.substring(1));
-        if(oldIndex != -1 && oldIndex != 2) {
-            document.getElementById(SOCIALS[oldIndex].id)?.classList.remove("glowing");
-        }
+        if(oldIndex != -1) {document.getElementById(SOCIALS[oldIndex].id)?.classList.remove("glowing"); }
     }
 
     // This section adds the glow effect to the new social tab.
     const hash = routeHash.value;
     if(hash !== "" && hash.length > 0) {
         const newIndex = SOCIALS.findIndex(item => item.id === hash.substring(1));
-        if(newIndex != -1 && newIndex != 2) {
-            document.getElementById(SOCIALS[newIndex].id)?.classList.add("glowing");
-        }
+        if(newIndex != -1) { document.getElementById(SOCIALS[newIndex].id)?.classList.add("glowing"); }
     }
 }
 

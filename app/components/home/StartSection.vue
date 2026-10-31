@@ -20,63 +20,72 @@
             </RouterLink>
         </div>
         <div class="start-buttonRow contact-links">
-            <template v-for="(contact, index) in SOCIALS">
-                <div class="start-buttonRow-btn-container" v-if="(index != 2 && index != 4)" :style="getColorStyles(contact.color)">
-                    <a v-if="!isMounted" :href="contact.link" class="start-buttonRow-btn"
-                        :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
-                        :style="getSpecialBtnStyles(contact.color)">
+            <div v-for="(contact, index) in SOCIALS_START" class="start-buttonRow-btn-container" :style="getColorStyles(contact.color)">
+                <a v-if="!isMounted" :href="contact.link" class="start-buttonRow-btn"
+                    :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
+                    :style="getSpecialBtnStyles(contact.color)">
 
-                        <font-awesome-icon :icon="contact.linkIcon" />
-                    </a>
-                    <button v-else class="start-buttonRow-btn"
-                        :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
-                        :style="getSpecialBtnStyles(contact.color)"
-                        @click="(event) => { onContactBtnClick(event, contact); }"
-                        @contextmenu="(event) => { onContactBtnClick(event, contact); }"
-                        @dblclick="shareContactLink(contact.link)">
+                    <font-awesome-icon :icon="contact.linkIcon" />
+                </a>
+                <button v-else :class="['start-buttonRow-btn', MAIN_CONTACT_BUTTONS_CLASS]"
+                    :title="((index == 0) ? contact.name : ('My ' + contact.name + ' Profile'))"
+                    :style="getSpecialBtnStyles(contact.color)"
+                    :[CONTACT_BUTTON_INDEX_ATTRIBUTE]="String(index)"
+                    :[CONTACT_BUTTON_LINK_ATTRIBUTE]="contact.link"
+                    :[CONTACT_BUTTON_ID_ATTRIBUTE]="contact.id">
 
-                        <font-awesome-icon :icon="contact.linkIcon" />
-                    </button>
+                    <font-awesome-icon :icon="contact.linkIcon" />
+                </button>
 
-                    <Transition name="fade-context-menu-transition">
-                        <div :id="CONTACT_DROPDOWN_ID" v-if="(startContactObj === contact.id)"
-                            :class="['start-contactBtn-dropdown', (contactDropdownShareHover ? 'share-hover' : '')]"
-                            :style="getContactDropdownStyles(contact.color)">
+                <Transition name="fade-context-menu-transition">
+                    <div :id="CONTACT_DROPDOWN_ID" v-if="(startContactObj === contact.id)"
+                        :class="['start-contactBtn-dropdown', (contactDropdownShareHover ? 'share-hover' : '')]"
+                        :style="getContactDropdownStyles(contact.color)">
 
-                            <button :id="CONTACT_DROPDOWN_SHARE_ID" class="start-contactBtn-dropdown-button"
-                                :title="contact.shareBtn"
-                                @click="shareContactLink(contact.link)">
+                        <button :id="CONTACT_DROPDOWN_SHARE_ID" class="start-contactBtn-dropdown-button"
+                            :title="contact.shareBtn"
+                            @click="() => { shareContactLink(contact.link); }">
 
-                                <span> Share </span>
-                                <FontAwesomeIcon icon="fa-share-from-square" />
-                            </button>
-                            <RouterLink class="start-contactBtn-dropdown-button" :to="('/contact/#' + contact.id)" title="Go To Contact Page">
-                                Go To Contact Page <FontAwesomeIcon icon="fa-link" />
-                            </RouterLink>
-                            <a :href="contact.link" :title="contact.linkBtn"
-                                :target="(contact.link.startsWith('mailto:') ? '_blank' : '_self')"
-                                class="start-contactBtn-dropdown-button bottom">
+                            <span> Share </span>
+                            <FontAwesomeIcon icon="fa-share-from-square" />
+                        </button>
+                        <RouterLink class="start-contactBtn-dropdown-button"
+                            :to="('/contact/#' + contact.id)"
+                            title="Go To Contact Page">
+                            
+                            <span> Go To Contact Page </span>
+                            <FontAwesomeIcon icon="fa-link" />
+                        </RouterLink>
+                        <a :href="contact.link" :title="contact.linkBtn"
+                            :target="(contact.link.startsWith('mailto:') ? '_blank' : '_self')"
+                            class="start-contactBtn-dropdown-button bottom">
 
-                                {{ ((contact.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + contact.name)) }}
-                                <FontAwesomeIcon icon="fa-up-right-from-square" />
-                            </a>
-                        </div>
-                    </Transition>
-                </div>
-            </template>
+                            {{ ((contact.linkBtn === 'Send Email') ? 'Send Me An Email' : ('Go To My ' + contact.name)) }}
+                            <FontAwesomeIcon icon="fa-up-right-from-square" />
+                        </a>
+                    </div>
+                </Transition>
+            </div>
         </div>
     </div>
 </div>
 </template>
 
 <script setup>
+const SOCIALS_START = [SOCIALS[0], SOCIALS[1], SOCIALS[2], SOCIALS[4]];
 const START_INNER_CONTAINER_ID = "start-innerContainer";
 const CONTACT_DROPDOWN_ID = "start-contact-dropdown";
 const CONTACT_DROPDOWN_SHARE_ID = "start-contact-dropdown-share";
 
+const MAIN_CONTACT_BUTTONS_CLASS = "mohit-start-buttonRow-contact-button";
+const CONTACT_BUTTON_ID_ATTRIBUTE = "mohit-contact-id";
+const CONTACT_BUTTON_LINK_ATTRIBUTE = "mohit-contact-link";
+const CONTACT_BUTTON_INDEX_ATTRIBUTE = "mohit-contact-array-index";
+
 /** @type {AbortController} This abort controller manages all the events for this component. */
 var abortController = null;
 var contextMenuTimeout = null;
+const isMounted = ref(false);
 
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
@@ -93,14 +102,29 @@ useRafFn(() => {
 }, { immediate: true });
 
 // This sets up event listeners that close the contact dropdown when the user clicks outside the dropdown itself or an assoicated button for it.
-const isMounted = onMountedAdvanced(async() => {
+onMounted(async() => {
     try {
+        isMounted.value = true;
+        await nextTick();
+
         abortController = new AbortController();
         const signal = abortController.signal;
 
         window.addEventListener("pointerdown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
         window.addEventListener("mousedown", (event) => { checkContactDropdownStayVisible(event); }, { signal });
         window.addEventListener("touchstart", (event) => { checkContactDropdownStayVisible(event); }, { signal });
+
+        /** @type {HTMLCollectionOf<HTMLButtonElement>} This is a list of the contact buttons in the start section. */
+        const contactButtons = document.getElementsByClassName(MAIN_CONTACT_BUTTONS_CLASS);
+
+        // This sets event listeners for all the contact buttons in the start section.
+        for(let i = 0; i < contactButtons.length; i++) {
+            const currentContactButton = contactButtons.item(i);
+            currentContactButton.addEventListener("click", (event) => { onContactBtnClick(event); }, { signal });
+            currentContactButton.addEventListener("contextmenu", (event) => { onContactBtnClick(event); }, { signal });
+            currentContactButton.addEventListener("dblclick", (event) => { onContactBtnDblClick(event); }, { signal });
+            currentContactButton.addEventListener("keydown", (event) => { onContactBtnKeydown(event); }, { signal });
+        }
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -127,22 +151,27 @@ function checkContactDropdownStayVisible(event) {
 }
 
 /**
- * This function triggers whenever the a button for a social media link is clicked.
+ * This function triggers whenever a button for a social media link is clicked.
  * @param {PointerEvent} event The pointer event from the contact button.
- * @param {{ link: String, id: String }} obj The custom object sent by the contact button.
  */
-function onContactBtnClick(event, obj) {
+function onContactBtnClick(event) {
     try {
-        if(!event || !event.type || (event.type.toLowerCase() === "contextmenu" && event.ctrlKey)) { return; }
+        if(!event || !event.target || (event.pointerId == -1) || !event.type) { return; }
+        if(event.type.toLowerCase() === "contextmenu" && event.ctrlKey) { return; }
+        const buttonAttributes = getContactButtonAttributes(event.target);
+
+        if(!Boolean(buttonAttributes.id)) { return; }
         event.preventDefault();
 
         if(event.altKey) {
-            shareContactLink(obj.link);
+            if(Boolean(buttonAttributes.link)) { shareContactLink(buttonAttributes.link); }
         } else if(event.ctrlKey) {
-            window.open(obj.link, (obj.link.startsWith("mailto:") ? "_blank" : "_self"));
+            if(Boolean(buttonAttributes.link)) {
+                window.open(buttonAttributes.link, (buttonAttributes.link.startsWith("mailto:") ? "_blank" : "_self"));
+            }
         } else if(event.shiftKey) {
-            router.push('/contact/#' + obj.id);
-        } else if(startContactObj.value === obj.id) {
+            router.push('/contact/#' + buttonAttributes.id);
+        } else if(startContactObj.value === buttonAttributes.id) {
             hideStartContactDropdown();
             if(contextMenuTimeout != null) { clearTimeout(contextMenuTimeout); }
             contextMenuTimeout = null;
@@ -150,16 +179,95 @@ function onContactBtnClick(event, obj) {
             if(event.type.toLowerCase() === "contextmenu") {
                 triggerClickSound();
                 contextMenuTimeout = setTimeout(() => {
-                    startContactObj.value = obj.id;
+                    startContactObj.value = buttonAttributes.id;
                     contextMenuTimeout = null;
                 }, 100);
             }
         } else {
             if(event.type.toLowerCase() === "contextmenu") { triggerClickSound(); }
-            startContactObj.value = obj.id;
+            startContactObj.value = buttonAttributes.id;
         }
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/**
+ * This function triggers whenever a button for a social media link is clicked.
+ * @param {PointerEvent} event The pointer event from the contact button.
+ */
+function onContactBtnDblClick(event) {
+    try {
+        if(!event || !event.target) { return; }
+
+        /** @type {Element} The element that the user is clicked on. */
+        const element = event.target;
+        const buttonElement = element.closest("." + MAIN_CONTACT_BUTTONS_CLASS);
+
+        if(!buttonElement || !(buttonElement instanceof HTMLButtonElement)) { return; }
+        const linkAttribute = buttonElement.getAttribute(CONTACT_BUTTON_LINK_ATTRIBUTE);
+        if(Boolean(linkAttribute)) { shareContactLink(linkAttribute); }
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/**
+ * This function triggers whenever key is pressed down while the user if focusing on a contact button.
+ * @param {KeyboardEvent} event The keyboard event from the contact button.
+ */
+function onContactBtnKeydown(event) {
+    try {
+        if(!event || !event.target || !event.key) { return; }
+        const buttonAttributes = getContactButtonAttributes(event.target);
+        if(!Boolean(buttonAttributes.id)) { return; }
+
+        const key = event.key.toLowerCase();
+        const noCtrlKey = !event.ctrlKey;
+        const noRepeat = !event.repeat;
+        var buttonFocusNumber = -1;
+
+        if(key === "enter" && noRepeat) {
+            startContactObj.value = ((startContactObj.value === buttonAttributes.id) ? "" : buttonAttributes.id);
+            triggerClickSound();
+        } else if((key === "arrowup" || key === "w") && noCtrlKey) {
+            event.preventDefault();
+            hideStartContactDropdown();
+        } else if((key === "arrowdown" || key === "s") && noCtrlKey) {
+            event.preventDefault();
+            startContactObj.value = buttonAttributes.id;
+        } else if((key === "arrowleft" || key === "a") && noCtrlKey && noRepeat) {
+            buttonFocusNumber = ((buttonAttributes.index <= 0) ? (SOCIALS_START.length - 1) : (buttonAttributes.index - 1));
+        } else if((key === "arrowright" || key === "d") && noCtrlKey && noRepeat) {
+            buttonFocusNumber = ((buttonAttributes.index >= 3) ? 0 : (buttonAttributes.index + 1));
+        }
+
+        if(buttonFocusNumber > -1) {
+            event.preventDefault();
+            document.getElementsByClassName(MAIN_CONTACT_BUTTONS_CLASS).item(buttonFocusNumber).focus();
+            if(startContactObj.value !== "") { startContactObj.value = SOCIALS_START[buttonFocusNumber].id; }
+        }
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/**
+ * This function returns all the custom attributes from a contact button.
+ * @param {Element} eventTarget The event target from interacting with the button.
+ */
+function getContactButtonAttributes(eventTarget = null) {
+    if(!eventTarget) { return; }
+    const buttonElement = eventTarget.closest("." + MAIN_CONTACT_BUTTONS_CLASS);
+
+    if(!buttonElement || !(buttonElement instanceof HTMLButtonElement)) {
+        return { link: null, id: null, index: NaN }
+    } else {
+        return {
+            link: buttonElement.getAttribute(CONTACT_BUTTON_LINK_ATTRIBUTE),
+            id: buttonElement.getAttribute(CONTACT_BUTTON_ID_ATTRIBUTE),
+            index: Number(buttonElement.getAttribute(CONTACT_BUTTON_INDEX_ATTRIBUTE))
+        }
     }
 }
 
@@ -215,7 +323,7 @@ const MAIN_BTNS = [
     { path: "/experience/", icon: "fa-file-code", color: "var(--website-text)", title: "See My Experience", shortTitle: "Exp" },
     { path: "/projects/", icon: "fa-cubes", color: "var(--globe-green-opaque)", title: "See My Projects", shortTitle: "Projects" },
     { path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)", title: "See My Resume", shortTitle: "Resume" },
-]
+];
 </script>
 
 <style scoped lang="scss">
@@ -333,7 +441,7 @@ $height-start-scale: 775;
     flex-direction: column;
     box-shadow: 0px 0px 10px 1px var(--website-text);
 }
-.start-buttonRow-btn:hover {
+.start-buttonRow-btn:hover, .start-buttonRow-btn:focus {
     background-color: rgb(39, 39, 39);
     scale: 1.1;
 }

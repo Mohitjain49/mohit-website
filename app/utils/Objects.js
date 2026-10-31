@@ -105,20 +105,6 @@ export const SOCIALS = [
         altColor: "#0072B1"
     },
     {
-        name: "Discord",
-        id: "discord",
-        displayLink: "Username: mohitjainn",
-        link: "https://discord.com/channels/@me/",
-        username: "mohitjainn",
-        copyBtn: "Copy Username",
-        linkBtn: "Go To Discord",
-        shareBtn: "Share My Discord Username",
-        showCopyUsername: true,
-        linkIcon: "fa-brands fa-discord",
-        color: "#5865F2",
-        altColor: "#5865F2"
-    },
-    {
         name: "GitHub",
         id: "github",
         displayLink: "https://github.com/Mohitjain49",
