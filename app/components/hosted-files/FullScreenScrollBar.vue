@@ -5,7 +5,7 @@
     </div>
 </Transition>
 
-<div v-if="showScrollBar" class="mohit-scrollBar" @contextmenu.prevent>
+<div v-if="showScrollBar" :class="mainScrollbarClasses" @contextmenu="(event) => { onScrollBarContextMenu(event); }">
     <button :id="SCROLLBAR_TOP_BUTTON_ID" :class="topArrowClasses" no-sound>
         <FontAwesomeIcon icon="fa-play" :rotation="'270'" />
     </button>
@@ -26,8 +26,8 @@ const SCROLLBAR_BOTTOM_BUTTON_ID = "fs-scrollbar-bottom-button";
 const styleStore = useStyleStore();
 const scrollStore = useScrollStore();
 
-const { scrollProgress } = storeToRefs(scrollStore);
-const { mouseY } = storeToRefs(styleStore);
+const { scrollProgress, isScrolling } = storeToRefs(scrollStore);
+const { mouseY, onTouchScreen } = storeToRefs(styleStore);
 
 /** @type {AbortController} The Abort controller for this component's events. */
 var eventsAbortController = null;
@@ -43,8 +43,11 @@ const wholeFileInView = useState("whole-hosted-file-in-view", () => { return fal
 const { vScrollbarStyle, vertical, atTop, atBottom } = useScrollPercentage(props.fsElementId);
 
 const showScrollBar = computed(() => { return (vertical.value.inView < 100); });
-const thumbClasses = computed(() => { return ['inner', (mousePressedOnThumb.value ? 'active' : '')]; });
+const mainScrollbarClasses = computed(() => { return ['mohit-scrollBar', (onTouchScreen.value ? 'touch' : '')]; });
 
+const thumbClasses = computed(() => {
+    return ['inner', (mousePressedOnThumb.value ? 'active' : ''), (isScrolling.value ? 'is-scrolling' : '')];
+});
 const topArrowClasses = computed(() => {
     return ['top', ((mousePressedOnArrow.value == -1) ? 'active' : ''), (atTop.value ? 'no-action' : '')];
 });
@@ -208,6 +211,14 @@ function onFsKeydown(event = null) {
     const key = event.key.toLowerCase();
     if(key === "arrowup" || key === "arrowdown") { event.preventDefault(); }
 }
+
+/**
+ * This function runs when the user right clicks on the scrollbar.
+ * @param {PointerEvent} event The event fired with the right click.
+ */
+function onScrollBarContextMenu(event) {
+    if(event && !event.ctrlKey) { event.preventDefault(); }
+}
 </script>
 
 <style scoped lang="scss">
@@ -222,6 +233,10 @@ function onFsKeydown(event = null) {
     border-radius: 0px;
     overflow: hidden;
 }
+.mohit-scrollBar.touch {
+    background-color: #1C1C1C00;
+    width: 10px;
+}
 
 .mohit-scrollBar-body {
     height: calc(100% - 40px);
@@ -229,6 +244,10 @@ function onFsKeydown(event = null) {
     padding: 5px 0px;
     position: relative;
 }
+.mohit-scrollBar.touch .mohit-scrollBar-body {
+    height: calc(100% - 10px);
+}
+
 .mohit-scrollBar-body .inner {
     width: 60% !important;
     background-color: var(--website-text);
@@ -237,12 +256,22 @@ function onFsKeydown(event = null) {
     left: 20% !important;
     border-radius: 30px;
 }
+.mohit-scrollBar.touch .mohit-scrollBar-body .inner {
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.mohit-scrollBar.touch .mohit-scrollBar-body .inner.is-scrolling { opacity: 1; }
+.mohit-scrollBar.touch .mohit-scrollBar-body .inner:not(.is-scrolling) { transition: opacity 0.4s; }
 
 .mohit-scrollBar-body .inner.active,
 .mohit-scrollBar-body .inner:hover {
     background-color: var(--website-light-text);
 }
 
+.mohit-scrollBar.touch button {
+    display: none !important;
+}
 .mohit-scrollBar button {
     cursor: default;
     display: flex;
@@ -259,6 +288,7 @@ function onFsKeydown(event = null) {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: scale 0.15s;
 }
 
 .mohit-scrollBar button.no-action { color: var(--website-text) !important; }
@@ -266,6 +296,7 @@ function onFsKeydown(event = null) {
 
 .mohit-scrollBar button.top svg { top: 1px; }
 .mohit-scrollBar button.bottom svg { bottom: 1px; }
+.mohit-scrollBar button.active svg { scale: 0.8; }
 
 .mohit-fs-autoscroll-progressBar {
     position: fixed;

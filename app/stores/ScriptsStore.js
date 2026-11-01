@@ -272,7 +272,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     async function setLineNumberEventListeners() {
         try {
             await new Promise(async (resolve, reject) => {
-                if(eventsAborted()) { return reject("Process Aborted"); }
+                if(Boolean(scriptAbortController) && scriptAbortController.signal.aborted) {
+                    return reject("Process Aborted");
+                }
 
                 /** @type {HTMLCollectionOf<HTMLButtonElement>} This is the new website for  */
                 const lineButtons = document.getElementsByClassName(SCRIPT_LINE_BUTTON_CLASS);
@@ -280,7 +282,10 @@ export const useScriptsStore = defineStore("scripts-store", () => {
                 const signal = scriptAbortController.signal;
 
                 for(let i = 0; i < numLineButtons; i++) {
-                    if(eventsAborted()) { return reject("Process Aborted"); }
+                    if(Boolean(scriptAbortController) && scriptAbortController.signal.aborted) {
+                        return reject("Process Aborted");
+                    }
+
                     const element = lineButtons.item(i);
                     if(!element) { continue; }
 
@@ -376,9 +381,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
             });
         }
     }
-
-    /** This checks if the script abort controller's "abort()" function was called or not. */
-    function eventsAborted() { if((scriptAbortController == null) ? true : scriptAbortController.signal.aborted); }
 
     /**
      * -------------------------------------------------------------------------------

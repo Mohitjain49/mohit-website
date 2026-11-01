@@ -7,6 +7,7 @@ export const useStyleStore = defineStore("style-store", () => {
     const TRUE_100VH_CSS_PROPERTY = "--true-100vh";
     const TRUE_100VW_CSS_PROPERTY = "--true-100vw";
     const CSS_LAYOUT_ID = "invisible-css-layout";
+    const TOUCH_SCREEN_CLASS = "mohit-touchScreen";
     var windowSizeAnimationFrame = null;
 
     const fullScreenStore = useFullScreenStore();
@@ -35,6 +36,9 @@ export const useStyleStore = defineStore("style-store", () => {
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the element that records the website's true CSS viewport dimensions. */
     var cssLayoutElementObserver = null;
 
+    /** @type {AbortController} This abort controller is designed to properly disable the touch screen media event listeners. */
+    var touchScreenAbortController = null;
+
     /** @type {AbortController} This abort controller is designed to properly disable the dynamic zoom factor's event listeners. */
     var zoomFactorAbortController = null;
 
@@ -49,10 +53,13 @@ export const useStyleStore = defineStore("style-store", () => {
 
     const mounted = ref(false);
     const zoomFactor = ref(1.0);
+
     const onMobileDevice = ref(false);
+    const onTouchScreen = ref(false);
     const viewportRafRanOnce = ref(false);
 
     const viewportRafEnabled = shallowRef(false);
+    const touchScreenWatcherEnabled = shallowRef(false);
     const dynamicZoomFactorEnabled = shallowRef(false);
     const breakpointsEnabled = ref(false);
     const cssLayoutObserverEnabled = ref(false);
@@ -95,7 +102,9 @@ export const useStyleStore = defineStore("style-store", () => {
         setDisableUserSelectClass(disableUserSelect.value);
 
         // This activates all the automated features in the Style Store.
+        setTouchScreenMediaWatcher(true);
         await startViewportRaf();
+
         await Promise.all([
             ((onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY) ? enableDynamicZoomFactor() : null),
             enableCssLayoutObserver(),
@@ -190,6 +199,53 @@ export const useStyleStore = defineStore("style-store", () => {
 
         if(!fullScreenSet.value && fullScreenStore.oldElement != null) {
             fullScreenStore.oldElement.classList.remove('disable-user-select');
+        }
+    }
+
+    /**
+     * -------------------------------------------------------------------------------------
+     * These functions listen and record on whether the user is using a touch screen or not.
+     * -------------------------------------------------------------------------------------
+     */
+
+    /**
+     * This function sets the touch screen media watcher to see if the user is on a touch screen or not.
+     * @param {Boolean} status The new status for the touch screen watcher.
+     */
+    function setTouchScreenMediaWatcher(status = false) {
+        if(!window || !validateClientMode()) { return; }
+        if(touchScreenAbortController != null) { touchScreenAbortController.abort(); }
+
+        if(status) {
+            touchScreenAbortController = new AbortController();
+            const signal = touchScreenAbortController.signal;
+            const touchDeviceMedia = window.matchMedia('(pointer: coarse)');
+
+            onTouchScreen.value = touchDeviceMedia.matches;
+            onTouchScreenChange({ matches: onTouchScreen.value });
+
+            touchDeviceMedia.addEventListener("change", (event) => { onTouchScreenChange(event); }, { signal });
+            touchScreenWatcherEnabled.value = true;
+        } else {
+            touchScreenAbortController = null;
+            onTouchScreenChange({ matches: false });
+            touchScreenWatcherEnabled.value = false;
+        }
+    }
+
+    /**
+     * This function runs whenever the touch screen watcher detects a change.
+     * @param {MediaQueryListEvent} event The event fired by the Touch Screen Change.
+     */
+    function onTouchScreenChange(event = null) {
+        if(!event || !validateClientMode()) { return; }
+        const newStatus = Boolean(event.matches);
+        onTouchScreen.value = newStatus;
+        
+        if(newStatus) {
+            document.documentElement.classList.add(TOUCH_SCREEN_CLASS);
+        } else {
+            document.documentElement.classList.remove(TOUCH_SCREEN_CLASS);
         }
     }
 
@@ -738,9 +794,10 @@ export const useStyleStore = defineStore("style-store", () => {
         }
     }
 
-    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY, mouseElement, viewportRafRanOnce,
-        breakpointsEnabled, trueViewportVariablesEnabled, mousePositionRecorderEnabled, viewportRafEnabled, cssLayoutObserverEnabled,
-        viewportWidth, viewportHeight, recordedDevicePixelRatio, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
+    return { mounted, hideOverflow, hideCursor, disableUserSelect, zoomFactor, mouseX, mouseY, mouseElement,
+        onTouchScreen, viewportRafRanOnce, breakpointsEnabled, trueViewportVariablesEnabled, touchScreenWatcherEnabled,
+        mousePositionRecorderEnabled, viewportRafEnabled, cssLayoutObserverEnabled, viewportWidth, viewportHeight,
+        recordedDevicePixelRatio, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
         mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray, waitForFirstViewportCalculation,
         enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
         enableDynamicZoomFactor, disableDynamicZoomFactor, resetDynamicZoomFactor,

@@ -14,6 +14,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     const fullScreenSet = getFullScreenSet();
     const mounted = ref(false);
+    const isScrolling = ref(false);
 
     /** @type {Lenis} This contains the Lenis object for autoscrolling. */
     var lenis = null;
@@ -114,6 +115,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(webData.websiteMenuMode == 0 || customEventType === "no-scroll") { webData.closeNavMenu(); }
         scriptsStore.closeLineOptions();
         documentStore.setContextMenuPageNumber(0);
+        isScrolling.value = lenis.isScrolling;
     }
 
     /**
@@ -321,7 +323,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This easing function is used by Lenis to make cool animations. */
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
-    return { mounted, scrollProgress, isAutoScrolling,
+    return { mounted, scrollProgress, isAutoScrolling, isScrolling,
         mountScrollStore, unmountScrollStore, cancelAutoscroll, waitForAutoScroll, waitForMounted,
         scrollToId, scrollToTop, scrollToTarget, scrollByIncrement
     }
