@@ -2,26 +2,31 @@
  * This function takes a PDF and renders it into an iframe for printing.
  * @param {String} url The URL of the PDF.
  * @param {AbortSignal} signal A signal to abort rendering the iframe.
+ * @param onComplete A function that runs when the iframe render is completed or Aborted.
+ * @param onProgress A function that should run when the progress of the iFrame Render is completed.
  */
-export async function renderCustomPrintIframe(url = "", signal = null) {
+export async function renderCustomPrintIframe(url = "", signal = null, onComplete = (item) => {}, onProgress = (item) => {}) {
     if(!import.meta.client || !url || url === "") { throw new Error("URL Invalid."); }
     if(!signal || !(signal instanceof AbortSignal)) { signal = null; }
 
     /** @type {HTMLIFrameElement} This is the IFrame where the HTML should be rendered onto. */
     var printIframe = null;
+    onProgress(0);
 
     /** This returns a boolean determining whether the iframe render was aborted or not. */
     function renderAborted() {
         const abortStatus = (!signal ? false : signal.aborted);
         if(abortStatus && printIframe != null) { printIframe.remove(); }
+        if(abortStatus) { onComplete(null); }
         return abortStatus;
     }
 
-    if(renderAborted()) { return null; }
+    if(renderAborted()) { return; }
     const documentStore = useDocumentStore();
     await documentStore.checkPdfjsWorker();
+    onProgress(3);
 
-    if(renderAborted()) { return null; }
+    if(renderAborted()) { return; }
     const PRINT_IFRAME_ID = "mohit-doc-customPrint";
     const PRINT_IFRAME_PAGE_CLASS = "mohit-doc-customPrint-page";
     const PRINT_IFRAME_PAGE_ID_PREFIX = "mohit-customPrint-page_";
@@ -29,34 +34,40 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
 
     /** This is the IFrame where the HTML should be rendered onto. */
     printIframe = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "none", value: "", signal });
+    onProgress(6);
 
-    if(renderAborted()) { return null; }
+    if(renderAborted()) { return; }
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
     const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
+    onProgress(10);
 
     const defaultLinkService = new PDFLinkService({ eventBus: new EventBus(), externalLinkTarget: 2 });
     const imageOutputScale = 2;
     const imageType = "image/png";
 
-    if(renderAborted()) { return null; }
+    if(renderAborted()) { return; }
     const pdfLoadingTask = getDocument({ url });
     const pdf = await pdfLoadingTask.promise;
     const numPages = pdf.numPages;
+    onProgress(15);
 
-    if(renderAborted()) { return null; }
+    if(renderAborted()) { return; }
     const printIframeDocument = (printIframe.contentDocument || printIframe.contentWindow.document);
     const iframeStyle = printIframeDocument.createElement("style");
     const pdfjsStylesheet = printIframeDocument.createElement("style");
 
     const customPrintStyles = await fetch("/printstyles.css");
     if(!customPrintStyles.ok) { throw new Error("Failed To Load Print CSS Stylesheet."); }
+    onProgress(18);
 
     iframeStyle.textContent = await customPrintStyles.text();
     pdfjsStylesheet.textContent = documentStore.getPdfjsStylesheet();
 
     printIframeDocument.body.appendChild(iframeStyle);
     printIframeDocument.head.appendChild(pdfjsStylesheet);
-    if(renderAborted()) { return null; }
+
+    if(renderAborted()) { return; }
+    onProgress(21);
 
     // Creates Containers for each page.
     for(let i = 1; i <= numPages; i++) {
@@ -68,6 +79,17 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
         await waitTwoFrames();
     }
 
+    // Sets the Progress of the Render Task at 25% complete.
+    onProgress(25);
+    var currentProgress = 25;
+    const pointsPerTask = (75 / (numPages * 5));
+
+    /** This adds to the progress on the Page Render. */
+    function addProgressOnPageRender() {
+        currentProgress = (currentProgress + pointsPerTask);
+        onProgress(currentProgress);
+    }
+
     /** This function renders a single page for print.  */
     async function renderPrintPage(pageNum = 1) {
         if(renderAborted()) { return; }
@@ -77,6 +99,7 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
         const pdfPage = await pdf.getPage(pageNum);
         const defaultViewport = pdfPage.getViewport({ scale: 1 });
         const viewport = pdfPage.getViewport({ scale: (LETTER_WIDTH / defaultViewport.width) });
+        addProgressOnPageRender();
 
         if(renderAborted()) { return; }
         printPageContainer.style.setProperty("--mohit-customPrint-pdfjs-raw-width", String(defaultViewport.width));
@@ -101,6 +124,7 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
 
         if(renderAborted()) { return; }
         await canvasRenderTask.promise;
+        addProgressOnPageRender();
 
         const printPageImage = printIframeDocument.createElement("img");
         printPageImage.src = canvasElement.toDataURL(imageType, 1);
@@ -114,6 +138,7 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
 
         // This awaits for the image to load with proper error handling.
         await waitForImageLoad(printPageImage, 7000, signal);
+        addProgressOnPageRender();
         if(renderAborted()) { return; }
 
         const printPageText = document.createElement("div");
@@ -131,6 +156,9 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
         
         if(renderAborted()) { return; }
         await textRenderTask.render();
+        addProgressOnPageRender();
+
+        if(renderAborted()) { return; }
         const annotations = await pdfPage.getAnnotations({ intent: 'print' });
 
         if(annotations && annotations.length > 0) {
@@ -149,10 +177,13 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
             await waitTwoFrames();
             await annotationLayer.render({ annotations });
         }
+
+        // Adds the final point to that this page render needs.
+        addProgressOnPageRender();
     }
 
     // Returns null if the render was aborted.
-    if(renderAborted()) { return null; }
+    if(renderAborted()) { return; }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
     const pageRenderPromises = create2dPromiseArray(numPages, DOCUMENT_RENDER_TASK_PARTITION_SIZE);
@@ -168,5 +199,5 @@ export async function renderCustomPrintIframe(url = "", signal = null) {
 
     // This runs all the arrays of promises and returns the print iframe.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-    return (renderAborted() ? null : printIframe);
+    if(!renderAborted()) { onComplete(printIframe); }
 }

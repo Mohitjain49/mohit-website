@@ -141,12 +141,25 @@
     gap: 5px;
 }
 
-.mohit-document-topBar.markdown {
-    width: calc(100% - 40px);
-    max-width: 1030px;
+.mohit-document-topBar.custom-print-loading {
+    padding-bottom: 14px;
+    position: relative;
 }
-:fullscreen .mohit-document-topBar.markdown {
-    max-width: none;
+.mohit-document-topBar-loadingBar {
+    position: absolute;
+    bottom: 6px;
+    left: 10px;
+    height: 4px;
+    width: calc(100% - 20px);
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.mohit-document-topBar-loadingBar .inner {
+    height: 100%;
+    width: 100%;
+    background-color: var(--blue-three);
+    transition: width 0.05s;
 }
 
 .mohit-document-topBar button, .mohit-document-topBar a {

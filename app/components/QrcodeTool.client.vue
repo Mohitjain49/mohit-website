@@ -514,7 +514,7 @@ function onSharePopupKeydown(event = undefined) {
             } else {
                 copyQRCodeLink();
             }
-        } else if(keyLetter === "p") {
+        } else if(keyLetter === "p" && !event.shiftKey) {
             event.preventDefault();
             setImageOptions(true);
             printQRCode()

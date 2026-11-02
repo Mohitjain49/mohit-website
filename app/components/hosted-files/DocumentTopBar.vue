@@ -1,5 +1,5 @@
 <template>
-<div ref="document-options" class="mohit-document-topBar">
+<div :class="['mohit-document-topBar', (documentStore.firstCustomPrintRender ? 'custom-print-loading' : '')]">
     <div class="mohit-document-topBar-sideSection">
         <button class="doc-save-opt" @click="documentStore.downloadDoc()"
             :title="documentStore.downloadTitle"
@@ -50,6 +50,10 @@
         <button @click="documentStore.toggleDocumentFullScreen()" :title="fullScreenStore.elementTitle" v-pulse-loop>
             <FontAwesomeIcon :icon="fullScreenStore.faIcon" />
         </button>
+    </div>
+
+    <div v-if="documentStore.firstCustomPrintRender" class="mohit-document-topBar-loadingBar">
+        <div class="inner" :style="{ 'width': (String(documentStore.customPrintRenderProgress) + '%') }"></div>
     </div>
 </div>
 </template>

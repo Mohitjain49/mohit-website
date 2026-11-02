@@ -108,6 +108,9 @@ export const useDocumentStore = defineStore("document-store", () => {
     const documentCustomPrintStatus = ref(0);
     const documentShareStatus = ref(0);
 
+    const customPrintRenderProgress = ref(0);
+    const firstCustomPrintRender = ref(false);
+
     const documentUploadToGoogleDriveStatus = ref(0);
     const documentUploadToGoogleDriveCanceled = ref(false);
 
@@ -247,16 +250,16 @@ export const useDocumentStore = defineStore("document-store", () => {
      * This function should run every time the user presses a key on their keyboard while on a Hosted Document Page.
      * @param {KeyboardEvent} event The Keyboard Event.
      */
-    function onHostedDocumentPageKeydown(event = undefined) {
+    function onHostedDocumentPageKeydown(event = null) {
         try {
             if(!event || webData.showSharePopup || !currentDocumentBlobCreated.value) { return; }
             if(!event.key || !event.ctrlKey || event.repeat) { return; }
             const keyLetter = event.key.toLowerCase();
 
-            if(keyLetter === "p") {
+            if(keyLetter === "p" && !event.shiftKey) {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
-                printDoc(!event.altKey && !event.shiftKey);
+                printDoc(!event.altKey);
             } else if(keyLetter === "s") {
                 event.preventDefault();
                 waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
@@ -309,17 +312,48 @@ export const useDocumentStore = defineStore("document-store", () => {
                 const printHtmlText = await hostedDocuments[currentDocumentRouteNumber].printHtml.value.text();
                 printIFrame = await createIFrameForPrint({ id: PRINT_IFRAME_ID, attribute: "srcdoc", value: printHtmlText });
             } else {
-                // Creates the custom HTML and saves it if the print function has not been called before.
                 setRenderIFrameController(true);
-                printIFrame = await renderCustomPrintIframe(documentFile.url, renderIFrameController.signal);
+                firstCustomPrintRender.value = true;
+
+                // Creates the custom HTML and saves it if the print function has not been called before.
+                // This setup also records the progress of the render to display to the user.
+                printIFrame = await new Promise(async(resolve) => {
+                    var msPassed = 0;
+                    var renderComplete = false;
+
+                    renderCustomPrintIframe(documentFile.url,
+                        renderIFrameController.signal,
+                        (item) => {
+                            renderComplete = false;
+                            resolve(item);
+                        },
+                        (item) => {
+                            customPrintRenderProgress.value = item;
+                            msPassed = 0;
+                        }
+                    );
+
+                    while(msPassed < 25000 && !renderComplete) {
+                        await sleep(50);
+                        msPassed += 50;
+                    }
+
+                    // This resolves the Print IFrame as null if no pregress was made in rendering it over the last 25 seconds.
+                    if(!renderComplete) {
+                        setRenderIFrameController(false);
+                        resolve(null);
+                    }
+                });
 
                 if(printIFrame != null) {
+                    await sleep(250);
                     const printIFrameDocument = (printIFrame.contentDocument || printIFrame.contentWindow.document);
                     hostedDocuments[currentDocumentRouteNumber].setPrintHtml(printIFrameDocument.documentElement.outerHTML);
                     setRenderIFrameController(false);
                 }
             }
 
+            firstCustomPrintRender.value = false;
             if((printIFrame != null) && (currentDocumentRouteNumber == currentDocumentRoute.value) && !webData.showSharePopupImmediate) {
                 // This triggers the print function at the end to open the popup.
                 const printIFrameWin = printIFrame.contentWindow;
@@ -865,8 +899,8 @@ export const useDocumentStore = defineStore("document-store", () => {
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, currentDocumentMetadataParsed,
         downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle, printCursor, customPrintCursor,
         documentDownloadStatus, documentSaveStatus, documentShareStatus, documentPrintStatus, documentCustomPrintStatus,
-        uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, customPdfWidth, customPdfHeight,
-        customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
+        uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, customPrintRenderProgress, firstCustomPrintRender,
+        customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, openMetadataMenuOnKeydown,
         awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
