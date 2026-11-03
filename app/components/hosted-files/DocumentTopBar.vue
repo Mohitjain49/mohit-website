@@ -1,5 +1,5 @@
 <template>
-<div :class="['mohit-document-topBar', (documentStore.firstCustomPrintRender ? 'custom-print-loading' : '')]">
+<div ref="doc-top-bar" :class="['mohit-document-topBar', (documentStore.firstCustomPrintRender ? 'custom-print-loading' : '')]">
     <div class="mohit-document-topBar-sideSection">
         <button class="doc-save-opt" @click="documentStore.downloadDoc()"
             :title="documentStore.downloadTitle"
@@ -63,6 +63,13 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 const { iframeSupported } = storeToRefs(documentStore);
+
+const topBarRef = useTemplateRef('doc-top-bar');
+const topBarVisible = useElementVisibility(topBarRef);
+
+onAfterMounted(() => { documentStore.documentTopBarVisible = topBarVisible.value; });
+onBeforeUnmount(() => { documentStore.documentTopBarVisible = false; });
+watch(topBarVisible, () => { documentStore.documentTopBarVisible = topBarVisible.value; });
 
 /** This function opens the document menu. */
 function openWebsiteMenu(index = 3) {

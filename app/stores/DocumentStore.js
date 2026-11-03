@@ -79,6 +79,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
     const currentObservedPage = ref(-1);
     const contextMenuPageNumber = ref(0);
+    const documentTopBarVisible = ref(false);
 
     const workerSrcAdded = ref(false);
     const fsStateChanging = ref(false);
@@ -258,11 +259,20 @@ export const useDocumentStore = defineStore("document-store", () => {
 
             if(keyLetter === "p" && !event.shiftKey) {
                 event.preventDefault();
-                waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
                 printDoc(!event.altKey);
+
+                waitForAutoScroll().then(() => {
+                    if(!documentTopBarVisible.value) {
+                        webData.setMenuOpen(DOCUMENT_MENU, false);
+                    }
+                });
             } else if(keyLetter === "s") {
                 event.preventDefault();
-                waitForAutoScroll().then(() => { webData.setMenuOpen(DOCUMENT_MENU, false); });
+                waitForAutoScroll().then(() => {
+                    if(!documentTopBarVisible.value) {
+                        webData.setMenuOpen(DOCUMENT_MENU, false);
+                    }
+                });
 
                 if(webData.saveAsSupported && (event.shiftKey || event.altKey)) {
                     saveDoc();
@@ -353,7 +363,6 @@ export const useDocumentStore = defineStore("document-store", () => {
                 }
             }
 
-            firstCustomPrintRender.value = false;
             if((printIFrame != null) && (currentDocumentRouteNumber == currentDocumentRoute.value) && !webData.showSharePopupImmediate) {
                 // This triggers the print function at the end to open the popup.
                 const printIFrameWin = printIFrame.contentWindow;
@@ -409,7 +418,19 @@ export const useDocumentStore = defineStore("document-store", () => {
     function setRenderIFrameController(status = false) {
         if(!import.meta.client) { return; }
         if(renderIFrameController != null) { renderIFrameController.abort(); }
-        renderIFrameController = (status ? new AbortController() : null);
+        
+        firstCustomPrintRender.value = false;
+        customPrintRenderProgress.value = 0;
+
+        if(status) {
+            renderIFrameController = new AbortController();
+            renderIFrameController.signal.addEventListener("abort", () => {
+                firstCustomPrintRender.value = false;
+                customPrintRenderProgress.value = 0;
+            }, { once: true });
+        } else {
+            renderIFrameController = null;
+        }
     }
 
     /**
@@ -894,7 +915,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** This function returns if a document is NOT loaded on a document page. */
     function checkDocNotLoaded() { return (onDocumentRoute.value && !docLoaded.value.status); }
 
-    return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber, documentScrollEventListenerEnabled,
+    return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber, documentScrollEventListenerEnabled, documentTopBarVisible,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, currentDocumentMetadataParsed,
         downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle, printCursor, customPrintCursor,

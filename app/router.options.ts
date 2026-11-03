@@ -5,8 +5,11 @@ const QUERY_NO_SCROLL_PARAMS = ["qrdata", "qrcodeAdded", "linksRemoved"];
 const QUERY_DOCUMENT_SCROLL_PARAMS = ["page", "y"];
 const TASKS_PENDING_WAIT_MILLISECONDS = 1500;
 
-/** If true, a call to the scrol behavior function is waiting for the page:finish hook to be resolved. */
+/** If true, a call to the scroll behavior function is waiting for the page:finish hook to be resolved. */
 const pageFinishHookRunning = ref(false);
+
+/** If true, the scroll behavior function is running for the first time. */
+const firstScrollCall = ref(true);
 
 /** This function determines if a scroll should be disabled based off a query change. */
 function disableScrollOnQueryChange(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
@@ -30,7 +33,7 @@ export default {
         try {
             // console.log({ to, from, savedPosition });
             if(!import.meta.client) { return { top: 0, left: 0, behavior: "instant" }; }
-            window.history.scrollRestoration = "manual";
+            if(firstScrollCall.value) { window.history.scrollRestoration = "manual"; }
 
             const lowercasePath = to.path.toLowerCase();
             if(lowercasePath === "/google-mockup" || lowercasePath === "/google-mockup/") {
@@ -46,9 +49,10 @@ export default {
             const { $pinia, hooks } = useNuxtApp();
 
             // This waits for the new webpage to load before instantly scrolling to the top of that webpage.
-            if(differentPage) {
+            if(differentPage || firstScrollCall.value) {
                 await new Promise<String>((resolve, reject) => {
                     pageFinishHookRunning.value = true;
+                    firstScrollCall.value = false;
                     hooks.hookOnce('page:finish', () => { resolve("finished"); });
                     sleep(1000).then(() => { resolve("timeout"); });
                 });

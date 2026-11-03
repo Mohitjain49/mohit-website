@@ -1,5 +1,5 @@
 <template>
-<div v-if="scriptsStore.scriptBlobCreated" ref="script-options" class="mohit-main-script-top">
+<div v-if="scriptsStore.scriptBlobCreated" ref="script-top-bar" class="mohit-main-script-top">
     <div class="mohit-main-script-top-sideSection">
         <div class="mohit-main-script-top-group">
             <button class="script-save-opt" @click="scriptsStore.downloadScript()"
@@ -44,6 +44,13 @@
 const scriptsStore = useScriptsStore();
 const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
+
+const topBarRef = useTemplateRef('script-top-bar');
+const topBarVisible = useElementVisibility(topBarRef);
+
+onAfterMounted(() => { scriptsStore.scriptTopBarVisible = topBarVisible.value; });
+onBeforeUnmount(() => { scriptsStore.scriptTopBarVisible = false; });
+watch(topBarVisible, () => { scriptsStore.scriptTopBarVisible = topBarVisible.value; });
 
 /** This function opens the scripts menu. */
 function openScriptsMenu() {

@@ -47,6 +47,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This manages the status of the line options menu. */
     const lineOptions = ref({ num: -1, oldNum: -1, timeout: null, copyStatus: 0, lastCopied: "", extraClass: "below-num" });
+    const scriptTopBarVisible = ref(false);
 
     const scriptDownloadStatus = ref(0);
     const scriptSaveStatus = ref(0);
@@ -193,12 +194,20 @@ export const useScriptsStore = defineStore("scripts-store", () => {
                 if(checkLineNumber(lineOptions.value.num)) {
                     copyLineAttribute(event.altKey ? "link" : "text");
                 } else {
-                    waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
                     copyScript();
+                    waitForAutoScroll().then(() => {
+                        if(!scriptTopBarVisible.value) {
+                            webData.setMenuOpen(SCRIPTS_MENU, false);
+                        }
+                    });
                 }
             } else if(keyLetter === "s") {
                 event.preventDefault();
-                waitForAutoScroll().then(() => { webData.setMenuOpen(SCRIPTS_MENU, false); });
+                waitForAutoScroll().then(() => {
+                    if(!scriptTopBarVisible.value) {
+                        webData.setMenuOpen(SCRIPTS_MENU, false);
+                    }
+                });
 
                 if(webData.saveAsSupported && (event.shiftKey || event.altKey)) {
                     saveScript();
@@ -575,7 +584,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     return { scripts, mounted, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
         scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus, downloadTitle, saveScriptTitle, copyTitle,
-        currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement,
+        currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement, scriptTopBarVisible,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen, checkLineNumber,
         setCodeWrapping, setWrapCodeStyles, setLineOptions, closeLineOptions, placeLineOptionsOnCode,
         mountScriptsStore, mountScriptPage, unmountScriptPage, copyLineAttribute, shareLinePermalink
