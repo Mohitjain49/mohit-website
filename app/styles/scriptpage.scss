@@ -196,6 +196,15 @@
     border-color: white;
 }
 
+.mohit-main-script-top button > svg, .mohit-main-script-top a > svg {
+    width: 12px;
+    height: 12px;
+}
+.mohit-main-script-top button.largeSvg > svg, .mohit-main-script-top a.largeSvg > svg {
+    width: 14px;
+    height: 14px;
+}
+
 .mohit-main-script-top-group {
     width: fit-content;
     height: 100%;

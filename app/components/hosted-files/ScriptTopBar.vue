@@ -27,7 +27,7 @@
         </a>
     </div>
     <div class="mohit-main-script-top-sideSection">
-        <button @click="openScriptsMenu()" title="Open Script Options" v-pulse-loop>
+        <button class="largeSvg" @click="openScriptsMenu()" title="Open Script Options" v-pulse-loop>
             <FontAwesomeIcon icon="fa-file-export" />
         </button>
         <button class="flame" @click="scriptsStore.setCodeWrapping('toggle')" :title="scriptsStore.wrapStatement" v-pulse-loop>

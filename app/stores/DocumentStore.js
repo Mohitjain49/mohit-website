@@ -418,9 +418,6 @@ export const useDocumentStore = defineStore("document-store", () => {
     function setRenderIFrameController(status = false) {
         if(!import.meta.client) { return; }
         if(renderIFrameController != null) { renderIFrameController.abort(); }
-        
-        firstCustomPrintRender.value = false;
-        customPrintRenderProgress.value = 0;
 
         if(status) {
             renderIFrameController = new AbortController();
