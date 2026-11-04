@@ -1,8 +1,9 @@
 <template>
 <!-- <WebCover v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu" v-web-menu>
+    <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu">
         <MenuTop />
+        <MenuEventActions />
 
         <div class="mohit-navMenu-opt-group">
             <div class="mohit-navMenu-opt hosted-file-save-opt">

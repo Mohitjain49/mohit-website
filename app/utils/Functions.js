@@ -38,6 +38,12 @@ export function getColorStyles(color = "var(--website-text)") {
     return { color, borderColor: color }
 }
 
+/** This function returns a boolean on whether the website "touch end" event exists. */
+export function checkTouchEndExists() {
+    if(!import.meta.client || !window) { return false; }
+    return (('ontouchend' in window) || (window.TouchEvent !== undefined));
+}
+
 /** This returns the css inner width. */
 export function getCssInnerWidth() {
     if(usePinia()) {

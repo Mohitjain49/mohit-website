@@ -29,17 +29,19 @@ var closeInterval = null;
 
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
+const coverRef = useTemplateRef('mohit-website-cover');
+
 const props = defineProps({
     zIndex: { type: Number, default: 500 },
     closeWebCover: { type: [Object, Function], default: null }
 });
 
-const coverRef = useTemplateRef('mohit-website-cover');
 const coverPressed = ref(false);
 const counter = ref(0);
+const hasTouchEvents = ref(false);
 
 const { mouseX: x, mouseY: y, cssToWindowHeightRatio, cssToWindowWidthRatio } = storeToRefs(styleStore);
-const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex, touchAction: 'none' } });
+const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex, touchAction: (hasTouchEvents.value ? '' : 'none') }});
 const showProgressRing = computed(() => { return (counter.value > 0); });
 const animateProgressRing = computed(() => { return (counter.value > (FINAL_COUNT / 4)); });
 
@@ -54,14 +56,17 @@ const progressRingInnerFill = computed(() => {
 
 // This sets the necessary event listeners for this component.
 onAfterMounted(() => {
+    // If Pointer Events do not exist, the "unique" functionality behind this cover will not be initialized.
     if(!Boolean(coverRef.value) || !('PointerEvent' in window)) { return; }
+
+    hasTouchEvents.value = checkTouchEndExists();
     eventsAbortController = new AbortController();
     const signal = eventsAbortController.signal;
 
     document.addEventListener("visibilitychange", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("mohit-mouse-leave", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("pointerup", () => { resetCounter(); }, { signal, passive: true });
-    window.addEventListener("pointercancel", () => { resetCounter(); }, { signal, passive: true });
+    window.addEventListener((hasTouchEvents.value ? "touchend" : "pointercancel"), () => { resetCounter(); }, { signal, passive: true });
     coverRef.value.addEventListener("pointerdown", () => { onWebpageCoverPointerDown(); }, { signal, passive: true });
 });
 

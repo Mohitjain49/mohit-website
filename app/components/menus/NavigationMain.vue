@@ -55,8 +55,9 @@
 </nav>
 
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu" v-web-menu>
+    <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu">
         <MenuTop />
+        <MenuEventActions />
 
         <div v-for="btn in MAIN_BTNS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
             <RouterLink :class="getNavMenuAnchorClasses(btn.path)" :to="btn.path" v-pulse-loop>

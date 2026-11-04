@@ -1,8 +1,9 @@
 <template>
 <!-- <WebCover v-if="(documentMetadataMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="websiteMenuTransition">
-    <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu" v-web-menu>
+    <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu">
         <MenuTop :show-doc-options-btn="true" />
+        <MenuEventActions />
 
         <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
             @click="setFocusedMetadata(true, field.header, field.content.value)"

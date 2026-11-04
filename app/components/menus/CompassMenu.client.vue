@@ -1,7 +1,8 @@
 <template>
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu" v-web-menu>
+    <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu">
         <MenuTop />
+        <MenuEventActions />
 
         <div v-for="section in routes" class="mohit-navMenu-opt" :style="getColorStyles(section.color)">
             <RouterLink :to="(routePath + '#' + section.id)" v-pulse-loop

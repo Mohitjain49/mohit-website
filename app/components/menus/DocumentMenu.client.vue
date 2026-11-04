@@ -1,8 +1,9 @@
 <template>
 <!-- <WebCover v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu" v-web-menu>
+    <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu">
         <MenuTop />
+        <MenuEventActions />
 
         <div class="mohit-navMenu-opt-group">
             <template v-if="documentStore.onResumeRoute">

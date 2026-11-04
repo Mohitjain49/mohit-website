@@ -1,8 +1,9 @@
 <template>
 <!-- <WebCover v-if="(resumeMenuOpen && fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="resumeMenuOpen" class="mohit-navMenu flame" id="mohit-resumeMenu" v-web-menu>
+    <div v-show="resumeMenuOpen" class="mohit-navMenu flame" id="mohit-resumeMenu">
         <MenuTop />
+        <MenuEventActions />
 
         <div class="mohit-navMenu-sectionheader" :style="getColorStyles('var(--website-light-text)')">
             <span> Options </span>
