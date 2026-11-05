@@ -5,7 +5,7 @@
     </div>
 </Transition>
 
-<div v-if="showScrollBar" :class="mainScrollbarClasses" @contextmenu="(event) => { onScrollBarContextMenu(event); }">
+<div v-show="showScrollBar" :class="mainScrollbarClasses" @contextmenu="(event) => { onScrollBarContextMenu(event); }">
     <button :id="SCROLLBAR_TOP_BUTTON_ID" :class="topArrowClasses" no-sound>
         <FontAwesomeIcon icon="fa-play" :rotation="'270'" />
     </button>
@@ -100,23 +100,18 @@ onBeforeUnmount(() => {
 function getFsElement() { return document.getElementById(props.fsElementId); }
 
 /**
- * This function scrolls within the Full Screen element.
- * @param {Number} divisor The number to divide the full screen element's total height by.
- */
-function scrollFsElement(divisor = 10) {
-    const element = getFsElement();
-    const newValue = (element.scrollTop + (element.scrollHeight / divisor));
-    element.scrollTop = Math.max(0, Math.min(element.scrollHeight, newValue));
-}
-
-/**
  * This function scrolls the FS Element when the mouse moves.
  * @param {Number} newY The new Y position of the mouse.
  * @param {Number} oldY The old Y position of the mouse.
  */
 function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
     if(!mousePressedOnThumb.value) { return; }
-    scrollFsElement((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
+    const element = getFsElement();
+    if(!element) { return; }
+
+    const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
+    const newValue = (element.scrollTop + (element.scrollHeight / divisor));
+    element.scrollTop = Math.max(0, Math.min(element.scrollHeight, newValue));
 }
 
 /**

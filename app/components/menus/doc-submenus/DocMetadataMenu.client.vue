@@ -2,51 +2,53 @@
 <!-- <WebCover v-if="(documentMetadataMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="websiteMenuTransition">
     <div v-show="documentMetadataMenuOpen" class="mohit-navMenu doc-metadata" id="mohit-metadata-docMenu">
-        <MenuTop :show-doc-options-btn="true" />
         <MenuEventActions />
 
-        <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
-            @click="setFocusedMetadata(true, field.header, field.content.value)"
-            :title="('Show ' + field.header + ' Options')">
+        <div class="mohit-navMenu-contents">
+            <MenuTop :show-doc-options-btn="true" />
+            <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
+                @click="setFocusedMetadata(true, field.header, field.content.value)"
+                :title="('Show ' + field.header + ' Options')">
 
-            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-            <span class="content" v-html="field.content.value"></span>
-        </button>
-        <div class="mohit-navMenu-opt-break"></div>
+                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+                <span class="content" v-html="field.content.value"></span>
+            </button>
+            <div class="mohit-navMenu-opt-break"></div>
 
-        <button v-for="field in METADATA_FIELDS_2" class="mohit-navMenu-info clickable"
-            @click="setFocusedMetadata(true, field.header, field.content.value)"
-            :title="('Show ' + field.header + ' Options')">
+            <button v-for="field in METADATA_FIELDS_2" class="mohit-navMenu-info clickable"
+                @click="setFocusedMetadata(true, field.header, field.content.value)"
+                :title="('Show ' + field.header + ' Options')">
 
-            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-            <span class="content" v-html="field.content.value"></span>
-        </button>
-        <div class="mohit-navMenu-opt-break"></div>
+                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+                <span class="content" v-html="field.content.value"></span>
+            </button>
+            <div class="mohit-navMenu-opt-break"></div>
 
-        <button v-for="field in METADATA_FIELDS_3" class="mohit-navMenu-info clickable"
-            @click="setFocusedMetadata(true, field.header, field.content.value)"
-            :title="('Show ' + field.header + ' Options')">
+            <button v-for="field in METADATA_FIELDS_3" class="mohit-navMenu-info clickable"
+                @click="setFocusedMetadata(true, field.header, field.content.value)"
+                :title="('Show ' + field.header + ' Options')">
 
-            <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
-            <span class="content" v-html="field.content.value"></span>
-        </button>
-        <div v-if="focusedMetadata.show" class="mohit-navMenu-opt-break"></div>
+                <span v-html="(field.header + ':' + repeatTabs(field.tabs))"></span>
+                <span class="content" v-html="field.content.value"></span>
+            </button>
+            <div v-if="focusedMetadata.show" class="mohit-navMenu-opt-break"></div>
 
-        <div v-if="focusedMetadata.show" class="metadata-docMenu-focused">
-            <div class="top-section">
-                <h3> {{ focusedMetadata.header }} </h3>
-                <div class="metadata-docMenu-focused-options">
-                    <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)"
-                        v-action-cursor="metadataCopyState" v-pulse-loop>
+            <div v-if="focusedMetadata.show" class="metadata-docMenu-focused">
+                <div class="top-section">
+                    <h3> {{ focusedMetadata.header }} </h3>
+                    <div class="metadata-docMenu-focused-options">
+                        <button class="copy" @click="copyMetadataField()" :title="('Copy ' + focusedMetadata.header)"
+                            v-action-cursor="metadataCopyState" v-pulse-loop>
 
-                        <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="metadataCopyState" />
-                    </button>
-                    <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" v-pulse-loop>
-                        <FontAwesomeIcon icon="fa-xmark" />
-                    </button>
+                            <FontAwesomeActionIcon :baseIcon="'fa-copy'" :status="metadataCopyState" />
+                        </button>
+                        <button @click="setFocusedMetadata(false)" :title="('Hide ' + focusedMetadata.header + ' Options')" v-pulse-loop>
+                            <FontAwesomeIcon icon="fa-xmark" />
+                        </button>
+                    </div>
                 </div>
+                <p :style="{ 'font-size': focusedMetadata.fontSize }"> {{ focusedMetadata.content }} </p>
             </div>
-            <p :style="{ 'font-size': focusedMetadata.fontSize }"> {{ focusedMetadata.content }} </p>
         </div>
     </div>
 </Transition>

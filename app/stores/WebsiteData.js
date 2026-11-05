@@ -313,11 +313,12 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
-     * This function sets the transition styles for any website menu.
+     * This function sets the transition styles for any website menu. Passing in no parameters resets it to their default places.
      * @param {Number} opacity The opacity of the website menu.
      * @param {Number} transform The translate Y value for the transform attribute.
      */
     function setWebsiteMenuTransitionStyles(opacity = 1, transform = 0) {
+        if(!import.meta.client || !document || !document.documentElement) { return; }
         document.documentElement.style.setProperty("--nav-menu-opacity", String(opacity));
         document.documentElement.style.setProperty("--nav-menu-transform", "translateY(" + String(transform) + "px)");
     }

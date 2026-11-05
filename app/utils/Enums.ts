@@ -15,6 +15,7 @@ export enum HideCursor {
 
 export enum DisableUserSelect {
     FS_SCROLL_BAR,
+    WEBSITE_MENU_SCROLL_BAR,
     WEBSITE_COVER,
     LENGTH
 }

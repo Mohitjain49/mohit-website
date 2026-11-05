@@ -1,44 +1,46 @@
 <template>
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu">
-        <MenuTop />
         <MenuEventActions />
 
-        <div v-for="section in routes" class="mohit-navMenu-opt" :style="getColorStyles(section.color)">
-            <RouterLink :to="(routePath + '#' + section.id)" v-pulse-loop
-                :title="('Scroll To The ' + section.title + ' Section')"
-                :class="['mohit-navMenu-mainOpt', (currentHashEquals(section.id) ? 'focused' : '')]">
+        <div class="mohit-navMenu-contents">
+            <MenuTop />
+            <div v-for="section in routes" class="mohit-navMenu-opt" :style="getColorStyles(section.color)">
+                <RouterLink :to="(routePath + '#' + section.id)" v-pulse-loop
+                    :title="('Scroll To The ' + section.title + ' Section')"
+                    :class="['mohit-navMenu-mainOpt', (currentHashEquals(section.id) ? 'focused' : '')]">
 
-                <template v-if="section.title === 'iVue'">
-                    <img :src="section.icon" draggable="false" />
-                    <img :src="ivue_logo" draggable="false" class="ivue" />
-                </template>
-                <template v-else>
-                    <font-awesome-icon v-if="section.faIcon" :icon="section.icon" />
-                    <img v-else :src="section.icon" draggable="false" />
-                    <span> {{ section.title }} </span>
-                </template>
-            </RouterLink>
-        </div>
-        <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
-            <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" v-pulse-loop>
-                <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
-                <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
-            </RouterLink>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
+                    <template v-if="section.title === 'iVue'">
+                        <img :src="section.icon" draggable="false" />
+                        <img :src="ivue_logo" draggable="false" class="ivue" />
+                    </template>
+                    <template v-else>
+                        <font-awesome-icon v-if="section.faIcon" :icon="section.icon" />
+                        <img v-else :src="section.icon" draggable="false" />
+                        <span> {{ section.title }} </span>
+                    </template>
+                </RouterLink>
+            </div>
+            <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
+                <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" v-pulse-loop>
+                    <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
+                    <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
+                </RouterLink>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
 
-        <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" v-pulse-loop>
-                <font-awesome-icon icon="fa-bars" />
-                <span> Open Navigation Menu </span>
-            </button>
-        </div>
-        <div class="mohit-navMenu-opt" :style="getColorStyles('red')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.closeNavMenu()" v-pulse-loop>
-                <font-awesome-icon icon="fa-square-xmark" />
-                <span> Close Menu </span>
-            </button>
+            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" v-pulse-loop>
+                    <font-awesome-icon icon="fa-bars" />
+                    <span> Open Navigation Menu </span>
+                </button>
+            </div>
+            <div class="mohit-navMenu-opt" :style="getColorStyles('red')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.closeNavMenu()" v-pulse-loop>
+                    <font-awesome-icon icon="fa-square-xmark" />
+                    <span> Close Menu </span>
+                </button>
+            </div>
         </div>
     </div>
 </Transition>

@@ -56,71 +56,73 @@
 
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu">
-        <MenuTop />
         <MenuEventActions />
 
-        <div v-for="btn in MAIN_BTNS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
-            <RouterLink :class="getNavMenuAnchorClasses(btn.path)" :to="btn.path" v-pulse-loop>
-                <font-awesome-icon :icon="btn.icon" />
-                <span> {{ btn.title }} </span>
-            </RouterLink>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
+        <div class="mohit-navMenu-contents">
+            <MenuTop />
+            <div v-for="btn in MAIN_BTNS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
+                <RouterLink :class="getNavMenuAnchorClasses(btn.path)" :to="btn.path" v-pulse-loop>
+                    <font-awesome-icon :icon="btn.icon" />
+                    <span> {{ btn.title }} </span>
+                </RouterLink>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
 
-        <div v-for="btn in NAV_MENU_EXTRAS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
-            <RouterLink :class="getNavMenuAnchorClasses(btn.path)" :to="btn.path" v-pulse-loop>
-                <font-awesome-icon :icon="btn.icon" />
-                <span> {{ btn.title }} </span>
-            </RouterLink>
-        </div>
-        <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
-            <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" v-pulse-loop>
-                <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
-                <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
-            </RouterLink>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
+            <div v-for="btn in NAV_MENU_EXTRAS" :style="getColorStyles(btn.color)" class="mohit-navMenu-opt">
+                <RouterLink :class="getNavMenuAnchorClasses(btn.path)" :to="btn.path" v-pulse-loop>
+                    <font-awesome-icon :icon="btn.icon" />
+                    <span> {{ btn.title }} </span>
+                </RouterLink>
+            </div>
+            <div v-if="webData.navFooterPresent" class="mohit-navMenu-opt">
+                <RouterLink class="mohit-navMenu-mainOpt" :to="footerRoute" v-pulse-loop>
+                    <font-awesome-icon :icon="(webData.webFooterVisibility ? 'fa-turn-up' : 'fa-book-open')" />
+                    <span> {{ (webData.webFooterVisibility ? 'Scroll To The Top' : 'See Webpages') }} </span>
+                </RouterLink>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
 
-        <div v-if="webData.compassMenuAvailable" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(COMPASS_MENU)" v-pulse-loop>
-                <font-awesome-icon icon="fa-compass" />
-                <span> Navigate This Page </span>
-            </button>
-        </div>
-        <div v-if="showScriptOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(SCRIPTS_MENU)" v-pulse-loop>
-                <font-awesome-icon icon="fa-file-export" />
-                <span> See Script Options </span>
-            </button>
-        </div>
-        <div v-if="showDocumentOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-            <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_MENU)" v-pulse-loop>
-                <font-awesome-icon icon="fa-file-pdf" />
-                <span> See Document Options </span>
-            </button>
-        </div>
-
-        <div v-if="isMounted" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-            <button class="mohit-navMenu-mainOpt"
-                @click="(event) => { webData.onWakeLockButtonClick(event); }"
-                :title="webData.wakeLockTitle" v-pulse-loop>
-
-                <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
-                <span> {{ webData.wakeLockStatement }} </span>
-            </button>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
-
-        <div class="mohit-navMenu-opt small-features" style="position: relative;">
-            <div class="mohit-navMenu-volume-meter">
-                <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" v-pulse-loop>
-                    <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+            <div v-if="webData.compassMenuAvailable" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(COMPASS_MENU)" v-pulse-loop>
+                    <font-awesome-icon icon="fa-compass" />
+                    <span> Navigate This Page </span>
                 </button>
-                <input type="range" min="0" max="100" title="Volume Meter for the click sound."
-                    v-model="audioStore.volumeInput"
-                    @input="audioStore.changeAudioVolume()"
-                />
-                <span> {{ (audioStore.volumeInput + '%') }} </span>
+            </div>
+            <div v-if="showScriptOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(SCRIPTS_MENU)" v-pulse-loop>
+                    <font-awesome-icon icon="fa-file-export" />
+                    <span> See Script Options </span>
+                </button>
+            </div>
+            <div v-if="showDocumentOptionsBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_MENU)" v-pulse-loop>
+                    <font-awesome-icon icon="fa-file-pdf" />
+                    <span> See Document Options </span>
+                </button>
+            </div>
+
+            <div v-if="isMounted" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
+                <button class="mohit-navMenu-mainOpt"
+                    @click="(event) => { webData.onWakeLockButtonClick(event); }"
+                    :title="webData.wakeLockTitle" v-pulse-loop>
+
+                    <font-awesome-icon :icon="webData.wakeLockIcon" :flip="webData.wakeLockChangeFresh" />
+                    <span> {{ webData.wakeLockStatement }} </span>
+                </button>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
+
+            <div class="mohit-navMenu-opt small-features" style="position: relative;">
+                <div class="mohit-navMenu-volume-meter">
+                    <button @click="audioStore.setAudioMuted('toggle')" :title="audioStore.volumeInputTitle" v-pulse-loop>
+                        <FontAwesomeIcon :icon="audioStore.volumeInputIcon" />
+                    </button>
+                    <input type="range" min="0" max="100" title="Volume Meter for the click sound."
+                        v-model="audioStore.volumeInput"
+                        @input="audioStore.changeAudioVolume()"
+                    />
+                    <span> {{ (audioStore.volumeInput + '%') }} </span>
+                </div>
             </div>
         </div>
     </div>

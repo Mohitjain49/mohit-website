@@ -2,147 +2,149 @@
 <!-- <WebCover v-if="(webData.documentMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.documentMenuOpen" class="mohit-navMenu" id="mohit-docMenu">
-        <MenuTop />
         <MenuEventActions />
 
-        <div class="mohit-navMenu-opt-group">
-            <template v-if="documentStore.onResumeRoute">
-                <div v-if="documentStore.docLoaded.status" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-                    <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(RESUME_MENU)" v-pulse-loop>
-                        <font-awesome-icon icon="fa-gears" />
-                        <span> Edit Resume Components </span>
+        <div class="mohit-navMenu-contents">
+            <MenuTop />
+            <div class="mohit-navMenu-opt-group">
+                <template v-if="documentStore.onResumeRoute">
+                    <div v-if="documentStore.docLoaded.status" class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
+                        <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(RESUME_MENU)" v-pulse-loop>
+                            <font-awesome-icon icon="fa-gears" />
+                            <span> Edit Resume Components </span>
+                        </button>
+                    </div>
+                </template>
+                <template v-else-if="documentStore.onCreateGithubRepoRoute">
+                    <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
+                        <button class="mohit-navMenu-mainOpt" @click="documentStore.scrollToPage(2)" v-pulse-loop>
+                            <font-awesome-icon icon="fa-list" />
+                            <span> See Table Of Contents </span>
+                        </button>
+                    </div>
+                    <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
+                        <a href="https://github.com/" class="mohit-navMenu-mainOpt" v-pulse-loop>
+                            <font-awesome-icon icon="fa-brands fa-github" />
+                            <span> Go To GitHub </span>
+                        </a>
+                    </div>
+                </template>
+            </div>
+            <div class="mohit-navMenu-opt-break" v-if="!documentStore.onResearchPaperRoute"></div>
+
+            <div class="mohit-navMenu-opt-group">
+                <div class="mohit-navMenu-opt hosted-file-save-opt">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()"
+                        :title="documentStore.downloadTitle"
+                        v-action-cursor="documentStore.documentDownloadStatus" v-pulse-loop>
+
+                        <FontAwesomeActionIcon :baseIcon="DOCUMENT_DOWNLOAD_BASE_ICON" :status="documentStore.documentDownloadStatus" />
+                        <span> Download Document </span>
                     </button>
                 </div>
-            </template>
-            <template v-else-if="documentStore.onCreateGithubRepoRoute">
-                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--vibrant-flame)')">
-                    <button class="mohit-navMenu-mainOpt" @click="documentStore.scrollToPage(2)" v-pulse-loop>
-                        <font-awesome-icon icon="fa-list" />
-                        <span> See Table Of Contents </span>
+                <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()"
+                        :title="documentStore.saveDocTitle"
+                        v-action-cursor="documentStore.documentSaveStatus" v-pulse-loop>
+
+                        <FontAwesomeActionIcon :baseIcon="DOCUMENT_SAVE_BASE_ICON" :status="documentStore.documentSaveStatus" />
+                        <span> Save Document </span>
                     </button>
                 </div>
-                <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
-                    <a href="https://github.com/" class="mohit-navMenu-mainOpt" v-pulse-loop>
-                        <font-awesome-icon icon="fa-brands fa-github" />
-                        <span> Go To GitHub </span>
-                    </a>
+                <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()"
+                        :title="documentStore.shareTitle"
+                        v-action-cursor="documentStore.documentShareStatus" v-pulse-loop>
+
+                        <FontAwesomeActionIcon :baseIcon="DOCUMENT_SHARE_BASE_ICON" :status="documentStore.documentShareStatus" />
+                        <span> Share Document </span>
+                    </button>
                 </div>
-            </template>
-        </div>
-        <div class="mohit-navMenu-opt-break" v-if="!documentStore.onResearchPaperRoute"></div>
+                <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.callCustomPrint()"
+                        :title="documentStore.customPrintTitle"
+                        :style="documentStore.customPrintCursor" v-pulse-loop>
 
-        <div class="mohit-navMenu-opt-group">
-            <div class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.downloadDoc()"
-                    :title="documentStore.downloadTitle"
-                    v-action-cursor="documentStore.documentDownloadStatus" v-pulse-loop>
+                        <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentCustomPrintStatus" />
+                        <span> {{ (documentStore.browserPdfViewerPresent ? 'Print Document (Standard)' : 'Print Document') }} </span>
+                    </button>
+                </div>
+                <div v-if="(documentStore.iframeSupported && documentStore.browserPdfViewerPresent)" class="mohit-navMenu-opt hosted-file-save-opt">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)"
+                        :title="documentStore.printTitle"
+                        :style="documentStore.printCursor" v-pulse-loop>
 
-                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_DOWNLOAD_BASE_ICON" :status="documentStore.documentDownloadStatus" />
-                    <span> Download Document </span>
-                </button>
-            </div>
-            <div v-if="webData.saveAsSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.saveDoc()"
-                    :title="documentStore.saveDocTitle"
-                    v-action-cursor="documentStore.documentSaveStatus" v-pulse-loop>
-
-                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_SAVE_BASE_ICON" :status="documentStore.documentSaveStatus" />
-                    <span> Save Document </span>
-                </button>
-            </div>
-            <div v-if="webData.shareSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.shareDoc()"
-                    :title="documentStore.shareTitle"
-                    v-action-cursor="documentStore.documentShareStatus" v-pulse-loop>
-
-                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_SHARE_BASE_ICON" :status="documentStore.documentShareStatus" />
-                    <span> Share Document </span>
-                </button>
-            </div>
-            <div v-if="documentStore.iframeSupported" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.callCustomPrint()"
-                    :title="documentStore.customPrintTitle"
-                    :style="documentStore.customPrintCursor" v-pulse-loop>
-
-                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentCustomPrintStatus" />
-                    <span> {{ (documentStore.browserPdfViewerPresent ? 'Print Document (Standard)' : 'Print Document') }} </span>
-                </button>
-            </div>
-            <div v-if="(documentStore.iframeSupported && documentStore.browserPdfViewerPresent)" class="mohit-navMenu-opt hosted-file-save-opt">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.printDoc(false)"
-                    :title="documentStore.printTitle"
-                    :style="documentStore.printCursor" v-pulse-loop>
-
-                    <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentPrintStatus" :browserPrint="true" />
-                    <span> Print Document (Browser) </span>
-                </button>
-            </div>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
-
-        <div class="mohit-navMenu-opt-group" v-if="documentStore.googleDriveOptionAvailable">
-            <div class="mohit-navMenu-sectionheader" :style="getColorStyles('#34A853')">
-                <span> Google Drive </span>
-                <FontAwesomeActionIcon :baseIcon="'fa-brands fa-google-drive'" :status="documentStore.uploadToGoogleDriveIconNumber" />
-            </div>
-            <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE" v-pulse-loop>
-                    <font-awesome-icon icon="fa-folder" />
-                    <span> Save To Google Drive (Default Folder) </span>
-                </button>
-            </div>
-            <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(true)" :title="GOOGLE_CHOOSE_FOLDER_TITLE" v-pulse-loop>
-                    <font-awesome-icon :icon="(documentStore.documentUploadToGoogleDriveCanceled ? 'fa-ban' : 'fa-folder-tree')" />
-                    <span> Save To Google Drive (Choose Folder) </span>
-                </button>
+                        <FontAwesomeActionIcon :baseIcon="DOCUMENT_PRINT_BASE_ICON" :status="documentStore.documentPrintStatus" :browserPrint="true" />
+                        <span> Print Document (Browser) </span>
+                    </button>
+                </div>
             </div>
             <div class="mohit-navMenu-opt-break"></div>
-        </div>
 
-        <div class="mohit-navMenu-opt-group">
-            <div v-if="(documentStore.documentLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
-                <a :href="documentStore.documentLink" target="mohit-document" class="mohit-navMenu-mainOpt" v-pulse-loop>
-                    <font-awesome-icon icon="fa-up-right-from-square" />
-                    <span> Open Document In New Tab </span>
+            <div class="mohit-navMenu-opt-group" v-if="documentStore.googleDriveOptionAvailable">
+                <div class="mohit-navMenu-sectionheader" :style="getColorStyles('#34A853')">
+                    <span> Google Drive </span>
+                    <FontAwesomeActionIcon :baseIcon="'fa-brands fa-google-drive'" :status="documentStore.uploadToGoogleDriveIconNumber" />
+                </div>
+                <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(false)" :title="GOOGLE_DEFAULT_SAVE_TITLE" v-pulse-loop>
+                        <font-awesome-icon icon="fa-folder" />
+                        <span> Save To Google Drive (Default Folder) </span>
+                    </button>
+                </div>
+                <div class="mohit-navMenu-opt" :style="getColorStyles('#34A853')">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.requestGoogleToUploadDoc(true)" :title="GOOGLE_CHOOSE_FOLDER_TITLE" v-pulse-loop>
+                        <font-awesome-icon :icon="(documentStore.documentUploadToGoogleDriveCanceled ? 'fa-ban' : 'fa-folder-tree')" />
+                        <span> Save To Google Drive (Choose Folder) </span>
+                    </button>
+                </div>
+                <div class="mohit-navMenu-opt-break"></div>
+            </div>
+
+            <div class="mohit-navMenu-opt-group">
+                <div v-if="(documentStore.documentLink != '')" class="mohit-navMenu-opt" :style="getColorStyles('white')">
+                    <a :href="documentStore.documentLink" target="mohit-document" class="mohit-navMenu-mainOpt" v-pulse-loop>
+                        <font-awesome-icon icon="fa-up-right-from-square" />
+                        <span> Open Document In New Tab </span>
+                    </a>
+                </div>
+                <div v-if="documentStore.currentDocumentMetadataParsed" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
+                    <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" v-pulse-loop>
+                        <font-awesome-icon icon="fa-database" />
+                        <span> See Document Properties </span>
+                    </button>
+                </div>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
+
+            <div class="mohit-navMenu-opt-group">
+                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                    <button class="mohit-navMenu-mainOpt" @click="documentStore.toggleDocumentFullScreen()" v-pulse-loop>
+                        <font-awesome-icon :icon="fullScreenStore.faIcon" />
+                        <span> {{ (fullScreenStore.fullScreenSet ? 'Minimize Document' : 'Maximize Document') }} </span>
+                    </button>
+                </div>
+                <div v-if="!fullScreenStore.fullScreenSet" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+                    <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" v-pulse-loop>
+                        <font-awesome-icon icon="fa-bars" />
+                        <span> Open Navigation Menu </span>
+                    </button>
+                </div>
+                <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-text)')">
+                    <RouterLink to="/library/#documents" class="mohit-navMenu-mainOpt" v-pulse-loop>
+                        <font-awesome-icon icon="fa-folder-open" />
+                        <span> See More Documents </span>
+                    </RouterLink>
+                </div>
+            </div>
+            <div class="mohit-navMenu-opt-break"></div>
+
+            <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
+                <a :href="PDFJS_LINK" target="_blank" class="mohit-navMenu-mainOpt" :title="PDFJS_TITLE" v-pulse-loop>
+                    <img :src="pdfjs_icon" draggable="false" />
+                    <span> PDF.js </span>
                 </a>
             </div>
-            <div v-if="documentStore.currentDocumentMetadataParsed" class="mohit-navMenu-opt" :style="getColorStyles('var(--c-color)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(DOCUMENT_METADATA_MENU)" v-pulse-loop>
-                    <font-awesome-icon icon="fa-database" />
-                    <span> See Document Properties </span>
-                </button>
-            </div>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
-
-        <div class="mohit-navMenu-opt-group">
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-                <button class="mohit-navMenu-mainOpt" @click="documentStore.toggleDocumentFullScreen()" v-pulse-loop>
-                    <font-awesome-icon :icon="fullScreenStore.faIcon" />
-                    <span> {{ (fullScreenStore.fullScreenSet ? 'Minimize Document' : 'Maximize Document') }} </span>
-                </button>
-            </div>
-            <div v-if="!fullScreenStore.fullScreenSet" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
-                <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(NAVIGATION_MENU)" v-pulse-loop>
-                    <font-awesome-icon icon="fa-bars" />
-                    <span> Open Navigation Menu </span>
-                </button>
-            </div>
-            <div class="mohit-navMenu-opt" :style="getColorStyles('var(--website-text)')">
-                <RouterLink to="/library/#documents" class="mohit-navMenu-mainOpt" v-pulse-loop>
-                    <font-awesome-icon icon="fa-folder-open" />
-                    <span> See More Documents </span>
-                </RouterLink>
-            </div>
-        </div>
-        <div class="mohit-navMenu-opt-break"></div>
-
-        <div class="mohit-navMenu-opt" :style="getColorStyles('white')">
-            <a :href="PDFJS_LINK" target="_blank" class="mohit-navMenu-mainOpt" :title="PDFJS_TITLE" v-pulse-loop>
-                <img :src="pdfjs_icon" draggable="false" />
-                <span> PDF.js </span>
-            </a>
         </div>
     </div>
 </Transition>

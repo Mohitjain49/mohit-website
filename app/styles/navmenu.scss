@@ -271,26 +271,25 @@
 
 .mohit-navMenu {
     position: fixed;
+    display: flex;
+    flex-direction: column;
     top: 60px;
     right: 10px;
     width: 325px;
     height: fit-content;
     max-height: calc(100% - 77px);
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     background-color: black;
     z-index: 516;
     border: 1px solid var(--website-light-text);
     border-radius: 10px;
-    padding-bottom: 10px;
     box-shadow: 0px 0px 10px 1px black;
-    overscroll-behavior: contain;
     user-select: none;
-    scrollbar-width: auto !important;
+    scrollbar-width: none !important;
     scrollbar-color: var(--website-text) transparent;
     opacity: var(--nav-menu-opacity, 1);
     transform: var(--nav-menu-transform, translateY(0px));
-    --random-mohit: calc(-0.5px * var(--true-100vh-safe));
 }
 @mixin mohit-navMenu-mohit_2() {
     left: 0px;
@@ -298,13 +297,26 @@
     right: 0px;
     bottom: 0px;
     margin: auto;
+    height: fit-content;
     max-height: calc(100% - 40px);
 }
 
+.mohit-navMenu-contents {
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    min-height: 0px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 10px;
+    scrollbar-width: none !important;
+    scrollbar-color: var(--website-text) transparent;
+}
 .mohit-navMenu.webMenu-vertical-overflow {
     border-radius: 5px;
-    width: 335px;
+    padding-right: 5px;
 }
+
 :fullscreen .mohit-navMenu { @include mohit-navMenu-mohit_2(); }
 .mohit-navMenu.menu-mode_2 { @include mohit-navMenu-mohit_2(); }
 
@@ -518,6 +530,49 @@
 }
 .mohit-navMenu.doc-metadata .mohit-navMenu-opt-break {
     background-color: var(--c-color);
+}
+
+/**
+ * This section contains styles for a website menu's "event" addons, including a custom scrollbar;
+ */
+
+.mohit-navMenu-addon-child-element {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+    background: transparent;
+}
+
+.mohit-webMenu-scrollBar {
+    position: absolute;
+    z-index: 15;
+    width: 10px;
+    height: 100%;
+    right: 0px;
+    top: 0px;
+    background-color: transparent;
+    border-radius: 0px;
+    overflow: hidden;
+}
+.mohit-webMenu-scrollBar-body {
+    height: calc(100% - 10px);
+    width: 100%;
+    padding: 5px 0px;
+    position: relative;
+}
+
+.mohit-webMenu-scrollBar-body .inner {
+    width: 60% !important;
+    background-color: var(--website-text);
+    transition: var(--default-transition);
+    position: relative;
+    left: 20% !important;
+    border-radius: 30px;
+}
+.mohit-webMenu-scrollBar-body .inner.active,
+.mohit-webMenu-scrollBar-body .inner:hover {
+    background-color: var(--website-light-text);
 }
 
 /**
