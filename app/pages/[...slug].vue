@@ -71,7 +71,6 @@ function startRedirect(internal = true) {
     PAGE_DESC.value = "Redirecting...";
     setRedirectTextInterval(true);
     backgroundType.value = (internal ? -1 : 1);
-    webData.openShareOnMount = true;
 }
 
 /**

@@ -9,29 +9,13 @@ export default defineNuxtPlugin((nuxtApp) => {
     router.beforeEach((to, from) => {
         if(window) { window.dispatchEvent(new Event("router-before-change", { cancelable: false })); }
         if(to.path !== from.path) { scrollStore.cancelAutoscroll(); }
-        if(to.path === from.path) { webData.closeNavMenu(); }
         return true;
     });
 
     // Fires a window event directly after the route has changed.
-    // If the page is changed, it also closes the QR Code Popup if "openShareOnMount" is false.
     router.afterEach(async(to, from) => {
         if(window) { window.dispatchEvent(new Event("router-after-change", { cancelable: false })); }
-        if(to.path === from.path) { return true; }
-
-        await nextTick();
-        await onNuxtReadyAdvanced();
-        webData.closeNavMenu();
-
-        if(webData.openShareOnMount) {
-            webData.openShareOnMount = false;
-            await sleep(50);
-            if(webData.showSharePopupImmediate) { webData.showSharePopup = true; }
-        } else if(webData.showSharePopup || webData.showSharePopupImmediate) {
-            webData.setQRCodePopup("quit");
-        }
-
-        // Tells the website that the navigation was good.
+        if(to.path !== from.path) { webData.closeNavMenu(); }
         return true;
     });
 });

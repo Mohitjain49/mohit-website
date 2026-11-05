@@ -37,7 +37,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const previousMenuOpen = ref(-1);
     const wakeLockChanging = ref(false);
 
-    const openShareOnMount = ref(true);
     const navFooterPresent = ref(false);
     const compassMenuAvailable = ref(false);
     const wakeLockChangeFresh = ref(false);
@@ -150,7 +149,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         window.addEventListener("unhandledrejection", (event) => { onUnhandledRejection(event); }, { signal });
         window.addEventListener("keydown", (event) => { onKeyDown(event); }, { signal, capture: true });
 
-        document.body.addEventListener("click", (event) => { onDocumentBodyClick(event); }, { signal });
+        window.addEventListener("click", (event) => { onDocumentBodyClick(event); }, { signal });
         document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
 
         mounted.value = 1.75;
@@ -179,13 +178,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
-     * This function closes the Nav Menu if the user clicks anywhere on the screen that isn't the Navigation bar.
-     * @param {PointerEvent} event The event.
+     * This function handles closing the navigation menu and playing the click sound on a click.
+     * @param {PointerEvent} event The click event.
      */
     function onDocumentBodyClick(event = null) {
         if(!event || !event.target) { return; }
         audioStore.confirmClickSound(event);
-        checkNavigationElement(event.target).then((result) => { if(!result) { closeNavMenu(); }});
+
+        if(websiteMenuMode.value == 0) {
+            checkNavigationElement(event.target).then((result) => { if(!result) { closeNavMenu(); }});
+        }
     }
 
     /**
@@ -193,26 +195,28 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {HTMLElement} element The element.
      */
     async function checkNavigationElement(element = null) {
-        await nextTick();
-        if(nullifyBodyClick.value) {
-            nullifyBodyClick.value = false;
-            return true;
-        }
+        try {
+            await nextTick();
+            if(nullifyBodyClick.value) {
+                nullifyBodyClick.value = false;
+                return true;
+            }
 
-        if(element == null) { return false; }
-        if(element.classList.contains("webpage-cover")) { return true; }
+            if(element == null) { return false; }
+            if(element.classList.contains("webpage-cover")) { return true; }
 
-        // A list of website menu elements where the menu should not close when normally clicked.
-        const WEBSITE_MENU_ELEMENTS = [
-            document.getElementById("mohit-navBar"),
-            getWebsiteMenuElement("current"),
-            getWebsiteMenuElement("previous"),
-        ];
+            // A list of website menu elements where the menu should not close when normally clicked.
+            const WEBSITE_MENU_ELEMENTS = [
+                document.getElementById("mohit-navBar"),
+                getWebsiteMenuElement("current"),
+                getWebsiteMenuElement("previous"),
+            ];
 
-        for(let i = 0; i < WEBSITE_MENU_ELEMENTS.length; i++) {
-            const webMenu = WEBSITE_MENU_ELEMENTS[i];
-            if(webMenu && (webMenu === element || webMenu.contains(element))) { return true; }
-        }
+            for(let i = 0; i < WEBSITE_MENU_ELEMENTS.length; i++) {
+                const webMenu = WEBSITE_MENU_ELEMENTS[i];
+                if(webMenu && (webMenu === element || webMenu.contains(element))) { return true; }
+            }
+        } catch(e) {}
 
         // Returns false if element was not found in any menu.
         return false;
@@ -226,6 +230,10 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         audioStore.onKeydownForAudio(event);
         if(!event || !event.key || event.repeat) { return; }
         const key = event.key.toLowerCase();
+
+        if(key === "k" && event.altKey) {
+            router.push("/contact/?qrdata=main");
+        }
 
         // When the "M" Key is pressed with a special key, a website menu should open.
         if(key === "m" && (event.ctrlKey || event.altKey) && !showSharePopup.value) {
@@ -320,9 +328,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             setQRCodePopup(showSharePopup.value ? "quit" : "main");
         } else {
             const route = router.currentRoute.value;
-            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata }}).then(() => {
-                sleep(10).then(() => { closeNavMenu(); });
-            });
+            router.push({ path: route.path, hash: route.hash, query: { ...route.query, qrdata }});
         }
     }
 
@@ -402,7 +408,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable,
         copyImageSupported, copySvgSupported, saveAsSupported, menuOpen, noMenuOpen, navMenuOpen,
         compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
-        openShareOnMount, shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
+        shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
         setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick,

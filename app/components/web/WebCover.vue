@@ -1,16 +1,16 @@
 <template>
 <div ref="mohit-website-cover" class="webpage-cover" :style="webpageCoverStyle">
     <Transition name="fade-transition" appear>
-        <div v-if="!showProgressRing" class="webpage-cover-closeMsg"> Hold Cover To Close </div>
+        <div v-if="!coverPressed" class="webpage-cover-closeMsg"> Hold Cover To Close </div>
     </Transition>
     <Transition name="fade-transition" appear>
-        <div v-if="showProgressRing" class="webpage-cover-progressBar">
+        <div v-if="coverPressed" class="webpage-cover-progressBar">
             <div class="inner" :style="{ 'width': ((counter * 100 / FINAL_COUNT) + '%') }"></div>
         </div>
     </Transition>
 </div>
 
-<div v-show="showProgressRing" class="webpage-cover-progressRing-container" :style="progressRingPosition">
+<div v-show="coverPressed" class="webpage-cover-progressRing-container" :style="progressRingPosition">
     <svg class="webpage-cover-progressRing" viewBox="0 0 30 30">
         <circle class="webpage-cover-progressRing-track" cx="15" cy="15" r="13.5"></circle>
         <circle class="webpage-cover-progressRing-indicator" :style="progressRingInnerFill" cx="15" cy="15" r="13.5"></circle>
@@ -42,7 +42,6 @@ const hasTouchEvents = ref(false);
 
 const { mouseX: x, mouseY: y, cssToWindowHeightRatio, cssToWindowWidthRatio } = storeToRefs(styleStore);
 const webpageCoverStyle = computed(() => { return { zIndex: props.zIndex, touchAction: (hasTouchEvents.value ? '' : 'none') }});
-const showProgressRing = computed(() => { return (counter.value > 0); });
 const animateProgressRing = computed(() => { return (counter.value > (FINAL_COUNT / 4)); });
 
 const progressRingPosition = computed(() => {
@@ -66,7 +65,15 @@ onAfterMounted(() => {
     document.addEventListener("visibilitychange", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("mohit-mouse-leave", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("pointerup", () => { resetCounter(); }, { signal, passive: true });
-    window.addEventListener((hasTouchEvents.value ? "touchend" : "pointercancel"), () => { resetCounter(); }, { signal, passive: true });
+
+    if(hasTouchEvents.value) {
+        window.addEventListener("touchend", () => { resetCounter(); }, { signal, passive: true });
+        window.addEventListener("touchcancel", () => { resetCounter(); }, { signal, passive: true });
+    } else {
+        window.addEventListener("pointercancel", () => { resetCounter(); }, { signal, passive: true });
+    }
+
+    // This adds the event listener used to start the counter to close the popup.
     coverRef.value.addEventListener("pointerdown", () => { onWebpageCoverPointerDown(); }, { signal, passive: true });
 });
 
@@ -111,9 +118,6 @@ function onWebpageCoverPointerDown() {
     if(closeInterval != null) { clearInterval(closeInterval); }
     closeInterval = setInterval(() => { onIntervalCallback(); }, 10);
     setStyles(true);
-
-    if(!Boolean(coverRef.value)) { return; }
-    coverRef.value.dispatchEvent(new PointerEvent("click", { bubbles: true, cancelable: true }));
 }
 
 /**

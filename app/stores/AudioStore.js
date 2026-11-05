@@ -136,8 +136,9 @@ export const useAudioStore = defineStore("audio-store", () => {
      * This function confirms whether a click should trigger the click sound or not.
      * @param {PointerEvent} event The click event.
      */
-    function confirmClickSound(event) {
-        if(event.type !== "click" || (event.pointerId == -1) || !event.isTrusted) { return; }
+    function confirmClickSound(event = null) {
+        if(!event || !event.type || !event.target) { return; }
+        if(event.type !== "click" || ((event.pointerId || -1) == -1) || !Boolean(event.isTrusted)) { return; }
 
         /** @type {HTMLElement} The Element that the user clicked on. */
         const foundElement = event.target;
