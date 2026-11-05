@@ -65,6 +65,7 @@ onAfterMounted(() => {
     document.addEventListener("visibilitychange", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("mohit-mouse-leave", () => { resetCounter(); }, { signal, passive: true });
     window.addEventListener("pointerup", () => { resetCounter(); }, { signal, passive: true });
+    window.addEventListener("dragstart", () => { resetCounter(); }, { signal, passive: true });
 
     if(hasTouchEvents.value) {
         window.addEventListener("touchend", () => { resetCounter(); }, { signal, passive: true });

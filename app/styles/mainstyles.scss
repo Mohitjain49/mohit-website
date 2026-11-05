@@ -16,6 +16,9 @@
     --body-height: calc(var(--true-100vh-safe) - 50px);
     --checkmark-cursor: url("/checkmark_cursor.svg") 15 15, default;
 
+    --nav-menu-opacity: 1;
+    --nav-menu-transform: translateY(0px);
+
     --blue-cobalt: #0047ab;
     --blue-zero: rgb(187, 210, 255);
     --blue-one: rgb(159, 191, 255);

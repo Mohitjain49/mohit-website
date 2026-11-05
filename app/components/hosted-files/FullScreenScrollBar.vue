@@ -85,12 +85,13 @@ onAfterMounted(() => {
     }
 
     window.addEventListener("pointerup", (event) => { onFsPointerUp(event); }, { signal });
+    window.addEventListener("dragstart", (event) => { onFsPointerUp("bypass"); }, { signal });
     window.addEventListener("keydown", (event) => { onFsKeydown(event); }, { signal, capture: true });
 });
 
 // This unsets a few variables before removing the component.
 onBeforeUnmount(() => {
-    onFsPointerUp("bypass")
+    onFsPointerUp("bypass");
     manageOverflowClass(false);
     if(eventsAbortController != null) { eventsAbortController.abort(); }
 });

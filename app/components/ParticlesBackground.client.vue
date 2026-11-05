@@ -52,10 +52,6 @@ async function onParticlesLoaded(container) {
         await sleep(500);
         particlesLoadedOnce.value = true;
     }
-    
-    if(resizeAbortController != null) { resizeAbortController.abort(); }
-    resizeAbortController = new AbortController();
-    window.addEventListener("animation-resize", () => { resetParticlesOnResize(); }, { signal: resizeAbortController.signal });
 }
 
 /** This function simple resets the particles in the tsparticles container. */
@@ -72,7 +68,9 @@ async function resetParticles() {
 
 /** This function triggers a particle reset on a viewport resize. */
 function resetParticlesOnResize() {
+    if(!preliminaryChecksPassed.value) { return; }
     if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+
     resizeTimeout = setTimeout(async() => {
         await setParticlesDensity(false);
         await resetParticles();
@@ -102,7 +100,12 @@ async function waitForParticles() {
  * @param {Boolean} mounting If true, this function is used when initially mounting the component.
  */
 async function setAllParticlesSettings(mounting = true) {
-    if(!mounting) {
+    if(mounting) {
+        window.addEventListener("animation-resize",
+            () => { resetParticlesOnResize(); },
+            { signal: resizeAbortController.signal }
+        );
+    } else {
         preliminaryChecksPassed.value = false;
         particlesOptionsCopy.value = props.particlesOptions;
 

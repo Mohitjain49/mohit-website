@@ -53,6 +53,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const resumeMenuOpen = computed(() => { return (menuOpen.value == RESUME_MENU); });
     const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_METADATA_MENU); });
 
+    /** This returns an integer representing the "Mode" of the website menu, altering its transitions and behaviors. */
     const websiteMenuMode = computed(() => { return ((styleStore.cssViewportWidth > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
     const websiteMenuHideOverflow = computed(() => { return (!noMenuOpen.value && websiteMenuMode.value == 1); });
@@ -308,6 +309,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function setMenuOpen(index = NO_MENU, toggle = false) {
         const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
         menuOpen.value = ((setMenuClosed || (toggle && menuOpen.value == index)) ? NO_MENU : index);
+        if(menuOpen.value != NO_MENU) { setWebsiteMenuTransitionStyles(); }
+    }
+
+    /**
+     * This function sets the transition styles for any website menu.
+     * @param {Number} opacity The opacity of the website menu.
+     * @param {Number} transform The translate Y value for the transform attribute.
+     */
+    function setWebsiteMenuTransitionStyles(opacity = 1, transform = 0) {
+        document.documentElement.style.setProperty("--nav-menu-opacity", String(opacity));
+        document.documentElement.style.setProperty("--nav-menu-transform", "translateY(" + String(transform) + "px)");
     }
 
     /** This function closes any open Navigation Menu. */
@@ -411,7 +423,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
-        setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick,
+        setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick, setWebsiteMenuTransitionStyles,
         shareText, shareLink, shareFile, mountStore, unmountStore, checkPartiallyMounted
     }
 });
