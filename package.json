@@ -31,7 +31,7 @@
         "test": "npx jest"
     },
     "dependencies": {
-        "@comark/nuxt": "^0.8.1",
+        "@comark/nuxt": "^0.9.0",
         "@fortawesome/fontawesome-svg-core": "^7.3.1",
         "@fortawesome/free-brands-svg-icons": "^7.3.1",
         "@fortawesome/free-solid-svg-icons": "^7.3.1",
@@ -41,8 +41,8 @@
         "@nuxtjs/robots": "^7.0.2",
         "@nuxtjs/sitemap": "^9.1.0",
         "@pinia/nuxt": "^1.0.3",
-        "@tsparticles/slim": "4.5.2",
-        "@tsparticles/vue3": "4.5.2",
+        "@tsparticles/slim": "4.5.3",
+        "@tsparticles/vue3": "4.5.3",
         "@vite-pwa/nuxt": "^1.1.1",
         "@vueuse/nuxt": "^15.0.0",
         "animate.css": "^4.1.1",
@@ -58,15 +58,15 @@
         "pinia": "^4.1.0",
         "pretty-bytes": "^7.2.0",
         "qr-code-styling": "^1.9.2",
-        "serve-handler": "^6.1.7",
+        "serve-handler": "^6.1.8",
         "validator": "^13.15.35",
         "vue": "^3.5.45",
         "vue-qrcode-reader": "^5.7.3",
         "vue-router": "^5.4.0"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1163.0",
-        "@aws-sdk/client-s3": "^3.1163.0",
+        "@aws-sdk/client-cloudfront": "^3.1164.0",
+        "@aws-sdk/client-s3": "^3.1164.0",
         "@stefanobartoletti/nuxt-social-share": "^3.3.2",
         "@types/gapi": "^0.0.47",
         "@types/google.accounts": "^0.0.18",

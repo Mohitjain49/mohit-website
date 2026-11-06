@@ -201,73 +201,23 @@ button {
     100% { transform: rotate(360deg); }
 }
 
-.main-sector-bottom-linkBtn {
-    height: 75px;
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-.main-sector-bottom-linkBtn a {
-    cursor: pointer;
-    height: 45px;
-    width: 250px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--website-text);
-    font-size: 20px;
-    font-weight: bold;
-    font-family: 'Lexend', 'Roboto', sans-serif;
-    border-radius: 10px;
-    text-decoration: none;
-    border: var(--empty-border);
-    background-color: var(--website-light-text);
-    transition: var(--default-transition), scale 0.2s;
-}
-.main-sector-bottom-linkBtn a:hover {
-    border-color: var(--website-text);
-    scale: 1.1;
-}
-
-.main-sector-bottom-linkBtn a.linkBtn-blue {
-    color: var(--blue-zero);
-    border-color: var(--blue-zero);
-    background-color: black;
-}
-.main-sector-bottom-linkBtn a.linkBtn-blue:hover {
-    border-color: var(--blue-zero);
-    box-shadow: 0px 0px 10px 2px var(--blue-zero);
-}
-
-.main-sector-bottom-linkBtn a.linkBtn-green {
-    color: var(--globe-green-opaque);
-    background-color: var(--globe-green-light);
-}
-.main-sector-bottom-linkBtn a.linkBtn-green:hover {
-    border-color: var(--globe-green-opaque);
-}
-
 .animate__slowLess { --animate-duration: 1.5s !important; }
 @include dynamic-less-equal-width-rule-noScopedBlock(375) {
     body, & { overflow-x: auto; }
 }
 
-/**
- * These are styles meant specifically for redirect pages.
- */
-
 .redirect-statement {
     width: calc(100% - 24px);
-    height: fit-content;
+    height: calc(var(--true-100vh-safe) - 115px);
     padding: 25px 12px 0px 12px;
-    font-size: 25px;
+    font-size: get-bounded-fluid-width(25px, 15px, 700px);
     font-family: 'Lexend', 'Roboto', sans-serif;
     color: var(--website-text);
     text-align: center;
-}
-@include dynamic-less-equal-width-rule-noScopedBlock(700) {
-    .redirect-statement { font-size: 15px; }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 /**

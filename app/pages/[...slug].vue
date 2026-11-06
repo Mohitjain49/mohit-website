@@ -3,7 +3,7 @@
 <main id="invalid" class="personal-web-body" ref="invalid-page-ref" :style="bodyBackground">
     <h1 class="incomplete-title"> {{ PAGE_DESC }} </h1>
     
-    <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
+    <div class="return-to-homepage" style="padding-bottom: 30px;">
         <RouterLink to="/" v-pulse-loop> Go To Home Page </RouterLink>
     </div>
 </main>
@@ -109,6 +109,7 @@ const INTERNAL_REDIRECTS = [
     { routes: ["/icon", "/static-icons"], replacement: "/icons" },
     { routes: ["/version", "/v"], replacement: "/copyright/" },
     { routes: ["/share/**", "/qrcode/**"], replacement: "/?qrdata=main" },
+    { routes: ["/email/**", "/mail/**", "/work-email/**"], replacement: "/contact/?qrdata=mailto:mohitkjain49@gmail.com#work_email" },
 
     { routes: ["/documents", "/library/documents"], replacement: "/library/#documents" },
     { routes: ["/scripts", "/library/scripts", "/library/code"], replacement: "/library/#scripts" },
@@ -160,17 +161,21 @@ const EXTERNAL_REDIRECTS = [
     align-items: center;
     flex-direction: column;
     width: calc(100% - 40px);
-    height: calc(var(--true-100vh-safe) - 70px);
+    min-width: 300px;
+    height: fit-content;
+    min-height: calc(var(--true-100vh-safe) - 90px);
     padding: 0px 20px;
     padding-top: 60px;
     background: transparent;
+    overflow-y: auto;
 }
 .incomplete-title {
-    font-size: 60px;
+    font-size: get-bounded-fluid-width(60px, 35px, 600px);
     padding: 10px;
     border-radius: 15px;
     border: 1px solid;
     width: fit-content;
+    min-width: 0px;
     height: fit-content;
     margin-bottom: 5px;
     text-align: center;
@@ -178,9 +183,36 @@ const EXTERNAL_REDIRECTS = [
     font-weight: bold;
     text-shadow: 0px 0px 5px var(--website-dark-text);
     background-color: rgba(248, 206, 171, 0.9);
+    overflow-wrap: break-word;
 }
 
-@include dynamic-less-equal-width-rule-noScopedBlock(600) {
-    .incomplete-title { font-size: 42px; }
+.return-to-homepage {
+    height: 75px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+.return-to-homepage a {
+    cursor: pointer;
+    height: 45px;
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--website-text);
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    border-radius: 10px;
+    text-decoration: none;
+    border: var(--empty-border);
+    background-color: var(--website-light-text);
+    transition: var(--default-transition), scale 0.2s;
+}
+.return-to-homepage a:hover {
+    border-color: var(--website-text);
+    scale: 1.1;
 }
 </style>

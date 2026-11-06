@@ -14,7 +14,7 @@
             <PizzaProjectCard />
             <GlobeNavCard />
         </div>
-        <div class="main-sector-bottom-linkBtn" style="padding-bottom: 30px;">
+        <div class="projects-homepage-btn" style="padding-bottom: 30px;">
             <RouterLink to="/" class="linkBtn-green" v-pulse-loop> Back To Home </RouterLink>
         </div>
     </div>
@@ -54,5 +54,34 @@ useHead(getMeta("Mohit Jain | My Projects", "projects/",
 }
 #main-projects-features-btn:hover {
     box-shadow: 0px 0px 20px var(--lightning-yellow);
+}
+
+.projects-homepage-btn {
+    height: 75px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.projects-homepage-btn a {
+    cursor: pointer;
+    height: 45px;
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--globe-green-opaque);
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Lexend', 'Roboto', sans-serif;
+    border-radius: 10px;
+    text-decoration: none;
+    border: var(--empty-border);
+    background-color: var(--globe-green-light);
+    transition: var(--default-transition), scale 0.2s;
+}
+.projects-homepage-btn a:hover {
+    border-color: var(--globe-green-opaque);
+    scale: 1.1;
 }
 </style>

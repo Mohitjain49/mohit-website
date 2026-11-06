@@ -320,12 +320,16 @@
     border-left: 2px dashed;
     border-bottom: 2px dashed;
     border-bottom-left-radius: 10px;
-    transition: var(--default-transition), font-size 0.2s;
+    transition: background-color 0.2s;
 }
-.social-tab-qrcodeBtn:hover {
-    background-color: rgba(0, 0, 0, 0.15);
-    font-size: 19px;
+.social-tab-qrcodeBtn svg {
+    width: 17px;
+    height: 17px;
+    transition: scale 0.2s;
 }
+
+.social-tab-qrcodeBtn:hover { background-color: rgba(0, 0, 0, 0.15); }
+.social-tab-qrcodeBtn:hover svg { scale: 1.1; }
 
 .social-tab-top {
     height: 30px;
