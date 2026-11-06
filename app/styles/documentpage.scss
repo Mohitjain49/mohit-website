@@ -1,5 +1,30 @@
 @use "@/styles/_dynamicrules.scss" as *;
 
+#mohit-hosted-document-page {
+    position: relative;
+    padding-top: 70px;
+    top: 0;
+    left: 0;
+    min-height: calc(100% - 70px);
+    height: fit-content;
+    width: 100%;
+    min-width: 350px;
+    background: transparent;
+}
+#mohit-hosted-document-page:fullscreen {
+    padding: 0px 15px 10px 0px;
+    width: calc(100% - 15px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1;
+    scrollbar-width: none !important;
+}
+
+.mohit-touchScreen #mohit-hosted-document-page:fullscreen {
+    width: 100%;
+    padding-right: 0px;
+}
+
 .document-loading-static {
     height: var(--body-height);
     width: 100%;
@@ -113,7 +138,7 @@
     background: #0000ff40 !important;
     color: transparent !important;
 }
-#resume-container:fullscreen .pdf-doc-mohit-container {
+#mohit-hosted-document-page:fullscreen .pdf-doc-mohit-container {
     min-height: calc(100% - 100px);
 }
 

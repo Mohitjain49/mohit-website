@@ -8,6 +8,19 @@
     scrollbar-color: white transparent;
 }
 
+#script-page:fullscreen {
+    padding: 0px 15px 0px 0px;
+    width: calc(100% - 15px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1;
+    scrollbar-width: none !important;
+}
+.mohit-touchScreen #script-page:fullscreen {
+    width: 100%;
+    padding-right: 0px;
+}
+
 .mohit-main-script {
     padding: 10px 20px;
     margin: 30px auto 20px auto;

@@ -1,5 +1,5 @@
 <template>
-<main id="resume-container">
+<main id="mohit-hosted-document-page">
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar />
         <div class="pdf-page-innerContainer" v-for="page in docPages" :id="('page_' + page.num)" :page-num="page.num" ref="pageRefs">
@@ -22,7 +22,7 @@
     </div>
     
     <template v-if="fullScreenSet">
-        <FullScreenScrollBar :fs-element-id="'resume-container'" />
+        <FullScreenScrollBar :fs-element-id="'mohit-hosted-document-page'" />
         <QrcodeTool v-if="webData.showSharePopup" />
         <VolumeWidget />
     </template>

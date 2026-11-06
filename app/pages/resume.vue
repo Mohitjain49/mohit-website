@@ -13,7 +13,7 @@
     <ResumeMenu />
 </DocumentViewer>
 
-<main id="resume-container" v-else>
+<main id="mohit-hosted-document-page" v-else>
     <div class="document-loading-static">
         <div class="loading-spinner"></div>
     </div>

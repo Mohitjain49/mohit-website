@@ -858,7 +858,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** This function sets the full screen for the element containing the document. */
     async function toggleDocumentFullScreen() {
         if(!import.meta.client || !docLoaded.value.status || fsStateChanging.value) { return; }
-        const element = document.getElementById("resume-container");
+        const element = document.getElementById("mohit-hosted-document-page");
         if(!element) { return; }
 
         fsStateChanging.value = true;
