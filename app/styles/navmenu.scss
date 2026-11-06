@@ -556,9 +556,9 @@
     overflow: hidden;
 }
 .mohit-webMenu-scrollBar-body {
-    height: calc(100% - 10px);
+    height: calc(100% - 4px);
     width: 100%;
-    padding: 5px 0px;
+    padding: 2px 0px;
     position: relative;
 }
 
@@ -573,6 +573,25 @@
 .mohit-webMenu-scrollBar-body .inner.active,
 .mohit-webMenu-scrollBar-body .inner:hover {
     background-color: var(--website-light-text);
+}
+
+.mohit-navMenu.doc-metadata {
+    .mohit-webMenu-scrollBar-body .inner {
+        background-color: var(--c-color);
+    }
+    .mohit-webMenu-scrollBar-body .inner.active,
+    .mohit-webMenu-scrollBar-body .inner:hover {
+        background-color: var(--c-color-light);
+    }
+}
+.mohit-navMenu.flame {
+    .mohit-webMenu-scrollBar-body .inner {
+        background-color: var(--vibrant-flame);
+    }
+    .mohit-webMenu-scrollBar-body .inner.active,
+    .mohit-webMenu-scrollBar-body .inner:hover {
+        background-color: var(--vibrant-flame-light);
+    }
 }
 
 /**

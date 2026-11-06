@@ -111,7 +111,7 @@ function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
 
     const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
     const newValue = (element.scrollTop + (element.scrollHeight / divisor));
-    element.scrollTop = Math.max(0, Math.min(element.scrollHeight, newValue));
+    element.scrollTop = Math.max(0, Math.min((element.scrollHeight - element.clientHeight), newValue));
 }
 
 /**

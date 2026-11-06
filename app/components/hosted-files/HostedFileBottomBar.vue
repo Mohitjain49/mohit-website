@@ -1,6 +1,6 @@
 <template>
 <div ref="hosted-file-bottom-options" :class="['mohit-hostedFile-bottom', hostedFileClass]">
-    <div class="mohit-document-topBar-sideSection">
+    <div class="mohit-hostedFile-bottom-sideSection">
         <button @click="setFS()" class="yellow" :title="minimizeTitle" v-pulse-loop>
             <font-awesome-icon :icon="fullScreenStore.faIcon" />
         </button>
@@ -22,7 +22,7 @@
         </button>
     </div>
 
-    <div class="mohit-document-topBar-sideSection">
+    <div class="mohit-hostedFile-bottom-sideSection">
         <button @click="openWebsiteMenu()" :title="fileOptionsTitle" :style="getColorStyles('var(--website-light-text)')" v-pulse-loop>
             <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
         </button>

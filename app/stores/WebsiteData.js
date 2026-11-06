@@ -276,7 +276,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
             } else if(showSharePopup.value) {
                 if(!sharePopupClosing.value) { setQRCodePopup("quit"); }
             } else {
-                toggleNavMenu();
+                setMenuOpen(NAVIGATION_MENU, true);
             }
         }
     }
@@ -296,11 +296,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         return ((websiteMenuCatalogIndex == -1) ? null : document.getElementById(WEBSITE_MENUS[websiteMenuCatalogIndex].id));
     }
 
-    /** The toggles the status of the home navigation menu. */
-    function toggleNavMenu() {
-        setMenuOpen((menuOpen.value == NAVIGATION_MENU) ? NO_MENU : NAVIGATION_MENU);
-    }
-
     /**
      * This function sets the status of whether a website menu is open or not.
      * @param {Number} index The index of what menu should be open.
@@ -309,7 +304,16 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     function setMenuOpen(index = NO_MENU, toggle = false) {
         const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
         menuOpen.value = ((setMenuClosed || (toggle && menuOpen.value == index)) ? NO_MENU : index);
-        if(menuOpen.value != NO_MENU) { setWebsiteMenuTransitionStyles(); }
+
+        if(menuOpen.value == NO_MENU || !import.meta.client || !document) { return; }
+        setWebsiteMenuTransitionStyles();
+
+        // This has the website menu scroll up to the top of its content when opened.
+        nextTick(() => {
+            const webMenuElement = getWebsiteMenuElement("current");
+            if(!Boolean(webMenuElement)) { return; }
+            webMenuElement.querySelector(".mohit-navMenu-contents")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        });
     }
 
     /**
@@ -423,7 +427,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
         shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
-        toggleNavMenu, setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
+        setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
         setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick, setWebsiteMenuTransitionStyles,
         shareText, shareLink, shareFile, mountStore, unmountStore, checkPartiallyMounted
     }
