@@ -83,6 +83,7 @@ export default {
 
             // This function cancels any ongoing autoscroll.
             if(scrollStore.isAutoScrolling) { scrollStore.cancelAutoscroll(); }
+            useWebsiteDataStore($pinia).closeNavMenu();
 
             if(hashExists) {
                 await scrollStore.scrollToId(hash);

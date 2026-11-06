@@ -79,8 +79,13 @@ onAfterMounted(() => {
     // This sets a group of event listeners that can close the website menu on a swipe.
     webMenu.addEventListener("pointerdown", (event) => { onMenuPointerEvent(event); }, { signal });
     window.addEventListener("pointerup", (event) => { onMenuPointerEvent(event); }, { signal });
+    window.addEventListener("pointermove", (event) => { onMenuPointerEvent(event); }, { signal, passive: false });
     window.addEventListener("dragstart", (event) => { onMenuPointerEvent(event); }, { signal });
-    if(hasTouchEvents.value) { window.addEventListener("touchend", (event) => { onMenuPointerEvent(event); }, { signal }); }
+
+    if(hasTouchEvents.value) {
+        window.addEventListener("touchend", (event) => { onMenuPointerEvent(event); }, { signal });
+        window.addEventListener("touchmove", (event) => { onMenuPointerEvent(event); }, { signal, passive: false });
+    }
 
     if(Boolean(websiteMenuScrollbarThumb.value)) {
         websiteMenuScrollbarThumb.value.addEventListener("pointerdown", (event) => { onWebsiteMenuScrollbarPointerEvent(event); }, { signal });
@@ -168,6 +173,8 @@ function onMenuPointerEvent(event = null) {
         // Sets the website menu as not being touched any more.
         webMenuTouched.value = false;
         webMenuSwipeWithTouch.value = false;
+    } else if((eType === "pointermove" || eType === "touchmove") && webMenuTouched.value) {
+        event.preventDefault();
     }
 }
 
