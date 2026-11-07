@@ -20,13 +20,16 @@ export const useStyleStore = defineStore("style-store", () => {
     /** @type {import('vue').ShallowRef<OrientationType>} This is the recorded orientation type of the website. */
     const recordedOrientation = shallowRef("");
 
+    /** @type {import('vue').ShallowRef<HTMLElement>} This is the recorded CSS Layout Element used for viewport calculations. */
+    const layoutElement = shallowRef(null);
+
     const cssViewportWidth = shallowRef(Number.MAX_SAFE_INTEGER);
     const cssViewportHeight = shallowRef(Number.MAX_SAFE_INTEGER);
     const cssToWindowWidthRatio = shallowRef(1.0);
     const cssToWindowHeightRatio = shallowRef(1.0);
 
     /** @type {import('vue').ShallowRef<Element>} This is the element the user's mouse is ove at any given time. */
-    const mouseElement = ref(null);
+    const mouseElement = shallowRef(null);
     const mouseX = shallowRef(0);
     const mouseY = shallowRef(0);
 
@@ -102,6 +105,7 @@ export const useStyleStore = defineStore("style-store", () => {
         setDisableUserSelectClass(disableUserSelect.value);
 
         // This activates all the automated features in the Style Store.
+        setCssLayoutElement();
         setTouchScreenMediaWatcher(true);
         await startViewportRaf();
 
@@ -116,6 +120,9 @@ export const useStyleStore = defineStore("style-store", () => {
         // This sets the style store as mounted.
         mounted.value = true;
     }
+
+    /** This function gets the layout element so it can be used by many of this store's various features. */
+    function setCssLayoutElement() { layoutElement.value = document.getElementById(CSS_LAYOUT_ID); }
 
     /**
      * -------------------------------------------------------------------------------------------------
@@ -268,6 +275,7 @@ export const useStyleStore = defineStore("style-store", () => {
         newCssLayoutElement.id = CSS_LAYOUT_ID;
 
         document.body.appendChild(newCssLayoutElement);
+        setCssLayoutElement();
         recordViewportDimensions();
         if(resetObserver) { await resetCssLayoutObserver(); }
     }
@@ -346,8 +354,14 @@ export const useStyleStore = defineStore("style-store", () => {
             window.dispatchEvent(new CustomEvent("animation-resize", { cancelable: false, detail: { type: "orientation" }}));
         }
 
-        const cssLayoutElement = document.getElementById(CSS_LAYOUT_ID);
-        const getNewCssViewport = Boolean(cssLayoutElement);
+        var cssLayoutElement = layoutElement.value;
+        var getNewCssViewport = (Boolean(cssLayoutElement) && Boolean(cssLayoutElement.isConnected));
+
+        if(!getNewCssViewport) {
+            setCssLayoutElement();
+            cssLayoutElement = layoutElement.value;
+            getNewCssViewport = (Boolean(cssLayoutElement) && Boolean(cssLayoutElement.isConnected));
+        }
 
         const oldCssViewportWidth = cssViewportWidth.value;
         const oldCssViewportHeight = cssViewportHeight.value;
@@ -360,8 +374,8 @@ export const useStyleStore = defineStore("style-store", () => {
             cssViewportHeight.value = viewportHeight.value;
         }
 
-        cssToWindowWidthRatio.value = (cssViewportWidth.value / viewportWidth.value);
-        cssToWindowHeightRatio.value = (cssViewportHeight.value / viewportHeight.value);
+        cssToWindowWidthRatio.value = (Math.round((cssViewportWidth.value * 10000) / viewportWidth.value) / 10000);
+        cssToWindowHeightRatio.value = (Math.round((cssViewportHeight.value * 10000) / viewportHeight.value) / 10000);
 
         const cssViewportWidthChanged = (cssViewportWidth.value !== oldCssViewportWidth);
         const cssViewportHeightChanged = (cssViewportHeight.value !== oldCssViewportHeight);

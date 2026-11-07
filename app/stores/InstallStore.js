@@ -35,6 +35,7 @@ export const useInstallStore = defineStore("install-store", () => {
 
         // Checks manually if an update is needed.
         checkUpdateNeededManually();
+        for(let i = 1; i <= 4; i++) { sleep(i * 2500).then(() => { checkUpdateNeededManually(); }); }
     }
 
     /** This function checks manually if an update is needed and sets and returns the result. */

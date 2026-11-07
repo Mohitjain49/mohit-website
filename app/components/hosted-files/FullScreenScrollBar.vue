@@ -5,12 +5,12 @@
     </div>
 </Transition>
 
-<div v-show="showScrollBar" :class="mainScrollbarClasses" @contextmenu="(event) => { onScrollBarContextMenu(event); }">
+<div v-show="fsScrollable" :class="mainScrollbarClasses" @contextmenu="(event) => { onScrollBarContextMenu(event); }">
     <button :id="SCROLLBAR_TOP_BUTTON_ID" :class="topArrowClasses" no-sound>
         <FontAwesomeIcon icon="fa-play" :rotation="'270'" />
     </button>
     <div class="mohit-scrollBar-body">
-        <div :id="SCROLLBAR_THUMB_ID" :class="thumbClasses" :style="vScrollbarStyle"></div>
+        <div :id="SCROLLBAR_THUMB_ID" :class="thumbClasses" :style="scrollbarThumbStyle"></div>
     </div>
     <button :id="SCROLLBAR_BOTTOM_BUTTON_ID" :class="bottomArrowClasses" no-sound>
         <FontAwesomeIcon icon="fa-play" :rotation="'90'" />
@@ -22,6 +22,7 @@
 const SCROLLBAR_THUMB_ID = "fs-scrollbar-thumb";
 const SCROLLBAR_TOP_BUTTON_ID = "fs-scrollbar-top-button";
 const SCROLLBAR_BOTTOM_BUTTON_ID = "fs-scrollbar-bottom-button";
+const NO_OVERFLOW_CLASS = "fullscreen-noOverflow";
 
 const styleStore = useStyleStore();
 const scrollStore = useScrollStore();
@@ -35,41 +36,63 @@ var scrollAnimationFrame = null;
 var pointerHoldTimeout = null;
 var lastTime = -1;
 
+/** @type {ShallowRef<HTMLElement>} This is the HTML Element in Full Screen Mode. */
+const fsElement = shallowRef(null);
 const mousePressedOnThumb = ref(false);
 const mousePressedOnArrow = ref(0);
 
+const fsScrollable = ref(false);
+const fsAtTop = ref(false);
+const fsAtBottom = ref(false);
+const verticalScrollPercent = ref(0);
+const fsClientInView = ref(0);
+
 const props = defineProps({ fsElementId: { type: String, required: true } });
 const wholeFileInView = useState("whole-hosted-file-in-view", () => { return false; });
-const { vScrollbarStyle, vertical, atTop, atBottom } = useScrollPercentage(props.fsElementId);
 
-const showScrollBar = computed(() => { return (vertical.value.inView < 100); });
-const mainScrollbarClasses = computed(() => { return ['mohit-scrollBar', (onTouchScreen.value ? 'touch' : '')]; });
+/** This sets the style for the scrollbar's thumb based on how far the user scrolled down. */
+const scrollbarThumbStyle = computed(() => {
+    const inView = fsClientInView.value;
+    const topNum = String(fsScrollable.value ? ((verticalScrollPercent.value / inView) * (100 - inView)) : 0);
+    return { height: (inView + "%"), transform: ("translateY(" + topNum + "%)") }
+});
 
+const mainScrollbarClasses = computed(() => {
+    return ['mohit-scrollBar', (onTouchScreen.value ? 'touch' : '')];
+});
 const thumbClasses = computed(() => {
     return ['inner', (mousePressedOnThumb.value ? 'active' : ''), (isScrolling.value ? 'is-scrolling' : '')];
 });
 const topArrowClasses = computed(() => {
-    return ['top', ((mousePressedOnArrow.value == -1) ? 'active' : ''), (atTop.value ? 'no-action' : '')];
+    return ['top', ((mousePressedOnArrow.value == -1) ? 'active' : ''), (fsAtTop.value ? 'no-action' : '')];
 });
 const bottomArrowClasses = computed(() => {
-    return ['bottom', ((mousePressedOnArrow.value == 1) ? 'active' : ''), (atBottom.value ? 'no-action' : '')];
+    return ['bottom', ((mousePressedOnArrow.value == 1) ? 'active' : ''), (fsAtBottom.value ? 'no-action' : '')];
 });
 
+/** This manages a Raf Loop that sets certain elements in this component given the Full Screen Element's Properties. */
+const fsElementDimensionsRaf = useRafFn(() => { onFsElementDimensionsChange(false); }, { immediate: false, fpsLimit: 20 });
+
+/** This watcher watches the mouse Y position so the Full Screen Element can be scrolled on a mouse move. */
 watch(mouseY, (newY, oldY) => { scrollFsElementOnMouseMove(newY, oldY); });
-watch(mousePressedOnThumb, (newValue) => { setUserSelect(newValue); });
-watch(showScrollBar, (newValue) => { manageOverflowClass(!newValue); });
 
 // This sets a few variables after the component is mounted.
 onAfterMounted(() => {
-    manageOverflowClass(!showScrollBar.value);
-    const fsElement = getFsElement();
+    removeOverflowClass();
+    fsElement.value = getFsElement();
 
-    if(!fsElement) { throw new Error("Full Screen Element Not Detected."); }
-    fsElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if(!checkRecordedFsElement()) { throw new Error("Full Screen Element Not Detected."); }
+    fsElement.value.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
     eventsAbortController = new AbortController();
     const signal = eventsAbortController.signal;
 
+    // This starts a Raf Loop that sets certain elements in this component given the Full Screen Element's Properties.
+    onFsElementDimensionsChange(true);
+    fsElementDimensionsRaf.resume();
+    signal.addEventListener("abort", () => { fsElementDimensionsRaf.pause(); }, { once: true });
+
+    // This section sets up the event listeners so that users can use the scroll bar like a normal website scroll bar.
     const thumbElement = document.getElementById(SCROLLBAR_THUMB_ID);
     const arrowDownElement = document.getElementById(SCROLLBAR_BOTTOM_BUTTON_ID);
     const arrowUpElement = document.getElementById(SCROLLBAR_TOP_BUTTON_ID);
@@ -85,19 +108,22 @@ onAfterMounted(() => {
     }
 
     window.addEventListener("pointerup", (event) => { onFsPointerUp(event); }, { signal });
-    window.addEventListener("dragstart", (event) => { onFsPointerUp("bypass"); }, { signal });
+    window.addEventListener("dragstart", () => { onFsPointerUp("bypass"); }, { signal });
     window.addEventListener("keydown", (event) => { onFsKeydown(event); }, { signal, capture: true });
 });
 
 // This unsets a few variables before removing the component.
 onBeforeUnmount(() => {
     onFsPointerUp("bypass");
-    manageOverflowClass(false);
+    removeOverflowClass();
     if(eventsAbortController != null) { eventsAbortController.abort(); }
 });
 
 /** This function returns the Full Screen element for it to be adjusted by the Full Screen Element. */
 function getFsElement() { return document.getElementById(props.fsElementId); }
+
+/** This returns a boolean on whether the Full Screen Element is Present and Connected. */
+function checkRecordedFsElement() { return (Boolean(fsElement.value) && Boolean(fsElement.value.isConnected)); }
 
 /**
  * This function scrolls the FS Element when the mouse moves.
@@ -106,8 +132,10 @@ function getFsElement() { return document.getElementById(props.fsElementId); }
  */
 function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
     if(!mousePressedOnThumb.value) { return; }
-    const element = getFsElement();
-    if(!element) { return; }
+    if(!checkRecordedFsElement()) { fsElement.value = getFsElement(); }
+
+    const element = (checkRecordedFsElement() ? fsElement.value : getFsElement());
+    if(!Boolean(element)) { return; }
 
     const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
     const newValue = (element.scrollTop + (element.scrollHeight / divisor));
@@ -124,22 +152,50 @@ function setUserSelect(disable = true) {
 }
 
 /**
- * This function sets a class for a full screen element based on whether there is vertical overflow or not.
- * @param {Boolean} noOverflow The status on whether there is no overflow for the full screen element.
+ * This function runs when the Full Screen Element has a new size.
+ * @param {Boolean} firstRun This marks the function as its first time being run for the component.
  */
-function manageOverflowClass(noOverflow = false) {
-    // Also sets the website state variable.
-    wholeFileInView.value = noOverflow;
+function onFsElementDimensionsChange(firstRun = false) {
+    if(!checkRecordedFsElement()) { fsElement.value = getFsElement(); }
+    if(!checkRecordedFsElement()) { return; }
 
-    const element = getFsElement();
-    const className = "fullscreen-noOverflow";
-    if(element == null) { return; }
+    const fsElementRaw = fsElement.value;
+    const clientHeight = fsElementRaw.clientHeight;
+    const scrollHeight = fsElementRaw.scrollHeight;
+    const scrollTop = fsElementRaw.scrollTop;
 
-    if(noOverflow && !element.classList.contains(className)) {
-        element.classList.add(className);
-    } else if(!noOverflow) {
-        element.classList.remove(className);
+    const oldScrollStatus = fsScrollable.value;
+    fsScrollable.value = (scrollHeight > clientHeight);
+    const diffStatus = ((fsScrollable.value != oldScrollStatus) || firstRun);
+
+    if(fsScrollable.value) {
+        if(diffStatus) {
+            wholeFileInView.value = false;
+            fsElement.value.classList.remove(NO_OVERFLOW_CLASS);
+        }
+
+        fsAtTop.value = (scrollTop <= 0);
+        fsAtBottom.value = (scrollTop >= (scrollHeight - clientHeight));
+
+        verticalScrollPercent.value = (Math.round((scrollTop * 10000) / (scrollHeight - clientHeight)) / 100);
+        fsClientInView.value = (Math.round((clientHeight / scrollHeight) * 10000) / 100);
+    } else if(!fsScrollable.value && diffStatus) {
+        wholeFileInView.value = true;
+        fsElementRaw.classList.add(NO_OVERFLOW_CLASS);
+
+        fsAtTop.value = true;
+        fsAtBottom.value = true;
+
+        verticalScrollPercent.value = 0;
+        fsClientInView.value = 100;
     }
+}
+
+/** This function removes the overflow class for the full screen element. */
+function removeOverflowClass() {
+    wholeFileInView.value = false;
+    const element = getFsElement();
+    if(Boolean(element)) { element.classList.remove(NO_OVERFLOW_CLASS); }
 }
 
 /** This function has the webpage scroll by an increment each frame while the user presses down an arrow. */

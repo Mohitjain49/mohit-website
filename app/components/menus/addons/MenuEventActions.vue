@@ -55,7 +55,7 @@ const scrollbarThumbStyle = computed(() => {
 });
 
 /** This manages a Raf Loop that sets certain elements in this component given the Website Menu's Properties. */
-const menuDimensionsRaf = useRafFn(() => { changeElementsOnMenuDimensions(); }, { immediate: false, fpsLimit: 20 });
+const menuDimensionsRaf = useRafFn(() => { changeElementsOnMenuDimensions(false); }, { immediate: false, fpsLimit: 20 });
 
 // This sets up the component so that it can find its website menu and set its actions based on website and browser events.
 onAfterMounted(() => {
@@ -73,6 +73,7 @@ onAfterMounted(() => {
     const signal = eventsAbortController.signal;
 
     // This starts an Raf Loop that sets certain elements in this component given the Website Menu's Properties.
+    changeElementsOnMenuDimensions(true);
     menuDimensionsRaf.resume();
     signal.addEventListener("abort", () => { menuDimensionsRaf.pause(); }, { once: true });
 
@@ -108,26 +109,29 @@ watch(webMenuTouched, () => { updateMenuTransitionStyles(); });
 // This scrolls the website menu when the mosue moves and the user is holding the custom scrollbar.
 watch(mouseY, (newY, oldY) => { scrollWebMenuOnMouseMove(newY, oldY); });
 
-/** This function changes elements in this component based on menu dimensions. */
-function changeElementsOnMenuDimensions() {
+/**
+ * This function changes elements in this component based on menu dimensions.
+ * @param {Boolean} firstRun This marks the function as its first time being run for the component.
+ */
+function changeElementsOnMenuDimensions(firstRun = false) {
     if(!Boolean(websiteMenuElement.value) || !Boolean(websiteMenuContents.value)) { return; }
     const webMenuContents = websiteMenuContents.value;
 
     const scrollHeight = webMenuContents.scrollHeight;
     const clientHeight = webMenuContents.clientHeight;
 
-    if(scrollHeight <= clientHeight) {
-        webMenuScrollable.value = false;
-        websiteMenuElement.value.classList.remove(OVERFLOW_SCROLL_CLASS);
+    const oldScrollStatus = webMenuScrollable.value;
+    webMenuScrollable.value = (scrollHeight > clientHeight);
+    const diffStatus = ((webMenuScrollable.value != oldScrollStatus) || firstRun);
 
-        verticalScrollPercent.value = 0;
-        menuClientInView.value = 100;
-    } else {
-        webMenuScrollable.value = true;
-        websiteMenuElement.value.classList.add(OVERFLOW_SCROLL_CLASS);
-
+    if(webMenuScrollable.value) {
+        if(diffStatus) { websiteMenuElement.value.classList.add(OVERFLOW_SCROLL_CLASS); }
         verticalScrollPercent.value = (Math.round((webMenuContents.scrollTop * 10000) / (scrollHeight - clientHeight)) / 100);
         menuClientInView.value = (Math.round((clientHeight / scrollHeight) * 10000) / 100);
+    } else if(!webMenuScrollable.value && diffStatus) {
+        websiteMenuElement.value.classList.remove(OVERFLOW_SCROLL_CLASS);
+        verticalScrollPercent.value = 0;
+        menuClientInView.value = 100;
     }
 }
 
