@@ -67,6 +67,7 @@ onAfterMounted(() => {
 
     websiteMenuContents.value = webMenu.querySelector(".mohit-navMenu-contents");
     if(!Boolean(websiteMenuContents.value)) { throw new Error("Website Menu Contents Element Not Found."); }
+    websiteMenuContents.value.tabIndex = -1;
 
     hasTouchEvents.value = checkTouchEndExists();
     eventsAbortController = new AbortController();
@@ -206,6 +207,10 @@ function onWebsiteMenuScrollbarPointerEvent(event = null) {
     const newStatus = (Boolean(event) && (event.type === "pointerdown") && (event.pointerType === "mouse"));
     scrollbarThumbPressed.value = newStatus;
     setUserSelect(newStatus);
+
+    if(!scrollbarThumbPressed.value || !Boolean(websiteMenuContents.value) || !Boolean(event)) { return; }
+    websiteMenuContents.value.focus();
+    event.preventDefault();
 }
 
 /**

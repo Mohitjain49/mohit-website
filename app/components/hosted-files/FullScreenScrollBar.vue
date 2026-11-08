@@ -83,6 +83,7 @@ onAfterMounted(() => {
 
     if(!checkRecordedFsElement()) { throw new Error("Full Screen Element Not Detected."); }
     fsElement.value.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    fsElement.value.tabIndex = -1;
 
     eventsAbortController = new AbortController();
     const signal = eventsAbortController.signal;
@@ -216,6 +217,7 @@ function onFsThumbDown(event) {
     if(!event || event.pointerType !== "mouse") { return; }
     mousePressedOnThumb.value = true;
     setUserSelect(true);
+    focusOnFsElement(event);
 }
 
 /**
@@ -227,6 +229,7 @@ function onArrowButtonPointerDown(event, type = "up") {
     if(!event || event.pointerType !== "mouse" || mousePressedOnArrow.value != 0) { return; }
     mousePressedOnArrow.value = ((type === "up") ? -1 : ((type === "down") ? 1 : 0));
     scrollStore.scrollByIncrement((mousePressedOnArrow.value * 40), true);
+    focusOnFsElement(event);
 
     pointerHoldTimeout = setTimeout(() => {
         pointerHoldTimeout = null;
@@ -262,6 +265,19 @@ function onFsKeydown(event = null) {
     if(!event || !event.key || (mousePressedOnArrow.value == 0 && !mousePressedOnThumb.value)) { return; }
     const key = event.key.toLowerCase();
     if(key === "arrowup" || key === "arrowdown") { event.preventDefault(); }
+}
+
+/**
+ * On a Pointer Down event, this function lets the user focus on the full screen element so keydown events still work.
+ * @param {PointerEvent} event The Pointer Down event.
+ */
+function focusOnFsElement(event = null) {
+    if(!Boolean(event)) { return; }
+    const element = getFsElement();
+    if(!Boolean(element)) { return; }
+
+    element.focus();
+    event.preventDefault();
 }
 
 /**

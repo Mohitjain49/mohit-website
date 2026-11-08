@@ -161,6 +161,10 @@ button {
 .fullscreen-noOverflow:fullscreen {
     width: 100% !important;
     padding-right: 0px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-direction: column !important;
 }
 
 .webpage-cover {
