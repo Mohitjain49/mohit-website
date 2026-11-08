@@ -1,11 +1,11 @@
 <template>
 <Transition name="qrcode-popup-transition" appear fade>
     <div v-if="showMainPopup" id="share-popup" class="qrcode-mainPopup">
-        <button :id="LINK_TEXT_ID" class="popup-qr-text" @click="copyQRCodeLink()" :title="copyLinkTitle" v-action-cursor="actions.copy">
+        <button ref="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" :title="copyLinkTitle" v-action-cursor="actions.copy">
             <p> {{ qrCodeFormattedLink }} </p>
         </button>
-        <div v-if="showShareLinkScrollbar" class="popup-qr-text-scrollBar">
-            <div class="inner" :style="shareLinkScrollbarStyle"></div>
+        <div v-if="linkTextScrollable" class="popup-qr-text-scrollBar">
+            <div class="inner" :style="linkTextScrollbarStyle"></div>
         </div>
 
         <button id="mohit-qrcode" v-show="qrCodeDisplay"
@@ -167,7 +167,6 @@ const SAVE_FILE_OPTIONS = [
 
 const IMAGE_STATUS = ['png', 'svg'];
 const DEFAULT_IMAGE_FILENAME = "Mohit_Website_QRCode";
-const LINK_TEXT_ID = "popup-shareLink";
 
 const COPY_LINK_TITLES = ["Copy Link", "Copying Link...", "Link Copied!", "Error While Copying Link."];
 const SHARE_LINK_TITLES = ["Share Link", "Sharing Link...", "Link Shared!", "Error While Sharing Link."];
@@ -180,6 +179,7 @@ const SHARE_IMAGE_TITLES = ["Share QR Code", "Sharing QR Code...", "QR Code Shar
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
+const linkTextRef = useTemplateRef('popup-shareLink');
 
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
 var lenis = null;
@@ -189,7 +189,6 @@ var unmountTimeout = null;
 /** @type {HTMLIFrameElement} This variable stores the iframe element used for printing the qr code. */
 var printIframe = null;
 var printIframeNeedsRerender = true;
-const { hScrollbarStyle: shareLinkScrollbarStyle } = useScrollPercentage(LINK_TEXT_ID);
 
 /** @type {Ref<QRCodeStyling>} This stores the qrcode object created when aking the QR Code for the Popup. */
 const qrcode = ref(null);
@@ -208,6 +207,10 @@ const showShareOptions = ref(-1);
 const sharePopupMode = ref(0);
 const customLinkValid = ref(false);
 
+const linkTextScrollable = ref(false);
+const linkTextScrollPercent = ref(0);
+const linkTextinView = ref(0);
+
 const shareLinkedIn = ref("");
 const shareFacebook = ref("");
 const shareWhatsApp = ref("");
@@ -222,8 +225,8 @@ const qrcodeImageCopySupported = computed(() => { return ((qrcodeImageMode.value
 
 const { showSharePopupImmediate } = storeToRefs(webData);
 const { iframeSupported } = storeToRefs(useDocumentStore());
-const showShareLinkScrollbar = computed(() => { return (shareLinkScrollbarStyle.value.width !== "100%"); });
 
+/** This is the link shown to the user with the share popup. */
 const qrCodeFormattedLink = computed(() => {
     const mainLink = qrCodeLink.value;
     if(typeof mainLink !== "string") { return mainLink; }
@@ -231,6 +234,13 @@ const qrCodeFormattedLink = computed(() => {
     if(mainLink.startsWith("mailto:")) { return mainLink.substring(7); }
     if(mainLink.startsWith("tel:")) { return formatPhoneNumber(); }
     return mainLink;
+});
+
+/** This object sets crucial styles for the link text scrollbar. */
+const linkTextScrollbarStyle = computed(() => {
+    const inView = linkTextinView.value;
+    const leftNum = String(linkTextScrollable.value ? ((linkTextScrollPercent.value / inView) * (100 - inView)) : 0);
+    return { width: (inView + "%"), transform: ("translateX(" + leftNum + "%)") }
 });
 
 const shareLinkInternal = computed(() => { return qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK); });
@@ -270,6 +280,9 @@ const shareImageTitle = computed(() => {
     return ((SHARE_IMAGE_TITLES[status] ?? "Share QR Code") + ((status == 0) ? (" (" + qrcodeFileSize.value + ")") : ""));
 });
 
+/** This manages a Raf Loop that sets certain variables in this component for the link text. */
+const linkTextDimensionsRaf = useRafFn(() => { setLinkTextScrollbar(false); }, { immediate: false, fpsLimit: 20 });
+
 // This mounts the share popup and all of its functionality.
 onMounted(async() => { await mountSharePopup(); });
 
@@ -301,7 +314,14 @@ async function mountSharePopup() {
 
     window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal, capture: true });
     window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
-    const linkTextElement = document.getElementById(LINK_TEXT_ID);
+
+    const linkTextElement = linkTextRef.value;
+    if(!Boolean(linkTextRef.value)) { return; }
+
+    // This starts a Raf Loop that sets certain variables in this component for the link text.
+    setLinkTextScrollbar(true);
+    linkTextDimensionsRaf.resume();
+    signal.addEventListener("abort", () => { linkTextDimensionsRaf.pause(); }, { once: true });
 
     // This creates the Lenis auto scrolling for this popup.
     lenis = new Lenis({ autoRaf: true, orientation: "horizontal",
@@ -776,7 +796,7 @@ async function printQRCode() {
 
 /** This function triggers all parts of the lenis autoscroll for this popup. */
 async function triggerLenisAutoScroll() {
-    lenis.scrollTo("left", { immediate: true });
+    lenis.scrollTo("left", { immediate: true, lock: true });
     await sleep(500);
     const duration = ((lenis.dimensions.scrollWidth / lenis.dimensions.width) * 1.9);
     lenis.scrollTo("right", { duration, onComplete: () => { manageLenisScrolling(); } });
@@ -804,6 +824,30 @@ function getParsedUrl() {
     const tempUrl = new URL(PERSONAL_WEBSITE_LINK + router.currentRoute.value.fullPath.substring(1));
     tempUrl.searchParams.delete("qrdata");
     return tempUrl;
+}
+
+/**
+ * This function sees and sets variables based on the scroll status and dimensions of the Link Text Element
+ * @param {Boolean} firstRun This marks the function as its first time being run for the component.
+ */
+function setLinkTextScrollbar(firstRun = false) {
+    if(!Boolean(linkTextRef.value)) { return; }
+    const linkTextElement = linkTextRef.value;
+
+    const scrollWidth = linkTextElement.scrollWidth;
+    const clientWidth = linkTextElement.clientWidth;
+
+    const oldScrollStatus = linkTextScrollable.value;
+    linkTextScrollable.value = (scrollWidth > clientWidth);
+    const diffStatus = ((oldScrollStatus != linkTextScrollable.value) || firstRun);
+
+    if(linkTextScrollable.value) {
+        linkTextScrollPercent.value = (Math.round((linkTextElement.scrollLeft * 10000) / (scrollWidth - clientWidth)) / 100);
+        linkTextinView.value = (Math.round((clientWidth / scrollWidth) * 10000) / 100);
+    } else if(!linkTextScrollable.value && diffStatus) {
+        linkTextScrollPercent.value = 0;
+        linkTextinView.value = 100;
+    }
 }
 </script>
 

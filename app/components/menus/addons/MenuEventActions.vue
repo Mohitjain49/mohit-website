@@ -91,7 +91,7 @@ onAfterMounted(() => {
     if(Boolean(websiteMenuScrollbarThumb.value)) {
         websiteMenuScrollbarThumb.value.addEventListener("pointerdown", (event) => { onWebsiteMenuScrollbarPointerEvent(event); }, { signal });
         window.addEventListener("pointerup", (event) => { onWebsiteMenuScrollbarPointerEvent(event); }, { signal });
-        window.addEventListener("dragstart", () => { onWebsiteMenuScrollbarPointerEvent(); }, { signal });
+        window.addEventListener("dragstart", (event) => { onWebsiteMenuScrollbarPointerEvent(event); }, { signal });
     }
 });
 
@@ -186,8 +186,8 @@ function onMenuPointerEvent(event = null) {
 function updateMenuTransitionStyles() {
     if(!webMenuTouched.value) { return; }
     const newValue = (closeSwipePercent.value / 2);
-    const transformMultiple = ((websiteMenuMode.value == 1) ? (-1 * SWIPE_THRESHOLD) : -10);
-    webData.setWebsiteMenuTransitionStyles((1 - newValue), (newValue * transformMultiple));
+    const transformNum = ((websiteMenuMode.value == 1) ? Math.min(0, (mouseY.value - startY.value)) : (newValue * -10));
+    webData.setWebsiteMenuTransitionStyles((1 - newValue), transformNum);
 }
 
 /**
@@ -203,13 +203,9 @@ function setUserSelect(disable = true) {
  * @param {PointerEvent} event The pointer event.
  */
 function onWebsiteMenuScrollbarPointerEvent(event = null) {
-    if(event && (event.type === "pointerdown") && (event.pointerType === "mouse")) {
-        scrollbarThumbPressed.value = true;
-        setUserSelect(true);
-    } else {
-        scrollbarThumbPressed.value = false;
-        setUserSelect(false);
-    }
+    const newStatus = (Boolean(event) && (event.type === "pointerdown") && (event.pointerType === "mouse"));
+    scrollbarThumbPressed.value = newStatus;
+    setUserSelect(newStatus);
 }
 
 /**
