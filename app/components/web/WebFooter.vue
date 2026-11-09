@@ -27,6 +27,10 @@
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
             </RouterLink>
+            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="getColorStyles('white')" v-pulse-loop>
+                <span> Website Repository </span>
+                <font-awesome-icon icon="fa-code-branch" />
+            </a>
         </div>
 
         <div class="footer-routes-column">
