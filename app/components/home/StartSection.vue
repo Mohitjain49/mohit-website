@@ -222,14 +222,17 @@ function onContactBtnDblClick(event) {
  */
 function onContactBtnKeydown(event) {
     try {
-        if(!event || !event.target || !event.key || event.repeat) { return; }
+        if(!event || !event.target || !event.key) { return; }
         const buttonAttributes = getContactButtonAttributes(event.target);
 
         if(!Boolean(buttonAttributes.id)) { return; }
         const key = event.key.toLowerCase();
+        const repeatEvent = Boolean(event.repeat);
 
         if(key === "enter") {
             event.preventDefault();
+            if(repeatEvent) { return; }
+
             startContactObj.value = ((startContactObj.value === buttonAttributes.id) ? "" : buttonAttributes.id);
             triggerClickSound();
         }
@@ -240,9 +243,11 @@ function onContactBtnKeydown(event) {
 
         if(key === "arrowup" || key === "w") {
             event.preventDefault();
+            if(repeatEvent) { return; }
             hideStartContactDropdown();
         } else if(key === "arrowdown" || key === "s") {
             event.preventDefault();
+            if(repeatEvent) { return; }
             startContactObj.value = buttonAttributes.id;
         } else if(key === "arrowleft" || key === "a") {
             buttonFocusNumber = ((buttonAttributes.index <= 0) ? (SOCIALS_START.length - 1) : (buttonAttributes.index - 1));
@@ -252,6 +257,8 @@ function onContactBtnKeydown(event) {
 
         if(buttonFocusNumber > -1) {
             event.preventDefault();
+            if(repeatEvent) { return; }
+
             document.getElementsByClassName(MAIN_CONTACT_BUTTONS_CLASS).item(buttonFocusNumber).focus();
             if(startContactObj.value !== "") { startContactObj.value = SOCIALS_START[buttonFocusNumber].id; }
         }
