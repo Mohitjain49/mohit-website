@@ -4,13 +4,6 @@
         <button @click="setFS()" class="yellow" :title="minimizeTitle" v-pulse-loop>
             <font-awesome-icon :icon="fullScreenStore.faIcon" />
         </button>
-        <button v-show="showUpdateWebsite" @click="openUpdateBox()" v-pulse-loop
-            :class="['yellow', (installStore.updateNeeded ? '' : 'noAction')]"
-            :title="(installStore.swUpdating ? 'Updating Website...' : 'This Is An Old Version Of My Website. Click Here To Update It.')">
-
-            <font-awesome-icon v-if="!installStore.swUpdating" icon="fa-triangle-exclamation" />
-            <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
-        </button>
         <button v-show="(webData.wakeLock.isActive || webData.wakeLockChangeFresh)"
             @click="(event) => { webData.onWakeLockButtonClick(event); }"
             :style="getColorStyles('var(--vibrant-flame)')"
@@ -38,7 +31,6 @@ const webData = useWebsiteDataStore();
 const fullScreenStore = useFullScreenStore();
 const documentStore = useDocumentStore();
 const scriptsStore = useScriptsStore();
-const installStore = useInstallStore();
 
 const { onDocumentRoute } = storeToRefs(documentStore);
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
@@ -55,9 +47,6 @@ watch(barVisible, (newValue) => { hfBottomBarVisible.value = newValue; });
 const hostedFileClass = computed(() => { return (onDocumentRoute.value ? "document" : "script"); });
 const minimizeTitle = computed(() => { return (onDocumentRoute.value ? "Minimize Document" : "Minimize Script"); });
 const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open Document Options" : "Open Script Options"); });
-const showUpdateWebsite = computed(() => {
-    return (!installStore.showUpdateBox || fullScreenStore.fullScreenSet) && (installStore.updateNeeded || installStore.swUpdating);
-});
 
 /** This function sets the full screen mode for a hosted file. */
 function setFS() {
@@ -72,13 +61,6 @@ function setFS() {
 function openWebsiteMenu() {
     webData.bypassBodyClick();
     webData.setMenuOpen((onDocumentRoute.value ? DOCUMENT_MENU : SCRIPTS_MENU), true);
-}
-
-/** This opens the update box only if an update is needed. */
-function openUpdateBox() {
-    if(!installStore.updateNeeded) { return; }
-    if(fullScreenStore.fullScreenSet) { setFS(); }
-    installStore.setUpdateBox(true);
 }
 </script>
 

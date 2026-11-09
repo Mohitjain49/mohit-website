@@ -29,9 +29,6 @@
 
             <div class="copyright-topBar">
                 <div class="copyright-topBar-side left">
-                    <button @click="installStore.resetWebsiteVersion()" class="copyright-topBar-btn" title="Update Website" v-pulse-loop>
-                        <FontAwesomeIcon icon="fa-rotate" :spin="installStore.swUpdating" />
-                    </button>
                     <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="copyright-topBar-btn updateLog" title="Update Log" v-pulse-loop>
                         <FontAwesomeIcon icon="fa-brands fa-git-alt" />
                     </a>
@@ -53,7 +50,6 @@
 
 <script setup>
 const router = useRouter();
-const installStore = useInstallStore();
 const { $websiteBuild } = useNuxtApp();
 
 const reactiveMeta = useReactiveMeta("Mohit Jain | Copyright Notice", "copyright",
@@ -71,7 +67,7 @@ const RELEASE_TIME = useState("release-time", () => { return ("(" + $websiteBuil
 const PROJECT_VERSION = useState("project-version", () => { return ("Version " + $websiteBuild.version); });
 
 // Updates the Website Date Information when the website is mounted.
-onMountedAdvanced(() => {
+onAfterMounted(() => {
     LICENSE_LINK.value = (window.location.origin + "/license.txt");
     COPYRIGHT_TEXT.value = ($websiteBuild.coprightYear + " Mohit Jain");
     RELEASE_DATE.value = ("Released On: " + $websiteBuild.releaseDate);

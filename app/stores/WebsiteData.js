@@ -19,7 +19,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     const scriptsStore = useScriptsStore();
     const documentStore = useDocumentStore();
-    const installStore = useInstallStore();
     const audioStore = useAudioStore();
     const fullScreenStore = useFullScreenStore();
     const scrollStore = useScrollStore();
@@ -143,7 +142,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         scrollStore.mountScrollStore();
         documentStore.mountDocumentStore();
         scriptsStore.mountScriptsStore();
-        installStore.mountInstallStore();
 
         resizePageComponents();
         window.addEventListener("animation-resize", () => { resizePageComponents(); }, { signal });

@@ -815,19 +815,6 @@ export const FEATURE_ENTITIES = [
         }
     },
     {
-        name: "Install Website",
-        link: "/install/",
-        color: "var(--website-text)",
-        desc: "I used the \"Vite PWA\" dependency to build a service worker " +
-            "for my website so that I can install and fully utilize my website offline.",
-
-        icon: {
-            id: vite_pwa_icon,
-            faIcon: false,
-            size: "150"
-        }
-    },
-    {
         name: "Wake Lock",
         link: "/wakelock/",
         color: "var(--vibrant-flame)",

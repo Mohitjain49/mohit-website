@@ -1,4 +1,4 @@
-// NPM Install Command: "npm install -D @aws-sdk/client-s3 @aws-sdk/client-cloudfront dotenv mime-types"
+// NPM  Command: "npm  -D @aws-sdk/client-s3 @aws-sdk/client-cloudfront dotenv mime-types"
 // NOTE: This command does NOT work correctly when bucket versioning is enabled.
 
 // Use in GitHub Actions: https://github.com/Mohitjain49/mohit-website/blob/main/.github/workflows/main.yml#L30
@@ -77,7 +77,7 @@ function getPutObjectCommands() {
         const filePath = path.join(outDir, filename);
 
         if(!fs.statSync(filePath).isFile()) { continue; }
-        if(!mimeType || mimeType === "application/x-install-instructions") { continue; }
+        if(!mimeType || mimeType === "application/x--instructions") { continue; }
 
         commands.push(new PutObjectCommand({
             Body: fs.createReadStream(filePath),
