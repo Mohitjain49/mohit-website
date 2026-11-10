@@ -5,7 +5,9 @@ import { addComponent } from "@nuxt/kit";
 import { imagetools } from "vite-imagetools";
 import type { Plugin } from "vite";
 
+// import pwaConfig from "./pwa.config";
 import usePageTemplates from "./page-templates.config";
+
 const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
 

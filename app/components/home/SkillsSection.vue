@@ -157,6 +157,7 @@ function setSkillsTransitions(isVisible = false) {
     }
     .skills-main-desc {
         width: 330px;
+        padding: 20px 0px;
     }
 }
 

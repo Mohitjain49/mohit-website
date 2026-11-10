@@ -32,26 +32,6 @@
                 <font-awesome-icon icon="fa-code-branch" />
             </a>
         </div>
-
-        <div class="footer-routes-column">
-            <h2 class="footer-routes-header light"> Extra Pages </h2>
-            <RouterLink v-for="tab in EXTRA_ROUTES" :to="tab.path" v-pulse-loop
-                :style="getColorStyles(tab.color)"
-                class="footer-routes-opt">
-
-                <span> {{ tab.name }} </span>
-                <font-awesome-icon :icon="tab.icon" />
-            </RouterLink>
-
-            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="getColorStyles('white')" v-pulse-loop>
-                <span> Website Repository </span>
-                <font-awesome-icon icon="fa-code-branch" />
-            </a>
-            <a :href="PERSONAL_WEBSITE_COMMITS_LINK" class="footer-routes-opt" :style="getColorStyles('#F05133')" v-pulse-loop>
-                <span> Update Log </span>
-                <font-awesome-icon icon="fa-brands fa-git-alt" />
-            </a>
-        </div>
     </div>
 
     <div class="footer-contact-section">
@@ -111,7 +91,7 @@ const MAIN_ROUTES = [
     { name: "My Experience", path: "/experience/", icon: "fa-file-code", color: "var(--website-text)" },
     { name: "My Projects", path: "/projects/", icon: "fa-cubes", color: "var(--globe-green)" },
     { name: "My Resume", path: "/resume/", icon: "fa-file-lines", color: "var(--website-text)" }
-]
+];
 
 const SECONDARY_ROUTES = [
     { name: "My Library", path: "/library/", icon: "fa-book-open-reader", color: "var(--website-light-text)" },
@@ -119,11 +99,6 @@ const SECONDARY_ROUTES = [
     { name: "Copyright Notice", path: "/copyright/", icon: "fa-copyright", color: "var(--blue-cobalt)" },
     { name: "My Icons", path: "/icons/", icon: "fa-pen-fancy", color: "var(--blue-two)" },
     { name: "Wake Lock", path: "/wakelock/", icon: "fa-lock", color: "var(--vibrant-flame)" },
-]
-
-const EXTRA_ROUTES = [
-    { name: "Barcode Reader", path: "/code-scanner/", icon: "fa-barcode", color: "var(--blue-cobalt)" },
-    { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" }
 ];
 </script>
 
@@ -143,11 +118,11 @@ const EXTRA_ROUTES = [
 
 .footer-body {
     position: relative;
-    left: calc(50% - 600px);
-    width: 1200px;
+    left: calc(50% - 450px);
+    width: 900px;
     height: fit-content;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 .footer-main-icon {
     grid-column: span 1;
@@ -351,18 +326,7 @@ const EXTRA_ROUTES = [
     scale: 1.1;
 }
 
-@include dynamic-less-equal-width-rule-scopedBlock(1200) {
-    .footer-body {
-        grid-template-columns: repeat(3, 1fr);
-        left: calc(50% - 375px);
-        width: 750px;
-    }
-    .footer-main-icon {
-        grid-column: span 3;
-        margin-bottom: 20px;
-    }
-}
-@include dynamic-less-equal-width-rule-scopedBlock(750) {
+@include dynamic-less-equal-width-rule-scopedBlock(925) {
     .footer-body {
         grid-template-columns: repeat(2, 1fr);
         left: calc(50% - 275px);

@@ -198,6 +198,8 @@ function setProjectsTransitions(isVisible) {
     }
     .projects-main-desc {
         width: 340px;
+        padding: 20px 0px;
+        text-align: center;
     }
     .projects-main-header a {
         font-size: 52px;

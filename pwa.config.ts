@@ -1,13 +1,15 @@
-import type { PwaModuleOptions } from "@vite-pwa/nuxt";
+// import type { PwaModuleOptions } from "@vite-pwa/nuxt";
 
 // This is the configuration for the website's PWA. It is on a separate file as it takes up a lot of space.
-const pwaConfig: PwaModuleOptions = {
+// THIS IS NOT IN USE AS PWA CACHING HAS BEEN REMOVED. THIS IS STILL HERE AS I MIGHT WANT TO REINTRODUCE IT.
+const pwaConfig = {
     strategies: "generateSW",
     registerType: "prompt",
     devOptions: { enabled: false },
+    selfDestroying: false,
     registerWebManifestInRouteRules: true,
 
-    client: { periodicSyncForUpdates: 600 },
+    client: { periodicSyncForUpdates: 100 },
     workbox: {
         cacheId: `mohit-website-pwa-cache-id-v4.0.0-${Date.now()}`,
         globPatterns: ['**/*', '_nuxt/fonts/**'],
@@ -21,8 +23,8 @@ const pwaConfig: PwaModuleOptions = {
         clientsClaim: false,
         skipWaiting: false,
         manifestTransforms: [
-            (manifestEntries) => {
-                const manifest = manifestEntries.map((entry) => {
+            (manifestEntries: any) => {
+                const manifest = manifestEntries.map((entry: any) => {
                     if (!entry.url.startsWith('/')) { entry.url = `/${entry.url}`; }
                     return entry;
                 });
