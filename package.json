@@ -64,8 +64,8 @@
         "vue-router": "^5.4.0"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.1164.0",
-        "@aws-sdk/client-s3": "^3.1164.0",
+        "@aws-sdk/client-cloudfront": "^3.1165.0",
+        "@aws-sdk/client-s3": "^3.1165.0",
         "@stefanobartoletti/nuxt-social-share": "^3.3.2",
         "@types/gapi": "^0.0.47",
         "@types/google.accounts": "^0.0.18",
