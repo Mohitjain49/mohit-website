@@ -270,6 +270,32 @@ export const VUEJS_SKILL_NOTES = [
             faIcon: false,
             size: "125"
         }
+    },
+    {
+        name: "Pinia",
+        link: "https://pinia.vuejs.org/",
+        color: "#dec96e",
+        desc: "Pinia is Vue.js's official module for global state management. " +
+            "It's extremely simple to use and works even better than modules like Redux or RxJS.",
+
+        icon: {
+            id: pinia_icon,
+            faIcon: false,
+            size: "90"
+        }
+    },
+    {
+        name: "Vue Router",
+        link: "https://router.vuejs.org/",
+        color: "#34495E",
+        desc: "Vue Router is a routing module that integrates seamlessly with Vue.js Apps. " +
+            "It's similar to any other framework's routing module.",
+
+        icon: {
+            id: vue_icon,
+            faIcon: false,
+            size: "105"
+        }
     }
 ];
 
@@ -332,7 +358,7 @@ export const FRONTEND_SKILL_NOTES = [
         link: "https://tauri.app/",
         color: "#24C8DB",
         desc: "Tauri is a framework that can build tiny and fast binaries for desktop and mobile applications. " +
-            "In other words, It allows any web developer to bundle their application to become a native desktop application.",
+            "In other words, It allows any web developer to bundle their application to become a native application.",
 
         icon: {
             id: tauri_icon,
