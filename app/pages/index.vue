@@ -30,7 +30,7 @@ function changePageTitle() {
     const hash = routerHash.value;
     if(hash === "#ivue") {
         pageTitle.value = "Mohit Jain | My Role Within iVue"
-    } else if(hash === "#footer") {
+    } else if(hash === "#footer" || hash === "#webpages") {
         pageTitle.value = "Mohit Jain | WebPages"
     } else {
         pageTitle.value = WEBSITE_TITLE;

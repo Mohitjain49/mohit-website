@@ -74,9 +74,9 @@ export default defineNuxtConfig({
         }
     },
     modules: [
-        '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/fonts',
+        '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/fonts', "@comark/vue",
         '@nuxtjs/sitemap', '@nuxtjs/robots', 'unplugin-info/nuxt',
-        '@stefanobartoletti/nuxt-social-share', "@comark/nuxt", "nuxt-vitalizer",
+        '@stefanobartoletti/nuxt-social-share', "nuxt-vitalizer",
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',

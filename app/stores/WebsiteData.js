@@ -27,8 +27,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const { share, isSupported: shareSupported } = useShare();
     const wakeLock = useWakeLock();
 
-    /** @type {Ref<HTMLElement>} This represents the website footer. */
-    const webFooter = ref(null);
+    /** @type {ShallowRef<HTMLElement>} This represents the website footer. */
+    const webFooter = shallowRef(null);
     const webFooterVisibility = useElementVisibility(webFooter);
 
     const mounted = ref(0);

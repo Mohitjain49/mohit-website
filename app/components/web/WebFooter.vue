@@ -1,7 +1,9 @@
 <template>
 <footer id="footer" ref="mohit-footer">
+    <div class="footer-websiteVersion"> {{ websiteVersion }} </div>
+
     <div class="footer-body">
-        <div class="footer-main-icon">
+        <div id="webpages" class="footer-main-icon">
             <RouterLink to="/" title="Home Page" v-pulse-loop>
                 <img :src="mkj_icon" draggable="false" />
             </RouterLink>
@@ -70,19 +72,24 @@ import ivue_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 
 const webData = useWebsiteDataStore();
 const { $websiteBuild } = useNuxtApp();
+const topPath = useRoutePathWithQuery();
 
-const isMounted = onMountedAdvanced(() => {
+const footerRef = useTemplateRef('mohit-footer');
+const copyrightText = useState("footer-copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
+const websiteVersion = useState("footer-project-version", () => { return ("Version " + $websiteBuild.version); });
+
+const isMounted = onAfterMounted(() => {
+    if(!Boolean(footerRef.value)) { throw new Error("Website Footer Not Accessible."); }
     webData.navFooterPresent = true;
-    webData.webFooter = document.getElementById("footer");
+    webData.webFooter = footerRef.value;
+
     copyrightText.value = ($websiteBuild.coprightYear + " Mohit Jain");
+    websiteVersion.value = ("Version " + $websiteBuild.version);
 });
 onBeforeUnmount(() => {
     webData.navFooterPresent = false;
     webData.webFooter = null;
 });
-
-const topPath = useRoutePathWithQuery();
-const copyrightText = useState("footer-copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 
 const MAIN_ROUTES = [
     { name: "Home Page", path: "/", icon: "fa-house", color: "var(--website-light-text)" },
@@ -112,10 +119,29 @@ const SECONDARY_ROUTES = [
     overflow: hidden;
     padding-top: 25px;
     z-index: 20;
-    border-top: 2px solid var(--website-light-text);
     scroll-margin-top: 50px;
+    --footer-border-color: var(--website-light-text); 
+    border-top: 2px solid var(--footer-border-color, var(--website-light-text));
+}
+#webpages {
+    scroll-margin-top: 75px;
 }
 
+.footer-websiteVersion {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    color: var(--footer-border-color, var(--website-light-text));
+    padding: 5px 8px;
+    border: 2px solid var(--footer-border-color, var(--website-light-text));
+    border-top: none;
+    border-radius: 0px 0px 7px 7px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    background: transparent;
+    user-select: none;
+}
 .footer-body {
     position: relative;
     left: calc(50% - 450px);
@@ -124,6 +150,7 @@ const SECONDARY_ROUTES = [
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
+
 .footer-main-icon {
     grid-column: span 1;
     width: 100%;
@@ -132,7 +159,6 @@ const SECONDARY_ROUTES = [
     align-items: center;
     justify-content: center;
 }
-
 .footer-main-icon > a {
     height: fit-content;
     width: fit-content;
@@ -143,6 +169,7 @@ const SECONDARY_ROUTES = [
     border-radius: 40px;
     transition: var(--default-transition);
 }
+
 .footer-main-icon > a:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
@@ -180,16 +207,16 @@ const SECONDARY_ROUTES = [
     align-items: center;
     flex-direction: row;
     border: 1px solid var(--website-text);
-    border-radius: 12px;
+    border-radius: 7px;
     height: fit-content;
-    width: 190px;
+    width: 225px;
     color: var(--website-text);
     background-color: rgb(29, 29, 29);
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     font-size: 16px;
     transition: scale 0.2s;
-    padding: 4px;
+    padding: 4px 8px;
     margin: 0px auto;
     margin-bottom: 10px;
 }
@@ -344,7 +371,7 @@ const SECONDARY_ROUTES = [
     }
     .footer-routes-opt {
         width: 280px;
-        padding: 4px 10px;
+        padding: 4px 8px;
         letter-spacing: 1px;
     }
 
