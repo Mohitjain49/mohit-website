@@ -119,7 +119,6 @@ const SECONDARY_ROUTES = [
 
 const EXTRA_ROUTES = [
     { name: "Barcode Reader", path: "/code-scanner/", icon: "fa-barcode", color: "var(--blue-cobalt)" },
-    { name: "Install Website", path: "/install/", icon: "fa-download", color: "var(--website-text)" },
     { name: "Google Mockup", path: "/google-mockup/", icon: "fa-brands fa-google", color: "#4286F5" }
 ];
 </script>

@@ -1,11 +1,11 @@
 <template>
 <NavigationMain />
 <QrcodeTool v-if="showShare" />
-<UpdateBox />
+<!-- <UpdateBox /> -->
 <VolumeWidget />
 
 <NuxtPage />
-<VitePwaManifest />
+<!-- <VitePwaManifest /> -->
 
 <NuxtLoadingIndicator :color="LOADING_BAR_COLOR" :height="2" />
 <WebCover v-if="useWebpageCover" :zIndex="500" />

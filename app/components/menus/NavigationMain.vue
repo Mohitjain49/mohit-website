@@ -129,13 +129,6 @@
 </Transition>
 
 <div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
-    <button v-if="showUpdateWebsiteWidget" @click="openUpdateBox()" v-pulse-loop
-        :class="['mohit-navBar-statusIcon', 'yellow', (installStore.updateNeeded ? '' : 'noAction')]"
-        :title="(installStore.swUpdating ? 'Updating Website...' : 'This Is An Old Version Of My Website. Click Here To Update It.')">
-
-        <font-awesome-icon v-if="!installStore.swUpdating" icon="fa-triangle-exclamation" />
-        <font-awesome-icon v-else icon="fa-spinner" spin-pulse />
-    </button>
     <button v-if="showWakeLockWidget" :title="webData.wakeLockTitle" v-pulse-loop
         @click="(event) => { webData.onWakeLockButtonClick(event); }"
         class="mohit-navBar-statusIcon wakelock">
@@ -180,7 +173,6 @@ const audioStore = useAudioStore();
 const scriptsStore = useScriptsStore();
 const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
-const installStore = useInstallStore();
 
 const router = useRouter();
 const isMounted = onMountedAdvanced();
@@ -198,21 +190,15 @@ const showWakeLockWidget = computed(() => {
 const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
 const showScriptOptionsBtn = computed(() => { return (scriptsStore.onScriptRoute && scriptsStore.scriptBlobCreated); });
 const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
-const showUpdateWebsiteWidget = computed(() => { return (!installStore.showUpdateBox && (installStore.updateNeeded || installStore.swUpdating)); });
 const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
-const showNavLeftWidgets = computed(() => {
-    return (isMounted.value && (showWakeLockWidget.value || showUpdateWebsiteWidget.value || resumeStore.queryOutOfSync));
-});
+const showNavLeftWidgets = computed(() => { return (isMounted.value && (showWakeLockWidget.value || resumeStore.queryOutOfSync)); });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.noMenuOpen || webData.websiteMenuMode == 1)); });
 
 /** This is a reactive function that can be used to check if a string equals the curent router path. */
 const currentPathEquals = computed(() => { return (path = "") => {
     return (path === routePath.value || path.substring(0, (path.length - 1)) === routePath.value);
 }});
-
-/** This opens the update box only if an update is needed. */
-function openUpdateBox() { if(installStore.updateNeeded) { installStore.setUpdateBox(true); }}
 
 /** This function lets users copy the webpage link  */
 async function copyWebpageLink() {

@@ -6,7 +6,7 @@ import { imagetools } from "vite-imagetools";
 import type { Plugin } from "vite";
 
 import usePageTemplates from "./page-templates.config";
-import pwaConfig from "./pwa.config";
+// import pwaConfig from "./pwa.config";
 
 const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
@@ -69,11 +69,12 @@ export default defineNuxtConfig({
         head: {
             htmlAttrs: { lang: "en-US" },
             script: [{ type: 'text/javascript', tagPosition: 'head', innerHTML: NO_SCROLL_FUNCTION }],
-            meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
+            meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+            link: [{ rel: 'manifest', href: '/manifest.webmanifest' }]
         }
     },
     modules: [
-        '@vueuse/nuxt', '@pinia/nuxt', '@vite-pwa/nuxt', '@nuxt/fonts',
+        '@vueuse/nuxt', '@pinia/nuxt', /* '@vite-pwa/nuxt', */ '@nuxt/fonts',
         '@nuxtjs/sitemap', '@nuxtjs/robots', 'unplugin-info/nuxt',
         '@stefanobartoletti/nuxt-social-share', "@comark/nuxt", "nuxt-vitalizer",
         (_, nuxt) => {
@@ -131,7 +132,7 @@ export default defineNuxtConfig({
 
     sourcemap: false,
     experimental: { appManifest: true, typedPages: true, payloadExtraction: false },
-    pwa: pwaConfig,
+    // pwa: pwaConfig,
     socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
     watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],
 
