@@ -1,9 +1,11 @@
 <template>
-<footer id="footer" ref="mohit-footer">
-    <div class="footer-websiteVersion"> {{ websiteVersion }} </div>
+<footer id="footer" ref="mohit-footer" :style="footerScrollMargin">
+    <div :class="['footer-websiteVersion', ((smallViewport && leftNavWidgetsVisible) ? 'center' : '')]">
+        {{ websiteVersion }}
+    </div>
 
     <div class="footer-body">
-        <div id="webpages" class="footer-main-icon">
+        <div id="webpages" class="footer-main-icon" :style="webpagesScrollMargin">
             <RouterLink to="/" title="Home Page" v-pulse-loop>
                 <img :src="mkj_icon" draggable="false" />
             </RouterLink>
@@ -29,7 +31,11 @@
                 <span> {{ tab.name }} </span>
                 <font-awesome-icon :icon="tab.icon" />
             </RouterLink>
-            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK" class="footer-routes-opt" :style="getColorStyles('white')" v-pulse-loop>
+            <a :href="PERSONAL_WEBSITE_REPOSITORY_LINK"
+                :style="getColorStyles('white')"
+                class="footer-routes-opt"
+                target="_self" v-pulse-loop>
+
                 <span> Website Repository </span>
                 <font-awesome-icon icon="fa-code-branch" />
             </a>
@@ -45,7 +51,8 @@
         </a>
     </div>
     <div class="footer-job-title">
-        Lead Software Developer At <span><a :href="MAIN_IVUE_WEBSITE_LINK" v-pulse-loop> <img :src="ivue_text" draggable="false" /> </a></span>
+        Lead Software Developer At
+        <span><a :href="MAIN_IVUE_WEBSITE_LINK" v-pulse-loop> <img :src="ivue_text" draggable="false" /> </a></span>
     </div>
 
     <div class="footer-bottom">
@@ -55,7 +62,10 @@
         </RouterLink>
 
         <div class="footer-bottom-buttons">
-            <button @click="webData.openQRCodePopup()" :title="SHARE_PAGE_TITLE" :style="getColorStyles('var(--website-light-text)')" v-pulse-loop>
+            <button @click="webData.openQRCodePopup()"
+                :style="getColorStyles('var(--website-light-text)')"
+                :title="SHARE_PAGE_TITLE" v-pulse-loop>
+
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
             <RouterLink v-show="isMounted" :to="topPath" title="Scroll To The Top" v-pulse-loop>
@@ -70,13 +80,24 @@
 import mkj_icon from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 import ivue_text from "@/assets/ivue/iVue_White_Text_Cropped.png";
 
-const webData = useWebsiteDataStore();
 const { $websiteBuild } = useNuxtApp();
-const topPath = useRoutePathWithQuery();
+const { cssViewportWidth } = storeToRefs(useStyleStore());
+const webData = useWebsiteDataStore();
 
+const topPath = useRoutePathWithQuery();
 const footerRef = useTemplateRef('mohit-footer');
+
+const leftNavWidgetsVisible = useState('left-nav-widgets', () => { return false; });
 const copyrightText = useState("footer-copyright-text", () => { return ($websiteBuild.coprightYear + " Mohit Jain"); });
 const websiteVersion = useState("footer-project-version", () => { return ("Version " + $websiteBuild.version); });
+
+const smallViewport = computed(() => { return (cssViewportWidth.value <= 925); });
+const footerScrollMargin = computed(() => {
+    return { scrollMarginTop: ((leftNavWidgetsVisible.value && !smallViewport.value) ? "90px" : "50px") }
+});
+const webpagesScrollMargin = computed(() => {
+    return { scrollMarginTop: ((leftNavWidgetsVisible.value && !smallViewport.value) ? "115px" : "75px") }
+});
 
 const isMounted = onAfterMounted(() => {
     if(!Boolean(footerRef.value)) { throw new Error("Website Footer Not Accessible."); }
@@ -131,6 +152,8 @@ const SECONDARY_ROUTES = [
     position: absolute;
     top: 0px;
     left: 0px;
+    height: fit-content;
+    width: fit-content;
     color: var(--footer-border-color, var(--website-light-text));
     padding: 5px 8px;
     border: 2px solid var(--footer-border-color, var(--website-light-text));
@@ -142,6 +165,15 @@ const SECONDARY_ROUTES = [
     background: transparent;
     user-select: none;
 }
+.footer-websiteVersion.center {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: 0px auto;
+}
+
 .footer-body {
     position: relative;
     left: calc(50% - 450px);
@@ -150,7 +182,6 @@ const SECONDARY_ROUTES = [
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
-
 .footer-main-icon {
     grid-column: span 1;
     width: 100%;
@@ -159,6 +190,7 @@ const SECONDARY_ROUTES = [
     align-items: center;
     justify-content: center;
 }
+
 .footer-main-icon > a {
     height: fit-content;
     width: fit-content;
@@ -169,7 +201,6 @@ const SECONDARY_ROUTES = [
     border-radius: 40px;
     transition: var(--default-transition);
 }
-
 .footer-main-icon > a:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }

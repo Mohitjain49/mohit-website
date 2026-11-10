@@ -175,10 +175,12 @@ const documentStore = useDocumentStore();
 const resumeStore = useResumeStore();
 
 const router = useRouter();
-const isMounted = onMountedAdvanced();
-const copyStatus = shallowRef(0);
-
 const topPath = useRoutePathWithQuery();
+const leftNavWidgetsVisible = useState('left-nav-widgets', () => { return false; });
+
+const copyStatus = shallowRef(0);
+const isMounted = onAfterMounted(() => { leftNavWidgetsVisible.value = showNavLeftWidgets.value; });
+
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return (topPath.value + (webData.webFooterVisibility ? '' :'#footer')); });
 
@@ -199,6 +201,9 @@ const showNavRightWidgets = computed(() => { return (isMounted.value && (webData
 const currentPathEquals = computed(() => { return (path = "") => {
     return (path === routePath.value || path.substring(0, (path.length - 1)) === routePath.value);
 }});
+
+// This sets a Nuxt State Variable that knows if the Navigation Bar Left Widgets Are Visible Or Not.
+watch(showNavLeftWidgets, () => { leftNavWidgetsVisible.value = showNavLeftWidgets.value; });
 
 /** This function lets users copy the webpage link  */
 async function copyWebpageLink() {
