@@ -61,6 +61,7 @@ function setFS() {
 function openWebsiteMenu() {
     webData.bypassBodyClick();
     webData.setMenuOpen((onDocumentRoute.value ? DOCUMENT_MENU : SCRIPTS_MENU), true);
+}
 </script>
 
 <style scoped lang="scss">
