@@ -73,7 +73,7 @@ export default defineNuxtConfig({
         }
     },
     modules: [
-        '@vueuse/nuxt', '@pinia/nuxt', /*'@vite-pwa/nuxt',*/ '@nuxt/fonts',
+        '@vueuse/nuxt', '@pinia/nuxt', '@vite-pwa/nuxt', '@nuxt/fonts',
         '@nuxtjs/sitemap', '@nuxtjs/robots', 'unplugin-info/nuxt',
         '@stefanobartoletti/nuxt-social-share', "@comark/nuxt", "nuxt-vitalizer",
         (_, nuxt) => {
@@ -131,7 +131,7 @@ export default defineNuxtConfig({
 
     sourcemap: false,
     experimental: { appManifest: true, typedPages: true, payloadExtraction: false },
-    // pwa: pwaConfig,
+    pwa: pwaConfig,
     socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
     watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],
 

@@ -5,7 +5,6 @@ const pwaConfig: PwaModuleOptions = {
     strategies: "generateSW",
     registerType: "prompt",
     devOptions: { enabled: false },
-    selfDestroying: false,
     registerWebManifestInRouteRules: true,
 
     client: { periodicSyncForUpdates: 600 },
