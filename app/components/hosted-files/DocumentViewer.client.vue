@@ -113,7 +113,7 @@ onMounted(async() => {
         if(renderAborted()) { return; }
 
         document.addEventListener("copy", (event) => { documentStore.onHostedDocumentPageCopy(event); }, { signal });
-        window.addEventListener("animation-resize", () => { resizePdfViewer(); }, { signal });
+        window.addEventListener("mohit-hosted-document-resize", () => { resizePdfViewer(); }, { signal });
         window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(false); }, { signal });
 
         // This sets a flag indicating that the custom scroll event listener is active for the Hosted Document Viewer.

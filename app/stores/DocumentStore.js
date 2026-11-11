@@ -732,8 +732,9 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
 
     /** Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf. */
-    function setPdfSize() {
-        if(!import.meta.client || !document || !document.documentElement) { return; }
+    async function setPdfSize() {
+        if(!import.meta.client || !window || !document || !document.documentElement) { return; }
+        await fullScreenStore.waitForFullScreenChange(7000);
         var largeViewportHeight = false;
 
         const maxWidth = customPdfMaxWidth.value;
@@ -745,7 +746,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
             if(Boolean(firstPdfPage)) {
                 const viewportHeight = styleStore.cssViewportHeight;
-                const distanceFromTop = ((firstPdfPage.getBoundingClientRect().top + getScrollY() + 20) * styleStore.cssToWindowHeightRatio);
+                const distanceFromTop = Math.round((firstPdfPage.getBoundingClientRect().top + getScrollY() + 20) * styleStore.cssToWindowHeightRatio);
 
                 if(viewportHeight >= ((maxWidth * scaleFactor) + distanceFromTop)) {
                     largeViewportHeight = true;
@@ -755,8 +756,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         }
 
         if(!largeViewportHeight) { customPdfWidth.value = Math.min(maxWidth, Math.max(customPdfMinWidth.value, defaultPdfWidth)); }
-        customPdfHeight.value = (customPdfWidth.value * scaleFactor);
+        customPdfWidth.value = Math.round(customPdfWidth.value);
+        customPdfHeight.value = Math.round(customPdfWidth.value * scaleFactor);
 
+        window.dispatchEvent(new CustomEvent("mohit-hosted-document-resize", { cancelable: false }));
         document.documentElement.style.setProperty(PDF_WIDTH_CSS_PROPERTY, (String(customPdfWidth.value) + "px"));
         document.documentElement.style.setProperty(PDF_HEIGHT_CSS_PROPERTY, (String(customPdfHeight.value) + "px"));
     }

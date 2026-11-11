@@ -34,6 +34,7 @@ export const useFullScreenStore = defineStore("screen-store", () => {
             }
 
             // This marks that the website is no longer changing its full screen status.
+            await sleep(25);
             fsChanging.value = false;
         } catch(e) {
             console.error(e);
@@ -51,12 +52,36 @@ export const useFullScreenStore = defineStore("screen-store", () => {
     async function exitFullScreen() {
         if(!fullScreenSet.value || fsChanging.value || !import.meta.client) { return; }
         fsChanging.value = true;
+
         await document.exitFullscreen();
+        await sleep(25);
         fsChanging.value = false;
     }
 
+    /**
+     * This function lets another function wait for the Full Screen Status to change before executing its tasks.
+     * @param {Number} timeout The amount of time in milliseconds to wait before throwing out a timeout error.
+     */
+    async function waitForFullScreenChange(timeout = 10000) {
+        await new Promise(async (resolve, reject) => {
+            if(!fsChanging.value) { resolve(null); }
+            var msPassed = 0;
+
+            while(msPassed < timeout && fsChanging.value) {
+                await sleep(50);
+                msPassed += 50;
+            }
+
+            if(!fsChanging.value) {
+                resolve(null);
+            } else {
+                reject(new Error("Timeout Error"));
+            }
+        });
+    }
+
     return { fullScreenSet, fsChanging, faIcon, elementTitle, element, oldElement,
-        setFullScreen, setFullScreenStatus, exitFullScreen
+        setFullScreen, setFullScreenStatus, exitFullScreen, waitForFullScreenChange
     }
 });
 
