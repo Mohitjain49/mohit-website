@@ -6,6 +6,7 @@ export const useStyleStore = defineStore("style-store", () => {
     const ZOOM_CSS_PROPERTY = "--webpage-zoom-factor";
     const TRUE_100VH_CSS_PROPERTY = "--true-100vh";
     const TRUE_100VW_CSS_PROPERTY = "--true-100vw";
+    const TRUE_DEVICE_PIXEL_RATIO_CSS_PROPERTY = "--recorded-dvr";
     const CSS_LAYOUT_ID = "invisible-css-layout";
     const TOUCH_SCREEN_CLASS = "mohit-touchScreen";
     var windowSizeAnimationFrame = null;
@@ -543,7 +544,7 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
 
         const signal = trueViewportVariablesController.signal;
-        window.addEventListener("animation-resize", (event) => { setTrueViewportVariablesOnResize(event); }, { signal });
+        window.addEventListener("animation-resize", () => { setTrueViewportVariables(); }, { signal });
         window.addEventListener("router-before-change", () => { setTrueViewportVariables(); }, { signal });
         window.addEventListener("router-after-change", () => { setTrueViewportVariables(); }, { signal });
 
@@ -556,17 +557,11 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
         const vhNum = (Math.round(cssViewportHeight.value * 100) / 100);
         const vwNum = (Math.round(cssViewportWidth.value * 100) / 100);
+        const dvrNum = (Math.round(recordedDevicePixelRatio.value * 100) / 100);
 
         document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, (String(vhNum) + "px"));
         document.documentElement.style.setProperty(TRUE_100VW_CSS_PROPERTY, (String(vwNum) + "px"));
-    }
-
-    /**
-     * This function should check the "animation-resize" event to make sure it is the correct type before setting the true viewport CSS Variables.
-     * @param {CustomEvent} event The event fired by the device. 
-     */
-    function setTrueViewportVariablesOnResize(event) {
-        if(event && event.detail && event.detail.type.includes("resize")) { setTrueViewportVariables(); }
+        document.documentElement.style.setProperty(TRUE_DEVICE_PIXEL_RATIO_CSS_PROPERTY, String(dvrNum));
     }
 
     /** This function unsets the true viewport CSS variables and reverts them back to the css viewport values. */
@@ -574,6 +569,7 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
         document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, "100vh");
         document.documentElement.style.setProperty(TRUE_100VW_CSS_PROPERTY, "100vw");
+        document.documentElement.style.setProperty(TRUE_DEVICE_PIXEL_RATIO_CSS_PROPERTY, "1");
     }
 
     /**

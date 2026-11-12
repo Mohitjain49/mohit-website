@@ -774,7 +774,10 @@ export const useDocumentStore = defineStore("document-store", () => {
         pdfDimensionsController = (status ? new AbortController() : null);
        
         if(!status) { return; }
-        window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal: pdfDimensionsController.signal });
+        const signal = pdfDimensionsController.signal;
+
+        window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal });
+        document.addEventListener("fullscreenchange", () => { sleep(25).then(() => { setPdfSize(); }); }, { signal });
     }
     
     /**

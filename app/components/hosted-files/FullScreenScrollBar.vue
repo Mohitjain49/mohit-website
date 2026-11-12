@@ -293,7 +293,7 @@ function onScrollBarContextMenu(event) {
 .mohit-scrollBar {
     position: fixed;
     z-index: 15;
-    width: 15px;
+    width: var(--custom-fs-scrollbar-width);
     height: 100%;
     right: 0px;
     top: 0px;
@@ -307,7 +307,7 @@ function onScrollBarContextMenu(event) {
 }
 
 .mohit-scrollBar-body {
-    height: calc(100% - 40px);
+    height: calc(100% - (var(--custom-fs-scrollbar-width) * 2.67));
     width: 100%;
     padding: 5px 0px;
     position: relative;
@@ -346,13 +346,13 @@ function onScrollBarContextMenu(event) {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 15px;
+    height: var(--custom-fs-scrollbar-width);
     color: var(--website-text);
     transition: var(--default-transition);
 }
 .mohit-scrollBar button svg {
     position: relative;
-    height: 10px;
+    height: calc(var(--custom-fs-scrollbar-width) * 0.67);
     display: flex;
     justify-content: center;
     align-items: center;

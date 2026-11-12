@@ -13,8 +13,8 @@
     outline: none;
 }
 #mohit-hosted-document-page:fullscreen {
-    padding: 0px 15px 10px 0px;
-    width: calc(100% - 15px);
+    padding: 0px var(--custom-fs-scrollbar-width) 10px 0px;
+    width: calc(100% - var(--custom-fs-scrollbar-width));
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;

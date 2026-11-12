@@ -10,11 +10,14 @@
 
     --true-100vh: 100vh;
     --true-100vw: 100vw;
+    --recorded-dvr: 1;
     --true-100vh-safe: var(--true-100vh, 100vh);
     --true-100vw-safe: var(--true-100vw, 100vw);
+    --recorded-dvr-safe: var(--recorded-dvr, 1);
 
     --body-height: calc(var(--true-100vh-safe) - 50px);
     --checkmark-cursor: url("/checkmark_cursor.svg") 15 15, default;
+    --custom-fs-scrollbar-width: max(15px, calc(15px / var(--recorded-dvr-safe)));
 
     --nav-menu-opacity: 1;
     --nav-menu-transform: translateY(0px);
