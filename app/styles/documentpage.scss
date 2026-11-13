@@ -63,18 +63,18 @@
 .pdf-doc-mohit-container {
     height: fit-content;
     width: 100%;
-    min-height: calc(var(--body-height) - 100px);
+    min-height: calc(var(--true-100vh-safe) - 150px);
     padding-top: 20px;
     padding-bottom: 80px;
     z-index: 10;
-    position: relative;
 }
 :fullscreen .pdf-doc-mohit-container {
-    padding-bottom: 0px;
+    min-height: 0px;
+    padding-bottom: 10px;
 }
 
 .pdf-page-innerContainer {
-    scroll-margin-top: 67px;
+    scroll-margin-top: 70px;
     position: relative;
     height: fit-content;
     width: fit-content;
@@ -139,10 +139,6 @@
     background: #0000ff40 !important;
     color: transparent !important;
 }
-#mohit-hosted-document-page:fullscreen .pdf-doc-mohit-container {
-    min-height: calc(100% - 100px);
-}
-
 
 .mohit-document-topBar {
     width: var(--mohit-custom-pdf-width, calc(100% - 70px));

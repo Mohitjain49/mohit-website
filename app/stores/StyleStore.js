@@ -1,5 +1,6 @@
 import Bowser from "bowser";
-const DYNAMIC_ZOOM_ON_ANY = false;
+const DYNAMIC_ZOOM_ON_ANY = false; // Default Value should be the boolean "false".
+const ZOOM_FACTOR_HEIGHT = 450; // Default Value should be the boolean "450".
 
 /** This store manages everything related to dynamically changing the styles of the website with JavaScript. */
 export const useStyleStore = defineStore("style-store", () => {
@@ -9,7 +10,6 @@ export const useStyleStore = defineStore("style-store", () => {
     const TRUE_DEVICE_PIXEL_RATIO_CSS_PROPERTY = "--recorded-dvr";
     const CSS_LAYOUT_ID = "invisible-css-layout";
     const TOUCH_SCREEN_CLASS = "mohit-touchScreen";
-    var windowSizeAnimationFrame = null;
 
     const fullScreenStore = useFullScreenStore();
     const fullScreenSet = getFullScreenSet();
@@ -34,6 +34,9 @@ export const useStyleStore = defineStore("style-store", () => {
     const mouseX = shallowRef(0);
     const mouseY = shallowRef(0);
 
+    /** @type {Number | null} This variable holds the animation frame number for the CSS Viewport Raf. */
+    var windowSizeAnimationFrame = null;
+
     /** @type {MutationObserver} This observer is designed to read any changes that occur to the document element's CSS Variables. */
     var cssVarObserver = null;
 
@@ -56,11 +59,12 @@ export const useStyleStore = defineStore("style-store", () => {
     var mousePositionController = null;
 
     const mounted = ref(false);
-    const zoomFactor = ref(1.0);
-
-    const onMobileDevice = ref(false);
     const onTouchScreen = ref(false);
+    const zoomFactor = ref(1.0);
     const viewportRafRanOnce = ref(false);
+
+    const zoomCssSupported = ref(false);
+    const onMobileDevice = ref(false);
 
     const viewportRafEnabled = shallowRef(false);
     const touchScreenWatcherEnabled = shallowRef(false);
@@ -96,9 +100,16 @@ export const useStyleStore = defineStore("style-store", () => {
         if(mounted.value) { return; }
         await nextTick();
 
+        // This checks if the zoom CSS Attribute that the zoom factor relies on actually exists.
+        zoomCssSupported.value = CSS.supports("zoom", "1");
+
         // This determines whether the user is using a phone to view this website or not.
-        const platformType = (("userAgent" in navigator) ? Bowser.parse(navigator.userAgent).platform.type : undefined);
-        onMobileDevice.value = (platformType === "mobile" || platformType === "tablet");
+        if(DYNAMIC_ZOOM_ON_ANY) {
+            onMobileDevice.value = true;
+        } else {
+            const platformType = (("userAgent" in navigator) ? Bowser.parse(navigator.userAgent).platform.type : undefined);
+            onMobileDevice.value = (platformType === "mobile" || platformType === "tablet");
+        }
 
         // This sets classes for the document element for hiding certain website behaviors.
         setHideOverflowClass(hideOverflow.value);
@@ -111,7 +122,7 @@ export const useStyleStore = defineStore("style-store", () => {
         await startViewportRaf();
 
         await Promise.all([
-            ((onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY) ? enableDynamicZoomFactor() : null),
+            ((zoomCssSupported.value && onMobileDevice.value) ? enableDynamicZoomFactor() : null),
             enableCssLayoutObserver(),
             enableTrueViewportVariables(),
             enableBreakpoints(),
@@ -450,7 +461,7 @@ export const useStyleStore = defineStore("style-store", () => {
     function setDynamicZoomFactor() {
         if(!validateClientMode()) { return; }
         const properOrientationType = recordedOrientation.value.startsWith("landscape");
-        const baseViewportHeight = (viewportHeight.value <= 450);
+        const baseViewportHeight = (viewportHeight.value <= ZOOM_FACTOR_HEIGHT);
         const mobileDevice = (onMobileDevice.value || DYNAMIC_ZOOM_ON_ANY);
 
         const newZoomFactor = ((properOrientationType && baseViewportHeight && mobileDevice) ? 0.5 : 1.0);

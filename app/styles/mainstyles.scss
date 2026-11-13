@@ -17,7 +17,7 @@
 
     --body-height: calc(var(--true-100vh-safe) - 50px);
     --checkmark-cursor: url("/checkmark_cursor.svg") 15 15, default;
-    --custom-fs-scrollbar-width: max(15px, calc(15px / var(--recorded-dvr-safe)));
+    --custom-fs-scrollbar-width: max(15px, calc(15px / var(--webpage-zoom-factor) / var(--recorded-dvr-safe)));
 
     --nav-menu-opacity: 1;
     --nav-menu-transform: translateY(0px);
@@ -164,10 +164,6 @@ button {
 .fullscreen-noOverflow:fullscreen {
     width: 100% !important;
     padding-right: 0px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-direction: column !important;
 }
 
 .webpage-cover {
