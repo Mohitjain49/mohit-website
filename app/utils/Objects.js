@@ -203,11 +203,24 @@ export const NEW_SKILL_ENTITIES = [
         }
     },
     {
+        name: "Platforms",
+        link: "/skills/#platforms",
+        color: "#F58A27",
+        desc: "I have used multiple unique platforms apart from those provided by Amazon Web Services and Google " +
+            "for my websites and applications for version control, product deployment, and testing.",
+
+        icon: {
+            id: "fa-code-compare",
+            faIcon: true,
+            size: "110"
+        }
+    },
+    {
         name: "Modules",
         link: "/skills/#modules",
         color: "#5C9E57",
-        desc: "I've used many unique modules AND tools for my websites and applications to either " +
-            "create more appealing and intuitive user interfaces or for version control and app deployment.",
+        desc: "I've used many unique modules for my websites and applications to " +
+            "create more appealing and intuitive user interfaces and to control hardware.",
 
         icon: {
             id: "fa-brands fa-node-js",
@@ -688,19 +701,6 @@ export const ICONS_SKILL_NOTES = [
             id: "fa-brands fa-font-awesome",
             faIcon: true,
             size: "100"
-        }
-    },
-    {
-        name: "iVue",
-        link: MAIN_IVUE_WEBSITE_LINK,
-        color: "#000000",
-        desc: "I use iVue's icons and logos to make my own website, " +
-            "particularly on the home page and the experience page.",
-
-        icon: {
-            id: ivue_black_text,
-            faIcon: false,
-            size: "160"
         }
     },
     {

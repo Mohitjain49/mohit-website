@@ -33,7 +33,7 @@
                 <tbody>
                     <tr>
                         <td> <span>Alt</span> + <span>W</span> </td>
-                        <td> Navigate To This Page </td>
+                        <td> Remotely Toggle Wake Lock </td>
                     </tr>
                     <tr>
                         <td><span>Ctrl</span> + <span>Alt</span> + <span>W</span></td>
@@ -142,15 +142,17 @@ function toggleMenuState() { menuState.value = ((menuState.value == 0) ? 1 : 0);
     border-right: 2px dashed;
     border-bottom: 2px dashed;
     border-bottom-right-radius: 10px;
-    transition: var(--default-transition), font-size 0.2s;
+    transition: background-color 0.2s;
 }
-.wakeLock-box.keybinds .wakelock-key-btn {
-    color: var(--vibrant-flame) !important;
+.wakelock-key-btn svg {
+    width: 17px;
+    height: 17px;
+    transition: scale 0.2s;
 }
-.wakelock-key-btn:hover {
-    background-color: var(--dark-background);
-    font-size: 19px;
-}
+
+.wakeLock-box.keybinds .wakelock-key-btn { color: var(--vibrant-flame) !important; }
+.wakelock-key-btn:hover { background-color: var(--dark-background); }
+.wakelock-key-btn:hover svg { scale: 1.2; }
 
 .keybinds-table {
     width: 80%;

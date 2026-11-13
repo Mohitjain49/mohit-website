@@ -225,7 +225,7 @@ export const WAKE_LOCK_BACKGROUND = ref({
         },
         number: {
             density: { enable: true, area: 1200 },
-            value: 150
+            value: 250
         },
         opacity: {
             value: { min: 0.1, max: 0.75 },
