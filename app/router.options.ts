@@ -50,9 +50,10 @@ export default {
 
             // This waits for the new webpage to load before instantly scrolling to the top of that webpage.
             if(differentPage || firstScrollCall.value) {
+                pageFinishHookRunning.value = true;
+                firstScrollCall.value = false;
+
                 await new Promise<String>((resolve, reject) => {
-                    pageFinishHookRunning.value = true;
-                    firstScrollCall.value = false;
                     hooks.hookOnce('page:finish', () => { resolve("finished"); });
                     sleep(1000).then(() => { resolve("timeout"); });
                 });
