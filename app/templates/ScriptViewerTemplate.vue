@@ -4,7 +4,7 @@
 
 <template>
 <main id="script-page" class="personal-web-body">
-    <div class="mohit-main-script" id="mohit-main-script">
+    <div id="mohit-main-script" :class="['mohit-main-script', (webData.fullyMounted ? 'client-margin-top' : '')]">
         <ScriptTopBar />
         <div ref="script-html" class="code-file-inHTML" v-html="html"></div>
         <HostedFileBottomBar v-if="fullScreenStore.fullScreenSet" />
@@ -38,7 +38,7 @@ const scriptHTML = useTemplateRef('script-html');
 
 onMountedAdvanced(() => { scriptsStore.mountScriptPage(numLines); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
-watch(scriptHTML, (newValue) => { if(newValue) { scriptsStore.setWrapCodeStyles(); } });
+watch(scriptHTML, (newValue) => { if(Boolean(newValue)) { scriptsStore.setWrapCodeStyles(); } });
 
 const script = scriptsStore.scripts[props.index];
 const { html, success, numLines } = await renderCodeScript(script.code, script.suffix, script.path);

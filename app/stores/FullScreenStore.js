@@ -16,7 +16,12 @@ export const useFullScreenStore = defineStore("screen-store", () => {
      * @param {HTMLElement} element The element to expand to full screen.
      */
     async function setFullScreen(element = null) {
-        if(!import.meta.client || !element || fsChanging.value) { return; }
+        if(fsChanging.value) {
+            await waitForFullScreenChange();
+            return;
+        }
+
+        if(!import.meta.client || !element) { return; }
         fsChanging.value = true;
         const fullScreenInactive = !fullScreenSet.value;
 

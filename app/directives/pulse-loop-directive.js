@@ -5,7 +5,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     const webData = useWebsiteDataStore();
     const styleStore = useStyleStore();
-    watch(() => webData.mounted, () => { manageVerifyInterval(); }, { deep: true });
+    watch(() => webData.fullyMounted, () => { manageVerifyInterval(); }, { deep: true });
 
     /**
      * This function finds an element in the list of animated elements.
@@ -58,7 +58,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     /** This function manages the verify interval, activating and deactivating it when necessary. */
     function manageVerifyInterval() {
         if(verifyInterval != null) { clearInterval(verifyInterval); }
-        verifyInterval = (webData.checkPartiallyMounted() ? setInterval(() => { verifyAnimatedElements(); }, 500) : null);
+        verifyInterval = (webData.fullyMounted ? setInterval(() => { verifyAnimatedElements(); }, 500) : null);
     }
 
     /**

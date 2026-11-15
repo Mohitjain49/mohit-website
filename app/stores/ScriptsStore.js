@@ -141,12 +141,13 @@ export const useScriptsStore = defineStore("scripts-store", () => {
 
     /** This function opens a "Save File Picker" so the user can save my script at their preferred location. */
     async function saveScript() {
-        if(!webData.saveAsSupported || scriptSaveStatus.value != 0) { return; }
+        if(!webData.saveAsSupported || fsStateChanging.value || scriptSaveStatus.value != 0) { return; }
         scriptSaveStatus.value = 1;
 
         try {
             const scriptFile = getCurrentScript();
             if(!scriptFile) { throw new Error("Script Does Not Exist!"); }
+            await exitScriptFullScreen();
 
             const saveHandle = await window.showSaveFilePicker({
                 suggestedName: scriptFile.name,
@@ -202,17 +203,24 @@ export const useScriptsStore = defineStore("scripts-store", () => {
                     });
                 }
             } else if(keyLetter === "s") {
-                event.preventDefault();
-                waitForAutoScroll().then(() => {
-                    if(!scriptTopBarVisible.value) {
-                        webData.setMenuOpen(SCRIPTS_MENU, false);
-                    }
-                });
-
                 if(webData.saveAsSupported && (event.shiftKey || event.altKey)) {
+                    event.preventDefault();
                     saveScript();
+
+                    waitForAutoScroll().then(() => {
+                        if(!scriptTopBarVisible.value && !fullScreenStore.fullScreenSet) {
+                            webData.setMenuOpen(SCRIPTS_MENU, false);
+                        }
+                    });
                 } else {
+                    event.preventDefault();
                     downloadScript();
+
+                    waitForAutoScroll().then(() => {
+                        if(!scriptTopBarVisible.value) {
+                            webData.setMenuOpen(SCRIPTS_MENU, false);
+                        }
+                    });
                 }
             }
         } catch(e) {
@@ -436,7 +444,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         const optionsAboveViewport = (lineOptionsPosition > styleStore.cssViewportHeight);
 
         const preElement = document.getElementById(SCRIPT_HTML_ID);
-        var optionsAbovePre = false
+        var optionsAbovePre = false;
 
         if(Boolean(preElement)) {
             const preElementBottomRect = ((preElement.getBoundingClientRect().bottom - 10) * heightRatio);
@@ -499,11 +507,11 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * --------------------------------------------------------------------------------
      */
 
-    /** This function sets the full screen for the element containing the document or script. */
+    /** This function sets the full screen mode on a script page. */
     async function toggleScriptFullScreen() {
         if(!import.meta.client || fsStateChanging.value) { return; }
         const element = document.getElementById("script-page");
-        if(!element) { return; }
+        if(!Boolean(element)) { return; }
 
         fsStateChanging.value = true;
         webData.bypassBodyClick();
@@ -516,6 +524,9 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         webData.closeNavMenu();
         fsStateChanging.value = false;
     }
+
+    /** This function lets the user exit full screen mode on a script page. */
+    async function exitScriptFullScreen() { if(fullScreenStore.fullScreenSet) { await toggleScriptFullScreen(); }}
 
     /**
      * This function sets the class for line numbers based on which one is focused on.

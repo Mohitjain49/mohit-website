@@ -7,6 +7,7 @@
 .code-file-inHTML {
     scrollbar-width: auto !important;
     scrollbar-color: white transparent;
+    &, pre { outline: none; }
 }
 
 #script-page:fullscreen {
@@ -24,13 +25,14 @@
 
 .mohit-main-script {
     padding: 10px 20px;
-    margin: 30px auto 20px auto;
+    margin: 8px auto 15px auto;
     border-radius: 10px;
     max-width: 1250px;
     width: calc(100% - 70px);
     height: fit-content;
     min-height: var(--body-height);
     background-color: rgb(15, 17, 26) !important;
+    scroll-margin-top: 200px;
 }
 :fullscreen .mohit-main-script {
     width: calc(100% - 36px);
@@ -41,6 +43,9 @@
     min-height: 0px;
     margin: 10px;
 }
+
+.mohit-main-script.client-margin-top { margin-top: 30px; }
+:fullscreen .mohit-main-script.client-margin-top { margin: 10px !important; }
 
 #mohit-scriptPage-code {
     width: 100%;

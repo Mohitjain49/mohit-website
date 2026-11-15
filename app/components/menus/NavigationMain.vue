@@ -179,7 +179,8 @@ const topPath = useRoutePathWithQuery();
 const leftNavWidgetsVisible = useState('left-nav-widgets', () => { return false; });
 
 const copyStatus = shallowRef(0);
-const isMounted = onAfterMounted(() => { leftNavWidgetsVisible.value = showNavLeftWidgets.value; });
+const { fullyMounted: isMounted } = storeToRefs(webData);
+onAfterMounted(() => { leftNavWidgetsVisible.value = showNavLeftWidgets.value; });
 
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return (topPath.value + (webData.webFooterVisibility ? '' :'#footer')); });

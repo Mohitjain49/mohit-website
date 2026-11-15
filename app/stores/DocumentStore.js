@@ -202,12 +202,13 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function opens a "Save File Picker" so the user can save my document at their preferred location. */
     async function saveDoc() {
-        if(!webData.saveAsSupported || documentSaveStatus.value != 0) { return; }
+        if(!webData.saveAsSupported || fsStateChanging.value || documentSaveStatus.value != 0) { return; }
         documentSaveStatus.value = 1;
 
         try {
             const documentFile = getCurrentPDFObject();
             if(!documentFile) { throw new Error("Document Does Not Exist."); }
+            await exitDocumentFullScreen();
 
             const saveHandle = await window.showSaveFilePicker({
                 suggestedName: documentFile.name,
@@ -231,13 +232,14 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function shares the document with someone using the OS's built in share popup. */
     async function shareDoc() {
-        if(documentShareStatus.value != 0) { return; }
+        if(!webData.shareSupported || fsStateChanging.value || documentShareStatus.value != 0) { return; }
         documentShareStatus.value = 1;
 
         try {
             const documentFile = getCurrentPDFObject();
             if(!documentFile) { throw new Error("Document Does Not Exist."); }
 
+            await exitDocumentFullScreen();
             await webData.shareFile(new File([documentFile.blob], (documentFile.name + documentFile.suffix), { type: 'application/pdf' }));
             documentShareStatus.value = 2;
         } catch(e) {
@@ -262,22 +264,29 @@ export const useDocumentStore = defineStore("document-store", () => {
                 printDoc(!event.altKey);
 
                 waitForAutoScroll().then(() => {
-                    if(!documentTopBarVisible.value) {
+                    if(!documentTopBarVisible.value && !fullScreenStore.fullScreenSet) {
                         webData.setMenuOpen(DOCUMENT_MENU, false);
                     }
                 });
             } else if(keyLetter === "s") {
-                event.preventDefault();
-                waitForAutoScroll().then(() => {
-                    if(!documentTopBarVisible.value) {
-                        webData.setMenuOpen(DOCUMENT_MENU, false);
-                    }
-                });
-
                 if(webData.saveAsSupported && (event.shiftKey || event.altKey)) {
+                    event.preventDefault();
                     saveDoc();
+
+                    waitForAutoScroll().then(() => {
+                        if(!documentTopBarVisible.value && !fullScreenStore.fullScreenSet) {
+                            webData.setMenuOpen(DOCUMENT_MENU, false);
+                        }
+                    });
                 } else {
+                    event.preventDefault();
                     downloadDoc();
+
+                    waitForAutoScroll().then(() => {
+                        if(!documentTopBarVisible.value) {
+                            webData.setMenuOpen(DOCUMENT_MENU, false);
+                        }
+                    });
                 }
             }
         } catch(e) {
@@ -303,17 +312,19 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Boolean} customPrint If true, this function forces the website to render the PDF into images instead of using the PDF Viewer.
      */
     async function printDoc(customPrint = false) {
-        if(!iframeSupported.value || documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
+        if(!iframeSupported.value || fsStateChanging.value) { return; }
+        if(documentPrintStatus.value != 0 || documentCustomPrintStatus.value != 0) { return; }
+
         const printActionString = ((!browserPdfViewerPresent.value || customPrint) ? "custom" : "standard");
         var cancelTimeout = false;
-
-        // Sets the specified print action to "Pending".
-        setPrintActionNumbers(printActionString, 1);
+        setPrintActionNumbers(printActionString, 1); // Sets the specified print action to "Pending".
 
         try {
             const documentFile = getCurrentPDFObject();
             const currentDocumentRouteNumber = currentDocumentRoute.value;
             if(!documentFile || currentDocumentRouteNumber == -1) { throw new Error("Document Does Not Exist."); }
+
+            await exitDocumentFullScreen();
             await removePrintIFrame(true);
 
             if(browserPdfViewerPresent.value && !customPrint) {
@@ -861,11 +872,11 @@ export const useDocumentStore = defineStore("document-store", () => {
         })
     }
 
-    /** This function sets the full screen for the element containing the document. */
+    /** This function sets the full screen mode for a document page. */
     async function toggleDocumentFullScreen() {
         if(!import.meta.client || !docLoaded.value.status || fsStateChanging.value) { return; }
         const element = document.getElementById("mohit-hosted-document-page");
-        if(!element) { return; }
+        if(!Boolean(element)) { return; }
 
         fsStateChanging.value = true;
         webData.bypassBodyClick();
@@ -878,6 +889,9 @@ export const useDocumentStore = defineStore("document-store", () => {
         webData.closeNavMenu();
         fsStateChanging.value = false;
     }
+
+    /** This exits from full screen mode on a document page. */
+    async function exitDocumentFullScreen() { if(fullScreenStore.fullScreenSet) { toggleDocumentFullScreen(); }}
 
     /**
      * This function scrolls to any page on a document webpage.

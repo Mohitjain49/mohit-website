@@ -43,6 +43,8 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const copySvgSupported = ref(false);
     const nullifyBodyClick = ref(false);
     const saveAsSupported = ref(false);
+    const showSharePopup = ref(false);
+    const sharePopupClosing = ref(false);
 
     const noMenuOpen = computed(() => { return (menuOpen.value == NO_MENU); });
     const navMenuOpen = computed(() => { return (menuOpen.value == NAVIGATION_MENU); });
@@ -52,16 +54,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     const resumeMenuOpen = computed(() => { return (menuOpen.value == RESUME_MENU); });
     const documentMetadataMenuOpen = computed(() => { return (menuOpen.value == DOCUMENT_METADATA_MENU); });
 
+    /** This returns true when the website data store is shown to be fully mounted. */
+    const fullyMounted = computed(() => { return (mounted.value >= 2); });
+
     /** This returns an integer representing the "Mode" of the website menu, altering its transitions and behaviors. */
     const websiteMenuMode = computed(() => { return ((styleStore.cssViewportWidth > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
     const websiteMenuTransition = computed(() => { return ("navMenu-transition_" + String(websiteMenuMode.value + 1)); });
     const websiteMenuHideOverflow = computed(() => { return (!noMenuOpen.value && websiteMenuMode.value == 1); });
 
-    const showSharePopup = ref(false);
-    const sharePopupClosing = ref(false);
     const showSharePopupImmediate = computed(() => {
         const data = (router.currentRoute.value.query.qrdata ?? null);
-        return (mounted.value >= 1.25 && data != null && typeof data === "string");
+        return (fullyMounted.value && data != null && typeof data === "string");
     });
 
     const wakeLockIcon = computed(() => {
@@ -143,13 +146,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         documentStore.mountDocumentStore();
         scriptsStore.mountScriptsStore();
 
-        resizePageComponents();
-        window.addEventListener("animation-resize", () => { resizePageComponents(); }, { signal });
+        onWebResize();
+        window.addEventListener("animation-resize", () => { onWebResize(); }, { signal });
         window.addEventListener("unhandledrejection", (event) => { onUnhandledRejection(event); }, { signal });
         window.addEventListener("keydown", (event) => { onKeyDown(event); }, { signal, capture: true });
 
         window.addEventListener("click", (event) => { onDocumentBodyClick(event); }, { signal });
-        document.addEventListener("fullscreenchange", () => { fullScreenStore.setFullScreenStatus(); }, { signal });
+        document.addEventListener("fullscreenchange", () => { onFullScreenModeChange(); }, { signal });
 
         mounted.value = 1.75;
         saveAsSupportedCheckInterval = setInterval(() => { setSaveAsSupported(); }, 1000);
@@ -167,13 +170,17 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         mounted.value = 0;
     }
 
-    /** This function checks if the website data store is partially mounted. */
-    function checkPartiallyMounted() { return (mounted.value >= 1.25); }
-
     /** This sets the size of crucial components within the website. */
-    function resizePageComponents() {
+    function onWebResize() {
         scriptsStore.closeLineOptions();
         documentStore.setContextMenuPageNumber(0);
+    }
+
+    /** This function runs when the "fullscreenchange" event is fired. */
+    function onFullScreenModeChange() {
+        fullScreenStore.setFullScreenStatus();
+        scrollStore.cancelAutoscroll();
+        documentStore.setCurrentObservedPage(1);
     }
 
     /**
@@ -420,13 +427,13 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(saveAsSupported.value !== newStatus) { saveAsSupported.value = newStatus; }
     }
 
-    return { mounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable,
+    return { mounted, fullyMounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable,
         copyImageSupported, copySvgSupported, saveAsSupported, menuOpen, noMenuOpen, navMenuOpen,
         compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
         shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
         setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick, setWebsiteMenuTransitionStyles,
-        shareText, shareLink, shareFile, mountStore, unmountStore, checkPartiallyMounted
+        shareText, shareLink, shareFile, mountStore, unmountStore
     }
 });

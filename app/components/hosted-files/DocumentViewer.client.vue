@@ -11,7 +11,7 @@
             </button>
 
             <div :class="[RENDERED_PDF_CLASS_NAME, ((pages > 1 && page.num != pages) ? 'multi-page' : '')]"
-                @contextmenu="(event) => { onPdfContentMenu(event, page.num); }">
+                @contextmenu="(event) => { onPdfContextMenu(event, page.num); }">
 
                 <canvas :id="('pdf_canvas_' + page.num)"></canvas>
                 <div v-if="annontations" class="textLayer" :id="('pdf_text_layer_' + page.num)"></div>
@@ -53,6 +53,7 @@ var eventAbortController = new AbortController();
 
 var pdfDocLoadingTask = null;
 var resizeTimeout = null;
+var pageObserverInterval = null;
 var bestPageRatio = 0;
 
 const router = useRouter();
@@ -75,18 +76,20 @@ const pageRefs = ref([]);
 const currentDocumentSize = ref(0);
 const currentPixelRatio = ref(1);
 
-// This observer tracks which page the user is currently viewing.
+/** This intersection observer tracks which page the user is currently viewing. */
 const pageObserver = useIntersectionObserver(pageRefs, (entry) => {
     for(let i = 0; i < entry.length; i++) {
         const entryItem = entry[i];
         const itemRatio = entryItem.intersectionRatio;
         const newPageNumber = parseInt(entryItem.target.getAttribute(CUSTOM_PARENT_PAGE_NUMBER_ATTRIBUTE));
 
+        // If another page is more visible that the current observed page or the ratio of the current observed page has changed, 
+        // this updates the necessary variables.
         if(itemRatio <= bestPageRatio && (newPageNumber != documentStore.currentObservedPage)) { continue; }
         bestPageRatio = itemRatio;
         documentStore.setCurrentObservedPage(newPageNumber);
     }
-}, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], immediate: false });
+}, { threshold: Array.from({ length: 10 }, (_, i) => { return ((i + 1) / 10); }), immediate: false });
 
 /** @type {import('vue').ShallowRef<import('pdfjs-dist').PDFDocumentProxy>} The pdf document loaded in by the viewer. */
 const pdfDoc = shallowRef(null);
@@ -112,6 +115,13 @@ onMounted(async() => {
         await renderPDF();
         if(renderAborted()) { return; }
 
+        // This sets an interval that will manually record the best observed page on the hosted document webpage twice a second.
+        if(pages.value > 1) {
+            pageObserverInterval = setInterval(() => { setVisiblePageManually(); }, 500);
+            signal.addEventListener("abort", () => { clearInterval(pageObserverInterval); }, { once: true });
+        }
+
+        // This sets event listeners to handle autoscroll, resize, and copy events.
         document.addEventListener("copy", (event) => { documentStore.onHostedDocumentPageCopy(event); }, { signal });
         window.addEventListener("mohit-hosted-document-resize", () => { resizePdfViewer(); }, { signal });
         window.addEventListener("mohit-pdf-destination-scroll", () => { scrollToCurrentPdfDest(false); }, { signal });
@@ -159,7 +169,8 @@ async function renderPDF() {
     if(renderAborted()) { return; }
 
     pages.value = numPages;
-    setInnerPagesArray(numPages);
+    documentStore.docLoaded.totalPages = numPages;
+    docPages.value = Array.from({ length: numPages }, (_, i) => { return { loaded: false, num: (i + 1), showAnnotations: true }; });
     if(numPages > 1) { pageObserver.resume(); }
 
     await nextTick();
@@ -292,8 +303,8 @@ async function renderPDF() {
             }
         }
 
-        // This sets that the page is fully loaded on the website. It holds the last page to add one more HTML attribute to annotations.
-        if(numPages > i) { setSingleDocLoaded(i - 1); }
+        // This sets that the page is fully rendered on the hosted document webpage.
+        if(documentStore.docLoaded.loadedPages < numPages) { documentStore.docLoaded.loadedPages++; }
     }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
@@ -310,14 +321,15 @@ async function renderPDF() {
 
     // This runs all the arrays of promises.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
+    documentStore.docLoaded.status = true;
+    scrollToCurrentPdfDest(true);
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     documentStore.setCurrentObservedPage(1);
-    setSingleDocLoaded(numPages - 1);
 
     if(renderAborted()) { return; }
-    await rerenderCanvases();
+    rerenderCanvases();
 }
 
 /** This function rerenders the canvases for the PDF. */
@@ -387,17 +399,6 @@ async function rerenderCanvases() {
     } catch(e) {}
 }
 
-/** This function checks if the render abort signal has been sent or not. */
-function renderAborted() {
-    return ((renderAbortController == null) ? false : renderAbortController.signal.aborted);
-}
-
-/** This function resizes all necessary components for the PDF Viewer when called. */
-function resizePdfViewer() {
-    if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
-    resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
-}
-
 /**
  * This function sets the scale factor for a specific rendered Pdf Page.
  * @param {Number} index The index of the page to set.
@@ -411,31 +412,45 @@ function setPdfPageScaleFactor(index = 1) {
     } catch(e) {}
 }
 
-/**
- * This function sets the internal array that records crucial data for each page in the PDF.
- * @param {Number} numPages The Number of pages.
- */
-function setInnerPagesArray(numPages = 0) {
-    if(numPages < 1) { return; }
-    documentStore.docLoaded.totalPages = numPages;
-    docPages.value = Array.from({ length: numPages }, (_, i) => { return { loaded: false, num: (i + 1), showAnnotations: true }; });
+/** This function checks if the render abort signal has been sent or not. */
+function renderAborted() {
+    return ((renderAbortController == null) ? false : renderAbortController.signal.aborted);
 }
 
-/**
- * This function sets a particular document component as loaded and only runs the main function once every doc is loaded.
- * @param {Number} index The index of the page being loaded starting from 0.
- */
-function setSingleDocLoaded(index = 1) {
-    docPages.value[index].loaded = true;
-    const totalPages = documentStore.docLoaded.totalPages;
-    var numPagesLoaded = 0;
+/** This function resizes all necessary components for the PDF Viewer when called. */
+function resizePdfViewer() {
+    if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+    resizeTimeout = setTimeout(() => { rerenderCanvases(); }, 250);
+}
 
-    for(let i = 0; i < docPages.value.length; i++) {
-        if(docPages.value[i].loaded) { numPagesLoaded++; }
+/** This function uses client rects to check which page is most visible.  */
+function setVisiblePageManually() {
+    const renderedPages = pageRefs.value;
+    const viewportHeight = styleStore.viewportHeight;
+
+    var newBestPageRatio = 0;
+    var newObservedPage = 1;
+
+    for(let i = 0; i < renderedPages.length; i++) {
+        if(newBestPageRatio == 1) { continue; }
+        const pageElementRect = renderedPages[i].getBoundingClientRect();
+        if(!Boolean(pageElementRect)) { continue; }
+
+        const rectTop = Math.max(pageElementRect.top, 0);
+        const rectBottom = Math.min(pageElementRect.bottom, viewportHeight);
+
+        if(rectTop > viewportHeight || rectBottom < 0) { continue; }
+        const pageRatio = (Math.abs(rectBottom - rectTop) / pageElementRect.height);
+        const roundedPageRatio = (Math.round(Math.min(1, Math.max(0, pageRatio)) * 100) / 100);
+
+        if(newBestPageRatio < roundedPageRatio) {
+            newBestPageRatio = roundedPageRatio;
+            newObservedPage = (i + 1);
+        }
     }
 
-    documentStore.docLoaded = { status: (numPagesLoaded >= totalPages), totalPages, loadedPages: numPagesLoaded }
-    if(documentStore.docLoaded.status) { scrollToCurrentPdfDest(true); }
+    bestPageRatio = newBestPageRatio;
+    documentStore.setCurrentObservedPage(newObservedPage);
 }
 
 /**
@@ -488,7 +503,7 @@ function onAnnotationClick(event) {
  * @param {PointerEvent} event The event fired by the action.
  * @param {Number} pageNum The number of the page that was clicked on.
  */
-async function onPdfContentMenu(event, pageNum = 1) {
+async function onPdfContextMenu(event, pageNum = 1) {
     /** @type {HTMLElement} The element that was clicked on. */
     const element = event.target;
     const selection = window.getSelection();
