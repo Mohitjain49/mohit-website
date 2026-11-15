@@ -352,7 +352,7 @@ export const useDocumentStore = defineStore("document-store", () => {
                             resolve(item);
                         },
                         (item = 0) => {
-                            customPrintRenderProgress.value = (Math.round(item * 100) / 100);
+                            customPrintRenderProgress.value = roundNumber(item, 2);
                             msPassed = 0;
                         }
                     );
@@ -941,7 +941,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function setDocumentLoadedPercent(newPercent = 0) {
         if((typeof newPercent !== "number") || Number.isNaN(newPercent)) { return; }
-        docLoadedPct.value = (Math.round(100 * Math.max(0, Math.min(100, newPercent))) / 100);
+        docLoadedPct.value = roundNumber(Math.max(0, Math.min(100, newPercent)));
     }
 
     /** This function returns if a document is NOT loaded on a document page. */

@@ -44,7 +44,7 @@ const thumbClasses = computed(() => { return ['inner', (scrollbarThumbPressed.va
 
 const closeSwipePercent = computed(() => {
     const rawDecimal = ((startY.value - mouseY.value) / closeSwipeThreshold.value);
-    return Math.max(0, Math.min(1, (Math.round(rawDecimal * 100) / 100)));
+    return roundNumber(Math.max(0, Math.min(1, rawDecimal)));
 });
 
 /** This is the style for the website menu scrollbar thumb. */
@@ -127,8 +127,8 @@ function changeElementsOnMenuDimensions(firstRun = false) {
 
     if(webMenuScrollable.value) {
         if(diffStatus) { websiteMenuElement.value.classList.add(OVERFLOW_SCROLL_CLASS); }
-        verticalScrollPercent.value = (Math.round((webMenuContents.scrollTop * 10000) / (scrollHeight - clientHeight)) / 100);
-        menuClientInView.value = (Math.round((clientHeight / scrollHeight) * 10000) / 100);
+        verticalScrollPercent.value = roundNumber((webMenuContents.scrollTop * 100) / (scrollHeight - clientHeight));
+        menuClientInView.value = roundNumber((clientHeight / scrollHeight) * 100);
     } else if(!webMenuScrollable.value && diffStatus) {
         websiteMenuElement.value.classList.remove(OVERFLOW_SCROLL_CLASS);
         verticalScrollPercent.value = 0;

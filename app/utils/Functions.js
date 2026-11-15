@@ -25,6 +25,19 @@ export async function waitTwoFrames() {
     return new Promise((resolve) => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(null); }); }); });
 }
 
+/**
+ * This function rounds a number to a certain amount of decimal points.
+ * @param {Number} num The number to round.
+ * @param {Number} decimalPoints The number of decimal points to round to. Must be an integer.
+ */
+export function roundNumber(num = 0, decimalPoints = 2) {
+    if((typeof num !== "number") || Number.isNaN(num)) { return num; }
+    if((typeof decimalPoints !== "number") || !Number.isInteger(decimalPoints)) { return num; }
+
+    const powerOfTen = Math.pow(10, decimalPoints);
+    return (Math.round(num * powerOfTen) / powerOfTen);
+}
+
 /** This function cuts a string to ensure it has the max length of characters. */
 export function truncate(str = "", maxLength = 80) {
     return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);

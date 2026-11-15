@@ -178,8 +178,8 @@ function onFsElementDimensionsChange(firstRun = false) {
         fsAtTop.value = (scrollTop <= 0);
         fsAtBottom.value = (scrollTop >= (scrollHeight - clientHeight));
 
-        verticalScrollPercent.value = (Math.round((scrollTop * 10000) / (scrollHeight - clientHeight)) / 100);
-        fsClientInView.value = (Math.round((clientHeight / scrollHeight) * 10000) / 100);
+        verticalScrollPercent.value = roundNumber((scrollTop * 100) / (scrollHeight - clientHeight));
+        fsClientInView.value = roundNumber((clientHeight / scrollHeight) * 100)
     } else if(!fsScrollable.value && diffStatus) {
         wholeFileInView.value = true;
         fsElementRaw.classList.add(NO_OVERFLOW_CLASS);

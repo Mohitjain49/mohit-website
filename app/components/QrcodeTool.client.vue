@@ -842,8 +842,8 @@ function setLinkTextScrollbar(firstRun = false) {
     const diffStatus = ((oldScrollStatus != linkTextScrollable.value) || firstRun);
 
     if(linkTextScrollable.value) {
-        linkTextScrollPercent.value = (Math.round((linkTextElement.scrollLeft * 10000) / (scrollWidth - clientWidth)) / 100);
-        linkTextinView.value = (Math.round((clientWidth / scrollWidth) * 10000) / 100);
+        linkTextScrollPercent.value = roundNumber((linkTextElement.scrollLeft * 100) / (scrollWidth - clientWidth));
+        linkTextinView.value = roundNumber((clientWidth / scrollWidth) * 100);
     } else if(!linkTextScrollable.value && diffStatus) {
         linkTextScrollPercent.value = 0;
         linkTextinView.value = 100;

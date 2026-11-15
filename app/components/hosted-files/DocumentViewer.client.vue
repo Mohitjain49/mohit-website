@@ -468,7 +468,7 @@ function setVisiblePageManually() {
 
         if(rectTop > viewportHeight || rectBottom < 0) { continue; }
         const pageRatio = (Math.abs(rectBottom - rectTop) / pageElementRect.height);
-        const roundedPageRatio = (Math.round(Math.min(1, Math.max(0, pageRatio)) * 100) / 100);
+        const roundedPageRatio = roundNumber(Math.min(1, Math.max(0, pageRatio)));
 
         if(newBestPageRatio < roundedPageRatio) {
             newBestPageRatio = roundedPageRatio;

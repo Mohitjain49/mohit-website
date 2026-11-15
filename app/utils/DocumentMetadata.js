@@ -61,7 +61,7 @@ export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
             pageCountAsString.value = String(pageCount.value);
             pageWidth.value = ((pageCount.value <= 0) ? 0 : (pdf.getPage(0).width / 72));
             pageHeight.value = ((pageCount.value <= 0) ? 0 : (pdf.getPage(0).height / 72));
-            pageHeightToWidthRatio.value = (Math.round((pageHeight.value * 1000) / pageWidth.value) / 1000);
+            pageHeightToWidthRatio.value = roundNumber((pageHeight.value / pageWidth.value), 4);
             pageOrientation.value = ((pageCount.value <= 0) ? "" : (pdf.getPage(0).isPortrait ? "Portrait" : "Landscape"));
             pageSize.value = String(pageWidth.value + " × " + pageHeight.value + " in (" + pageOrientation.value + ")");
 

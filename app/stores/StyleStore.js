@@ -386,8 +386,8 @@ export const useStyleStore = defineStore("style-store", () => {
             cssViewportHeight.value = viewportHeight.value;
         }
 
-        cssToWindowWidthRatio.value = (Math.round((cssViewportWidth.value * 10000) / viewportWidth.value) / 10000);
-        cssToWindowHeightRatio.value = (Math.round((cssViewportHeight.value * 10000) / viewportHeight.value) / 10000);
+        cssToWindowWidthRatio.value = roundNumber((cssViewportWidth.value / viewportWidth.value), 4);
+        cssToWindowHeightRatio.value = roundNumber((cssViewportHeight.value / viewportHeight.value), 4);
 
         const cssViewportWidthChanged = (cssViewportWidth.value !== oldCssViewportWidth);
         const cssViewportHeightChanged = (cssViewportHeight.value !== oldCssViewportHeight);
@@ -566,9 +566,9 @@ export const useStyleStore = defineStore("style-store", () => {
     /** This function sets the true viewport CSS variables. */
     function setTrueViewportVariables() {
         if(!validateClientMode()) { return; }
-        const vhNum = (Math.round(cssViewportHeight.value * 100) / 100);
-        const vwNum = (Math.round(cssViewportWidth.value * 100) / 100);
-        const dvrNum = (Math.round(recordedDevicePixelRatio.value * 100) / 100);
+        const vhNum = roundNumber(cssViewportHeight.value, 2);
+        const vwNum = roundNumber(cssViewportWidth.value, 2);
+        const dvrNum = roundNumber(recordedDevicePixelRatio.value, 2);
 
         document.documentElement.style.setProperty(TRUE_100VH_CSS_PROPERTY, (String(vhNum) + "px"));
         document.documentElement.style.setProperty(TRUE_100VW_CSS_PROPERTY, (String(vwNum) + "px"));
