@@ -3,7 +3,7 @@
     <div class="pdf-doc-mohit-container">
         <DocumentTopBar />
         <div class="pdf-page-innerContainer" v-for="page in docPages" :id="('page_' + page.num)" :page-num="page.num" ref="pageRefs">
-            <div v-if="!documentStore.docLoaded.status" class="pdf-doc-loadingCover">
+            <div v-if="!documentStore.docLoaded" class="pdf-doc-loadingCover">
                 <FontAwesomeIcon icon="fa-spinner" spin-pulse />
             </div>
             <button v-if="showDocumentShareWidgets" @click="openShare(page.num)" class="pdf-doc-linkBtn" :title="('Get A Link For Page ' + page.num + '.')">
@@ -97,7 +97,7 @@ const pages = ref(0);
 const docPages = ref([{ loaded: false, num: 0, showAnnotations: true }]);
 
 const showDocumentShareWidgets = computed(() => {
-    return (props.addShare && documentStore.docLoaded.status && (props.shareMinWidth <= styleStore.cssViewportWidth));
+    return (props.addShare && documentStore.docLoaded && (props.shareMinWidth <= styleStore.cssViewportWidth));
 });
 const showFsWebCover = computed(() => {
     if(!fullScreenSet.value) { return false; }
@@ -156,24 +156,30 @@ function getPageElement(index = 1) {
 async function renderPDF() {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
+    documentStore.setDocumentLoadedPercent(1);
     if(renderAborted()) { return; }
 
     const { getDocument, TextLayer, AnnotationLayer } = await import("pdfjs-dist");
     const { PDFLinkService, EventBus } = await import("pdfjs-dist/web/pdf_viewer.mjs");
+
     await documentStore.checkPdfjsWorker();
+    documentStore.setDocumentLoadedPercent(7);
     if(renderAborted()) { return; }
 
     pdfDocLoadingTask = getDocument({ url: props.url });
     pdfDoc.value = await pdfDocLoadingTask.promise;
     const numPages = pdfDoc.value.numPages;
+
+    documentStore.setDocumentLoadedPercent(16);
     if(renderAborted()) { return; }
 
     pages.value = numPages;
-    documentStore.docLoaded.totalPages = numPages;
+    documentStore.docTotalPages = numPages;
     docPages.value = Array.from({ length: numPages }, (_, i) => { return { loaded: false, num: (i + 1), showAnnotations: true }; });
     if(numPages > 1) { pageObserver.resume(); }
 
     await nextTick();
+    documentStore.setDocumentLoadedPercent(19);
     if(renderAborted()) { return; }
 
     /** This is a link service used by the annotation layers. */
@@ -184,6 +190,17 @@ async function renderPDF() {
     // This sets the initial document size for each PDF Page.
     currentDocumentSize.value = documentStore.customPdfWidth;
     currentPixelRatio.value = styleStore.recordedDevicePixelRatio;
+    const includeAnnotations = props.annontations;
+
+    documentStore.setDocumentLoadedPercent(20);
+    var currentProgress = 20;
+    const pointsPerTask = (80 / (numPages * (includeAnnotations ? 5 : 2)));
+
+    /** This adds to the progress on the PDF Render. */
+    function addProgressOnPageRender() {
+        currentProgress = (currentProgress + pointsPerTask);
+        documentStore.setDocumentLoadedPercent(currentProgress);
+    }
 
     /**
      * This function renders a singular page.
@@ -201,6 +218,7 @@ async function renderPDF() {
         // Sets a properly scaled viewport so it works on every necessary size.
         const viewport = page.getViewport({ scale: (currentDocumentSize.value / defaultViewport.width) });
         setPdfPageScaleFactor(i);
+        addProgressOnPageRender();
 
         /** @type {HTMLCanvasElement} This is the canvas element that stores the image layer of a rendered PDF page. */
         var canvas = document.getElementById("pdf_canvas_" + i);
@@ -222,8 +240,9 @@ async function renderPDF() {
 
         if(renderAborted()) { return; }
         await canvasRenderTask.promise;
+        addProgressOnPageRender();
 
-        if(props.annontations) {
+        if(includeAnnotations) {
             const textLayerDiv = document.getElementById('pdf_text_layer_'+ i);
             textLayerDiv.innerHTML = '';
             const textContent = await page.getTextContent({ includeMarkedContent: true });
@@ -236,6 +255,7 @@ async function renderPDF() {
             
             if(renderAborted()) { return; }
             await textRenderTask.render();
+            addProgressOnPageRender();
 
             textLayerDiv.style.setProperty("--min-font-size", 1);
             const annotationLayerDiv = document.getElementById('pdf_annotation_layer_' + i);
@@ -255,6 +275,8 @@ async function renderPDF() {
 
                 // Renders the annotation layer.
                 await annotationLayer.render({ annotations });
+                addProgressOnPageRender();
+
                 annotationLayerDiv.style.setProperty("--min-font-size", 1);
                 const annotationElements = annotationLayerDiv.children;
 
@@ -299,12 +321,13 @@ async function renderPDF() {
                 }
             } else {
                 // The annotation layer element for a specific page is hidden if that page does not need an annotation layer.
+                addProgressOnPageRender();
                 docPages.value[i - 1].showAnnotations = false;
             }
         }
 
-        // This sets that the page is fully rendered on the hosted document webpage.
-        if(documentStore.docLoaded.loadedPages < numPages) { documentStore.docLoaded.loadedPages++; }
+        // This sets that this page is fully rendered on the hosted document webpage.
+        addProgressOnPageRender();
     }
 
     /** @type {Array<Array<Promise>>} A 2D Array of page render tasks. */
@@ -321,12 +344,14 @@ async function renderPDF() {
 
     // This runs all the arrays of promises.
     for(let k = 0; k < numPromiseArrays; k++) { await Promise.all(pageRenderPromises[k]); }
-    documentStore.docLoaded.status = true;
-    scrollToCurrentPdfDest(true);
+    documentStore.docLoaded = true;
 
     // This sets the last page as loaded for the user.
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, false);
     documentStore.setCurrentObservedPage(1);
+
+    sleep(250).then(() => { documentStore.setDocumentLoadedPercent(0); });
+    scrollToCurrentPdfDest(true);
 
     if(renderAborted()) { return; }
     rerenderCanvases();
@@ -414,7 +439,9 @@ function setPdfPageScaleFactor(index = 1) {
 
 /** This function checks if the render abort signal has been sent or not. */
 function renderAborted() {
-    return ((renderAbortController == null) ? false : renderAbortController.signal.aborted);
+    const newStatus = ((renderAbortController == null) ? false : renderAbortController.signal.aborted);
+    if(newStatus) { documentStore.setDocumentLoadedPercent(0); }
+    return newStatus;
 }
 
 /** This function resizes all necessary components for the PDF Viewer when called. */

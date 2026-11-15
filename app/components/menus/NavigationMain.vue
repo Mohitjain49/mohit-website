@@ -1,5 +1,5 @@
 <template>
-<nav id="mohit-navBar" ref="navBar">
+<nav id="mohit-navBar">
     <Transition name="fade-exit-transition" fade>
         <div class="mohit-main-progressBar" v-if="scrollProgress.show">
             <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
@@ -128,7 +128,12 @@
     </div>
 </Transition>
 
-<div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons" ref="navWidgets">
+<div class="mohit-navBar-loadingCenter" v-if="showCenterLoadingBar">
+    <div class="mohit-navBar-loadingCenter-bar">
+        <div class="inner" :style="{ 'width': (String(documentStore.docLoadedPct) + '%') }"></div>
+    </div>
+</div>
+<div v-show="showNavLeftWidgets" class="mohit-navBar-status-icons">
     <button v-if="showWakeLockWidget" :title="webData.wakeLockTitle" v-pulse-loop
         @click="(event) => { webData.onWakeLockButtonClick(event); }"
         class="mohit-navBar-statusIcon wakelock">
@@ -144,13 +149,7 @@
         <font-awesome-icon icon="fa-rotate-right" />
     </button>
 </div>
-<div v-show="showNavRightWidgets" class="mohit-navBar-status-icons right" ref="shareWidget">
-    <div v-if="showLoadingDocsWidget" class="mohit-navBar-loadingWidget" title="Loading Document...">
-        <font-awesome-icon icon="fa-spinner" spin-pulse />
-        <span v-if="(documentStore.docLoaded.totalPages > 1)">
-            {{ documentStore.docLoaded.loadedPages + '/' + documentStore.docLoaded.totalPages }}
-        </span>
-    </div>
+<div v-show="showNavRightWidgets" class="mohit-navBar-status-icons right">
     <button v-if="showCopyLinkButton" @click="copyWebpageLink()"
         class="mohit-navBar-statusIcon share yellow"
         :title="(COPY_STATUS_TITLE[copyStatus] ?? 'Copy Webpage Link')"
@@ -192,9 +191,9 @@ const showWakeLockWidget = computed(() => {
 
 const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
 const showScriptOptionsBtn = computed(() => { return (scriptsStore.onScriptRoute && scriptsStore.scriptBlobCreated); });
-const showLoadingDocsWidget = computed(() => { return (!documentStore.docLoaded.status && documentStore.docLoaded.totalPages > 0); });
 const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
+const showCenterLoadingBar = computed(() => { return (documentStore.onDocumentRoute && (documentStore.docLoadedPct > 0) && webData.noMenuOpen); });
 const showNavLeftWidgets = computed(() => { return (isMounted.value && (showWakeLockWidget.value || resumeStore.queryOutOfSync)); });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.noMenuOpen || webData.websiteMenuMode == 1)); });
 

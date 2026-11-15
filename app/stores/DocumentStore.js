@@ -76,7 +76,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     const googleDrivePickerAPILoaded = ref(false);
     const googleDriveOptionAvailable = computed(() => { return (googleDriveOptAvailable.value >= 0); });
 
-    const docLoaded = ref({ status: false, totalPages: 0, loadedPages: 0 });
+    const docLoaded = ref(false);
+    const docTotalPages = ref(0);
+    const docLoadedPct = ref(0);
+
     const currentObservedPage = ref(-1);
     const contextMenuPageNumber = ref(0);
     const documentTopBarVisible = ref(false);
@@ -348,8 +351,8 @@ export const useDocumentStore = defineStore("document-store", () => {
                             renderComplete = false;
                             resolve(item);
                         },
-                        (item) => {
-                            customPrintRenderProgress.value = item;
+                        (item = 0) => {
+                            customPrintRenderProgress.value = (Math.round(item * 100) / 100);
                             msPassed = 0;
                         }
                     );
@@ -674,7 +677,10 @@ export const useDocumentStore = defineStore("document-store", () => {
     function unmountDocumentPage() {
         fullScreenStore.exitFullScreen();
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
-        docLoaded.value = { status: false, totalPages: 0, loadedPages: 0 };
+
+        docLoaded.value = false;
+        docTotalPages.value = 0;
+        docLoadedPct.value = 0;
 
         closeGooglePicker(false);
         setWindowSizeWatchers(false);
@@ -856,15 +862,15 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** This function lets a function wait for when the PDF Document is fully rendered on the webpage before performing its tasks. */
     async function awaitDocLoaded() {
         await new Promise(async (resolve, reject) => {
-            if(!onDocumentRoute.value || docLoaded.value.status) { resolve(null); }
+            if(!onDocumentRoute.value || docLoaded.value) { resolve(null); }
             var msPassed = 0;
 
-            while(msPassed < 10000 && !docLoaded.value.status) {
+            while(msPassed < 10000 && !docLoaded.value) {
                 await sleep(50);
                 msPassed += 50
             }
 
-            if(docLoaded.value.status) {
+            if(docLoaded.value) {
                 resolve(null);
             } else {
                 reject(new Error("Timeout Error"));
@@ -874,7 +880,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function sets the full screen mode for a document page. */
     async function toggleDocumentFullScreen() {
-        if(!import.meta.client || !docLoaded.value.status || fsStateChanging.value) { return; }
+        if(!import.meta.client || !docLoaded.value || fsStateChanging.value) { return; }
         const element = document.getElementById("mohit-hosted-document-page");
         if(!Boolean(element)) { return; }
 
@@ -910,7 +916,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {Number} pageNum The page number to check.
      */
     function checkValidPageNumber(pageNum = 1) {
-        return (pageNum >= 1 && pageNum <= docLoaded.value.totalPages && Number.isInteger(pageNum));
+        return (pageNum >= 1 && pageNum <= docTotalPages.value && Number.isInteger(pageNum));
     }
 
     /**
@@ -929,10 +935,20 @@ export const useDocumentStore = defineStore("document-store", () => {
         if(index == 0 || checkValidPageNumber(index)) { contextMenuPageNumber.value = index; }
     }
 
-    /** This function returns if a document is NOT loaded on a document page. */
-    function checkDocNotLoaded() { return (onDocumentRoute.value && !docLoaded.value.status); }
+    /**
+     * This function sets the percentage for how far the document has been rendered on the hosted document page.
+     * @param {Number} newPercent A number between 0 and 100 that tells how far the document has been loaded.
+     */
+    function setDocumentLoadedPercent(newPercent = 0) {
+        if((typeof newPercent !== "number") || Number.isNaN(newPercent)) { return; }
+        docLoadedPct.value = (Math.round(100 * Math.max(0, Math.min(100, newPercent))) / 100);
+    }
 
-    return { hostedDocuments, docLoaded, currentObservedPage, contextMenuPageNumber, documentScrollEventListenerEnabled, documentTopBarVisible,
+    /** This function returns if a document is NOT loaded on a document page. */
+    function checkDocNotLoaded() { return (onDocumentRoute.value && !docLoaded.value); }
+
+    return { hostedDocuments, docLoaded, docLoadedPct, docTotalPages, currentObservedPage, contextMenuPageNumber, documentScrollEventListenerEnabled,
+        documentTopBarVisible,
         googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
         currentDocumentBlobCreated, currentDocumentFileSize, documentLink, currentDocumentMetadataParsed,
         downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle, printCursor, customPrintCursor,
@@ -940,7 +956,7 @@ export const useDocumentStore = defineStore("document-store", () => {
         uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, customPrintRenderProgress, firstCustomPrintRender,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,
         downloadDoc, saveDoc, shareDoc, printDoc, callCustomPrint, requestGoogleToUploadDoc, onHostedDocumentPageKeydown, openMetadataMenuOnKeydown,
-        awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber,
+        awaitDocLoaded, toggleDocumentFullScreen, setPdfSize, scrollToPage, setCurrentObservedPage, setContextMenuPageNumber, setDocumentLoadedPercent,
         initGoogleTokenClient, initGooglePickerAPI, mountDocumentStore, mountDocumentPage, mountCustomDocumentPage, unmountDocumentPage,
         checkPdfjsWorker, getPdfjsStylesheet, getCurrentDocumentMetadata, checkValidPageNumber, checkDocNotLoaded, onHostedDocumentPageCopy
     }

@@ -23,7 +23,7 @@
                     @input="() => { onWidgetPageNumberChange(); }"
                     @keydown="(event) => { onPageNumberKeydown(event); }"
                 />
-                <span>{{ ('/ ' + documentStore.docLoaded.totalPages) }}</span>  
+                <span>{{ ('/ ' + documentStore.docTotalPages) }}</span>  
             </div>
             <button @click="navigatePage('up')" :title="nextPageScrollTitle" :class="getNavArrowClasses(onLastPage)">
                 <FontAwesomeIcon icon="fa-chevron-right" />
@@ -52,10 +52,10 @@ const fileOptionsTitle = computed(() => { return (onDocumentRoute.value ? "Open 
 const hfBottomBarVisible = useState("hosted-file-bottom-bar-visible", () => { return false; });
 const largeWindowWidth = computed(() => { return (onDocumentRoute.value && (styleStore.cssViewportWidth > (documentStore.customPdfWidth + 150))); });
 const showMinimizeWidget = computed(() => { return (fullScreenSet.value && (!hfBottomBarVisible.value || largeWindowWidth.value)); });
-const showPageNavigationWidget = computed(() => { return (onDocumentRoute.value && documentStore.docLoaded.status && (documentStore.docLoaded.totalPages > 1)); });
+const showPageNavigationWidget = computed(() => { return (onDocumentRoute.value && documentStore.docLoaded && (documentStore.docTotalPages > 1)); });
 
 const onFirstPage = computed(() => { return (currentObservedPage.value <= 1); });
-const onLastPage = computed(() => { return (currentObservedPage.value >= documentStore.docLoaded.totalPages); });
+const onLastPage = computed(() => { return (currentObservedPage.value >= documentStore.docTotalPages); });
 
 const previousPageScrollTitle = computed(() => {
     return (onFirstPage.value ? 'Cannot Scroll Before Page 1.' : ('Scroll To Page ' + (currentObservedPage.value - 1)));
@@ -105,7 +105,7 @@ function navigatePage(direction = "up") {
     if(direction === "up" && !onLastPage.value) {
         documentStore.scrollToPage(Math.max(1, (currentObservedPage.value + 1)));
     } else if(direction === "down" && !onFirstPage.value) {
-        documentStore.scrollToPage(Math.min(documentStore.docLoaded.totalPages, (currentObservedPage.value - 1)));
+        documentStore.scrollToPage(Math.min(documentStore.docTotalPages, (currentObservedPage.value - 1)));
     }
 }
 
@@ -116,7 +116,7 @@ function navigatePage(direction = "up") {
 function onWidgetPageNumberChange(strict = false) {
     if(widgetPageNumber.value === "") { return; }
     const editedNumber = Number(widgetPageNumber.value);
-    const maxNum = (strict ? documentStore.docLoaded.totalPages : 999);
+    const maxNum = (strict ? documentStore.docTotalPages : 999);
 
     if(!PAGE_NUMBER_REGEX.test(widgetPageNumber.value) || isNaN(editedNumber) || editedNumber > maxNum) {
         resetWidgetPageNumber();
@@ -148,7 +148,7 @@ function onPageNumberKeydown(event) {
         }
     } else if((key === "arrowup" || key === "w" || key === "arrowright" || key === "d") && !event.ctrlKey) {
         event.preventDefault();
-        if(widgetPageNumber.value < documentStore.docLoaded.totalPages) { widgetPageNumber.value++; }
+        if(widgetPageNumber.value < documentStore.docTotalPages) { widgetPageNumber.value++; }
         onWidgetPageNumberChange(false);
     } else if((key === "arrowdown" || key === "s" || key === "arrowleft" || key === "a")  && !event.ctrlKey) {
         event.preventDefault();
