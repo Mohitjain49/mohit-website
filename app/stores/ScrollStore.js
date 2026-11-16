@@ -30,7 +30,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     var hideScrollProgressTimeout = null;
 
     const webpageHeight = ref(0);
-    const scrollProgress = ref({ pct: 0, duration: 0, show: false, targetElement: null });
+    const scrollProgress = ref({ show: false, pct: 0, duration: 0 });
     const isAutoScrolling = computed(() => { return scrollProgress.value.show; });
 
     // If the height of the main element changed, lenis resizes itself.
@@ -48,7 +48,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
             clearInterval(calculateScrollInterval);
             calculateScrollInterval = null;
             cancelScrollTimeout = null;
-            scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null }
+            scrollProgress.value = { show: false, pct: 0, duration: 0 }
         }, 5000);
     });
 
@@ -162,22 +162,16 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 return;
             }
 
-            const initDuration = ((Math.abs(targetY - scrollY) / 4000) * styleStore.cssToWindowHeightRatio);
-            const finalDuration = clampNumber(initDuration, AUTOSCROLL_DURATION_MINIMUM, AUTOSCROLL_DURATION_MAXIMUM);
-
-            scrollProgress.value.targetElement = target;
-            scrollProgress.value.duration = finalDuration;
-            scrollStartTime = dayjs(new Date());
-
             var offset = 0;
+            const finalDuration = clampAndSetScrollDuration((Math.abs(targetY - scrollY) / 4000) * styleStore.cssToWindowHeightRatio);
             const addedScrollMargin = parseFloat(window.getComputedStyle(target).getPropertyValue('scroll-margin-top'));
 
             if(!isNaN(addedScrollMargin) && addedScrollMargin != 0) {
                 offset = (addedScrollMargin - (addedScrollMargin / styleStore.cssToWindowHeightRatio));
             }
 
-            sleep(finalDuration + 1005).then(() => { resolve("timed out."); });
-            sleep(50).then(() => {
+            sleep((finalDuration * 1000) + 1020).then(() => { resolve("timed out."); });
+            sleep(20).then(() => {
                 lenis.scrollTo(target, {
                     offset, duration: finalDuration, lock: true,
                     onStart: () => { setScrollInterval(0); },
@@ -190,9 +184,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /**
      * This function scrolls to the top of the webpage using Lenis.
      * @param {Boolean} instant If true, this function skips the animation and instantly takes the user to the top.
-     * @param {Number} delay How much time to delay the scroll before starting it.
      */
-    async function scrollToTop(instant = false, delay = 0) {
+    async function scrollToTop(instant = false) {
         return new Promise((resolve, reject) => {
             if(!verifyAutoscroll()) { reject("Autoscroll Unavailable"); }
             const scrollY = getScrollY();
@@ -203,21 +196,16 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 return;
             }
 
-            const duration = clampNumber(
-                ((scrollY / 4000) * styleStore.cssToWindowHeightRatio),
-                AUTOSCROLL_DURATION_MINIMUM,
-                AUTOSCROLL_DURATION_MAXIMUM
-            );
+            const duration = clampAndSetScrollDuration((scrollY / 4000) * styleStore.cssToWindowHeightRatio);
+            sleep((duration * 1000) + 1020).then(() => { resolve("timed out."); });
 
-            scrollProgress.value.duration = duration;
-            scrollStartTime = dayjs(new Date());
-
-            sleep(delay).then(() => { lenis.scrollTo("top", {
-                duration, lock: true, immediate: instant,
-                onStart: () => { setScrollInterval(0); },
-                onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
-            }); });
-            sleep(delay + duration + 1000).then(() => { resolve("timed out."); });
+            sleep(20).then(() => {
+                lenis.scrollTo("top", {
+                    duration, lock: true, immediate: instant,
+                    onStart: () => { setScrollInterval(0); },
+                    onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
+                });
+            });
         });
     }
 
@@ -236,18 +224,15 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 return;
             }
 
-            const initDuration = (Math.abs(targetY - scrollY) / 4000);
-            const finalDuration = clampNumber(initDuration, AUTOSCROLL_DURATION_MINIMUM, AUTOSCROLL_DURATION_MAXIMUM);
+            const finalDuration = clampAndSetScrollDuration(Math.abs(targetY - scrollY) / 4000);
+            sleep((finalDuration * 1000) + 1020).then(() => { resolve("timed out."); });
 
-            scrollProgress.value.targetElement = null;
-            scrollProgress.value.duration = finalDuration;
-            scrollStartTime = dayjs(new Date());
-
-            sleep(finalDuration + 1000).then(() => { resolve("timed out."); });
-            lenis.scrollTo(targetY, {
-                duration: finalDuration, lock: true,
-                onStart: () => { setScrollInterval(0); },
-                onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
+            sleep(20).then(() => {
+                lenis.scrollTo(targetY, {
+                    duration: finalDuration, lock: true,
+                    onStart: () => { setScrollInterval(0); },
+                    onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
+                });
             });
         });
     }
@@ -274,7 +259,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(calculateScrollInterval != null) { clearInterval(calculateScrollInterval); }
         if(hideScrollProgressTimeout != null) { clearTimeout(hideScrollProgressTimeout); }
         
-        scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
+        scrollProgress.value = { show: false, pct: 0, duration: 0 };
         calculateScrollInterval = null;
         hideScrollProgressTimeout = null;
 
@@ -311,10 +296,11 @@ export const useScrollStore = defineStore("scroll-store", () => {
             scrollProgress.value.pct = 150;
 
             hideScrollProgressTimeout = setTimeout(() => {
-                scrollProgress.value = { show: false, pct: 0, duration: 0, targetElement: null };
+                scrollProgress.value = { show: false, pct: 0, duration: 0 };
                 hideScrollProgressTimeout = null;
             }, 250);
         } else if(start == 0 && calculateScrollInterval == null) {
+            scrollStartTime = dayjs(new Date());
             calculateScrollInterval = setInterval(() => { calculateScrollProgress(); }, 10);
             scrollProgress.value.show = true;
         }
@@ -326,6 +312,16 @@ export const useScrollStore = defineStore("scroll-store", () => {
         const currentTime = dayjs(new Date());
         const msDiff = currentTime.diff(scrollStartTime, 'ms');
         scrollProgress.value.pct = roundNumber((Math.min(1000, (msDiff / scrollProgress.value.duration)) / 10), 2);
+    }
+
+    /**
+     * This function clamps, sets, and returns the new autoscroll duration for a new autoscroll call.
+     * @param {Number} initDuration The new, raw autoscroll duration.
+     */
+    function clampAndSetScrollDuration(initDuration = AUTOSCROLL_DURATION_MINIMUM) {
+        const finalDuration = roundNumber(clampNumber(initDuration, AUTOSCROLL_DURATION_MINIMUM, AUTOSCROLL_DURATION_MAXIMUM), 2);
+        scrollProgress.value.duration = finalDuration;
+        return finalDuration;
     }
 
     /** This easing function is used by Lenis to make cool animations. */
@@ -348,10 +344,9 @@ export async function goToPageSection(id = "start") {
 /**
  * This function scrolls to the top of the webpage.
  * @param {Boolean} instant If true, this function skips the animation and instantly takes the user to the top.
- * @param {Number} delay How much time to delay the scroll before starting it.
  */
-export async function scrollToTop(instant = false, delay = 0) {
-    return useScrollStore().scrollToTop(instant, delay);
+export async function scrollToTop(instant = false) {
+    return useScrollStore().scrollToTop(instant);
 }
 
 /**

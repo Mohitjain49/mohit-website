@@ -91,9 +91,9 @@ export default {
             } else if(checkDocumentScrollParams(to, from, documentStore)) {
                 window.dispatchEvent(new CustomEvent("mohit-pdf-destination-scroll", { cancelable: false }));
             } else if(!hashExists && differentPage) {
-                await scrollStore.scrollToTop(true, 0);
+                await scrollStore.scrollToTop(true);
             } else if(!differentPage) {
-                await scrollStore.scrollToTop(false, 0);
+                await scrollStore.scrollToTop(false);
             }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }

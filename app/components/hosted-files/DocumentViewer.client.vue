@@ -590,7 +590,7 @@ async function scrollToCurrentPdfDest(awaitScrollStore = false) {
         } else if(!Number.isNaN(hashPageNumber)) {
             documentStore.scrollToPage(hashPageNumber);
         } else {
-            scrollToTop(false, 10);
+            scrollToTop(false);
         }
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
