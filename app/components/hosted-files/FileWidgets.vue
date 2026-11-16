@@ -121,7 +121,7 @@ function onWidgetPageNumberChange(strict = false) {
     if(!PAGE_NUMBER_REGEX.test(widgetPageNumber.value) || isNaN(editedNumber) || editedNumber > maxNum) {
         resetWidgetPageNumber();
     } else {
-        widgetPageNumber.value = String(Math.max(1, (Math.min(maxNum, editedNumber.toFixed(0)))));
+        widgetPageNumber.value = clampNumber(editedNumber, 1, maxNum).toFixed(0);
     }
 }
 

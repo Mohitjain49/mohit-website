@@ -39,12 +39,10 @@ const menuClientInView = ref(0);
 /** @type {AbortController} This abort controller manages aborting the event listeners for this component. */
 var eventsAbortController = null;
 
-const closeSwipeThreshold = computed(() => { return Math.ceil(SWIPE_THRESHOLD / cssToWindowHeightRatio.value); });
 const thumbClasses = computed(() => { return ['inner', (scrollbarThumbPressed.value ? 'active' : '')]; });
-
+const closeSwipeThreshold = computed(() => { return Math.ceil(SWIPE_THRESHOLD / cssToWindowHeightRatio.value); });
 const closeSwipePercent = computed(() => {
-    const rawDecimal = ((startY.value - mouseY.value) / closeSwipeThreshold.value);
-    return roundNumber(Math.max(0, Math.min(1, rawDecimal)));
+    return roundNumber(clampNumber(((startY.value - mouseY.value) / closeSwipeThreshold.value), 0, 1));
 });
 
 /** This is the style for the website menu scrollbar thumb. */
@@ -127,8 +125,8 @@ function changeElementsOnMenuDimensions(firstRun = false) {
 
     if(webMenuScrollable.value) {
         if(diffStatus) { websiteMenuElement.value.classList.add(OVERFLOW_SCROLL_CLASS); }
-        verticalScrollPercent.value = roundNumber((webMenuContents.scrollTop * 100) / (scrollHeight - clientHeight));
-        menuClientInView.value = roundNumber((clientHeight / scrollHeight) * 100);
+        verticalScrollPercent.value = convertDecimalToPercent(webMenuContents.scrollTop / (scrollHeight - clientHeight));
+        menuClientInView.value = convertDecimalToPercent(clientHeight / scrollHeight);
     } else if(!webMenuScrollable.value && diffStatus) {
         websiteMenuElement.value.classList.remove(OVERFLOW_SCROLL_CLASS);
         verticalScrollPercent.value = 0;
@@ -233,7 +231,7 @@ function scrollWebMenuOnMouseMove(newY = 0, oldY = 0) {
 
     const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
     const newValue = (webMenuContents.scrollTop + (webMenuContents.scrollHeight / divisor));
-    webMenuContents.scrollTop = Math.max(0, Math.min((webMenuContents.scrollHeight - webMenuContents.clientHeight), newValue));
+    webMenuContents.scrollTop = clampNumber(newValue, 0, (webMenuContents.scrollHeight - webMenuContents.clientHeight));
 }
 
 /**

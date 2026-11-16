@@ -26,16 +26,12 @@ export async function waitTwoFrames() {
 }
 
 /**
- * This function rounds a number to a certain amount of decimal points.
- * @param {Number} num The number to round.
- * @param {Number} decimalPoints The number of decimal points to round to. Must be an integer.
+ * This function converts a decmial value to a percentage value.
+ * @param {Number} number The number to convert.
  */
-export function roundNumber(num = 0, decimalPoints = 2) {
-    if((typeof num !== "number") || Number.isNaN(num)) { return num; }
-    if((typeof decimalPoints !== "number") || !Number.isInteger(decimalPoints)) { return num; }
-
-    const powerOfTen = Math.pow(10, decimalPoints);
-    return (Math.round(num * powerOfTen) / powerOfTen);
+export function convertDecimalToPercent(number = 0) {
+    if((typeof number !== "number") || Number.isNaN(number)) { return number; }
+    return roundNumber((number * 100), 2);
 }
 
 /** This function cuts a string to ensure it has the max length of characters. */

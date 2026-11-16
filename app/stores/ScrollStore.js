@@ -7,6 +7,9 @@ import dayjs from "dayjs";
  * @see {@link https://easings.net/en | Easing Functions}
  */
 export const useScrollStore = defineStore("scroll-store", () => {
+    const AUTOSCROLL_DURATION_MINIMUM = 0.75;
+    const AUTOSCROLL_DURATION_MAXIMUM = 3.00;
+
     const webData = useWebsiteDataStore();
     const scriptsStore = useScriptsStore();
     const documentStore = useDocumentStore();
@@ -159,8 +162,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 return;
             }
 
-            const initDuration = (Math.abs(targetY - scrollY) / 4000);
-            const finalDuration = Math.max(0.75, Math.min((initDuration * styleStore.cssToWindowHeightRatio), 3));
+            const initDuration = ((Math.abs(targetY - scrollY) / 4000) * styleStore.cssToWindowHeightRatio);
+            const finalDuration = clampNumber(initDuration, AUTOSCROLL_DURATION_MINIMUM, AUTOSCROLL_DURATION_MAXIMUM);
 
             scrollProgress.value.targetElement = target;
             scrollProgress.value.duration = finalDuration;
@@ -200,7 +203,12 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 return;
             }
 
-            const duration = Math.max(0.75, Math.min(((scrollY / 4000) * styleStore.cssToWindowHeightRatio), 3));
+            const duration = clampNumber(
+                ((scrollY / 4000) * styleStore.cssToWindowHeightRatio),
+                AUTOSCROLL_DURATION_MINIMUM,
+                AUTOSCROLL_DURATION_MAXIMUM
+            );
+
             scrollProgress.value.duration = duration;
             scrollStartTime = dayjs(new Date());
 
@@ -229,7 +237,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
             }
 
             const initDuration = (Math.abs(targetY - scrollY) / 4000);
-            const finalDuration = Math.max(0.75, Math.min((initDuration), 3));
+            const finalDuration = clampNumber(initDuration, AUTOSCROLL_DURATION_MINIMUM, AUTOSCROLL_DURATION_MAXIMUM);
 
             scrollProgress.value.targetElement = null;
             scrollProgress.value.duration = finalDuration;
@@ -317,7 +325,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
         if(scrollStartTime == null) { return; }
         const currentTime = dayjs(new Date());
         const msDiff = currentTime.diff(scrollStartTime, 'ms');
-        scrollProgress.value.pct = (Math.min(1000, (msDiff / scrollProgress.value.duration)) / 10).toFixed(1);
+        scrollProgress.value.pct = roundNumber((Math.min(1000, (msDiff / scrollProgress.value.duration)) / 10), 2);
     }
 
     /** This easing function is used by Lenis to make cool animations. */

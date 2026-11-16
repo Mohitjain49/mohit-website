@@ -177,7 +177,7 @@ export const useAudioStore = defineStore("audio-store", () => {
      */
     function addToVolume(amount = 1) {
         const volumeInt = (parseInt(volumeInput.value) + amount);
-        volumeInput.value = String(Math.max(0, Math.min(100, volumeInt)));
+        volumeInput.value = String(clampNumber(volumeInt, 0, 100));
         changeAudioVolume();
     }
 

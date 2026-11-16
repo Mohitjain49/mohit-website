@@ -140,7 +140,7 @@ function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
 
     const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
     const newValue = (element.scrollTop + (element.scrollHeight / divisor));
-    element.scrollTop = Math.max(0, Math.min((element.scrollHeight - element.clientHeight), newValue));
+    element.scrollTop = clampNumber(newValue, 0, (element.scrollHeight - element.clientHeight));
 }
 
 /**
@@ -178,8 +178,8 @@ function onFsElementDimensionsChange(firstRun = false) {
         fsAtTop.value = (scrollTop <= 0);
         fsAtBottom.value = (scrollTop >= (scrollHeight - clientHeight));
 
-        verticalScrollPercent.value = roundNumber((scrollTop * 100) / (scrollHeight - clientHeight));
-        fsClientInView.value = roundNumber((clientHeight / scrollHeight) * 100)
+        verticalScrollPercent.value = convertDecimalToPercent(scrollTop / (scrollHeight - clientHeight));
+        fsClientInView.value = convertDecimalToPercent(clientHeight / scrollHeight);
     } else if(!fsScrollable.value && diffStatus) {
         wholeFileInView.value = true;
         fsElementRaw.classList.add(NO_OVERFLOW_CLASS);

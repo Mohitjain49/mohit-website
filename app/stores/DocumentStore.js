@@ -772,7 +772,7 @@ export const useDocumentStore = defineStore("document-store", () => {
             }
         }
 
-        if(!largeViewportHeight) { customPdfWidth.value = Math.min(maxWidth, Math.max(customPdfMinWidth.value, defaultPdfWidth)); }
+        if(!largeViewportHeight) { customPdfWidth.value = clampNumber(defaultPdfWidth, customPdfMinWidth.value, maxWidth); }
         customPdfWidth.value = Math.round(customPdfWidth.value);
         customPdfHeight.value = Math.round(customPdfWidth.value * scaleFactor);
 
@@ -941,7 +941,7 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function setDocumentLoadedPercent(newPercent = 0) {
         if((typeof newPercent !== "number") || Number.isNaN(newPercent)) { return; }
-        docLoadedPct.value = roundNumber(Math.max(0, Math.min(100, newPercent)));
+        docLoadedPct.value = clampNumber(newPercent, 0, 100);
     }
 
     /** This function returns if a document is NOT loaded on a document page. */
