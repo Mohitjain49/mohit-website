@@ -38,8 +38,8 @@
                 </button>
             </div>
 
-            <div v-if="(newResumeState || resumeStore.queryOutOfSync)" class="mohit-navMenu-opt-break"></div>
-            <div v-if="resumeStore.queryOutOfSync" class="mohit-navMenu-opt">
+            <div v-if="(newResumeState || resumeStore.showQueryReloadButton)" class="mohit-navMenu-opt-break"></div>
+            <div v-if="resumeStore.showQueryReloadButton" class="mohit-navMenu-opt">
                 <button class="mohit-navMenu-mainOpt" v-pulse-loop
                     @click="() => { reloadNuxtApp({ force: true }); }"
                     :style="getColorStyles('var(--blue-one)')">

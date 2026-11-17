@@ -142,12 +142,12 @@
             :icon="(webData.wakeLock.isActive ? 'fa-lock' : 'fa-unlock')"
         />
     </button>
-    <button v-if="resumeStore.queryOutOfSync" :title="RESUME_QUERY_UNSYNC_TITLE"
+    <AnimatedIconButton v-if="resumeStore.showQueryReloadButton" :title="RESUME_QUERY_UNSYNC_TITLE"
         @click="() => { reloadNuxtApp({ force: true }); }"
-        class="mohit-navBar-statusIcon resume-unsynced" v-pulse-loop>
-
-        <font-awesome-icon icon="fa-rotate-right" />
-    </button>
+        :class="['mohit-navBar-statusIcon', 'resume-unsynced']"
+        :faIcon="'fa-rotate-right'"
+        :hoverAnimation="'spin'"
+    />
 </div>
 <div v-show="showNavRightWidgets" class="mohit-navBar-status-icons right">
     <button v-if="showCopyLinkButton" @click="copyWebpageLink()"
@@ -194,7 +194,7 @@ const showScriptOptionsBtn = computed(() => { return (scriptsStore.onScriptRoute
 const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
 const showCenterLoadingBar = computed(() => { return (documentStore.onDocumentRoute && (documentStore.docLoadedPct > 0) && webData.noMenuOpen); });
-const showNavLeftWidgets = computed(() => { return (isMounted.value && (showWakeLockWidget.value || resumeStore.queryOutOfSync)); });
+const showNavLeftWidgets = computed(() => { return (isMounted.value && (showWakeLockWidget.value || resumeStore.showQueryReloadButton)); });
 const showNavRightWidgets = computed(() => { return (isMounted.value && (webData.noMenuOpen || webData.websiteMenuMode == 1)); });
 
 /** This is a reactive function that can be used to check if a string equals the curent router path. */

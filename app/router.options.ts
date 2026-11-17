@@ -97,6 +97,7 @@ export default {
             }
         } catch(e) {
             if(import.meta.dev) { console.error(e); }
+            firstScrollCall.value = false;
             pageFinishHookRunning.value = false;
             return false;
         }

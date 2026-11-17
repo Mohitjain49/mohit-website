@@ -556,14 +556,14 @@ async function onPdfContextMenu(event, pageNum = 1) {
  * @param {Number} y The Y coordinate in the page to scroll to.
  */
 function scrollToPdfDest(pageNumber = 1, y = 0) {
-    if(pageNumber < 1 || pageNumber > pages.value || y < 0) { return; }
+    if(!documentStore.checkValidPageNumber(pageNumber) || y < 0) { return; }
     const pageElement = getPageElement(pageNumber);
     const destY = (Math.abs(y - parseFloat(pageElement.getAttribute(CUSTOM_PDFJS_RAW_HEIGHT_ATTRIBUTE))));
     const destScalar = parseFloat(getComputedStyle(pageElement).getPropertyValue(PDFJS_SCALE_CSS_PROPERTY));
 
     const destPixels = (((destY * destScalar) - (fullScreenSet.value ? 20 : 90)) / styleStore.cssToWindowHeightRatio);
     const top = (pageElement.getBoundingClientRect().top + getScrollY() + destPixels);
-    scrollToTarget(top);
+    scrollStore.scrollToTarget(top);
 }
 
 /**
@@ -581,16 +581,16 @@ async function scrollToCurrentPdfDest(awaitScrollStore = false) {
         const validPageQuery = !Number.isNaN(pageQuery);
         const yQuery = (searchParams.has("y") ? parseFloat(searchParams.get("y")) : NaN);
 
-        if(linkUrl.hash === "#footer") {
-            goToPageSection("footer");
+        if(linkUrl.hash === "#footer" || linkUrl.hash === "#webpages") {
+            scrollStore.scrollToId("footer");
         } else if(validPageQuery && !Number.isNaN(yQuery)) {
             scrollToPdfDest(pageQuery, yQuery);
         } else if(validPageQuery) {
-            documentStore.scrollToPage(pageQuery);
-        } else if(!Number.isNaN(hashPageNumber)) {
-            documentStore.scrollToPage(hashPageNumber);
+            router.push(router.currentRoute.value.path + "#page_" + String(pageQuery));
+        } else if(!Number.isNaN(hashPageNumber) && documentStore.checkValidPageNumber(hashPageNumber)) {
+            scrollStore.scrollToId("page_" + String(hashPageNumber));
         } else {
-            scrollToTop(false);
+            scrollStore.scrollToTop(false);
         }
     } catch(e) {
         if(import.meta.dev) { console.error(e); }

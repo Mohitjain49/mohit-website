@@ -333,31 +333,5 @@ export const useScrollStore = defineStore("scroll-store", () => {
     }
 });
 
-/**
- * This scrolls to the section the visitor requested.
- * @param {String} id The element ID of the section.
- */
-export async function goToPageSection(id = "start") {
-    return useScrollStore().scrollToId(id);
-}
-
-/**
- * This function scrolls to the top of the webpage.
- * @param {Boolean} instant If true, this function skips the animation and instantly takes the user to the top.
- */
-export async function scrollToTop(instant = false) {
-    return useScrollStore().scrollToTop(instant);
-}
-
-/**
- * This function lets the user autoscroll to a defined target passed in by the user.
- * @param {Number} targetY The distance from the top the user should scroll from.
- */
-export async function scrollToTarget(targetY = 0) {
-    return useScrollStore().scrollToTarget(targetY);
-}
-
 /** This function returns a promise that resolves when the auto scroll is finished. */
-export async function waitForAutoScroll() {
-    return useScrollStore().waitForAutoScroll();
-}
+export async function waitForAutoScroll() { return useScrollStore().waitForAutoScroll(); }

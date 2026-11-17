@@ -26,9 +26,12 @@
             <a v-if="showOpenNewTabButton" :href="qrCodeLink" target="_blank" class="qrcode-mainPopup-btn white" :title="openNewTabButtonTitle">
                 <FontAwesomeIcon :icon="openNewTabButtonIcon" />
             </a>
-            <RouterLink v-if="showInternalNavLink" :to="internalShareLinkFullPath" class="qrcode-mainPopup-btn white">
+            <a v-if="showInternalNavLink" target="_self" :href="internalShareLinkFullPath" class="qrcode-mainPopup-btn white"
+                :title="internalShareLinkTitle"
+                @click="(event) => { navigateToInternalShareLink(event); }">
+
                 <FontAwesomeIcon icon="fa-diamond-turn-right" />
-            </RouterLink>
+            </a>
 
             <button @click="copyQRCodeLink()" class="qrcode-mainPopup-btn light" :title="copyLinkTitle" v-action-cursor="actions.copy">
                 <FontAwesomeActionIcon :baseIcon="'fa-link'" :status="actions.copy" />
@@ -179,6 +182,7 @@ const SHARE_IMAGE_TITLES = ["Share QR Code", "Sharing QR Code...", "QR Code Shar
 const router = useRouter();
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
+const resumeStore = useResumeStore();
 const linkTextRef = useTemplateRef('popup-shareLink');
 
 /** @type {Lenis} This lenis instance manages the autoscroll mechanic for the link. */
@@ -224,7 +228,7 @@ const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.
 const qrcodeImageCopySupported = computed(() => { return ((qrcodeImageMode.value == 0) ? webData.copyImageSupported : webData.copySvgSupported); });
 
 const { showSharePopupImmediate } = storeToRefs(webData);
-const { iframeSupported } = storeToRefs(useDocumentStore());
+const { iframeSupported, onResumeRoute } = storeToRefs(useDocumentStore());
 
 /** This is the link shown to the user with the share popup. */
 const qrCodeFormattedLink = computed(() => {
@@ -245,6 +249,8 @@ const linkTextScrollbarStyle = computed(() => {
 
 const shareLinkInternal = computed(() => { return qrCodeLink.value.startsWith(PERSONAL_WEBSITE_LINK); });
 const internalShareLinkFullPath = computed(() => { return (shareLinkInternal.value ? ("/" + qrCodeLink.value.replace(PERSONAL_WEBSITE_LINK, "")) : ""); });
+const internalShareLinkTitle = computed(() => { return ("Navigate To " + window.location.origin + internalShareLinkFullPath.value); });
+
 const showOpenNewTabButton = computed(() => { return (sharePopupMode.value == 2 && !shareLinkInternal.value && customLinkValid.value); });
 const showCustomLinkShare = computed(() => { return (webData.shareSupported && sharePopupMode.value == 2 && customLinkValid.value); });
 
@@ -495,7 +501,6 @@ function setImageTypesOptions(status = "toggle") {
     showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 2) ? -1 : 2) : (status ? 2 : -1));
 }
 
-
 /**
  * This function has the website focus on the QR Code.
  * @param {PointerEvent} event The click event.
@@ -511,6 +516,24 @@ function focusOnQrcode(event = undefined) {
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
+}
+
+/**
+ * This function lets the the user navigate to the internal share link if it is different from the share popup link.
+ * @param {PointerEvent} event the event fired by clicking the appropriate button.
+ */
+function navigateToInternalShareLink(event = null) {
+    if(!event) { return; }
+    event.preventDefault();
+    if(onResumeRoute.value) { resumeStore.willHandleOutOfSyncQuery = true; }
+
+    router.push(internalShareLinkFullPath.value).then(() => {
+        if(onResumeRoute.value && resumeStore.queryOutOfSync) {
+            reloadNuxtApp({ force: true });
+        } else {
+            resumeStore.willHandleOutOfSyncQuery = false;
+        }
+    });
 }
 
 /**
