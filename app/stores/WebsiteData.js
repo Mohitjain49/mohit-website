@@ -179,7 +179,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** This function runs when the "fullscreenchange" event is fired. */
     function onFullScreenModeChange() {
         fullScreenStore.setFullScreenStatus();
-        scrollStore.cancelAutoscroll();
+        scrollStore.onLenisFullScreenChange();
         documentStore.setCurrentObservedPage(1);
     }
 

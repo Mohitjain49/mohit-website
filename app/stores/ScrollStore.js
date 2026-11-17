@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 export const useScrollStore = defineStore("scroll-store", () => {
     const AUTOSCROLL_DURATION_MINIMUM = 0.75;
     const AUTOSCROLL_DURATION_MAXIMUM = 3.00;
+    const SLEEP_MS_BEFORE_SCROLL_CALL = 20;
 
     const webData = useWebsiteDataStore();
     const scriptsStore = useScriptsStore();
@@ -22,6 +23,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** @type {Lenis} This contains the Lenis object for autoscrolling. */
     var lenis = null;
     var animationFrame = null;
+    var fullScreenChangeTimeout = null;
 
     /** @type {dayjs.Dayjs} This represents the start time when the scrollTo function was successfully called. */
     var scrollStartTime = null;
@@ -35,9 +37,6 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     // If the height of the main element changed, lenis resizes itself.
     watch(webpageHeight, () => { if(mounted.value && lenis) { lenis.resize(); } });
-
-    // As the user switches between full screen mode and a normal mode, this makes sure that the lenis instance is properly set.
-    watch(fullScreenSet, () => { sleep(10).then(() => { setLenisInstance(); }); });
 
     // This sets a timeout to remotely cancel the autoscroll after 5 seconds to prevent errors in the website.
     watch(isAutoScrolling, (newValue) => {
@@ -91,7 +90,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     /** This function sets the lenis instance based on the full screen status. */
     function setLenisInstance() {
+        fullScreenChangeTimeout = null;
         if(!import.meta.client) { return; }
+
         const newWrapper = (fullScreenSet.value ? document.fullscreenElement : window);
         if(!newWrapper) { return; }
 
@@ -100,13 +101,13 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
         lenis = new Lenis({ wrapper: newWrapper, autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
         lenis.resize();
-        setScrollEL();
+        lenis.on("scroll", (lenisInstance) => { onLenisScroll(lenisInstance, "default"); });
     }
 
-    /** This function sets the Lenis scroll event listener. */
-    function setScrollEL() {
-        if(lenis == null) { return; }
-        lenis.on("scroll", (lenisInstance) => { onLenisScroll(lenisInstance, "default"); });
+    /** This function runs for the scroll store when the full screen status is changed for the website. */
+    function onLenisFullScreenChange() {
+        if(fullScreenChangeTimeout != null) { clearTimeout(fullScreenChangeTimeout); }
+        fullScreenChangeTimeout = setTimeout(() => { setLenisInstance(); }, 25);
     }
 
     /**
@@ -170,8 +171,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 offset = (addedScrollMargin - (addedScrollMargin / styleStore.cssToWindowHeightRatio));
             }
 
-            sleep((finalDuration * 1000) + 1020).then(() => { resolve("timed out."); });
-            sleep(20).then(() => {
+            sleep((finalDuration * 1000) + 1000 + SLEEP_MS_BEFORE_SCROLL_CALL).then(() => { resolve("timed out."); });
+            sleep(SLEEP_MS_BEFORE_SCROLL_CALL).then(() => {
                 lenis.scrollTo(target, {
                     offset, duration: finalDuration, lock: true,
                     onStart: () => { setScrollInterval(0); },
@@ -197,9 +198,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
             }
 
             const duration = clampAndSetScrollDuration((scrollY / 4000) * styleStore.cssToWindowHeightRatio);
-            sleep((duration * 1000) + 1020).then(() => { resolve("timed out."); });
+            sleep((duration * 1000) + 1000 + SLEEP_MS_BEFORE_SCROLL_CALL).then(() => { resolve("timed out."); });
 
-            sleep(20).then(() => {
+            sleep(SLEEP_MS_BEFORE_SCROLL_CALL).then(() => {
                 lenis.scrollTo("top", {
                     duration, lock: true, immediate: instant,
                     onStart: () => { setScrollInterval(0); },
@@ -225,9 +226,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
             }
 
             const finalDuration = clampAndSetScrollDuration(Math.abs(targetY - scrollY) / 4000);
-            sleep((finalDuration * 1000) + 1020).then(() => { resolve("timed out."); });
+            sleep((finalDuration * 1000) + 1000 + SLEEP_MS_BEFORE_SCROLL_CALL).then(() => { resolve("timed out."); });
 
-            sleep(20).then(() => {
+            sleep(SLEEP_MS_BEFORE_SCROLL_CALL).then(() => {
                 lenis.scrollTo(targetY, {
                     duration: finalDuration, lock: true,
                     onStart: () => { setScrollInterval(0); },
@@ -328,7 +329,8 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
     return { mounted, scrollProgress, isAutoScrolling, isScrolling,
-        mountScrollStore, unmountScrollStore, cancelAutoscroll, waitForAutoScroll, waitForMounted,
+        mountScrollStore, unmountScrollStore, cancelAutoscroll,
+        waitForAutoScroll, waitForMounted, onLenisFullScreenChange,
         scrollToId, scrollToTop, scrollToTarget, scrollByIncrement
     }
 });

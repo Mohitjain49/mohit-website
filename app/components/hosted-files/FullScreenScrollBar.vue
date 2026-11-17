@@ -1,5 +1,5 @@
 <template>
-<Transition name="fade-exit-transition" fade>
+<Transition name="fs-scroll-transition" fade>
     <div class="mohit-fs-autoscroll-progressBar" v-if="scrollProgress.show">
         <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
     </div>
@@ -368,24 +368,29 @@ function onScrollBarContextMenu(event) {
 
 .mohit-fs-autoscroll-progressBar {
     position: fixed;
-    top: 10px;
-    right: calc(50% - 102px);
-    width: 200px;
-    height: 10px;
-    background-color: black;
+    top: 0px;
+    left: 0px;
+    width: calc(100% - var(--custom-fs-scrollbar-width));
+    height: 8px;
+    background: #1C1C1C;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
-    border: 2px solid white;
-    border-radius: 7px;
-    box-shadow: 0px 0px 10px 2px black;
+    border-radius: 0px;
     overflow: hidden;
     z-index: 3000;
+    --fs-autoscroll-opacity: 0.75;
+    opacity: var(--fs-autoscroll-opacity);
 }
 .mohit-fs-autoscroll-progressBar > .inner {
     height: 100%;
     width: 100%;
+    border-radius: 0px;
     background: linear-gradient(to right, white 0%, var(--vibrant-flame) 100%);
 }
+
+.fs-scroll-transition-leave-active { transition: opacity 0.5s; }
+.fs-scroll-transition-leave-to { opacity: 0; }
+.fs-scroll-transition-leave-from { opacity: var(--fs-autoscroll-opacity); }
 </style>
