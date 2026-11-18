@@ -40,7 +40,6 @@ export const useScriptsStore = defineStore("scripts-store", () => {
     const styleStore = useStyleStore();
     const scrollStore = useScrollStore();
 
-    const mounted = ref(false);
     const wrapCode = ref(false);
     const fsStateChanging = ref(false);
     const maxLinesInScript = ref(Number.MAX_SAFE_INTEGER);
@@ -240,14 +239,8 @@ export const useScriptsStore = defineStore("scripts-store", () => {
      * ------------------------------------------------------------------------------------
      */
 
-    /**
-     * This function mounts the scripts store so the website can properly use it.
-     * It also sets a function for the window to open options for each line of code displayed.
-     */
-    function mountScriptsStore() {
-        for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }
-        mounted.value = true;
-    }
+    /** This function mounts the scripts store so the website can properly use it. */
+    function mountScriptsStore() { for(let i = 0; i < scripts.length; i++) { scripts[i].initBlob(); }}
 
     /**
      * This function mounts a page that hosts a script.
@@ -593,7 +586,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, mounted, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
+    return { scripts, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
         scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus, downloadTitle, saveScriptTitle, copyTitle,
         currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement, scriptTopBarVisible,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen, checkLineNumber,

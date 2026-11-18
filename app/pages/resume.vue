@@ -3,7 +3,7 @@
 </style>
 
 <template>
-<DocumentViewer v-if="(resumeStore.blobCreated == 2)"
+<DocumentViewer v-if="resumeStore.showDocumentViewer"
     :url="resumeStore.objectUrl"
     :shareMinWidth="0"
     :addShare="false"

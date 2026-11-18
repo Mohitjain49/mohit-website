@@ -3,8 +3,8 @@
 </style>
 
 <template>
-<DocumentViewer v-if="documentStore.hostedDocuments[index].blobCreated"
-    :url="documentStore.hostedDocuments[index].objectUrl"
+<DocumentViewer v-if="documentStore.showDocumentViewer"
+    :url="documentStore.currentDocumentObjectUrl"
     :shareMinWidth="0"
     :addShare="(index == 1)"
     :annontations="true"

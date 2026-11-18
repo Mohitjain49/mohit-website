@@ -1,5 +1,5 @@
 <template>
-<div v-if="scriptsStore.scriptBlobCreated" ref="script-top-bar" class="mohit-main-script-top">
+<div v-if="webData.fullyMounted" ref="script-top-bar" class="mohit-main-script-top">
     <div class="mohit-main-script-top-sideSection">
         <div class="mohit-main-script-top-group">
             <button class="script-save-opt" @click="scriptsStore.downloadScript()"

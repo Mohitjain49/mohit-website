@@ -184,13 +184,14 @@ onAfterMounted(() => { leftNavWidgetsVisible.value = showNavLeftWidgets.value; }
 const routePath = computed(() => { return router.currentRoute.value.path; });
 const footerRoute = computed(() => { return (topPath.value + (webData.webFooterVisibility ? '' :'#footer')); });
 
+/** This determines if the wake lock widget should be shown. It indicates if the wake lock is set on the website. */
 const showWakeLockWidget = computed(() => {
     const isActive = webData.wakeLock.isActive;
     return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
 });
 
-const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.currentDocumentBlobCreated); });
-const showScriptOptionsBtn = computed(() => { return (scriptsStore.onScriptRoute && scriptsStore.scriptBlobCreated); });
+const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.showDocumentViewer); });
+const showScriptOptionsBtn = computed(() => { return (scriptsStore.onScriptRoute && webData.fullyMounted); });
 const showCopyLinkButton = computed(() => { return (webData.compassMenuAvailable || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
 const showCenterLoadingBar = computed(() => { return (documentStore.onDocumentRoute && (documentStore.docLoadedPct > 0) && webData.noMenuOpen); });

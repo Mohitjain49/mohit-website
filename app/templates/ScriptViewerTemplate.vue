@@ -4,7 +4,7 @@
 
 <template>
 <main id="script-page" class="personal-web-body">
-    <div id="mohit-main-script" :class="['mohit-main-script', (webData.fullyMounted ? 'client-margin-top' : '')]">
+    <div id="mohit-main-script" :class="['mohit-main-script', (webData.fullyMounted ? 'client-mode' : '')]">
         <ScriptTopBar />
         <div ref="script-html" class="code-file-inHTML" v-html="html"></div>
         <HostedFileBottomBar v-if="fullScreenStore.fullScreenSet" />
@@ -16,7 +16,7 @@
         <VolumeWidget />
     </template>
 
-    <template v-if="scriptsStore.scriptBlobCreated">
+    <template v-if="webData.fullyMounted">
         <FileWidgets />
         <ScriptLineOptions />
         <ScriptsMenu />

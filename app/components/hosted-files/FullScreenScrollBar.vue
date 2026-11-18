@@ -1,6 +1,6 @@
 <template>
 <Transition name="fs-scroll-transition" fade>
-    <div class="mohit-fs-autoscroll-progressBar" v-if="scrollProgress.show">
+    <div v-if="scrollProgress.show" :class="['mohit-fs-autoscroll-progressBar', (onTouchScreen ? 'touch' : '')]">
         <div class="inner" :style="('width:' + scrollProgress.pct + '%')"></div>
     </div>
 </Transition>
@@ -304,6 +304,8 @@ function onScrollBarContextMenu(event) {
 .mohit-scrollBar.touch {
     background-color: #1C1C1C00;
     width: 10px;
+    height: calc(100% - 8px);
+    top: 4px;
 }
 
 .mohit-scrollBar-body {
@@ -371,7 +373,7 @@ function onScrollBarContextMenu(event) {
     top: 0px;
     left: 0px;
     width: calc(100% - var(--custom-fs-scrollbar-width));
-    height: 8px;
+    height: 4px;
     background: #1C1C1C;
     display: flex;
     justify-content: flex-start;
@@ -382,6 +384,7 @@ function onScrollBarContextMenu(event) {
     z-index: 3000;
     --fs-autoscroll-opacity: 0.75;
     opacity: var(--fs-autoscroll-opacity);
+    &.touch { width: 100%; }
 }
 .mohit-fs-autoscroll-progressBar > .inner {
     height: 100%;

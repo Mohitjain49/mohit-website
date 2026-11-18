@@ -12,7 +12,8 @@ export const WEBSITE_MENUS = [
 export const useWebsiteDataStore = defineStore("web-data", () => {
     const router = useRouter();
 
-    var controller = new AbortController();
+    /** @type {AbortController} This abort controller manages event listeners and unmounting functions called in this store. */
+    var controller = null;
     var wakeLockTimeout = null;
     var sharePopupClosingTimeout = null;
     var saveAsSupportedCheckInterval = null;
@@ -136,13 +137,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         mounted.value = 1.25;
         copyImageSupported.value = ClipboardItem.supports("image/png");
         copySvgSupported.value = ClipboardItem.supports("image/svg+xml");
+
+        setMainAbortController(true);
         const signal = controller.signal;
 
         await styleStore.mountStyleStore();
+        signal.addEventListener("abort", () => { styleStore.unmountStyleStore(); }, { once: true });
         mounted.value = 1.5;
 
-        audioStore.setupClickAudio();
         scrollStore.mountScrollStore();
+        signal.addEventListener("abort", () => { scrollStore.unmountScrollStore(); }, { once: true });
+
+        audioStore.setupClickAudio();
         documentStore.mountDocumentStore();
         scriptsStore.mountScriptsStore();
 
@@ -165,9 +171,18 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** This function unmounts the website data store. */
     function unmountStore() {
         if(mounted.value != 2) { return; }
-        controller.abort();
-        controller = new AbortController();
+        setMainAbortController(false);
         mounted.value = 0;
+    }
+
+    /**
+     * This function sets the main abort controller used by the webpage.
+     * @param {Boolean} status The new status of the abort controller.
+     */
+    function setMainAbortController(status) {
+        if(!import.meta.client || !window) { return; }
+        if(controller != null) { controller.abort(); }
+        controller = (status ? new AbortController() : null);
     }
 
     /** This sets the size of crucial components within the website. */

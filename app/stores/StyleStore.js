@@ -133,6 +133,22 @@ export const useStyleStore = defineStore("style-store", () => {
         mounted.value = true;
     }
 
+    /** This function unmounts the style store. */
+    function unmountStyleStore() {
+        if(!mounted.value) { return; }
+        setTouchScreenMediaWatcher(false);
+        stopViewportRaf();
+
+        disableDynamicZoomFactor();
+        disableCssLayoutObserver();
+        disableTrueViewportVariables();
+        disableBreakpoints();
+        disableMousePositionRecorder();
+
+        // Sets the store as unmounted.
+        mounted.value = false;
+    }
+
     /** This function gets the layout element so it can be used by many of this store's various features. */
     function setCssLayoutElement() { layoutElement.value = document.getElementById(CSS_LAYOUT_ID); }
 
@@ -819,7 +835,7 @@ export const useStyleStore = defineStore("style-store", () => {
         onTouchScreen, viewportRafRanOnce, breakpointsEnabled, trueViewportVariablesEnabled, touchScreenWatcherEnabled,
         mousePositionRecorderEnabled, viewportRafEnabled, cssLayoutObserverEnabled, viewportWidth, viewportHeight,
         recordedDevicePixelRatio, cssViewportWidth, cssViewportHeight, cssToWindowWidthRatio, cssToWindowHeightRatio, 
-        mountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray, waitForFirstViewportCalculation,
+        mountStyleStore, unmountStyleStore, setHideOverflowArray, setHideCursorArray, setDisableUserSelectArray, waitForFirstViewportCalculation,
         enableTrueViewportVariables, disableTrueViewportVariables, resetTrueViewportVariables,
         enableDynamicZoomFactor, disableDynamicZoomFactor, resetDynamicZoomFactor,
         enableMousePositionRecorder, disableMousePositionRecorder, resetMousePositionRecorder,

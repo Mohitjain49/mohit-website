@@ -22,6 +22,7 @@ export const useResumeStore = defineStore("resume-store", () => {
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
 
+    const showDocumentViewer = computed(() => { return (blobCreated.value == 2 && documentStore.windowSizeWatchersEnabled); });
     const showQueryReloadButton = computed(() => { return (queryOutOfSync.value && !willHandleOutOfSyncQuery.value); });
 
     // This watcher runs a function to check if the resume customization options are in sync or not.
@@ -244,7 +245,7 @@ export const useResumeStore = defineStore("resume-store", () => {
         return newResumeBlob;
     }
    
-    return { blob, objectUrl, blobCreated, qrcodeAdded, linksRemoved,
+    return { blob, objectUrl, blobCreated, showDocumentViewer, qrcodeAdded, linksRemoved,
         queryOutOfSync, willHandleOutOfSyncQuery, showQueryReloadButton,
         mountResumePage, unmountResumePage, initBlob, deleteCurrentBlob, resetBlob, setResumeQuery
     }

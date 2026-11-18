@@ -90,7 +90,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const onFirefox = ref(false);
     const onSafari = ref(false);
     const iframeSupported = ref(false);
-    const confirmedImageTypes = ref(["image/png"]);
+    const windowSizeWatchersEnabled = ref(false);
     const documentScrollEventListenerEnabled = ref(false);
 
     const customPdfWidth = ref(DEFAULT_PDF_MAX_WIDTH);
@@ -123,10 +123,13 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     const currentDocumentRoute = computed(() => { return hostedDocuments.findIndex((item) => { return item.checkPath(routePath.value) }); });
     const currentDocumentBlobCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].blobCreated.value : false); });
+    const currentDocumentObjectUrl = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].objectUrl.value : ""); });
     const currentDocumentFileSize = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].fileSize.value : ""); });
     const currentDocumentMetadataParsed = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].metadataParsed.value : false); });
     const currentDocumentPrintHtmlCreated = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].printHtmlCreated.value : false); });
+
     const documentLink = computed(() => { return (onDocumentRoute.value ? hostedDocuments[currentDocumentRoute.value].link.value : ""); });
+    const showDocumentViewer = computed(() => { return (windowSizeWatchersEnabled.value && currentDocumentBlobCreated.value); });
 
     const onResumeRoute = computed(() => { return hostedDocuments[0].onRoute.value; });
     const onCreateGithubRepoRoute = computed(() => { return hostedDocuments[1].onRoute.value; });
@@ -651,13 +654,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = 1;
         tempCanvas.height = 1;
-
-        confirmedImageTypes.value = [];
-        for(let i = 0; i < POSSIBLE_IMAGE_TYPES.length; i++) {
-            const possibleMimeType = POSSIBLE_IMAGE_TYPES[i];
-            const tempDataUrl = tempCanvas.toDataURL(possibleMimeType);
-            if(tempDataUrl.startsWith(`data:${possibleMimeType}`)) { confirmedImageTypes.value.push(possibleMimeType); }
-        }
     }
 
     /** This function mounts a page that hosts a document. */
@@ -698,8 +694,6 @@ export const useDocumentStore = defineStore("document-store", () => {
         customPdfMaxWidth.value = maxWidth;
         customPdfMinWidth.value = minWidth;
         customPdfScaleFactor.value = scaleFactor;
-
-        setPdfSize();
         setWindowSizeWatchers(true);
     }
 
@@ -788,13 +782,19 @@ export const useDocumentStore = defineStore("document-store", () => {
     function setWindowSizeWatchers(status = false) {
         if(!import.meta.client) { return; }
         if(pdfDimensionsController != null) { pdfDimensionsController.abort(); }
-        pdfDimensionsController = (status ? new AbortController() : null);
        
-        if(!status) { return; }
-        const signal = pdfDimensionsController.signal;
+        if(status) {
+            setPdfSize();
+            pdfDimensionsController = new AbortController();
+            const signal = pdfDimensionsController.signal;
 
-        window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal });
-        document.addEventListener("fullscreenchange", () => { sleep(25).then(() => { setPdfSize(); }); }, { signal });
+            window.addEventListener("animation-resize", () => { setPdfSize(); }, { signal });
+            document.addEventListener("fullscreenchange", () => { sleep(25).then(() => { setPdfSize(); }); }, { signal });
+            windowSizeWatchersEnabled.value = true;
+        } else {
+            pdfDimensionsController = null;
+            windowSizeWatchersEnabled.value = false;
+        }
     }
     
     /**
@@ -948,9 +948,8 @@ export const useDocumentStore = defineStore("document-store", () => {
     function checkDocNotLoaded() { return (onDocumentRoute.value && !docLoaded.value); }
 
     return { hostedDocuments, docLoaded, docLoadedPct, docTotalPages, currentObservedPage, contextMenuPageNumber, documentScrollEventListenerEnabled,
-        documentTopBarVisible,
-        googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, confirmedImageTypes,
-        currentDocumentBlobCreated, currentDocumentFileSize, documentLink, currentDocumentMetadataParsed,
+        documentTopBarVisible, googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, windowSizeWatchersEnabled,
+        currentDocumentObjectUrl, currentDocumentFileSize, documentLink, currentDocumentMetadataParsed, showDocumentViewer,
         downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle, printCursor, customPrintCursor,
         documentDownloadStatus, documentSaveStatus, documentShareStatus, documentPrintStatus, documentCustomPrintStatus,
         uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, customPrintRenderProgress, firstCustomPrintRender,
@@ -978,12 +977,12 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     /** @type {import('vue').ShallowRef<Blob>} This Blob represents the raw data of the file passed in. */
     const blob = shallowRef(null);
     const objectUrl = shallowRef("");
+    const blobCreated = shallowRef(false);
 
     /** @type {import('vue').ShallowRef<Blob>} This is HTML text used for the custom print functionality to speed up repeated calls. */
     const printHtml = shallowRef(null);
 
     const onRoute = computed(() => { return checkPath(router.currentRoute.value.path); });
-    const blobCreated = computed(() => { return (blob.value != null && objectUrl.value !== ""); });
     const printHtmlCreated = computed(() => { return (printHtml.value != null); });
     const metadataParsed = computed(() => { return (metadata.metadataReceived.value); });
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
@@ -999,6 +998,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
 
         changeLink("default");
         await metadata.parsePdf();
+        blobCreated.value = true;
     }
 
     /** This function deletes the current blob used by the website. */
@@ -1009,6 +1009,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         blob.value = null;
         printHtml.value = null;
         objectUrl.value = "";
+        blobCreated.value = false;
 
         metadata.setDefaultValues();
         changeLink("default");
@@ -1025,6 +1026,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
         
         changeLink("default");
         await metadata.parsePdf();
+        blobCreated.value = true;
     }
 
     /**
