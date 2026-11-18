@@ -41,9 +41,7 @@ var eventsAbortController = null;
 
 const thumbClasses = computed(() => { return ['inner', (scrollbarThumbPressed.value ? 'active' : '')]; });
 const closeSwipeThreshold = computed(() => { return Math.ceil(SWIPE_THRESHOLD / cssToWindowHeightRatio.value); });
-const closeSwipePercent = computed(() => {
-    return roundNumber(clampNumber(((startY.value - mouseY.value) / closeSwipeThreshold.value), 0, 1));
-});
+const closeSwipePercent = computed(() => { return roundAndClampDecimal((startY.value - mouseY.value) / closeSwipeThreshold.value); });
 
 /** This is the style for the website menu scrollbar thumb. */
 const scrollbarThumbStyle = computed(() => {
