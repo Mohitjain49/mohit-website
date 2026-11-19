@@ -179,7 +179,7 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
 
 // This mounts the contact page by setting its animations and event listeners.
 /** */
-const isMounted = onMountedAdvanced(() => {
+const isMounted = onAfterMounted(() => {
     manageSocialTabGlow();
     audioStore.changeSTTUpdateFunc((str) => { msgMain.value += str; });
 
@@ -188,11 +188,6 @@ const isMounted = onMountedAdvanced(() => {
         (event) => { onContactPageKeydown(event); },
         { signal: contactAbortController.signal, capture: true }
     );
-    if(getCssInnerWidth() <= 525 || routeHash.value !== "") { return; }
-
-    const contactBoxes = document.getElementsByClassName("contact-me-box");
-    contactBoxes.item(0)?.classList.add("animate__animated", "animate__fadeInDown");
-    contactBoxes.item(1)?.classList.add("animate__animated", "animate__fadeInDown");
 });
 
 // This unmounts the contact page.

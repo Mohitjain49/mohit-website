@@ -10,9 +10,7 @@
 </template>
 
 <script setup>
-import '~build/console';
 const LOADING_BAR_COLOR = "linear-gradient(to right, var(--blue-one) 0%, var(--blue-two) 100%)";
-
 const webData = useWebsiteDataStore();
 const fullScreenSet = getFullScreenSet();
 

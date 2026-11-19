@@ -5,9 +5,8 @@ import dayjs from "dayjs"
 /**
  * This utility gathers the metadata for a PDF and ensures that the website can use it.
  * @param {import('vue').ShallowRef<String>} objectUrl A reference Object URL representing the document.
- * @param {Boolean} onMounted If true (which is by default), this function runs the "parsePDF" function when initialized.
  */
-export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
+export function usePdfMetadata(objectUrl = shallowRef(null)) {
     const metadataReceived = shallowRef(false);
     const parsingPdf = shallowRef(false);
 
@@ -129,11 +128,6 @@ export function usePdfMetadata(objectUrl = shallowRef(null), onMounted = true) {
         if(!objectUrl.value || objectUrl.value === "") { return; }
         return await parsePdf();
     }
-
-    // Sets Hooks that will run the parse function.
-    if(onMounted) { parsePdf(); }
-    watch(objectUrl, () => { reset(); });
-    if(getCurrentInstance() && onMounted) { onMountedAdvanced(() => { parsePdf(); }); }
 
     return { parsePdf, setDefaultValues, reset, metadataReceived, parsingPdf, title, author, subject,
         dateCreated, dateModified, application, producer, keywords, keywordsAsOne, pdfVersion, pageCount,  pageCountAsString,

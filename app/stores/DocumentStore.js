@@ -988,7 +988,7 @@ function useHostedDocument(path = "/", file = "", name = "", suffix = ".pdf", or
     const fileSize = computed(() => { return (blobCreated.value ? prettyBytes(blob.value.size, { binary: true }) : ""); });
 
     /** This is the metadata provided by the document. */
-    const metadata = usePdfMetadata(objectUrl, false);
+    const metadata = usePdfMetadata(objectUrl);
 
     /** This functions initializes the blob value for this hosted document. */
     async function initBlob() {

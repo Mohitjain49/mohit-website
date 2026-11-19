@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { readFileSync } from "node:fs";
 import { globSync } from 'fast-glob';
 
 import { addComponent } from "@nuxt/kit";
@@ -8,6 +9,8 @@ import type { Plugin } from "vite";
 // import pwaConfig from "./pwa.config";
 import usePageTemplates from "./page-templates.config";
 
+/** This is my website's version number. */
+const VERSION_NUMBER: string = JSON.parse(readFileSync("./package.json", "utf8")).version;
 const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
 
@@ -28,7 +31,7 @@ const SITEMAP_EXCLUDED_ROUTES = [
 
 /** This is a list of all the TypeScript dependencies used to make developing code easier. */
 const TS_TYPES = [
-    'unplugin-info/client', '@types/node', '@types/validator', '@types/lodash-es',
+    '@types/node', '@types/validator', '@types/lodash-es',
     '@types/google.picker', '@types/google.accounts', '@types/gapi',
     '@types/wicg-file-system-access'
 ];
@@ -74,9 +77,8 @@ export default defineNuxtConfig({
         }
     },
     modules: [
-        '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/fonts', "@comark/vue",
-        '@nuxtjs/sitemap', '@nuxtjs/robots', 'unplugin-info/nuxt',
-        '@stefanobartoletti/nuxt-social-share', "nuxt-vitalizer",
+        '@vueuse/nuxt', '@pinia/nuxt', '@nuxt/fonts', "@comark/vue", "nuxt-vitalizer",
+        '@nuxtjs/sitemap', '@nuxtjs/robots', '@stefanobartoletti/nuxt-social-share',
         (_, nuxt) => {
             addComponent({
                 name: 'FontAwesomeIcon',
@@ -90,6 +92,7 @@ export default defineNuxtConfig({
     components: [{ path: '~/components', pathPrefix: false, extensions: ['vue'] }],
     pinia: { storesDirs: ['./stores/**'] },
     css: ['@fortawesome/fontawesome-svg-core/styles.css', '~/styles/mainstyles.scss', '~/styles/navmenu.scss'],
+    runtimeConfig: { public: { version: VERSION_NUMBER, buildDate: (new Date().toISOString()) }},
 
     imports: {
         dirs: ['~/stores/**', '~/utils/**'],
