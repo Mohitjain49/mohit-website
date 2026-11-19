@@ -1,5 +1,7 @@
 <template>
 <div ref="addon-reference" class="mohit-navMenu-addon-child-element"></div>
+<div class="mohit-navMenu-closing-cover"></div>
+
 <div v-show="webMenuScrollable" class="mohit-webMenu-scrollBar" @contextmenu="(event) => { onScrollBarContextMenu(event); }">
     <div class="mohit-webMenu-scrollBar-body">
         <div ref="web-menu-scrollbar-thumb" :class="thumbClasses" :style="scrollbarThumbStyle"></div>

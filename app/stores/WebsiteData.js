@@ -322,18 +322,27 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Boolean} toggle If true AND the menu to be opened is already open, this function wil then close the menu.
      */
     function setMenuOpen(index = NO_MENU, toggle = false) {
+        if(!import.meta.client || !document) {
+            menuOpen.value = NO_MENU;
+            return; // The Website Menu should not be open while the website cannot use JS.
+        }
+
         const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
         menuOpen.value = ((setMenuClosed || (toggle && menuOpen.value == index)) ? NO_MENU : index);
 
-        if(menuOpen.value == NO_MENU || !import.meta.client || !document) { return; }
-        setWebsiteMenuTransitionStyles();
+        if(menuOpen.value == NO_MENU) {
+            document.documentElement.style.setProperty("--nav-menu-closing-cover-display", "block");
+        } else {
+            document.documentElement.style.setProperty("--nav-menu-closing-cover-display", "none");
+            setWebsiteMenuTransitionStyles();
 
-        // This has the website menu scroll up to the top of its content when opened.
-        nextTick(() => {
-            const webMenuElement = getWebsiteMenuElement("current");
-            if(!Boolean(webMenuElement)) { return; }
-            webMenuElement.querySelector(".mohit-navMenu-contents")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        });
+            // This has the website menu scroll up to the top of its content when opened.
+            nextTick(() => {
+                const webMenuElement = getWebsiteMenuElement("current");
+                if(!Boolean(webMenuElement)) { return; }
+                webMenuElement.querySelector(".mohit-navMenu-contents")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            });
+        }
     }
 
     /**
