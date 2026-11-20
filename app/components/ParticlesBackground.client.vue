@@ -23,60 +23,17 @@ const particlesOptionsCopy = shallowRef(null);
 const props = defineProps({ particlesOptions: { type: Object, required: true } });
 
 particlesOptionsCopy.value = props.particlesOptions;
-var resizeAbortController = new AbortController();
+var eventsAbortController = new AbortController();
 var resizeTimeout = null;
 
 const styleStore = useStyleStore();
-const visibility = useDocumentVisibility();
 const battery = useBattery();
 
 const preliminaryChecksPassed = ref(false);
 const particlesLoadedOnce = ref(false);
 const particlesLoaded = ref(false);
 const batteryLow = ref(false);
-
 const particlesHalved = ref(false);
-const webpageHidden = computed(() => { return (visibility.value === "hidden"); });
-
-/**
- * This function runs when the particles are fully loaded on the webpage.
- * @param {import('@tsparticles/engine').Container} container The container representing the background.
- */
-async function onParticlesLoaded(container) {
-    tsparticlesContainer.value = container;
-    setParticlesBackgroundColor();
-    particlesLoaded.value = true;
-
-    if(!particlesLoadedOnce.value) {
-        await styleStore.waitForFirstViewportCalculation();
-        await sleep(500);
-        particlesLoadedOnce.value = true;
-    }
-}
-
-/** This function simple resets the particles in the tsparticles container. */
-async function resetParticles() {
-    try {
-        await waitForParticles();
-        particlesLoaded.value = false;
-        await tsparticlesContainer.value.reset(particlesOptionsCopy.value);
-        particlesLoaded.value = true;
-    } catch(e) {
-        if(import.meta.dev) { console.error(e); }
-    }
-}
-
-/** This function triggers a particle reset on a viewport resize. */
-function resetParticlesOnResize() {
-    if(!preliminaryChecksPassed.value) { return; }
-    if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
-
-    resizeTimeout = setTimeout(async() => {
-        await setParticlesDensity(false);
-        await resetParticles();
-        resizeTimeout = null;
-    }, 500);
-}
 
 /** This function can have a function wait till the particles are loaded before executing its capabilities. */
 async function waitForParticles() {
@@ -96,15 +53,70 @@ async function waitForParticles() {
 }
 
 /**
+ * This function runs when the particles are fully loaded on the webpage.
+ * @param {import('@tsparticles/engine').Container} container The container representing the background.
+ */
+async function onParticlesLoaded(container) {
+    tsparticlesContainer.value = container;
+    setParticlesBackgroundColor();
+    particlesLoaded.value = true;
+
+    if(!particlesLoadedOnce.value) {
+        await styleStore.waitForFirstViewportCalculation();
+        await sleep(500);
+        particlesLoadedOnce.value = true;
+    }
+}
+
+/** This function triggers a particle reset on a viewport resize. */
+function resetParticlesOnResize() {
+    if(!preliminaryChecksPassed.value) { return; }
+    if(resizeTimeout != null) { clearTimeout(resizeTimeout); }
+
+    resizeTimeout = setTimeout(async() => {
+        await setParticlesDensity();
+        await resetParticles();
+        resizeTimeout = null;
+    }, 500);
+}
+
+/** This function changes whether the particles are paused or playing based on whether the webpage is visible. */
+async function onWebpageVisibilityChange() {
+    try {
+        if(!preliminaryChecksPassed.value) { return }
+        await waitForParticles();
+
+        if(document.visibilityState === "hidden") {
+            tsparticlesContainer.value.pause();
+        } else {
+            tsparticlesContainer.value.play();
+        }
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/** This function simple resets the particles in the tsparticles container. */
+async function resetParticles() {
+    try {
+        await waitForParticles();
+        particlesLoaded.value = false;
+        await tsparticlesContainer.value.reset(particlesOptionsCopy.value);
+        particlesLoaded.value = true;
+    } catch(e) {
+        if(import.meta.dev) { console.error(e); }
+    }
+}
+
+/**
  * This function runs when all particles options need to be set.
  * @param {Boolean} mounting If true, this function is used when initially mounting the component.
  */
 async function setAllParticlesSettings(mounting = true) {
     if(mounting) {
-        window.addEventListener("animation-resize",
-            () => { resetParticlesOnResize(); },
-            { signal: resizeAbortController.signal }
-        );
+        const signal = eventsAbortController.signal;
+        window.addEventListener("animation-resize", () => { resetParticlesOnResize(); }, { signal });
+        document.addEventListener("visibilitychange", () => { onWebpageVisibilityChange(); }, { signal });
     } else {
         preliminaryChecksPassed.value = false;
         particlesOptionsCopy.value = props.particlesOptions;
@@ -112,7 +124,6 @@ async function setAllParticlesSettings(mounting = true) {
         batteryLow.value = false;
         particlesHalved.value = false;
 
-        visibilityWatcher.pause();
         batteryLevelWatcher.pause();
         batterySupportedWatcher.pause();
         batteryChargingWatcher.pause();
@@ -120,15 +131,13 @@ async function setAllParticlesSettings(mounting = true) {
 
     setParticlesBackgroundColor();
     await onBatteryStatusChange(false);
-    await setParticlesDensity(false);
+    await setParticlesDensity();
     preliminaryChecksPassed.value = true;
 
     batteryLevelWatcher.resume();
     batterySupportedWatcher.resume();
     batteryChargingWatcher.resume();
-
     onWebpageVisibilityChange();
-    visibilityWatcher.resume();
 }
 
 /** This returns whether the density property for a particles background exists. */
@@ -181,36 +190,14 @@ function setParticlesBackgroundColor() {
     }
 }
 
-/**
- * This disables the "density" property of the TS Particles Background when the viewport size gets too large.
- * @param {Boolean} reset If true, this function resets the particles after the change.
- * @returns A boolean indicating whether the particles need to be reset.
- */
-async function setParticlesDensity(reset = true) {
-    if(!checkDensityExists()) { return false; }
+/** This sets the "density" property of the TS Particles Background based on the viewport size. */
+async function setParticlesDensity() {
+    if(!checkDensityExists()) { return; }
     await styleStore.waitForFirstViewportCalculation();
 
-    const oldDensity = particlesOptionsCopy.value.particles.number.density.enable;
-    const newDensity = (styleStore.cssViewportHeight < DISABLE_DENSITY_EDGE_LENGTH && styleStore.cssViewportWidth < DISABLE_DENSITY_EDGE_LENGTH);
-    particlesOptionsCopy.value.particles.number.density.enable = newDensity;
-
-    const needsReset = (oldDensity != newDensity);
-    if(reset && needsReset) { await resetParticles(); }
-    return needsReset;
-}
-
-/** This function changes whether the particles are paused or playing based on whether the webpage is visible. */
-async function onWebpageVisibilityChange() {
-    try {
-        await waitForParticles();
-        if(webpageHidden.value) {
-            tsparticlesContainer.value.pause();
-        } else {
-            tsparticlesContainer.value.play();
-        }
-    } catch(e) {
-        if(import.meta.dev) { console.error(e); }
-    }
+    const heightSmall = (styleStore.cssViewportHeight < DISABLE_DENSITY_EDGE_LENGTH);
+    const widthSmall = (styleStore.cssViewportWidth < DISABLE_DENSITY_EDGE_LENGTH);
+    particlesOptionsCopy.value.particles.number.density.enable = (heightSmall && widthSmall);
 }
 
 // This sets certain settings of the particles background when the component is mounted.
@@ -219,19 +206,16 @@ onAfterMounted(async() => { await setAllParticlesSettings(true); });
 // This destroys the particles container before unmounting the component.
 onBeforeUnmount(() => {
     if(tsparticlesContainer.value != null) { tsparticlesContainer.value.destroy(true); }
-    if(resizeAbortController != null) { resizeAbortController.abort(); }
-    resizeAbortController = null;
+    if(eventsAbortController != null) { eventsAbortController.abort(); }
+    eventsAbortController = null;
     sleep(1000).then(() => { particlesOptionsCopy.value = null; });
 });
 
 watch(() => props.particlesOptions, () => { setAllParticlesSettings(false); }, { immediate: false });
-const visibilityWatcher = watch(webpageHidden, () => { onWebpageVisibilityChange(); }, { immediate: false });
-
 const batteryLevelWatcher = watch(battery.level, () => { onBatteryStatusChange(true); }, { immediate: false });
 const batterySupportedWatcher = watch(battery.isSupported, () => { onBatteryStatusChange(true); }, { immediate: false });
 const batteryChargingWatcher = watch(battery.charging, () => { onBatteryStatusChange(true); }, { immediate: false });
 
-visibilityWatcher.pause();
 batteryLevelWatcher.pause();
 batterySupportedWatcher.pause();
 batteryChargingWatcher.pause();

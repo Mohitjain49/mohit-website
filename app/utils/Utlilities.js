@@ -33,6 +33,7 @@ export function useRoutePathWithQuery() {
     }
 
     updateQueryEnd();
+    onMounted(() => { updateQueryEnd(); });
     watch(rawRouteQuery, () => { updateQueryEnd(); }, { deep: true });
     return path;
 }

@@ -28,6 +28,9 @@ const websiteMenuElement = shallowRef(null);
 /** @type {ShallowRef<HTMLDivElement>} This is the website menu element that stores its contents. */
 const websiteMenuContents = shallowRef(null);
 
+/** @type {ShallowRef<DOMRect>} This is the DOM Rect of the website menu element that stores its contents. */
+const websiteMenuContentsRect = shallowRef(null);
+
 const startY = ref(0);
 const webMenuTouched = ref(false);
 const webMenuSwipeWithTouch = ref(false);
@@ -35,6 +38,7 @@ const scrollbarThumbPressed = ref(false);
 
 const hasTouchEvents = ref(false);
 const webMenuScrollable = ref(false);
+const contentsClientHeight = ref(0);
 const verticalScrollPercent = ref(0);
 const menuClientInView = ref(0);
 
@@ -67,7 +71,10 @@ onAfterMounted(() => {
     if(!Boolean(websiteMenuContents.value)) { throw new Error("Website Menu Contents Element Not Found."); }
     websiteMenuContents.value.tabIndex = -1;
 
+    websiteMenuContentsRect.value = websiteMenuContents.value.getBoundingClientRect();
+    contentsClientHeight.value = websiteMenuContents.value.clientHeight;
     hasTouchEvents.value = checkTouchEndExists();
+
     eventsAbortController = new AbortController();
     const signal = eventsAbortController.signal;
 
@@ -115,14 +122,24 @@ watch(mouseY, (newY, oldY) => { scrollWebMenuOnMouseMove(newY, oldY); });
 function changeElementsOnMenuDimensions(firstRun = false) {
     if(!Boolean(websiteMenuElement.value) || !Boolean(websiteMenuContents.value)) { return; }
     const webMenuContents = websiteMenuContents.value;
-
     const scrollHeight = webMenuContents.scrollHeight;
-    const clientHeight = webMenuContents.clientHeight;
 
+    const oldClientHeight = contentsClientHeight.value;
+    const clientHeight = webMenuContents.clientHeight;
+    const getNewClientRect = ((oldClientHeight != clientHeight) || firstRun);
+
+    // If the client height changes for the website menu contents, the function records its new Client Rect.
+    if(getNewClientRect) {
+        websiteMenuContentsRect.value = websiteMenuContents.value.getBoundingClientRect();
+        contentsClientHeight.value = clientHeight;
+    }
+
+    // This obtains the new scroll status of the website menu and sees if it has changed or not.
     const oldScrollStatus = webMenuScrollable.value;
     webMenuScrollable.value = (scrollHeight > clientHeight);
     const diffStatus = ((webMenuScrollable.value != oldScrollStatus) || firstRun);
 
+    // This calculates certain numbers and sets a class for the website menu based on its scroll status.
     if(webMenuScrollable.value) {
         if(diffStatus) { websiteMenuElement.value.classList.add(OVERFLOW_SCROLL_CLASS); }
         verticalScrollPercent.value = convertDecimalToPercent(webMenuContents.scrollTop / (scrollHeight - clientHeight));
