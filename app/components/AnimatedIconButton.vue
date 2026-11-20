@@ -6,6 +6,7 @@
 
 <script setup>
 const props = defineProps({
+    handleClick: { type: Function, default: (event) => {} },
     faIcon: { type: String, default: "fa-question" },
     hoverAnimation: { type: String, default: "jello" },
     iconClass: { type: [String, Array], default: '' }
@@ -19,15 +20,22 @@ const { mouseElement } = storeToRefs(useStyleStore());
 const buttonRef = useTemplateRef('animate-icon-on-hover-button');
 const isHovering = ref(false);
 
-onAfterMounted(() => {
-    if(!Boolean(buttonRef.value) || !('PointerEvent' in window)) { return; }
-    setHoverInterval(true);
+onMounted(async() => {
+    if(checkButtonNonexistent()) {
+        await nextTick();
+        if(checkButtonNonexistent()) { return; }
+    }
 
     eventsAbortController = new AbortController();
     const signal = eventsAbortController.signal;
+    const mainButton = buttonRef.value;
     
-    buttonRef.value.addEventListener("pointerenter", (event) => { onButtonHover(event); }, { signal, passive: true });
-    buttonRef.value.addEventListener("pointerleave", (event) => { onButtonHover(event); }, { signal, passive: true });
+    mainButton.addEventListener("click", (event) => { props.handleClick(event); }, { signal });
+    mainButton.addEventListener("pointerenter", (event) => { onButtonHover(event); }, { signal, passive: true });
+    mainButton.addEventListener("pointerleave", (event) => { onButtonHover(event); }, { signal, passive: true });
+
+    // This sets an interval that uses the recorded mouse element to stop the animation if necessary.
+    setHoverInterval(true);
     signal.addEventListener("abort", () => { setHoverInterval(false); }, { once: true });
 });
 onBeforeUnmount(() => {
@@ -35,6 +43,9 @@ onBeforeUnmount(() => {
     setHoverInterval(false);
     if(eventsAbortController != null) { eventsAbortController.abort(); }
 });
+
+/** This function returns true if the main button here DOES NOT exist, false otherwise. */
+function checkButtonNonexistent() { return (!Boolean(buttonRef.value)); }
 
 /**
  * This function runs when the user either hovers over the button or stops hovering over the button.
@@ -46,14 +57,14 @@ function onButtonHover(event) {
 }
 
 /**
- * This function sets an interval that uses the recorded mouse element to see if the animation should still continue.
+ * This function sets an interval that uses the recorded mouse element to stop the animation if necessary.
  * @param {Boolean} status The new status of the Hover Interval.
  */
 function setHoverInterval(status = false) {
     if(checkHoverInterval != null) { clearInterval(checkHoverInterval); }
     if(status) {
         checkHoverInterval = setInterval(() => {
-            const mouseNotOnElement = (!Boolean(buttonRef.value) || !buttonRef.value.contains(mouseElement.value));
+            const mouseNotOnElement = (checkButtonNonexistent() || !buttonRef.value.contains(mouseElement.value));
             if(mouseNotOnElement) { isHovering.value = false; }
         }, 500);
     } else {

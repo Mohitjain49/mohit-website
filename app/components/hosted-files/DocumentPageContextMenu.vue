@@ -6,9 +6,15 @@
             <h3 v-if="onResumeRoute"> <span id="mohit-document-contextMenu-pageNum"> My Resume </span> </h3>
 
             <div class="mohit-hostedDoc-contextMenu-topOpts">
-                <AnimatedIconButton class="resume-menu" @click="openWebsiteMenu(RESUME_MENU)" title="Edit Resume Components" :faIcon="'fa-gears'" />
-                <AnimatedIconButton class="web-menu" @click="openWebsiteMenu(DOCUMENT_MENU)" title="Open Document Menu" :faIcon="'fa-file-pdf'" />
-                <AnimatedIconButton @click="closeDocumentContextMenu()" title="Close Context Menu" :faIcon="'fa-xmark'" />
+                <AnimatedIconButton v-if="onResumeRoute" class="resume-menu" title="Edit Resume Components" :faIcon="'fa-gears'"
+                    :handleClick="() => { openWebsiteMenu(RESUME_MENU); }"
+                />
+                <AnimatedIconButton class="web-menu" title="Open Document Menu" :faIcon="'fa-file-pdf'"
+                    :handleClick="() => { openWebsiteMenu(DOCUMENT_MENU); }"
+                />
+                <AnimatedIconButton title="Close Context Menu" :faIcon="'fa-xmark'"
+                    :handleClick="() => { closeDocumentContextMenu(); }"
+                />
             </div>
         </div>
 

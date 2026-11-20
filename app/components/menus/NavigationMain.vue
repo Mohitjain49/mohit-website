@@ -143,7 +143,7 @@
         />
     </button>
     <AnimatedIconButton v-if="resumeStore.showQueryReloadButton" :title="RESUME_QUERY_UNSYNC_TITLE"
-        @click="() => { reloadNuxtApp({ force: true }); }"
+        :handleClick="() => { reloadNuxtApp({ force: true }); }"
         :class="['mohit-navBar-statusIcon', 'resume-unsynced']"
         :faIcon="'fa-rotate-right'"
         :hoverAnimation="'spin'"

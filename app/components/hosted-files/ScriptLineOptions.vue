@@ -5,8 +5,12 @@
             <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
                 <h3> Line <span id="lineOptions-num" v-html="viewableLineOptionsNum"></span> </h3>
                 <div class="mohit-script-lineOptions-topOpts">
-                    <AnimatedIconButton class="web-menu" @click="openScriptsMenu()" title="Open Scripts Menu" :faIcon="'fa-file-export'" />
-                    <AnimatedIconButton @click="closeLineOptionsMenu()" :title="('Close Options For Line ' + viewableLineOptionsNum)" :faIcon="'fa-xmark'" />
+                    <AnimatedIconButton class="web-menu" title="Open Scripts Menu" :faIcon="'fa-file-export'"
+                        :handleClick="() => { openScriptsMenu(); }"
+                    />
+                    <AnimatedIconButton :title="('Close Options For Line ' + viewableLineOptionsNum)" :faIcon="'fa-xmark'"
+                        :handleClick="() => { closeLineOptionsMenu(); }"
+                    />
                 </div>
             </div>
             <button @click="scriptsStore.copyLineAttribute('text')" v-action-cursor="(copyingText ? lineOptions.copyStatus : 0)">

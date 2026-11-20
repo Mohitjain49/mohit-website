@@ -252,7 +252,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
     }
 
     /** This function returns a Boolean that if true confirms that the website is ready for an autoscroll. */
-    function verifyAutoscroll() { return (mounted.value && !isAutoScrolling.value && lenis); }
+    function verifyAutoscroll() { return (mounted.value && !isAutoScrolling.value && Boolean(lenis)); }
 
     /** This function cancels any ongoing autoscroll. */
     function cancelAutoscroll() {

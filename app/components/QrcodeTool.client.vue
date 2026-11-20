@@ -146,7 +146,10 @@
             </div>
         </div>
 
-        <AnimatedIconButton @click="webData.setQRCodePopup('quit')" class="qrcode-mainPopup-close" title="Close Popup" :faIcon="'fa-xmark'" />
+        <AnimatedIconButton class="qrcode-mainPopup-close"
+            :handleClick="() => { webData.setQRCodePopup('quit'); }"
+            :faIcon="'fa-xmark'" title="Close Share Popup"
+        />
     </div>
 </Transition>
 </template>

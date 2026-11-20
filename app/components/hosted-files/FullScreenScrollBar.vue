@@ -141,7 +141,7 @@ function checkRecordedFsElement() { return (Boolean(fsElement.value) && Boolean(
  * @param {Number} oldY The old Y position of the mouse.
  */
 function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
-    if(!mousePressedOnThumb.value) { return; }
+    if(!mousePressedOnThumb.value || scrollProgress.value.show) { return; }
     if(!checkRecordedFsElement()) { fsElement.value = getFsElement(); }
 
     const element = (checkRecordedFsElement() ? fsElement.value : getFsElement());
