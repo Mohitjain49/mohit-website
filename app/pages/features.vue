@@ -37,10 +37,9 @@ useIntersectionObserver(cardRefs, (entry) => {
     }
 });
 
-onAfterMounted(async() => {
-    await nextTick();
+// This animates the main title and description for this page upon entering it.
+onAfterMounted(() => {
     if(getCssInnerWidth() <= 450) { return; }
-
     const elements = [
         document.getElementsByClassName('features-main-header').item(0),
         document.getElementsByClassName('features-main-desc').item(0)
@@ -48,11 +47,11 @@ onAfterMounted(async() => {
 
     for(let i = 0; i < elements.length; i++) {
         const item = elements[i];
-        if(item && (typeof item.classList !== "undefined") && (item.classList instanceof DOMTokenList)) {
+        if(Boolean(item) && Boolean(item.classList)) {
             item.classList.add("animate__animated", ("animate__lightSpeedIn" + ((i % 2 == 0) ? "Left" : "Right")))
         }
     }
-})
+});
 
 useHead(getMeta("Mohit Jain | Features", "features",
     "My website utilizes multiple code libraries and Web APIs to make unique features " +

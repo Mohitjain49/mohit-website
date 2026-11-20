@@ -238,17 +238,15 @@ function scrollWebMenuOnMouseMove(newY = 0, oldY = 0) {
     const webMenuContents = websiteMenuContents.value;
     const contentsRect = webMenuContents.getBoundingClientRect();
 
-    if(newY >= contentsRect.bottom) {
-        webMenuContents.scrollTop = (webMenuContents.scrollHeight - webMenuContents.clientHeight);
-        return;
-    } else if(newY <= contentsRect.top) {
+    if(newY <= contentsRect.top) {
         webMenuContents.scrollTop = 0;
-        return;
+    } else if(newY >= contentsRect.bottom) {
+        webMenuContents.scrollTop = (webMenuContents.scrollHeight - webMenuContents.clientHeight);
+    } else {
+        const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
+        const newValue = roundNumber(webMenuContents.scrollTop + (webMenuContents.scrollHeight / divisor));
+        webMenuContents.scrollTop = clampNumber(newValue, 0, (webMenuContents.scrollHeight - webMenuContents.clientHeight));
     }
-
-    const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
-    const newValue = (webMenuContents.scrollTop + (webMenuContents.scrollHeight / divisor));
-    webMenuContents.scrollTop = clampNumber(newValue, 0, (webMenuContents.scrollHeight - webMenuContents.clientHeight));
 }
 
 /**

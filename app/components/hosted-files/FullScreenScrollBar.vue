@@ -57,6 +57,15 @@ const scrollbarThumbStyle = computed(() => {
     return { height: (inView + "%"), transform: ("translateY(" + topNum + "%)") }
 });
 
+/**
+ * This is roughly how far away the scrollbar body is from either vertical edge.
+ * Make sure it is aligned with the necessary CSS attribute.
+ */
+const scrollbarBodyFromVerticalEdge = computed(() => {
+    const buttonHeight = Math.max(15, (15 / styleStore.zoomFactor / styleStore.recordedDevicePixelRatio));
+    return roundNumber((buttonHeight * (1.33 / styleStore.cssToWindowHeightRatio)), 2);
+});
+
 const mainScrollbarClasses = computed(() => {
     return ['mohit-scrollBar', (onTouchScreen.value ? 'touch' : '')];
 });
@@ -137,10 +146,17 @@ function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
 
     const element = (checkRecordedFsElement() ? fsElement.value : getFsElement());
     if(!Boolean(element)) { return; }
+    const distanceFromVerticalEdge = scrollbarBodyFromVerticalEdge.value;
 
-    const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
-    const newValue = (element.scrollTop + (element.scrollHeight / divisor));
-    element.scrollTop = clampNumber(newValue, 0, (element.scrollHeight - element.clientHeight));
+    if(mouseY.value <= distanceFromVerticalEdge) {
+        element.scrollTop = 0;
+    } else if(mouseY.value >= (styleStore.viewportHeight - distanceFromVerticalEdge)) {
+        element.scrollTop = (element.scrollHeight - element.clientHeight);
+    } else {
+        const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
+        const newValue = roundNumber(element.scrollTop + (element.scrollHeight / divisor));
+        element.scrollTop = clampNumber(newValue, 0, (element.scrollHeight - element.clientHeight));
+    }
 }
 
 /**
