@@ -41,7 +41,7 @@ const barVisible = useElementVisibility(bottomOptionsBar);
 const routePath = useRoutePathWithQuery();
 
 // These two functions update the state on whether the hosted file bottom bar is visible or not.
-onMountedAdvanced(() => { hfBottomBarVisible.value = barVisible.value; });
+onAfterMounted(() => { hfBottomBarVisible.value = barVisible.value; });
 watch(barVisible, (newValue) => { hfBottomBarVisible.value = newValue; });
 
 const hostedFileClass = computed(() => { return (onDocumentRoute.value ? "document" : "script"); });

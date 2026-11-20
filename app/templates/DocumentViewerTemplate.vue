@@ -22,7 +22,7 @@
 const documentStore = useDocumentStore();
 const props = defineProps({ index: { type: Number, required: true } });
 
-onMountedAdvanced(() => { documentStore.mountDocumentPage(); });
+onAfterMounted(() => { documentStore.mountDocumentPage(); });
 onBeforeUnmount(() => { documentStore.unmountDocumentPage(); });
 
 const PAGE_METADATA = [

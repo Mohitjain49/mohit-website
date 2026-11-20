@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-onMountedAdvanced(() => { setBottomCornerWidgetAnimation("features-return-widget"); });
+onAfterMounted(() => { setBottomCornerWidgetAnimation("features-return-widget"); });
 </script>
 
 <style scoped lang="scss">

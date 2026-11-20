@@ -37,7 +37,7 @@ useIntersectionObserver(cardRefs, (entry) => {
     }
 });
 
-onMountedAdvanced(async() => {
+onAfterMounted(async() => {
     await nextTick();
     if(getCssInnerWidth() <= 450) { return; }
 

@@ -37,7 +37,7 @@ import main_webpage from "~/assets/ivue/iVue_Main_Website_Home.png";
 import wiv_icon from "~/assets/ivue/Worlds_iVue_Icon.png";
 import aws_icon from "~/assets/aws/AWS_Icon.png";
 
-onMountedAdvanced(() => { setNavCardAnimation("ivue-nav-newCard"); });
+onAfterMounted(() => { setNavCardAnimation("ivue-nav-newCard"); });
 const DEV_STACK = [
     { title: "Worlds iVue", icon: wiv_icon },
     { title: "Cloud Architecture", icon: aws_icon },

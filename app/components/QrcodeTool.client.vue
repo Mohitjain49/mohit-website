@@ -319,7 +319,7 @@ async function mountSharePopup() {
     const signal = sharePopupAbortController.signal;
 
     window.addEventListener("keydown", (event) => { onSharePopupKeydown(event); }, { signal, capture: true });
-    window.addEventListener("click", (event) => { onSharePopupClick(event); }, { signal });
+    window.addEventListener("pointerdown", (event) => { onSharePopupClick(event); }, { signal });
 
     const linkTextElement = linkTextRef.value;
     if(!Boolean(linkTextRef.value)) { return; }

@@ -35,7 +35,7 @@
 <script setup>
 import main_app_page from "~/assets/Tictactoe_Project_Page.png";
 import nuxt_icon from "~/assets/Nuxt_Icon.png";
-onMountedAdvanced(() => { setNavCardAnimation("tictactoe-nav-newCard"); });
+onAfterMounted(() => { setNavCardAnimation("tictactoe-nav-newCard"); });
 </script>
 
 <style lang="scss">

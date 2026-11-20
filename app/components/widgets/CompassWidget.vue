@@ -15,7 +15,7 @@ function openCompass() {
 }
 
 // This sets an opening transition for the widget when it is rendered.
-onMountedAdvanced(() => { setBottomCornerWidgetAnimation("compass-widget"); });
+onAfterMounted(() => { setBottomCornerWidgetAnimation("compass-widget"); });
 </script>
 
 <style scoped lang="scss">

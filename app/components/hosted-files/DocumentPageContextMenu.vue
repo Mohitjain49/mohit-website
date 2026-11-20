@@ -41,7 +41,7 @@ const copyStatus = ref(0);
 watch(contextMenuPageNumber, () => { onContextMenuPageNumberChange(); });
 
 // This mounts a few event listeners that help close the hosted document context menu if the proper HTML Element is not clicked.
-onMountedAdvanced(() => {
+onAfterMounted(() => {
     docContextMenuAbortController = new AbortController();
     const signal = docContextMenuAbortController.signal;
 

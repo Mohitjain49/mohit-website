@@ -50,7 +50,7 @@ const copyingLink = computed(() => { return (lineOptions.value.lastCopied === "l
 watch(lineOptionsNum, () => { onLineOptionsNumChange(); });
 
 // This mounts a few event listeners that help close the line options menu if the proper HTML Element is not clicked.
-onMountedAdvanced(() => {
+onAfterMounted(() => {
     lineOptionsAbortController = new AbortController();
     const signal = lineOptionsAbortController.signal;
 

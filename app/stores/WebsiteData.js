@@ -131,7 +131,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         window.history.scrollRestoration = "manual";
 
         await nextTick();
-        await onNuxtReadyAdvanced();
         setSaveAsSupported();
 
         mounted.value = 1.25;

@@ -23,7 +23,7 @@
 
 <script setup>
 const resumeStore = useResumeStore();
-onMounted(() => { resumeStore.mountResumePage(); });
+onAfterMounted(() => { resumeStore.mountResumePage(); });
 onBeforeUnmount(() => { resumeStore.unmountResumePage(); });
 
 useHead(getMeta("Mohit Jain | My Resume", "resume",

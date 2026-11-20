@@ -36,7 +36,7 @@ const fullScreenStore = useFullScreenStore();
 const props = defineProps({ index: { type: Number, required: true } });
 const scriptHTML = useTemplateRef('script-html');
 
-onMountedAdvanced(() => { scriptsStore.mountScriptPage(numLines); });
+onAfterMounted(() => { scriptsStore.mountScriptPage(numLines); });
 onBeforeUnmount(() => { scriptsStore.unmountScriptPage(); });
 watch(scriptHTML, (newValue) => { if(Boolean(newValue)) { scriptsStore.setWrapCodeStyles(); } });
 

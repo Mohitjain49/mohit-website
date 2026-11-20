@@ -21,7 +21,7 @@ const router = useRouter();
 const headTags = computed(() => { return getHomeMeta(pageTitle.value); });
 const routerHash = computed(() => { return router.currentRoute.value.hash; });
 
-onMountedAdvanced(() => { changePageTitle(); });
+onAfterMounted(() => { changePageTitle(); });
 watch(routerHash, () => { changePageTitle(); });
 useHead(headTags);
 

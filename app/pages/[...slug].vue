@@ -27,7 +27,7 @@ const routePath = computed(() => { return router.currentRoute.value.path; });
 const metaTags = computed(() => { return getMeta(PAGE_TITLE.value, "404", PAGE_DESC.value, "rgb(248, 206, 171)"); });
 useHead(metaTags);
 
-onMountedAdvanced(async() => {
+onMounted(() => {
     // console.log(router.getRoutes());
     webData.closeNavMenu();
 
@@ -35,7 +35,7 @@ onMountedAdvanced(async() => {
     const internalRoute = INTERNAL_REDIRECTS.findIndex(item => checkRedirectRoute(item.routes));
     if(internalRoute != -1) {
         startRedirect(true);
-        await router.replace(INTERNAL_REDIRECTS[internalRoute].replacement);
+        router.replace(INTERNAL_REDIRECTS[internalRoute].replacement);
         return;
     }
 

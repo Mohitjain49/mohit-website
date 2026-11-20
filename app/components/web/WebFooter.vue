@@ -68,7 +68,7 @@
 
                 <FontAwesomeIcon icon="fa-share-from-square" />
             </button>
-            <RouterLink v-show="isMounted" :to="topPath" title="Scroll To The Top" v-pulse-loop>
+            <RouterLink v-if="webData.fullyMounted" :to="topPath" title="Scroll To The Top" v-pulse-loop>
                 <FontAwesomeIcon icon="fa-turn-up" />
             </RouterLink>
         </div>
@@ -99,7 +99,7 @@ const webpagesScrollMargin = computed(() => {
     return { scrollMarginTop: ((leftNavWidgetsVisible.value && !smallViewport.value) ? "115px" : "75px") }
 });
 
-const isMounted = onAfterMounted(() => {
+onAfterMounted(() => {
     if(!Boolean(footerRef.value)) { throw new Error("Website Footer Not Accessible."); }
     webData.navFooterPresent = true;
     webData.webFooter = footerRef.value;
@@ -377,7 +377,8 @@ const SECONDARY_ROUTES = [
 }
 
 .footer-bottom-buttons > button > svg, .footer-bottom-buttons > a > svg {
-    font-size: 20px;
+    width: 20px;
+    height: 20px;
 }
 .footer-bottom-buttons > button:hover, .footer-bottom-buttons > a:hover {
     background-color: rgb(43, 43, 43);
@@ -415,7 +416,8 @@ const SECONDARY_ROUTES = [
         width: 27px;
     }
     .footer-bottom-buttons > button > svg, .footer-bottom-buttons > a > svg {
-        font-size: 17px;
+        width: 17px;
+        height: 17px;
     }
 }
 </style>

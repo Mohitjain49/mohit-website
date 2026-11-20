@@ -36,7 +36,7 @@
                     <div class="contact-input-tab-header-container withOptions">
                         <div class="contact-input-tab-header">
                             <span style="margin-right: 10px;"> Your Message </span>
-                            <div v-if="isMounted" class="options">
+                            <div v-if="webData.fullyMounted" class="options">
                                 <button @click="audioStore.manageTTS(msgMain)" :title="audioStore.ttsTitle">
                                     <font-awesome-icon :icon="audioStore.ttsIcon" />
                                 </button>
@@ -178,8 +178,7 @@ useHead(getMeta("Mohit Jain | Contact Me", "contact",
  */
 
 // This mounts the contact page by setting its animations and event listeners.
-/** */
-const isMounted = onAfterMounted(() => {
+onAfterMounted(() => {
     manageSocialTabGlow();
     audioStore.changeSTTUpdateFunc((str) => { msgMain.value += str; });
 

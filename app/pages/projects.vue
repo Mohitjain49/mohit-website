@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-onMountedAdvanced(() => {
+onAfterMounted(() => {
     setNavCardAnimation("main-projects-features-btn");
 });
 useHead(getMeta("Mohit Jain | My Projects", "projects/",

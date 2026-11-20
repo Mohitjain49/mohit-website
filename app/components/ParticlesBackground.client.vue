@@ -214,7 +214,7 @@ async function onWebpageVisibilityChange() {
 }
 
 // This sets certain settings of the particles background when the component is mounted.
-onMountedAdvanced(async() => { await setAllParticlesSettings(true); });
+onAfterMounted(async() => { await setAllParticlesSettings(true); });
 
 // This destroys the particles container before unmounting the component.
 onBeforeUnmount(() => {

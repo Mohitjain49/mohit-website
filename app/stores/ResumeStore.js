@@ -30,9 +30,6 @@ export const useResumeStore = defineStore("resume-store", () => {
 
     /** This function mounts the resume page. */
     async function mountResumePage() {
-        await nextTick();
-        await onNuxtReadyAdvanced();
-
         if(mountedOnce.value) {
             await setResumeQuery();
         } else {

@@ -20,7 +20,7 @@ const router = useRouter();
 const reactiveMeta = useReactiveMeta(DEFAULT_TITLE, "library", PAGE_DESC);
 const routerHash = computed(() => { return router.currentRoute.value.hash; });
 
-onMountedAdvanced(() => { changePageTitle(); });
+onAfterMounted(() => { changePageTitle(); });
 watch(routerHash, () => { changePageTitle(); });
 useHead(reactiveMeta.metaObjectRef);
 
