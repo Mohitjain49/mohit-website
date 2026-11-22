@@ -14,7 +14,6 @@ const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
 const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
 
 const DOCUMENT_ACTION_CURSORS = ["pointer", "wait", "var(--checkmark-cursor)", "not-allowed", "not-allowed", "not-allowed"];
-const POSSIBLE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"];
 const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
 export const RENDERED_PDF_CLASS_NAME = "mohit-rendered-pdf";
@@ -54,6 +53,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     const webData = useWebsiteDataStore();
     const resumeStore = useResumeStore();
     const styleStore = useStyleStore();
+    const scrollStore = useScrollStore();
     const fullScreenStore = useFullScreenStore();
 
     const SCRIPT_TAG_OPTIONS = { async: true, defer: true, immediate: false, manual: true }
@@ -62,6 +62,10 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** @type {AbortController} This abort controller manages the event listeners fired when the page resizes. */
     var pdfDimensionsController = null;
+
+    /** @type {AbortController} This abort controller manages custom event listeners related to the Google Picker API UI. */
+    var googlePickerEventsController = null;
+    var googlePickerRepositionInterval = null;
 
     /** @type {AbortController} This abort controller manages the event listeners fired when the user focuses on the window. */
     var windowFocusAbortController = null;
@@ -489,7 +493,7 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function opens a view that lets the user pick the folder they want to upload my document to. */
     async function openGoogleDrivePicker() {
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        await scrollStore.scrollToTop(true);
         await nextTick();
         await nextTick();
         styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, true);
@@ -519,19 +523,48 @@ export const useDocumentStore = defineStore("document-store", () => {
      * @param {"loaded" | "cancel" | "picked"} data.action The type of action the user took to save the file.
      */
     function googleDrivePickerCallback(data = { action: "loaded" }) {
-        if(data.action === "loaded") {
-            styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, true);
-            window.dispatchEvent(new Event("resize"));
-            sleep(150).then(() => { window.dispatchEvent(new Event("resize")); });
-        } else if(data.action === "cancel") {
-            closeGooglePicker(true);
-        } else if(data.action === "picked") {
-            closeGooglePicker(false);
-            const firstFolder = data.docs[0];
+        try {
+            if(data.action === "loaded") {
+                scrollStore.scrollToTop(true);
+                styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, true);
 
-            if(firstFolder.type === "folder" && typeof firstFolder.id === "string") {
-                uploadDocToGoogleDrive(firstFolder.id);
+                if(googlePickerEventsController != null) { googlePickerEventsController.abort(); }
+                googlePickerEventsController = new AbortController();
+
+                const signal = googlePickerEventsController.signal;
+                window.addEventListener("resize", () => { sleep(100).then(() => { repositionGoogleDrivePicker(); }); }, { signal });
+                window.addEventListener("animation-resize", () => { repositionGoogleDrivePicker(); }, { signal });
+
+                repositionGoogleDrivePicker();
+                sleep(150).then(() => { repositionGoogleDrivePicker(); });
+            } else if(data.action === "cancel") {
+                closeGooglePicker(true);
+            } else if(data.action === "picked") {
+                closeGooglePicker(false);
+                const firstFolder = data.docs[0];
+
+                if(firstFolder.type === "folder" && typeof firstFolder.id === "string") {
+                    uploadDocToGoogleDrive(firstFolder.id);
+                }
             }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
+        }
+    }
+
+    /** This function repositions the google drive picker and accounts for the dynamic zoom factor. */
+    function repositionGoogleDrivePicker() {
+        try {
+            /** @type {HTMLCollectionOf<HTMLElement>} This collection should contain the picker dialog box that needs to be positioned. */
+            const pickerDialogElements = document.getElementsByClassName("picker-dialog");
+
+            for(let i = 0; i < pickerDialogElements.length; i++) {
+                const element = pickerDialogElements[i];
+                element.style.left = (String((styleStore.cssViewportWidth - element.clientWidth) / 2) + "px");
+                element.style.top = (String((styleStore.cssViewportHeight - element.clientHeight) / 2) + "px");
+            }
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
         }
     }
 
@@ -541,8 +574,10 @@ export const useDocumentStore = defineStore("document-store", () => {
      */
     function closeGooglePicker(canceled = true) {
         try {
+            if(googlePickerEventsController != null) { googlePickerEventsController.abort(); }
             if(googleDrivePickerInstance != null) { googleDrivePickerInstance.dispose(); }
         } finally {
+            googlePickerEventsController = null;
             googleDrivePickerInstance = null;
             styleStore.setHideOverflowArray(HideOverflow.GOOGLE_DRIVE_PICKER, false);
 
@@ -610,6 +645,8 @@ export const useDocumentStore = defineStore("document-store", () => {
 
             if(googleDriveOptAvailable.value < 0) { return; }
             chooseGoogleDriveFolderForUpload = chooseFolder;
+
+            await exitDocumentFullScreen();
             googleTokenClient.requestAccessToken();
         } catch(e) {
             googleDriveOptAvailable.value = -3;
@@ -744,35 +781,39 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** Based on the current width, height, scale factor, and viewport, this function sets the size of the pdf. */
     async function setPdfSize() {
-        if(!import.meta.client || !window || !document || !document.documentElement) { return; }
-        await fullScreenStore.waitForFullScreenChange(7000);
-        var largeViewportHeight = false;
+        try {
+            if(!import.meta.client || !window || !document || !document.documentElement) { return; }
+            await fullScreenStore.waitForFullScreenChange(7000);
+            var largeViewportHeight = false;
 
-        const maxWidth = customPdfMaxWidth.value;
-        const scaleFactor = customPdfScaleFactor.value;
-        const defaultPdfWidth = (styleStore.cssViewportWidth - 30);
+            const maxWidth = customPdfMaxWidth.value;
+            const scaleFactor = customPdfScaleFactor.value;
+            const defaultPdfWidth = (styleStore.cssViewportWidth - 30);
 
-        if(onResumeRoute.value && (maxWidth < defaultPdfWidth)) {
-            const firstPdfPage = document.getElementsByClassName(RENDERED_PDF_CLASS_NAME).item(0);
+            if(onResumeRoute.value && (maxWidth < defaultPdfWidth)) {
+                const firstPdfPage = document.getElementsByClassName(RENDERED_PDF_CLASS_NAME).item(0);
 
-            if(Boolean(firstPdfPage)) {
-                const viewportHeight = styleStore.cssViewportHeight;
-                const distanceFromTop = Math.round((firstPdfPage.getBoundingClientRect().top + getScrollY() + 20) * styleStore.cssToWindowHeightRatio);
+                if(Boolean(firstPdfPage)) {
+                    const viewportHeight = styleStore.cssViewportHeight;
+                    const distanceFromTop = Math.round((firstPdfPage.getBoundingClientRect().top + getScrollY() + 20) * styleStore.cssToWindowHeightRatio);
 
-                if(viewportHeight >= ((maxWidth * scaleFactor) + distanceFromTop)) {
-                    largeViewportHeight = true;
-                    customPdfWidth.value = Math.min(((viewportHeight - distanceFromTop) / scaleFactor), defaultPdfWidth);
+                    if(viewportHeight >= ((maxWidth * scaleFactor) + distanceFromTop)) {
+                        largeViewportHeight = true;
+                        customPdfWidth.value = Math.min(((viewportHeight - distanceFromTop) / scaleFactor), defaultPdfWidth);
+                    }
                 }
             }
+
+            if(!largeViewportHeight) { customPdfWidth.value = clampNumber(defaultPdfWidth, customPdfMinWidth.value, maxWidth); }
+            customPdfWidth.value = Math.round(customPdfWidth.value);
+            customPdfHeight.value = Math.round(customPdfWidth.value * scaleFactor);
+
+            window.dispatchEvent(new CustomEvent("mohit-hosted-document-resize", { cancelable: false }));
+            document.documentElement.style.setProperty(PDF_WIDTH_CSS_PROPERTY, (String(customPdfWidth.value) + "px"));
+            document.documentElement.style.setProperty(PDF_HEIGHT_CSS_PROPERTY, (String(customPdfHeight.value) + "px"));
+        } catch(e) {
+            if(import.meta.dev) { console.error(e); }
         }
-
-        if(!largeViewportHeight) { customPdfWidth.value = clampNumber(defaultPdfWidth, customPdfMinWidth.value, maxWidth); }
-        customPdfWidth.value = Math.round(customPdfWidth.value);
-        customPdfHeight.value = Math.round(customPdfWidth.value * scaleFactor);
-
-        window.dispatchEvent(new CustomEvent("mohit-hosted-document-resize", { cancelable: false }));
-        document.documentElement.style.setProperty(PDF_WIDTH_CSS_PROPERTY, (String(customPdfWidth.value) + "px"));
-        document.documentElement.style.setProperty(PDF_HEIGHT_CSS_PROPERTY, (String(customPdfHeight.value) + "px"));
     }
 
     /**

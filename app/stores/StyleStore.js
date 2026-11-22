@@ -199,8 +199,10 @@ export const useStyleStore = defineStore("style-store", () => {
         if(!validateClientMode()) { return; }
         if(hide) {
             document.documentElement.classList.add('hide-overflow');
+            document.body.classList.add('hide-overflow');
         } else {
             document.documentElement.classList.remove('hide-overflow');
+            document.body.classList.remove('hide-overflow');
         }
     }
 
