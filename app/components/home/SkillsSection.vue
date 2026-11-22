@@ -92,8 +92,8 @@ function setSkillsTransitions(isVisible = false) {
     font-family: 'Lexend', 'sans-serif';
     width: calc(100% - 30px);
     height: fit-content;
-    padding: 20px 15px;
-    margin-bottom: 0px;
+    padding: 20px 0px;
+    margin: 0px auto;
     color: var(--blue-zero);
     text-align: center;
     line-height: 35px;
@@ -131,9 +131,9 @@ function setSkillsTransitions(isVisible = false) {
 
     .skills-main-textContainer {
         grid-column: span 1;
-        width: 400px;
+        width: 100%;
         position: relative;
-        left: calc(50% - 200px);
+        left: 0px
     }
     .skills-main-header a {
         font-size: 75px;
@@ -144,19 +144,15 @@ function setSkillsTransitions(isVisible = false) {
         line-height: 28px;
         margin-bottom: 0px;
         text-align: left;
+        max-width: 400px;
     }
 }
 @include dynamic-less-equal-width-rule-scopedBlock(500) {
-    .skills-main-textContainer {
-        width: 330px;
-        position: relative;
-        left: calc(50% - 165px);
-    }
     .skills-main-header a {
         font-size: 70px;
     }
     .skills-main-desc {
-        width: 330px;
+        max-width: 330px;
         padding: 20px 0px;
     }
 }

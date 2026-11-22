@@ -368,8 +368,9 @@ const SECONDARY_ROUTES = [
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 33px;
-    width: 33px;
+    height: fit-content;
+    width: fit-content;
+    padding: 6px;
     color: var(--website-text);
     border: 1px solid;
     border-radius: 7px;
@@ -377,8 +378,8 @@ const SECONDARY_ROUTES = [
 }
 
 .footer-bottom-buttons > button > svg, .footer-bottom-buttons > a > svg {
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
 }
 .footer-bottom-buttons > button:hover, .footer-bottom-buttons > a:hover {
     background-color: rgb(43, 43, 43);
@@ -411,10 +412,6 @@ const SECONDARY_ROUTES = [
     .footer-bottom { height: 40px; }
     .copyright-statement { font-size: 18px; }
 
-    .footer-bottom-buttons > button, .footer-bottom-buttons > a {
-        height: 27px;
-        width: 27px;
-    }
     .footer-bottom-buttons > button > svg, .footer-bottom-buttons > a > svg {
         width: 17px;
         height: 17px;

@@ -105,10 +105,11 @@ function setProjectsTransitions(isVisible) {
     font-family: 'Lexend', 'sans-serif';
     width: calc(100% - 30px);
     height: fit-content;
-    padding: 20px 15px;
+    padding: 20px 0px;
     color: var(--globe-green-opaque);
     text-align: center;
     line-height: 35px;
+    margin: 0px auto;
 }
 .projects-note-container {
     height: 500px;
@@ -168,12 +169,9 @@ function setProjectsTransitions(isVisible) {
         grid-column: span 1;
     }
     .projects-main-textContainer {
-        width: 500px;
+        width: 100%;
         position: relative;
-        left: calc(50% - 250px);
-    }
-    .projects-main-desc {
-        width: 470px;
+        left: 0px;
     }
 
     .projects-main-header a {
@@ -184,6 +182,7 @@ function setProjectsTransitions(isVisible) {
         line-height: 28px;
         margin-bottom: 0px;
         text-align: left;
+        max-width: 470px;
     }
     .projects-features-btn {
         font-size: 17px;
