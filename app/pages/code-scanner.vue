@@ -36,8 +36,9 @@ function clickOnQrcodeCapture() {
                 v-html="'Waiting On Camera...'"
                 v-if="!codeScanner.cameraActive && codeScanner.scanMode == 0">
             </div>
+
             <div v-if="codeScanner.scanMode == 1" class="scanner-component-dropZone">
-                <QrcodeDropZone v-if="codeScanner.scanMode == 1" class="scanner-component-dropZone-overlay"
+                <QrcodeDropZone class="scanner-component-dropZone-overlay"
                     @dragover="(e) => { codeScanner.setDraggingImage(e); }"
                     @detect="(event) => { codeScanner.onDetectCode(event); }"
                     @click="() => { clickOnQrcodeCapture(); }"
@@ -51,9 +52,10 @@ function clickOnQrcodeCapture() {
             <div class="scanner-console-top">
                 <div class="scanner-console-header"> <FontAwesomeIcon icon="fa-terminal" /> Console </div>
                 <div class="scanner-console-utils">
-                    <a :href="VUE_QRCODE_READER_GITHUB" target="vue-qrcode-reader" title="See the dependency This page uses.">
-                        <FontAwesomeIcon icon="fa-brands fa-github-square" />
-                    </a>
+                    <AnimatedIconButton :isAnchor="true" :href="VUE_QRCODE_READER_GITHUB" target="vue-qrcode-reader"
+                        title="See the dependency This page uses."
+                        :faIcon="'fa-brands fa-github-square'"
+                    />
                     <AnimatedIconButton :title="codeScanner.scanModeBtnTitle" :faIcon="codeScanner.scanModeIcon"
                         :handle-click="() => { codeScanner.setScanMode('toggle'); }"
                     />
@@ -65,7 +67,7 @@ function clickOnQrcodeCapture() {
             <div class="scanner-console-body">
                 <div class="scanned-code-item" v-for="(item, index) in codeScanner.scannedItems">
                     <p v-if="!item.onlineLink"> {{ item.value }} </p>
-                    <a v-else :href="item.value" :title="('Open: ' + item.value)"> {{ item.value }} </a>
+                    <a v-else :href="item.value" :title="('Open ' + item.value)"> {{ item.value }} </a>
 
                     <div class="scanned-code-item-options">
                         <AnimatedIconButton title="Share Scanned Item" :faIcon="'fa-share-from-square'"

@@ -1,14 +1,16 @@
 <template>
-<button ref="animate-icon-on-hover-button">
-    <FontAwesomeIcon :icon="faIcon" :[hoverAnimation]="isHovering" :class="iconClass" />
-</button>
+<component :is="(props.isAnchor ? 'a' : 'button')" ref="animate-icon-on-hover-button">
+    <FontAwesomeIcon :icon="iconToDisplay" :[hoverAnimation]="isHovering" :class="iconClass" />
+</component>
 </template>
 
 <script setup>
 const props = defineProps({
+    isAnchor: { type: Boolean, default: false },
     handleClick: { type: Function, default: (event) => {} },
     faIcon: { type: String, default: "fa-question" },
     hoverAnimation: { type: String, default: "jello" },
+    hoverIcon: { type: String, default: "" },
     iconClass: { type: [String, Array], default: '' }
 });
 
@@ -16,11 +18,25 @@ const props = defineProps({
 var eventsAbortController = null;
 var checkHoverInterval = null;
 
-const { mouseElement } = storeToRefs(useStyleStore());
+/** @type {ShallowRef<HTMLButtonElement | HTMLAnchorElement>} This is the reference variable that represents the icon button. */
 const buttonRef = useTemplateRef('animate-icon-on-hover-button');
-const isHovering = ref(false);
+const { mouseElement } = storeToRefs(useStyleStore());
 
-onMounted(async() => {
+const eventListenersSet = ref(0);
+const isHovering = ref(false);
+const iconToDisplay = computed(() => {
+    return ((isHovering.value && Boolean(props.hoverIcon) && (props.hoverIcon !== "")) ? props.hoverIcon : props.faIcon);
+});
+
+onMounted(async() => { await setIconButtonEventListeners(); });
+onBeforeUnmount(() => { stopIconButtonEventListeners(true); });
+watch(buttonRef, () => { resetIconButtonEventListeners(); });
+
+/** This function sets the Icon Button's event listeners. */
+async function setIconButtonEventListeners() {
+    if(eventListenersSet.value != 0) { return; }
+    eventListenersSet.value = 1;
+
     if(checkButtonNonexistent()) {
         await nextTick();
         if(checkButtonNonexistent()) { return; }
@@ -37,12 +53,27 @@ onMounted(async() => {
     // This sets an interval that uses the recorded mouse element to stop the animation if necessary.
     setHoverInterval(true);
     signal.addEventListener("abort", () => { setHoverInterval(false); }, { once: true });
-});
-onBeforeUnmount(() => {
+    eventListenersSet.value = 2;
+}
+
+/**
+ * This function stops all the icon button's event listeners.
+ * @param {Boolean} force If true, this will stop the event listeners even if they are not set yet.
+ */
+function stopIconButtonEventListeners(force = false) {
+    if(!force && eventListenersSet.value != 0) { return; }
     isHovering.value = false;
+
     setHoverInterval(false);
     if(eventsAbortController != null) { eventsAbortController.abort(); }
-});
+    eventListenersSet.value = 0;
+}
+
+/** This function resets the icon button's event listeners. */
+async function resetIconButtonEventListeners() {
+    stopIconButtonEventListeners();
+    await setIconButtonEventListeners();
+}
 
 /** This function returns true if the main button here DOES NOT exist, false otherwise. */
 function checkButtonNonexistent() { return (!Boolean(buttonRef.value)); }

@@ -35,6 +35,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
      */
     function setScanMode(index = "toggle") {
         scanMode.value = ((index === "toggle") ? ((scanMode.value != 0) ? 0 : 1) : index);
+        if(scanMode.value != 0) { deactivateCamera({}); }
     }
 
     /** This function is run whenever a visior activates their camera for the webpage. */
@@ -58,13 +59,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         for(let i = 0; i < event.length; i++) {
             const item = event[i];
             const rawValue = item.rawValue;
-
-            const onlineLink = (rawValue.startsWith("https://") ||
-                rawValue.startsWith("http://") ||
-                rawValue.startsWith("mailto:") ||
-                rawValue.startsWith("tel:")
-            );
-            scannedItems.value.push({ value: rawValue, format: item.format, onlineLink });
+            scannedItems.value.push({ value: rawValue, format: item.format, onlineLink: validateLink(rawValue) });
         }
 
         triggerScanSound();

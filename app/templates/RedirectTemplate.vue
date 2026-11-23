@@ -5,14 +5,13 @@
 </template>
 
 <script setup>
-import isURL from 'validator/es/lib/isURL';
 const props = defineProps({
     link: { type: String, default: "" },
     title: { type: String, default: "" },
     desc: { type: String, default: "" }
 });
 
-const linkNotFound = (!props.link || typeof props.link !== "string" || !isURL(props.link, { protocols: ['https'] }));
+const linkNotFound = (!props.link || typeof props.link !== "string" || !isStringUrl(props.link, { protocols: ['https'] }));
 const titleNotFound = (!props.title || typeof props.title !== "string");
 const descNotFound = (!props.desc || typeof props.desc !== "string");
 

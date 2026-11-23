@@ -96,13 +96,17 @@ export default defineNuxtConfig({
 
     imports: {
         dirs: ['~/stores/**', '~/utils/**'],
-        presets: [{
-            from: 'lodash-es',
-            imports: [
-                { name: "clamp", as: "clampNumber" },
-                { name: "round", as: "roundNumber" }
-            ]
-        }]
+        presets: [
+            {
+                from: 'lodash-es',
+                imports: [
+                    { name: "clamp", as: "clampNumber" },
+                    { name: "round", as: "roundNumber" }
+                ]
+            },
+            { from: 'validator/es/lib/isURL', imports: [{ name: "default", as: "isStringUrl" }] },
+            { from: 'validator/es/lib/isMailtoURI.js', imports: [{ name: "default", as: "isStringMailtoUri" }] }
+        ]
     },
     build: {
         transpile: [

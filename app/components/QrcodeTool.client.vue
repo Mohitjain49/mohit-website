@@ -44,9 +44,12 @@
             </button>
             
             <div v-if="(sharePopupMode != 2)" class="qrcode-mainPopup-btn_v2">
-                <button @click="setSocialMediaOptions('toggle')" class="qrcode-mainPopup-btn" title="Share Webpage Link!">
-                    <FontAwesomeIcon icon="fa-comment-nodes" />
-                </button>
+                <AnimatedIconButton class="qrcode-mainPopup-btn" :faIcon="'fa-comment-nodes'" :hoverAnimation="'flip'"
+                    :hoverIcon="((showShareOptions == 1) ? 'fa-square-caret-up' : 'fa-square-caret-down')"
+                    :title="((showShareOptions == 1) ? 'Hide Link Sharing Options' : 'Share Webpage Link')"
+                    :handleClick="() => { setSocialMediaOptions('toggle'); }"
+                />
+
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 1)" class="qrcode-image-options">
                         <button v-if="webData.shareSupported" class="qrcode-mainPopup-btn light"
@@ -56,37 +59,35 @@
 
                             <FontAwesomeActionIcon :baseIcon="'fa-share'" :status="actions.share" />
                         </button>
-                        <a :href="shareEmail" class="qrcode-mainPopup-btn" title="Share This Link By Email!">
-                            <FontAwesomeIcon icon="fa-envelope" />
-                        </a>
-                        <a :href="shareLinkedIn" target="_blank" class="qrcode-mainPopup-btn"
+                        <AnimatedIconButton :isAnchor="true" :href="shareEmail" :faIcon="'fa-envelope'"
+                            class="qrcode-mainPopup-btn"
+                            title="Share This Link By Email!"
+                        />
+                        <AnimatedIconButton :isAnchor="true" :href="shareLinkedIn" target="_blank" :faIcon="'fa-brands fa-linkedin'"
+                            class="qrcode-mainPopup-btn"
                             title="Share This Link On LinkedIn!"
-                            :style="getColorStyles('#0072B1')">
-
-                            <FontAwesomeIcon icon="fa-brands fa-linkedin" />
-                        </a>
-                        <a :href="shareWhatsApp" target="_blank" class="qrcode-mainPopup-btn"
+                            :style="getColorStyles('#0072B1')"
+                        />
+                        <AnimatedIconButton :isAnchor="true" :href="shareWhatsApp" target="_blank" :faIcon="'fa-brands fa-whatsapp'"
+                            class="qrcode-mainPopup-btn"
                             title="Share This Link On WhatsApp!"
-                            :style="getColorStyles('#2DED64')">
-
-                            <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
-                        </a>
-                        <a :href="shareFacebook" target="_blank" class="qrcode-mainPopup-btn"
+                            :style="getColorStyles('#2DED64')"
+                        />
+                        <AnimatedIconButton :isAnchor="true" :href="shareFacebook" target="_blank" :faIcon="'fa-brands fa-facebook'"
+                            class="qrcode-mainPopup-btn"
                             title="Share This Link On Facebook!"
-                            :style="getColorStyles('#0A65FE')">
-
-                            <FontAwesomeIcon icon="fa-brands fa-facebook" />
-                        </a>
+                            :style="getColorStyles('#0A65FE')"
+                        />
                     </div>
                 </Transition>
             </div>
 
-            <div class="qrcode-mainPopup-btn_v2">
-                <button v-if="qrCodeBlob != null" @click="setImageOptions('toggle')" class="qrcode-mainPopup-btn"
-                    :title="(((showShareOptions == 0) ? 'Close' : 'See') + ' Image Options')">
-
-                    <FontAwesomeIcon icon="fa-image" />
-                </button>
+            <div v-if="qrcodeBlobCreated" class="qrcode-mainPopup-btn_v2">
+                <AnimatedIconButton class="qrcode-mainPopup-btn" :faIcon="'fa-image'" :hoverAnimation="'flip'"
+                    :hoverIcon="((showShareOptions == 0) ? 'fa-square-caret-up' : 'fa-square-caret-down')"
+                    :title="(((showShareOptions == 0) ? 'Close' : 'See') + ' Image Options')"
+                    :handleClick="() => { setImageOptions('toggle'); }"
+                />
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
                         <button v-if="webData.shareSupported" @click="shareQRCode()"
@@ -119,22 +120,21 @@
 
                             <FontAwesomeActionIcon :baseIcon="'fa-print'" :status="actions.printImage" />
                         </button>
-                        <a v-if="qrcodeUrlCreated" :href="qrCodeURL" target="mohit-qrcode"
+                        <AnimatedIconButton v-if="qrcodeUrlCreated" :isAnchor="true" :href="qrCodeURL" target="mohit-qrcode"
+                            :faIcon="'fa-arrow-up-right-from-square'"
                             class="qrcode-mainPopup-btn white"
-                            title="Open QR Code in New Tab">
-
-                            <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
-                        </a>
+                            title="Open QR Code in New Tab"
+                        />
                     </div>
                 </Transition>
             </div>
 
-            <div class="qrcode-mainPopup-btn_v2">
-                <button v-if="qrCodeBlob != null" @click="setImageTypesOptions('toggle')" class="qrcode-mainPopup-btn"
-                    :title="((showShareOptions == 2) ? 'Close Image Types' : 'Change Image Type')">
-
-                    <FontAwesomeIcon icon="fa-marker" />
-                </button>
+            <div v-if="qrcodeBlobCreated" class="qrcode-mainPopup-btn_v2">
+                <AnimatedIconButton class="qrcode-mainPopup-btn" :faIcon="'fa-marker'" :hoverAnimation="'flip'"
+                    :hoverIcon="((showShareOptions == 2) ? 'fa-square-caret-up' : 'fa-square-caret-down')"
+                    :title="((showShareOptions == 2) ? 'Close Image Types' : 'Change Image Type')"
+                    :handleClick="() => { setImageTypesOptions('toggle'); }"
+                />
                 <Transition name="fade-transition">
                     <div v-if="(showShareOptions == 2)" class="qrcode-image-options">
                         <button v-for="(type, index) in IMAGE_STATUS" v-html="type.toUpperCase()"
@@ -158,10 +158,7 @@
 import QRCodeStyling from 'qr-code-styling';
 import ParsePhoneNumber from 'libphonenumber-js';
 import Lenis from 'lenis';
-
 import prettyBytes from 'pretty-bytes';
-import isURL from 'validator/es/lib/isURL';
-import isMailtoURI from 'validator/es/lib/isMailtoURI';
 
 /** @type {Array<FilePickerAcceptType>} These are all the types in which a file can be saved. */
 const SAVE_FILE_OPTIONS = [
@@ -224,7 +221,8 @@ const shareWhatsApp = ref("");
 const shareEmail = ref("");
 
 const qrdata = computed(() => { return (router.currentRoute.value.query.qrdata ?? null); });
-const qrcodeFileSize = computed(() => { return ((qrCodeBlob.value == null) ? "" : prettyBytes(qrCodeBlob.value.size, { binary: true })); });
+const qrcodeBlobCreated = computed(() => { return (qrCodeBlob.value != null); });
+const qrcodeFileSize = computed(() => { return (qrcodeBlobCreated.value ? prettyBytes(qrCodeBlob.value.size, { binary: true }) : ""); });
 const qrcodeUrlCreated = computed(() => { return (qrCodeURL.value.length > 0); });
 const qrcodeBg = computed(() => { return { 'background-image': (qrcodeUrlCreated.value ? 'url(' + qrCodeURL.value + ')' : '') }});
 const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.value] ?? ''); });
@@ -404,7 +402,7 @@ async function setQRCodeLink() {
         shareWhatsApp.value = useSocialShare({ network: 'whatsapp', url: newQRCodeLink }).value.shareUrl;
         shareEmail.value = useSocialShare({ network: 'email', url: newQRCodeLink }).value.shareUrl;
     } else {
-        customLinkValid.value = (isURL(newQRCodeLink) || isMailtoURI(newQRCodeLink) || newQRCodeLink.startsWith("tel:"));
+        customLinkValid.value = validateLink(newQRCodeLink);
     }
 
     if(qrcode.value != null) {
@@ -483,7 +481,7 @@ function deleteCurrentQrcodeURL() {
  * @param {Boolean | "toggle"} status The new status for the image options. If it is set to "toggle", then it just flips the value.
  */
 function setImageOptions(status = "toggle") {
-    if(qrCodeBlob.value == null) { return; }
+    if(!qrcodeBlobCreated.value) { return; }
     showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 0) ? -1 : 0) : (status ? 0 : -1));
 }
 
@@ -500,7 +498,7 @@ function setSocialMediaOptions(status = "toggle") {
  * @param {Boolean | "toggle"} status The new status for the image options. If it is set to "toggle", then it just flips the value.
  */
 function setImageTypesOptions(status = "toggle") {
-    if(qrCodeBlob.value == null) { return; }
+    if(!qrcodeBlobCreated.value) { return; }
     showShareOptions.value = ((status === "toggle") ? ((showShareOptions.value == 2) ? -1 : 2) : (status ? 2 : -1));
 }
 
@@ -546,7 +544,7 @@ function navigateToInternalShareLink(event = null) {
  */
 function onSharePopupKeydown(event = undefined) {
     try {
-        if(!event || !event.ctrlKey || event.repeat || !qrCodeBlob.value) { return; }
+        if(!event || !event.ctrlKey || event.repeat || !qrcodeBlobCreated.value) { return; }
         const qrcodeActiveElement = (document.activeElement === getQrcodeContainer());
         const keyLetter = event.key.toLowerCase();
 
@@ -640,7 +638,7 @@ async function shareQRCodeLink() {
 
 /** This function shares the actual QR Code image. */
 function shareQRCode() {
-    if(!webData.copyImageSupported || actions.value.shareImage > 0 || !qrCodeBlob.value) { return; }
+    if(!webData.copyImageSupported || actions.value.shareImage > 0 || !qrcodeBlobCreated.value) { return; }
     actions.value.shareImage = 1;
     const blob = qrCodeBlob.value;
 
@@ -660,7 +658,7 @@ function shareQRCode() {
 
 /** This function saves the actual QR Code image. */
 async function saveQRCode() {
-    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrcode.value) { return; }
+    if(!webData.saveAsSupported || actions.value.saveImage > 0 || !qrcode.value || !qrcodeBlobCreated.value) { return; }
     actions.value.saveImage = 1;
 
     try {
@@ -706,7 +704,7 @@ async function saveQRCode() {
 
 /** This function lets the user download the QR Code as a .png file. */
 function downloadQRCode() {
-    if(actions.value.downloadImage > 0 || !qrCodeBlob.value) { return; }
+    if(actions.value.downloadImage > 0 || !qrcodeBlobCreated.value) { return; }
     actions.value.downloadImage = 1;
 
     try {
@@ -753,7 +751,7 @@ async function copyQRCode() {
 
 /** This function lets the user print the QR Code rendered by the user. */
 async function printQRCode() {
-    if(actions.value.printImage > 0 || !iframeSupported.value || !qrCodeBlob.value) { return; }
+    if(actions.value.printImage > 0 || !iframeSupported.value || !qrcodeBlobCreated.value) { return; }
     actions.value.printImage = 1;
     var cancelTimeout = false;
 

@@ -43,6 +43,14 @@ export function roundAndClampDecimal(decimal = 0) {
 }
 
 /**
+ * This function checks and validates if a string is a valid link.
+ * @param {String} str The string to validate.
+ */
+export function validateLink(str = "") {
+    return (isStringUrl(str) || isStringMailtoUri(str) || str.startsWith("tel:"));
+}
+
+/**
  * This sets the color and border color of an icon.
  * @param {String} color The color to use.
  */
