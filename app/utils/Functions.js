@@ -42,11 +42,6 @@ export function roundAndClampDecimal(decimal = 0) {
     return roundNumber(clampNumber(Number(decimal), 0, 1), 2);
 }
 
-/** This function cuts a string to ensure it has the max length of characters. */
-export function truncate(str = "", maxLength = 80) {
-    return ((str.length > maxLength) ? (str.substring(0, (maxLength - 3)) + '...') : str);
-}
-
 /**
  * This sets the color and border color of an icon.
  * @param {String} color The color to use.

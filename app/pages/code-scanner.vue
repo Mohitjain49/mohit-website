@@ -54,55 +54,33 @@ function clickOnQrcodeCapture() {
                     <a :href="VUE_QRCODE_READER_GITHUB" target="vue-qrcode-reader" title="See the dependency This page uses.">
                         <FontAwesomeIcon icon="fa-brands fa-github-square" />
                     </a>
-                    <button @click="codeScanner.setScanMode('toggle')" :title="codeScanner.scanModeBtnTitle">
-                        <FontAwesomeIcon :icon="codeScanner.scanModeIcon" />
-                    </button>
-                    <button @click="codeScanner.clearAllScannedItems()" title="Delete All Scanned Items" style="color: red;">
-                        <FontAwesomeIcon icon="fa-trash" />
-                    </button>
+                    <AnimatedIconButton :title="codeScanner.scanModeBtnTitle" :faIcon="codeScanner.scanModeIcon"
+                        :handle-click="() => { codeScanner.setScanMode('toggle'); }"
+                    />
+                    <AnimatedIconButton title="Delete All Scanned Items" :faIcon="'fa-trash'" style="color: red;"
+                        :handle-click="() => { codeScanner.clearAllScannedItems(); }"
+                    />
                 </div>
             </div>
             <div class="scanner-console-body">
                 <div class="scanned-code-item" v-for="(item, index) in codeScanner.scannedItems">
-                    <p v-if="!item.onlineLink"> {{ truncate(item.value, 25) }} </p>
-                    <a v-else :href="item.value" :title="('Open: ' + item.value)"> {{ truncate(item.value, 25) }} </a>
+                    <p v-if="!item.onlineLink"> {{ item.value }} </p>
+                    <a v-else :href="item.value" :title="('Open: ' + item.value)"> {{ item.value }} </a>
 
-                    <button title="Open Info For Scanned Item" @click="codeScanner.setScannedItemMenu(index, true)">
-                        <FontAwesomeIcon icon="fa-bars-staggered" />
-                    </button>
+                    <div class="scanned-code-item-options">
+                        <AnimatedIconButton title="Share Scanned Item" :faIcon="'fa-share-from-square'"
+                            :handle-click="() => { codeScanner.shareScannedItem(index); }"
+                        />
+                        <AnimatedIconButton class="trash" title="Delete Scanned Item" :faIcon="'fa-trash'"
+                            :handle-click="() => { codeScanner.removeSelectedItem(index); }"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <WebFooter />
 </main>
-
-<div v-if="(codeScanner.scannedItemMenu != -1)" id="code-scanner-popup" class="webpage-cover">
-    <div class="scanner-itemMenu animate__animated animate__bounceIn">
-        <button @click="codeScanner.setScannedItemMenu(-1)" class="scanner-itemMenu-closeBtn" title="Close Menu">
-            <FontAwesomeIcon icon="fa-xmark" />
-        </button>
-
-        <input v-model="codeScanner.selectedItem.value" readonly />
-        <div class="scanner-itemMenu-options">
-            <button @click="codeScanner.removeSelectedItem()"
-                class="scanner-itemMenu-opt delete"
-                title="Remove Scanned Value From List">
-
-                <FontAwesomeIcon icon="fa-trash" />
-            </button>
-            <button class="scanner-itemMenu-opt" @click="codeScanner.copySelectedScannedValue()" title="Copy Scanned Value">
-                <FontAwesomeIcon :icon="codeScanner.copiedStatusIcon" />
-            </button>
-            <a v-if="codeScanner.selectedItem.onlineLink" title="Open Link"
-                :href="codeScanner.selectedItem.value" target="_blank"
-                class="scanner-itemMenu-opt link">
-
-                <FontAwesomeIcon icon="fa-arrow-up-right-from-square" />
-            </a>
-        </div>
-    </div>
-</div>
 </template>
 
 <style scoped lang="scss">
@@ -261,134 +239,55 @@ function clickOnQrcodeCapture() {
     color: inherit;
     font-size: 15px;
     font-weight: bold;
-}
-.scanned-code-item a:hover {
-    text-decoration: underline;
+    width: calc(100% - 80px);
+    text-align: left;
+    text-wrap: nowrap;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0.1) 100%);
 }
 
+.scanned-code-item-options {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 5px;
+}
 .scanned-code-item button {
     height: fit-content;
     width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid;
+    color: var(--website-light-text);
+    border: 1px solid var(--website-light-text);
     border-radius: 5px;
     padding: 4px;
     transition: var(--default-transition);
 }
-.scanned-code-item button:hover {
-    background-color: black;
-}
 
-#code-scanner-popup {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 495;
-    background-color: rgba(0, 0, 0, 0.9);
-}
-.scanner-itemMenu {
-    position: relative;
-    width: 500px;
-    height: 250px;
-    background-color: var(--dark-background);
-    border: 2px solid var(--blue-two);
-    border-radius: 20px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.scanner-itemMenu-closeBtn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 6px;
+.scanned-code-item button.trash {
     color: red;
-    border: 2px solid;
-    border-radius: 50%;
-    transition: var(--default-transition);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-color: red;
 }
-.scanner-itemMenu-closeBtn svg {
-    width: 17px;
-    height: 17px;
-}
-.scanner-itemMenu-closeBtn:hover {
-    background-color: black;
+.scanned-code-item button svg {
+    width: 16px;
+    height: 16px;
+    padding: 0px 2px;
 }
 
-.scanner-itemMenu input {
-    padding: 5px;
-    outline: none;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid;
-    color: var(--blue-two);
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
-    width: 80%;
-    max-width: 80%;
-    text-align: center;
-    margin-bottom: 15px;
-}
-.scanner-itemMenu-options {
-    height: fit-content;
-    width: fit-content;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    gap: 20px;
-}
-
-.scanner-itemMenu-opt {
-    font-size: 16px;
-    color: var(--blue-three);
-    border: 2px dotted;
-    border-radius: 12px;
-    padding: 7px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: var(--default-transition);
-}
-.scanner-itemMenu-opt:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-.scanner-itemMenu-opt.delete {
-    color: red;
-}
-.scanner-itemMenu-opt.link {
-    color: white;
-}
+.scanned-code-item a:hover { text-decoration: underline; }
+.scanned-code-item button:hover { background-color: black; }
 
 @include dynamic-less-equal-width-rule-scopedBlock(1050) {
     .code-scanner-main {
         flex-direction: column-reverse;
         min-height: 1200px;
     }
-    .scanner-component-container {
-        width: 90%;
-    }
-    .code-scanner-console {
-        width: calc(90% - 4px);
-    }
-}
-@include dynamic-less-equal-width-rule-scopedBlock(600) {
-    .scanner-itemMenu {
-        width: 300px;
-        height: 200px;
-    }
-    .scanner-itemMenu input {
-        font-size: 12px;
-    }
+
+    .scanner-component-container { width: 90%; }
+    .code-scanner-console { width: calc(90% - 4px); }
 }
 </style>

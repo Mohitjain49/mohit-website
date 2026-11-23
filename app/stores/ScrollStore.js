@@ -176,7 +176,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 lenis.scrollTo(target, {
                     offset, duration: finalDuration, lock: true,
                     onStart: () => { setScrollInterval(0); },
-                    onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); },
+                    onComplete: () => { setScrollInterval(1, resolve); },
                 });
             })
         });
@@ -204,7 +204,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 lenis.scrollTo("top", {
                     duration, lock: true, immediate: instant,
                     onStart: () => { setScrollInterval(0); },
-                    onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
+                    onComplete: () => { setScrollInterval(1, resolve); }
                 });
             });
         });
@@ -232,7 +232,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
                 lenis.scrollTo(targetY, {
                     duration: finalDuration, lock: true,
                     onStart: () => { setScrollInterval(0); },
-                    onComplete: () => { setScrollInterval(1); resolve("Scroll Complete!"); }
+                    onComplete: () => { setScrollInterval(1, resolve); }
                 });
             });
         });
@@ -286,16 +286,18 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
     /**
      * This function sets the scroll calculation interval.
-     * @param {0 | 1 | 2} start If true, this function should start the interval, else it should stop it.
+     * @param {0 | 1} start If 1, this function should start the interval, else if 0, it should stop it.
+     * @param {Function} resolveFunc The function to resolve the promise for the scroll call once it is been completed.
      */
-    function setScrollInterval(start = 0) {
-        if(start > 0 && calculateScrollInterval != null) {
+    function setScrollInterval(start = 0, resolveFunc = (msg = "") => {}) {
+        if(start == 1 && calculateScrollInterval != null) {
             clearInterval(calculateScrollInterval);
             if(hideScrollProgressTimeout != null) { clearTimeout(hideScrollProgressTimeout); }
 
             calculateScrollInterval = null;
             scrollProgress.value.pct = 150;
 
+            resolveFunc("Scroll Complete!");
             hideScrollProgressTimeout = setTimeout(() => {
                 scrollProgress.value = { show: false, pct: 0, duration: 0 };
                 hideScrollProgressTimeout = null;

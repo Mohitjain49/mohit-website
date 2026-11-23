@@ -1,6 +1,6 @@
 export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const SCANNED_ITEMS_KEY = "mohit-codeScanner-items";
-    const styleStore = useStyleStore();
+    const webData = useWebsiteDataStore();
 
     /**
      * @type {Ref<Array<{ value: String, format: String, onlineLink: Boolean }>>}
@@ -9,23 +9,13 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     const scannedItems = ref([]);
     const cameraActive = ref(false);
     const draggingImage = ref(false);
-
     const scanMode = ref(0);
-    const scannedItemMenu = ref(-1);
-
-    const copiedTimeout = ref(null);
-    const copiedStatus = ref(0);
-
-    const selectedItem = computed(() => {
-        return ((scannedItemMenu.value == -1) ? null : scannedItems.value[scannedItemMenu.value]);
-    });
-    const copiedStatusIcon = computed(() => {
-        return ((copiedStatus.value == 0) ? 'fa-copy' : ((copiedStatus.value == 1) ? 'fa-check' : 'fa-ban'));
-    });
 
     const scanModeIcon = computed(() => { return ((scanMode.value == 0) ? "fa-file-arrow-up" : "fa-video"); });
     const scanModeBtnTitle = computed(() => { return ((scanMode.value == 0) ? "Switch To Drag and Drop" : "Switch to Video"); });
-    const draggingImageText = computed(() => { return (!draggingImage.value ? "Click Here or Drag Your Image Here To Find Its QR Codes." : "Drop Your Image Here."); });
+    const draggingImageText = computed(() => {
+        return (!draggingImage.value ? "Click Here or Drag Your Image Here To Find Its QR Codes." : "Drop Your Image Here.");
+    });
 
     /** This function mounts the page hosting the code scanner. */
     function mountCodeScanner() {
@@ -36,7 +26,6 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     /** This function unmounts the page hosting the code scanner. */
     function unmountCodeScanner() {
         deactivateCamera();
-        setScannedItemMenu(-1);
         setDraggingImage(false);
     }
 
@@ -54,10 +43,7 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         cameraActive.value = true;
     }
 
-    /**
-     * This function sets the "cameraActive" boolean to false.
-     * Note that this doesn't actually deactivate the camera.
-     */
+    /** This function sets the "cameraActive" boolean to false. Note that this doesn't actually deactivate the camera. */
     function deactivateCamera(event = {}) {
         if(import.meta.dev) { console.log(event); }
         cameraActive.value = false;
@@ -94,61 +80,32 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
     }
 
     /**
-     * This function removes the selected item from the list.
+     * This function opens the share popup for a selected item from the list.
+     * @param {Number} index The index of the scanned item.
      */
-    function removeSelectedItem() {
-        const index = (scannedItemMenu.value == -1 ? (scannedItems.value.length - 1) : scannedItemMenu.value);
-        if(index == -1) { return; }
-        setScannedItemMenu(-1);
+    function shareScannedItem(index = 0) {
+        if(index < 0 || index >= scannedItems.value.length) { return; }
+        webData.setQRCodePopup(scannedItems.value[index].value);
+    }
 
+    /**
+     * This function removes the selected item from the list.
+     * @param {Number} index The index of the selected scanned item.
+     */
+    function removeSelectedItem(index = 0) {
+        if(index < 0 || index >= scannedItems.value.length) { return; }
         scannedItems.value.splice(index, 1);
         setLocalStorageObj();
     }
 
-    /**
-     * This function clears all scanned items from the list.
-     */
+    /** This function clears all scanned items from the list. */
     function clearAllScannedItems() {
         scannedItems.value = [];
         setLocalStorageObj();
     }
 
-    /**
-     * This function sets the local storage object so that visitors can access scanned items later.
-     */
-    function setLocalStorageObj() {
-        localStorage.setItem(SCANNED_ITEMS_KEY, JSON.stringify(scannedItems.value));
-    }
-
-    /**
-     * This function sets which scanned item menu is open or not.
-     * @param {Number} index The new index for which scanned item should be displayed.
-     * @param {Boolean} toggle Sets the variable to -1 if true and if the variable equals the passed in index.
-     */
-    function setScannedItemMenu(index = -1, toggle = false) {
-        scannedItemMenu.value = ((toggle && index == scannedItemMenu.value) ? -1 : index);
-        styleStore.setHideOverflowArray(HideOverflow.SCANNED_ITEM_POPUP, (scannedItemMenu.value != -1));
-    }
-
-    /**
-     * This function copies the value of the selected scanned value.
-     */
-    function copySelectedScannedValue() {
-        if(copiedTimeout.value != null) { clearTimeout(copiedTimeout.value); }
-        navigator.clipboard.writeText(selectedItem.value.value).then(() => {
-            copiedStatus.value = 1;
-            copiedTimeout.value = setTimeout(() => {
-                copiedStatus.value = 0;
-                copiedTimeout.value = null;
-            }, 3500);
-        }).catch(() => {
-            copiedStatus.value = 2;
-            copiedTimeout.value = setTimeout(() => {
-                copiedStatus.value = 0;
-                copiedTimeout.value = null;
-            }, 3500);
-        });
-    }
+    /** This function sets the local storage object so that visitors can access scanned items later. */
+    function setLocalStorageObj() { localStorage.setItem(SCANNED_ITEMS_KEY, JSON.stringify(scannedItems.value)); }
 
     const BARCODE_FORMATS = [
         "aztec",
@@ -174,9 +131,9 @@ export const useCodeScannerStore = defineStore("code-scanner-store", () => {
         "matrix_codes"
     ];
 
-    return { scannedItems, cameraActive, scannedItemMenu, scanMode, draggingImage,
-        selectedItem, copiedStatusIcon, scanModeIcon, scanModeBtnTitle, draggingImageText, BARCODE_FORMATS,
-        mountCodeScanner, unmountCodeScanner, clearAllScannedItems, setScannedItemMenu, setScanMode,
-        onCameraActive, deactivateCamera, onDetectCode, setDraggingImage, removeSelectedItem, copySelectedScannedValue
+    return { scannedItems, cameraActive, scanMode, draggingImage,
+        scanModeIcon, scanModeBtnTitle, draggingImageText, BARCODE_FORMATS,
+        mountCodeScanner, unmountCodeScanner, clearAllScannedItems, setScanMode, shareScannedItem,
+        onCameraActive, deactivateCamera, onDetectCode, setDraggingImage, removeSelectedItem
     }
 });

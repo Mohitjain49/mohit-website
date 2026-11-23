@@ -81,6 +81,7 @@
     align-items: stretch;
     flex-direction: row;
     scroll-margin-top: 90px;
+    scroll-margin-bottom: 20px;
 }
 .mohit-scriptPage-code-line-content {
     width: calc(100% - 55px);
@@ -125,6 +126,7 @@
     color: white;
     font-family: 'Roboto', sans-serif;
     scroll-margin-top: 90px;
+    scroll-margin-bottom: 20px;
     transition: var(--default-transition);
 }
 .mohit-scriptPage-code-lineNum-innerButton:hover,

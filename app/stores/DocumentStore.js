@@ -65,7 +65,6 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** @type {AbortController} This abort controller manages custom event listeners related to the Google Picker API UI. */
     var googlePickerEventsController = null;
-    var googlePickerRepositionInterval = null;
 
     /** @type {AbortController} This abort controller manages the event listeners fired when the user focuses on the window. */
     var windowFocusAbortController = null;

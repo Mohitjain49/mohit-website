@@ -251,10 +251,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(!event || !event.key || event.repeat) { return; }
         const key = event.key.toLowerCase();
 
-        if(key === "k" && event.altKey) {
-            router.push("/contact/?qrdata=main");
-        }
-
         // When the "M" Key is pressed with a special key, a website menu should open.
         if(key === "m" && (event.ctrlKey || event.altKey) && !showSharePopup.value) {
             const fullScreenSet = fullScreenStore.fullScreenSet;
