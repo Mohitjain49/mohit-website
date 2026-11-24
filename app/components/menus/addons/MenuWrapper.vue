@@ -1,7 +1,7 @@
 <template>
 <!-- <WebCover v-if="(webMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
-    <div v-show="webMenuOpen" :inert="!webMenuOpen" :class="['mohit-navMenu', extraMenuClass]" :id="menuId">
+    <div v-show="webMenuOpen" :inert="!webMenuOpen" :class="webMenuClasses" :id="menuId">
         <MenuEventActions v-if="webMenuOpen" />
         <div class="mohit-navMenu-closing-cover" v-show="!webMenuOpen"></div>
 
@@ -46,9 +46,17 @@ const props = defineProps({
     showDocOptionsBtn: { type: Boolean, default: false }
 });
 
-const webData = useWebsiteDataStore();
 const router = useRouter();
+const webData = useWebsiteDataStore();
 
 const webMenuOpen = computed(() => { return (webData.menuOpen == props.menuNumber); });
+const webMenuClasses = computed(() => { return ['mohit-navMenu', props.extraMenuClass, (webMenuOpen.value ? '' : 'closed')]; });
 const onHomepage = computed(() => { return (router.currentRoute.value.path === "/"); });
+
+// This unfocuses or "blurs" the active element if the active element is in the website menu when the website menu closes.
+watch(webMenuOpen, (newValue) => {
+    if(newValue || !import.meta.client || !document || !document.activeElement) { return; }
+    const activeElement = document.activeElement;
+    if(Boolean(activeElement) && Boolean(activeElement.blur) && Boolean(activeElement.closest("#" + props.menuId))) { activeElement.blur(); }
+});
 </script>

@@ -7,6 +7,7 @@ export const RESUME_HOSTED_DOCUMENT_INDEX = 0;
 /** This pinia store is used to customize my resume. */
 export const useResumeStore = defineStore("resume-store", () => {
     const documentStore = useDocumentStore();
+    const webData = useWebsiteDataStore();
     const router = useRouter();
     const fullScreenSet = getFullScreenSet();
 
@@ -42,6 +43,8 @@ export const useResumeStore = defineStore("resume-store", () => {
         }
 
         await initBlob({ addQrcode: qrcodeAdded.value, removeLinks: linksRemoved.value, updateQuery: false });
+        await webData.waitForFullyMounted(10000);
+
         const scaleFactor = documentStore.hostedDocuments[RESUME_HOSTED_DOCUMENT_INDEX].metadata.pageHeightToWidthRatio;
         documentStore.mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor);
     }

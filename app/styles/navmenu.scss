@@ -296,6 +296,18 @@
     opacity: var(--nav-menu-opacity, 1);
     transform: var(--nav-menu-transform, translateY(0px));
 }
+
+.mohit-navMenu.webMenu-vertical-overflow {
+    border-radius: 5px;
+    padding-right: 5px;
+}
+.mohit-navMenu.closed {
+    interactivity: none;
+    user-select: none;
+    pointer-events: none;
+    touch-action: none;
+}
+
 @mixin mohit-navMenu-mohit_2() {
     left: 0px;
     top: 0px;
@@ -305,7 +317,6 @@
     height: fit-content;
     max-height: calc(100% - 40px);
 }
-
 .mohit-navMenu-contents {
     height: 100%;
     width: 100%;
@@ -317,10 +328,6 @@
     scrollbar-width: none !important;
     scrollbar-color: var(--website-text) transparent;
     outline: none !important;
-}
-.mohit-navMenu.webMenu-vertical-overflow {
-    border-radius: 5px;
-    padding-right: 5px;
 }
 
 :fullscreen .mohit-navMenu { @include mohit-navMenu-mohit_2(); }

@@ -302,6 +302,28 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     }
 
     /**
+     * This function lets another function wait for the website to mount its main functionality before performing its tasks.
+     * @param {Number} timeout The amount of time in milliseconds to wait before throwing out a timeout error.
+     */
+    async function waitForFullyMounted(timeout = 7000) {
+        await new Promise(async (resolve, reject) => {
+            if(fullyMounted.value) { resolve(null); }
+            var msPassed = 0;
+
+            while(msPassed < timeout && !fullyMounted.value) {
+                await sleep(50);
+                msPassed += 50;
+            }
+
+            if(fullyMounted.value) {
+                resolve(null);
+            } else {
+                reject(new Error("Timeout Error"));
+            }
+        });
+    }
+
+    /**
      * This function gets the HTML Element representing the current website menu open.
      * @param {"current" | "previous"} mode The website menu to obtain.
      */
@@ -449,6 +471,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
         setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
         setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick, setWebsiteMenuTransitionStyles,
-        shareText, shareLink, shareFile, mountStore, unmountStore
+        shareText, shareLink, shareFile, mountStore, unmountStore, waitForFullyMounted
     }
 });

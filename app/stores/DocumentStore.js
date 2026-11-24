@@ -701,7 +701,8 @@ export const useDocumentStore = defineStore("document-store", () => {
             await hostedDocuments[currentDocumentRoute.value].initBlob();
         }
 
-        const scaleFactor = getCurrentDocumentMetadata()?.pageHeightToWidthRatio.value;
+        await webData.waitForFullyMounted(10000);
+        const scaleFactor = (getCurrentDocumentMetadata()?.pageHeightToWidthRatio.value ?? PDF_LETTER_SCALE);
         if(Boolean(scaleFactor)) { mountCustomDocumentPage(DEFAULT_PDF_MAX_WIDTH, DEFAULT_PDF_MIN_WIDTH, scaleFactor); }
     }
 
