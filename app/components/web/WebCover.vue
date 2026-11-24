@@ -3,7 +3,7 @@
     <Transition name="fade-transition" appear>
         <div v-if="!coverPressed" class="webpage-cover-closeMsg"> Hold Cover To Close </div>
     </Transition>
-    <Transition name="fade-transition" appear>
+    <Transition name="fade-exit-transition" appear>
         <div v-if="coverPressed" class="webpage-cover-progressBar">
             <div class="inner" :style="{ 'width': ((counter * 100 / FINAL_COUNT) + '%') }"></div>
         </div>

@@ -117,14 +117,15 @@ onAfterMounted(() => {
         arrowUpElement.addEventListener("pointerdown", (event) => { onArrowButtonPointerDown(event, "up"); }, { signal });
     }
 
-    window.addEventListener("pointerup", (event) => { onFsPointerUp(event); }, { signal });
-    window.addEventListener("dragstart", () => { onFsPointerUp("bypass"); }, { signal });
-    window.addEventListener("keydown", (event) => { onFsKeydown(event); }, { signal, capture: true });
+    window.addEventListener("pointerup", () => { cancelScrollbarAction(); }, { signal });
+    window.addEventListener("pointercancel", () => { cancelScrollbarAction(); }, { signal });
+    window.addEventListener("dragstart", () => { cancelScrollbarAction(); }, { signal });
+    window.addEventListener("blur", () => { cancelScrollbarAction(); }, { signal });
 });
 
 // This unsets a few variables before removing the component.
 onBeforeUnmount(() => {
-    onFsPointerUp("bypass");
+    cancelScrollbarAction();
     removeOverflowClass();
     if(eventsAbortController != null) { eventsAbortController.abort(); }
 });
@@ -141,7 +142,7 @@ function checkRecordedFsElement() { return (Boolean(fsElement.value) && Boolean(
  * @param {Number} oldY The old Y position of the mouse.
  */
 function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
-    if(!mousePressedOnThumb.value || scrollProgress.value.show) { return; }
+    if(!mousePressedOnThumb.value || scrollProgress.value.show || scrollStore.scrollKeyPressed) { return; }
     if(!checkRecordedFsElement()) { fsElement.value = getFsElement(); }
 
     const element = (checkRecordedFsElement() ? fsElement.value : getFsElement());
@@ -160,11 +161,11 @@ function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
 }
 
 /**
- * This function enables and disables vistors from selecting text on the full screen element.
- * @warn This has no effect if there isn't a full screen element active.
- * @param {Boolean} disable Whether to disable user text selection or not.
+ * This function enables and disables vistors from performing certain browser actions.
+ * This prevents the actions of this component from "glitching" the website.
+ * @param {Boolean} disable Whether to disable said actions or not.
  */
-function setUserSelect(disable = true) {
+function setEventLocks(disable = true) {
     styleStore.setDisableUserSelectArray(DisableUserSelect.FS_SCROLL_BAR, disable);
 }
 
@@ -218,10 +219,10 @@ function removeOverflowClass() {
 /** This function has the webpage scroll by an increment each frame while the user presses down an arrow. */
 function scrollRepeatedly() {
     const currentTime = performance.now();
-    const deltaTime = ((currentTime - lastTime) * 0.8);
+    const deltaTime = (currentTime - lastTime);
     lastTime = currentTime;
 
-    scrollStore.scrollByIncrement(mousePressedOnArrow.value * deltaTime);
+    if(!scrollStore.scrollKeyPressed) { scrollStore.scrollByIncrement(mousePressedOnArrow.value * deltaTime * 0.8); }
     scrollAnimationFrame = requestAnimationFrame(() => { scrollRepeatedly(); });
 }
 
@@ -232,7 +233,7 @@ function scrollRepeatedly() {
 function onFsThumbDown(event) {
     if(!event || event.pointerType !== "mouse") { return; }
     mousePressedOnThumb.value = true;
-    setUserSelect(true);
+    setEventLocks(true);
     focusOnFsElement(event);
 }
 
@@ -244,7 +245,9 @@ function onFsThumbDown(event) {
 function onArrowButtonPointerDown(event, type = "up") {
     if(!event || event.pointerType !== "mouse" || mousePressedOnArrow.value != 0) { return; }
     mousePressedOnArrow.value = ((type === "up") ? -1 : ((type === "down") ? 1 : 0));
-    scrollStore.scrollByIncrement((mousePressedOnArrow.value * 40), true);
+    if(!scrollStore.scrollKeyPressed) { scrollStore.scrollByIncrement((mousePressedOnArrow.value * 40), true); }
+
+    setEventLocks(true);
     focusOnFsElement(event);
 
     pointerHoldTimeout = setTimeout(() => {
@@ -255,13 +258,8 @@ function onArrowButtonPointerDown(event, type = "up") {
     }, 500);
 }
 
-/**
- * This function is triggered when the user stops holding down a button on the full screen element.
- * @param {PointerEvent | "bypass"} event The event on holding the button down.
- *  It it is "bypass", the function runs without interruption.
- */
-function onFsPointerUp(event = "bypass") {
-    if(event !== "bypass" && (!event || event.pointerType !== "mouse")) { return; }
+/** This function is triggered when the user stops holding down a button on the full screen element. */
+function cancelScrollbarAction() {
     mousePressedOnThumb.value = false;
     mousePressedOnArrow.value = 0;
 
@@ -270,17 +268,7 @@ function onFsPointerUp(event = "bypass") {
 
     scrollAnimationFrame = null;
     pointerHoldTimeout = null;
-    setUserSelect(false);
-}
-
-/**
- * This function runs when the user presses down a key while focused on a Script Line Number.
- * @param {KeyboardEvent} event The event from clicking the button.
- */
-function onFsKeydown(event = null) {
-    if(!event || !event.key || (mousePressedOnArrow.value == 0 && !mousePressedOnThumb.value)) { return; }
-    const key = event.key.toLowerCase();
-    if(key === "arrowup" || key === "arrowdown") { event.preventDefault(); }
+    setEventLocks(false);
 }
 
 /**

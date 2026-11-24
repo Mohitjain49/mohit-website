@@ -26,16 +26,10 @@ export const useFullScreenStore = defineStore("screen-store", () => {
         const fullScreenInactive = !fullScreenSet.value;
 
         try {
-            if((element.requestFullscreen != undefined) && fullScreenInactive) {
-                await element.requestFullscreen();
-            } else if((element.webkitRequestFullscreen != undefined) && fullScreenInactive) {
-                await element.webkitRequestFullscreen();
-            } else if((element.mozRequestFullscreen != undefined) && fullScreenInactive) {
-                await element.mozRequestFullscreen();
-            } else if((element.msRequestFullscreen != undefined) && fullScreenInactive) {
-                await element.msRequestFullscreen();
-            } else if(!fullScreenInactive) {
-                await document.exitFullscreen();
+            if(fullScreenInactive) {
+                if(Boolean(element.requestFullscreen)) { await element.requestFullscreen(); }
+            } else {
+                if(Boolean(document.exitFullscreen)) { await document.exitFullscreen(); }
             }
 
             // This marks that the website is no longer changing its full screen status.

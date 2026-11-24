@@ -2,7 +2,8 @@
 <!-- <WebCover v-if="(webData.scriptsMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.scriptsMenuOpen" class="mohit-navMenu" id="mohit-scriptsMenu">
-        <MenuEventActions />
+        <MenuEventActions v-if="webData.scriptsMenuOpen" />
+        <div class="mohit-navMenu-closing-cover" v-show="!webData.scriptsMenuOpen"></div>
 
         <div class="mohit-navMenu-contents">
             <MenuTop />

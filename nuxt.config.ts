@@ -143,7 +143,8 @@ export default defineNuxtConfig({
     sitemap: {
         zeroRuntime: true,
         exclude: SITEMAP_EXCLUDED_ROUTES,
-        defaults: { lastmod: new Date().toISOString().split('T')[0] }
+        defaults: { lastmod: (new Date().toISOString().split('T')[0]) },
+        xsl: true
     },
 
     sourcemap: false,

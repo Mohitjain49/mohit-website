@@ -193,7 +193,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
     /** This function runs when the "fullscreenchange" event is fired. */
     function onFullScreenModeChange() {
         fullScreenStore.setFullScreenStatus();
-        scrollStore.onLenisFullScreenChange();
+        scrollStore.onScrollStoreFullScreenChange();
         documentStore.setCurrentObservedPage(1);
     }
 
@@ -325,19 +325,15 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
         menuOpen.value = ((setMenuClosed || (toggle && menuOpen.value == index)) ? NO_MENU : index);
 
-        if(menuOpen.value == NO_MENU) {
-            document.documentElement.style.setProperty("--nav-menu-closing-cover-display", "block");
-        } else {
-            document.documentElement.style.setProperty("--nav-menu-closing-cover-display", "none");
-            setWebsiteMenuTransitionStyles();
+        if(menuOpen.value == NO_MENU) { return; }
+        setWebsiteMenuTransitionStyles();
 
-            // This has the website menu scroll up to the top of its content when opened.
-            nextTick(() => {
-                const webMenuElement = getWebsiteMenuElement("current");
-                if(!Boolean(webMenuElement)) { return; }
-                webMenuElement.querySelector(".mohit-navMenu-contents")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            });
-        }
+        // This has the website menu scroll up to the top of its content when opened.
+        nextTick(() => {
+            const webMenuElement = getWebsiteMenuElement("current");
+            if(!Boolean(webMenuElement)) { return; }
+            webMenuElement.querySelector(".mohit-navMenu-contents")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        });
     }
 
     /**

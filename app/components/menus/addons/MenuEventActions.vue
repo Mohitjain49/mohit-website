@@ -1,7 +1,5 @@
 <template>
 <div ref="addon-reference" class="mohit-navMenu-addon-child-element"></div>
-<div class="mohit-navMenu-closing-cover"></div>
-
 <div v-show="webMenuScrollable" class="mohit-webMenu-scrollBar" @contextmenu="(event) => { onScrollBarContextMenu(event); }">
     <div class="mohit-webMenu-scrollBar-body">
         <div ref="web-menu-scrollbar-thumb" :class="thumbClasses" :style="scrollbarThumbStyle"></div>
@@ -15,6 +13,7 @@ const SWIPE_THRESHOLD = 75;
 
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
+const scrollStore = useScrollStore();
 
 const { websiteMenuMode } = storeToRefs(webData);
 const { mouseY, cssToWindowHeightRatio } = storeToRefs(styleStore);
@@ -94,16 +93,18 @@ onAfterMounted(() => {
         window.addEventListener("touchmove", (event) => { onMenuPointerEvent(event); }, { signal, passive: false });
     }
 
-    if(Boolean(websiteMenuScrollbarThumb.value)) {
-        websiteMenuScrollbarThumb.value.addEventListener("pointerdown", (event) => { onWebsiteMenuScrollbarPointerEvent(event); }, { signal });
-        window.addEventListener("pointerup", (event) => { onWebsiteMenuScrollbarPointerEvent(event); }, { signal });
-        window.addEventListener("dragstart", (event) => { onWebsiteMenuScrollbarPointerEvent(event); }, { signal });
-    }
+    if(!Boolean(websiteMenuScrollbarThumb.value)) { throw new Error("Website Menu Scrollbar Thumb Element Not Found."); }
+    websiteMenuScrollbarThumb.value.addEventListener("pointerdown", (event) => { onWebsiteMenuScrollbarPointerDown(event); }, { signal });
+
+    window.addEventListener("pointerup", () => { cancelWebsiteMenuScrollbarActions(); }, { signal });
+    window.addEventListener("pointercancel", () => { cancelWebsiteMenuScrollbarActions(); }, { signal });
+    window.addEventListener("dragstart", () => { cancelWebsiteMenuScrollbarActions(); }, { signal });
+    window.addEventListener("blur", () => { cancelWebsiteMenuScrollbarActions(); }, { signal });
 });
 
 // This aborts all event listeners and stops the Raf Loop when the component unmounts.
 onBeforeUnmount(() => {
-    setUserSelect(false);
+    cancelWebsiteMenuScrollbarActions();
     if(eventsAbortController != null) { eventsAbortController.abort(); }
 });
 
@@ -218,14 +219,19 @@ function setUserSelect(disable = true) {
  * This function runs when a pointer event is fired with the scrollbar.
  * @param {PointerEvent} event The pointer event.
  */
-function onWebsiteMenuScrollbarPointerEvent(event = null) {
-    const newStatus = (Boolean(event) && (event.type === "pointerdown") && (event.pointerType === "mouse"));
-    scrollbarThumbPressed.value = newStatus;
-    setUserSelect(newStatus);
+function onWebsiteMenuScrollbarPointerDown(event = null) {
+    if(!event || event.pointerType !== "mouse") { return; }
+    scrollbarThumbPressed.value = true;
+    setUserSelect(true);
 
-    if(!scrollbarThumbPressed.value || !Boolean(websiteMenuContents.value) || !Boolean(event)) { return; }
-    websiteMenuContents.value.focus();
+    if(Boolean(websiteMenuContents.value)) { websiteMenuContents.value.focus(); }
     event.preventDefault();
+}
+
+/** This cancels the website menu's scrollbar actions. */
+function cancelWebsiteMenuScrollbarActions() {
+    scrollbarThumbPressed.value = false;
+    setUserSelect(false);
 }
 
 /**
@@ -234,7 +240,7 @@ function onWebsiteMenuScrollbarPointerEvent(event = null) {
  * @param {Number} oldY The old Y position of the mouse.
  */
 function scrollWebMenuOnMouseMove(newY = 0, oldY = 0) {
-    if(!scrollbarThumbPressed.value || !Boolean(websiteMenuContents.value)) { return; }
+    if(!scrollbarThumbPressed.value || !Boolean(websiteMenuContents.value) || scrollStore.scrollKeyPressed) { return; }
     const webMenuContents = websiteMenuContents.value;
     const contentsRect = webMenuContents.getBoundingClientRect();
 

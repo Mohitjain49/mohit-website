@@ -1,7 +1,8 @@
 <template>
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.compassMenuOpen" class="mohit-navMenu" id="mohit-compassMenu">
-        <MenuEventActions />
+        <MenuEventActions v-if="webData.compassMenuOpen" />
+        <div class="mohit-navMenu-closing-cover" v-show="!webData.compassMenuOpen"></div>
 
         <div class="mohit-navMenu-contents">
             <MenuTop />

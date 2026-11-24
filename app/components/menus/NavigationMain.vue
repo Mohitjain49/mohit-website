@@ -56,7 +56,8 @@
 
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webData.navMenuOpen" class="mohit-navMenu" id="mohit-navMenu">
-        <MenuEventActions />
+        <MenuEventActions v-if="webData.navMenuOpen" />
+        <div class="mohit-navMenu-closing-cover" v-show="!webData.navMenuOpen"></div>
 
         <div class="mohit-navMenu-contents">
             <MenuTop />

@@ -20,20 +20,38 @@ export const useScrollStore = defineStore("scroll-store", () => {
     const mounted = ref(false);
     const isScrolling = ref(false);
 
+    const webpageHeight = ref(0);
+    const scrollProgress = ref({ show: false, pct: 0, duration: 0 });
+
+    /** This tracks keys that can trigger a scroll and sees if they are pressed down or not. */
+    const scrollKeys = ref([
+        { name: "ArrowUp", pressed: false },
+        { name: "ArrowDown", pressed: false },
+        { name: "ArrowLeft", pressed: false },
+        { name: "ArrowRight", pressed: false },
+        { name: "PageUp", pressed: false },
+        { name: "PageDown", pressed: false },
+        { name: "Home", pressed: false },
+        { name: "End", pressed: false },
+        { name: " ", pressed: false },
+    ]);
+
+    const isAutoScrolling = computed(() => { return scrollProgress.value.show; });
+    const scrollKeyPressed = computed(() => { return (-1 != scrollKeys.value.findIndex((item) => { return item.pressed; })); });
+
     /** @type {Lenis} This contains the Lenis object for autoscrolling. */
     var lenis = null;
     var animationFrame = null;
     var fullScreenChangeTimeout = null;
+
+    /** @type {AbortController} This manages aborting the event listeners for this store. */
+    var eventsAbortController = null;
 
     /** @type {dayjs.Dayjs} This represents the start time when the scrollTo function was successfully called. */
     var scrollStartTime = null;
     var calculateScrollInterval = null;
     var cancelScrollTimeout = null;
     var hideScrollProgressTimeout = null;
-
-    const webpageHeight = ref(0);
-    const scrollProgress = ref({ show: false, pct: 0, duration: 0 });
-    const isAutoScrolling = computed(() => { return scrollProgress.value.show; });
 
     // If the height of the main element changed, lenis resizes itself.
     watch(webpageHeight, () => { if(mounted.value && lenis) { lenis.resize(); } });
@@ -75,6 +93,14 @@ export const useScrollStore = defineStore("scroll-store", () => {
         }
 
         animationFrame = requestAnimationFrame(() => { updateWebpageHeight(); });
+        if(eventsAbortController != null) { eventsAbortController.abort(); }
+        eventsAbortController = new AbortController();
+
+        const signal = eventsAbortController.signal;
+        window.addEventListener("keydown", (event) => { trackScrollKey(event); }, { signal, capture: true });
+        window.addEventListener("keyup", (event) => { trackScrollKey(event); }, { signal, capture: true });
+
+        // Marks the scroll store as mounted.
         mounted.value = true;
     }
 
@@ -82,9 +108,13 @@ export const useScrollStore = defineStore("scroll-store", () => {
     function unmountScrollStore() {
         if(!mounted.value) { return; }
         if(animationFrame != null) { cancelAnimationFrame(animationFrame); }
+        if(eventsAbortController != null) { eventsAbortController.abort(); }
 
-        lenis.destroy();
+        cancelAutoscroll();
+        if(lenis != null) { lenis.destroy(); }
         lenis = null;
+
+        eventsAbortController = null;
         mounted.value = false;
     }
 
@@ -104,12 +134,6 @@ export const useScrollStore = defineStore("scroll-store", () => {
         lenis.on("scroll", (lenisInstance) => { onLenisScroll(lenisInstance, "default"); });
     }
 
-    /** This function runs for the scroll store when the full screen status is changed for the website. */
-    function onLenisFullScreenChange() {
-        if(fullScreenChangeTimeout != null) { clearTimeout(fullScreenChangeTimeout); }
-        fullScreenChangeTimeout = setTimeout(() => { setLenisInstance(); }, 25);
-    }
-
     /**
      * This function runs everytime a lenis instance occurs.
      * @param {Lenis} lenisInstance The current instance of Lenis.
@@ -120,6 +144,25 @@ export const useScrollStore = defineStore("scroll-store", () => {
         scriptsStore.closeLineOptions();
         documentStore.setContextMenuPageNumber(0);
         isScrolling.value = lenis.isScrolling;
+    }
+
+    /** This function runs for the scroll store when the full screen status is changed for the website. */
+    function onScrollStoreFullScreenChange() {
+        if(fullScreenChangeTimeout != null) { clearTimeout(fullScreenChangeTimeout); }
+        fullScreenChangeTimeout = setTimeout(() => { setLenisInstance(); }, 25);
+    }
+
+    /**
+     * This function tracks scroll keys and whether they are pressed or not.
+     * @param {KeyboardEvent} event The keyboard event to use.
+     */
+    function trackScrollKey(event = null) {
+        if(!event || !event.type || !event.key || event.repeat) { return; }
+        const key = event.key.toLowerCase();
+        const keyIndexInArray = scrollKeys.value.findIndex((item) => { return (key === item.name.toLowerCase()); });
+
+        if(keyIndexInArray == -1) { return; }
+        scrollKeys.value[keyIndexInArray].pressed = (event.type.toLowerCase() === "keydown");
     }
 
     /**
@@ -281,7 +324,7 @@ export const useScrollStore = defineStore("scroll-store", () => {
 
             // This resolves how long the promise needed to wait before resolving.
             resolve(secondsPassed);
-        })
+        });
     }
 
     /**
@@ -330,9 +373,9 @@ export const useScrollStore = defineStore("scroll-store", () => {
     /** This easing function is used by Lenis to make cool animations. */
     function easeOutQuart(x = 0) { return (1 - Math.pow(1 - x, 4)); }
 
-    return { mounted, scrollProgress, isAutoScrolling, isScrolling,
+    return { mounted, scrollProgress, isAutoScrolling, isScrolling, scrollKeyPressed,
         mountScrollStore, unmountScrollStore, cancelAutoscroll,
-        waitForAutoScroll, waitForMounted, onLenisFullScreenChange,
+        waitForAutoScroll, waitForMounted, onScrollStoreFullScreenChange,
         scrollToId, scrollToTop, scrollToTarget, scrollByIncrement
     }
 });
