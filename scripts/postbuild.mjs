@@ -59,7 +59,6 @@ function onError(e) {
 
 /** This runs all postbuild functions. */
 function main() {
-    console.log("\n\n");
     try { createBuildInfoFile(); } catch(e) { onError(e); }
     console.log("\n🏁 Website Build Complete!");
 }

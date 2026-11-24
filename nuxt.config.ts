@@ -39,6 +39,15 @@ const TS_TYPES = [
 /** This function prevents any auto-scrolling before the website's internal JS can kick in. */
 const NO_SCROLL_FUNCTION = "if(\'scrollRestoration\' in history) { history.scrollRestoration = \'manual\'; }";
 
+/**
+ * This function is ran to confirm whether to inline a style block.
+ * @param id The id of the resource asking to inline a style block.
+ */
+function inlineStylesCallback(id?: string) {
+    if(!Boolean(id) || (typeof id !== "string")) { return false; }
+    return !(id.includes('?inline'));
+}
+
 /** This plugin adds a null "alt" attribute to any image tag that doesn't already have an "alt" attribute. */
 const AUTO_ALT_PLUGIN: Plugin = {
     name: 'vite-plugin-auto-null-alt',
@@ -132,12 +141,8 @@ export default defineNuxtConfig({
     routeRules: { '/**': { appLayout: false }},
     router: { options: { sensitive: true }},
 
-    features: { inlineStyles: true },
-    vitalizer: {
-        disablePrefetchLinks: true,
-        disablePreloadLinks: true
-    },
-
+    features: { inlineStyles: (id?: string) => { return inlineStylesCallback(id); }},
+    vitalizer: { disablePrefetchLinks: true, disablePreloadLinks: true },
     hooks: { 'pages:extend'(pages) { usePageTemplates(pages); }},
     site: { url: PERSONAL_MAIN_WEBSITE, name: "Mohit Jain | My Portfolio" },
     sitemap: {
@@ -148,7 +153,7 @@ export default defineNuxtConfig({
     },
 
     sourcemap: false,
-    experimental: { appManifest: true, typedPages: true, payloadExtraction: false },
+    experimental: { appManifest: true, typedPages: true, payloadExtraction: true, webmcp: false, parallelBuild: false },
     socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
     watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],
 
