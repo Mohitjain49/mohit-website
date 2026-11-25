@@ -279,7 +279,7 @@
     flex-direction: column;
     top: 60px;
     right: 10px;
-    width: 325px;
+    width: 330px;
     height: fit-content;
     max-height: calc(100% - 77px);
     overflow-x: hidden;
@@ -296,16 +296,23 @@
     opacity: var(--nav-menu-opacity, 1);
     transform: var(--nav-menu-transform, translateY(0px));
 }
-
 .mohit-navMenu.webMenu-vertical-overflow {
     border-radius: 5px;
     padding-right: 5px;
+    width: 325px;
 }
+
 .mohit-navMenu.closed {
-    interactivity: none;
+    interactivity: inert;
     user-select: none;
     pointer-events: none;
     touch-action: none;
+}
+.mohit-navMenu.closed.webMenu-vertical-overflow {
+    @at-root #{chain-selector(&, 2)} {
+        padding-right: 0px;
+        width: 330px;
+    }
 }
 
 @mixin mohit-navMenu-mohit_2() {
@@ -410,6 +417,7 @@
     border-bottom-left-radius: 0px;
     transition: var(--default-transition);
     user-select: none;
+    text-wrap: nowrap;
     font-family: 'Lexend', sans-serif;
     font-size: 13px;
     overflow: hidden;
@@ -787,6 +795,15 @@
 }
 .navMenu-transition_2-enter-active, .navMenu-transition_2-leave-active {
     transition: transform 0.75s, opacity 0.75s !important;
+}
+
+.long-dev-transitions {
+    .navMenu-transition_1-enter-active, .navMenu-transition_1-leave-active {
+        transition: opacity 1.5s, transform 1.5s !important;
+    }
+    .navMenu-transition_2-enter-active, .navMenu-transition_2-leave-active {
+        transition: transform 1.75s, opacity 1.75s !important;
+    }
 }
 
 .navMenu-transition_1-enter-from, .navMenu-transition_1-leave-to {

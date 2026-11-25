@@ -1,6 +1,7 @@
 import Bowser from "bowser";
 const DYNAMIC_ZOOM_ON_ANY = false; // Default Value should be the boolean "false".
 const ZOOM_FACTOR_HEIGHT = 450; // Default Value should be the boolean "450".
+const LONG_DEV_TRANSITIONS = false; // Default Value should be the boolean "false".
 
 /** This store manages everything related to dynamically changing the styles of the website with JavaScript. */
 export const useStyleStore = defineStore("style-store", () => {
@@ -59,6 +60,8 @@ export const useStyleStore = defineStore("style-store", () => {
     var mousePositionController = null;
 
     const mounted = ref(false);
+    const mounting = ref(false);
+
     const onTouchScreen = ref(false);
     const zoomFactor = ref(1.0);
     const viewportRafRanOnce = ref(false);
@@ -92,12 +95,12 @@ export const useStyleStore = defineStore("style-store", () => {
     watch(disableUserSelect, (newValue) => { setDisableUserSelectClass(newValue); });
     watch(fullScreenSet, () => { setDisableUserSelectClass(disableUserSelect.value); });
 
-    /** This function returns whether the website is able to use client-only features like the DOM. */
-    function validateClientMode() { return Boolean(import.meta.client && document && document.documentElement); }
-
     /** This function mounts the style store to ensure it is ready to use. */
     async function mountStyleStore() {
+        await waitForStyleMounting(10000);
         if(mounted.value) { return; }
+
+        mounting.value = true;
         await nextTick();
 
         // This checks if the zoom CSS Attribute that the zoom factor relies on actually exists.
@@ -109,6 +112,11 @@ export const useStyleStore = defineStore("style-store", () => {
         } else {
             const platformType = (("userAgent" in navigator) ? Bowser.parse(navigator.userAgent).platform.type : undefined);
             onMobileDevice.value = (platformType === "mobile" || platformType === "tablet");
+        }
+
+        // This adds a class to the document element to enable long transitions in development if its flag is set.
+        if(import.meta.dev && LONG_DEV_TRANSITIONS && validateClientMode()) {
+            document.documentElement.classList.add("long-dev-transitions");
         }
 
         // This sets classes for the document element for hiding certain website behaviors.
@@ -130,12 +138,16 @@ export const useStyleStore = defineStore("style-store", () => {
         ])
 
         // This sets the style store as mounted.
+        mounting.value = false;
         mounted.value = true;
     }
 
     /** This function unmounts the style store. */
-    function unmountStyleStore() {
+    async function unmountStyleStore() {
+        await waitForStyleMounting(10000);
         if(!mounted.value) { return; }
+        mounting.value = true;
+
         setTouchScreenMediaWatcher(false);
         stopViewportRaf();
 
@@ -146,11 +158,37 @@ export const useStyleStore = defineStore("style-store", () => {
         disableMousePositionRecorder();
 
         // Sets the store as unmounted.
+        mounting.value = false;
         mounted.value = false;
     }
 
     /** This function gets the layout element so it can be used by many of this store's various features. */
     function setCssLayoutElement() { layoutElement.value = document.getElementById(CSS_LAYOUT_ID); }
+
+    /** This function returns whether the website is able to use client-only features like the DOM. */
+    function validateClientMode() { return Boolean(import.meta.client && document && document.documentElement); }
+
+    /**
+     * This function lets another function wait for the store to complete a mounting or unmounting function before performing its tasks.
+     * @param {Number} timeout The amount of time in milliseconds to wait before throwing out a timeout error.
+     */
+    async function waitForStyleMounting(timeout = 7000) {
+        await new Promise(async (resolve, reject) => {
+            if(!mounting.value) { resolve(null); }
+            var msPassed = 0;
+
+            while(msPassed < timeout && mounting.value) {
+                await sleep(50);
+                msPassed += 50;
+            }
+
+            if(!mounting.value) {
+                resolve(null);
+            } else {
+                reject(new Error("Timeout Error"));
+            }
+        });
+    }
 
     /**
      * -------------------------------------------------------------------------------------------------

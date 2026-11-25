@@ -11,6 +11,11 @@
 const OVERFLOW_SCROLL_CLASS = "webMenu-vertical-overflow";
 const SWIPE_THRESHOLD = 75;
 
+const emit = defineEmits({
+    /** @param {Boolean} status The new status on whether the website menu is scrollable or not. */
+    scrollableChange: (status) => { return (typeof status === "boolean"); }
+});
+
 const webData = useWebsiteDataStore();
 const styleStore = useStyleStore();
 const scrollStore = useScrollStore();
@@ -142,11 +147,11 @@ function changeElementsOnMenuDimensions(firstRun = false) {
 
     // This calculates certain numbers and sets a class for the website menu based on its scroll status.
     if(webMenuScrollable.value) {
-        if(diffStatus) { websiteMenuElement.value.classList.add(OVERFLOW_SCROLL_CLASS); }
+        if(diffStatus) { emit("scrollableChange", true); }
         verticalScrollPercent.value = convertDecimalToPercent(webMenuContents.scrollTop / (scrollHeight - clientHeight));
         menuClientInView.value = convertDecimalToPercent(clientHeight / scrollHeight);
     } else if(!webMenuScrollable.value && diffStatus) {
-        websiteMenuElement.value.classList.remove(OVERFLOW_SCROLL_CLASS);
+        emit("scrollableChange", false);
         verticalScrollPercent.value = 0;
         menuClientInView.value = 100;
     }

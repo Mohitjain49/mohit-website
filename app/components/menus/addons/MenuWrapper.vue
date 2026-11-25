@@ -2,7 +2,7 @@
 <!-- <WebCover v-if="(webMenuOpen && fullScreenStore.fullScreenSet)" /> -->
 <Transition :name="webData.websiteMenuTransition">
     <div v-show="webMenuOpen" :inert="!webMenuOpen" :class="webMenuClasses" :id="menuId">
-        <MenuEventActions v-if="webMenuOpen" />
+        <MenuEventActions v-if="webMenuOpen" @scrollable-change="(status) => { setMenuScrollable(status); }" />
         <div class="mohit-navMenu-closing-cover" v-show="!webMenuOpen"></div>
 
         <div class="mohit-navMenu-contents">
@@ -48,10 +48,14 @@ const props = defineProps({
 
 const router = useRouter();
 const webData = useWebsiteDataStore();
+const isMenuScrollable = ref(false);
 
 const webMenuOpen = computed(() => { return (webData.menuOpen == props.menuNumber); });
-const webMenuClasses = computed(() => { return ['mohit-navMenu', props.extraMenuClass, (webMenuOpen.value ? '' : 'closed')]; });
 const onHomepage = computed(() => { return (router.currentRoute.value.path === "/"); });
+
+const menuClosedClass = computed(() => { return (webMenuOpen.value ? '' : 'closed'); });
+const verticalOverflowClass = computed(() => { return (isMenuScrollable.value ? 'webMenu-vertical-overflow' : ''); });
+const webMenuClasses = computed(() => { return ['mohit-navMenu', props.extraMenuClass, menuClosedClass.value, verticalOverflowClass.value]; });
 
 // This unfocuses or "blurs" the active element if the active element is in the website menu when the website menu closes.
 watch(webMenuOpen, (newValue) => {
@@ -59,4 +63,7 @@ watch(webMenuOpen, (newValue) => {
     const activeElement = document.activeElement;
     if(Boolean(activeElement) && Boolean(activeElement.blur) && Boolean(activeElement.closest("#" + props.menuId))) { activeElement.blur(); }
 });
+
+/** This sets a reference boolean on if the webiste menu is scrollable or not only when the menu is open. */
+function setMenuScrollable(status = false) { if(webMenuOpen.value) { isMenuScrollable.value = status; }}
 </script>
