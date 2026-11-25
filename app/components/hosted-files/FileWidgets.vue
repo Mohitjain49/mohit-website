@@ -1,14 +1,15 @@
 <template>
 <div class="file-widgets-container" ref="file-widgets-container">
     <Transition name="file-widgets-transition" appear>
-        <button v-if="showMinimizeWidget" id="minimizeScreen-widget" @click="exitFS()" :title="minimizeTitle" v-pulse-loop>
-            <FontAwesomeIcon icon="fa-compress" />
-        </button>
+        <AnimatedIconButton v-if="showMinimizeWidget" id="minimizeScreen-widget" :title="minimizeTitle" :faIcon="'fa-compress'"
+            :handleClick="() => { exitFS(); }"
+        />
     </Transition>
     <Transition name="file-widgets-transition" appear>
-        <button v-if="!fullScreenSet" id="download-file-widget" @click="openOptions()" :title="fileOptionsTitle" v-pulse-loop>
-            <FontAwesomeIcon :icon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')" />
-        </button>
+        <AnimatedIconButton v-if="!fullScreenSet" id="download-file-widget" :title="fileOptionsTitle"
+            :faIcon="(onDocumentRoute ? 'fa-file-pdf' : 'fa-file-export')"
+            :handleClick="() => { openOptions(); }"
+        />
     </Transition>
 
     <Transition name="file-widgets-transition" appear>

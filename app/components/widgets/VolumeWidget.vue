@@ -27,6 +27,9 @@ const barBallPosition = computed(() => {
 
 <style scoped lang="scss">
 .mohit-volume-widget {
+    cursor: default !important;
+    pointer-events: none;
+    touch-action: none;
     overflow: hidden;
     position: fixed;
     top: 15px;

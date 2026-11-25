@@ -1,6 +1,8 @@
 <template>
 <Transition name="qrcode-popup-transition" appear fade>
-    <div v-if="showMainPopup" id="share-popup" class="qrcode-mainPopup">
+    <div v-show="showMainPopup" id="share-popup" class="qrcode-mainPopup">
+        <div v-show="webData.sharePopupClosing" class="share-popup-closing-cover"></div>
+
         <button ref="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" :title="copyLinkTitle" v-action-cursor="actions.copy">
             <p> {{ qrCodeFormattedLink }} </p>
         </button>
@@ -13,7 +15,7 @@
             @click="(e) => { focusOnQrcode(e); }"
             @contextmenu="(e) => { focusOnQrcode(e); }"
             title="Select QR Code"
-            tabindex="0" :style="qrcodeBg">
+            tabindex="0" :style="qrcodeBg" no-sound>
         </button>
         <div id="mohit-qrcode-waiting" v-if="!qrCodeDisplay">
             <div class="cover"> <FontAwesomeIcon icon="fa-spinner" :spin-pulse="true" /> </div>
@@ -513,7 +515,7 @@ function focusOnQrcode(event = undefined) {
 
         getQrcodeContainer().focus({ preventScroll: true, focusVisible: true });
         setImageOptions(true);
-        triggerClickSound();
+        if((event.pointerId || -1) != -1) { triggerClickSound(); }
     } catch(e) {
         if(import.meta.dev) { console.error(e); }
     }
@@ -909,6 +911,17 @@ html {
         var(--blue-cobalt) 100%
     );
 }
+.share-popup-closing-cover {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 0px;
+}
 
 #mohit-qrcode, #mohit-qrcode-waiting {
     margin: 10px 0px 7px 0px;
@@ -1149,6 +1162,10 @@ html {
 .qrcode-popup-transition-enter-from, .qrcode-popup-transition-leave-to {
     opacity: 0;
     transform: scale(0.10);
+    user-select: none;
+    pointer-events: none;
+    touch-action: none;
+    interactivity: inert;
 }
 .qrcode-popup-transition-enter-to, .qrcode-popup-transition-leave-from {
     opacity: 1;
