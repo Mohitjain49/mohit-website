@@ -1,6 +1,6 @@
 <template>
 <Transition name="qrcode-popup-transition" appear fade>
-    <div v-show="showMainPopup" id="share-popup" class="qrcode-mainPopup">
+    <div v-show="showMainPopup" :inert="!showMainPopup" id="share-popup" class="qrcode-mainPopup">
         <div v-show="webData.sharePopupClosing" class="share-popup-closing-cover"></div>
 
         <button ref="popup-shareLink" class="popup-qr-text" @click="copyQRCodeLink()" :title="copyLinkTitle" v-action-cursor="actions.copy">
@@ -47,13 +47,13 @@
             
             <div v-if="(sharePopupMode != 2)" class="qrcode-mainPopup-btn_v2">
                 <AnimatedIconButton class="qrcode-mainPopup-btn" :faIcon="'fa-comment-nodes'" :hoverAnimation="'flip'"
-                    :hoverIcon="((showShareOptions == 1) ? 'fa-square-caret-up' : 'fa-square-caret-down')"
-                    :title="((showShareOptions == 1) ? 'Hide Link Sharing Options' : 'Share Webpage Link')"
+                    :hoverIcon="(showLinkShareOptions ? 'fa-square-caret-up' : 'fa-square-caret-down')"
+                    :title="(showLinkShareOptions ? 'Hide Link Sharing Options' : 'Share Webpage Link')"
                     :handleClick="() => { setSocialMediaOptions('toggle'); }"
                 />
 
                 <Transition name="fade-transition">
-                    <div v-if="(showShareOptions == 1)" class="qrcode-image-options">
+                    <div v-show="showLinkShareOptions" :inert="!showLinkShareOptions" class="qrcode-image-options">
                         <button v-if="webData.shareSupported" class="qrcode-mainPopup-btn light"
                             @click="shareQRCodeLink()"
                             :title="shareLinkTitle"
@@ -86,12 +86,12 @@
 
             <div v-if="qrcodeBlobCreated" class="qrcode-mainPopup-btn_v2">
                 <AnimatedIconButton class="qrcode-mainPopup-btn" :faIcon="'fa-image'" :hoverAnimation="'flip'"
-                    :hoverIcon="((showShareOptions == 0) ? 'fa-square-caret-up' : 'fa-square-caret-down')"
-                    :title="(((showShareOptions == 0) ? 'Close' : 'See') + ' Image Options')"
+                    :hoverIcon="(showQrcodeOptions ? 'fa-square-caret-up' : 'fa-square-caret-down')"
+                    :title="((showQrcodeOptions ? 'Close' : 'See') + ' Image Options')"
                     :handleClick="() => { setImageOptions('toggle'); }"
                 />
                 <Transition name="fade-transition">
-                    <div v-if="(showShareOptions == 0)" class="qrcode-image-options">
+                    <div v-show="showQrcodeOptions" :inert="!showQrcodeOptions" class="qrcode-image-options">
                         <button v-if="webData.shareSupported" @click="shareQRCode()"
                             class="qrcode-mainPopup-btn yellow"
                             :title="shareImageTitle" v-action-cursor="actions.shareImage">
@@ -133,12 +133,12 @@
 
             <div v-if="qrcodeBlobCreated" class="qrcode-mainPopup-btn_v2">
                 <AnimatedIconButton class="qrcode-mainPopup-btn" :faIcon="'fa-marker'" :hoverAnimation="'flip'"
-                    :hoverIcon="((showShareOptions == 2) ? 'fa-square-caret-up' : 'fa-square-caret-down')"
-                    :title="((showShareOptions == 2) ? 'Close Image Types' : 'Change Image Type')"
+                    :hoverIcon="(showImageTypeOptions ? 'fa-square-caret-up' : 'fa-square-caret-down')"
+                    :title="(showImageTypeOptions ? 'Close Image Types' : 'Change Image Type')"
                     :handleClick="() => { setImageTypesOptions('toggle'); }"
                 />
                 <Transition name="fade-transition">
-                    <div v-if="(showShareOptions == 2)" class="qrcode-image-options">
+                    <div v-show="showImageTypeOptions" :inert="!showImageTypeOptions" class="qrcode-image-options">
                         <button v-for="(type, index) in IMAGE_STATUS" v-html="type.toUpperCase()"
                             @click="() => { changeImageType(index); }"
                             :class="['qrcode-mainPopup-btn_v3', (qrcodeImageMode == index ? 'selected' : '')]">
@@ -229,6 +229,10 @@ const qrcodeUrlCreated = computed(() => { return (qrCodeURL.value.length > 0); }
 const qrcodeBg = computed(() => { return { 'background-image': (qrcodeUrlCreated.value ? 'url(' + qrCodeURL.value + ')' : '') }});
 const qrcodeImageSuffix = computed(() => { return (IMAGE_STATUS[qrcodeImageMode.value] ?? ''); });
 const qrcodeImageCopySupported = computed(() => { return ((qrcodeImageMode.value == 0) ? webData.copyImageSupported : webData.copySvgSupported); });
+
+const showLinkShareOptions = computed(() => { return (showShareOptions.value == 1); });
+const showQrcodeOptions = computed(() => { return (showShareOptions.value == 0); });
+const showImageTypeOptions = computed(() => { return (showShareOptions.value == 2); });
 
 const { showSharePopupImmediate } = storeToRefs(webData);
 const { iframeSupported, onResumeRoute } = storeToRefs(useDocumentStore());

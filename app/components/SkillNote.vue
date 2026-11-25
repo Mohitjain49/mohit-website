@@ -1,5 +1,5 @@
 <template>
-<div v-if="(link === '#')" class="mohit-note no-link" v-pulse-loop>
+<div v-if="(link === '#')" class="mohit-note no-link">
     <div class="mohit-note-image">
         <img v-if="!faIcon" :src="id" :width="size" draggable="false" />
         <font-awesome-icon v-else :icon="id" :style="getFAIconStyle()" />

@@ -1,7 +1,5 @@
 <template>
 <ParticlesBackground :particlesOptions="WAKE_LOCK_BACKGROUND" />
-<FeaturesReturnWidget />
-
 <main id="wakeLock-page" class="personal-web-body">
     <div class="wakeLock-body">
         <div :class="['wakeLock-box', ((menuState == 1) ? 'keybinds' : '')]">

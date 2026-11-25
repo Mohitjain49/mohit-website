@@ -1,7 +1,7 @@
 <template>
 <Teleport :to="teleportQuery">
     <Transition name="fade-context-menu-transition">
-        <div v-show="showLineOptions" :id="LINE_OPTIONS_ELEMENT_ID" :class="['mohit-script-lineOptions', lineOptions.extraClass]">
+        <div v-show="showLineOptions" :inert="!showLineOptions" :id="LINE_OPTIONS_ELEMENT_ID" :class="lineOptionClasses">
             <div class="mohit-script-lineOptions-top" ref="mohit-line-options-top">
                 <h3> Line <span id="lineOptions-num" v-html="viewableLineOptionsNum"></span> </h3>
                 <div class="mohit-script-lineOptions-topOpts">
@@ -48,6 +48,7 @@ const teleportQuery = computed(() => { return ("#L" + String(viewableLineOptions
 var lineOptionsAbortController = null;
 const lineOptionsNum = computed(() => { return lineOptions.value.num; });
 const showLineOptions = computed(() => { return scriptsStore.checkLineNumber(lineOptionsNum.value); });
+const lineOptionClasses = computed(() => { return ['mohit-script-lineOptions', lineOptions.value.extraClass]; });
 
 const copyingText = computed(() => { return (lineOptions.value.lastCopied === "text"); });
 const copyingLink = computed(() => { return (lineOptions.value.lastCopied === "link"); });

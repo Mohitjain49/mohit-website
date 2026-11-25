@@ -23,7 +23,7 @@
             <RouterLink to="/contact/" :class="['mohit-navBar-icon', (currentPathEquals('/contact/') ? 'focused' : '')]" title="Contact Me!" v-pulse-loop>
                 <font-awesome-icon icon="fa-paper-plane" />
             </RouterLink>
-            <button v-if="showCompassMenuBtn"
+            <button v-if="webData.compassMenuMounted"
                 class="mohit-navBar-icon light"
                 :title="(webData.compassMenuOpen ? 'Close Compass Menu' : 'Navigate This Page')"
                 @click="webData.setMenuOpen(COMPASS_MENU, true)" v-pulse-loop>
@@ -77,7 +77,7 @@
     </div>
     <div class="mohit-navMenu-opt-break"></div>
 
-    <div v-if="showCompassMenuBtn" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
+    <div v-if="webData.compassMenuMounted" class="mohit-navMenu-opt" :style="getColorStyles('var(--website-light-text)')">
         <button class="mohit-navMenu-mainOpt" @click="webData.setMenuOpen(COMPASS_MENU)" v-pulse-loop>
             <font-awesome-icon icon="fa-compass" />
             <span> Navigate This Page </span>
@@ -183,10 +183,9 @@ const showWakeLockWidget = computed(() => {
     return (webData.wakeLock.isSupported && (isActive || (!isActive && webData.wakeLockChangeFresh)));
 });
 
-const showCompassMenuBtn = computed(() => { return (webData.compassMenuAvailable && webData.fullyMounted); });
 const showDocumentOptionsBtn = computed(() => { return (documentStore.onDocumentRoute && documentStore.showDocumentViewer); });
 const showScriptOptionsBtn = computed(() => { return (scriptsStore.onScriptRoute && webData.fullyMounted); });
-const showCopyLinkButton = computed(() => { return (showCompassMenuBtn.value || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
+const showCopyLinkButton = computed(() => { return (webData.compassMenuMounted || showDocumentOptionsBtn.value || showScriptOptionsBtn.value); });
 
 const showCenterLoadingBar = computed(() => { return (documentStore.onDocumentRoute && (documentStore.docLoadedPct > 0) && webData.noMenuOpen); });
 const showNavLeftWidgets = computed(() => { return (isMounted.value && (showWakeLockWidget.value || resumeStore.showQueryReloadButton)); });

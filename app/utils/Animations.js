@@ -45,19 +45,6 @@ export function setNavCardAnimation(cardId = "#ivue-nav-newCard") {
 }
 
 /**
- * This function sets the initial transition for a Bottom Corner Widget.
- * @param {HTMLElement} target The HTML element that was observed.
- */
-export function setBottomCornerWidgetAnimation(widgetId = "") {
-    const target = document.getElementById(widgetId);
-    if(!target || (typeof target.classList === "undefined") || !(target.classList instanceof DOMTokenList)) { return; }
-
-    removeAnimationClasses(target);
-    target.classList.add("animate__animated", "animate__fadeInUp");
-    setTimeout(() => { removeAnimationClasses(document.getElementById(widgetId)); }, 1100);
-}
-
-/**
  * This sets an Animation for the Home Tabs based on whether the tab is visible or not.
  * @param {HTMLElement} target The HTML element that was observed.
  * @param {Boolean} fromLeft If true, the element should enter from the left, otherwise it enters from the right.

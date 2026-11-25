@@ -20,8 +20,6 @@ function clickOnQrcodeCapture() {
 
 <template>
 <ParticlesBackground :particlesOptions="CODE_SCANNER_BACKGROUND" />
-<FeaturesReturnWidget />
-
 <main id="code-reader-page" class="personal-web-body">
     <div class="code-scanner-main">
         <div class="scanner-component-container">

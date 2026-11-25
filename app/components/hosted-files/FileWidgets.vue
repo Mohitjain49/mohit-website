@@ -14,9 +14,12 @@
 
     <Transition name="file-widgets-transition" appear>
         <div v-if="showPageNavigationWidget" class="page-navigation-widget">
-            <button @click="navigatePage('down')" :title="previousPageScrollTitle" :class="getNavArrowClasses(onFirstPage)">
-                <FontAwesomeIcon icon="fa-chevron-left" />
-            </button>
+            <AnimatedIconButton :faIcon="'fa-chevron-left'" :size="NAV_ARROWS_SIZE" :title="previousPageScrollTitle"
+                :disableHover="leftArrowDisabled"
+                :style="{ cursor: (leftArrowDisabled ? 'default' : 'pointer') }"
+                :class="['page-nav-side-button', (leftArrowDisabled ? 'inactive' : '')]"
+                :handleClick="() => { navigatePage('down'); }"
+            />
             <div class="page-nav-center">
                 <input id="page-number-mohit" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done"
                     v-model="widgetPageNumber"
@@ -26,9 +29,12 @@
                 />
                 <span>{{ ('/ ' + documentStore.docTotalPages) }}</span>  
             </div>
-            <button @click="navigatePage('up')" :title="nextPageScrollTitle" :class="getNavArrowClasses(onLastPage)">
-                <FontAwesomeIcon icon="fa-chevron-right" />
-            </button>
+            <AnimatedIconButton :faIcon="'fa-chevron-right'" :size="NAV_ARROWS_SIZE" :title="nextPageScrollTitle"
+                :disableHover="rightArrowDisabled"
+                :style="{ cursor: (rightArrowDisabled ? 'default' : 'pointer') }"
+                :class="['page-nav-side-button', (rightArrowDisabled ? 'inactive' : '')]"
+                :handleClick="() => { navigatePage('up'); }"
+            />
         </div>
     </Transition>
 </div>
@@ -36,6 +42,7 @@
 
 <script setup>
 const PAGE_NUMBER_REGEX = /^[0-9]*$/;
+const NAV_ARROWS_SIZE = 15;
 
 const webData = useWebsiteDataStore();
 const documentStore = useDocumentStore();
@@ -58,10 +65,15 @@ const showPageNavigationWidget = computed(() => { return (onDocumentRoute.value 
 const onFirstPage = computed(() => { return (currentObservedPage.value <= 1); });
 const onLastPage = computed(() => { return (currentObservedPage.value >= documentStore.docTotalPages); });
 
+const leftArrowDisabled = computed(() => { return (onFirstPage.value || isAutoScrolling.value); });
+const rightArrowDisabled = computed(() => { return (onLastPage.value || isAutoScrolling.value); });
+
 const previousPageScrollTitle = computed(() => {
+    if(isAutoScrolling.value) { return "Waiting For Autoscroll to finish..." }
     return (onFirstPage.value ? 'Cannot Scroll Before Page 1.' : ('Scroll To Page ' + (currentObservedPage.value - 1)));
 });
 const nextPageScrollTitle = computed(() => {
+    if(isAutoScrolling.value) { return "Waiting For Autoscroll to finish..." }
     return (onLastPage.value ? ('Cannot Scroll After Page ' + currentObservedPage.value + '.') : ('Scroll To Page ' + (currentObservedPage.value + 1)));
 });
 
@@ -259,18 +271,16 @@ function onPageNumberKeydown(event) {
     cursor: pointer;
     width: 25px;
     height: 100%;
-    transition: var(--default-transition);
+    transition: background-color 0.2s;
     color: white;
     background-color: transparent;
 }
-.page-nav-side-button svg {
-    width: 15px;
-    height: 15px;
+.page-nav-side-button:hover {
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 .page-nav-side-button.inactive { color: grey; }
 .page-nav-side-button.inactive:hover { background-color: transparent; }
-.page-nav-side-button:hover { background-color: rgba(255, 255, 255, 0.25); }
 
 .file-widgets-transition-enter-active, .file-widgets-transition-leave-active {
     transition: opacity 0.5s, transform 0.5s !important;
@@ -278,6 +288,10 @@ function onPageNumberKeydown(event) {
 .file-widgets-transition-enter-from, .file-widgets-transition-leave-to {
     opacity: 0;
     transform: translateY(74px);
+    user-select: none;
+    pointer-events: none;
+    touch-action: none;
+    interactivity: inert;
 }   
 .file-widgets-transition-enter-to, .file-widgets-transition-leave-from {
     opacity: 1;

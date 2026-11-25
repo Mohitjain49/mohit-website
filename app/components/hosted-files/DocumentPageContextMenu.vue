@@ -1,6 +1,9 @@
 <template>
 <Transition name="fade-context-menu-transition">
-    <div v-show="showDocumentContextMenu" :style="contextMenuPosition" :id="CONTEXT_MENU_ID" class="mohit-hostedDoc-contextMenu">
+    <div v-show="showDocumentContextMenu" class="mohit-hostedDoc-contextMenu" :id="CONTEXT_MENU_ID"
+        :style="contextMenuPosition"
+        :inert="!showDocumentContextMenu">
+
         <div class="mohit-hostedDoc-contextMenu-top">
             <h3 v-if="!onResumeRoute"> Page <span id="mohit-document-contextMenu-pageNum" v-html="viewablePageNumber"></span> </h3>
             <h3 v-if="onResumeRoute"> <span id="mohit-document-contextMenu-pageNum"> My Resume </span> </h3>

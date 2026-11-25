@@ -1,17 +1,18 @@
 <template>
 <component :is="(props.isAnchor ? 'a' : 'button')" ref="animate-icon-on-hover-button">
-    <FontAwesomeIcon :icon="iconToDisplay" :[hoverAnimation]="isHovering" :class="iconClass" />
+    <FontAwesomeIcon :icon="iconToDisplay" :[hoverAnimation]="(isHovering && hoverEnabled)" :style="iconSize" />
 </component>
 </template>
 
 <script setup>
 const props = defineProps({
     isAnchor: { type: Boolean, default: false },
+    disableHover: { type: Boolean, default: false },
     handleClick: { type: Function, default: (event) => {} },
     faIcon: { type: String, default: "fa-question" },
     hoverAnimation: { type: String, default: "jello" },
     hoverIcon: { type: String, default: "" },
-    iconClass: { type: [String, Array], default: '' }
+    size: { type: Number, default: -1 }
 });
 
 /** @type {AbortController} This is the abort controller that manages stopping the abort controller. */
@@ -24,8 +25,22 @@ const { mouseElement } = storeToRefs(useStyleStore());
 
 const eventListenersSet = ref(0);
 const isHovering = ref(false);
+const hoverEnabled = computed(() => { return !Boolean(props.disableHover); });
+
+/** This sets styles for the icon's size. */
+const iconSize = computed(() => {
+    if(props.size < 0) { return {}; }
+    const sizePx = (String(props.size) + "px");
+    return { width: sizePx, height: sizePx }
+});
+
+/** This determines what icon to display. */
 const iconToDisplay = computed(() => {
-    return ((isHovering.value && Boolean(props.hoverIcon) && (props.hoverIcon !== "")) ? props.hoverIcon : props.faIcon);
+    if(isHovering.value && hoverEnabled.value && Boolean(props.hoverIcon) && (props.hoverIcon !== "")) {
+        return props.hoverIcon;
+    } else {
+        return props.faIcon;
+    }
 });
 
 onMounted(async() => { await setIconButtonEventListeners(); });

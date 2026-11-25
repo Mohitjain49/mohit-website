@@ -64,22 +64,25 @@ export default defineNuxtPlugin((nuxtApp) => {
     /**
      * This function is ran when an element using the directive is mounted.
      * @param {HTMLElement} el The HTML Element used in the directive. 
-     * @param {import("vue").DirectiveBinding<any>} binding The Binding with the directive.
+     * @param {import("vue").DirectiveBinding<Boolean>} binding The Binding with the directive.
      */
     function mountDirectiveElement(el, binding) {
+        if(!Boolean(el) || !(el instanceof HTMLElement)) { return; }
         if(findElement(el) != -1) { return; }
+
         const animationAbortController = new AbortController();
         const signal = animationAbortController.signal;
 
         animatedElementsList.push({ el, controller: animationAbortController });
         el.addEventListener("pointerenter", (event) => { animate(event); }, { signal });
         el.addEventListener("pointerleave", (event) => { animate(event); }, { signal });
+        signal.addEventListener("abort", () => { animate({ target: el, pointerType: "", type: "" }); }, { once: true });
     }
 
     /**
      * This function is ran right before when an element using the directive unmounts.
      * @param {HTMLElement} el The HTML Element used in the directive. 
-     * @param {import("vue").DirectiveBinding<any>} binding The Binding with the directive.
+     * @param {import("vue").DirectiveBinding<Boolean>} binding The Binding with the directive.
      */
     function unmountDirectiveElement(el, binding) {
         const itemIndex = findElement(el);
@@ -88,9 +91,23 @@ export default defineNuxtPlugin((nuxtApp) => {
         animatedElementsList.splice(itemIndex, 1);
     }
 
+    /**
+     * This function is ran when an element's boolean binding is updated.
+     * @param {HTMLElement} el The HTML Element used in the directive. 
+     * @param {import("vue").DirectiveBinding<Boolean>} binding The Binding with the directive.
+     */
+    function updateDirectiveElement(el, binding) {
+        if((typeof binding.value === "boolean") && !binding.value) {
+            unmountDirectiveElement(el, binding);
+        } else {
+            mountDirectiveElement(el, binding);
+        }
+    }
+
     // This makes a new directive that allows any element to use the pulse-loop animation when hovered over.
     nuxtApp.vueApp.directive('pulse-loop', {
         mounted(el, binding) { mountDirectiveElement(el, binding); },
-        beforeUnmount(el, binding) { unmountDirectiveElement(el, binding); }
+        beforeUnmount(el, binding) { unmountDirectiveElement(el, binding); },
+        updated(el, binding) { updateDirectiveElement(el, binding); }
     });
 });

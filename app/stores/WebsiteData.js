@@ -57,6 +57,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
     /** This returns true when the website data store is shown to be fully mounted. */
     const fullyMounted = computed(() => { return (mounted.value >= 2); });
+    const compassMenuMounted = computed(() => { return (compassMenuAvailable.value && fullyMounted.value); });
 
     /** This returns an integer representing the "Mode" of the website menu, altering its transitions and behaviors. */
     const websiteMenuMode = computed(() => { return ((styleStore.cssViewportWidth > 600 && !fullScreenStore.fullScreenSet) ? 0 : 1); });
@@ -464,11 +465,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         if(saveAsSupported.value !== newStatus) { saveAsSupported.value = newStatus; }
     }
 
-    return { mounted, fullyMounted, websiteMenuMode, websiteMenuTransition, navFooterPresent, compassMenuAvailable,
-        copyImageSupported, copySvgSupported, saveAsSupported, menuOpen, noMenuOpen, navMenuOpen,
-        compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
-        shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing,
-        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh, webFooter, webFooterVisibility,
+    return { mounted, fullyMounted, websiteMenuMode, websiteMenuTransition, navFooterPresent,
+        copyImageSupported, copySvgSupported, saveAsSupported, compassMenuMounted, compassMenuAvailable,
+        menuOpen, noMenuOpen, navMenuOpen, compassMenuOpen, documentMenuOpen, scriptsMenuOpen, resumeMenuOpen, documentMetadataMenuOpen,
+        shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing, webFooter, webFooterVisibility,
+        wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
         setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick, setWebsiteMenuTransitionStyles,
         shareText, shareLink, shareFile, mountStore, unmountStore, waitForFullyMounted

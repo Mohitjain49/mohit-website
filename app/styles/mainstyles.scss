@@ -232,7 +232,8 @@ button {
 }
 
 .fade-transition-enter-active, .fade-transition-leave-active { transition: opacity 0.5s; }
-.fade-transition-enter-from, .fade-transition-leave-to { @include mohit-fade-leaveTo(); }
+.fade-transition-enter-from { opacity: 0; }
+.fade-transition-leave-to { @include mohit-fade-leaveTo(); }
 .fade-transition-enter-to, .fade-transition-leave-from { opacity: 1; }
 
 .fade-exit-transition-leave-active { transition: opacity 0.5s; }
@@ -241,7 +242,8 @@ button {
 
 .fade-context-menu-transition-enter-active { transition: opacity 0.5s; }
 .fade-context-menu-transition-leave-active { transition: opacity 0.05s; }
-.fade-context-menu-transition-enter-from, .fade-context-menu-transition-leave-to { @include mohit-fade-leaveTo(); }
+.fade-context-menu-transition-enter-from { opacity: 0; }
+.fade-context-menu-transition-leave-to { @include mohit-fade-leaveTo(); }
 .fade-context-menu-transition-enter-to, .fade-context-menu-transition-leave-from { opacity: 1; }
 
 .long-dev-transitions {

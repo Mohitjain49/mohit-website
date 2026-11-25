@@ -1,37 +1,37 @@
 <template>
-<button id="compass-widget" :class="htmlClass" @click="openCompass()" title="Navigate This Page" v-pulse-loop>
-    <font-awesome-icon icon="fa-compass" />
-</button>
+<Transition name="compass-widget-transition" appear>
+    <AnimatedIconButton v-if="webData.compassMenuMounted" title="Navigate This Page" :faIcon="'fa-compass'"
+        :class="['compass-widget', props.htmlClass]"
+        :handleClick="() => { openCompass(); }"
+    />
+</Transition>
 </template>
 
 <script setup>
-const props = defineProps({ htmlClass: { type: String, default: "main" } });
 const webData = useWebsiteDataStore();
+const props = defineProps({ htmlClass: { type: String, default: "main" } });
 
 /** This function opens the compass for this page. */
 function openCompass() {
     webData.bypassBodyClick();
     webData.setMenuOpen(COMPASS_MENU, true);
 }
-
-// This sets an opening transition for the widget when it is rendered.
-onAfterMounted(() => { setBottomCornerWidgetAnimation("compass-widget"); });
 </script>
 
 <style scoped lang="scss">
-#compass-widget {
+.compass-widget {
     position: fixed;
     cursor: pointer;
     overflow: hidden;
-    bottom: 15px;
-    left: 15px;
+    bottom: 12px;
+    left: 12px;
     background-color: black;
     color: var(--website-light-text);
     border: 2px solid var(--website-light-text);
-    font-size: 28px;
-    height: 50px;
-    width: 50px;
-    border-radius: 30px;
+    font-size: 20px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
     z-index: 5;
     display: flex;
     justify-content: center;
@@ -39,26 +39,34 @@ onAfterMounted(() => { setBottomCornerWidgetAnimation("compass-widget"); });
     flex-direction: column;
     transition: var(--default-transition), scale 0.2s;
 }
-#compass-widget:hover {
+.compass-widget:hover {
     scale: 1.1;
     background-color: var(--dark-background);
     box-shadow: 0px 0px 10px 1px;
 }
 
-#compass-widget.main {
+.compass-widget.main {
     color: var(--website-light-text);
     border-color: var(--website-light-text);
 }
-#compass-widget.blue {
+.compass-widget.blue {
     color: var(--blue-one);
     border-color: var(--blue-one);
 }
 
-@include dynamic-less-equal-width-rule-scopedBlock(525) {
-    #compass-widget {
-        height: 45px;
-        width: 45px;
-        font-size: 23px;
-    }
+.compass-widget-transition-enter-active, .compass-widget-transition-leave-active {
+    transition: opacity 0.5s, transform 0.5s !important;
+}
+.compass-widget-transition-enter-from, .compass-widget-transition-leave-to {
+    opacity: 0;
+    transform: translateY(74px);
+    user-select: none;
+    pointer-events: none;
+    touch-action: none;
+    interactivity: inert;
+}   
+.compass-widget-transition-enter-to, .compass-widget-transition-leave-from {
+    opacity: 1;
+    transform: translateY(0px);
 }
 </style>
