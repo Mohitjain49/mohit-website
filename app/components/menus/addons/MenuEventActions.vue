@@ -52,7 +52,7 @@ var eventsAbortController = null;
 const thumbClasses = computed(() => { return ['inner', (scrollbarThumbPressed.value ? 'active' : '')]; });
 const closeSwipeThreshold = computed(() => { return Math.ceil(SWIPE_THRESHOLD / cssToWindowHeightRatio.value); });
 const closeSwipePercent = computed(() => {
-    return roundNumber(Math.max(0, ((startY.value - mouseY.value) / closeSwipeThreshold.value)), 2);
+    return roundNumber(Math.max(-0.4, ((startY.value - mouseY.value) / closeSwipeThreshold.value)), 2);
 });
 
 /** This is the style for the website menu scrollbar thumb. */
@@ -95,13 +95,18 @@ onAfterMounted(() => {
     webMenu.addEventListener("pointerdown", (event) => { onMenuPointerEvent(event); }, { signal });
     window.addEventListener("pointerup", (event) => { onMenuPointerEvent(event); }, { signal });
     window.addEventListener("pointermove", (event) => { onMenuPointerEvent(event); }, { signal, passive: false });
-    window.addEventListener("dragstart", (event) => { onMenuPointerEvent(event); }, { signal });
 
     if(hasTouchEvents.value) {
         window.addEventListener("touchend", (event) => { onMenuPointerEvent(event); }, { signal });
         window.addEventListener("touchmove", (event) => { onMenuPointerEvent(event); }, { signal, passive: false });
+    } else {
+        window.addEventListener("pointercancel", (event) => { onMenuPointerEvent(event); }, { signal });
     }
 
+    window.addEventListener("dragstart", (event) => { onMenuPointerEvent(event); }, { signal });
+    window.addEventListener("blur", (event) => { onMenuPointerEvent(event); }, { signal });
+
+    // This sets a group of event listeners that can let the user interact with the menu's custom scrollbar.
     if(!Boolean(websiteMenuScrollbarThumb.value)) { throw new Error("Website Menu Scrollbar Thumb Element Not Found."); }
     websiteMenuScrollbarThumb.value.addEventListener("pointerdown", (event) => { onWebsiteMenuScrollbarPointerDown(event); }, { signal });
 
@@ -120,10 +125,17 @@ onBeforeUnmount(() => {
 
 // This watches the close swipe progress to set the style of the website menu.
 watch(closeSwipePercent, () => { updateMenuTransitionStyles(); });
-watch(websiteMenuMode, () => { updateMenuTransitionStyles(); });
+watch(websiteMenuMode, () => { undoMenuSwipe(false); });
 
-// This scrolls the website menu when the mosue moves and the user is holding the custom scrollbar.
-watch(mouseY, (newY, oldY) => { scrollWebMenuOnMouseMove(newY, oldY); });
+// This scrolls the website menu when the mouse moves and the user is holding the custom scrollbar.
+// It can also set the transition styles for the menu.
+watch(mouseY, (newY, oldY) => {
+    if(scrollbarThumbPressed.value) {
+        scrollWebMenuOnMouseMove(newY, oldY);
+    } else {
+        updateMenuTransitionStyles();
+    }
+});
 
 /**
  * This function changes elements in this component based on menu dimensions.
@@ -185,38 +197,45 @@ function onMenuPointerEvent(event = null) {
             }
         }
 
+        resetWebsiteMenuTransitionStyles(false);
         startY.value = (event.clientY || mouseY.value);
         webMenuTouched.value = true;
-        resetWebsiteMenuTransitionStyles();
-    } else if((eType === "dragstart") && webMenuTouched.value) {
-        // Sets the website menu as not being touched any more.
-        webMenuTouched.value = false;
-        webMenuSwipeWithTouch.value = false;
-        resetWebsiteMenuTransitionStyles();
-    } else if((eType === "pointerup" || eType === "touchend") && webMenuTouched.value) {
-        if(closeSwipePercent.value >= 0.9) {
-            webData.closeNavMenu();
-            triggerClickSound();
-        } else {
-            resetWebsiteMenuTransitionStyles();
-        }
+        updateMenuTransitionStyles();
+    } else if(webMenuTouched.value) {
+        if(eType === "pointerup" || eType === "touchend") {
+            const finalCloseSwipePercent = closeSwipePercent.value;
+            webMenuTouched.value = false;
+            webMenuSwipeWithTouch.value = false;
 
-        // Sets the website menu as not being touched any more.
-        webMenuTouched.value = false;
-        webMenuSwipeWithTouch.value = false;
-    } else if((eType === "pointermove" || eType === "touchmove") && webMenuTouched.value) {
-        event.preventDefault();
+            if(finalCloseSwipePercent >= 0.9) {
+                webData.closeNavMenu();
+                triggerClickSound();
+            } else {
+                resetWebsiteMenuTransitionStyles(true);
+            }
+        } else if(eType === "dragstart" || eType === "blur" || eType === "pointercancel") {
+            undoMenuSwipe(true);
+        } else if(eType === "pointermove" || eType === "touchmove") {
+            event.preventDefault();
+        }
     }
 }
 
 /** This function updates the website menu transition styles based on how the user is swiping. */
 function updateMenuTransitionStyles() {
-    if(!webMenuTouched.value) { return; }
+    if(!webMenuTouched.value || transitionRafId != null) { return; }
     const newValue = Math.min(0.5, (closeSwipePercent.value / 2));
-    const transformNum = ((websiteMenuMode.value == 1) ? Math.min(0, (mouseY.value - startY.value)) : (newValue * -10));
+    const opacityNum = Math.min(1, (1 - newValue));
+    var transformNum = 0;
 
-    if(transitionRafId != null) { return; }
-    transitionRafId = requestAnimationFrame(() => { setWebsiteMenuTransitionStyles((1 - newValue), transformNum); });
+    if(websiteMenuMode.value == 1) {
+        transformNum = Math.min(SWIPE_THRESHOLD, ((mouseY.value - startY.value) * cssToWindowHeightRatio.value));
+    } else {
+        transformNum = Math.min(0, (newValue * -10));
+    }
+
+    // This sets the transition styles. It is wrapped in a Raf Loop to ensure it does not lag the website.
+    transitionRafId = requestAnimationFrame(() => { setWebsiteMenuTransitionStyles(opacityNum, transformNum); });
 }
 
 /** This cancels the current animation frame request to set the transition styles if one exists. */
@@ -237,10 +256,25 @@ function setWebsiteMenuTransitionStyles(opacity = 1, transform = 0) {
     transitionRafId = null;
 }
 
-/** This resets the website menu's transition styles. */
-function resetWebsiteMenuTransitionStyles() {
+/**
+ * This resets the website menu's transition styles.
+ * @param {Boolean} addTransitionToReset If true, this adds a transition to the reset.
+ */
+function resetWebsiteMenuTransitionStyles(addTransitionToReset = false) {
+    if(!import.meta.client || !Boolean(websiteMenuElement.value)) { return; }
+    websiteMenuElement.value.style.setProperty("--nav-menu-transition-seconds", (addTransitionToReset ? "0.25s" : "0s"));
     cancelMenuTransitionStyleUpdate();
     setWebsiteMenuTransitionStyles();
+}
+
+/**
+ * This undoes any effect of a website menu swipe.
+ * @param {Boolean} addTransitionToReset If true, this adds a transition to the reset.
+ */
+function undoMenuSwipe(addTransitionToReset = false) {
+    webMenuTouched.value = false;
+    webMenuSwipeWithTouch.value = false;
+    resetWebsiteMenuTransitionStyles(addTransitionToReset);
 }
 
 /**
@@ -259,9 +293,11 @@ function onWebsiteMenuScrollbarPointerDown(event = null) {
     if(!event || event.pointerType !== "mouse") { return; }
     scrollbarThumbPressed.value = true;
     setUserSelect(true);
+    webData.bypassBodyClick();
 
     if(Boolean(websiteMenuContents.value)) { websiteMenuContents.value.focus(); }
     event.preventDefault();
+    event.stopPropagation();
 }
 
 /** This cancels the website menu's scrollbar actions. */

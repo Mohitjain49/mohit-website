@@ -196,9 +196,9 @@ export default defineNuxtConfig({
         },
         css: {
             preprocessorOptions: { scss: { additionalData: '@use "@/styles/_dynamicrules.scss" as *;\n' }},
-            lightningcss: { errorRecovery: true },
+            lightningcss: { errorRecovery: true }
         },
-        build: { cssMinify: "lightningcss" },
+        build: { cssMinify: "lightningcss" }
     },
 
     alias: { '@scripts': fileURLToPath(new URL('./scripts', import.meta.url)) },

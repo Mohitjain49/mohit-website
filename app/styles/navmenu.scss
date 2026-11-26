@@ -294,10 +294,13 @@
     outline: none !important;
     scrollbar-width: none !important;
     scrollbar-color: var(--website-text) transparent;
+
     --nav-menu-opacity: 1;
     --nav-menu-transform: translateY(0px);
+    --nav-menu-transition-seconds: 0s;
     opacity: var(--nav-menu-opacity, 1);
     transform: var(--nav-menu-transform, translateY(0px));
+    transition: transform var(--nav-menu-transition-seconds), opacity var(--nav-menu-transition-seconds);
 }
 .mohit-navMenu.webMenu-vertical-overflow {
     border-radius: 5px;
