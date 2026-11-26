@@ -927,11 +927,10 @@ export const useDocumentStore = defineStore("document-store", () => {
 
         fsStateChanging.value = true;
         webData.bypassBodyClick();
-        await fullScreenStore.setFullScreen(element);
 
-        await sleep(50);
+        await fullScreenStore.setFullScreen(element);
         await nextTick();
-        await sleep(50);
+        await sleep(25);
 
         webData.closeNavMenu();
         fsStateChanging.value = false;

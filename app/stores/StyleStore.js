@@ -655,21 +655,23 @@ export const useStyleStore = defineStore("style-store", () => {
         await sleep(10);
         if(!validateClientMode()) { return; }
 
-        const signal = mousePositionController.signal;
-        window.addEventListener('click', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('contextmenu', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('pointermove', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('pointerdown', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('pointerup', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('dragover', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('dragstart', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('dragend', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('mousemove', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('mousedown', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('mouseup', (event) => { recordMousePosition(event); }, { signal });
-        window.addEventListener('touchmove', (event) => { recordMousePositionWithTouch(event); }, { signal });
-        window.addEventListener('touchstart', (event) => { recordMousePositionWithTouch(event); }, { signal });
-        window.addEventListener('touchend', (event) => { recordMousePositionWithTouch(event); }, { signal });
+        /** @type {AddEventListenerOptions} These are the options for each event listener in this group. */
+        const eventListenerOptions = { signal: mousePositionController.signal, capture: true }
+
+        window.addEventListener('click', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('contextmenu', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('pointermove', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('pointerdown', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('pointerup', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('dragover', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('dragstart', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('dragend', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('mousemove', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('mousedown', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('mouseup', (event) => { recordMousePosition(event); }, eventListenerOptions);
+        window.addEventListener('touchmove', (event) => { recordMousePositionWithTouch(event); }, eventListenerOptions);
+        window.addEventListener('touchstart', (event) => { recordMousePositionWithTouch(event); }, eventListenerOptions);
+        window.addEventListener('touchend', (event) => { recordMousePositionWithTouch(event); }, eventListenerOptions);
 
         // This sets the mouse position recorder as enabled.
         mousePositionRecorderEnabled.value = true;

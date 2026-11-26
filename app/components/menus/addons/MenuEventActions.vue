@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-const OVERFLOW_SCROLL_CLASS = "webMenu-vertical-overflow";
 const SWIPE_THRESHOLD = 75;
+var transitionRafId = null;
 
 const emit = defineEmits({
     /** @param {Boolean} status The new status on whether the website menu is scrollable or not. */
@@ -51,7 +51,9 @@ var eventsAbortController = null;
 
 const thumbClasses = computed(() => { return ['inner', (scrollbarThumbPressed.value ? 'active' : '')]; });
 const closeSwipeThreshold = computed(() => { return Math.ceil(SWIPE_THRESHOLD / cssToWindowHeightRatio.value); });
-const closeSwipePercent = computed(() => { return roundAndClampDecimal((startY.value - mouseY.value) / closeSwipeThreshold.value); });
+const closeSwipePercent = computed(() => {
+    return roundNumber(Math.max(0, ((startY.value - mouseY.value) / closeSwipeThreshold.value)), 2);
+});
 
 /** This is the style for the website menu scrollbar thumb. */
 const scrollbarThumbStyle = computed(() => {
@@ -70,15 +72,17 @@ onAfterMounted(() => {
 
     if(!Boolean(websiteMenuElement.value)) { throw new Error("Website Menu Element Not Found."); }
     const webMenu = websiteMenuElement.value;
+    setWebsiteMenuTransitionStyles();
 
     websiteMenuContents.value = webMenu.querySelector(".mohit-navMenu-contents");
     if(!Boolean(websiteMenuContents.value)) { throw new Error("Website Menu Contents Element Not Found."); }
-    websiteMenuContents.value.tabIndex = -1;
 
+    websiteMenuContents.value.tabIndex = -1;
+    websiteMenuContents.value.scrollTo({ top: 0, left: 0, behavior: "instant" });
     websiteMenuContentsRect.value = websiteMenuContents.value.getBoundingClientRect();
     contentsClientHeight.value = websiteMenuContents.value.clientHeight;
-    hasTouchEvents.value = checkTouchEndExists();
 
+    hasTouchEvents.value = checkTouchEndExists();
     eventsAbortController = new AbortController();
     const signal = eventsAbortController.signal;
 
@@ -110,13 +114,13 @@ onAfterMounted(() => {
 // This aborts all event listeners and stops the Raf Loop when the component unmounts.
 onBeforeUnmount(() => {
     cancelWebsiteMenuScrollbarActions();
+    cancelMenuTransitionStyleUpdate();
     if(eventsAbortController != null) { eventsAbortController.abort(); }
 });
 
 // This watches the close swipe progress to set the style of the website menu.
 watch(closeSwipePercent, () => { updateMenuTransitionStyles(); });
 watch(websiteMenuMode, () => { updateMenuTransitionStyles(); });
-watch(webMenuTouched, () => { updateMenuTransitionStyles(); });
 
 // This scrolls the website menu when the mosue moves and the user is holding the custom scrollbar.
 watch(mouseY, (newY, oldY) => { scrollWebMenuOnMouseMove(newY, oldY); });
@@ -183,17 +187,18 @@ function onMenuPointerEvent(event = null) {
 
         startY.value = (event.clientY || mouseY.value);
         webMenuTouched.value = true;
+        resetWebsiteMenuTransitionStyles();
     } else if((eType === "dragstart") && webMenuTouched.value) {
         // Sets the website menu as not being touched any more.
         webMenuTouched.value = false;
         webMenuSwipeWithTouch.value = false;
-        webData.setWebsiteMenuTransitionStyles();
+        resetWebsiteMenuTransitionStyles();
     } else if((eType === "pointerup" || eType === "touchend") && webMenuTouched.value) {
         if(closeSwipePercent.value >= 0.9) {
             webData.closeNavMenu();
             triggerClickSound();
         } else {
-            webData.setWebsiteMenuTransitionStyles();
+            resetWebsiteMenuTransitionStyles();
         }
 
         // Sets the website menu as not being touched any more.
@@ -207,9 +212,35 @@ function onMenuPointerEvent(event = null) {
 /** This function updates the website menu transition styles based on how the user is swiping. */
 function updateMenuTransitionStyles() {
     if(!webMenuTouched.value) { return; }
-    const newValue = (closeSwipePercent.value / 2);
+    const newValue = Math.min(0.5, (closeSwipePercent.value / 2));
     const transformNum = ((websiteMenuMode.value == 1) ? Math.min(0, (mouseY.value - startY.value)) : (newValue * -10));
-    webData.setWebsiteMenuTransitionStyles((1 - newValue), transformNum);
+
+    if(transitionRafId != null) { return; }
+    transitionRafId = requestAnimationFrame(() => { setWebsiteMenuTransitionStyles((1 - newValue), transformNum); });
+}
+
+/** This cancels the current animation frame request to set the transition styles if one exists. */
+function cancelMenuTransitionStyleUpdate() {
+    if(transitionRafId != null) { cancelAnimationFrame(transitionRafId); }
+    transitionRafId = null;
+}
+
+/**
+ * This function sets the transition styles for any website menu. Passing in no parameters resets it to their default places.
+ * @param {Number} opacity The opacity of the website menu.
+ * @param {Number} transform The translate Y value for the transform attribute.
+ */
+function setWebsiteMenuTransitionStyles(opacity = 1, transform = 0) {
+    if(!import.meta.client || !Boolean(websiteMenuElement.value)) { return; }
+    websiteMenuElement.value.style.setProperty("--nav-menu-opacity", String(opacity));
+    websiteMenuElement.value.style.setProperty("--nav-menu-transform", "translateY(" + String(transform) + "px)");
+    transitionRafId = null;
+}
+
+/** This resets the website menu's transition styles. */
+function resetWebsiteMenuTransitionStyles() {
+    cancelMenuTransitionStyleUpdate();
+    setWebsiteMenuTransitionStyles();
 }
 
 /**

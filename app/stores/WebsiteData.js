@@ -347,27 +347,6 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
 
         const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
         menuOpen.value = ((setMenuClosed || (toggle && menuOpen.value == index)) ? NO_MENU : index);
-
-        if(menuOpen.value == NO_MENU) { return; }
-        setWebsiteMenuTransitionStyles();
-
-        // This has the website menu scroll up to the top of its content when opened.
-        nextTick(() => {
-            const webMenuElement = getWebsiteMenuElement("current");
-            if(!Boolean(webMenuElement)) { return; }
-            webMenuElement.querySelector(".mohit-navMenu-contents")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        });
-    }
-
-    /**
-     * This function sets the transition styles for any website menu. Passing in no parameters resets it to their default places.
-     * @param {Number} opacity The opacity of the website menu.
-     * @param {Number} transform The translate Y value for the transform attribute.
-     */
-    function setWebsiteMenuTransitionStyles(opacity = 1, transform = 0) {
-        if(!import.meta.client || !document || !document.documentElement) { return; }
-        document.documentElement.style.setProperty("--nav-menu-opacity", String(opacity));
-        document.documentElement.style.setProperty("--nav-menu-transform", "translateY(" + String(transform) + "px)");
     }
 
     /** This function closes any open Navigation Menu. */
@@ -471,7 +450,7 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         shareSupported, showSharePopup, showSharePopupImmediate, sharePopupClosing, webFooter, webFooterVisibility,
         wakeLock, wakeLockIcon, wakeLockStatement, wakeLockTitle, wakeLockChangeFresh,
         setMenuOpen, closeNavMenu, toggleWakeLock, onWakeLockButtonClick,
-        setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick, setWebsiteMenuTransitionStyles,
+        setQRCodePopup, openQRCodePopup, getWebsiteMenuElement, bypassBodyClick,
         shareText, shareLink, shareFile, mountStore, unmountStore, waitForFullyMounted
     }
 });

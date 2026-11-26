@@ -35,14 +35,6 @@ export function convertDecimalToPercent(number = 0) {
 }
 
 /**
- * This function rounds and clamps a decimal and returns it.
- * @param {Number} decimal The decimal to alter.
- */
-export function roundAndClampDecimal(decimal = 0) {
-    return roundNumber(clampNumber(Number(decimal), 0, 1), 2);
-}
-
-/**
  * This function checks and validates if a string is a valid link.
  * @param {String} str The string to validate.
  */

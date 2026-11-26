@@ -294,6 +294,8 @@
     outline: none !important;
     scrollbar-width: none !important;
     scrollbar-color: var(--website-text) transparent;
+    --nav-menu-opacity: 1;
+    --nav-menu-transform: translateY(0px);
     opacity: var(--nav-menu-opacity, 1);
     transform: var(--nav-menu-transform, translateY(0px));
 }
