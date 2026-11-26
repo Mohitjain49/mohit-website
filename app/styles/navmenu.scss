@@ -341,6 +341,7 @@
     scrollbar-width: none !important;
     scrollbar-color: var(--website-text) transparent;
     outline: none !important;
+    overscroll-behavior: none;
 }
 
 :fullscreen .mohit-navMenu { @include mohit-navMenu-mohit_2(); }

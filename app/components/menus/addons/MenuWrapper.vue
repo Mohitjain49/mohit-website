@@ -5,7 +5,7 @@
         <MenuEventActions v-if="webMenuOpen" @scrollable-change="(status) => { setMenuScrollable(status); }" />
         <div class="mohit-navMenu-closing-cover" v-show="!webMenuOpen"></div>
 
-        <div class="mohit-navMenu-contents">
+        <div class="mohit-navMenu-contents" data-lenis-prevent>
             <div class="mohit-navMenu-top">
                 <div class="mohit-navBar-icons menu-top left">
                     <RouterLink to="/" :class="['mohit-navBar-banner', (onHomepage ? 'focused' : '')]" title="Home Page" v-pulse-loop>

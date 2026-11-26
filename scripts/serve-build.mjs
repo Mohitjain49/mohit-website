@@ -42,7 +42,7 @@ const SERVE_URL = `http://localhost:${PORT}`;
 function shutdownServer(signal) {
     if(isShuttingDown || !serverListening || !server) { return; }
     isShuttingDown = true;
-    console.log(`\nReceived ${signal}. Closing server...`);
+    console.log(`\nReceived \"${signal}\". Closing server...`);
 
     const forceExitTimer = setTimeout(() => {
         console.error("Server did not close in time. Forcing exit.");
@@ -95,6 +95,7 @@ function main() {
         process.stdin.on("keypress", (chunk = "", key) => {
             if(key.name === "c" && key.ctrl) { shutdownServer("SIGINT"); }
             if(key.name === "q") { shutdownServer("Q"); }
+            if(key.name === "escape") { shutdownServer("Escape"); }
             if(key.name === "o") { openUrl(`Opened ${SERVE_URL}`); }
         });
 

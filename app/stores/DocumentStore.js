@@ -990,7 +990,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     return { hostedDocuments, docLoaded, docLoadedPct, docTotalPages, currentObservedPage, contextMenuPageNumber, documentScrollEventListenerEnabled,
         documentTopBarVisible, googleDriveOptionAvailable, browserPdfViewerPresent, workerSrcAdded, iframeSupported, windowSizeWatchersEnabled,
         currentDocumentObjectUrl, currentDocumentFileSize, documentLink, currentDocumentMetadataParsed, showDocumentViewer,
-        downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle, printCursor, customPrintCursor,
+        downloadTitle, saveDocTitle, shareTitle, printTitle, customPrintTitle, printCursor, customPrintCursor, fsStateChanging,
         documentDownloadStatus, documentSaveStatus, documentShareStatus, documentPrintStatus, documentCustomPrintStatus,
         uploadToGoogleDriveIconNumber, documentUploadToGoogleDriveCanceled, customPrintRenderProgress, firstCustomPrintRender,
         customPdfWidth, customPdfHeight, customPdfMaxWidth, customPdfMinWidth, onDocumentRoute, onResumeRoute, onCreateGithubRepoRoute, onResearchPaperRoute,

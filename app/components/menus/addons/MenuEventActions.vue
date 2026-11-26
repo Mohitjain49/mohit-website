@@ -35,12 +35,15 @@ const websiteMenuContents = shallowRef(null);
 /** @type {ShallowRef<DOMRect>} This is the DOM Rect of the website menu element that stores its contents. */
 const websiteMenuContentsRect = shallowRef(null);
 
+/** @type {Ref<"any" | "up" | "down">} The swipe direction that the menu is allowed to use. */
+const swipeDirectionAllowed = ref("any");
 const startY = ref(0);
-const webMenuTouched = ref(false);
-const webMenuSwipeWithTouch = ref(false);
-const scrollbarThumbPressed = ref(false);
+const closeSwipePercent = ref(0);
 
+const webMenuTouched = ref(false);
+const scrollbarThumbPressed = ref(false);
 const hasTouchEvents = ref(false);
+
 const webMenuScrollable = ref(false);
 const contentsClientHeight = ref(0);
 const verticalScrollPercent = ref(0);
@@ -49,11 +52,8 @@ const menuClientInView = ref(0);
 /** @type {AbortController} This abort controller manages aborting the event listeners for this component. */
 var eventsAbortController = null;
 
+/** The classes for the custom scrollbar thumb. */
 const thumbClasses = computed(() => { return ['inner', (scrollbarThumbPressed.value ? 'active' : '')]; });
-const closeSwipeThreshold = computed(() => { return Math.ceil(SWIPE_THRESHOLD / cssToWindowHeightRatio.value); });
-const closeSwipePercent = computed(() => {
-    return roundNumber(Math.max(-0.4, ((startY.value - mouseY.value) / closeSwipeThreshold.value)), 2);
-});
 
 /** This is the style for the website menu scrollbar thumb. */
 const scrollbarThumbStyle = computed(() => {
@@ -94,11 +94,11 @@ onAfterMounted(() => {
     // This sets a group of event listeners that can close the website menu on a swipe.
     webMenu.addEventListener("pointerdown", (event) => { onMenuPointerEvent(event); }, { signal });
     window.addEventListener("pointerup", (event) => { onMenuPointerEvent(event); }, { signal });
-    window.addEventListener("pointermove", (event) => { onMenuPointerEvent(event); }, { signal, passive: false });
+    window.addEventListener("pointermove", (event) => { onMenuPointerMove(event); }, { signal, passive: false });
 
     if(hasTouchEvents.value) {
         window.addEventListener("touchend", (event) => { onMenuPointerEvent(event); }, { signal });
-        window.addEventListener("touchmove", (event) => { onMenuPointerEvent(event); }, { signal, passive: false });
+        window.addEventListener("touchmove", (event) => { onMenuPointerMove(event); }, { signal, passive: false });
     } else {
         window.addEventListener("pointercancel", (event) => { onMenuPointerEvent(event); }, { signal });
     }
@@ -123,19 +123,11 @@ onBeforeUnmount(() => {
     if(eventsAbortController != null) { eventsAbortController.abort(); }
 });
 
-// This watches the close swipe progress to set the style of the website menu.
-watch(closeSwipePercent, () => { updateMenuTransitionStyles(); });
+// This watches the website menu mode so it can reset the styles if necessary.
 watch(websiteMenuMode, () => { undoMenuSwipe(false); });
 
 // This scrolls the website menu when the mouse moves and the user is holding the custom scrollbar.
-// It can also set the transition styles for the menu.
-watch(mouseY, (newY, oldY) => {
-    if(scrollbarThumbPressed.value) {
-        scrollWebMenuOnMouseMove(newY, oldY);
-    } else {
-        updateMenuTransitionStyles();
-    }
-});
+watch(mouseY, (newY, oldY) => { scrollWebMenuOnMouseMove(newY, oldY); });
 
 /**
  * This function changes elements in this component based on menu dimensions.
@@ -178,18 +170,27 @@ function changeElementsOnMenuDimensions(firstRun = false) {
  * @param {PointerEvent | TouchEvent} event The Pointer Event. 
  */
 function onMenuPointerEvent(event = null) {
-    if(!event || !event.type || !websiteMenuElement.value) { return; }
+    if(!event || !event.type || !websiteMenuElement.value || !websiteMenuContents.value) { return; }
     const eType = event.type;
 
     if(eType === "pointerdown" && !webMenuTouched.value) {
-        webMenuSwipeWithTouch.value = (event.pointerType === "touch");
-        if(webMenuSwipeWithTouch.value && !hasTouchEvents.value) { return; }
+        const webMenuSwipeWithTouch = (event.pointerType !== "mouse");
+        if(webMenuSwipeWithTouch && !hasTouchEvents.value) { return; }
         webData.bypassBodyClick();
 
         if(webMenuScrollable.value) {
-            if(webMenuSwipeWithTouch.value) {
-                const webMenuContents = websiteMenuContents.value;
-                if(webMenuContents.scrollTop < (webMenuContents.scrollHeight - webMenuContents.clientHeight)) { return; }
+            if(webMenuSwipeWithTouch) {
+                const contentsScrollTop = websiteMenuContents.value.scrollTop;
+                const contentsScrollMax = (websiteMenuContents.value.scrollHeight - websiteMenuContents.value.clientHeight - 2);
+
+                if(contentsScrollTop <= 2) {
+                    swipeDirectionAllowed.value = "down";
+                } else if(contentsScrollTop >= contentsScrollMax) {
+                    swipeDirectionAllowed.value = "up";
+                } else {
+                    undoMenuSwipe(false);
+                    return;
+                }
             } else {
                 /** @type {Element} This is the exact element the user pressed down on for this event. */
                 const elementPressed = event.target;
@@ -198,32 +199,46 @@ function onMenuPointerEvent(event = null) {
         }
 
         resetWebsiteMenuTransitionStyles(false);
+        if(!webMenuSwipeWithTouch) { swipeDirectionAllowed.value = "any"; }
         startY.value = (event.clientY || mouseY.value);
         webMenuTouched.value = true;
-        updateMenuTransitionStyles();
     } else if(webMenuTouched.value) {
         if(eType === "pointerup" || eType === "touchend") {
-            const finalCloseSwipePercent = closeSwipePercent.value;
             webMenuTouched.value = false;
-            webMenuSwipeWithTouch.value = false;
 
-            if(finalCloseSwipePercent >= 0.9) {
+            if(closeSwipePercent.value >= 0.9) {
                 webData.closeNavMenu();
                 triggerClickSound();
             } else {
-                resetWebsiteMenuTransitionStyles(true);
+                undoMenuSwipe(true);
             }
         } else if(eType === "dragstart" || eType === "blur" || eType === "pointercancel") {
             undoMenuSwipe(true);
-        } else if(eType === "pointermove" || eType === "touchmove") {
-            event.preventDefault();
         }
     }
 }
 
-/** This function updates the website menu transition styles based on how the user is swiping. */
-function updateMenuTransitionStyles() {
-    if(!webMenuTouched.value || transitionRafId != null) { return; }
+/**
+ * This function runs on a "pointermove" or "touchmove" event for the website menu swipe functionality. 
+ * @param {PointerEvent} event The event fired with the pointer or finger move.
+ */
+function onMenuPointerMove(event = null) {
+    if(!event || !webMenuTouched.value) { return; }
+    const allowedDirection = swipeDirectionAllowed.value;
+
+    // Stops the swipe action if move events cannot be canceled.
+    if(!event.cancelable) {
+        undoMenuSwipe(false);
+        return;
+    }
+
+    if(allowedDirection === "down" && mouseY.value < startY.value) { return; }
+    if(allowedDirection === "up" && mouseY.value > startY.value) { return; }
+
+    event.preventDefault();
+    closeSwipePercent.value = roundNumber(((startY.value - mouseY.value) / (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)), 2);
+    if(transitionRafId != null) { return; }
+
     const newValue = Math.min(0.5, (closeSwipePercent.value / 2));
     const opacityNum = Math.min(1, (1 - newValue));
     var transformNum = 0;
@@ -250,7 +265,6 @@ function cancelMenuTransitionStyleUpdate() {
  * @param {Number} transform The translate Y value for the transform attribute.
  */
 function setWebsiteMenuTransitionStyles(opacity = 1, transform = 0) {
-    if(!import.meta.client || !Boolean(websiteMenuElement.value)) { return; }
     websiteMenuElement.value.style.setProperty("--nav-menu-opacity", String(opacity));
     websiteMenuElement.value.style.setProperty("--nav-menu-transform", "translateY(" + String(transform) + "px)");
     transitionRafId = null;
@@ -272,8 +286,8 @@ function resetWebsiteMenuTransitionStyles(addTransitionToReset = false) {
  * @param {Boolean} addTransitionToReset If true, this adds a transition to the reset.
  */
 function undoMenuSwipe(addTransitionToReset = false) {
+    swipeDirectionAllowed.value = "any";
     webMenuTouched.value = false;
-    webMenuSwipeWithTouch.value = false;
     resetWebsiteMenuTransitionStyles(addTransitionToReset);
 }
 

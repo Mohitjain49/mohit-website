@@ -129,7 +129,11 @@ export const useScrollStore = defineStore("scroll-store", () => {
         cancelAutoscroll();
         if(lenis != null) { lenis.destroy(); }
 
-        lenis = new Lenis({ wrapper: newWrapper, autoRaf: true, easing: (x) => { return easeOutQuart(x); }, smoothWheel: false });
+        lenis = new Lenis({ wrapper: newWrapper, autoRaf: true,
+            smoothWheel: false, allowNestedScroll: true,
+            easing: (x) => { return easeOutQuart(x); }
+        });
+
         lenis.resize();
         lenis.on("scroll", (lenisInstance) => { onLenisScroll(lenisInstance, "default"); });
     }

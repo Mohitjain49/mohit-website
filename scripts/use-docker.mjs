@@ -94,7 +94,7 @@ function main() {
     process.on("SIGTERM", () => { shutdownDockerInstance(); });
 
     process.stdin.on("keypress", (chunk = "", key) => {
-        if((key.name !== "c" || !key.ctrl) && key.name !== "q") { return; }
+        if((key.name !== "c" || !key.ctrl) && key.name !== "q" && key.name !== "escape") { return; }
         shutdownDockerInstance();
     });
 }

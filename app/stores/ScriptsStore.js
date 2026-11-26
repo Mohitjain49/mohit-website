@@ -585,7 +585,7 @@ export const useScriptsStore = defineStore("scripts-store", () => {
         }
     }
 
-    return { scripts, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated,
+    return { scripts, wrapCode, lineOptions, maxLinesInScript, onScriptRoute, scriptBlobCreated, fsStateChanging,
         scriptDownloadStatus, scriptSaveStatus, scriptCopyStatus, downloadTitle, saveScriptTitle, copyTitle,
         currentScriptLink, copyCodeTextIcon, copyCodePermalinkIcon, wrapIcon, wrapStatement, scriptTopBarVisible,
         downloadScript, copyScript, saveScript, onScriptPageKeydown, toggleScriptFullScreen, checkLineNumber,

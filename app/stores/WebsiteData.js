@@ -196,6 +196,11 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
         fullScreenStore.setFullScreenStatus();
         scrollStore.onScrollStoreFullScreenChange();
         documentStore.setCurrentObservedPage(1);
+
+        // Closes the open website menu if the full screen status was changed by an unexpected event.
+        if(!documentStore.fsStateChanging && !scriptsStore.fsStateChanging && !fullScreenStore.fsChanging) {
+            sleep(25).then(() => { closeNavMenu(); });
+        }
     }
 
     /**
