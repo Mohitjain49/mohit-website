@@ -67,8 +67,6 @@ async function sendS3Command(command) {
 function getPutObjectCommands() {
     /** @type {Array<String>} All the filenames from the build output. */
     const allFiles = fs.readdirSync(outDir, { recursive: true });
-
-    const assetFolders = ["_nuxt/", "_fonts/"];
     const commands = [];
 
     for(let i = 0; i < allFiles.length; i++) {
@@ -78,16 +76,14 @@ function getPutObjectCommands() {
 
         if(!fs.statSync(filePath).isFile()) { continue; }
         if(!mimeType || mimeType === "application/x-install-instructions") { continue; }
+        if(filename.endsWith(".map")) { continue; }
 
         commands.push(new PutObjectCommand({
             Body: fs.createReadStream(filePath),
             Bucket: AWS_BUCKET,
             Key: filename,
             ContentType: ((mimeType === "text/javascript") ? "application/javascript" : mimeType),
-            CacheControl: ((filename.startsWith(assetFolders[0]) || filename.startsWith(assetFolders[1])) ?
-                "public, max-age=2592000, no-cache" :
-                "no-cache, no-store, must-revalidate"
-            )
+            CacheControl: (filename.startsWith("_nuxt/") ? "public, max-age=2592000, no-cache" : "no-cache, no-store, must-revalidate")
         }));
     }
 

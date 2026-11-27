@@ -27,12 +27,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build Website
         env:
           GOOGLE_CLOUD_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_CLOUD_OAUTH_CLIENT_ID }}
           GOOGLE_DRIVE_PICKER_DEVELOPER_KEY: ${{ secrets.GOOGLE_DRIVE_PICKER_DEVELOPER_KEY }}
           GOOGLE_DRIVE_PICKER_APP_ID: ${{ secrets.GOOGLE_DRIVE_PICKER_APP_ID }}
           DOCKER_SCRIPT: ${{ 'false' }}
+          SOURCEMAPS_ENABLED: ${{ 'false' }}
         run: npm run build
 
       - name: Deploy to AWS S3 and CloudFront with Custom Script
@@ -44,13 +45,3 @@ jobs:
           AWS_REGION: ${{ 'us-east-1' }}
           BUILD_OUTPUT: ${{ '.output/public' }}
         run: npm run deploy
-
-    #   - name: Deploy Bundles To GitHub Pages
-    #     uses: JamesIves/github-pages-deploy-action@v4
-    #     with:
-    #       branch: gh-pages
-    #       folder: bundle-visualizer
-    #       clean: true
-    #       clean-exclude: |
-    #         README.md
-

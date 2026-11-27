@@ -24,12 +24,16 @@ function createBuildInfoFile() {
     /** @type {Array<String>} An Array of strings representing all the file paths in the build output. */
     const allFiles = fs.readdirSync(outDir, { recursive: true });
     var totalBuildSizeInBytes = 0;
+    var noMapBuildSizeInBytes = 0;
 
     for(let i = 0; i < allFiles.length; i++) {
         const filename = allFiles[i].replaceAll("\\", "/");
         const filePath = join(outDir, filename);
         const fileStats = fs.statSync(filePath);
-        if(fileStats.isFile()) { totalBuildSizeInBytes += fileStats.size; }
+
+        if(!fileStats.isFile()) { continue; }
+        totalBuildSizeInBytes += fileStats.size;
+        if(!filename.endsWith(".map")) { noMapBuildSizeInBytes += fileStats.size; }
     }
 
     /** The JSON Object that makes up the build information. */
@@ -42,8 +46,14 @@ function createBuildInfoFile() {
             now: utcNow.format(),
             now_format: utcNow.format(DATE_FORMAT)
         },
-        size_decimal: prettyBytes(totalBuildSizeInBytes),
-        size_binary: prettyBytes(totalBuildSizeInBytes, { binary: true })
+        total_build: {
+            size_decimal: prettyBytes(totalBuildSizeInBytes),
+            size_binary: prettyBytes(totalBuildSizeInBytes, { binary: true })
+        },
+        no_sourcemap_build: {
+            size_decimal: prettyBytes(noMapBuildSizeInBytes),
+            size_binary: prettyBytes(noMapBuildSizeInBytes, { binary: true })
+        }
     }, null, 4);
 
     fs.writeFileSync(path, jsonObj, 'utf8');

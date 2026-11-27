@@ -12,6 +12,7 @@ import usePageTemplates from "./page-templates.config";
 /** This is my website's version number. */
 const VERSION_NUMBER: string = JSON.parse(readFileSync("./package.json", "utf8")).version;
 const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
+const SOURCEMAPS_ENABLED = (process.env.SOURCEMAPS_ENABLED === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
 
 const GOOGLE_CLOUD_OAUTH_CLIENT_ID: string = (process.env.GOOGLE_CLOUD_OAUTH_CLIENT_ID || "");
@@ -164,7 +165,7 @@ export default defineNuxtConfig({
         xsl: false
     },
 
-    sourcemap: false,
+    sourcemap: SOURCEMAPS_ENABLED,
     experimental: { appManifest: true, typedPages: true, payloadExtraction: true, webmcp: false, parallelBuild: false },
     socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
     watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],

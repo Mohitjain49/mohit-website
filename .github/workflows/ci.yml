@@ -20,10 +20,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Building...
+      - name: Build Website
         env:
           GOOGLE_CLOUD_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_CLOUD_OAUTH_CLIENT_ID }}
           GOOGLE_DRIVE_PICKER_DEVELOPER_KEY: ${{ secrets.GOOGLE_DRIVE_PICKER_DEVELOPER_KEY }}
           GOOGLE_DRIVE_PICKER_APP_ID: ${{ secrets.GOOGLE_DRIVE_PICKER_APP_ID }}
           DOCKER_SCRIPT: ${{ 'false' }}
+          SOURCEMAPS_ENABLED: ${{ 'true' }}
         run: npm run build
