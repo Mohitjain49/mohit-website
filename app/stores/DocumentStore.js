@@ -9,10 +9,6 @@ import { ofetch } from 'ofetch';
 import Bowser from "bowser";
 import prettyBytes from "pretty-bytes";
 
-const GOOGLE_CLOUD_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID;
-const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
-const GOOGLE_CLOUD_APP_ID = import.meta.env.VITE_GOOGLE_CLOUD_APP_ID;
-
 const DOCUMENT_ACTION_CURSORS = ["pointer", "wait", "var(--checkmark-cursor)", "not-allowed", "not-allowed", "not-allowed"];
 const PRINT_IFRAME_ID = "mohit-doc-customPrint";
 
@@ -39,6 +35,10 @@ export const PDF_LETTER_SCALE = 1.295;
 export const useDocumentStore = defineStore("document-store", () => {
     const PDF_WIDTH_CSS_PROPERTY = "--mohit-custom-pdf-width";
     const PDF_HEIGHT_CSS_PROPERTY = "--mohit-custom-pdf-height";
+
+    var GOOGLE_CLOUD_OAUTH_CLIENT_ID = "";
+    var GOOGLE_DRIVE_PICKER_DEVELOPER_KEY = "";
+    var GOOGLE_DRIVE_PICKER_APP_ID = "";
 
     /** These are the hosted documents used to set the document pages. */
     const hostedDocuments = [
@@ -506,9 +506,9 @@ export const useDocumentStore = defineStore("document-store", () => {
             .addView(docsView)
             .setTitle("Select The Folder Where You Will Save The Document In.")
             .setOAuthToken(googleAPIAccessToken)
-            .setDeveloperKey(GOOGLE_CLOUD_API_KEY)
+            .setDeveloperKey(GOOGLE_DRIVE_PICKER_DEVELOPER_KEY)
             .setCallback((data) => { googleDrivePickerCallback(data); })
-            .setAppId(GOOGLE_CLOUD_APP_ID)
+            .setAppId(GOOGLE_DRIVE_PICKER_APP_ID)
             .build();
 
         // Displays the Google Drive Picker to the user.
@@ -660,10 +660,15 @@ export const useDocumentStore = defineStore("document-store", () => {
 
     /** This function sets certain variables in the document store and DOM to ensure it runs properly. */
     function mountDocumentStore() {
-        // If certain Google Cloud API keys are not present, this function disables the Google Drive functionality.
-        if(!GOOGLE_CLOUD_CLIENT_ID || GOOGLE_CLOUD_CLIENT_ID === "") { googleDriveOptAvailable.value = -1; }
-        if(!GOOGLE_CLOUD_API_KEY || GOOGLE_CLOUD_API_KEY === "") { googleDriveOptAvailable.value = -1; }
-        if(!GOOGLE_CLOUD_APP_ID || GOOGLE_CLOUD_APP_ID === "") { googleDriveOptAvailable.value = -1; }
+        // If certain Google Cloud frontend keys are not present, this function disables the Google Drive functionality.
+        const publicRuntimeConfig = useRuntimeConfig().public;
+        GOOGLE_CLOUD_OAUTH_CLIENT_ID = publicRuntimeConfig.GOOGLE_CLOUD_OAUTH_CLIENT_ID;
+        GOOGLE_DRIVE_PICKER_DEVELOPER_KEY = publicRuntimeConfig.GOOGLE_DRIVE_PICKER_DEVELOPER_KEY;
+        GOOGLE_DRIVE_PICKER_APP_ID = publicRuntimeConfig.GOOGLE_DRIVE_PICKER_APP_ID;
+
+        if(!GOOGLE_CLOUD_OAUTH_CLIENT_ID || GOOGLE_CLOUD_OAUTH_CLIENT_ID === "") { googleDriveOptAvailable.value = -1; }
+        if(!GOOGLE_DRIVE_PICKER_DEVELOPER_KEY || GOOGLE_DRIVE_PICKER_DEVELOPER_KEY === "") { googleDriveOptAvailable.value = -1; }
+        if(!GOOGLE_DRIVE_PICKER_APP_ID || GOOGLE_DRIVE_PICKER_APP_ID === "") { googleDriveOptAvailable.value = -1; }
 
         // This sets whether the user is able to print a document on the website using the native PDF Viewer.
         const userAgentExists = ("userAgent" in navigator);
@@ -744,7 +749,7 @@ export const useDocumentStore = defineStore("document-store", () => {
     /** This function initializes a token client for OAuth 2 necessary for the "Save To Google Drive" Feature. */
     function initGoogleTokenClient() {
         googleTokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: GOOGLE_CLOUD_CLIENT_ID,
+            client_id: GOOGLE_CLOUD_OAUTH_CLIENT_ID,
             scope: 'https://www.googleapis.com/auth/drive.file',
             callback: (response) => {
                 if(!response.access_token) { return; }

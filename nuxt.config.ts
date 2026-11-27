@@ -14,6 +14,10 @@ const VERSION_NUMBER: string = JSON.parse(readFileSync("./package.json", "utf8")
 const RUNNING_DOCKER_ENV = (process.env.DOCKER_SCRIPT === "true");
 const PERSONAL_MAIN_WEBSITE = "https://www.mohit-jain.com";
 
+const GOOGLE_CLOUD_OAUTH_CLIENT_ID: string = (process.env.GOOGLE_CLOUD_OAUTH_CLIENT_ID || "");
+const GOOGLE_DRIVE_PICKER_DEVELOPER_KEY: string = (process.env.GOOGLE_DRIVE_PICKER_DEVELOPER_KEY || "");
+const GOOGLE_DRIVE_PICKER_APP_ID: string = (process.env.GOOGLE_DRIVE_PICKER_APP_ID || "");
+
 /** This fetches all the Vue.js Directive Plugins that this project uses so they are registered here. */
 const VUE_DIRECTIVE_PLUGINS = globSync("app/directives/**/*.{ts,js}", {
     cwd: __dirname,
@@ -101,8 +105,16 @@ export default defineNuxtConfig({
     components: [{ path: '~/components', pathPrefix: false, extensions: ['vue'] }],
     pinia: { storesDirs: ['./stores/**'] },
     css: ['@fortawesome/fontawesome-svg-core/styles.css', '~/styles/mainstyles.scss', '~/styles/navmenu.scss'],
-    runtimeConfig: { public: { version: VERSION_NUMBER, buildDate: (new Date().toISOString()) }},
 
+    runtimeConfig: {
+        public: {
+            version: VERSION_NUMBER,
+            buildDate: (new Date().toISOString()),
+            GOOGLE_CLOUD_OAUTH_CLIENT_ID,
+            GOOGLE_DRIVE_PICKER_DEVELOPER_KEY,
+            GOOGLE_DRIVE_PICKER_APP_ID
+        }
+    },
     imports: {
         dirs: ['~/stores/**', '~/utils/**'],
         presets: [

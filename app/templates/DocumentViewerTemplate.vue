@@ -12,7 +12,7 @@
 />
 <main id="mohit-hosted-document-page" v-else>
     <div class="document-loading-static">
-        <div class="loading-spinner"></div>
+        <FontAwesomeIcon class="loading-spinner" icon="fa-spinner" spin-pulse />
     </div>
     <WebFooter />
 </main>

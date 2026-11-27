@@ -156,6 +156,8 @@ function getPageElement(index = 1) {
 async function renderPDF() {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     styleStore.setHideOverflowArray(HideOverflow.LOADING_DOCUMENT, true);
+
+    sleep(25).then(() => { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); });
     documentStore.setDocumentLoadedPercent(1);
     if(renderAborted()) { return; }
 

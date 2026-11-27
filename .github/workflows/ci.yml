@@ -22,8 +22,8 @@ jobs:
 
       - name: Building...
         env:
-          VITE_GOOGLE_CLOUD_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLOUD_CLIENT_ID }}
-          VITE_GOOGLE_CLOUD_API_KEY: ${{ secrets.VITE_GOOGLE_CLOUD_API_KEY }}
-          VITE_GOOGLE_CLOUD_APP_ID: ${{ secrets.VITE_GOOGLE_CLOUD_APP_ID }}
+          GOOGLE_CLOUD_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_CLOUD_OAUTH_CLIENT_ID }}
+          GOOGLE_DRIVE_PICKER_DEVELOPER_KEY: ${{ secrets.GOOGLE_DRIVE_PICKER_DEVELOPER_KEY }}
+          GOOGLE_DRIVE_PICKER_APP_ID: ${{ secrets.GOOGLE_DRIVE_PICKER_APP_ID }}
           DOCKER_SCRIPT: ${{ 'false' }}
         run: npm run build

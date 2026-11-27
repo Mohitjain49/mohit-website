@@ -47,7 +47,7 @@ export async function renderCodeScript(code = "", suffix = "", path) {
         return { success: true, html, numLines }
     } catch(e) {
         console.error(e);
-        return { success: false, html: "<pre> <div class=\"loading-spinner\"></div> </pre>", numLines: 0 }
+        return { success: false, html: "<pre></pre>", numLines: 0 }
     }
 }
 
