@@ -45,7 +45,6 @@ const scrollbarThumbPressed = ref(false);
 const hasTouchEvents = ref(false);
 
 const webMenuScrollable = ref(false);
-const contentsClientHeight = ref(0);
 const verticalScrollPercent = ref(0);
 const menuClientInView = ref(0);
 
@@ -80,7 +79,6 @@ onAfterMounted(() => {
     websiteMenuContents.value.tabIndex = -1;
     websiteMenuContents.value.scrollTo({ top: 0, left: 0, behavior: "instant" });
     websiteMenuContentsRect.value = websiteMenuContents.value.getBoundingClientRect();
-    contentsClientHeight.value = websiteMenuContents.value.clientHeight;
 
     hasTouchEvents.value = checkTouchEndExists();
     eventsAbortController = new AbortController();
@@ -136,17 +134,14 @@ watch(mouseY, (newY, oldY) => { scrollWebMenuOnMouseMove(newY, oldY); });
 function changeElementsOnMenuDimensions(firstRun = false) {
     if(!Boolean(websiteMenuElement.value) || !Boolean(websiteMenuContents.value)) { return; }
     const webMenuContents = websiteMenuContents.value;
-    const scrollHeight = webMenuContents.scrollHeight;
 
-    const oldClientHeight = contentsClientHeight.value;
-    const clientHeight = webMenuContents.clientHeight;
-    const getNewClientRect = ((oldClientHeight != clientHeight) || firstRun);
-
-    // If the client height changes for the website menu contents, the function records its new Client Rect.
-    if(getNewClientRect) {
+    // If the custom scrollbar is active, this records the website menu contents client rect.
+    if(scrollbarThumbPressed.value) {
         websiteMenuContentsRect.value = websiteMenuContents.value.getBoundingClientRect();
-        contentsClientHeight.value = clientHeight;
     }
+
+    const scrollHeight = webMenuContents.scrollHeight;
+    const clientHeight = webMenuContents.clientHeight;
 
     // This obtains the new scroll status of the website menu and sees if it has changed or not.
     const oldScrollStatus = webMenuScrollable.value;
@@ -328,7 +323,7 @@ function cancelWebsiteMenuScrollbarActions() {
 function scrollWebMenuOnMouseMove(newY = 0, oldY = 0) {
     if(!scrollbarThumbPressed.value || !Boolean(websiteMenuContents.value) || scrollStore.scrollKeyPressed) { return; }
     const webMenuContents = websiteMenuContents.value;
-    const contentsRect = webMenuContents.getBoundingClientRect();
+    const contentsRect = websiteMenuContentsRect.value;
 
     if(newY <= contentsRect.top) {
         webMenuContents.scrollTop = 0;

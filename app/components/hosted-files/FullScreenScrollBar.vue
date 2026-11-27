@@ -143,10 +143,9 @@ function checkRecordedFsElement() { return (Boolean(fsElement.value) && Boolean(
  */
 function scrollFsElementOnMouseMove(newY = 0, oldY = 0) {
     if(!mousePressedOnThumb.value || scrollProgress.value.show || scrollStore.scrollKeyPressed) { return; }
-    if(!checkRecordedFsElement()) { fsElement.value = getFsElement(); }
+    if(!checkRecordedFsElement()) { return; }
 
-    const element = (checkRecordedFsElement() ? fsElement.value : getFsElement());
-    if(!Boolean(element)) { return; }
+    const element = fsElement.value;
     const distanceFromVerticalEdge = scrollbarBodyFromVerticalEdge.value;
 
     if(mouseY.value <= distanceFromVerticalEdge) {
@@ -231,7 +230,7 @@ function scrollRepeatedly() {
  * @param {PointerEvent} event The event on holding the button down.
  */
 function onFsThumbDown(event) {
-    if(!event || event.pointerType !== "mouse") { return; }
+    if(!event || event.pointerType !== "mouse" || mousePressedOnArrow.value != 0) { return; }
     mousePressedOnThumb.value = true;
     setEventLocks(true);
     focusOnFsElement(event);
@@ -243,7 +242,7 @@ function onFsThumbDown(event) {
  * @param {"up" | "down"} type The direction of the arrow bing held.
  */
 function onArrowButtonPointerDown(event, type = "up") {
-    if(!event || event.pointerType !== "mouse" || mousePressedOnArrow.value != 0) { return; }
+    if(!event || event.pointerType !== "mouse" || mousePressedOnThumb.value || mousePressedOnArrow.value != 0) { return; }
     mousePressedOnArrow.value = ((type === "up") ? -1 : ((type === "down") ? 1 : 0));
     if(!scrollStore.scrollKeyPressed) { scrollStore.scrollByIncrement((mousePressedOnArrow.value * 40), true); }
 
