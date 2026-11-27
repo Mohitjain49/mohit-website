@@ -54,7 +54,7 @@ export async function renderCodeScript(code = "", suffix = "", path) {
 /**
  * This function transforms how the HTML code for a line looks when fully rendered.
  * @param {Function} addClassToHast This function adds a class to the line. 
- * @param {import("../../node_modules/@types/hast/index").Element} node The line element itself.
+ * @param {import("hast").Element} node The line element itself.
  * @param {Number} lineNum The number of said line.
  */
 function transformCodeLine(addClassToHast, node, lineNum, path) {
@@ -101,7 +101,7 @@ function transformCodeLine(addClassToHast, node, lineNum, path) {
 
 /**
  * This recursive function extracts all the text from a line and returns a string
- * @param {Array<import("../../node_modules/@types/hast/index").ElementContent>} children The children of the node.
+ * @param {Array<import("hast").ElementContent>} children The children of the node.
  */
 function extractTextFromLine(children) {
     return children.map((child) => {

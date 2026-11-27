@@ -345,13 +345,9 @@ export const useWebsiteDataStore = defineStore("web-data", () => {
      * @param {Boolean} toggle If true AND the menu to be opened is already open, this function wil then close the menu.
      */
     function setMenuOpen(index = NO_MENU, toggle = false) {
-        if(!import.meta.client || !document) {
-            menuOpen.value = NO_MENU;
-            return; // The Website Menu should not be open while the website cannot use JS.
-        }
-
-        const setMenuClosed = (scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
+        const setMenuClosed = (!import.meta.client || scrollStore.isAutoScrolling || documentStore.checkDocNotLoaded() || showSharePopup.value);
         menuOpen.value = ((setMenuClosed || (toggle && menuOpen.value == index)) ? NO_MENU : index);
+        if(menuOpen.value == NAVIGATION_MENU) { audioStore.setVolumeWidget(false); }
     }
 
     /** This function closes any open Navigation Menu. */

@@ -55,7 +55,7 @@ export default {
 
                 await new Promise<String>((resolve, reject) => {
                     hooks.hookOnce('page:finish', () => { resolve("finished"); });
-                    sleep(1000).then(() => { resolve("timeout"); });
+                    sleep(1250).then(() => { resolve("timeout"); });
                 });
 
                 pageFinishHookRunning.value = false;

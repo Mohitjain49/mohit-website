@@ -244,7 +244,7 @@ export const useAudioStore = defineStore("audio-store", () => {
 
     return { audioClickClip, audioScanClip, audioMuted, showVolumeWidget, volumeInput, volumeInputAsNum,
         volumeInputIcon, volumeInputTitle, ttsAvailable, ttsPlaying, ttsIcon, ttsTitle, sttUtility, sttUtilityIcon, sttUtilityTitle,
-        manageSTT, changeSTTUpdateFunc, checkTTSAvailable, manageTTS, cancelTTS, startTTS, setupClickAudio,
+        manageSTT, changeSTTUpdateFunc, checkTTSAvailable, manageTTS, cancelTTS, startTTS, setupClickAudio, setVolumeWidget,
         changeAudioVolume, confirmClickSound, addToVolume, setAudioMuted, playClickSound, playScanSound, onKeydownForAudio
     }
 });

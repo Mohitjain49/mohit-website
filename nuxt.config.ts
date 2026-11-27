@@ -166,7 +166,7 @@ export default defineNuxtConfig({
     },
 
     sourcemap: SOURCEMAPS_ENABLED,
-    experimental: { appManifest: true, typedPages: true, payloadExtraction: true, webmcp: false, parallelBuild: false },
+    experimental: { appManifest: true, typedPages: true, payloadExtraction: false, webmcp: false, parallelBuild: false },
     socialShare: { baseUrl: PERSONAL_MAIN_WEBSITE },
     watch: ['./scripts/**', './tests/**', "./page-templates.config.ts", "./pwa.config.ts" ],
 

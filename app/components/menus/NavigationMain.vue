@@ -112,8 +112,8 @@
                 <span> {{ webData.wakeLockStatement }} </span>
             </button>
         </div>
+        <div class="mohit-navMenu-opt-break"></div>
     </template>
-    <div class="mohit-navMenu-opt-break"></div>
 
     <div class="mohit-navMenu-opt small-features" style="position: relative;">
         <div class="mohit-navMenu-volume-meter">
