@@ -209,7 +209,8 @@ function onMenuPointerEvent(event = null) {
 
         // Restricts the swipe action if the user holds down on a button or anchor element.
         const closestClickable = elementPressed.closest("a, button");
-        if(Boolean(closestClickable)) {
+        if(Boolean(closestClickable) && !webMenuSwipeWithTouch) {
+            if(Boolean(document.activeElement) && Boolean(document.activeElement.blur)) { document.activeElement.blur(); }
             if(Boolean(closestClickable.focus)) { closestClickable.focus({ preventScroll: true }); }
             swipeDirectionAllowed.value = (swipeDirectionAllowed.value + "-restrict");
         }

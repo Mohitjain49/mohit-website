@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="mohit-navBar-icons menu-top right">
-                    <button class="mohit-navBar-icon light" v-if="props.showDocOptionsBtn"
+                    <button class="mohit-navBar-icon light" v-if="showDocOptionsBtn"
                         title="Back To Document Options"
                         @click="webData.setMenuOpen(DOCUMENT_MENU)" v-pulse-loop>
 
@@ -42,8 +42,7 @@ import mkj_text from "/static-icons/Personal_Icon_Expanded_Rounded.png";
 const props = defineProps({
     menuNumber: { type: Number, default: NAVIGATION_MENU },
     menuId: { type: String, default: "mohit-navMenu" },
-    extraMenuClass: { type: String, default: "" },
-    showDocOptionsBtn: { type: Boolean, default: false }
+    extraMenuClass: { type: String, default: "" }
 });
 
 const router = useRouter();
@@ -51,6 +50,7 @@ const webData = useWebsiteDataStore();
 const isMenuScrollable = ref(false);
 
 const webMenuOpen = computed(() => { return (webData.menuOpen == props.menuNumber); });
+const showDocOptionsBtn = computed(() => { return ((props.menuNumber != DOCUMENT_MENU) && (Math.floor(props.menuNumber) == DOCUMENT_MENU)); });
 const onHomepage = computed(() => { return (router.currentRoute.value.path === "/"); });
 
 const menuClosedClass = computed(() => { return (webMenuOpen.value ? '' : 'closed'); });

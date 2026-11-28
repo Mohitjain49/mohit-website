@@ -1,8 +1,5 @@
 <template>
-<MenuWrapper :menuNumber="DOCUMENT_METADATA_MENU" :showDocOptionsBtn="true"
-    :menuId="'mohit-metadata-docMenu'"
-    :extraMenuClass="'doc-metadata'">
-
+<MenuWrapper :menuNumber="DOCUMENT_METADATA_MENU" :menuId="'mohit-metadata-docMenu'" :extraMenuClass="'doc-metadata'">
     <button v-for="field in METADATA_FIELDS_1" class="mohit-navMenu-info clickable"
         @click="setFocusedMetadata(true, field.header, field.content.value)"
         :title="('Show ' + field.header + ' Options')">
