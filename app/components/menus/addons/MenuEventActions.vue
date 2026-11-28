@@ -9,6 +9,7 @@
 
 <script setup>
 const SWIPE_THRESHOLD = 75;
+const SWIPE_THRESHOLD_FOURTH = Math.ceil(SWIPE_THRESHOLD * 0.25);
 var transitionRafId = null;
 
 const emit = defineEmits({
@@ -35,7 +36,10 @@ const websiteMenuContents = shallowRef(null);
 /** @type {ShallowRef<DOMRect>} This is the DOM Rect of the website menu element that stores its contents. */
 const websiteMenuContentsRect = shallowRef(null);
 
-/** @type {Ref<"any" | "up" | "down">} The swipe direction that the menu is allowed to use. */
+/**
+ * @type {Ref<"any" | "up" | "down" | "any-restrict" | "up-restrict" | "down-restrict">}
+ * The swipe direction that the menu is allowed to use.
+ */
 const swipeDirectionAllowed = ref("any");
 const startY = ref(0);
 const closeSwipePercent = ref(0);
@@ -170,10 +174,17 @@ function onMenuPointerEvent(event = null) {
 
     if(eType === "pointerdown" && !webMenuTouched.value) {
         const webMenuSwipeWithTouch = (event.pointerType !== "mouse");
-        if(webMenuSwipeWithTouch && !hasTouchEvents.value) { return; }
+        if(!event.target || (webMenuSwipeWithTouch && !hasTouchEvents.value)) { return; }
+
+        /** @type {Element} This is the exact element the user pressed down on for this event. */
+        const elementPressed = event.target;
+        if(!(elementPressed instanceof Element)) { return; }
         webData.bypassBodyClick();
 
-        if(webMenuScrollable.value) {
+        if(Boolean(elementPressed.closest("input"))) {
+            undoMenuSwipe(false);
+            return;
+        } else if(webMenuScrollable.value) {
             if(webMenuSwipeWithTouch) {
                 const contentsScrollTop = websiteMenuContents.value.scrollTop;
                 const contentsScrollMax = (websiteMenuContents.value.scrollHeight - websiteMenuContents.value.clientHeight - 2);
@@ -186,15 +197,24 @@ function onMenuPointerEvent(event = null) {
                     undoMenuSwipe(false);
                     return;
                 }
+            } else if(!Boolean(elementPressed.closest(".mohit-navMenu-top"))) {
+                undoMenuSwipe(false);
+                return;
             } else {
-                /** @type {Element} This is the exact element the user pressed down on for this event. */
-                const elementPressed = event.target;
-                if(!elementPressed.closest(".mohit-navMenu-top")) { return; }
+                swipeDirectionAllowed.value = "any";
             }
+        } else {
+            swipeDirectionAllowed.value = "any";
+        }
+
+        // Restricts the swipe action if the user holds down on a button or anchor element.
+        const closestClickable = elementPressed.closest("a, button");
+        if(Boolean(closestClickable)) {
+            if(Boolean(closestClickable.focus)) { closestClickable.focus({ preventScroll: true }); }
+            swipeDirectionAllowed.value = (swipeDirectionAllowed.value + "-restrict");
         }
 
         resetWebsiteMenuTransitionStyles(false);
-        if(!webMenuSwipeWithTouch) { swipeDirectionAllowed.value = "any"; }
         startY.value = (event.clientY || mouseY.value);
         webMenuTouched.value = true;
     } else if(webMenuTouched.value) {
@@ -227,19 +247,24 @@ function onMenuPointerMove(event = null) {
         return;
     }
 
-    if(allowedDirection === "down" && mouseY.value < startY.value) { return; }
-    if(allowedDirection === "up" && mouseY.value > startY.value) { return; }
+    if(allowedDirection.includes("down") && mouseY.value < startY.value) { return; }
+    if(allowedDirection.includes("up") && mouseY.value > startY.value) { return; }
+    const restrictSwipe = allowedDirection.includes("restrict");
+
+    var newCloseSwipePct = roundNumber(((startY.value - mouseY.value) / (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)), 2);
+    if(restrictSwipe) { newCloseSwipePct = clampNumber(newCloseSwipePct, -0.25, 0.25); }
+    closeSwipePercent.value = newCloseSwipePct;
 
     event.preventDefault();
-    closeSwipePercent.value = roundNumber(((startY.value - mouseY.value) / (SWIPE_THRESHOLD / cssToWindowHeightRatio.value)), 2);
     if(transitionRafId != null) { return; }
 
-    const newValue = Math.min(0.5, (closeSwipePercent.value / 2));
+    const newValue = Math.min(0.5, (newCloseSwipePct / 2));
     const opacityNum = Math.min(1, (1 - newValue));
     var transformNum = 0;
 
     if(websiteMenuMode.value == 1) {
-        transformNum = Math.min(SWIPE_THRESHOLD, ((mouseY.value - startY.value) * cssToWindowHeightRatio.value));
+        transformNum = Math.min(SWIPE_THRESHOLD_FOURTH, ((mouseY.value - startY.value) * cssToWindowHeightRatio.value));
+        if(restrictSwipe) { transformNum = Math.max((SWIPE_THRESHOLD_FOURTH * -1), transformNum); }
     } else {
         transformNum = Math.min(0, (newValue * -10));
     }
@@ -282,6 +307,7 @@ function resetWebsiteMenuTransitionStyles(addTransitionToReset = false) {
  */
 function undoMenuSwipe(addTransitionToReset = false) {
     swipeDirectionAllowed.value = "any";
+    closeSwipePercent.value = 0;
     webMenuTouched.value = false;
     resetWebsiteMenuTransitionStyles(addTransitionToReset);
 }
@@ -325,9 +351,9 @@ function scrollWebMenuOnMouseMove(newY = 0, oldY = 0) {
     const webMenuContents = websiteMenuContents.value;
     const contentsRect = websiteMenuContentsRect.value;
 
-    if(newY <= contentsRect.top) {
+    if(newY <= (contentsRect.top + 2)) {
         webMenuContents.scrollTop = 0;
-    } else if(newY >= contentsRect.bottom) {
+    } else if(newY >= (contentsRect.bottom - 2)) {
         webMenuContents.scrollTop = (webMenuContents.scrollHeight - webMenuContents.clientHeight);
     } else {
         const divisor = ((styleStore.viewportHeight - (26 / styleStore.cssToWindowHeightRatio)) / (newY - oldY));
